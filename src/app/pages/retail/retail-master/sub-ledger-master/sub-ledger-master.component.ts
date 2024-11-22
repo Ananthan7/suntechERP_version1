@@ -1,5 +1,5 @@
 import { Code } from 'angular-feather/icons';
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Subscription } from "rxjs";
@@ -7,6 +7,8 @@ import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: "app-sub-ledger-master",
@@ -15,6 +17,10 @@ import Swal from "sweetalert2";
 })
 export class SubLedgerMasterComponent implements OnInit {
   @Input() content!: any;
+  
+  @ViewChild('overlayCountrySearch') overlayCountrySearch!: MasterSearchComponent;
+  @ViewChild('overlayStateSearch') overlayStateSearch!: MasterSearchComponent; //
+  @ViewChild('overlayCitySearch') overlayCitySearch!: MasterSearchComponent;
   selectedTabIndex = 0;
   tableData: any = [];
   ContacttableData: any = [];
@@ -28,6 +34,10 @@ export class SubLedgerMasterComponent implements OnInit {
   editMode: boolean = false;
   codeEnable: boolean = false;
   data: any;
+  selectedIndexes: any = [];
+  selectedContactndexes: any = [];
+
+
   CityCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -92,7 +102,8 @@ export class SubLedgerMasterComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private commonService: CommonServiceService
+    private commonService: CommonServiceService,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -194,12 +205,14 @@ export class SubLedgerMasterComponent implements OnInit {
     const data = {
       name: this.SubLedgerMasterForm.value.name,
       designation: this.SubLedgerMasterForm.value.designation,
-      mobile: this.SubLedgerMasterForm.value.mobile.toString(),
-      email: this.SubLedgerMasterForm.value.email,
+      MOBILE_NO: this.SubLedgerMasterForm.value.mobile.toString(),
+      EMAIL: this.SubLedgerMasterForm.value.email,
     };
     console.log(data);
 
     this.ContacttableData.push(data);
+    console.log(this.ContacttableData);
+    
   }
 
   setFormValues() {
@@ -240,8 +253,8 @@ export class SubLedgerMasterComponent implements OnInit {
     this.SubLedgerMasterForm.controls.country.setValue(this.content.COUNTRY);
     this.SubLedgerMasterForm.controls.state.setValue(this.content.STATE);
     this.SubLedgerMasterForm.controls.city.setValue(this.content.CITY);
-    this.SubLedgerMasterForm.controls.mobile.setValue(this.content.MOBILE_NO);
-    this.SubLedgerMasterForm.controls.email.setValue(this.content.EMAIL);
+    // this.SubLedgerMasterForm.controls.mobile.setValue(this.content.MOBILE_NO);
+    // this.SubLedgerMasterForm.controls.email.setValue(this.content.EMAIL);
   }
 
   setPostData() {
@@ -253,10 +266,10 @@ export class SubLedgerMasterComponent implements OnInit {
       SL_CODE: this.commonService.nullToString(form.code),
       DESCRIPTION: this.commonService.nullToString(form.description),
       // MOBILE_NO: this.SubLedgerMasterForm.value.mobile || "",
-      MOBILE_NO: contactRow.MOBILE_NO || "",
+      MOBILE_NO: contactRow.MOBILE_NO || this.content.MOBILE_NO,
       TELEPHONE_NO: "",
       // EMAIL: this.SubLedgerMasterForm.value.email || "",
-      EMAIL: contactRow.EMAIL || "",
+      EMAIL: contactRow.EMAIL || this.content.EMAIL,
       ADDRESS: this.commonService.nullToString(form.address),
       ACTIVE: form.active ? true : false,
       ALLOCATED_ACCOUNT: this.commonService.nullToString(
@@ -419,5 +432,255 @@ export class SubLedgerMasterComponent implements OnInit {
         this.subscriptions.push(Sub);
       }
     });
+  }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'country':
+        this.overlayCountrySearch.showOverlayPanel(event);
+        break;
+      case 'state':
+        this.overlayStateSearch.showOverlayPanel(event);
+        break;
+      case 'city':
+        this.overlayCitySearch.showOverlayPanel(event);
+        break;
+
+      default:
+    }
+  }
+  onKeyDown(event: KeyboardEvent, controllers: string[], LOOKUPDATA:MasterSearchModel) {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (event.key === "Backspace" || event.key === "Delete") {
+      console.log("DELETE");
+      setTimeout(() => {
+        if (inputElement.value.trim() === "") {
+          this.clearRelevantFields(controllers, LOOKUPDATA);
+        }
+      }, 0);
+    } else if(event.key == "Tab"){
+      console.log("Tab");
+      console.log(controllers);
+      console.log(event);
+      
+      this.lookupKeyPress(event,controllers[0])
+
+    }
+  }
+
+  clearRelevantFields(controllers: string[], LOOKUPDATA:MasterSearchModel) {
+    controllers.forEach((controllerName) => {
+      const control = this.SubLedgerMasterForm.controls[controllerName];
+      if (control) {
+        control.setValue("");
+      } else {
+        console.warn(`Control ${controllerName} not found in the form.`);
+      }
+    });
+
+    this.clearLookupData(LOOKUPDATA, controllers);
+  }
+
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FORMNAMES.forEach((formName) => {
+      this.SubLedgerMasterForm.controls[formName].setValue("");
+    });
+  }
+
+  
+  SPvalidateLookupFieldModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAMES: string[],
+    isCurrencyField: boolean,
+    lookupFields?: string[],
+    FROMCODE?: boolean
+  ) {
+    const searchValue = event.target.value?.trim();
+
+    // if (!searchValue || this.flag == "VIEW") return;
+
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.dataService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            console.log("In");
+
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Up");
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+                console.log(FORMNAMES);
+                console.log(matchedItem);
+                
+                
+
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+                    console.log(field);
+                    
+                    this.SubLedgerMasterForm.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        },
+      });
+
+    this.subscriptions.push(sub);
+  }
+
+  onSelectionChanged(event: any) {
+    const values = event.selectedRowKeys;
+    // console.log(values);
+    let indexes: Number[] = [];
+    this.tableData.reduce((acc:any, value:any, index:any) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+        // console.log(acc);
+
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+    // console.log(this.selectedIndexes);
+  }
+
+  onContactSelectionChanged(event: any) {
+    const values = event.selectedRowKeys;
+    // console.log(values);
+    let indexes: Number[] = [];
+    this.ContacttableData.reduce((acc:any, value:any, index:any) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+        // console.log(acc);
+
+      }
+      return acc;
+    }, indexes);
+    this.selectedContactndexes = indexes;
+    // console.log(this.selectedIndexes);
+  }
+
+  removedata() {
+    console.log(this.selectedIndexes);
+
+    if (this.selectedIndexes.length > 0) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Simulate deletion without using an actual API call
+          if (this.tableData.length > 0) {
+            this.tableData = this.tableData.filter((data:any, index:any) => !this.selectedIndexes.includes(index));
+            this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+            this.tableData.forEach((item: any, i: any) => {
+              item.SRNO = i + 1;
+            });
+
+          } else {
+            this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
+          }
+        }
+      });
+    } else {
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 });
+    }
+  }
+
+  removeContactdata() {
+    console.log(this.selectedContactndexes);
+
+    if (this.selectedContactndexes.length > 0) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Simulate deletion without using an actual API call
+          if (this.ContacttableData.length > 0) {
+            this.ContacttableData = this.ContacttableData.filter((data:any, index:any) => !this.selectedContactndexes.includes(index));
+            this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+            this.ContacttableData.forEach((item: any, i: any) => {
+              item.SRNO = i + 1;
+            });
+
+          } else {
+            this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
+          }
+        }
+      });
+    } else {
+      this.snackBar.open('Please select record', 'OK', { duration: 2000 });
+    }
   }
 }

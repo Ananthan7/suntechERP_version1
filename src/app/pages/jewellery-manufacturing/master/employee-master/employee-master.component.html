@@ -149,9 +149,15 @@
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
                   (focusout)="
-                    validateLookupField($event, DepartmentData, 'Department')
+                    SPvalidateLookupFieldModified(
+                      $event,
+                      BranchData,
+                      ['Department', 'DepartmentDes'],
+                      false,
+                      ['DEPT_CODE', 'DEPT_NAME']
+                    )
                   "
-                  (keydown)="onKeyDown($event, ['Department'], DepartmentData)"
+                  (keydown)="onKeyDown($event, ['Department','DepartmentDes'], DepartmentData)"
                 />
                 <master-search
                   *ngIf="!viewMode"
@@ -168,6 +174,7 @@
                 <input
                   type="text"
                   matInput
+                  (keydown)="onKeyDown($event, ['Department','DepartmentDes'], DepartmentData)"
                   formControlName="DepartmentDes"
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
@@ -191,10 +198,16 @@
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
                   (focusout)="
-                    validateLookupField($event, DesignationData, 'Designation')
-                  "
+                  SPvalidateLookupFieldModified(
+                    $event,
+                    DesignationData,
+                    ['Designation', 'DesignationDes'],
+                    false,
+                    ['CODE', 'DESCRIPTION']
+                  )
+                "
                   (keydown)="
-                    onKeyDown($event, ['Designation'], DesignationData)
+                    onKeyDown($event, ['Designation','DesignationDes'], DesignationData)
                   "
                 />
                 <master-search
@@ -213,6 +226,9 @@
                   type="text"
                   matInput
                   formControlName="DesignationDes"
+                  (keydown)="
+                  onKeyDown($event, ['Designation','DesignationDes'], DesignationData)
+                "
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
                 />
@@ -265,9 +281,15 @@
                         autocomplete="off"
                         [readonly]="viewMode || codeEnable"
                         (focusout)="
-                          validateLookupField($event, GradeData, 'Grade')
-                        "
-                        (keydown)="onKeyDown($event, ['Grade'], GradeData)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          GradeData,
+                          ['Grade', 'GradeDes'],
+                          false,
+                          ['CODE', 'DESCRIPTION']
+                        )
+                      "
+                        (keydown)="onKeyDown($event, ['Grade','GradeDes'], GradeData)"
                       />
                       <master-search
                         *ngIf="!viewMode"
@@ -285,6 +307,7 @@
                         type="text"
                         #codeInput
                         matInput
+                        (keydown)="onKeyDown($event, ['Grade','GradeDes'], GradeData)"
                         formControlName="GradeDes"
                         UpperCaseDirective
                         autocomplete="off"
@@ -379,12 +402,14 @@
                         autocomplete="off"
                         [readonly]="viewMode || codeEnable"
                         (focusout)="
-                          validateLookupField(
-                            $event,
-                            NationalityData,
-                            'Nationality'
-                          )
-                        "
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          NationalityData,
+                          ['Nationality'],
+                          false,
+                          ['CODE']
+                        )
+                      "
                         (keydown)="
                           onKeyDown($event, ['Nationality'], NationalityData)
                         "
@@ -415,8 +440,14 @@
                         autocomplete="off"
                         [readonly]="viewMode || codeEnable"
                         (focusout)="
-                          validateLookupField($event, ReligionData, 'Religion')
-                        "
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          ReligionData,
+                          ['Religion'],
+                          false,
+                          ['CODE']
+                        )
+                      "
                         (keydown)="
                           onKeyDown($event, ['Religion'], ReligionData)
                         "
@@ -574,12 +605,14 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                              validateLookupField(
-                                $event,
-                                CountryCodeData,
-                                'Country'
-                              )
-                            "
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              CountryCodeData,
+                              ['Country'],
+                              false,
+                              ['CODE']
+                            )
+                          "
                             (keydown)="
                               onKeyDown($event, ['Country'], CountryCodeData)
                             "
@@ -616,12 +649,14 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                              validateLookupField(
-                                $event,
-                                StateCodeData,
-                                'State'
-                              )
-                            "
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              StateCodeData,
+                              ['State'],
+                              false,
+                              ['CODE']
+                            )
+                          "
                             (keydown)="
                               onKeyDown($event, ['State'], StateCodeData)
                             "
@@ -658,8 +693,14 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                              validateLookupField($event, StateCodeData, 'City')
-                            "
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              CityCodeData,
+                              ['City'],
+                              false,
+                              ['CODE']
+                            )
+                          "
                             (keydown)="
                               onKeyDown($event, ['City'], CityCodeData)
                             "
@@ -837,12 +878,14 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                              validateLookupField(
-                                $event,
-                                PRCountryCodeData,
-                                'PRCountryCodeData'
-                              )
-                            "
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              PRCountryCodeData,
+                              ['PRCountry'],
+                              false,
+                              ['CODE']
+                            )
+                          "
                             (keydown)="
                               onKeyDown(
                                 $event,
@@ -883,12 +926,14 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                              validateLookupField(
-                                $event,
-                                PRStateCodeData,
-                                'PRStateCodeData'
-                              )
-                            "
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              PRStateCodeData,
+                              ['PRState'],
+                              false,
+                              ['CODE']
+                            )
+                          "
                             (keydown)="
                               onKeyDown($event, ['PRState'], PRStateCodeData)
                             "
@@ -925,12 +970,14 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                              validateLookupField(
-                                $event,
-                                PRCityCodeData,
-                                'PRCity'
-                              )
-                            "
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              PRCityCodeData,
+                              ['PRCity'],
+                              false,
+                              ['CODE']
+                            )
+                          "
                             (keydown)="
                               onKeyDown($event, ['PRCity'], PRCityCodeData)
                             "
