@@ -28,6 +28,8 @@ export class JewelleryMasterComponent implements OnInit {
   selectedTabIndex: number = 0; 
   viewMode: boolean = false;
   editMode: boolean = false;
+  EnterMetalDetailsComponentData:  any[] =[];
+  StoneDetailsComponentData: any[] =[];
 
   onCheckboxChange(tabIndex: number) {
     if (tabIndex === 2 && this.tab3Checkbox.checked) {
@@ -69,20 +71,20 @@ export class JewelleryMasterComponent implements OnInit {
     "Color",
   ];
   columnheader: any[] = [
-    "Div",
-    "Stock Code",
-    "Shape",
-    "Color",
-    "Clarity",
-    "Sieve",
-    "Size",
-    "Pcs",
-    "Carat",
-    "Currency",
-    "Pc Code",
-    "Lab Rate",
-    "Lab Amt",
-    "LbCode",
+    "DIVCODE",
+    "STOCK_CODE",
+    "SHAPE",
+    "COLOR",
+    "CLARITY",
+    "SIEVE",
+    "DSIZE",
+    "PCS",
+    "KARAT",
+    "CURRENCY_CODE",
+    "PRICECODE",
+    "LAB_RATE",
+    "LABCHGCODE",
+    "LABOURCODE",
   ];
   columnheaders: any[] = ["Sr", "Description", "FC", "LC"];
   columnheaderPartDetails: any[] = [
@@ -95,7 +97,7 @@ export class JewelleryMasterComponent implements OnInit {
     "Rate",
     "Amount",
   ];
-  subscriptions: any;
+  private subscriptions: Subscription[] = [];
   @Input() content!: any;
   tableData: any[] = [];
   checkBoxesMode: string;
@@ -312,8 +314,7 @@ export class JewelleryMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
-  EnterMetalDetailsComponentData: any;
-  StoneDetailsComponentData: any;
+
 
   itemcodeSelected(value: any) {
     console.log(value);
@@ -756,6 +757,7 @@ export class JewelleryMasterComponent implements OnInit {
   }
 
   addTableDataStoneDetails() {
+    let tablecount = this.StoneDetailsComponentData.length;
     const modalRef: NgbModalRef = this.modalService.open(
       StoneDetailsComponent,
       {
@@ -765,6 +767,7 @@ export class JewelleryMasterComponent implements OnInit {
         windowClass: "modal-full-width",
       }
     );
+    modalRef.componentInstance.tablecount = tablecount;
     modalRef.result.then((postData) => {
       console.log(postData);
       if (postData) {
@@ -963,16 +966,16 @@ export class JewelleryMasterComponent implements OnInit {
       PRICE3PER:  this.commonService.nullToString(this.jewellerymasterForm.value.price3),
       PRICE4PER:  this.commonService.nullToString(this.jewellerymasterForm.value.price4),
       PRICE5PER:  this.commonService.nullToString(this.jewellerymasterForm.value.price5),
-      PRICE1FC:  this.commonService.nullToString(this.jewellerymasterForm.value.price1FC),
-      PRICE1LC:  this.commonService.nullToString(this.jewellerymasterForm.value.price1LC),
-      PRICE2FC:  this.commonService.nullToString(this.jewellerymasterForm.value.price2FC),
-      PRICE2LC:  this.commonService.nullToString(this.jewellerymasterForm.value.price2LC),
-      PRICE3FC:  this.commonService.nullToString(this.jewellerymasterForm.value.price3FC),
-      PRICE3LC:  this.commonService.nullToString(this.jewellerymasterForm.value.price3LC),
-      PRICE4FC:  this.commonService.nullToString(this.jewellerymasterForm.value.price4FC),
-      PRICE4LC:  this.commonService.nullToString(this.jewellerymasterForm.value.price4LC),
-      PRICE5FC:  this.commonService.nullToString(this.jewellerymasterForm.value.price5FC),
-      PRICE5LC:  this.commonService.nullToString(this.jewellerymasterForm.value.price5LC),
+      PRICE1FC:  this.commonService.emptyToZero(this.jewellerymasterForm.value.price1FC),
+      PRICE1LC:  this.commonService.emptyToZero(this.jewellerymasterForm.value.price1LC),
+      PRICE2FC:  this.commonService.emptyToZero(this.jewellerymasterForm.value.price2FC),
+      PRICE2LC:  this.commonService.emptyToZero(this.jewellerymasterForm.value.price2LC),
+      PRICE3FC:  this.commonService.emptyToZero(this.jewellerymasterForm.value.price3FC),
+      PRICE3LC:  this.commonService.emptyToZero(this.jewellerymasterForm.value.price3LC),
+      PRICE4FC:  this.commonService.emptyToZero(this.jewellerymasterForm.value.price4FC),
+      PRICE4LC:  this.commonService.emptyToZero(this.jewellerymasterForm.value.price4LC),
+      PRICE5FC:  this.commonService.emptyToZero(this.jewellerymasterForm.value.price5FC),
+      PRICE5LC:  this.commonService.emptyToZero(this.jewellerymasterForm.value.price5LC),
       CHARGE1FC:   this.commonService.emptyToZero(this.jewellerymasterForm.value.price1per),
       CHARGE1LC: 0,
       CHARGE2FC:   this.commonService.emptyToZero(this.jewellerymasterForm.value.price2per),
@@ -1049,7 +1052,7 @@ export class JewelleryMasterComponent implements OnInit {
       WATCH_STATUS: "",
       WATCH_WEIGHT: "",
       UNIT: "",
-      PCS_PERUNIT: this.commonService.nullToString(this.jewellerymasterForm.value.PCSunit),
+      PCS_PERUNIT: this.commonService.emptyToZero(this.jewellerymasterForm.value.PCSunit),
       TAG_LINESWOENTER:  this.commonService.nullToString(this.jewellerymasterForm.value.tagDetails),
       PICTURE_NAME_THUMBNAIL: "",
       GOLDSMITH: "",
@@ -1123,30 +1126,30 @@ export class JewelleryMasterComponent implements OnInit {
       CHARACTERISTIC: "",
       TONE_SATURATION: "",
       SHAPEAPPAREL: "",
-      DIA_PCS:  this.commonService.nullToString(this.jewellerymasterForm.value.diamondsPcs),
-      DIA_CARAT:  this.commonService.nullToString(this.jewellerymasterForm.value.diamondsCarat),
-      DIA_VALUEFC:  this.commonService.nullToString(this.jewellerymasterForm.value.diamondsFC),
-      DIA_VALUECC:  this.commonService.nullToString(this.jewellerymasterForm.value.diamondsLC ),
-      COLOR_PCS: this.commonService.nullToString(this.jewellerymasterForm.value.colorstonePcs ),
-      COLOR_CARAT: this.commonService.nullToString(this.jewellerymasterForm.value.colorstoneCarat),
-      COLOR_VALUEFC: this.commonService.nullToString(this.jewellerymasterForm.value.colorstoneFC),
-      COLOR_VALUECC: this.commonService.nullToString(this.jewellerymasterForm.value.colorstoneLC),
-      PEARL_PCS: this.commonService.nullToString(this.jewellerymasterForm.value.pearlsPcs),
-      PEARL_CARAT: this.commonService.nullToString(this.jewellerymasterForm.value.pearlsCarat),
-      PEARL_VALUEFC: this.commonService.nullToString(this.jewellerymasterForm.value.pearlsFC),
-      PEARL_VALUECC: this.commonService.nullToString(this.jewellerymasterForm.value.pearlsLC),
-      OTSTONES_PCS: this.commonService.nullToString(this.jewellerymasterForm.value.otstonesPcs),
-      OTSTONES_CARAT: this.commonService.nullToString(this.jewellerymasterForm.value.otstonesCarat),
-      OTSTONES_VALUEFC: this.commonService.nullToString(this.jewellerymasterForm.value.otstonesFC),
-      OTSTONES_VALUECC: this.commonService.nullToString(this.jewellerymasterForm.value.otstonesLC),
-      METAL_GROSSWT: this.commonService.nullToString(this.jewellerymasterForm.value.metalGrams),
-      METAL_VALUEFC: this.commonService.nullToString(this.jewellerymasterForm.value.metalFC),
-      METAL_VALUECC: this.commonService.nullToString(this.jewellerymasterForm.value.metalLC),
-      TOTPCS: this.commonService.nullToString(this.jewellerymasterForm.value.totalPcs),
-      TOTCARAT: this.commonService.nullToString(this.jewellerymasterForm.value.totalCarat),
-      TOTGMS: this.commonService.nullToString(this.jewellerymasterForm.value.totalGrams),
-      TOTVFC: this.commonService.nullToString(this.jewellerymasterForm.value.totalFC),
-      TOTVLC: this.commonService.nullToString(this.jewellerymasterForm.value.totalLC),
+      DIA_PCS:  this.commonService.emptyToZero(this.jewellerymasterForm.value.diamondsPcs),
+      DIA_CARAT:  this.commonService.emptyToZero(this.jewellerymasterForm.value.diamondsCarat),
+      DIA_VALUEFC:  this.commonService.emptyToZero(this.jewellerymasterForm.value.diamondsFC),
+      DIA_VALUECC:  this.commonService.emptyToZero(this.jewellerymasterForm.value.diamondsLC ),
+      COLOR_PCS: this.commonService.emptyToZero(this.jewellerymasterForm.value.colorstonePcs ),
+      COLOR_CARAT: this.commonService.emptyToZero(this.jewellerymasterForm.value.colorstoneCarat),
+      COLOR_VALUEFC: this.commonService.emptyToZero(this.jewellerymasterForm.value.colorstoneFC),
+      COLOR_VALUECC: this.commonService.emptyToZero(this.jewellerymasterForm.value.colorstoneLC),
+      PEARL_PCS: this.commonService.emptyToZero(this.jewellerymasterForm.value.pearlsPcs),
+      PEARL_CARAT: this.commonService.emptyToZero(this.jewellerymasterForm.value.pearlsCarat),
+      PEARL_VALUEFC: this.commonService.emptyToZero(this.jewellerymasterForm.value.pearlsFC),
+      PEARL_VALUECC: this.commonService.emptyToZero(this.jewellerymasterForm.value.pearlsLC),
+      OTSTONES_PCS: this.commonService.emptyToZero(this.jewellerymasterForm.value.otstonesPcs),
+      OTSTONES_CARAT: this.commonService.emptyToZero(this.jewellerymasterForm.value.otstonesCarat),
+      OTSTONES_VALUEFC: this.commonService.emptyToZero(this.jewellerymasterForm.value.otstonesFC),
+      OTSTONES_VALUECC: this.commonService.emptyToZero(this.jewellerymasterForm.value.otstonesLC),
+      METAL_GROSSWT: this.commonService.emptyToZero(this.jewellerymasterForm.value.metalGrams),
+      METAL_VALUEFC: this.commonService.emptyToZero(this.jewellerymasterForm.value.metalFC),
+      METAL_VALUECC: this.commonService.emptyToZero(this.jewellerymasterForm.value.metalLC),
+      TOTPCS: this.commonService.emptyToZero(this.jewellerymasterForm.value.totalPcs),
+      TOTCARAT: this.commonService.emptyToZero(this.jewellerymasterForm.value.totalCarat),
+      TOTGMS: this.commonService.emptyToZero(this.jewellerymasterForm.value.totalGrams),
+      TOTVFC: this.commonService.emptyToZero(this.jewellerymasterForm.value.totalFC),
+      TOTVLC: this.commonService.emptyToZero(this.jewellerymasterForm.value.totalLC),
       TOTALFC: this.commonService.emptyToZero(this.jewellerymasterForm.value.totalLBFC) ,
       TOTALCC: this.commonService.emptyToZero(this.jewellerymasterForm.value.totalLBLC) ,
       LAST_EDT_BY: this.commonService.nullToString(this.jewellerymasterForm.value.lasteditby),
@@ -1280,72 +1283,7 @@ export class JewelleryMasterComponent implements OnInit {
       CHARGE10FC: 0,
       CHARGE10LC: 0,
       MANUFACTURE_ITEM: true,
-      diamondStockDetails: [
-        {
-          UNIQUEID: 0,
-          SRNO: 0,
-          METALSTONE: "",
-          DIVCODE: "",
-          KARAT: "",
-          CARAT: 0,
-          GROSS_WT: 0,
-          PCS: 0,
-          RATE_TYPE: "",
-          CURRENCY_CODE: "",
-          RATE: 0,
-          AMOUNTFC: 0,
-          AMOUNTLC: 0,
-          MAKINGRATE: 0,
-          MAKINGAMOUNT: 0,
-          COLOR: "",
-          CLARITY: "",
-          SIEVE: "",
-          SHAPE: "",
-          TMPDETSTOCK_CODE: "",
-          DSIZE: "",
-          LABCHGCODE: "",
-          PRICECODE: "",
-          DESIGN_CODE: "",
-          DETLINEREMARKS: "",
-          MFTSTOCK_CODE: "",
-          STOCK_CODE: "",
-          METALRATE: 0,
-          LABOURCODE: "",
-          STONE_TYPE: "",
-          STONE_WT: 0,
-          NET_WT: 0,
-          LOT_REFERENCE: "",
-          INCLUDEMETALVALUE: true,
-          FINALVALUE: 0,
-          PERCENTAGE: 0,
-          HANDLING_CHARGEFC: 0,
-          HANDLING_CHARGELC: 0,
-          PROCESS_TYPE: "",
-          SELLING_RATE: 0,
-          LAB_RATE: 0,
-          LAB_AMTFC: 0,
-          LAB_AMTLC: 0,
-          SIEVE_SET: "",
-          PURITY: 0,
-          PUREWT: 0,
-          RRR_STOCK_REF: "",
-          FINALVALUELC: 0,
-          LABCHGCODE1: "",
-          LABCHGCODE2: "",
-          LABRATE1: 0,
-          LABRATE2: 0,
-          CERT_REF: "",
-          FROMEXISTINGSTOCK: 0,
-          INSERTEDSTOCKCODE: "",
-          INSERTEDSTOCKCOST: 0,
-          POLISHED: "",
-          RAPPRICE: 0,
-          PIQUE: "",
-          GRAINING: "",
-          FLUORESCENCE: "",
-          WEIGHT: 0,
-        },
-      ],
+      diamondStockDetails: this.StoneDetailsComponentData
     };
   }
 
@@ -1428,19 +1366,7 @@ export class JewelleryMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
   deleteRecord() {
-    if (!this.content.MID) {
-      Swal.fire({
-        title: "",
-        text: "Please Select data to delete!",
-        icon: "error",
-        confirmButtonColor: "#336699",
-        confirmButtonText: "Ok",
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return;
-    }
+
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -1452,8 +1378,7 @@ export class JewelleryMasterComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         let API =
-          "DiamondStockMaster/DeleteDiamondStockMaster/" +
-          this.content.STOCK_CODE;
+          "DiamondStockMaster/DeleteDiamondStockMaster/" + this.content.STOCK_CODE;
         let Sub: Subscription = this.dataService
           .deleteDynamicAPI(API)
           .subscribe(
