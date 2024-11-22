@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JewelleryAltrationDetailsComponent } from '../jewellery-altration/jewellery-altration-details/jewellery-altration-details.component';
 import { JewelleryAssemblingDetailsComponent } from './jewellery-assembling-details/jewellery-assembling-details.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-jewellery-assembling',
@@ -16,6 +17,7 @@ import { JewelleryAssemblingDetailsComponent } from './jewellery-assembling-deta
   styleUrls: ['./jewellery-assembling.component.scss']
 })
 export class JewelleryAssemblingComponent implements OnInit {
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
   divisionMS: any = 'ID';
   column1:any[] = ['SRNO','Stock Code', 'PCS','Design','Type','Category','Sub Category','Brand','Cost Code','Price 1','Price 2','Location'];
   @Input() content!: any; 
@@ -26,6 +28,10 @@ export class JewelleryAssemblingComponent implements OnInit {
   yearMonth?: String;
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
+ 
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -68,6 +74,15 @@ export class JewelleryAssemblingComponent implements OnInit {
    workername:[''],
     narration:[''],
   });
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
+  }
 
   removedata(){
     this.tableData.pop();

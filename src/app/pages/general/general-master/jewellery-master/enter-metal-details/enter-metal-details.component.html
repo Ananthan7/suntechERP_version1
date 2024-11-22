@@ -5,7 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
- <modal-header (cancelClick)="close()" [isViewContinue]="true"></modal-header>
+ <modal-header (cancelClick)="close()" [isViewContinue]="true" (saveClick)="formSubmit()"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="enterMetalDetailsForm">

@@ -35,12 +35,20 @@
                       (change)="onInput($event, 'code', true)"
                       [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                       type="text"
-                      #codeInput
+                      maxlength="6"
                       matInput
                       formControlName="code"
-                      UpperCaseDirective
                       autocomplete="off"
                     />
+                    <mat-error
+                      *ngIf="
+                        deductionMasterForm.controls['code'].hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Code is required.
+                    </mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -60,9 +68,17 @@
                       #codeInput
                       matInput
                       formControlName="description"
-                      UpperCaseDirective
                       autocomplete="off"
                     />
+                    <mat-error
+                      *ngIf="
+                        deductionMasterForm.controls['description'].hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Desc is required.
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-sm-4">
@@ -86,6 +102,9 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (keydown)="
+                        onKeyDown($event, ['glCode', 'glCodeDesc'], glCodeData)
+                      "
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
@@ -102,6 +121,8 @@
                       formControlName="glCode"
                     />
                     <master-search
+                      (focusout)="openTab($event, 'glCode')"
+                      #overlayGlCode
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="glCodeData"
@@ -114,6 +135,16 @@
                       "
                     >
                     </master-search>
+
+                    <mat-error
+                      *ngIf="
+                        deductionMasterForm.controls['glCode'].hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      GL Code is required.
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-sm-3">
@@ -123,8 +154,19 @@
                       type="text"
                       matInput
                       formControlName="glCodeDesc"
-                      UpperCaseDirective
+                      (keydown)="
+                        onKeyDown($event, ['glCode', 'glCodeDesc'], glCodeData)
+                      "
                     />
+                    <mat-error
+                      *ngIf="
+                        deductionMasterForm.controls['glCodeDesc'].hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      GL Desc is required.
+                    </mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -138,6 +180,13 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (keydown)="
+                        onKeyDown(
+                          $event,
+                          ['countryCode', 'countryDesc'],
+                          countryCodeData
+                        )
+                      "
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
@@ -154,6 +203,8 @@
                       formControlName="countryCode"
                     />
                     <master-search
+                      (focusout)="openTab($event, 'countryCode')"
+                      #overlayCountryCode
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="countryCodeData"
@@ -166,6 +217,16 @@
                       "
                     >
                     </master-search>
+
+                    <mat-error
+                      *ngIf="
+                        deductionMasterForm.controls['countryCode'].hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Country Code is required.
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-sm-3">
@@ -175,8 +236,23 @@
                       type="text"
                       matInput
                       formControlName="countryDesc"
-                      UpperCaseDirective
+                      (keydown)="
+                        onKeyDown(
+                          $event,
+                          ['countryCode', 'countryDesc'],
+                          countryCodeData
+                        )
+                      "
                     />
+                    <mat-error
+                      *ngIf="
+                        deductionMasterForm.controls['countryDesc'].hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Country Desc is required.
+                    </mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -201,6 +277,16 @@
                         ><b>Percentage</b></mat-radio-button
                       >
                     </mat-radio-group>
+                    <mat-error
+                      style="font-size: 11px; color: red"
+                      *ngIf="
+                        deductionMasterForm.controls['method'].hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Please select a method.
+                    </mat-error>
                   </div>
                   <div class="col-md-6">
                     <div class="row mb-1">
@@ -220,11 +306,20 @@
                             [readonly]="flag == 'VIEW'"
                             type="text"
                             matInput
-                            style="text-align: right"
+                            class="text-right"
                             AmountDecimalInput
                             formControlName="value"
                             autocomplete="off"
                           />
+                          <mat-error
+                            *ngIf="
+                              deductionMasterForm.controls['value'].hasError(
+                                'required'
+                              )
+                            "
+                          >
+                            Value is required.
+                          </mat-error>
                         </mat-form-field>
                       </div>
                     </div>
@@ -241,7 +336,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row my-2">
+              <div *ngIf="isViewReport" class="row my-2">
                 <label
                   for="inputPassword"
                   id="ID002"
@@ -265,7 +360,6 @@
                       type="text"
                       matInput
                       formControlName="reportHeadingCode"
-                      UpperCaseDirective
                     />
                     <master-search
                       *ngIf="flag != 'VIEW'"
@@ -346,7 +440,7 @@
                           userDefinedData,
                           ['userDefined1'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -356,11 +450,13 @@
                       formControlName="userDefined1"
                     />
                     <master-search
+                      #overlayUserDefined1
+                      (focusout)="openTab($event, 'userDefined1')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined1', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined1', 'CODE')
                       "
                     >
                     </master-search>
@@ -383,7 +479,7 @@
                           userDefinedData,
                           ['userDefined2'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -394,11 +490,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined2
+                      (focusout)="openTab($event, 'userDefined2')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined2', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined2', 'CODE')
                       "
                     >
                     </master-search>
@@ -421,7 +519,7 @@
                           userDefinedData,
                           ['userDefined3'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -432,11 +530,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined3
+                      (focusout)="openTab($event, 'userDefined3')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined3', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined3', 'CODE')
                       "
                     >
                     </master-search>
@@ -459,7 +559,7 @@
                           userDefinedData,
                           ['userDefined4'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -470,11 +570,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined4
+                      (focusout)="openTab($event, 'userDefined4')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined4', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined4', 'CODE')
                       "
                     >
                     </master-search>
@@ -497,7 +599,7 @@
                           userDefinedData,
                           ['userDefined5'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -508,11 +610,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined5
+                      (focusout)="openTab($event, 'userDefined5')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined5', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined5', 'CODE')
                       "
                     >
                     </master-search>
@@ -537,7 +641,7 @@
                           userDefinedData,
                           ['userDefined6'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -548,11 +652,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined6
+                      (focusout)="openTab($event, 'userDefined6')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined6', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined6', 'CODE')
                       "
                     >
                     </master-search>
@@ -575,7 +681,7 @@
                           userDefinedData,
                           ['userDefined7'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -586,11 +692,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined7
+                      (focusout)="openTab($event, 'userDefined7')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined7', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined7', 'CODE')
                       "
                     >
                     </master-search>
@@ -613,7 +721,7 @@
                           userDefinedData,
                           ['userDefined8'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -624,11 +732,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined8
+                      (focusout)="openTab($event, 'userDefined8')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined8', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined8', 'CODE')
                       "
                     >
                     </master-search>
@@ -651,7 +761,7 @@
                           userDefinedData,
                           ['userDefined9'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -662,11 +772,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined9
+                      (focusout)="openTab($event, 'userDefined9')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined9', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined9', 'CODE')
                       "
                     >
                     </master-search>
@@ -689,7 +801,7 @@
                           userDefinedData,
                           ['userDefined10'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -700,11 +812,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined10
+                      (focusout)="openTab($event, 'userDefined10')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined10', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined10', 'CODE')
                       "
                     >
                     </master-search>
@@ -729,7 +843,7 @@
                           userDefinedData,
                           ['userDefined11'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -740,11 +854,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined11
+                      (focusout)="openTab($event, 'userDefined11')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined11', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined11', 'CODE')
                       "
                     >
                     </master-search>
@@ -767,7 +883,7 @@
                           userDefinedData,
                           ['userDefined12'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -778,11 +894,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined12
+                      (focusout)="openTab($event, 'userDefined12')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined12', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined12', 'CODE')
                       "
                     >
                     </master-search>
@@ -805,7 +923,7 @@
                           userDefinedData,
                           ['userDefined13'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -816,11 +934,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined3
+                      (focusout)="openTab($event, 'userDefined13')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined13', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined13', 'CODE')
                       "
                     >
                     </master-search>
@@ -843,7 +963,7 @@
                           userDefinedData,
                           ['userDefined14'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -854,11 +974,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined14
+                      (focusout)="openTab($event, 'userDefined14')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined14', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined14', 'CODE')
                       "
                     >
                     </master-search>
@@ -881,7 +1003,7 @@
                           userDefinedData,
                           ['userDefined15'],
                           false,
-                          ['DESCRIPTION'],
+                          ['CODE'],
                           false
                         )
                       "
@@ -892,11 +1014,13 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined15
+                      (focusout)="openTab($event, 'userDefined15')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
-                        lookupSelect($event, 'userDefined15', 'DESCRIPTION')
+                        lookupSelect($event, 'userDefined15', 'CODE')
                       "
                     >
                     </master-search>

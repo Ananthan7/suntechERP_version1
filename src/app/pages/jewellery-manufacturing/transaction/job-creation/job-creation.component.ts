@@ -12,6 +12,7 @@ import {
   NgbModalRef,
 } from "@ng-bootstrap/ng-bootstrap";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { AttachmentUploadComponent } from "src/app/shared/common/attachment-upload/attachment-upload.component";
 
 @Component({
   selector: "app-job-creation",
@@ -20,7 +21,10 @@ import { MasterSearchComponent } from "src/app/shared/common/master-search/maste
 })
 export class JobCreationComponent implements OnInit {
   @ViewChild('overlayuserName') overlayuserName!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
   divisionMS: any;
   columnhead: any[] = ["SL No", "Date", "Stock Code", "Party", "Delivery Date", "Partyname", "Remarks", "Pending Days", "Design Code", "Description", "Pcs Order", "Balance Pcs", "No Bags", "Metal Wt", "Stone Wt", "Gross Wt", "Unq Design", "SRNO"];
   columnheader: any[] = ["SL No", "Orders", "Design Code", "Stock Code", "Job Number", "Job Description", "Karat", "Total Pcs", "Stone Wt", "Metal Wt", "Gross Wt", "Category", "Sub Category", "Brand Code", "Metal Color", "Type", "Seq.Code", "Actualpcs", "YEARMONTH", "PartyCode", "DSO_SRNO"];
@@ -92,6 +96,17 @@ export class JobCreationComponent implements OnInit {
     this.jobCreationFrom.controls.vocNo.setValue('1')
     this.jobCreationFrom.controls.vocDate.setValue(this.comService.currentDate)
   
+  }
+
+  
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
   }
 
   removedata() {

@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-casting-tree-up',
@@ -21,6 +22,8 @@ export class CastingTreeUpComponent implements OnInit {
   @ViewChild('overlayenteredBy') overlayenteredBy!: MasterSearchComponent;
   @ViewChild('overlaykaratCode') overlaykaratCode!: MasterSearchComponent;
   @ViewChild('overlaycolor') overlaycolor!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
   selectedTabIndex = 0;
   divisionMS: any = 'ID';
   branchCode?: String;
@@ -161,6 +164,21 @@ export class CastingTreeUpComponent implements OnInit {
       this.setAllInitialValues()
     }
   }
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+    
+  }
+
   setInitialValues(){
   this.castingTreeUpFrom.controls.recMetal.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   this.castingTreeUpFrom.controls.stoneWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))

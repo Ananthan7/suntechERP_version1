@@ -17,8 +17,9 @@ import themes from 'devextreme/ui/themes';
 export class StoneDetailsComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any;
+  @Input() tablecount :any;
   tableData: any[] = [];
-  
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -30,6 +31,7 @@ export class StoneDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(this.tableData)
   }
 
   enterStoneDetailsForm: FormGroup = this.formBuilder.group({
@@ -45,6 +47,19 @@ export class StoneDetailsComponent implements OnInit {
     SizeCode: [''],
     labourCode: [''],
     stockRefCode: [''],
+    karat:[''],
+    karatRate:[''],
+    labourRate:[''],
+    labourAmt:[''],
+    currency:[''],
+    currencyRate:[''],
+    amountLC:[''],
+    amountFC:[''],
+    percentage:[''],
+    sellingPriceLC:[''],
+    sellingPriceFC:[''],
+    certRef:[''],
+    pieces:[''],
   });
 
 
@@ -70,9 +85,9 @@ export class StoneDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Shape Code',
+    SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "types='SHAPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -88,7 +103,7 @@ export class StoneDetailsComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve Set Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -104,7 +119,7 @@ export class StoneDetailsComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -148,7 +163,7 @@ export class StoneDetailsComponent implements OnInit {
   stockRefCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 35,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'StockRef Code',
     SEARCH_VALUE: '',
@@ -168,7 +183,7 @@ export class StoneDetailsComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION:  "TYPES = 'color master'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -181,9 +196,9 @@ export class StoneDetailsComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 37,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Clarity Code',
-    SEARCH_VALUE: '',
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Clarity Code",
+    SEARCH_VALUE: "",
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
@@ -200,7 +215,7 @@ export class StoneDetailsComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -226,7 +241,83 @@ export class StoneDetailsComponent implements OnInit {
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
+    //TODO reset forms and data before
+    console.log(data);
+    
     this.activeModal.close(data);
+  }
+
+
+
+  formSubmit(){
+    this.tablecount += 1;
+ 
+    const postData = {
+      UNIQUEID: 0,
+          SRNO: this.tablecount,
+          METALSTONE: "",
+          DIVCODE: "",
+          KARAT:   this.commonService.nullToString(this.enterStoneDetailsForm.value.karat),
+          CARAT:   this.commonService.emptyToZero(this.enterStoneDetailsForm.value.karatRate),
+          GROSS_WT: 0,
+          PCS: this.commonService.emptyToZero(this.enterStoneDetailsForm.value.pieces),
+          RATE_TYPE: this.commonService.nullToString(this.enterStoneDetailsForm.value.currencyRate),
+          CURRENCY_CODE: this.commonService.nullToString(this.enterStoneDetailsForm.value.currency),
+          RATE: 0,
+          AMOUNTFC:  this.commonService.emptyToZero(this.enterStoneDetailsForm.value.amountFC),
+          AMOUNTLC:  this.commonService.emptyToZero(this.enterStoneDetailsForm.value.amountLC),
+          MAKINGRATE: 0,
+          MAKINGAMOUNT: 0,
+          COLOR:  this.commonService.nullToString(this.enterStoneDetailsForm.value.ColorCode),
+          CLARITY:  this.commonService.nullToString(this.enterStoneDetailsForm.value.ClarityCode),
+          SIEVE: this.commonService.nullToString(this.enterStoneDetailsForm.value.sieve),
+          SHAPE: this.commonService.nullToString(this.enterStoneDetailsForm.value.Shapecode),
+          TMPDETSTOCK_CODE: "",
+          DSIZE:  this.commonService.nullToString(this.enterStoneDetailsForm.value.SizeCode),
+          LABCHGCODE: this.commonService.nullToString(this.enterStoneDetailsForm.value.labourAmt),
+          PRICECODE: this.commonService.nullToString(this.enterStoneDetailsForm.value.priceCode),
+          DESIGN_CODE: "",
+          DETLINEREMARKS: "",
+          MFTSTOCK_CODE: this.commonService.nullToString(this.enterStoneDetailsForm.value.Stockcode),
+          STOCK_CODE: this.commonService.nullToString(this.enterStoneDetailsForm.value.StockcodeDes),
+          METALRATE: 0,
+          LABOURCODE: this.commonService.nullToString(this.enterStoneDetailsForm.value.labourCode),
+          STONE_TYPE:  this.commonService.nullToString(this.enterStoneDetailsForm.value.stoneTypeCode),
+          STONE_WT: 0,
+          NET_WT: 0,
+          LOT_REFERENCE: "",
+          INCLUDEMETALVALUE: true,
+          FINALVALUE: 0,
+          PERCENTAGE: this.commonService.emptyToZero(this.enterStoneDetailsForm.value.percentage),
+          HANDLING_CHARGEFC: 0,
+          HANDLING_CHARGELC: 0,
+          PROCESS_TYPE: "",
+          SELLING_RATE:  this.commonService.emptyToZero(this.enterStoneDetailsForm.value.sellingPriceLC),
+          LAB_RATE:  this.commonService.emptyToZero(this.enterStoneDetailsForm.value.labourRate),
+          LAB_AMTFC:  this.commonService.emptyToZero(this.enterStoneDetailsForm.value.sellingPriceFC),
+          LAB_AMTLC: 0,
+          SIEVE_SET:  this.commonService.nullToString(this.enterStoneDetailsForm.value.sieveSet),
+          PURITY: 0,
+          PUREWT: 0,
+          RRR_STOCK_REF: this.commonService.nullToString(this.enterStoneDetailsForm.value.stockRefCode),
+          FINALVALUELC: 0,
+          LABCHGCODE1: "",
+          LABCHGCODE2: "",
+          LABRATE1: 0,
+          LABRATE2: 0,
+          CERT_REF: this.commonService.nullToString(this.enterStoneDetailsForm.value.certRef),
+          FROMEXISTINGSTOCK: 0,
+          INSERTEDSTOCKCODE: "",
+          INSERTEDSTOCKCOST: 0,
+          POLISHED: "",
+          RAPPRICE: 0,
+          PIQUE: "",
+          GRAINING: "",
+          FLUORESCENCE: "",
+          WEIGHT: 0,
+    }
+
+    this.close(postData);
+
   }
 }

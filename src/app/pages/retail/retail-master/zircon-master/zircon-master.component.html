@@ -587,7 +587,7 @@
                     type="number"
                     [readonly]="flag === 'VIEW'"
                     matInput
-                    formControlName="currencyDesc"
+                    formControlName="currencyRate"
                   />
                 </mat-form-field>
               </div>
@@ -632,6 +632,7 @@
                 <button
                   type="button"
                   class="col-md-12 p-4 mb-4 btn btn-primary text-center"
+                  (click)="diamondPriceCalculation()"
                 >
                   Price Schema
                 </button>

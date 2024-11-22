@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
@@ -81,6 +82,8 @@ export class ProcessMasterComponent implements OnInit {
   @ViewChild('codeInput1') codeInput1!: ElementRef;
   @ViewChild('approvalProcessInput') approvalProcessInput!: ElementRef;
   @ViewChild('recStockCode') recStockCode!: ElementRef;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
 
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -384,6 +387,20 @@ export class ProcessMasterComponent implements OnInit {
     if (this.processMasterForm.value.processCode == '') {
       this.commonService.toastErrorByMsgId('MSG1680')//Process Code cannot be empty
     }
+  }
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
   }
 
   jobNumberShow() {
@@ -1159,12 +1176,6 @@ export class ProcessMasterComponent implements OnInit {
 
   /**use: common accode change validation */
   checkAccodeSelected(event: any, LOOKUPDATA: MasterSearchModel, formname: string) {
-    console.log(event.target.value);
-
-    var checkValue = event.target.value;
-    console.log(checkValue);
-
-
     // LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '') {
       this.processMasterForm.controls[formname].setValue('');
@@ -1174,8 +1185,6 @@ export class ProcessMasterComponent implements OnInit {
     // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
     this.wipAccodeValidateSP();
     // this.lossAccodeValidateSP();
-
-
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
       this.processMasterForm.controls[formname].setValue('');
       this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
@@ -1459,18 +1468,12 @@ export class ProcessMasterComponent implements OnInit {
 
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    console.log('Focusout event triggered:', event);
-    console.log('Focusout event triggered:', event.target.value);
-    console.log('LOOKUPDATA:', LOOKUPDATA);
-    console.log('FORMNAME:', FORMNAME);
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    if (event.target.value == '' || this.viewMode) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    console.log("this Working Now");
-
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
@@ -1482,7 +1485,6 @@ export class ProcessMasterComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
-
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
@@ -1761,14 +1763,8 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
-  // lookupKeyPress(event: KeyboardEvent) {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //   }
-  // }
-
-
   lookupKeyPress(event: any, form?: any) {
+    this.showAlertIfCodeIsEmpty()
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
     }

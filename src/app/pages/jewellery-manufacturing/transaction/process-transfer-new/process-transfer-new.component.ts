@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ProcessTransferNewDetailComponent } from './process-transfer-new-detail/process-transfer-new-detail.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-process-transfer-new',
@@ -16,6 +17,10 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 })
 export class ProcessTransferNewComponent implements OnInit {
   @ViewChild('overlaysalesman') public overlaysalesman!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
   @Input() content!: any;
   tableData: any[] = [];
   detailData: any[] = [];
@@ -205,6 +210,15 @@ export class ProcessTransferNewComponent implements OnInit {
       this.processTransferFrom.controls.currencyrate.setValue('')
       this.commonService.toastErrorByMsgId('MSG1531')
     }
+  }
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
   }
 
   removedata() {

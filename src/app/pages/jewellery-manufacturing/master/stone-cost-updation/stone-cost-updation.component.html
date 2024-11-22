@@ -8,7 +8,9 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
     [isViewDelete]="editMode"
-    (deleteClick)="deleteRecord()"></modal-header>
+    (deleteClick)="deleteRecord()"[isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+    <!-- component to upload attachment -->
+    <attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="stonecostupdationFrom">

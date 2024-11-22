@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { AlloyAllocationComponent } from './alloy-allocation/alloy-allocation.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { Code } from 'angular-feather/icons';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-cad-processing',
@@ -21,6 +22,7 @@ export class CADProcessingComponent implements OnInit {
   @ViewChild('overlayworkercode') overlayworkercode!: MasterSearchComponent;
   @ViewChild('overlaytoworkercode') overlaytoworkercode!: MasterSearchComponent;
   @ViewChild('overlaytoProcesscode') overlaytoProcesscode!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
   @Input() content!: any;
   @Input()
   selectedIndex!: number | null;
@@ -132,6 +134,20 @@ export class CADProcessingComponent implements OnInit {
     salesPersonCode:[''],
     StockCode: ['', [Validators.required]],
   });
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+    
+  }
 
   setvaluesdata(){
     console.log(this.comService);

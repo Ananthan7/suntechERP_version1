@@ -5,7 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="jewellerymasterForm">
@@ -18,7 +18,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Item Code :</label>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="itemcode" />
+                      <input type="text" matInput formControlName="itemcode" maxlength="1"/>
                     </mat-form-field>
                     
                   </div>
@@ -284,7 +284,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Pcs / Unit :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="PCSunit" />
+                      <input type="number" matInput formControlName="PCSunit" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Size :</label>
@@ -307,7 +307,7 @@
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;"  appearance="outline">
                       <input type="text" matInput formControlName="karat" />
-                      <master-search  class="masterSearch" [MasterSearchData]="timeCodeData" (newRowClick)="timeSelected($event)">
+                      <master-search  class="masterSearch" [MasterSearchData]="karatcodeData" (newRowClick)="karatcodeSelected($event)">
                       </master-search>
                     </mat-form-field>
                   </div>
@@ -335,22 +335,22 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label"><a href="#">Print Scheme</a></label>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="printscheme" />
+                      <input type="number" matInput formControlName="printscheme" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="printscheme2"/>
+                      <input type="number" matInput formControlName="printscheme2" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="printscheme3"/>
+                      <input type="number" matInput formControlName="printscheme3" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="printscheme4"/>
+                      <input type="number" matInput formControlName="printscheme4" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -366,17 +366,17 @@
                   </div>
                   <div class="col-md-2">
                     <mat-form-field   style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="price1per" />
+                      <input type="number" matInput formControlName="price1per" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field   style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="price1FC" />
+                      <input type="number" matInput formControlName="price1FC" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field   style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="price1LC" />
+                      <input type="number" matInput formControlName="price1LC" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -392,17 +392,17 @@
                   </div>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="price2per" />
+                      <input type="number" matInput formControlName="price2per" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="price2FC" />
+                      <input type="number" matInput formControlName="price2FC" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="price2LC" />
+                      <input type="number" matInput formControlName="price2LC" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -418,17 +418,17 @@
                   </div>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="price3per" />
+                      <input type="number" matInput formControlName="price3per" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="price3FC" />
+                      <input type="number" matInput formControlName="price3FC" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="price3LC" />
+                      <input type="number" matInput formControlName="price3LC" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -444,17 +444,17 @@
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="price4per" />
+                      <input type="number" matInput formControlName="price4per" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="price4FC" />
+                      <input type="number" matInput formControlName="price4FC" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="price4LC" />
+                      <input type="number" matInput formControlName="price4LC" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -470,17 +470,17 @@
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="price5per" />
+                      <input type="number" matInput formControlName="price5per" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="price5FC" />
+                      <input type="number" matInput formControlName="price5FC" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="price5LC" />
+                      <input type="number" matInput formControlName="price5LC" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -488,13 +488,13 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Landed cost:</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="landercost" />
+                      <input type="number" matInput formControlName="landercost" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Foreign Cost :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="foreigncost" />
+                      <input type="number" matInput formControlName="foreigncost" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -502,13 +502,13 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Market Cost :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="marketcost" />
+                      <input type="number" matInput formControlName="marketcost" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Gross Wt :</label>
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="grossWt" />
+                      <input type="number" matInput formControlName="grossWt" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -687,7 +687,10 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label">Created On :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="createon" />
+                      <input matInput [matDatepicker]="createon"  formControlName="createon"
+                      placeholder="DD/MM/YYYY" DateValidation />
+                    <mat-datepicker-toggle matSuffix [for]="createon"></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate" #createon></mat-datepicker>
                     </mat-form-field>
                   </div>
                   </div>
@@ -698,7 +701,7 @@
                   <div class="col-md-6">
                       <mat-form-field style="width: 100%;"  appearance="outline">
                         <input matInput [matDatepicker]="lastediton"  formControlName="lastediton"
-                        placeholder="YYYY/MM/DD" DateValidation />
+                        placeholder="DD/MM/YYYY" DateValidation />
                       <mat-datepicker-toggle matSuffix [for]="lastediton"></mat-datepicker-toggle>
                       <mat-datepicker [startAt]="currentDate" #lastediton></mat-datepicker>
                       </mat-form-field>
@@ -869,7 +872,7 @@
           <mat-tab label="Stone Details">
             <div class="row mt-3">
               <div class="col-md-12">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true"  [dataSource]="StoneDetailsComponentData" >
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>
@@ -911,27 +914,27 @@
                   <label for="inputPassword" class="col-sm-2 col-form-label">Diamonds :</label>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="diamondsPcs" />
+                      <input type="number" matInput formControlName="diamondsPcs" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="diamondsCarat" />
+                      <input type="number" matInput formControlName="diamondsCarat" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="diamondsGrams" />
+                      <input type="number" matInput formControlName="diamondsGrams" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="diamondsFC" />
+                      <input type="number" matInput formControlName="diamondsFC" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="diamondsLC" />
+                      <input type="number" matInput formControlName="diamondsLC" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -939,27 +942,27 @@
                   <label for="inputPassword" class="col-sm-2 col-form-label">Color Stone :</label>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="colorstonePcs" />
+                      <input type="number" matInput formControlName="colorstonePcs" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="colorstoneCarat" />
+                      <input type="number" matInput formControlName="colorstoneCarat" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="colorstoneGrams" />
+                      <input type="number" matInput formControlName="colorstoneGrams" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="colorstoneFC" />
+                      <input type="number" matInput formControlName="colorstoneFC" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="colorstoneLC" />
+                      <input type="number" matInput formControlName="colorstoneLC" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -967,27 +970,27 @@
                   <label for="inputPassword" class="col-sm-2 col-form-label">Pearls :</label>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="pearlsPcs" />
+                      <input type="number" matInput formControlName="pearlsPcs" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="pearlsCarat" />
+                      <input type="number" matInput formControlName="pearlsCarat" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="pearlsGrams" />
+                      <input type="number" matInput formControlName="pearlsGrams" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="pearlsFC" />
+                      <input type="number" matInput formControlName="pearlsFC" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="pearlsLC" />
+                      <input type="number" matInput formControlName="pearlsLC" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -995,27 +998,27 @@
                   <label for="inputPassword" class="col-sm-2 col-form-label">Ot Stones :</label>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="otstonesPcs" />
+                      <input type="number" matInput formControlName="otstonesPcs" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="otstonesCarat" />
+                      <input type="number" matInput formControlName="otstonesCarat" class="text-right">
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="otstonesGrams" />
+                      <input type="number" matInput formControlName="otstonesGrams" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="otstonesFC" />
+                      <input type="number" matInput formControlName="otstonesFC" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="otstonesLC" />
+                      <input type="number" matInput formControlName="otstonesLC" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -1023,27 +1026,27 @@
                   <label for="inputPassword" class="col-sm-2 col-form-label">Metal :</label>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="metalPcs" />
+                      <input type="number" matInput formControlName="metalPcs" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="metalCarat" />
+                      <input type="number" matInput formControlName="metalCarat" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="metalGrams" />
+                      <input type="number" matInput formControlName="metalGrams" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="metalFC" />
+                      <input type="number" matInput formControlName="metalFC" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="metalLC" />
+                      <input type="number" matInput formControlName="metalLC" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -1051,27 +1054,27 @@
                   <label for="inputPassword" class="col-sm-2 col-form-label">Total :</label>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="totalPcs" />
+                      <input type="number" matInput formControlName="totalPcs" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="totalCarat" />
+                      <input type="number" matInput formControlName="totalCarat" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="totalGrams" />
+                      <input type="number" matInput formControlName="totalGrams" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="totalFC" />
+                      <input type="number" matInput formControlName="totalFC" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                      <input type="number" matInput formControlName="totalLC" />
+                      <input type="number" matInput formControlName="totalLC" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -1093,12 +1096,12 @@
                       <label for="inputPassword" class="col-sm-4 col-form-label">Setting :</label>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="settingFC" />
+                          <input type="number" matInput formControlName="settingFC" class="text-right"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="settingLC" />
+                          <input type="number" matInput formControlName="settingLC" class="text-right"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1106,12 +1109,12 @@
                       <label for="inputPassword" class="col-sm-4 col-form-label">Polishing :</label>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="polishingFC" />
+                          <input type="number" matInput formControlName="polishingFC" class="text-right"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="polishingLC" />
+                          <input type="number" matInput formControlName="polishingLC" class="text-right"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1119,12 +1122,12 @@
                       <label for="inputPassword" class="col-sm-4 col-form-label">Rhodium :</label>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="rhodiumFC" />
+                          <input type="number" matInput formControlName="rhodiumFC" class="text-right"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="rhodiumLC" />
+                          <input type="number" matInput formControlName="rhodiumLC" class="text-right"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1132,12 +1135,12 @@
                       <label for="inputPassword" class="col-sm-4 col-form-label">Making :</label>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="makingFC" />
+                          <input type="number" matInput formControlName="makingFC" class="text-right"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="makingLC" />
+                          <input type="number" matInput formControlName="makingLC" class="text-right"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1145,12 +1148,12 @@
                       <label for="inputPassword" class="col-sm-4 col-form-label">Plat charges :</label>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="platChargesFC" />
+                          <input type="number" matInput formControlName="platChargesFC" class="text-right"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="platChargesLC" />
+                          <input type="number" matInput formControlName="platChargesLC" class="text-right"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1158,12 +1161,12 @@
                       <label for="inputPassword" class="col-sm-4 col-form-label">Cert charges :</label>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="certChargesFC" />
+                          <input type="number" matInput formControlName="certChargesFC" class="text-right"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="certChargesLC" />
+                          <input type="number" matInput formControlName="certChargesLC" class="text-right"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1171,12 +1174,12 @@
                       <label for="inputPassword" class="col-sm-4 col-form-label">Others :</label>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="othersFC" />
+                          <input type="number" matInput formControlName="othersFC" class="text-right"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="othersLC" />
+                          <input type="number" matInput formControlName="othersLC" class="text-right"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1184,12 +1187,12 @@
                       <label for="inputPassword" class="col-sm-4 col-form-label">Total :</label>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="totalLBFC" />
+                          <input type="number" matInput formControlName="totalLBFC" class="text-right"/>
                         </mat-form-field>
                       </div>
                       <div class="col-md-4">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="totalLBLC" />
+                          <input type="number" matInput formControlName="totalLBLC" class="text-right"/>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1210,7 +1213,7 @@
                       <label for="inputPassword" class="col-sm-12 col-form-label">No Of plat</label>
                       <div class="col-md-12">
                         <mat-form-field style="width: 100%;"  appearance="outline">
-                          <input type="number" matInput formControlName="noofplat" />
+                          <input type="number" matInput formControlName="noofplat" class="text-right"/>
                         </mat-form-field>
                       </div>
                     </div>

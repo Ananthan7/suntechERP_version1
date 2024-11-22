@@ -10,6 +10,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import themes from 'devextreme/ui/themes';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-mould-making',
@@ -24,7 +25,10 @@ export class MouldMakingComponent implements OnInit {
   @ViewChild('overlayMouldType') overlayMouldType!: MasterSearchComponent;
   @ViewChild('overlayToProcess') overlayToProcess!: MasterSearchComponent;
   @ViewChild('overlayToWorker') overlayToWorker!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
 
   @Input() content!: any;
   tableData: any[] = [];
@@ -159,6 +163,15 @@ export class MouldMakingComponent implements OnInit {
       this.setvalues()
     }
 
+  }
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
   }
 
   setvalues() {
