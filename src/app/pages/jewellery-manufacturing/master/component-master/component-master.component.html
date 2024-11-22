@@ -580,7 +580,7 @@
                                         <a href="javascript:void(0)"
                                             class="mx-1"
                                             [innerHTML]="data.value"></a>
-                                        <master-search
+                                        <master-search (iconClick)="stockClicked(data)"
                                             [MasterSearchData]="stockCodeData"
                                             *ngIf="!iskaratDisabled || !isPCSDisabled"
                                             (newRowClick)="stockCodeDataSelected($event,data,'stockCodetemp')">
