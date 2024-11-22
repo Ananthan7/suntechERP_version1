@@ -41,7 +41,58 @@
             </div>
 
             <div class="row mb-1">
-                <dx-data-grid></dx-data-grid>
+                <app-loader [isLoading]="isLoading"></app-loader>
+                <dx-data-grid  #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
+                [columnAutoWidth]="true" [dataSource]="schemeRegisterDevArr" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
+                    <dxo-paging [pageSize]="6"></dxo-paging>
+                    <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                    <dxo-scrolling mode="standard"></dxo-scrolling>
+
+                    <dxi-column  dataField="BRANCHCODE" caption="Branch Code" [allowResizing]="true" alignment="left"
+                        [allowReordering]="true"></dxi-column>
+                    <dxi-column  dataField="SALESPERSON CODE" caption="Salesperson Code" [allowResizing]="true" alignment="left"
+                        [allowReordering]="true"></dxi-column>
+                    <dxi-column  dataField="SALESPERSON NAME" caption="Salesperson Name" [allowResizing]="true" alignment="left"
+                        [allowReordering]="true"></dxi-column>
+                    <dxi-column  dataField="SCHEMECODE" caption="Scheme Code" [allowResizing]="true" alignment="left"
+                        [allowReordering]="true"></dxi-column>
+                    <dxi-column  dataField="SCHEMEID" caption="Scheme ID" [allowResizing]="true" alignment="left"
+                        [allowReordering]="true"></dxi-column>
+                    <dxi-column  dataField="CUSTOMERCODE" caption="Customer Code" [allowResizing]="true" alignment="left"
+                        [allowReordering]="true"></dxi-column>
+                    <dxi-column  dataField="CUSTOMER NAME" caption="Scheme Code" [allowResizing]="true" alignment="left"
+                        [allowReordering]="true"></dxi-column>
+                    <dxi-column  dataField="EMAIL" caption="Mail ID" [allowResizing]="true" alignment="left"
+                        [allowReordering]="true"></dxi-column>
+                    <dxi-column  dataField="MOBILE" caption="Mobile Number" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true"></dxi-column>
+                    <dxi-column  dataField="SCHEME JOIN DATE" caption="Scheme Joined Date" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true" dataType="date" [format]="'dd-MM-yyyy'"></dxi-column>
+                    <dxi-column  dataField="SCHEME END DATE" caption="Scheme Ending Date" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true" dataType="date" [format]="'dd-MM-yyyy'"></dxi-column>
+                    <dxi-column  dataField="SCHEME PERIOD" caption="Scheme Duration" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true"></dxi-column>
+                    <dxi-column  dataField="INSTALLMENT AMOUNT" caption="Installment Amount" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true" [customizeText]="customizeGridContent"></dxi-column>
+                    <dxi-column  dataField="TOTAL PAYMENT AMOUNT" caption="Total Amount" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true" [customizeText]="customizeGridContent"></dxi-column>
+                    <dxi-column  dataField="BONUS" caption="Bonus" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true"></dxi-column>
+                    <dxi-column  dataField="ASSURED AMOUNT" caption="Assured Amount" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true" [customizeText]="customizeGridContent"></dxi-column>
+                    <dxi-column  dataField="SCHEME STATUS" caption="Scheme Status" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true"></dxi-column>
+                    <dxi-column  dataField="TOTAL PAID AMOUNT" caption="Total Amount Paid" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true"  [customizeText]="customizeGridContent"></dxi-column>
+                    <dxi-column  dataField="TOTAL INSTALLEMENT" caption="Total Installment" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true" [customizeText]="nullObjectHandler"></dxi-column>
+                    <dxi-column  dataField="REDEEMEDREF" caption="Redeemed Ref" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true"  [customizeText]="nullObjectHandler"></dxi-column>
+                    <dxi-column  dataField="REDEEMEDDATE" caption="Redeemed Date" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true" [customizeText]="nullObjectHandler"></dxi-column>
+                    <dxi-column  dataField="REDEEMEDAMOUNT" caption="Redeemed Amount" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true" [customizeText]="nullObjectHandler"></dxi-column>
+            </dx-data-grid>
             </div>
             
             <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
