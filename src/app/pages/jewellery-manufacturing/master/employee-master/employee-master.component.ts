@@ -53,6 +53,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "BRANCH_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   DepartmentData: MasterSearchModel = {
@@ -65,6 +67,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "Types = 'FA DEPARTMENT'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   DesignationData: MasterSearchModel = {
@@ -77,6 +81,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES='HRM DESIGNATION MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   GradeData: MasterSearchModel = {
@@ -89,6 +95,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES ='HRM GRADE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   NationalityData: MasterSearchModel = {
@@ -101,7 +109,10 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES='NATIONALITY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
+
 
   ReligionData: MasterSearchModel = {
     PAGENO: 1,
@@ -113,6 +124,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "CODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   CountryCodeData: MasterSearchModel = {
@@ -125,6 +138,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   StateCodeData: MasterSearchModel = {
@@ -137,6 +152,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES='state master'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   CityCodeData: MasterSearchModel = {
@@ -149,6 +166,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES='REGION MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   PRCountryCodeData: MasterSearchModel = {
@@ -161,6 +180,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   PRStateCodeData: MasterSearchModel = {
@@ -173,6 +194,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES='state master'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   PRCityCodeData: MasterSearchModel = {
@@ -185,6 +208,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "CODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
 
@@ -464,10 +489,10 @@ export class EmployeeMasterComponent implements OnInit {
       case 'PRCity':
         this.overlayPRCityDataSearch.showOverlayPanel(event);
         break;
-      case 'PRStateCodeData':
+      case 'PRState':
         this.overlayPRStateCodeDataSearch.showOverlayPanel(event);
         break;
-      case 'PRCountryCodeData':
+      case 'PRCountry':
         this.overlayPRCountryCodeSearch.showOverlayPanel(event);
         break;
       default:

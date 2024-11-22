@@ -91,10 +91,23 @@
                         matInput
                         formControlName="country"
                         UpperCaseDirective
+                        (focusout)="
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              PRCountryCodeData,
+                              ['country'],
+                              false,
+                              ['CODE']
+                            )
+                          "
+                            (keydown)="
+                              onKeyDown($event, ['country'], PRCountryCodeData)
+                            "
                       />
                       <master-search
                         class="masterSearch"
                         [MasterSearchData]="PRCountryCodeData"
+                        #overlayCountrySearch
                         (newRowClick)="CountryCodeDataSelected($event)"
                       >
                       </master-search>
@@ -115,9 +128,22 @@
                         matInput
                         formControlName="state"
                         UpperCaseDirective
+                        (focusout)="
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              PRStateCodeData,
+                              ['state'],
+                              false,
+                              ['CODE']
+                            )
+                          "
+                            (keydown)="
+                              onKeyDown($event, ['state'], PRStateCodeData)
+                            "
                       />
                       <master-search
                         class="masterSearch"
+                        #overlayStateSearch
                         [MasterSearchData]="PRStateCodeData"
                         (newRowClick)="StateCodeDataSelected($event)"
                       >
@@ -139,9 +165,22 @@
                         matInput
                         formControlName="city"
                         UpperCaseDirective
+                        (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          CityCodeData,
+                          ['city'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                        (keydown)="
+                          onKeyDown($event, ['city'], CityCodeData)
+                        "
                       />
                       <master-search
                         class="masterSearch"
+                        #overlayCitySearch
                         [MasterSearchData]="CityCodeData"
                         (newRowClick)="CityCodeDataSelected($event)"
                       >
@@ -202,6 +241,7 @@
                       [viewDeleteBtn]="true"
                       [viewImportBtn]="false"
                       (addClick)="addTableData()"
+                      (deleteClick)="removedata()"
                     >
                     </menu-buttons>
 
@@ -214,6 +254,7 @@
                       [allowColumnResizing]="true"
                       keyExpr="SRNO"
                       class="mt-3"
+                      (onSelectionChanged)="onSelectionChanged($event)"
                     >
                       <dxo-selection mode="single"></dxo-selection>
                       <dxi-column dataField="SRNO" caption="SN" class="tab">
@@ -289,6 +330,7 @@
                     [viewDeleteBtn]="true"
                     [viewImportBtn]="false"
                     (addClick)="addContactTableData()"
+                    (deleteClick)="removeContactdata()"
                   >
                   </menu-buttons>
 
@@ -300,6 +342,7 @@
                     [showRowLines]="true"
                     [allowColumnResizing]="true"
                     class="mt-3"
+                    (onSelectionChanged)="onContactSelectionChanged($event)"
                   >
                     <dxo-selection mode="single"></dxo-selection>
                     <dxi-column
@@ -316,13 +359,13 @@
                     >
                     </dxi-column>
                     <dxi-column
-                      dataField="DEF_ALLOY_STOCK"
+                      dataField="EMAIL"
                       caption="Email"
                       cellTemplate="email"
                     >
                     </dxi-column>
                     <dxi-column
-                      dataField="DEF_ALLOY_STOCK"
+                      dataField="MOBILE_NO"
                       caption="Mobile"
                       cellTemplate="mobile"
                     >
