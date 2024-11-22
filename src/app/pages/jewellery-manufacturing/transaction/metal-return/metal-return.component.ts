@@ -1018,7 +1018,7 @@ export class MetalReturnComponent implements OnInit {
       "NAVSEQNO": 0,
       "FIX_UNFIX": true,
       "AUTOPOSTING": true,
-      "POSTDATE": this.commonService.currentDate,
+      "POSTDATE": this.commonService.formatDateTime(form.currentDate),
       "SYSTEM_DATE": this.commonService.formatDateTime(form.vocDate),
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
