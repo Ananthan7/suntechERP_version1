@@ -1,5 +1,10 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -8,6 +13,7 @@ import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
 
@@ -17,6 +23,30 @@ import Swal from "sweetalert2";
   styleUrls: ["./deduction-master.component.scss"],
 })
 export class DeductionMasterComponent implements OnInit {
+  @ViewChild("overlayGlCode") overlayGlCode!: MasterSearchComponent;
+  @ViewChild("overlayCountryCode") overlayCountryCode!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined1") overlayUserDefined1!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined2") overlayUserDefined2!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined3") overlayUserDefined3!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined4") overlayUserDefined4!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined5") overlayUserDefined5!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined6") overlayUserDefined6!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined7") overlayUserDefined7!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined8") overlayUserDefined8!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined9") overlayUserDefined9!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined10")
+  overlayUserDefined10!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined11")
+  overlayUserDefined11!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined12")
+  overlayUserDefined12!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined13")
+  overlayUserDefined13!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined14")
+  overlayUserDefined14!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined15")
+  overlayUserDefined15!: MasterSearchComponent;
+
   @Input() content!: any;
 
   private subscriptions: Subscription[] = [];
@@ -34,6 +64,7 @@ export class DeductionMasterComponent implements OnInit {
   ];
   avoidFraction!: any;
   considerForLeaveSalary!: any;
+  isViewReport: boolean = false;
 
   countryCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -80,15 +111,15 @@ export class DeductionMasterComponent implements OnInit {
   };
 
   deductionMasterForm: FormGroup = this.formBuilder.group({
-    code: [""],
-    description: [""],
+    code: ["", [Validators.required]],
+    description: ["", [Validators.required]],
     considerForLeaveSalary: [""],
-    countryCode: [""],
-    countryDesc: [""],
-    glCode: [""],
-    glCodeDesc: [""],
-    method: [""],
-    value: [""],
+    countryCode: ["", [Validators.required]],
+    countryDesc: ["", [Validators.required]],
+    glCode: ["", [Validators.required]],
+    glCodeDesc: ["", [Validators.required]],
+    method: ["", [Validators.required]],
+    value: ["", [Validators.required]],
     period: [""],
     avoidFraction: [""],
     reportHeadingCode: [""],
@@ -122,9 +153,9 @@ export class DeductionMasterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.content
-      ? (this.flag = this.content!.FLAG)
-      : console.log("No Content, Due to you are in ADD");
+    this.flag = this.content
+      ? this.content.FLAG
+      : (this.content = { FLAG: "ADD" }).FLAG;
     this.initialController(this.flag, this.content);
   }
 
@@ -219,7 +250,7 @@ export class DeductionMasterComponent implements OnInit {
               });
 
               response.status === "Success"
-                ? this.close("reloadMainGrid")
+                ? this.close("reloadMainGrid", true)
                 : console.log("Delete Error");
             },
             error: (err) => {
@@ -239,9 +270,23 @@ export class DeductionMasterComponent implements OnInit {
     });
   }
 
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+  close(data?: any, calling?: boolean) {
+    if (this.flag !== "VIEW" && !calling) {
+      Swal.fire({
+        title: "Are you sure you want to close this ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Close!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    } else {
+      this.activeModal.close(data);
+    }
   }
 
   BranchDataSelected(e: any) {}
@@ -306,88 +351,108 @@ export class DeductionMasterComponent implements OnInit {
   }
 
   deductionMasterFormSubmit() {
-    let postData = {
-      MID: 0,
-      DEDMST_CODE: this.deductionMasterForm.value.code,
-      DEDMST_DESC: this.deductionMasterForm.value.description,
-      DEDMST_ACCODE: this.deductionMasterForm.value.glCode,
-      DEDMST_AMOUNT: Number(this.deductionMasterForm.value.value),
-      DEDMST_PERCENFIXED:
-        this.deductionMasterForm.value.method == "F" ? true : false,
-      DEDMST_AVOIDFRACTION: this.avoidFraction == true ? 1 : 0,
-      DEDMST_BASIS: this.deductionMasterForm.value.calculationBasis,
-      DEDMST_REPORTHEADINGTO: 0,
-      DEDMST_YEARMONTHLY: this.deductionMasterForm.value.period,
-      DEDMSTCOUNTRYCODE: this.deductionMasterForm.value.countryCode,
-      UDF1: this.deductionMasterForm.value.userDefined1 || "kjfbjkhbfj",
-      UDF2: this.deductionMasterForm.value.userDefined2 || "kjfbjkhbfj",
-      UDF3: this.deductionMasterForm.value.userDefined3 || "kjfbjkhbfj",
-      UDF4: this.deductionMasterForm.value.userDefined4 || "kjfbjkhbfj",
-      UDF5: this.deductionMasterForm.value.userDefined5 || "kjfbjkhbfj",
-      UDF6: this.deductionMasterForm.value.userDefined6 || "kjfbjkhbfj",
-      UDF7: this.deductionMasterForm.value.userDefined7 || "kjfbjkhbfj",
-      UDF8: this.deductionMasterForm.value.userDefined8 || "kjfbjkhbfj",
-      UDF9: this.deductionMasterForm.value.userDefined9 || "kjfbjkhbfj",
-      UDF10: this.deductionMasterForm.value.userDefined10 || "kjfbjkhbfj",
-      UDF11: this.deductionMasterForm.value.userDefined11 || "kjfbjkhbfj",
-      UDF12: this.deductionMasterForm.value.userDefined12 || "kjfbjkhbfj",
-      UDF13: this.deductionMasterForm.value.userDefined13 || "kjfbjkhbfj",
-      UDF14: this.deductionMasterForm.value.userDefined14 || "kjfbjkhbfj",
-      UDF15: this.deductionMasterForm.value.userDefined15 || "kjfbjkhbfj",
-      DEDMST_LS: this.considerForLeaveSalary,
-    };
+    Object.keys(this.deductionMasterForm.controls).forEach((controlName) => {
+      const control = this.deductionMasterForm.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
 
-    if (this.flag === "EDIT") {
-      let API = `DeductionMaster/UpdateDeductionMaster/${this.code}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
+    const requiredFieldsInvalid = Object.keys(
+      this.deductionMasterForm.controls
+    ).some((controlName) => {
+      const control = this.deductionMasterForm.controls[controlName];
+      return control.hasError("required") && control.touched;
+    });
 
-            this.close("reloadMainGrid");
-          } else {
-            // Handle cases where the result is not successful or undefined
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+    if (!requiredFieldsInvalid) {
+      let postData = {
+        MID: 0,
+        DEDMST_CODE: this.deductionMasterForm.value.code,
+        DEDMST_DESC: this.deductionMasterForm.value.description,
+        DEDMST_ACCODE: this.deductionMasterForm.value.glCode,
+        DEDMST_AMOUNT: Number(this.deductionMasterForm.value.value),
+        DEDMST_PERCENFIXED:
+          this.deductionMasterForm.value.method == "F" ? true : false,
+        DEDMST_AVOIDFRACTION: this.avoidFraction == true ? 1 : 0,
+        DEDMST_BASIS: this.deductionMasterForm.value.calculationBasis,
+        DEDMST_REPORTHEADINGTO: 0,
+        DEDMST_YEARMONTHLY: this.deductionMasterForm.value.period,
+        DEDMSTCOUNTRYCODE: this.deductionMasterForm.value.countryCode,
+        UDF1: this.deductionMasterForm.value.userDefined1 || "kjfbjkhbfj",
+        UDF2: this.deductionMasterForm.value.userDefined2 || "kjfbjkhbfj",
+        UDF3: this.deductionMasterForm.value.userDefined3 || "kjfbjkhbfj",
+        UDF4: this.deductionMasterForm.value.userDefined4 || "kjfbjkhbfj",
+        UDF5: this.deductionMasterForm.value.userDefined5 || "kjfbjkhbfj",
+        UDF6: this.deductionMasterForm.value.userDefined6 || "kjfbjkhbfj",
+        UDF7: this.deductionMasterForm.value.userDefined7 || "kjfbjkhbfj",
+        UDF8: this.deductionMasterForm.value.userDefined8 || "kjfbjkhbfj",
+        UDF9: this.deductionMasterForm.value.userDefined9 || "kjfbjkhbfj",
+        UDF10: this.deductionMasterForm.value.userDefined10 || "kjfbjkhbfj",
+        UDF11: this.deductionMasterForm.value.userDefined11 || "kjfbjkhbfj",
+        UDF12: this.deductionMasterForm.value.userDefined12 || "kjfbjkhbfj",
+        UDF13: this.deductionMasterForm.value.userDefined13 || "kjfbjkhbfj",
+        UDF14: this.deductionMasterForm.value.userDefined14 || "kjfbjkhbfj",
+        UDF15: this.deductionMasterForm.value.userDefined15 || "kjfbjkhbfj",
+        DEDMST_LS: this.considerForLeaveSalary,
+      };
+
+      if (this.flag === "EDIT") {
+        let API = `DeductionMaster/UpdateDeductionMaster/${this.code}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              // Handle cases where the result is not successful or undefined
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `DeductionMaster/InsertDeductionMaster`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message
+                  ? result.message
+                  : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
     } else {
-      let API = `DeductionMaster/InsertDeductionMaster`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+      this.commonService.showSnackBarMsg("Please fill mandatory fields.");
     }
   }
 
@@ -522,6 +587,115 @@ export class DeductionMasterComponent implements OnInit {
             return this.openDialog("Warning", message, true);
           }
         });
+    }
+  }
+
+  onKeyDown(
+    event: KeyboardEvent,
+    controllers: string[],
+    codeData: MasterSearchModel
+  ) {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (event.key === "Backspace" || event.key === "Delete") {
+      setTimeout(() => {
+        if (inputElement.value.trim() === "") {
+          this.clearRelevantFields(controllers, codeData);
+        }
+      }, 0);
+    }
+  }
+
+  clearRelevantFields(controllers: string[], codeData: MasterSearchModel) {
+    controllers.forEach((controllerName) => {
+      const control = this.deductionMasterForm.controls[controllerName];
+      if (control) {
+        control.setValue("");
+      } else {
+        console.warn(`Control ${controllerName} not found in the form.`);
+      }
+    });
+
+    this.clearLookupData(codeData, controllers);
+  }
+
+  openTab(event: any, formControlName: string) {
+    if (event.target.value === "") {
+      this.openPanel(event, formControlName);
+    }
+  }
+
+  openPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case "glCode":
+        this.overlayGlCode.showOverlayPanel(event);
+        break;
+      case "countryCode":
+        this.overlayCountryCode.showOverlayPanel(event);
+        break;
+
+      case "userDefined1":
+        this.overlayUserDefined1.showOverlayPanel(event);
+        break;
+
+      case "userDefined2":
+        this.overlayUserDefined2.showOverlayPanel(event);
+        break;
+
+      case "userDefined3":
+        this.overlayUserDefined3.showOverlayPanel(event);
+        break;
+
+      case "userDefined4":
+        this.overlayUserDefined4.showOverlayPanel(event);
+        break;
+
+      case "userDefined5":
+        this.overlayUserDefined5.showOverlayPanel(event);
+        break;
+
+      case "userDefined6":
+        this.overlayUserDefined6.showOverlayPanel(event);
+        break;
+
+      case "userDefined7":
+        this.overlayUserDefined7.showOverlayPanel(event);
+        break;
+
+      case "userDefined8":
+        this.overlayUserDefined8.showOverlayPanel(event);
+        break;
+
+      case "userDefined9":
+        this.overlayUserDefined9.showOverlayPanel(event);
+        break;
+
+      case "userDefined10":
+        this.overlayUserDefined10.showOverlayPanel(event);
+        break;
+
+      case "userDefined11":
+        this.overlayUserDefined11.showOverlayPanel(event);
+        break;
+
+      case "userDefined12":
+        this.overlayUserDefined12.showOverlayPanel(event);
+        break;
+
+      case "userDefined13":
+        this.overlayUserDefined13.showOverlayPanel(event);
+        break;
+
+      case "userDefined14":
+        this.overlayUserDefined14.showOverlayPanel(event);
+        break;
+
+      case "userDefined15":
+        this.overlayUserDefined15.showOverlayPanel(event);
+        break;
+
+      default:
+        console.warn(`Unknown form control name: ${formControlName}`);
     }
   }
 }

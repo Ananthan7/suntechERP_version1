@@ -8,6 +8,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 @Component({
   selector: 'app-metal-issue',
   templateUrl: './wax-process.component.html',
@@ -17,7 +18,10 @@ export class WaxProcessComponent implements OnInit {
   @ViewChild('overlayprocessCodeSearch') overlayprocessCodeSearch!: MasterSearchComponent;
   @ViewChild('overlayworkercodeSearch') overlayworkercodeSearch!: MasterSearchComponent;
   @ViewChild('overlayenteredBySearch') overlayenteredBySearch!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
   // columnhead:any[] = ['SR No','Job Number','Design', 'Party','SO','SO Date ','Del Date','Gross Wt','Metal Wt','Stone Wt','Ord Pcs','Issue Pcs'];
   branchCode?: String;
   yearMonth?: String;
@@ -184,6 +188,15 @@ export class WaxProcessComponent implements OnInit {
       }
     }
     )
+  }
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
   }
 
   jobNumberDataSelected(data: any, value: any) {

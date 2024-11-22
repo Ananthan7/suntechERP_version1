@@ -83,10 +83,11 @@
             </div>
             
             <div class="col-md-6">
+                <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
                 <dx-data-grid width="100%" height="310px" #gridContainer id="gridContainer" [allowColumnReordering]="true"
-                    [dataSource]="APIData" [showColumnLines]="true" [showRowLines]="true"
+                    [dataSource]="APIData" [showColumnLines]="true" [showRowLines]="true" *ngIf="!isLoading"
                     [showBorders]="true" [columnAutoWidth]="true" (onSelectionChanged)="onGridSelection($event)"
-                    [selectedRowKeys]="selectedRowKeys">
+                    [selectedRowKeys]="selectedRowKeys" (onCellPrepared)="onCellPrepared($event)">
 
                     <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
                     <dxo-paging [enabled]="false"></dxo-paging>

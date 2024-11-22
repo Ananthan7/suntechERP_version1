@@ -1,5 +1,10 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
@@ -7,6 +12,7 @@ import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
 
@@ -18,6 +24,32 @@ import Swal from "sweetalert2";
 export class WpsAgentMasterComponent implements OnInit {
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
+
+  @ViewChild("overlayPreferedCompnyBankCode")
+  overlayPreferedCompnyBankCode!: MasterSearchComponent;
+  @ViewChild("overlayCountryCode") overlayCountryCode!: MasterSearchComponent;
+  @ViewChild("overlayBankCode") overlayBankCode!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined1") overlayUserDefined1!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined2") overlayUserDefined2!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined3") overlayUserDefined3!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined4") overlayUserDefined4!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined5") overlayUserDefined5!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined6") overlayUserDefined6!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined7") overlayUserDefined7!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined8") overlayUserDefined8!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined9") overlayUserDefined9!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined10")
+  overlayUserDefined10!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined11")
+  overlayUserDefined11!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined12")
+  overlayUserDefined12!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined13")
+  overlayUserDefined13!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined14")
+  overlayUserDefined14!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined15")
+  overlayUserDefined15!: MasterSearchComponent;
 
   flag: any;
   code: any;
@@ -55,10 +87,10 @@ export class WpsAgentMasterComponent implements OnInit {
   };
 
   WPSAgentMasterForm: FormGroup = this.formBuilder.group({
-    code: [""],
-    description: [""],
-    countryCode: [""],
-    countryDesc: [""],
+    code: ["", [Validators.required]],
+    description: ["", [Validators.required]],
+    countryCode: ["", [Validators.required]],
+    countryDesc: ["", [Validators.required]],
     bankCode: [""],
     bankDesc: [""],
     bankName: [""],
@@ -97,9 +129,9 @@ export class WpsAgentMasterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.content
-      ? (this.flag = this.content!.FLAG)
-      : console.log("No Content, Due to you are in ADD");
+    this.flag = this.content
+      ? this.content.FLAG
+      : (this.content = { FLAG: "ADD" }).FLAG;
 
     this.initialController(this.flag, this.content);
   }
@@ -191,7 +223,7 @@ export class WpsAgentMasterComponent implements OnInit {
               });
 
               response.status === "Success"
-                ? this.close("reloadMainGrid")
+                ? this.close("reloadMainGrid", true)
                 : console.log("Delete Error");
             },
             error: (err) => {
@@ -211,9 +243,23 @@ export class WpsAgentMasterComponent implements OnInit {
     });
   }
 
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+  close(data?: any, calling?: boolean) {
+    if (this.flag !== "VIEW" && !calling) {
+      Swal.fire({
+        title: "Are you sure you want to close this ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Close!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    } else {
+      this.activeModal.close(data);
+    }
   }
 
   lookupSelect(e: any, controller?: any, modelfield?: any) {
@@ -249,88 +295,108 @@ export class WpsAgentMasterComponent implements OnInit {
   }
 
   WPSAgentMasterFormSubmit() {
-    let postData = {
-      MID: 0,
-      CODE: this.WPSAgentMasterForm.value.code || "",
-      DESCRIPTION: this.WPSAgentMasterForm.value.description || "",
-      BANKNAME: this.WPSAgentMasterForm.value.bankName || "",
-      BANKBRANCH: this.WPSAgentMasterForm.value.bankBranch || "",
-      BANK_ACCNO: this.WPSAgentMasterForm.value.accountNo || "",
-      BANK_CODE: this.WPSAgentMasterForm.value.bankCode || "",
-      WPSMSTCOUNTRYCODE: this.WPSAgentMasterForm.value.countryCode || "",
-      WPS_COMPANYBANK_CODE:
-        this.WPSAgentMasterForm.value.preferedCompnyBankCode || "",
-      WPS_SWIFT_CODE: this.WPSAgentMasterForm.value.swiftCode || "",
-      WPS_SORT_CODE: this.WPSAgentMasterForm.value.sortCode || "",
-      WPS_ROUTING_CODE: this.WPSAgentMasterForm.value.routingCode || "",
-      UDF1: this.WPSAgentMasterForm.value.userDefined1 || "",
-      UDF2: this.WPSAgentMasterForm.value.userDefined2 || "",
-      UDF3: this.WPSAgentMasterForm.value.userDefined3 || "",
-      UDF4: this.WPSAgentMasterForm.value.userDefined4 || "",
-      UDF5: this.WPSAgentMasterForm.value.userDefined5 || "",
-      UDF6: this.WPSAgentMasterForm.value.userDefined6 || "",
-      UDF7: this.WPSAgentMasterForm.value.userDefined7 || "",
-      UDF8: this.WPSAgentMasterForm.value.userDefined8 || "",
-      UDF9: this.WPSAgentMasterForm.value.userDefined9 || "",
-      UDF10: this.WPSAgentMasterForm.value.userDefined10 || "",
-      UDF11: this.WPSAgentMasterForm.value.userDefined11 || "",
-      UDF12: this.WPSAgentMasterForm.value.userDefined12 || "",
-      UDF13: this.WPSAgentMasterForm.value.userDefined13 || "",
-      UDF14: this.WPSAgentMasterForm.value.userDefined14 || "",
-      UDF15: this.WPSAgentMasterForm.value.userDefined15 || "",
-    };
+    Object.keys(this.WPSAgentMasterForm.controls).forEach((controlName) => {
+      const control = this.WPSAgentMasterForm.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
 
-    if (this.flag === "EDIT") {
-      let API = `WPSAgentMaster/UpdateWPSAgentMaster/${this.code}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
+    const requiredFieldsInvalid = Object.keys(
+      this.WPSAgentMasterForm.controls
+    ).some((controlName) => {
+      const control = this.WPSAgentMasterForm.controls[controlName];
+      return control.hasError("required") && control.touched;
+    });
 
-            this.close("reloadMainGrid");
-          } else {
-            // Handle cases where the result is not successful or undefined
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+    if (!requiredFieldsInvalid) {
+      let postData = {
+        MID: 0,
+        CODE: this.WPSAgentMasterForm.value.code || "",
+        DESCRIPTION: this.WPSAgentMasterForm.value.description || "",
+        BANKNAME: this.WPSAgentMasterForm.value.bankName || "",
+        BANKBRANCH: this.WPSAgentMasterForm.value.bankBranch || "",
+        BANK_ACCNO: this.WPSAgentMasterForm.value.accountNo || "",
+        BANK_CODE: this.WPSAgentMasterForm.value.bankCode || "",
+        WPSMSTCOUNTRYCODE: this.WPSAgentMasterForm.value.countryCode || "",
+        WPS_COMPANYBANK_CODE:
+          this.WPSAgentMasterForm.value.preferedCompnyBankCode || "",
+        WPS_SWIFT_CODE: this.WPSAgentMasterForm.value.swiftCode || "",
+        WPS_SORT_CODE: this.WPSAgentMasterForm.value.sortCode || "",
+        WPS_ROUTING_CODE: this.WPSAgentMasterForm.value.routingCode || "",
+        UDF1: this.WPSAgentMasterForm.value.userDefined1 || "",
+        UDF2: this.WPSAgentMasterForm.value.userDefined2 || "",
+        UDF3: this.WPSAgentMasterForm.value.userDefined3 || "",
+        UDF4: this.WPSAgentMasterForm.value.userDefined4 || "",
+        UDF5: this.WPSAgentMasterForm.value.userDefined5 || "",
+        UDF6: this.WPSAgentMasterForm.value.userDefined6 || "",
+        UDF7: this.WPSAgentMasterForm.value.userDefined7 || "",
+        UDF8: this.WPSAgentMasterForm.value.userDefined8 || "",
+        UDF9: this.WPSAgentMasterForm.value.userDefined9 || "",
+        UDF10: this.WPSAgentMasterForm.value.userDefined10 || "",
+        UDF11: this.WPSAgentMasterForm.value.userDefined11 || "",
+        UDF12: this.WPSAgentMasterForm.value.userDefined12 || "",
+        UDF13: this.WPSAgentMasterForm.value.userDefined13 || "",
+        UDF14: this.WPSAgentMasterForm.value.userDefined14 || "",
+        UDF15: this.WPSAgentMasterForm.value.userDefined15 || "",
+      };
+
+      if (this.flag === "EDIT") {
+        let API = `WPSAgentMaster/UpdateWPSAgentMaster/${this.code}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              // Handle cases where the result is not successful or undefined
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `WPSAgentMaster/InsertWPSAgentMaster`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message
+                  ? result.message
+                  : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
     } else {
-      let API = `WPSAgentMaster/InsertWPSAgentMaster`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+      this.commonService.showSnackBarMsg("Please fill mandatory fields.");
     }
   }
 
@@ -465,6 +531,118 @@ export class WpsAgentMasterComponent implements OnInit {
             return this.openDialog("Warning", message, true);
           }
         });
+    }
+  }
+
+  onKeyDown(
+    event: KeyboardEvent,
+    controllers: string[],
+    codeData: MasterSearchModel
+  ) {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (event.key === "Backspace" || event.key === "Delete") {
+      setTimeout(() => {
+        if (inputElement.value.trim() === "") {
+          this.clearRelevantFields(controllers, codeData);
+        }
+      }, 0);
+    }
+  }
+
+  clearRelevantFields(controllers: string[], codeData: MasterSearchModel) {
+    controllers.forEach((controllerName) => {
+      const control = this.WPSAgentMasterForm.controls[controllerName];
+      if (control) {
+        control.setValue("");
+      } else {
+        console.warn(`Control ${controllerName} not found in the form.`);
+      }
+    });
+
+    this.clearLookupData(codeData, controllers);
+  }
+
+  openTab(event: any, formControlName: string) {
+    if (event.target.value === "") {
+      this.openPanel(event, formControlName);
+    }
+  }
+
+  openPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case "preferedCompnyBankCode":
+        this.overlayPreferedCompnyBankCode.showOverlayPanel(event);
+        break;
+      case "countryCode":
+        this.overlayCountryCode.showOverlayPanel(event);
+        break;
+      case "bankCode":
+        this.overlayBankCode.showOverlayPanel(event);
+        break;
+
+      case "userDefined1":
+        this.overlayUserDefined1.showOverlayPanel(event);
+        break;
+
+      case "userDefined2":
+        this.overlayUserDefined2.showOverlayPanel(event);
+        break;
+
+      case "userDefined3":
+        this.overlayUserDefined3.showOverlayPanel(event);
+        break;
+
+      case "userDefined4":
+        this.overlayUserDefined4.showOverlayPanel(event);
+        break;
+
+      case "userDefined5":
+        this.overlayUserDefined5.showOverlayPanel(event);
+        break;
+
+      case "userDefined6":
+        this.overlayUserDefined6.showOverlayPanel(event);
+        break;
+
+      case "userDefined7":
+        this.overlayUserDefined7.showOverlayPanel(event);
+        break;
+
+      case "userDefined8":
+        this.overlayUserDefined8.showOverlayPanel(event);
+        break;
+
+      case "userDefined9":
+        this.overlayUserDefined9.showOverlayPanel(event);
+        break;
+
+      case "userDefined10":
+        this.overlayUserDefined10.showOverlayPanel(event);
+        break;
+
+      case "userDefined11":
+        this.overlayUserDefined11.showOverlayPanel(event);
+        break;
+
+      case "userDefined12":
+        this.overlayUserDefined12.showOverlayPanel(event);
+        break;
+
+      case "userDefined13":
+        this.overlayUserDefined13.showOverlayPanel(event);
+        break;
+
+      case "userDefined14":
+        this.overlayUserDefined14.showOverlayPanel(event);
+        break;
+
+      case "userDefined15":
+        this.overlayUserDefined15.showOverlayPanel(event);
+        break;
+
+      default:
+        console.warn(`Unknown form control name: ${formControlName}`);
     }
   }
 }

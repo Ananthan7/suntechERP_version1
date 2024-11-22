@@ -10,7 +10,9 @@
         </div>
         <!-- modal header component -->
         <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-            (deleteClick)="deleteClicked()"></modal-header>
+            (deleteClick)="deleteClicked()" [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+            <!-- component to upload attachment -->
+            <attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
     </div>
     <!-- content section -->
     <div class=" m-1 p-2">

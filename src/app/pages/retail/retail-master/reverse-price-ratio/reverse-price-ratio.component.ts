@@ -21,6 +21,7 @@ export class ReversePriceRatioComponent implements OnInit {
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   viewMode: boolean = false;
+  editMode: boolean = false;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -41,6 +42,7 @@ export class ReversePriceRatioComponent implements OnInit {
        this.viewMode = true;
      } else if (this.content.FLAG == 'EDIT') {
        this.viewMode = false;
+       this.editMode = true;
       
      } else if (this.content?.FLAG == 'DELETE') {
        this.viewMode = true;
@@ -51,7 +53,7 @@ export class ReversePriceRatioComponent implements OnInit {
 
 
   reversepriceratioForm: FormGroup = this.formBuilder.group({
-    metalDiamond:[false],
+    metalDiamond:[''],
     branchCode:[''],
     divisioncode:[''],
     directPropotion:[false],
@@ -283,9 +285,31 @@ export class ReversePriceRatioComponent implements OnInit {
     });
   }
 
-
-  close(data?: any){
-    this.activeModal.close(data);
+  close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
 
 }

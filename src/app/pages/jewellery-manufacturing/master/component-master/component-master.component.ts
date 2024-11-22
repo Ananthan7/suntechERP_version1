@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 
 @Component({
@@ -26,6 +27,8 @@ export class ComponentMasterComponent implements OnInit {
   @ViewChild('overlaysettingTypeSearch') overlaysettingTypeSearch!: MasterSearchComponent;
   @ViewChild('overlayprocessSeqSearch') overlayprocessSeqSearch!: MasterSearchComponent;
   @ViewChild('overlaycostCenterSearch') overlaycostCenterSearch!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
 
   @Input() content!: any;
   currentDate: any = new Date();
@@ -97,12 +100,12 @@ export class ComponentMasterComponent implements OnInit {
     const condition = 'L'; // This value would be dynamically determined
 
     if (condition === 'L') {
-      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','Z')";
+      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','Z') ORDER BY DIVISION_CODE";
     } else if (condition === 'Z') {
-      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','L')";
+      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','L') ORDER BY DIVISION_CODE";
     } else {
       // Default condition if none of the specific conditions are met
-      return "DIVISION_CODE <> ''";
+      return "DIVISION_CODE <> '' ORDER BY DIVISION_CODE ";
     }
   }
 
@@ -114,7 +117,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Category type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
+    WHERECONDITION: "TYPES = 'CATEGORY MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -125,7 +128,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'KARAT_CODE',
     SEARCH_HEADING: 'Karat Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "KARAT_CODE<> ''",
+    WHERECONDITION: "KARAT_CODE <> '' ORDER BY KARAT_CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -135,7 +138,7 @@ export class ComponentMasterComponent implements OnInit {
     LOOKUPID: 14,
     SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'Prefix master',
-    WHERECONDITION: "COMP_PREFIX='1'",
+    WHERECONDITION: "COMP_PREFIX='1' ORDER BY PREFIX_CODE",
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
@@ -146,7 +149,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES ='TYPE MASTER'",
+    WHERECONDITION: "TYPES ='TYPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -157,26 +160,10 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'COMPSET_CODE',
     SEARCH_HEADING: 'Size set',
     SEARCH_VALUE: '',
-    WHERECONDITION: "COMPSET_CODE<> ''",
+    WHERECONDITION: "COMPSET_CODE <> '' ORDER BY COMPSET_CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  // sizeCodeData: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 89,
-  //   SEARCH_FIELD: 'COMPSIZE_CODE',
-  //   SEARCH_HEADING: 'Size',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: "COMPSIZE_CODE <>''",
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-  //   LOAD_ONCLICK: true,
-  // }
-
-
-
-
   shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -184,12 +171,10 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
-    WHERECONDITION: "types='SHAPE MASTER'",
+    WHERECONDITION: "types='SHAPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
   settingTypeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -197,10 +182,9 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Setting Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SETTING TYPE MASTER'",
+    WHERECONDITION: "TYPES='SETTING TYPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    //LOAD_ONCLICK:true,
   }
   processSeqCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -209,7 +193,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'SEQ_CODE',
     SEARCH_HEADING: 'Sequence ',
     SEARCH_VALUE: '',
-    WHERECONDITION: "SEQ_CODE<> ''",
+    WHERECONDITION: "SEQ_CODE<> '' ORDER BY SEQ_CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -220,46 +204,31 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'COST_CODE',
     SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
+    WHERECONDITION: "TYPE = 'PRECIOUS STONES' ORDER BY COST_CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-  CodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 15,
-    SEARCH_FIELD: 'TYPE',
-    SEARCH_HEADING: 'Cost Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-
-  stocktypeCodeData: MasterSearchModel = {
+  stonetypeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Stone Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'STONE TYPE MASTER'",
+    WHERECONDITION: "types = 'STONE TYPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-
-
   colorCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'Types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Types = 'COLOR MASTER'",
+    WHERECONDITION: "Types = 'COLOR MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -268,7 +237,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'Types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "Types = 'CLARITY MASTER'",
@@ -280,7 +249,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'SIEVE',
     SEARCH_VALUE: '',
     WHERECONDITION: "types = 'SIEVE MASTER'",
@@ -295,7 +264,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<>''",
+    WHERECONDITION: "CODE<>'' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -319,7 +288,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Pointer Wt',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<>''",
+    WHERECONDITION: "CODE<>'' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -328,7 +297,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'Types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "Types = 'COLOR MASTER'",
@@ -340,7 +309,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'Types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "Types = 'CLARITY MASTER'",
@@ -352,7 +321,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'SIEVE MASTER',
     SEARCH_VALUE: '',
     WHERECONDITION: "types = 'SIEVE MASTER'",
@@ -364,7 +333,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve To',
     SEARCH_VALUE: '',
     WHERECONDITION: "types = 'SIEVE MASTER' AND CODE > ''",
@@ -372,24 +341,11 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-   // sizeCodeData: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 89,
-  //   SEARCH_FIELD: 'COMPSIZE_CODE',
-  //   SEARCH_HEADING: 'Size',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`,
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-  //   LOAD_ONCLICK: true,
-  // }
-
   sizegridCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size',
     SEARCH_VALUE: '',
     WHERECONDITION: "types = 'SIZE MASTER'",
@@ -491,7 +447,19 @@ export class ComponentMasterComponent implements OnInit {
 
   }
 
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
 
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
+  }
 
   stockCodeDataSelected(value: any, data: any, controlName: string,) {
 
@@ -801,12 +769,12 @@ export class ComponentMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
-    if (data) {
+    if (data){
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW') {
+    if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return
     }
@@ -895,18 +863,32 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   onSelectionChanged(event: any) {
-    const values: number[] = event.selectedRowKeys;
-    const indexes: number[] = [];
+    // const values: number[] = event.selectedRowKeys;
+    // const indexes: number[] = [];
 
-    values.forEach((selectedValue: number) => {
-      const index = this.tableData.findIndex(item => parseFloat(item.SRNO) === selectedValue);
+    // values.forEach((selectedValue: number) => {
+    //   const index = this.tableData.findIndex(item => parseFloat(item.SRNO) === selectedValue);
 
-      // Check if the value is not already in the selectedIndexes array
-      if (index !== -1 && !this.selectedIndexes.includes(index)) {
-        indexes.push(index);
+    //   // Check if the value is not already in the selectedIndexes array
+    //   if (index !== -1 && !this.selectedIndexes.includes(index)) {
+    //     indexes.push(index);
+    //   }
+    // });
+
+    // this.selectedIndexes = indexes;
+    // console.log(this.selectedIndexes);
+
+    
+    const values = event.selectedRowKeys;
+    console.log(values);
+    let indexes: Number[] = [];
+    this.tableData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+        console.log(acc);
       }
-    });
-
+      return acc;
+    }, indexes);
     this.selectedIndexes = indexes;
     console.log(this.selectedIndexes);
   }
@@ -931,36 +913,91 @@ export class ComponentMasterComponent implements OnInit {
   //   }
   // }
 
+  // deleteTableData() {
+  //   console.log('Selected indexes:', this.selectedIndexes);
+  //   if (this.selectedIndexes.length > 0) {
+
+  //     // Show the confirmation dialog before deleting
+  //     this.showConfirmationDialog().then((result) => {
+  //       if (result.isConfirmed) {
+  //         // Proceed with deletion if the user confirms
+  //         this.selectedIndexes.sort((a: number, b: number) => b - a);
+
+  //         console.log('Before deletion - tableData:', this.tableData);
+
+  //         this.selectedIndexes.forEach((indexToRemove: number) => {
+  //           console.log('Deleting index:', indexToRemove);
+  //           this.tableData.splice(indexToRemove, 2);
+  //         });
+
+  //         console.log('After deletion - tableData:', this.tableData);
+
+  //         this.selectedIndexes = [];
+  //         this.snackBar.open('Records deleted successfully', 'OK', { duration: 2000 });
+  //       }
+  //     });
+
+  //   } else {
+  //     this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+  //   }
+  // }
+
+
   deleteTableData() {
-    console.log('Selected indexes:', this.selectedIndexes);
-    if (this.selectedIndexes.length > 0) {
-
-      // Show the confirmation dialog before deleting
-      this.showConfirmationDialog().then((result) => {
+    console.log("After Selecting " + this.selectedIndexes);
+  
+    if (this.selectedIndexes !== undefined && this.selectedIndexes.length > 0) {
+      // Display confirmation dialog before deleting
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete!'
+      }).then((result) => {
         if (result.isConfirmed) {
-          // Proceed with deletion if the user confirms
-          this.selectedIndexes.sort((a: number, b: number) => b - a);
-
-          console.log('Before deletion - tableData:', this.tableData);
-
-          this.selectedIndexes.forEach((indexToRemove: number) => {
-            console.log('Deleting index:', indexToRemove);
-            this.tableData.splice(indexToRemove, 2);
-          });
-
-          console.log('After deletion - tableData:', this.tableData);
-
-          this.selectedIndexes = [];
-          this.snackBar.open('Records deleted successfully', 'OK', { duration: 2000 });
+          if (this.tableData.length > 0) {
+            // Log the selected indexes before filtering
+            // console.log('Selected indexes to delete:', this.selectedIndexes);
+  
+            if (this.selectedIndexes && this.selectedIndexes.length > 0) {
+              // console.log('Before deletion, tableData length:', this.tableData.length);
+  
+              // Filter out items whose index is included in the selectedIndexes
+              this.tableData = this.tableData.filter((data, index) => {
+                const shouldDelete = !this.selectedIndexes.includes(index);
+                // console.log(`Index ${index} - Should Delete: ${!shouldDelete}`);
+                return shouldDelete;
+              });
+  
+              // console.log('After deletion, tableData length:', this.tableData.length);
+              // console.log('Table data:', this.tableData);
+              // Reset selectedIndexes after deletion
+              this.selectedIndexes = [];
+              // console.log('Selected indexes after reset:', this.selectedIndexes);
+  
+              // Show success message after deletion
+              this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+  
+              // Update serial numbers after deletion
+              this.tableData.forEach((item: any, i: number) => {
+                item.SRNO = i + 1; // Reset serial numbers starting from 1
+              });
+  
+            } else {
+              // console.warn('No indexes selected for deletion.');
+            }
+          } else {
+            this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
+          }
         }
       });
-
     } else {
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
   }
-
-
 
 
   setFormValues() {

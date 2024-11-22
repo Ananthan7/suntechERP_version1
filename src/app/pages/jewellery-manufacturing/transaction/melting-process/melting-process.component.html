@@ -8,7 +8,11 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
   [isViewDelete]="false"
-  (deleteClick)="deleteTableData()"></modal-header>
+  (deleteClick)="deleteTableData()" [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+  
+
+<!-- component to upload attachment -->
+<attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
 <div class="row">
   <div class="row mb-2 text-right">
     <div class="col-md-12">

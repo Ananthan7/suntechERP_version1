@@ -26,6 +26,9 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
   dyndatas:any;
   username = localStorage.getItem('username');
   postdata:any;
+  disable_code:boolean = false;
+  editMode: boolean = false;
+
 
 
   constructor(
@@ -71,6 +74,21 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
     VIEW_TABLE:true,
 }
 
+setcodevalues(){
+  console.log(this.viewMode);
+  console.log(this.disable_code);
+  
+  if(this.viewMode || this.disable_code){
+    return;
+  }
+  let salesmancode = this.wholesalesmanform.controls.salesman.value;
+  let finyearcode = this.wholesalesmanform.controls.fin_year.value;
+  if(salesmancode != "" && finyearcode != ""){
+    let data_code = salesmancode + '-' + finyearcode;
+    this.wholesalesmanform.controls.code.setValue(data_code);
+  }
+}
+
  selectedfinyear(e:any){
   console.log(e);
   this.wholesalesmanform.controls.fin_year.setValue(e.FYEARCODE);
@@ -104,10 +122,15 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.content);
+   
     // this.wst_id = this.content?.MID;
     this.wst_id = this.content?.TARGET_CODE;
     console.log(this.wst_id);
     this.flag = this.content?.FLAG;
+    if(this.flag == 'EDIT'){
+      this.disable_code = true;
+      this.editMode = true;
+    }
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.wst_id);
@@ -116,7 +139,7 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
 
   detailsapi(wst_id: any) {
     this.viewOnly = true;
-    let API = `WhlSmanTargetHeader/GetWhlSmanTargetHeaderDetail/${this.wst_id}`;
+    let API = `WhlSmanTargetHeader/GetWhlSmanTargetFullDetail/${this.wst_id}`;
     let Sub: Subscription = this.apiService.getDynamicAPI(API)
       .subscribe((result: any) => {
         this.dyndatas = result.response;
@@ -160,7 +183,23 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
   }
 
   close(data?: any) {
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    if(this.flag == undefined || this.flag == 'EDIT'){
+      Swal.fire({
+        title: "Confirm",
+        text: "Are you sure you want to close this window?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    }else{
+      this.activeModal.close(data);
+    }
   }
 
   formSubmit() {

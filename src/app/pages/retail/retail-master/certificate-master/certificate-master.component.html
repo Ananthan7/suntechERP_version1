@@ -12,6 +12,7 @@
   (saveClick)="certificateMasterMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
+  [isViewDelete]="flag == 'VIEW'"
 ></modal-header>
 
 <!-- content section -->
@@ -29,10 +30,20 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     type="text"
-                    [readonly]="flag === 'VIEW'"
+                    [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                     matInput
+                    maxlength="6"
                     formControlName="code"
                   />
+                  <mat-error
+                    *ngIf="
+                      certificateMasterMainForm.controls['code'].hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    Code is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -70,7 +81,7 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        ledgerCodeData,
                         ['ledger'],
                         false,
                         ['CODE'],
@@ -84,7 +95,7 @@
                     *ngIf="flag != 'VIEW'"
                     #overlayLedger
                     class="masterSearch"
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="ledgerCodeData"
                     (newRowClick)="lookupSelect($event, ['ledger'], ['CODE'])"
                   >
                   </master-search>
@@ -148,6 +159,16 @@
                     matInput
                     formControlName="description"
                   />
+
+                  <mat-error
+                    *ngIf="
+                      certificateMasterMainForm.controls['description'].hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    Description is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>

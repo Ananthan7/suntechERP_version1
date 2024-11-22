@@ -36,10 +36,10 @@ export class BuyBackPolicyComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 103,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: '',
     SEARCH_HEADING: 'Policy Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -251,15 +251,42 @@ export class BuyBackPolicyComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
+  // close(data?: any) {
+  //   //TODO reset forms and data before closing
+  //   this.activeModal.close(data);
+  // }
+
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
  
 
   policycodeSelected(e: any) {
     console.log(e);
-    this.buybackpolicy.controls.policycode.setValue(e.KARAT_CODE);
+    this.buybackpolicy.controls.policycode.setValue(e.FYEARCODE);
   }
 
   update() {

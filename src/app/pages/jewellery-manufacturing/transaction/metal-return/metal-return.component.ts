@@ -12,6 +12,7 @@ import themes from 'devextreme/ui/themes';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-metal-return',
@@ -25,6 +26,10 @@ export class MetalReturnComponent implements OnInit {
   @ViewChild('overlayprocess') overlayprocess!: MasterSearchComponent;
   @ViewChild('overlayworker') overlayworker!: MasterSearchComponent;
   @ViewChild('overlaylocation') overlaylocation!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
   selectedRowData: any[] = [];
   selectedRowData1: any;
   @Input() content!: any;
@@ -46,7 +51,7 @@ export class MetalReturnComponent implements OnInit {
     { title: 'Pure Wt', field: 'PURE_WT', format: '', alignment: 'right' },
     { title: 'Job Number', field: 'JOB_NUMBER', format: '', alignment: 'left' },
     { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '', alignment: 'left' },
-    { title: 'PURITY', field: 'Purity', format: '', alignment: 'right' },
+    { title: 'Purity', field: 'PURITY', format: '', alignment: 'right' },
     { title: 'Stone Wt', field: 'STONE_WT', format: '', alignment: 'right' },
     { title: 'Net Wt', field: 'NET_WT', format: '', alignment: 'right' },
     { title: 'Process Code', field: 'PROCESS_CODE', format: '', alignment: 'left' },
@@ -261,6 +266,16 @@ export class MetalReturnComponent implements OnInit {
     this.subscriptions.push(Sub)
 
   }
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
+  }
+
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
@@ -968,6 +983,7 @@ export class MetalReturnComponent implements OnInit {
       item.NET_WT = this.commonService.setCommaSerperatedNumber(item.NET_WT, 'METAL')
       item.PURITY = this.commonService.setCommaSerperatedNumber(item.PURITY, 'PURITY')
       item.PURE_WT = this.commonService.setCommaSerperatedNumber(item.PURE_WT, 'METAL')
+      item.STONE_WT = this.commonService.setCommaSerperatedNumber(item.STONE_WT, 'METAL')
       item.TOTAL_AMOUNTFC = this.commonService.setCommaSerperatedNumber(item.TOTAL_AMOUNTFC, 'AMOUNT')
     })
   }

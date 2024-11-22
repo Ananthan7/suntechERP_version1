@@ -9,6 +9,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MeltingIssueDetailsComponent } from './melting-issue-details/melting-issue-details.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 
 
@@ -24,6 +25,10 @@ export class MeltingIssueComponent implements OnInit {
   @ViewChild('overlayprocesscode') overlayprocesscode!: MasterSearchComponent;
   @ViewChild('overlayworkercode') overlayworkercode!: MasterSearchComponent;
   @ViewChild('codeInput1') codeInput1!: ElementRef;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
   router: any;
   onClose: any;
   modalRef: NgbModalRef | null = null
@@ -301,6 +306,16 @@ export class MeltingIssueComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
   }
 
   setAllInitialValues() {

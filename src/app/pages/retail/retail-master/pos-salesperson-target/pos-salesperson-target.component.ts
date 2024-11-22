@@ -28,6 +28,24 @@ export class PosSalespersonTargetComponent implements OnInit {
     metal_divisions_:[''],
   })
 
+  finyearcodedata: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 103,
+    SEARCH_FIELD: '',
+    SEARCH_HEADING: 'FIN YEAR',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  selectedfinyear(e: any) {
+    console.log(e);
+    this.salespersontargetform.controls.finyear.setValue(e.FYEARCODE);
+  }
+
+
 
   constructor(
     private activeModal: NgbActiveModal,

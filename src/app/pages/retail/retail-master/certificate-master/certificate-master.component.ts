@@ -44,6 +44,20 @@ export class CertificateMasterComponent implements OnInit {
     FRONTENDFILTER: true,
   };
 
+  ledgerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: "LEDGER",
+    SEARCH_HEADING: "LEDGER CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "LEDGER<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -53,7 +67,7 @@ export class CertificateMasterComponent implements OnInit {
   ) {}
 
   certificateMasterMainForm: FormGroup = this.formBuilder.group({
-    code: [""],
+    code: ["", [Validators.required]],
     stdCharges: [""],
     ledger: [""],
     email: [
@@ -61,16 +75,15 @@ export class CertificateMasterComponent implements OnInit {
       [Validators.maxLength(40), Validators.email, this.domainValidator],
     ],
     web: [""],
-    description: [""],
+    description: ["", [Validators.required]],
     leadDays: [""],
     offsetAccount: [""],
   });
 
   ngOnInit(): void {
-    this.content
-      ? (this.flag = this.content!.FLAG)
-      : console.log("No Content, Due to you are in ADD");
-
+    this.flag = this.content
+      ? this.content.FLAG
+      : (this.content = { FLAG: "ADD" }).FLAG;
     this.initialController(this.flag, this.content);
   }
 
@@ -152,7 +165,7 @@ export class CertificateMasterComponent implements OnInit {
               });
 
               response.status === "Success"
-                ? this.close("reloadMainGrid")
+                ? this.close("reloadMainGrid", true)
                 : console.log("Delete Error");
             },
             error: (err) => {
@@ -172,8 +185,23 @@ export class CertificateMasterComponent implements OnInit {
     });
   }
 
-  close(data?: any) {
-    this.activeModal.close(data);
+  close(data?: any, calling?: boolean) {
+    if (this.flag !== "VIEW" && !calling) {
+      Swal.fire({
+        title: "Are you sure you want to close this ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Close!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    } else {
+      this.activeModal.close(data);
+    }
   }
 
   openTab(event: any, formControlName: string) {
@@ -336,70 +364,91 @@ export class CertificateMasterComponent implements OnInit {
   }
 
   certificateMasterMainFormSubmit() {
-    let postData = {
-      MID: 0,
-      CODE: this.certificateMasterMainForm.value.code,
-      DESCRIPTION: this.certificateMasterMainForm.value.description,
-      STD_CHARGES: this.certificateMasterMainForm.value.stdCharges,
-      LEAD_DAYS: this.certificateMasterMainForm.value.leadDays,
-      LEDJER_ACCODE: this.certificateMasterMainForm.value.ledger,
-      OFFSET_ACCODE: this.certificateMasterMainForm.value.offsetAccount,
-      EMAIL: this.certificateMasterMainForm.value.email,
-      WEB: this.certificateMasterMainForm.value.web,
-      SYSTEM_DATE: new Date(),
-    };
+    Object.keys(this.certificateMasterMainForm.controls).forEach(
+      (controlName) => {
+        const control = this.certificateMasterMainForm.controls[controlName];
+        if (control.validator && control.validator({} as AbstractControl)) {
+          control.markAsTouched();
+        }
+      }
+    );
 
-    if (this.flag === "EDIT") {
-      let API = `CertificateMaster/UpdateCertificateMaster/${this.code}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
+    const requiredFieldsInvalid = Object.keys(
+      this.certificateMasterMainForm.controls
+    ).some((controlName) => {
+      const control = this.certificateMasterMainForm.controls[controlName];
+      return control.hasError("required") && control.touched;
+    });
 
-            this.close("reloadMainGrid");
-          } else {
-            // Handle cases where the result is not successful or undefined
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+    if (!requiredFieldsInvalid) {
+      let postData = {
+        MID: 0,
+        CODE: this.certificateMasterMainForm.value.code,
+        DESCRIPTION: this.certificateMasterMainForm.value.description,
+        STD_CHARGES: this.certificateMasterMainForm.value.stdCharges,
+        LEAD_DAYS: this.certificateMasterMainForm.value.leadDays,
+        LEDJER_ACCODE: this.certificateMasterMainForm.value.ledger,
+        OFFSET_ACCODE: this.certificateMasterMainForm.value.offsetAccount,
+        EMAIL: this.certificateMasterMainForm.value.email,
+        WEB: this.certificateMasterMainForm.value.web,
+        SYSTEM_DATE: new Date(),
+      };
+
+      if (this.flag === "EDIT") {
+        let API = `CertificateMaster/UpdateCertificateMaster/${this.code}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `/CertificateMaster/InsertCertificateMaster`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message
+                  ? result.message
+                  : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
     } else {
-      let API = `/CertificateMaster/InsertCertificateMaster`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+      this.commonService.showSnackBarMsg("Please fill mandatory fields.");
     }
   }
 

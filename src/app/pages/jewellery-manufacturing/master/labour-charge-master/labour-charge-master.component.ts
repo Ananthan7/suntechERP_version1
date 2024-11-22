@@ -8,6 +8,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 
 
@@ -25,6 +26,7 @@ export class LabourChargeMasterComponent implements OnInit {
   @ViewChild('overlaylabouracSearch') overlaylabouracSearch!: MasterSearchComponent;
   @ViewChild('overlaysizetoSearch') overlaysizetoSearch!: MasterSearchComponent;
   @ViewChild('overlaysieveSearch') overlaysieveSearch!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
   @Input() content!: any;
   viewMode: boolean = false;
@@ -472,6 +474,19 @@ export class LabourChargeMasterComponent implements OnInit {
     this.getcurrencyOptions()
   }
 
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
+  }
 
   inputValidate(event: any) {
     if (event.target.value != '') {

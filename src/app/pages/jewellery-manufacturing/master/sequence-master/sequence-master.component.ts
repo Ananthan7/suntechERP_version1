@@ -9,6 +9,7 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { CdkDragDrop, CdkDragStart, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 @Component({
   selector: 'app-sequence-master',
   templateUrl: './sequence-master.component.html',
@@ -17,6 +18,8 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 export class SequenceMasterComponent implements OnInit {
   @ViewChild('overlaysequencePrefixCodeSearch') overlaysequencePrefixCodeSearch!: MasterSearchComponent;
   @Input() content!: any; //use: To get clicked row details from master grid
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
 
   dataSource: any[] = [];
   tableData: any[] = []
@@ -128,6 +131,20 @@ export class SequenceMasterComponent implements OnInit {
   }
   lossAccodeSelected(event: any, data: any) {
     this.dataSource[data.SRNO - 1].LOSS_ACCODE = event.ACCODE;
+  }
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
   }
 
   // searchFromGrid(event: any) {
@@ -345,9 +362,9 @@ export class SequenceMasterComponent implements OnInit {
 
       }
     })
-    if (this.checkCondtion == true) {
-      return true;
-    }
+    // if (this.checkCondtion == true) {
+    //   return true;
+    // }
 
     this.dataSource.forEach((item: any) => {
       if (item.isChecked == true && item.STD_TIME > item.MAX_TIME) {

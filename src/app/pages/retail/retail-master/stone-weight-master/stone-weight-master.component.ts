@@ -18,6 +18,7 @@ export class StoneWeightMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   data: any;
   viewMode: boolean = false;
+  editMode: boolean = false;
   @Input() content!: any;
   mid: any;
   branchCode?: any = localStorage.getItem("userbranch");
@@ -56,29 +57,29 @@ export class StoneWeightMasterComponent implements OnInit {
   stoneweightmaster: FormGroup = this.formBuilder.group({
     mid: [""],
     sieveset: [""],
-    division: [""],
+    division: ["L"],
     sievefrom: [""],
     sievefromdesc: [""],
     sizefrom: [""],
-    pcs: [""],
-    pointerwt: [""],
-    shape: [""],
+    pcs: ["0"],
+    pointerwt: ["0.0000"],
+    shape: ["RD"],
     sieveto: [""],
     sievetodesc: [""],
     sizeto: [""],
-    variance1: [""],
-    variance2: [""],
+    variance1: ["0.00"],
+    variance2: ["0.00"],
 
   });
 
   sieveSetcodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 86,
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve Set Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES = 'SIEVE SET MASTER' AND CODE NOT IN(SELECT SIEVE_SET  FROM DIASIZEWT)",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -205,11 +206,15 @@ export class StoneWeightMasterComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.content);
+    this.flag = this.content?.FLAG;
     if (this.content?.FLAG == "EDIT" || this.content?.FLAG == "VIEW") {
       if (this.content?.FLAG == "VIEW") {
         this.viewOnly = true;
-      } else {
+        this.viewMode = true;
+      }else {
         this.viewOnly = false;
+        this.editMode = true;
+
       }
       this.mid = this.content.MID;
       this.stoneweightmaster.controls.division.setValue(this.content.DIVCODE);
@@ -295,6 +300,7 @@ export class StoneWeightMasterComponent implements OnInit {
               }).then((result: any) => {
                 if (result.value) {
                   this.stoneweightmaster.reset();
+                  // this.flag='EDIT';
                   this.close("reloadMainGrid");
                 }
               });
@@ -346,6 +352,7 @@ export class StoneWeightMasterComponent implements OnInit {
               }).then((result: any) => {
                 if (result.value) {
                   this.stoneweightmaster.reset();
+                  // this.flag='EDIT';
                   this.close("reloadMainGrid");
                 }
               });
@@ -360,8 +367,55 @@ export class StoneWeightMasterComponent implements OnInit {
   }
 
 
+  // close(data?: any) {
+  //   if(data == 'reloadMainGrid'){
+  //     this.activeModal.close(data);
+  //   }else{
+  //     if(this.flag == undefined || this.flag == 'EDIT'){
+  //       Swal.fire({
+  //         title: "Confirm",
+  //         text: "Are you sure you want to close this window?",
+  //         icon: "warning",
+  //         showCancelButton: true,
+  //         confirmButtonText: 'Yes',
+  //         cancelButtonText: 'No'
+  //       }).then((result) => {
+  //         if (result.isConfirmed) {
+  //           this.activeModal.close(data);
+  //         }
+  //       });
+  //     }else{
+  //       this.activeModal.close(data);
+  //     }
+  //   }
+  //   // console.log(this.flag)
+  
+  // }
   close(data?: any) {
-    this.activeModal.close(data);
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+  }
+  )
   }
 
   deleteTableData() {

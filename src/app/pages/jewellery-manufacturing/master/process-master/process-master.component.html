@@ -10,8 +10,16 @@
     <!-- <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteProcessMaster()"
         [isloading]="isloading" [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewMore]="!viewMode"
         [isViewDelete]="!dele"></modal-header> -->
-        <modal-header [isViewSave]="!viewMode"   [isloading]="isloading" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"  [isViewAttachment]="!viewMode" (cancelClick)="close()"
-    (saveClick)="formSubmit()" (deleteClick)="deleteProcessMaster()" [isViewDelete]="!viewMode && editableMode"></modal-header>
+    <modal-header [isViewSave]="!viewMode" [isloading]="isloading"
+        [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+        [isViewAttachment]="!viewMode" (cancelClick)="close()"
+        (saveClick)="formSubmit()" (deleteClick)="deleteProcessMaster()"
+        [isViewDelete]="!viewMode && editableMode"
+        [isViewAttachment]="!viewMode"
+        (attachmentClick)="attachmentClicked()"></modal-header>
+    <!-- component to upload attachment -->
+    <attachment-upload (uploadSubmit)="uploadSubmited($event)"
+        [savedAttachment]="savedAttachments"></attachment-upload>
     <!-- content section -->
     <div class="card py-3">
         <form [formGroup]="processMasterForm">
@@ -20,16 +28,24 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
-                            <label id="ID001" for="input" class="col-sm-2 col-form-label">Process
+                            <label id="ID001" for="input"
+                                class="col-sm-2 col-form-label">Process
                                 Code <span class="required">*</span>
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput placeholder="CODE" #codeInput1 UpperCaseDirective
-                                        formControlName="processCode" maxlength="6" #code
-                                        [readonly]="editableMode || viewMode" (focusout)="checkCodeExists($event)"
-                                        id="code" (keyup)="codeEnabled()" tabindex="1" />
-                                    <mat-error class="mt-2" *ngIf="processMasterForm.controls.processCode.touched 
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        placeholder="CODE" #codeInput1
+                                        UpperCaseDirective
+                                        formControlName="processCode"
+                                        maxlength="6" #code
+                                        [readonly]="editableMode || viewMode"
+                                        (focusout)="checkCodeExists($event)"
+                                        id="code" (keyup)="codeEnabled()"
+                                        tabindex="1" />
+                                    <mat-error class="mt-2"
+                                        *ngIf="processMasterForm.controls.processCode.touched 
                                     && processMasterForm.controls.processCode.hasError('required')">
                                         Process Code
                                         <strong>required</strong>
@@ -37,189 +53,276 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-5">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput #codeDes UpperCaseDirective id="codeDesc"
-                                        placeholder="DESCRIPTION" formControlName="processDesc" maxlength="40"
-                                        (focus)="showAlertIfCodeIsEmpty()" [readonly]="viewMode || codeEnable" tabindex="2" />
-                                    <mat-error class="mt-2" *ngIf="processMasterForm.controls.processType.touched 
-                                &&processMasterForm.controls.processDesc.hasError('required')">
-                                        Process Description is <strong>required</strong>
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput #codeDes
+                                        UpperCaseDirective id="codeDesc"
+                                        placeholder="DESCRIPTION"
+                                        formControlName="processDesc"
+                                        maxlength="40"
+                                        (focus)="showAlertIfCodeIsEmpty()"
+                                        [readonly]="viewMode || codeEnable"
+                                        tabindex="2" />
+                                    <mat-error class="mt-2"
+                                        *ngIf="processMasterForm.controls.processType.touched 
+                                        && processMasterForm.controls.processDesc.hasError('required')">
+                                        Process Description is
+                                        <strong>required</strong>
                                     </mat-error>
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="input" id="ID002" class="col-sm-2 col-form-label ">Process
+                            <label for="input" id="ID002"
+                                class="col-sm-2 col-form-label ">Process
                                 Type <span class="required">*</span>
                                 :</label>
                             <div class="col-sm-3 mt-2">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <mat-select tabindex="3" formControlName="processType" (change)="ProcessDes()"
-                                        (focus)="showAlertIfCodeIsEmpty()" [disabled]="viewMode || codeEnable">
-                                        <mat-option *ngFor="let option of processTypeList" [value]="option.SRNO">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <mat-select tabindex="3"
+                                        formControlName="processType"
+                                        (change)="ProcessDes()"
+                                        (focus)="showAlertIfCodeIsEmpty()"
+                                        [disabled]="viewMode || codeEnable">
+                                        <mat-option
+                                            *ngFor="let option of processTypeList"
+                                            [value]="option.SRNO">
                                             {{ option.ENGLISH }}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            <label for="input" class="col-sm-2  col-form-label" id="ID003">Standard
+                            <label for="input" class="col-sm-2  col-form-label"
+                                id="ID003">Standard
                                 Time<span class="required"
                                     *ngIf="processMasterForm.value.TimeCalculateonProcess">*</span>
                             </label>
                             <div class="col-sm-5">
-                                <app-duration-picker [content]="yourContent" [viewMode]="viewMode || codeEnable"
-                                    (click)="showMaxContentAlert()" (updateDuration)="updateStandardTime($event)"
-                                    [durationToSplit]="standTime" formControlName="stand_time"
-                                    (focus)="showAlertIfCodeIsEmpty()" [disabled]="viewMode"></app-duration-picker>
+                                <app-duration-picker [content]="yourContent"
+                                    [viewMode]="viewMode || codeEnable"
+                                    (click)="showMaxContentAlert()"
+                                    (updateDuration)="updateStandardTime($event)"
+                                    [durationToSplit]="standTime"
+                                    formControlName="stand_time"
+                                    (focus)="showAlertIfCodeIsEmpty()"
+                                    [disabled]="viewMode"></app-duration-picker>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="input" id="ID004" class="col-sm-2 col-form-label ">WIP A/C
+                            <label for="input" id="ID004"
+                                class="col-sm-2 col-form-label ">WIP A/C
                                 <span class="required">*</span>
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput maxlength="6" UpperCaseDirective
-                                        formControlName="WIPaccount" (focus)="showAlertIfCodeIsEmpty()"
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput maxlength="6"
+                                        UpperCaseDirective
+                                        formControlName="WIPaccount"
                                         (focusout)="validateLookupField($event,WipACCODEData,'WIPaccount')"
-                                        [readonly]="viewMode || codeEnable" tabindex="4"
+                                        [readonly]="viewMode || codeEnable"
+                                        tabindex="4"
                                         (keydown)="lookupKeyPress($event,'WIPaccount')"
-                                        (change)="checkAccodeSelected($event,WipACCODEData,'WIPaccount')"/>
-                                    <master-search class="masterSearch" [MasterSearchData]="WipACCODEData"
-                                        *ngIf="viewMode == false" #overlayWIPaccountSearch
+                                        (change)="checkAccodeSelected($event,WipACCODEData,'WIPaccount')" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="WipACCODEData"
+                                        *ngIf="viewMode == false"
+                                        #overlayWIPaccountSearch
                                         (newRowClick)="WIPaccountSelected($event)">
                                     </master-search>
                                 </mat-form-field>
                             </div>
-                            <label for="input" id="ID005" class="col-sm-2 col-form-label">Maximum
+                            <label for="input" id="ID005"
+                                class="col-sm-2 col-form-label">Maximum
                                 Time<span class="required"
                                     *ngIf="processMasterForm.value.TimeCalculateonProcess">*</span>
                             </label>
                             <div class="col-sm-5">
-                                <app-duration-picker [content]="maxContent" [durationToSplit]="maxTime"
-                                    [viewMode]="viewMode || codeEnable" (click)="showMaxContentAlert()"
-                                    (updateDuration)="updateMaximumTime($event)" formControlName="max_time"
+                                <app-duration-picker [content]="maxContent"
+                                    [durationToSplit]="maxTime"
+                                    [viewMode]="viewMode || codeEnable"
+                                    (click)="showMaxContentAlert()"
+                                    (updateDuration)="updateMaximumTime($event)"
+                                    formControlName="max_time"
                                     (focus)="showAlertIfCodeIsEmpty()"
                                     [disabled]="viewMode || codeEnable"></app-duration-picker>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="input" id="ID006" class="col-sm-2 col-form-label">Position
+                            <label for="input" id="ID006"
+                                class="col-sm-2 col-form-label">Position
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput class="text-right" maxlength="2"
-                                        (focusout)="postionCodeValidates()" formControlName="Position"
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        class="text-right" maxlength="2"
+                                        (focusout)="postionCodeValidates()"
+                                        formControlName="Position"
                                         (focus)="showAlertIfCodeIsEmpty()"
                                         onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
-                                        [readonly]="viewMode || codeEnable" tabindex="5" />
+                                        [readonly]="viewMode || codeEnable"
+                                        tabindex="5" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" id="ID007" class="col-sm-2 col-form-label">Tray Weight
+                            <label for="input" id="ID007"
+                                class="col-sm-2 col-form-label">Tray Weight
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput style="text-align: right;" formControlName="trayWeight"
-                                        [max]="5" AmountDecimalInput (focus)="showAlertIfCodeIsEmpty()"
-                                        [readonly]="viewMode || codeEnable " tabindex="6" />
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        style="text-align: right;"
+                                        formControlName="trayWeight"
+                                        [max]="5" AmountDecimalInput
+                                        (focus)="showAlertIfCodeIsEmpty()"
+                                        [readonly]="viewMode || codeEnable "
+                                        tabindex="6" />
                                     <!-- <input type="number" matInput style="text-align: right;"
                                     formControlName="trayWeight"  [readonly]="viewMode" /> -->
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="input" id="ID008" class="col-sm-2 col-form-label">Approval
-                                Code <span class="required" *ngIf="processMasterForm.value.ApprovalRequired">*</span> :
+                            <label for="input" id="ID008"
+                                class="col-sm-2 col-form-label">Approval
+                                Code <span class="required"
+                                    *ngIf="processMasterForm.value.ApprovalRequired">*</span>
+                                :
                             </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput maxlength="6" UpperCaseDirective autocomplete="off"
-                                        formControlName="approvalCode" #approvalCode id="approvalCode"
-                                        (focus)="showAlertIfCodeIsEmpty()"
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput maxlength="6"
+                                        UpperCaseDirective autocomplete="off"
+                                        formControlName="approvalCode"
+                                        #approvalCode id="approvalCode"
                                         (focusout)="validateLookupField($event,approvalCodeData,'approvalCode')"
-                                        [readonly]="viewMode || codeEnable" tabindex="7"
+                                        [readonly]="viewMode || codeEnable"
+                                        tabindex="7"
                                         (keydown)="lookupKeyPress($event,'approvalCode')" />
-                                    <master-search class="masterSearch" [MasterSearchData]="approvalCodeData"
-                                        *ngIf="viewMode == false" #overlayapprovalCodeSearch
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="approvalCodeData"
+                                        *ngIf="viewMode == false"
+                                        #overlayapprovalCodeSearch
                                         (newRowClick)="ApprovalCodeSelected($event)">
                                     </master-search>
                                 </mat-form-field>
                             </div>
-                            <label for="input" id="ID009" class="col-sm-2 col-form-label">Approval
+                            <label for="input" id="ID009"
+                                class="col-sm-2 col-form-label">Approval
                                 Process
-                                <span class="required" *ngIf="processMasterForm.value.ApprovalRequired">*</span>
+                                <span class="required"
+                                    *ngIf="processMasterForm.value.ApprovalRequired">*</span>
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput maxlength="6" UpperCaseDirective autocomplete="off"
-                                        formControlName="approvalProcess" #approvalProcess id="approvalProcess"
-                                        (focus)="showAlertIfCodeIsEmpty()"
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput maxlength="6"
+                                        UpperCaseDirective autocomplete="off"
+                                        formControlName="approvalProcess"
+                                        #approvalProcess id="approvalProcess"
                                         (focusout)="validateLookupField($event,approvalProcessData,'approvalProcess')"
-                                        [readonly]="viewMode || codeEnable" tabindex="8"
+                                        [readonly]="viewMode || codeEnable"
+                                        tabindex="8"
                                         (keydown)="lookupKeyPress($event,'approvalProcess')" />
-                                    <master-search class="masterSearch" [MasterSearchData]="approvalProcessData"
-                                        *ngIf="viewMode == false" #overlayapprovalProcessSearch
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="approvalProcessData"
+                                        *ngIf="viewMode == false"
+                                        #overlayapprovalProcessSearch
                                         (newRowClick)="ApprovalProcessSelected($event)">
                                     </master-search>
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="input" id="ID010" class="col-sm-2 col-form-label"> Recov.
+                            <label for="input" id="ID010"
+                                class="col-sm-2 col-form-label"> Recov.
                                 Stock
-                                Code  <span class="required" *ngIf="processMasterForm.value.RecoveryProcess">*</span> :
-                               </label>
+                                Code <span class="required"
+                                    *ngIf="processMasterForm.value.RecoveryProcess">*</span>
+                                :
+                            </label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput UpperCaseDirective autocomplete="off"
-                                        formControlName="recStockCode" #recStockCode id="recStockCode"
-                                        (focus)="showAlertIfCodeIsEmpty()"
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        UpperCaseDirective autocomplete="off"
+                                        formControlName="recStockCode"
+                                        #recStockCode id="recStockCode"
                                         (focusout)="validateLookupField($event,StockProcessData,'recStockCode')"
-                                        [readonly]="viewMode || codeEnable" tabindex="9"
+                                        [readonly]="viewMode || codeEnable"
+                                        tabindex="9"
                                         (keydown)="lookupKeyPress($event,'recStockCode')" />
-                                    <master-search class="masterSearch" [MasterSearchData]="StockProcessData"
-                                        #overlayrecStockCodeSearch (newRowClick)="StockProcesSelected($event)"
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="StockProcessData"
+                                        #overlayrecStockCodeSearch
+                                        (newRowClick)="StockProcesSelected($event)"
                                         *ngIf="!viewMode">
                                     </master-search>
-                                    <mat-error class="mt-2" *ngIf="processMasterForm.value.RecoveryProcess == true">
-                                        Process Description is <strong>required</strong>
+                                    <mat-error class="mt-2"
+                                        *ngIf="processMasterForm.value.RecoveryProcess == true">
+                                        Process Description is
+                                        <strong>required</strong>
                                     </mat-error>
                                 </mat-form-field>
                             </div>
-                            <label for="input" id="ID011" class="col-sm-2 col-form-label" *ngIf="jobNumberShow()">Job No
+                            <label for="input" id="ID011"
+                                class="col-sm-2 col-form-label"
+                                *ngIf="jobNumberShow()">Job No
                                 :</label>
                             <div class="col-sm-3" *ngIf="jobNumberShow()">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput maxlength="6" UpperCaseDirective
-                                        formControlName="jobNumber" (focus)="showAlertIfCodeIsEmpty()"
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput maxlength="6"
+                                        UpperCaseDirective
+                                        formControlName="jobNumber"
                                         (focusout)="validateLookupField($event,adjustAccodeData,'jobNumber')"
-                                        [readonly]="viewMode || codeEnable" (keydown)="lookupKeyPress($event,'jobNumber')" />
-                                    <master-search class="masterSearch" [MasterSearchData]="jobNoData"
-                                        *ngIf="viewMode == false" #overlayjobNoSearch
+                                        [readonly]="viewMode || codeEnable"
+                                        (keydown)="lookupKeyPress($event,'jobNumber')" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="jobNoData"
+                                        *ngIf="viewMode == false"
+                                        #overlayjobNoSearch
                                         (newRowClick)="jobNoSelected($event)">
                                     </master-search>
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="input" id="ID012" class="col-sm-2 col-form-label">Labour
+                            <label for="input" id="ID012"
+                                class="col-sm-2 col-form-label">Labour
                                 Charge/Hour:</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput AmountDecimalInput style="text-align: right;"
-                                        formControlName="labour_charge" maxlength="15"
-                                        (focus)="showAlertIfCodeIsEmpty()" [readonly]="viewMode || codeEnable" tabindex="10" />
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        AmountDecimalInput
+                                        style="text-align: right;"
+                                        formControlName="labour_charge"
+                                        maxlength="15"
+                                        (focus)="showAlertIfCodeIsEmpty()"
+                                        [readonly]="viewMode || codeEnable"
+                                        tabindex="10" />
                                 </mat-form-field>
                             </div>
-                            <label for="input" id="ID011" class="col-sm-2 col-form-label">Adjust Accode :</label>
+                            <label for="input" id="ID011"
+                                class="col-sm-2 col-form-label">Adjust Accode
+                                :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput maxlength="6" UpperCaseDirective
-                                        formControlName="ADJUST_ACCODE" (focus)="showAlertIfCodeIsEmpty()"
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput maxlength="6"
+                                        UpperCaseDirective
+                                        formControlName="ADJUST_ACCODE"
                                         (focusout)="validateLookupField($event,adjustAccodeData,'ADJUST_ACCODE')"
-                                        [readonly]="viewMode || codeEnable" (keydown)="lookupKeyPress($event,'ADJUST_ACCODE')" />
-                                    <master-search class="masterSearch" [MasterSearchData]="adjustAccodeData"
-                                        *ngIf="viewMode == false" #overlayadjustaccodeSearch
+                                        [readonly]="viewMode || codeEnable"
+                                        (keydown)="lookupKeyPress($event,'ADJUST_ACCODE')" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="adjustAccodeData"
+                                        *ngIf="viewMode == false"
+                                        #overlayadjustaccodeSearch
                                         (newRowClick)="adjustAccodeSelected($event)">
                                     </master-search>
                                 </mat-form-field>
@@ -230,58 +333,87 @@
                 <div class="row">
                     <div class="col-md-2">
                         <div class="form-check mt-md-5">
-                            <mat-checkbox formControlName="loss" id="ID013" class="example-margin" tabindex="11"
-                                (change)="onlossChange()" (focus)="showAlertIfCodeIsEmpty()"
+                            <mat-checkbox formControlName="loss" id="ID013"
+                                class="example-margin" tabindex="11"
+                                (change)="onlossChange()"
+                                (focus)="showAlertIfCodeIsEmpty()"
                                 [disabled]="viewMode || codeEnable">
-                                Loss <span class="required">*</span></mat-checkbox>
+                                Loss <span
+                                    class="required">*</span></mat-checkbox>
                         </div>
                         <div class="form-check">
-                            <mat-checkbox formControlName="recovery" id="ID014" class="example-margin"
-                                (change)="onRecovery()" [disabled]="viewMode || codeEnable || lossDisable"
-                                (focus)="showAlertIfCodeIsEmpty()" tabindex="16">
+                            <mat-checkbox formControlName="recovery" id="ID014"
+                                class="example-margin"
+                                (change)="onRecovery()"
+                                [disabled]="viewMode || codeEnable || lossDisable"
+                                (focus)="showAlertIfCodeIsEmpty()"
+                                tabindex="16">
                                 Recovery </mat-checkbox>
                         </div>
                         <div class="form-check">
-                            <mat-checkbox formControlName="allowGain" id="ID015" class="example-margin" tabindex="20"
-                                (change)="onAllowGain()" (focus)="showAlertIfCodeIsEmpty()"
+                            <mat-checkbox formControlName="allowGain" id="ID015"
+                                class="example-margin" tabindex="20"
+                                (change)="onAllowGain()"
+                                (focus)="showAlertIfCodeIsEmpty()"
                                 [disabled]="viewMode || codeEnable">
                                 Allow Gain </mat-checkbox>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="row mb-2">
-                            <label for="input" id="ID016" class="col-sm-12 col-form-label">Standard %
+                            <label for="input" id="ID016"
+                                class="col-sm-12 col-form-label">Standard %
                                 :</label>
                             <div class="col-sm-12">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput style="text-align: right;"
-                                        formControlName="loss_standard" [max]="3" tabindex="12" AmountDecimalInput
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        style="text-align: right;"
+                                        formControlName="loss_standard"
+                                        [max]="3" tabindex="12"
+                                        AmountDecimalInput
                                         [readonly]="islossReadOnly || codeEnable" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-12">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput style="text-align: right;"
-                                        [readonly]="viewMode || lossDisable" formControlName="standard_end" [max]="3"
-                                        AmountDecimalInput [readonly]="isRecovReadOnly || codeEnable" tabindex="17" />
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        style="text-align: right;"
+                                        [readonly]="viewMode || lossDisable"
+                                        formControlName="standard_end" [max]="3"
+                                        AmountDecimalInput
+                                        [readonly]="isRecovReadOnly || codeEnable"
+                                        tabindex="17" />
                                 </mat-form-field>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="row mb-2">
-                            <label for="input" id="ID017" class="col-sm-12 col-form-label">Min %
+                            <label for="input" id="ID017"
+                                class="col-sm-12 col-form-label">Min %
                                 :</label>
                             <div class="col-sm-12">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput style="text-align: right;" formControlName="loss_min"
-                                        [max]="3" AmountDecimalInput tabindex="13" [readonly]="islossReadOnly || codeEnable" />
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        style="text-align: right;"
+                                        formControlName="loss_min"
+                                        [max]="3" AmountDecimalInput
+                                        tabindex="13"
+                                        [readonly]="islossReadOnly || codeEnable" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-12">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput style="text-align: right;" formControlName="min_end"
-                                        [max]="3" AmountDecimalInput tabindex="18" [readonly]="isRecovReadOnly || codeEnable"
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        style="text-align: right;"
+                                        formControlName="min_end"
+                                        [max]="3" AmountDecimalInput
+                                        tabindex="18"
+                                        [readonly]="isRecovReadOnly || codeEnable"
                                         [readonly]="viewMode || lossDisable" />
                                 </mat-form-field>
                             </div>
@@ -289,12 +421,16 @@
                     </div>
                     <div class="col-md-2">
                         <div class="row mb-2">
-                            <label for="input" id="ID018" class="col-sm-12 col-form-label">Max %
+                            <label for="input" id="ID018"
+                                class="col-sm-12 col-form-label">Max %
                                 :</label>
                             <div class="col-sm-12">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput tabindex="14" AmountDecimalInput [max]="3"
-                                        formControlName="loss_max" style="text-align: right;"
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput tabindex="14"
+                                        AmountDecimalInput [max]="3"
+                                        formControlName="loss_max"
+                                        style="text-align: right;"
                                         [readonly]="islossReadOnly || codeEnable" />
                                 </mat-form-field>
                             </div>
@@ -302,45 +438,62 @@
                     </div>
                     <div class="col-md-2">
                         <div class="row mb-2">
-                            <label for="input" id="ID019" class="col-sm-12 col-form-label">Account
+                            <label for="input" id="ID019"
+                                class="col-sm-12 col-form-label">Account
                                 Code :</label>
                             <div class="col-sm-12">
-                                <mat-form-field style="width: 70%;" appearance="outline">
-                                    <input type="text" matInput maxlength="6" UpperCaseDirective
+                                <mat-form-field style="width: 70%;"
+                                    appearance="outline">
+                                    <input type="text" matInput maxlength="6"
+                                        UpperCaseDirective
                                         formControlName="LOSS_ACCODE"
                                         (change)="losscheckAccodeSelected($event,LossACCODEData,'LOSS_ACCODE')"
                                         (focusout)="validateLookupField($event,LossACCODEData,'LOSS_ACCODE')"
-                                        [readonly]="islossReadOnly || codeEnable" tabindex="15"
+                                        [readonly]="islossReadOnly || codeEnable"
+                                        tabindex="15"
                                         (keydown)="lookupKeyPress($event,'LOSS_ACCODE')" />
-                                    <master-search class="masterSearch" [MasterSearchData]="LossACCODEData"
-                                        *ngIf="!viewMode && searchModeLoss" #overlaylossaccodeSearch
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="LossACCODEData"
+                                        *ngIf="!viewMode && searchModeLoss"
+                                        #overlaylossaccodeSearch
                                         (newRowClick)="LOSS_ACCODESelected($event)">
                                     </master-search>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-12">
-                                <mat-form-field style="width: 70%;" appearance="outline">
-                                    <input type="text" matInput maxlength="6" UpperCaseDirective
+                                <mat-form-field style="width: 70%;"
+                                    appearance="outline">
+                                    <input type="text" matInput maxlength="6"
+                                        UpperCaseDirective
                                         (change)="recovcheckAccodeSelected($event,RecovACCODEData,'RECOV_ACCODE')"
                                         (focusout)="validateLookupField($event,RecovACCODEData,'RECOV_ACCODE')"
-                                        formControlName="RECOV_ACCODE" [readonly]="isRecovReadOnly || lossDisable || codeEnable"
-                                        tabindex="19" (keydown)="lookupKeyPress($event,'RECOV_ACCODE')" />
-                                    <master-search class="masterSearch" [MasterSearchData]="RecovACCODEData"
+                                        formControlName="RECOV_ACCODE"
+                                        [readonly]="isRecovReadOnly || lossDisable || codeEnable"
+                                        tabindex="19"
+                                        (keydown)="lookupKeyPress($event,'RECOV_ACCODE')" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="RecovACCODEData"
                                         *ngIf="!viewMode && searchModeRecov && searchModeLoss"
-                                        #overlayrecoveaccodeSearch (newRowClick)="RECOV_ACCODESelected($event)">
+                                        #overlayrecoveaccodeSearch
+                                        (newRowClick)="RECOV_ACCODESelected($event)">
                                     </master-search>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-12">
-                                <mat-form-field style="width: 70%;" appearance="outline">
-                                    <input type="text" matInput maxlength="6" UpperCaseDirective
+                                <mat-form-field style="width: 70%;"
+                                    appearance="outline">
+                                    <input type="text" matInput maxlength="6"
+                                        UpperCaseDirective
                                         formControlName="GAIN_ACCODE"
                                         (change)="gaincheckAccodeSelected($event,WipACCODEData,'GAIN_ACCODE')"
                                         (focusout)="validateLookupField($event,WipACCODEData,'GAIN_ACCODE')"
-                                        [readonly]="isAlloWGainReadOnly || codeEnable" tabindex="21"
+                                        [readonly]="isAlloWGainReadOnly || codeEnable"
+                                        tabindex="21"
                                         (keydown)="lookupKeyPress($event,'GAIN_ACCODE')" />
-                                    <master-search class="masterSearch" [MasterSearchData]="WipACCODEData"
-                                        *ngIf="!viewMode && searchModeAllow" #overlaygainaccodeSearch
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="WipACCODEData"
+                                        *ngIf="!viewMode && searchModeAllow"
+                                        #overlaygainaccodeSearch
                                         (newRowClick)="GAIN_ACCODESelected($event)">
                                     </master-search>
                                 </mat-form-field>
@@ -349,7 +502,9 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-check mt-md-5">
-                            <mat-checkbox formControlName="loss_on_gross" id="ID020" [disabled]="viewMode|| lossDisable  || codeEnable"
+                            <mat-checkbox formControlName="loss_on_gross"
+                                id="ID020"
+                                [disabled]="viewMode|| lossDisable  || codeEnable"
                                 class="example-margin">
                                 Loss on Gross only</mat-checkbox>
                         </div>
@@ -363,92 +518,120 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID022" formControlName="FinalProcess"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox id="ID022"
+                                                    formControlName="FinalProcess"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Final Process</mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID023" formControlName="MergePices"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox id="ID023"
+                                                    formControlName="MergePices"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Merge Pieces</mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID024" formControlName="RefineryAutoProcess"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox id="ID024"
+                                                    formControlName="RefineryAutoProcess"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Refinery Auto Process
                                                 </mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID025" formControlName="DeductPureWeight"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
-                                                    Deduct Pure Weight </mat-checkbox>
+                                                <mat-checkbox id="ID025"
+                                                    formControlName="DeductPureWeight"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
+                                                    Deduct Pure Weight
+                                                </mat-checkbox>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox formControlName="Setting"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin"
+                                                <mat-checkbox
+                                                    formControlName="Setting"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin"
                                                     id="ID026">
                                                     Setting</mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox formControlName="LockWeight" id="ID027"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox
+                                                    formControlName="LockWeight"
+                                                    id="ID027"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Lock Weight</mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID028" formControlName="ApplyAutoLossToRefinery"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox id="ID028"
+                                                    formControlName="ApplyAutoLossToRefinery"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Apply Auto Loss to Refinery
                                                 </mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID029" formControlName="StoneIncluded"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
-                                                    Stone Included </mat-checkbox>
+                                                <mat-checkbox id="ID029"
+                                                    formControlName="StoneIncluded"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
+                                                    Stone Included
+                                                </mat-checkbox>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID030" formControlName="LabProcess"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox id="ID030"
+                                                    formControlName="LabProcess"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Lab Process</mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID031" formControlName="HaveTreeNo"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox id="ID031"
+                                                    formControlName="HaveTreeNo"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Have Tree No</mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID032" formControlName="RepairProcess"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
-                                                    Repair Process </mat-checkbox>
+                                                <mat-checkbox id="ID032"
+                                                    formControlName="RepairProcess"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
+                                                    Repair Process
+                                                </mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID033" formControlName="TimeCalculateonProcess"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox id="ID033"
+                                                    formControlName="TimeCalculateonProcess"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Time Calculate on
                                                     Process</mat-checkbox>
                                             </div>
@@ -457,90 +640,128 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID034" formControlName="WaxProcess"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox id="ID034"
+                                                    formControlName="WaxProcess"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Wax Process</mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID035" formControlName="NonQuantity"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox id="ID035"
+                                                    formControlName="NonQuantity"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Non Quantity </mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox formControlName="Metal" [disabled]="viewMode|| codeEnable"
-                                                    class="example-margin" id="ID036">
+                                                <mat-checkbox
+                                                    formControlName="Metal"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin"
+                                                    id="ID036">
                                                     Metal </mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID037" formControlName="RecoveryProcess"
+                                                <mat-checkbox id="ID037"
+                                                    formControlName="RecoveryProcess"
                                                     (change)="onRecovStockCode($event)"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
-                                                    Recovery Process</mat-checkbox>
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
+                                                    Recovery
+                                                    Process</mat-checkbox>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox formControlName="Stone" [disabled]="viewMode|| codeEnable"
-                                                    class="example-margin" id="ID038">
+                                                <mat-checkbox
+                                                    formControlName="Stone"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin"
+                                                    id="ID038">
                                                     Stone </mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID039" formControlName="Consumable"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox id="ID039"
+                                                    formControlName="Consumable"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Consumable </mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID040" formControlName="ApprovalRequired"
-                                                    (change)="approvalSelect($event)" [disabled]="viewMode|| codeEnable"
+                                                <mat-checkbox id="ID040"
+                                                    formControlName="ApprovalRequired"
+                                                    (change)="approvalSelect($event)"
+                                                    [disabled]="viewMode|| codeEnable"
                                                     class="example-margin">
-                                                    Approval Required </mat-checkbox>
+                                                    Approval Required
+                                                </mat-checkbox>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID041" formControlName="AutoTransfer"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox id="ID041"
+                                                    formControlName="AutoTransfer"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Auto Transfer</mat-checkbox>
                                             </div>
                                         </div>
-                                        <div class="col-md-3" *ngIf="applySettinglist()">
+                                        <div class="col-md-3"
+                                            *ngIf="applySettinglist()">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID042" formControlName="ApplySetting"
-                                                    [disabled]="viewMode|| codeEnable" class="example-margin">
+                                                <mat-checkbox id="ID042"
+                                                    formControlName="ApplySetting"
+                                                    [disabled]="viewMode|| codeEnable"
+                                                    class="example-margin">
                                                     Apply Setting</mat-checkbox>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </mat-tab>
-                            <mat-tab label="Mandatory Check list" *ngIf="mandatoryChecklist()">
+                            <mat-tab label="Mandatory Check list"
+                                *ngIf="mandatoryChecklist()">
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                                            [showColumnLines]="true" [showRowLines]="true" class="mt-3" keyExpr="SRNO">
-                                            <dxo-editing mode="cell"></dxo-editing>
+                                        <dx-data-grid id="gridContainer"
+                                            [dataSource]="tableData"
+                                            [showBorders]="true"
+                                            [showColumnLines]="true"
+                                            [showRowLines]="true" class="mt-3"
+                                            keyExpr="SRNO">
+                                            <dxo-editing
+                                                mode="cell"></dxo-editing>
                                             <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
                                             <!-- <dxo-selection mode="multiple"></dxo-selection> -->
-                                            <dxi-column dataField="SRNO" caption="SN"> </dxi-column>
-                                            <dxi-column dataField="MAND_CODE" caption="Code"></dxi-column>
-                                            <dxi-column dataField="MAND_DESCRIPTION" caption="Description">
+                                            <dxi-column dataField="SRNO"
+                                                caption="SN"> </dxi-column>
+                                            <dxi-column dataField="MAND_CODE"
+                                                caption="Code"></dxi-column>
+                                            <dxi-column
+                                                dataField="MAND_DESCRIPTION"
+                                                caption="Description">
                                             </dxi-column>
-                                            <dxi-column width="auto" dataField="ISMANDATORY" caption="Mandatory"
+                                            <dxi-column width="auto"
+                                                dataField="ISMANDATORY"
+                                                caption="Mandatory"
                                                 cellTemplate="limitTemplate"></dxi-column>
-                                            <div *dxTemplate="let data of 'limitTemplate'">
-                                                <mat-checkbox [checked]="data.value" [disabled]="viewMode"
+                                            <div
+                                                *dxTemplate="let data of 'limitTemplate'">
+                                                <mat-checkbox
+                                                    [checked]="data.value"
+                                                    [disabled]="viewMode"
                                                     (change)="changedCheckbox(data)"></mat-checkbox>
                                             </div>
                                         </dx-data-grid>

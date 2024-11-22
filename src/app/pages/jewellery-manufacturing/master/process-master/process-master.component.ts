@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
@@ -81,6 +82,8 @@ export class ProcessMasterComponent implements OnInit {
   @ViewChild('codeInput1') codeInput1!: ElementRef;
   @ViewChild('approvalProcessInput') approvalProcessInput!: ElementRef;
   @ViewChild('recStockCode') recStockCode!: ElementRef;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
 
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -290,7 +293,7 @@ export class ProcessMasterComponent implements OnInit {
       this.postionCodeValidate();//to get position only for new entry
     }
   }
-  
+
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.processMasterForm.controls[formControlName].setValue(
       this.commonService.setCommaSerperatedNumber(value, Decimal)
@@ -384,6 +387,20 @@ export class ProcessMasterComponent implements OnInit {
     if (this.processMasterForm.value.processCode == '') {
       this.commonService.toastErrorByMsgId('MSG1680')//Process Code cannot be empty
     }
+  }
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
   }
 
   jobNumberShow() {
@@ -917,7 +934,7 @@ export class ProcessMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
@@ -1014,7 +1031,7 @@ export class ProcessMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  
+
 
 
   postionCodeValidate(event?: any) {
@@ -1159,12 +1176,6 @@ export class ProcessMasterComponent implements OnInit {
 
   /**use: common accode change validation */
   checkAccodeSelected(event: any, LOOKUPDATA: MasterSearchModel, formname: string) {
-    console.log( event.target.value);
-
-    var checkValue =  event.target.value;
-    console.log(checkValue);
-
-
     // LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '') {
       this.processMasterForm.controls[formname].setValue('');
@@ -1174,8 +1185,6 @@ export class ProcessMasterComponent implements OnInit {
     // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
     this.wipAccodeValidateSP();
     // this.lossAccodeValidateSP();
-    
-
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
       this.processMasterForm.controls[formname].setValue('');
       this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
@@ -1186,9 +1195,9 @@ export class ProcessMasterComponent implements OnInit {
 
 
   losscheckAccodeSelected(event: any, LOOKUPDATA: MasterSearchModel, formname: string) {
-    console.log( event.target.value);
+    console.log(event.target.value);
 
-    var checkValue =  event.target.value;
+    var checkValue = event.target.value;
     console.log(checkValue);
 
 
@@ -1200,7 +1209,7 @@ export class ProcessMasterComponent implements OnInit {
 
     // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
     this.lossAccodeValidateSP();
-    
+
 
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
       this.processMasterForm.controls[formname].setValue('');
@@ -1211,9 +1220,9 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   recovcheckAccodeSelected(event: any, LOOKUPDATA: MasterSearchModel, formname: string) {
-    console.log( event.target.value);
+    console.log(event.target.value);
 
-    var checkValue =  event.target.value;
+    var checkValue = event.target.value;
     console.log(checkValue);
 
 
@@ -1226,7 +1235,7 @@ export class ProcessMasterComponent implements OnInit {
     // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
     this.recovAccodeValidateSP();
 
-    
+
 
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
       this.processMasterForm.controls[formname].setValue('');
@@ -1237,9 +1246,9 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   gaincheckAccodeSelected(event: any, LOOKUPDATA: MasterSearchModel, formname: string) {
-    console.log( event.target.value);
+    console.log(event.target.value);
 
-    var checkValue =  event.target.value;
+    var checkValue = event.target.value;
     console.log(checkValue);
 
 
@@ -1252,7 +1261,7 @@ export class ProcessMasterComponent implements OnInit {
     // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
     this.gainAccodeValidateSP();
 
-    
+
 
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
       this.processMasterForm.controls[formname].setValue('');
@@ -1262,69 +1271,73 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
-  // /**use: sp call to validate same accode to avoid same accode selection */
-  // accodeValidateSP(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-  //   // console.log('This');
+  /**use: sp call to validate same accode to avoid same accode selection */
+  accodeValidateSP(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    // console.log('This');
 
-  //   // console.log(event.target.value);
-  //   // LOOKUPDATA.SEARCH_VALUE = event.target.value
-  //   let values = event.target.value;
-  //   if (values == '' || this.viewMode == true || this.editMode == true) return
-  //   let param = {
-  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
-  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${values}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-  //   }
-  //   this.commonService.toastInfoByMsgId('MSG81447');
-  //   let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-  //   let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
-  //     .subscribe((result) => {
-  //       console.log('this api working');        
-  //       // this.isDisableSaveBtn = false;
-  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-  //       if (data.length > 0) {
-  //         this.commonService.toastErrorByMsgId('MSG1121')//Accode already exists in other process
-  //         this.processMasterForm.controls[FORMNAME].setValue('')
-  //         return
-  //       }
+    // console.log(event.target.value);
+    // LOOKUPDATA.SEARCH_VALUE = event.target.value
+    let values = event.target.value;
+    if (values == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${values}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        console.log('this api working');
+        // this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length > 0) {
+          this.commonService.toastErrorByMsgId('MSG1121')//Accode already exists in other process
+          this.processMasterForm.controls[FORMNAME].setValue('')
+          return
+        }
 
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-  //     })
-  //   this.subscriptions.push(Sub)
-  // } 
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
 
 
-  wipAccodeValidateSP(){
+  wipAccodeValidateSP() {
     let postData = {
       "SPID": "0176",
       "parameter": {
         "strType": "WIP",
-        "Adjust_AC":"",
+        "Adjust_AC": "",
         "Wip_AC": this.processMasterForm.value.WIPaccount,
-        "Process_Code":"",
+        "Process_Code": "",
         "Loss_AC": "",
-        "RecAccode":"",
-        "Gain_AC":"",
+        "RecAccode": "",
+        "Gain_AC": "",
       }
     };
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        if (result.status == "Success") {
-          const responseData = result.dynamicData[0][0];
-          // console.log(responseData);
-          // console.log(responseData.WIP_ACCODE);
-          if (responseData.WIP_ACCODE == this.processMasterForm.value.WIPaccount) {
-            Swal.fire({
-              title: '',
-              text: 'Account code Already Exists in process  ' + responseData.PROCESS_CODE + '-' + responseData.DESCRIPTION,
-              icon: 'warning',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then(() => {
-              this.processMasterForm.controls.WIPaccount.setValue('');
-              this.renderer.selectRootElement('#code').focus();  
-            });
-          }          
+        try {
+          if (result.status === "Success" && Array.isArray(result.dynamicData) && result.dynamicData[0]?.[0]) {
+            const responseData = result.dynamicData[0][0];
+            if (responseData.WIP_ACCODE === this.processMasterForm.value.WIPaccount) {
+              Swal.fire({
+                title: '',
+                text: `Account code Already Exists in process ${responseData.PROCESS_CODE} - ${responseData.DESCRIPTION}`,
+                icon: 'warning',
+                confirmButtonColor: '#336699',
+                confirmButtonText: 'Ok'
+              }).then(() => {
+                this.processMasterForm.controls.WIPaccount.setValue('');
+                this.renderer.selectRootElement('#code').focus();
+              });
+            }
+          } else {
+            console.error("Unexpected response structure: ", result);
+          }
+        } catch (error) {
+          console.error("Error processing response: ", error);
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG81451');
@@ -1334,17 +1347,18 @@ export class ProcessMasterComponent implements OnInit {
   }
 
 
-  lossAccodeValidateSP(){
+
+  lossAccodeValidateSP() {
     let postData = {
       "SPID": "0176",
       "parameter": {
-        "strType":  "LOSS",
-        "Adjust_AC":"",
+        "strType": "LOSS",
+        "Adjust_AC": "",
         "Wip_AC": "",
-        "Process_Code":"",
+        "Process_Code": "",
         "Loss_AC": this.processMasterForm.value.LOSS_ACCODE,
-        "RecAccode":"",
-        "Gain_AC":"",
+        "RecAccode": "",
+        "Gain_AC": "",
       }
     };
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
@@ -1362,9 +1376,9 @@ export class ProcessMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then(() => {
               this.processMasterForm.controls.LOSS_ACCODE.setValue('');
-              this.renderer.selectRootElement('#code').focus();  
+              this.renderer.selectRootElement('#code').focus();
             });
-          }          
+          }
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG81451');
@@ -1373,17 +1387,17 @@ export class ProcessMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-  recovAccodeValidateSP(){
+  recovAccodeValidateSP() {
     let postData = {
       "SPID": "0176",
       "parameter": {
-        "strType":  "RECOVERY",
-        "Adjust_AC":"",
+        "strType": "RECOVERY",
+        "Adjust_AC": "",
         "Wip_AC": "",
-        "Process_Code":"",
+        "Process_Code": "",
         "Loss_AC": "",
         "RecAccode": this.processMasterForm.value.RECOV_ACCODE,
-        "Gain_AC":"",
+        "Gain_AC": "",
       }
     };
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
@@ -1401,9 +1415,9 @@ export class ProcessMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then(() => {
               this.processMasterForm.controls.RECOV_ACCODE.setValue('');
-              this.renderer.selectRootElement('#code').focus();  
+              this.renderer.selectRootElement('#code').focus();
             });
-          }          
+          }
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG81451');
@@ -1412,17 +1426,17 @@ export class ProcessMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-  gainAccodeValidateSP(){
+  gainAccodeValidateSP() {
     let postData = {
       "SPID": "0176",
       "parameter": {
-        "strType":  "GAIN",
-        "Adjust_AC":"",
+        "strType": "GAIN",
+        "Adjust_AC": "",
         "Wip_AC": "",
-        "Process_Code":"",
+        "Process_Code": "",
         "Loss_AC": "",
         "RecAccode": "",
-        "Gain_AC":this.processMasterForm.value.GAIN_ACCODE,
+        "Gain_AC": this.processMasterForm.value.GAIN_ACCODE,
       }
     };
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
@@ -1440,9 +1454,9 @@ export class ProcessMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then(() => {
               this.processMasterForm.controls.GAIN_ACCODE.setValue('');
-              this.renderer.selectRootElement('#code').focus();  
+              this.renderer.selectRootElement('#code').focus();
             });
-          }          
+          }
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG81451');
@@ -1455,13 +1469,11 @@ export class ProcessMasterComponent implements OnInit {
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    if (event.target.value == '' || this.viewMode) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    console.log("this Working Now");
-    
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
@@ -1473,7 +1485,6 @@ export class ProcessMasterComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
-
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
@@ -1752,14 +1763,8 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
-  // lookupKeyPress(event: KeyboardEvent) {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //   }
-  // }
-
-
   lookupKeyPress(event: any, form?: any) {
+    this.showAlertIfCodeIsEmpty()
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
     }

@@ -5,7 +5,9 @@
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
-    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="DeleteController()"
+     [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    ></modal-header>
     <div class="p-4 ">
         <form [formGroup]="fixedassetsform">
             <mat-tab-group>
@@ -15,21 +17,31 @@
                             Fixing Asset Category :</label>
                         <div class="col-md-2 p-0">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="category_code"
-                                    UpperCaseDirective autocomplete="off" [readonly]="viewOnly" (focusout)="
-                                                SPvalidateLookupFieldModified(
-                                                  $event,
-                                                  fixingassetscodedata,
-                                                  ['category_code','category_code_desc'],
-                                                  false,
-                                                  ['CODE','DESCRIPTION'],
-                                                  false
-                                                )
-                                              " />
-                                <master-search class="masterSearch" [MasterSearchData]="fixingassetscodedata"
+                                <input 
+                                    type="text" 
+                                    #codeInput 
+                                    matInput 
+                                    formControlName="category_code" 
+                                    UpperCaseDirective 
+                                    autocomplete="off" 
+                                    [readonly]="viewOnly || disable_code" 
+                                    (focusout)="SPvalidateLookupFieldModified(
+                                        $event,
+                                        fixingassetscodedata,
+                                        ['category_code', 'category_code_desc'],
+                                        false,
+                                        ['CODE', 'DESCRIPTION'],
+                                        false
+                                    )"
+                                />
+                                
+                                <master-search 
+                                    class="masterSearch" 
+                                    [MasterSearchData]="fixingassetscodedata"
                                     (newRowClick)="selectedfixingassets($event)">
                                 </master-search>
                             </mat-form-field>
+                            
 
                         </div>
                         <div class="col-md-4 p-0">
@@ -48,7 +60,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="assets_code"
-                                            [readonly]="viewOnly" />
+                                            [readonly]="viewOnly" maxlength="15"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -701,12 +713,12 @@
                                                     </label>
                                                     <div class="col-sm-8 p-0">
                                                         <mat-form-field style="width: 100%" appearance="outline">
-                                                            <input type="text" matInput formControlName="doc_no"
+                                                            <input type="number" matInput formControlName="doc_no"
                                                                 UpperCaseDirective [readonly]="viewOnly" (focusout)="
                                                                 SPvalidateLookupFieldModified(
                                                                   $event,
                                                                   BranchData,
-                                                                  ['doc_type'],
+                                                                  ['doc_no'],
                                                                   false,
                                                                   ['CODE'],
                                                                   false
@@ -726,7 +738,7 @@
                                                     </label>
                                                     <div class="col-sm-8 p-0">
                                                         <mat-form-field style="width: 100%" appearance="outline">
-                                                            <input type="text" matInput formControlName="Branch"
+                                                            <input type="text" matInput formControlName="doc_sr"
                                                                 UpperCaseDirective [readonly]="viewOnly" />
                                                         </mat-form-field>
                                                     </div>

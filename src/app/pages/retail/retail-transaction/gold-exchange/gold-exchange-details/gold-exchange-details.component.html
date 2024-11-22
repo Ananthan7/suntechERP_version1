@@ -90,7 +90,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID007">Pcs</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" (change)="changePieces($event)" class="text-right" [min]="0" id="pieces" [readonly]="viewOnly"
+                                <input type="text" (change)="changePieces($event)" class="text-right" [min]="0" id="pieces" [readonly]="viewOnly"
                                     matInput  formControlName="pieces" />
                             </mat-form-field>
 
@@ -100,7 +100,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID008">Gross Weight</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" id="grossWeight" (change)="changeGrossweight($event)"
+                                <input type="text" id="grossWeight" (change)="changeGrossweight($event)"
                                     [readonly]="viewOnly" class="st_txt_right" matInput MetalDecimalInput
                                     formControlName="grossWeight" />
                             </mat-form-field>
@@ -122,7 +122,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID010">Purity</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" (change)="changeStandardPurity($event)" [readonly]="viewOnly"
+                                <input type="text" (change)="changeStandardPurity($event)" [readonly]="viewOnly"
                                     class="st_txt_right" matInput PurityDecimal formControlName="purity" />
                             </mat-form-field>
 
@@ -132,7 +132,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID011">Pure Weight</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" readonly class="st_txt_right" matInput MetalDecimalInput
+                                <input type="text" readonly class="st_txt_right" matInput MetalDecimalInput
                                     formControlName="pureWeight" />
                             </mat-form-field>
 
@@ -142,10 +142,10 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID012">Mud Weight</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" id="mudWeight" (change)="changeMudWeight($event)"
+                                <input type="text" id="mudWeight" (change)="changeMudWeight($event)"
                                     [readonly]="viewOnly" class="st_txt_right" matInput MetalDecimalInput
                                     formControlName="mudWeight" />
-                                <!-- <input type="number" class="st_txt_right" (change)="changeMudWeight($event)" [readonly]="viewOnly" matInput
+                                <!-- <input type="text" class="st_txt_right" (change)="changeMudWeight($event)" [readonly]="viewOnly" matInput
                                     MetalDecimalInput formControlName="mudWeight" /> -->
                             </mat-form-field>
 
@@ -155,7 +155,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID013">Net Weight</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" id="netWeight" class="st_txt_right" matInput MetalDecimalInput
+                                <input type="text" id="netWeight" class="st_txt_right" matInput MetalDecimalInput
                                     readonly formControlName="netWeight" />
                             </mat-form-field>
 
@@ -165,7 +165,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID014">Chargeable Weight</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" class="st_txt_right" matInput MetalDecimalInput readonly
+                                <input type="text" class="st_txt_right" matInput MetalDecimalInput readonly
                                     formControlName="chargableWeight" />
                             </mat-form-field>
 
@@ -202,7 +202,7 @@
                         </div>
                         <div class="col-md-4">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" class="st_txt_right" AmountDecimalInput matInput
+                                <input type="text" class="st_txt_right" AmountDecimalInput matInput
                                    readonly formControlName="wastageAmount" />
                             </mat-form-field>
 
@@ -231,7 +231,7 @@
                         </div>
                         <div class="col-md-4">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" class="text-right" [min]="0" id="unitValue" [readonly]="viewOnly"
+                                <input type="text" class="text-right" [min]="0" id="unitValue" [readonly]="viewOnly"
                                     matInput formControlName="unitValue" />
                             </mat-form-field>
 
@@ -241,7 +241,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID025">Rate</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" class="st_txt_right" (change)="changeMakingRate($event)"
+                                <input type="text" class="st_txt_right" (change)="changeMakingRate($event)"
                                     AmountDecimalInput matInput [readonly]="viewOnly" formControlName="unitRate" />
                             </mat-form-field>
 
@@ -251,7 +251,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID026">Amount</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" class="st_txt_right" (change)="changeMakingAmount($event)"
+                                <input type="text" class="st_txt_right" (change)="changeMakingAmount($event)"
                                     AmountDecimalInput matInput [readonly]="viewOnly" formControlName="unitAmount" />
                             </mat-form-field>
 
@@ -269,7 +269,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID025">Rate</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" id="stoneRate" class="st_txt_right"
+                                <input type="text" id="stoneRate" class="st_txt_right"
                                     (change)="changeStoneRate($event)" AmountDecimalInput matInput [readonly]="viewOnly"
                                     formControlName="stoneRate" />
                             </mat-form-field>
@@ -280,7 +280,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID026">Amount</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" id="stoneAmount" class="st_txt_right"
+                                <input type="text" id="stoneAmount" class="st_txt_right"
                                     (change)="changeStoneAmount($event)" AmountDecimalInput matInput
                                     [readonly]="viewOnly" formControlName="stoneAmount" />
                             </mat-form-field>
@@ -355,7 +355,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID017">Stone Difference</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 70%;">
-                                <input type="number" class="st_txt_right" matInput MetalDecimalInput readonly
+                                <input type="text" class="st_txt_right" matInput MetalDecimalInput readonly
                                     formControlName="stoneDiffer" />
                             </mat-form-field>
 
@@ -365,7 +365,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label" id="ID018">Oz Wt</label>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" (change)="triggerOunceWeightChange($event)" class="st_txt_right" matInput MetalDecimalInput [readonly]="viewOnly"
+                                <input type="text" (change)="triggerOunceWeightChange($event)" class="st_txt_right" matInput MetalDecimalInput [readonly]="viewOnly"
                                     formControlName="ozWeight" />
                             </mat-form-field>
 
@@ -400,7 +400,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label">Rate</label>
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%;">
-                                <input type="number" (change)="changeMetalRate($event)" class="st_txt_right" matInput PurityDecimal
+                                <input type="text" (change)="changeMetalRate($event)" class="st_txt_right" matInput PurityDecimal
                                     [readonly]="viewOnly" formControlName="metalRate" />
                             </mat-form-field>
                         </div>
@@ -409,7 +409,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label">Amount</label>
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%;">
-                                <input type="number" (change)="changeMetalAmount($event)" class="st_txt_right" matInput AmountDecimalInput
+                                <input type="text" (change)="changeMetalAmount($event)" class="st_txt_right" matInput AmountDecimalInput
                                     [readonly]="viewOnly" formControlName="metalAmount" />
                             </mat-form-field>
                         </div>
@@ -426,7 +426,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label">AMOUNT</label>
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%;">
-                                <input type="number" class="st_txt_right" matInput AmountDecimalInput
+                                <input type="text" class="st_txt_right" matInput AmountDecimalInput
                                     [readonly]="viewOnly" formControlName="netAmount" />
                             </mat-form-field>
                         </div>

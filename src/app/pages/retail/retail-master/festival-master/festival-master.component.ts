@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import Swal from 'sweetalert2';
 
@@ -37,6 +38,10 @@ export class FestivalMasterComponent implements OnInit {
   dyndatas: any = [];
   viewOnly: boolean = false;
   gridForm: any;
+  data: any = [];
+  disable_code: boolean = false;
+  editMode: boolean = false;
+
 
 
   festivalmasterform: FormGroup = this.formBuilder.group({
@@ -44,7 +49,7 @@ export class FestivalMasterComponent implements OnInit {
     code: [""],
     description: [""],
     target: [""],
-    year: [""],
+    year: this.formBuilder.array([]),
     fromDate: [""],
     todate: [""],
 
@@ -54,40 +59,34 @@ export class FestivalMasterComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private apiService: SuntechAPIService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private commonService: CommonServiceService,
+    private renderer: Renderer2
+
 
 
 
   ) { }
 
-  // initializeMaindetails() {
-  //   const startYear = 2009;
+  checkcode() {
 
-  //   let curr_year = localStorage.getItem('YEAR');
-  //   if (!curr_year) {
-  //     curr_year = new Date().getFullYear().toString(); 
-  //   }
+    const code_data = this.festivalmasterform.controls.code;
 
-  //   const currentYear = Number(curr_year);
+    if (!code_data.value || code_data.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1124');
+      this.renderer.selectRootElement('#fes_code')?.focus();
+    }
+  }
 
-  //   const numRows = currentYear - startYear + 1; 
-  //   this.maindetails = [];  
+  checkdesc() {
 
-  //   for (let i = 0; i < numRows; i++) {
-  //     const year = startYear + i;
-  //     const newRow: RowData = {
-  //       SRNO: i + 1,             
-  //       YEAR: year.toString(),    
-  //       FROM_DATE: new Date(),   
-  //       TO_DATE: new Date(),      
-  //       TARGET: '',               
-  //     };
-  //     this.maindetails.push(newRow);
-  //   }
+    const code_data = this.festivalmasterform.controls.description;
 
-  //   console.log(this.maindetails);
-  // }
-
+    if (!code_data.value || code_data.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1193');
+      // this.renderer.selectRootElement('#fes_desc')?.focus();
+    }
+  }
 
 
   ngOnInit(): void {
@@ -98,15 +97,55 @@ export class FestivalMasterComponent implements OnInit {
     console.log(this.fm_id);
     this.flag = this.content?.FLAG;
     this.initialController(this.flag, this.content);
-    if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
+    if (this.flag == 'EDIT') {
+      this.disable_code = true;
+      this.editMode = true;
+
+    }
+    if (this?.flag == "EDIT" || this?.flag == 'VIEW' || this.flag == 'DELETE') {
       this.detailsapi(this.fm_id);
     }
     this.gridForm = this.formBuilder.group({
-      rows: this.formBuilder.array([])  // Dynamic rows will go here
+      rows: this.formBuilder.array([])
     });
 
+    if(this.flag != 'VIEW' && this.flag != 'EDIT'){
+      this.loadYears();
+    }
 
   }
+
+  loadYears() {
+    const currentYear = new Date().getFullYear();
+    const yearsList = Array.from({ length: 10 }, (_, index) => currentYear - (9 - index));
+    const reversedYearsList = yearsList.reverse();
+    this.data.year = reversedYearsList;
+    
+    this.data.year.forEach((e:any, i:any) => {
+      this.maindetails.push({ SRNO: i+1, YEAR: e });
+    });
+    console.log(this.maindetails);
+  }
+
+  year(data: any, event: any) {
+    console.log('New Value:', event.target.value);
+    console.log(data);
+
+
+    const updatedSRNO = data.data.SRNO - 1;
+    this.maindetails[updatedSRNO].year = event.target.value;
+
+    console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].year);
+  }
+
+
+  docTypeDes(data: any, event: any) {
+    const updatedSRNO = data.data.SRNO - 1;
+    this.maindetails[updatedSRNO].KYC_DOCDESC = event.target.value;
+
+    console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].KYC_DOCDESC);
+  }
+
 
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
@@ -181,9 +220,56 @@ export class FestivalMasterComponent implements OnInit {
 
 
 
+  // close(data?: any) {
+  //   // this.activeModal.close(data);
+  //   console.log(this.flag)
+  //   if(this.flag == undefined || this.flag == 'EDIT'){
+  //     Swal.fire({
+  //       title: "Confirm",
+  //       text: "Are you sure you want to close this window?",
+  //       icon: "warning",
+  //       showCancelButton: true,
+  //       confirmButtonText: 'Yes',
+  //       cancelButtonText: 'No'
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         this.activeModal.close(data);
+  //       }
+  //     });
+  //   }else{
+  //     this.activeModal.close(data);
+  //   }
+  // }
+
   close(data?: any) {
-    this.activeModal.close(data);
+    if (data) {
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW') {
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
+
+
+
 
   detailsapi(fm_id: any) {
     this.viewOnly = true;
@@ -193,38 +279,48 @@ export class FestivalMasterComponent implements OnInit {
       .subscribe((result: any) => {
         this.dyndatas = result.response;
         console.log(this.dyndatas);
-        // this.maindetails.push(...this.dyndatas?.Details)
+        this.dyndatas.Details.forEach((ele:any) => {
+          ele.TODATE = new Date(ele.TODATE).toISOString().split('T')[0];
+          ele.FROMDATE = new Date(ele.FROMDATE).toISOString().split('T')[0];
+        });
+        
         this.maindetails = [...this.maindetails, ...this.dyndatas?.Details];
-
-
-        this.flag = "EDIT";
-
+        // this.flag = "EDIT";
       }, (err: any) => {
 
       })
     this.subscriptions.push(Sub);
     console.log(this.dyndatas.FA_CATEGORY);
+    console.log(this.maindetails);
   }
 
   formSubmit() {
 
+    let count = 1;
+    this.maindetails = this.maindetails.filter((ele: any) => {
+      return ele.FROMDATE && ele.TODATE && ele.YEAR && ele.FEST_TARGET;
+    });
+    this.maindetails.forEach((ele: any) => {
+      ele.UNIQUEID = count++;
+      ele.SRNO = count++;
+      ele.FEST_TARGET = Number(ele.FEST_TARGET);
+      ele.CODE = "";
+      ele.YEAR = ele.YEAR.toString();
+      if (ele.FROMDATE) {
+        ele.FROMDATE = new Date(ele.FROMDATE).toISOString(); 
+      }
+      if (ele.TODATE) {
+        ele.TODATE = new Date(ele.TODATE).toISOString();
+      }
+    });
     const postData = {
       "MID": 0,
       "CODE": this.festivalmasterform.controls.code.value,
       "DESCRIPTION": this.festivalmasterform.controls.description.value,
-      "Details": [
-        {
-        UNIQUEID: this.maindetails.length + 1,
-        SRNO: this.maindetails.length + 1,
-        CODE: this.festivalmasterform.controls.code.value,
-        YEAR: this.festivalmasterform.controls.year.value,
-        FROMDATE: this.festivalmasterform.controls.fromDate.value,
-        TODATE:this.festivalmasterform.controls.todate.value,
-        FEST_TARGET: this.festivalmasterform.controls.target.value
-        }
-       
-      ]
+      "Details": this.maindetails
     }
+
+
 
     if (this.flag === "EDIT") {
       let API = `FestivalMaster/UpdateFestivalMaster/${this.fm_id}`;
@@ -283,39 +379,82 @@ export class FestivalMasterComponent implements OnInit {
 
   }
 
+  // addTableData() {
+  //   if (this.festivalmasterform.controls.code.value == "") {
+  //     Swal.fire({
+  //       title: 'Error',
+  //       text: 'Code Cannot be Empty',
+  //     });
+  //   } else if (this.festivalmasterform.controls.description.value == "") {
+  //     Swal.fire({
+  //       title: 'Error',
+  //       text: 'Description Cannot be Empty',
+  //     });
+  //   } else {
+  //     // const fromDateFormatted = this.datePipe.transform(this.festivalmasterform.controls.fromDate.value, 'yyyy-MM-dd');
+  //     // const toDateFormatted = this.datePipe.transform(this.festivalmasterform.controls.todate.value, 'yyyy-MM-dd');
+  //     // const newRow = {
+  //     //   UNIQUEID: this.maindetails.length + 1,
+  //     //   SRNO: this.maindetails.length + 1,
+  //     //   CODE: "",
+  //     //   YEAR: "",
+  //     //   FROMDATE: "",
+  //     //   TODATE: "",
+  //     //   FEST_TARGET: ""
+  //     //   // UNIQUEID: this.maindetails.length + 1,
+  //     //   // SRNO: this.maindetails.length + 1,
+  //     //   // CODE: this.festivalmasterform.controls.code.value,
+  //     //   // YEAR: this.festivalmasterform.controls.year.value,
+  //     //   // FROMDATE: this.festivalmasterform.controls.fromDate.value,
+  //     //   // TODATE:this.festivalmasterform.controls.todate.value,
+  //     //   // FEST_TARGET: this.festivalmasterform.controls.target.value
+  //     const newRow = {
+  //       UNIQUEID: this.maindetails.length + 1,
+  //       SRNO: this.maindetails.length + 1,
+  //       CODE: "",
+  //       YEAR: "",
+  //       FROMDATE: "",
+  //       TODATE: "",
+  //       FEST_TARGET: ""
+  //     }
+  //     console.log(newRow);
+  //     this.maindetails.push(newRow);
+  //     };
+
+  //   }
+
   addTableData() {
     if (this.festivalmasterform.controls.code.value == "") {
-      Swal.fire({
-        title: 'Error',
-        text: 'Code Cannot be Empty',
-      });
+      this.commonService.toastErrorByMsgId('MSG1193');
+      this.renderer.selectRootElement('#fes_code')?.focus();
+      return;
     } else if (this.festivalmasterform.controls.description.value == "") {
-      Swal.fire({
-        title: 'Error',
-        text: 'Description Cannot be Empty',
-      });
+      this.commonService.toastErrorByMsgId('MSG1193');
+      this.renderer.selectRootElement('#fes_desc')?.focus();
+      return;
     } else {
-      const fromDateFormatted = this.datePipe.transform(this.festivalmasterform.controls.fromDate.value, 'yyyy-MM-dd');
-      const toDateFormatted = this.datePipe.transform(this.festivalmasterform.controls.todate.value, 'yyyy-MM-dd');
-      const newRow = {
-        UNIQUEID: this.maindetails.length + 1,
-        SRNO: this.maindetails.length + 1,
-        CODE: "",
-        YEAR: "",
-        FROMDATE: "",
-        TODATE:"",
-        FEST_TARGET: ""
-        // UNIQUEID: this.maindetails.length + 1,
-        // SRNO: this.maindetails.length + 1,
-        // CODE: this.festivalmasterform.controls.code.value,
-        // YEAR: this.festivalmasterform.controls.year.value,
-        // FROMDATE: this.festivalmasterform.controls.fromDate.value,
-        // TODATE:this.festivalmasterform.controls.todate.value,
-        // FEST_TARGET: this.festivalmasterform.controls.target.value
-      };
-      console.log(newRow);
-      this.maindetails.push(newRow);
+
+      let srno = this.maindetails.length;
+      srno += 1;
+
+      let data = {
+        // "UNIQUEID": srno ,
+        // "KYC_DETCODE": "",
+        // "KYC_SRNO": srno,
+        // "KYC_DOCTYPE": "",
+        // "KYC_DOCDESC": ""
+        "UNIQUEID": srno,
+        "SRNO": srno,
+        "CODE": "",
+        "YEAR": "",
+        "FROMDATE": "",
+        "TODATE": "",
+        "FEST_TARGET": ""
+      }
+      this.maindetails.push(data);
+
     }
+
   }
 
   deleteTableData() {
@@ -333,4 +472,41 @@ export class FestivalMasterComponent implements OnInit {
     cellData.setValue(event.value);
   }
 
+  // datechange(event: any, value: any) {
+  //   // console.log(data, value);
+  //   // this.maindetails[value.data.SRNO - 1].FROMDATE = data.target.value;
+  //   const updatedSRNO = data.data.SRNO - 1;
+  //   this.maindetails[updatedSRNO].FROMDATE = event.target.value;
+
+  //   console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].KYC_DOCTYPE);
+  // }
+
+  datechange(event: any, data: any) {
+    console.log(event);  // Logs the event
+    console.log(data);   // Logs the data passed
+    const updatedSRNO = data.data.SRNO - 1;
+    console.log(updatedSRNO);
+    this.maindetails[updatedSRNO].FROMDATE = event.target.value;
+    console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].FROMDATE);
+  }
+
+  changeyear(event: any, data: any) {
+    const updatedSRNO = data.data.SRNO - 1;
+    this.maindetails[updatedSRNO].YEAR = event.target.value;
+  }
+
+  changefromdate(event: any, data: any) {
+    const updatedSRNO = data.data.SRNO - 1;
+    this.maindetails[updatedSRNO].FROMDATE = event.target.value;
+  }
+
+  changetodate(event: any, data: any) {
+    const updatedSRNO = data.data.SRNO - 1;
+    this.maindetails[updatedSRNO].TODATE = event.target.value;
+  }
+
+  tragetchange(event: any, data: any) {
+    const updatedSRNO = data.data.SRNO - 1;
+    this.maindetails[updatedSRNO].FEST_TARGET = event.target.value;
+  }
 }

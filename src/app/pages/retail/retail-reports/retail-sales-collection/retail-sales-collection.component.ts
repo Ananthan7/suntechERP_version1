@@ -1,7 +1,9 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -61,7 +63,7 @@ export class RetailSalesCollectionComponent implements OnInit {
   outputGridDataSource: any;
   OutputGridColumns: any;
   
-  constructor(  private activeModal: NgbActiveModal,
+  constructor(  private activeModal: NgbActiveModal, private datePipe: DatePipe,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
     private commonService: CommonServiceService,   private toastr: ToastrService, private sanitizer: DomSanitizer
   ) { }
@@ -136,38 +138,11 @@ export class RetailSalesCollectionComponent implements OnInit {
     console.log(this.retailSalesCollection.controls.reportTo.value)
   }
 
-  // getAPIData(data?: any) {
-  //   let payload: any
-  //   if(data){
-  //     payload = {
-  //       "strReportName": "POS_COLLECTION_A",
-  //       "strMainVouchers": this.voucherData,
-  //       "strExcludeVouchers": "",
-  //       "strWhereCond": "",
-  //       "strLoginBranch": "", //this.comService.branchCode
-  //     };
-  //   } else{
-  //     payload = {
-  //       "strReportName": "POS_COLLECTION_A",
-  //       "strMainVouchers": this.voucherData,
-  //       "strExcludeVouchers": "",
-  //       "strWhereCond": "",
-  //       "strLoginBranch": "", //this.comService.branchCode
-  //     };
-  //   }
-  //   this.isLoading = true;
-  //   this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
-  //     console.log('Retailsales API call data', response);
-  //     this.APIData = response.dynamicData[0] || [];
-  //     this.prefillScreenValues()
-  //     setTimeout(() => {
-  //       this.isLoading = false;
-  //     }, 1000);
-  //   },(error: any) => {
-  //     console.error('Error occurred:', error);
-  //     this.isLoading = false;
-  //   });
-  // }
+  onCellPrepared(e: any) {
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
 
   onSalesCheckboxChange(value: boolean){
     if(value){
@@ -419,16 +394,6 @@ export class RetailSalesCollectionComponent implements OnInit {
       const uniqueArray = [...new Set( vocTypeArr )];
       const plainText = uniqueArray.join('');
       this.VocTypeParam = plainText
-
-    //   // let defaultVoctype = ['POS','RIN','PSR', 'POSC','POSEX','POSER', PCR]
-    //   const selectedKeys = this.APIData.filter(item => item.MAIN_VOCTYPE!== 'PCR').map(item => item);
-    //   this.selectedRowKeys = selectedKeys;
-    //   const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
-    //   this.APIData.sort((a, b) => {
-    //     const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
-    //     const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
-    //     return bIsSelected - aIsSelected;
-    //   });
     }
   }
 
@@ -529,7 +494,9 @@ export class RetailSalesCollectionComponent implements OnInit {
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
         "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
         "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
-        "flag": this.retailSalesCollection.controls.OutpuGridView.value == true? 'GRID' : '',
+        "flag": this.retailSalesCollection.controls.OutpuGridView.value == true? 'GRID' : 
+        this.retailSalesCollection.controls.showSalesRegisterCheckbox.value == true? 'REGISTER' :
+        this.retailSalesCollection.controls.showOnlySummaryCheckbox.value == true? 'Summary' : '',
         "USERBRANCH": localStorage.getItem('userbranch'),
         "USERNAME": localStorage.getItem('username'),
         "Logdata": JSON.stringify(logData)
@@ -539,22 +506,44 @@ export class RetailSalesCollectionComponent implements OnInit {
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
-      console.log(result);
-      this.previewpopup = true;
       if(result.status != "Failed"){
         if(this.retailSalesCollection.controls.OutpuGridView.value == true){
           this.outputInGridBoolean = true;
           this.outputGridDataSource = result.dynamicData[0];
 
-          this.OutputGridColumns = Object.keys(this.outputGridDataSource[0] || {}).map(key => {
-            return {
-              dataField: key,
-              caption: key,
-              width: key === 'Branch Name' ? 400 : 120,
-              alignment: key === 'Branch Name' ? 'left' : key === 'Voc No' ? 'right' : 'center'
-            };
-          });
-          this.isLoading = false;
+          if(this.outputGridDataSource.length == 0){
+            this.outputInGridBoolean = false;
+            Swal.fire('No Data!', 'There is no data!', 'info');
+            this.isLoading = false;
+          }
+          else{
+            this.OutputGridColumns = Object.keys(this.outputGridDataSource[0] || {}).map(key => {
+              return {
+                dataField: key,
+                caption: key,
+                width: key === 'Branch Name' ? 400 : 120,
+                alignment: this.setAlignment(key) 
+              };
+            });
+            this.isLoading = false;
+          }
+        }
+        else if(this.retailSalesCollection.controls.showSalesRegisterCheckbox.value == true){
+          let data = result.dynamicData;
+          let SalesRegisterprintContent = data[0][0].HTMLOUT;
+          if (Object.keys(SalesRegisterprintContent).length === 0) {
+            Swal.fire('No Data!', 'There is no data!', 'info');
+            this.commonService.closeSnackBarMsg();
+            this.isLoading = false;
+            return
+          } else {
+            this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(SalesRegisterprintContent);
+            const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+            this.commonService.closeSnackBarMsg();
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+            this.isLoading = false;
+          }
         }
         else{
           this.outputInGridBoolean = false;
@@ -581,45 +570,41 @@ export class RetailSalesCollectionComponent implements OnInit {
         return
       }
     });      
+  }
+  setAlignment(key: string): string {
+    if( key === 'Year'){
+      return 'right';
+    }
 
+    if (key === 'Voc Date') {
+      this.outputGridDataSource.forEach((item: any) => {
+        const formattedDate = this.datePipe.transform(item[key], 'yyyy-MM-dd');
+        item[key] = formattedDate || 'Invalid Date';
+      });
+      return this.outputGridDataSource, 'right';
+    }
 
-    // this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-    // .subscribe((result: any) => {
-    //   console.log(result);
-    //   let data = result.dynamicData;
-    //   this.commonService.closeSnackBarMsg()
-    //   var WindowPrt = window.open(' ', ' ', 'width=900px, height=800px');
-    //   if (WindowPrt === null) {
-    //     console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-    //     return;
-    //   }
-    //   let printContent = data[0][0].HTMLINPUT;
-    //   WindowPrt.document.write(printContent);
-    //   WindowPrt.document.close();
-    //   WindowPrt.focus();  
-    //   WindowPrt.onload = function () {
-    //     if (WindowPrt && WindowPrt.document.head) {
-    //       let styleElement = WindowPrt.document.createElement('style');
-    //       styleElement.textContent = `
-    //                   @page {
-    //                       size: A5 landscape;
-    //                   }
-    //                   body {
-    //                       margin: 0mm;
-    //                   }
-    //               `;
-    //       WindowPrt.document.head.appendChild(styleElement);
-
-    //       setTimeout(() => {
-    //         if (WindowPrt) {
-    //           WindowPrt.print();
-    //         } else {
-    //           console.error('Print window was closed before printing could occur.');
-    //         }
-    //       }, 800);
-    //     }
-    //   };
-    // });   
+    if (key === 'Time') {
+      this.outputGridDataSource.forEach((item: any) => {
+        const formattedTime = moment(item[key], "HH:mm:ss.SSSSSSS").format("hh:mm:ss A");
+        item[key] = formattedTime || 'Invalid Time';
+      });
+      return this.outputGridDataSource, 'right';
+    }
+   
+    this.outputGridDataSource.forEach((item: any) => {
+      Object.keys(item).forEach((key) => {
+        if(key == 'Net Amount' || key == 'Sales Return' || key == 'Metal Amount' || key == 'Making Amount'  
+          || key == 'Cost' || key == 'Profit' ||key == 'Discount Amount' || key == 'Tax Amount CC' || key == 'Diamond Amount'
+          || key == 'Tax Amount FC' || key == 'Net Wt.' || key == 'Purchase Wt' || key == 'Advance Amount' || key == 'ADCBV'
+          || key == 'CASH' || key == 'CASHQR' || key == 'Credit Sales' || key == 'Gold Rate' || key == 'ADV' || key == 'Credit Sales'  ){
+          if (typeof item[key] === 'number') {
+            item[key] = this.customizeMainGridContent( item[key] )
+          }
+        }
+      });
+    });
+    return this.outputGridDataSource, 'right';
   }
   
   printBtnClick(){
@@ -644,7 +629,9 @@ export class RetailSalesCollectionComponent implements OnInit {
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
         "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
         "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
-        "flag": '',
+        "flag": this.retailSalesCollection.controls.OutpuGridView.value == true? 'GRID' : 
+        this.retailSalesCollection.controls.showSalesRegisterCheckbox.value == true? 'REGISTER' :
+        this.retailSalesCollection.controls.showOnlySummaryCheckbox.value == true? 'Summary' : '',
         "USERBRANCH": localStorage.getItem('userbranch'),
         "USERNAME": localStorage.getItem('username'),
         "Logdata": JSON.stringify(logData)
@@ -699,4 +686,9 @@ export class RetailSalesCollectionComponent implements OnInit {
   onOutputInGridPopupHidden(){
     this.outputInGridBoolean = !this.outputInGridBoolean;
   }
+
+  customizeMainGridContent = (data: any) => {
+    const formattedValue = this.commonService.decimalQuantityFormat(data, 'AMOUNT');
+    return Number(formattedValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
 }

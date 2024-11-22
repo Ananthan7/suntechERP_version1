@@ -80,7 +80,7 @@
                                 <div class="grid-label text-center mt-1 text-warning" id="ID006">Sales</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="salesGridArr" [showBorders]="true"
-                                [allowColumnResizing]="true" *ngIf="!isLoading">
+                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                     <dxo-paging [pageSize]="12"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
@@ -109,7 +109,7 @@
                                 <div class="grid-label text-center mt-1 text-warning" id="ID007">Stock</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="stockGridArr" [showBorders]="true"
-                                [allowColumnResizing]="true" *ngIf="!isLoading">
+                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                     <dxo-paging [pageSize]="12"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
@@ -138,7 +138,7 @@
                                 <div class="grid-label text-center mt-1 text-warning" id="ID006">Sales</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="diamonSalesGridArr" [showBorders]="true"
-                                [allowColumnResizing]="true" *ngIf="!isLoading">
+                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                     <dxo-paging [pageSize]="12"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
@@ -162,7 +162,7 @@
                                 <div class="grid-label text-center mt-1 text-warning" id="ID008">Physical Stock</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="physicalStockGridArr" [showBorders]="true"
-                                [allowColumnResizing]="true" *ngIf="!isLoading">
+                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                     <dxo-paging [pageSize]="12"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
@@ -209,7 +209,7 @@
             </dx-popup>
 
             
-            <div class="row mt-2 justify-content-end mx-2">
+            <div class="row mt-2 justify-content-end mx-2" [ngClass]="{'loading-class': isLoading }">
                 <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
                 (printClicked)="printBtnClick()"></app-report-screen-buttons>
             </div>

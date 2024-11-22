@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -56,7 +57,7 @@ export class CreditSaleReportComponent implements OnInit {
 
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private commonService: CommonServiceService,
-
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -78,8 +79,8 @@ export class CreditSaleReportComponent implements OnInit {
     if (this.checkPriceCode()) return
     this.creditSaleReportForm.controls.approvedby.setValue(e.UsersName);
   }
-  checkPriceCode(): boolean {
 
+  checkPriceCode(): boolean {
     if (this.creditSaleReportForm.value.pricecode == '') {
       this.commonService.toastErrorByMsgId('please enter pricecode')
       return true
@@ -87,21 +88,20 @@ export class CreditSaleReportComponent implements OnInit {
     return false
   }
 
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
+  onCellPrepared(e: any) {
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
 
   setDateValue(event: any){
     if(event.FromDate){
       this.creditSaleReportForm.controls.fromdate.setValue(event.FromDate);
-      console.log(event.FromDate)
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
       this.creditSaleReportForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
   }
 
@@ -199,8 +199,8 @@ export class CreditSaleReportComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!
       };
     }
   }

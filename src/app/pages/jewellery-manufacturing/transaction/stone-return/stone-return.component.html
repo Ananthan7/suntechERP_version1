@@ -9,8 +9,11 @@
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
   (deleteClick)="deleteClicked()"
   [isViewDelete]="editMode" [isViewAuditTrail]="true"  [isViewSave]="!viewMode"
-  [isViewPost]="true"></modal-header>
+  [isViewPost]="true"   [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
 
+
+  <!-- component to upload attachment -->
+  <attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="stonereturnFrom">

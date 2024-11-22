@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 @Component({
   selector: 'app-tree-down',
   templateUrl: './tree-down.component.html',
@@ -28,6 +29,11 @@ export class TreeDownComponent implements OnInit {
   @ViewChild('overlaykaratCodeSearch') overlaykaratCodeSearch!: MasterSearchComponent;
   @ViewChild('overlaytoWorkerSearch') overlaytoWorkerSearch!: MasterSearchComponent;
   @ViewChild('overlaycolorSearch') overlaycolorSearch!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
 
   divisionMS: any = 'ID';
   branchCode?: String;
@@ -229,7 +235,14 @@ export class TreeDownComponent implements OnInit {
   }
 
 
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
 
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
+  }
 
   adddata() {
     let length = this.tableData.length;

@@ -20,6 +20,9 @@ export class FixedAssetsComponent implements OnInit {
   username = localStorage.getItem('username');
   viewOnly: boolean = false;
   dyndatas: any = [];
+  viewMode: boolean = false;
+  editMode: boolean = false;
+  disable_code:boolean = false;
 
 
   constructor(
@@ -91,6 +94,7 @@ export class FixedAssetsComponent implements OnInit {
     userdefined_5: [''],
     doc_type: [''],
     doc_no: [''],
+    doc_sr: [''],
   });
 
   ngOnInit(): void {
@@ -98,6 +102,12 @@ export class FixedAssetsComponent implements OnInit {
     this.fa_id = this.content?.MID;
     console.log(this.fa_id);
     this.flag = this.content?.FLAG;
+    if(this.flag == 'EDIT'){
+      this.disable_code = true;
+    }else if(this.content?.FLAG == 'VIEW'){
+        this.viewOnly = true;
+        this.viewMode = true;
+    }
     this.initialController(this.flag, this.content);
   }
 
@@ -269,10 +279,11 @@ export class FixedAssetsComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 180,
-    SEARCH_FIELD: 'SUBLEDGER_CODE',
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: '',
     SEARCH_HEADING: 'Sub Ledger Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "SUBLEDGER_CODE<> ''",
+    WHERECONDITION: "@SLACCODE=''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -280,8 +291,8 @@ export class FixedAssetsComponent implements OnInit {
   }
   subledgerCodeSelected(e: any) {
     console.log(e);
-    this.fixedassetsform.controls.subledger_code.setValue(e.SUBLEDGER_CODE);
-    this.fixedassetsform.controls.subledger_code_desc.setValue(e.SUBLEDGER_CODE);
+    this.fixedassetsform.controls.subledger_code.setValue(e.Code);
+    this.fixedassetsform.controls.subledger_code_desc.setValue(e.Description);
   }
 
   fixingassetscodedata: MasterSearchModel = {
@@ -289,9 +300,9 @@ export class FixedAssetsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 104,
     ORDER_TYPE: 0,
-    SEARCH_HEADING: 'fixing assets code',
+    SEARCH_HEADING: 'Fixing assets code',
     SEARCH_VALUE: "",
-    SEARCH_FIELD: "CODE",
+    SEARCH_FIELD:  " + txtFACategory.Text.Trim() + ",
     WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
@@ -474,7 +485,7 @@ export class FixedAssetsComponent implements OnInit {
         this.fixedassetsform.controls.userdefined_3.setValue(this.dyndatas.UDF3);
         this.fixedassetsform.controls.userdefined_4.setValue(this.dyndatas.UDF4);
         this.fixedassetsform.controls.userdefined_5.setValue(this.dyndatas.UDF5);
-        this.flag = "EDIT";
+        // this.flag = "EDIT";
 
       }, (err: any) => {
 
@@ -543,8 +554,31 @@ export class FixedAssetsComponent implements OnInit {
 
 
   close(data?: any) {
-    this.activeModal.close(data);
-  }
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
+  }
 
   formSubmit() {
 

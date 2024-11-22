@@ -1,239 +1,377 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Customer Wise Stone Pricing and Labour Charges</h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
-        <i class="feather icon-x close-icon"></i>
-    </button>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Customer Wise Stone Pricing and Labour Charges</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="deleteRecord()"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 
 
 <div class="row">
-    <div class="col-md-12">
-        <form [formGroup]="customerWiseStonePriceForm">
-            <div class="container-fluid pt-3">
-                <div class="row justify-content-between mb-4">
-                    <div class="col-md-10">
-                      <div class="row align-items-center mb-1">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Price Code * :</label>
-                        <div class="col-md-2">
-                          <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput formControlName="pricecode"  />
-                          </mat-form-field>
-                        </div>
-                      
-                      </div>
+  <div class="col-md-12">
+    <form [formGroup]="customerWiseStonePriceForm">
+      <div class="container-fluid pt-3">
+        <div class="row justify-content-between mb-4">
+          <div class="col-md-10">
+            <div class="row align-items-center mb-1">
+              <label for="inputPassword" class="col-sm-2 col-form-label">Price Code :</label>
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%;" appearance="outline">
+                  <input type="text" matInput formControlName="pricecode"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode"/>
+                </mat-form-field>
+              </div>
 
-                      <div class="row align-items-center mb-1">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Currency * :</label>
-                        <div class="col-md-2">
-                          <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput formControlName="currency"  />
+            </div>
 
-                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
-                            >
-                        </master-search>
-                          </mat-form-field>
-                        </div>
+            <div class="row align-items-center mb-1">
+              <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%;" appearance="outline">
+                  <input type="text" matInput formControlName="currency"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode"/>
+                </mat-form-field>
+              </div>
 
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%;" appearance="outline">
-                              <input type="text" matInput formControlName="currency"  />
-  
-                              <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
-                              >
-                          </master-search>
-                            </mat-form-field>
-                          </div>
-                      </div>
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%;" appearance="outline">
+                  <input type="text" matInput formControlName="currencyDetail"  [readonly]="viewMode" (focusout)="validateLookupField($event,curencyCodeData,'currencyDetail')"  (keydown)="lookupKeyPress($event,'currencyDetail')"/>
+                  <master-search [MasterSearchData]="curencyCodeData"  *ngIf=" viewMode == false" class="masterSearch"
+                    (newRowClick)="curencyCodeSelected($event)" #currencyDetailcodeSearch>
+                  </master-search>
+                </mat-form-field>
+              </div>
+            </div>
 
 
 
-                      <div class="row align-items-center mb-1">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Valid From * :</label>
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input
-                                  matInput
-                                  [matDatepicker]="dob"
-                                  [max]="vocMaxDate"
-                                  name="dob"
-                                  placeholder="DD/MM/YYYY"
-                                  DateValidation
-                                  formControlName="dob"
-                                  readonly="true"
-                                  (dateChange)="dobValueSetting($event)"
-                                />
-                                <mat-datepicker-toggle
-                                  matSuffix
-                                  [for]="dob"
-                                ></mat-datepicker-toggle>
-                                <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
-                              </mat-form-field>
-                        </div>
-                        <div class="col-md-3">
-                            <mat-checkbox class="example-margin">Apply in POS</mat-checkbox>
-                        </div>
-                      </div>
+            <div class="row align-items-center mb-1">
+              <label for="inputPassword" class="col-sm-2 col-form-label">Valid From :</label>
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput DateValidation [matDatepicker]="validFrom" formControlName="validFrom"
+                    [readonly]="viewMode" placeholder="DD/MM/YYYY"  [readonly]="viewMode"/>
+                  <mat-datepicker-toggle matSuffix [for]="validFrom" [disabled]="viewMode"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #validFrom [disabled]="viewMode"></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-checkbox class="example-margin" formControlName="applyinPOS" [disabled]="viewMode">Apply in POS</mat-checkbox>
+              </div>
+            </div>
 
 
-                    </div>
+          </div>
+        </div>
+
+
+        <mat-tab-group>
+          <mat-tab label="Stone Pricing">
+            <div class="row pt-2">
+              <div class="col-md-12 d-flex justify-content-between align-items-center">
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                  (addClick)="openstonedetails()" (deleteClick)="removeItemDetails()"></menu-buttons>
+              </div>
+
+              <!-- Data Grid -->
+              <dx-data-grid id="gridContainer" [showBorders]="true" [dataSource]="tableData" [showColumnLines]="true"
+                [showRowLines]="true" class="mt-3" [paging]="{ pageSize: 5 }">
+                <dxo-paging [enabled]="true"></dxo-paging>
+                <dxo-pager [showInfo]="true"></dxo-pager>
+                <dxo-selection mode="single"></dxo-selection>
+
+                <dxi-column dataField="SRNO" caption="SRNO"> </dxi-column>
+                <dxi-column dataField="DIVISION" caption="Division" cellTemplate="divisiontemp">
+                </dxi-column>
+                <dxi-column dataField="LABTYPE" caption="Type" cellTemplate="typetemp">
+                </dxi-column>
+                <dxi-column dataField="CUSTOMER_CODE" caption="Category" cellTemplate="categorytemp">
+                </dxi-column>
+                <dxi-column dataField="PRICE_CODE" caption="Sub Category" cellTemplate="subCategorytemp">
+                </dxi-column>
+                <dxi-column dataField="DESCRIPTION" caption="Brand" cellTemplate="brandtemp">
+                </dxi-column>
+                <dxi-column dataField="CURRENCYCODE" caption="Stone Type" cellTemplate="stoneTypetemp">
+                </dxi-column>
+                <dxi-column dataField="SHAPE" caption="Shape" cellTemplate="shapeTypetemp">
+                </dxi-column>
+                <dxi-column dataField="SIEVE_SET" caption="Sieve Set" cellTemplate="sieveSettemp">
+                </dxi-column>
+                <dxi-column dataField="SIEVE" caption="Sieve From" cellTemplate="sieveFromtemp">
+                </dxi-column>
+                <dxi-column dataField="SIEVE_TO" caption="Sieve To" cellTemplate="sieveTotemp">
+                </dxi-column>
+                <dxi-column dataField="COLOR" caption="Color" cellTemplate="colortemp">
+                </dxi-column>
+                <dxi-column dataField="CLARITY" caption="Clarity" cellTemplate="claritytemp">
+                </dxi-column>
+
+                <div *dxTemplate="let data1 of 'divisiontemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="divisiontemp($event,data1)"
+                    style="width: 100%;" />
                 </div>
 
-                
-                <mat-tab-group>
-                  <mat-tab label="Stone Pricing">
-                    <div class="row pt-2">
-                      <div class="col-md-12 d-flex justify-content-between align-items-center">
-                        
-                      
-                        <menu-buttons
-                          [viewAddBtn]="true"
-                          [viewDeleteBtn]="true"
-                          [viewImportBtn]="false"
-                          (addClick)="openItemdetails()"
-                          (deleteClick)="removeItemDetails()"
-                        ></menu-buttons>
-                        
-                      
-                 
-                      </div>
-                  
-                      <!-- Data Grid -->
-                      <dx-data-grid
-                        id="gridContainer"
-                        [showBorders]="true"
-                        [dataSource]="stonePricingDetails"
-                        [showColumnLines]="true"
-                        [showRowLines]="true"
-                        class="mt-3"
-                        [paging]="{ pageSize: 5 }"
-                      >
-                        <dxo-paging [enabled]="true"></dxo-paging>
-                        <dxo-pager [showInfo]="true"></dxo-pager>
-                        <dxo-selection mode="single"></dxo-selection>
-                  
-                        <dxi-column
+                <div *dxTemplate="let data1 of 'typetemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="typetemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+
+                <div *dxTemplate="let data1 of 'categorytemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="categorytemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+                <div *dxTemplate="let data1 of 'subCategorytemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value"
+                    (change)="subCategorytemp($event,data1)" style="width: 100%;" />
+                </div>
+                <div *dxTemplate="let data1 of 'brandtemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="brandtemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+                <div *dxTemplate="let data1 of 'stoneTypetemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="stoneTypetemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+                <div *dxTemplate="let data1 of 'shapeTypetemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="shapeTypetemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+                <div *dxTemplate="let data1 of 'sieveSettemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="sieveSettemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+                <div *dxTemplate="let data1 of 'sieveFromtemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="sieveFromtemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+                <div *dxTemplate="let data1 of 'sieveTotemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="sieveTotemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+                <div *dxTemplate="let data1 of 'colortemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="colortemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+                <div *dxTemplate="let data1 of 'claritytemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="claritytemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+
+                <!-- <dxi-column
                           *ngFor="let data of stonePricingHeadings"
                           [dataField]="data.field"
                           [caption]="data.caption"
                           [allowEditing]="true"
                           alignment="center"
-                        ></dxi-column>
-                      </dx-data-grid>
-                    </div>
-                  </mat-tab>
-                  
-                    <mat-tab label="Labour Pricing">
-                      <div class="row pt-2">
-                        <div class="col-md-12">
-                            <menu-buttons
-                        [viewAddBtn]="true"
-                        [viewDeleteBtn]="true"
-                        [viewImportBtn]="false"
-                        (addClick)="openItemdetails()"
-                        (deleteClick)="removeItemDetails()"
-                      >
-                      </menu-buttons>
-                          <dx-data-grid
-                            id="gridContainer"
-                            [showBorders]="true"
-                            [dataSource]="labourPricingDetails"
-                            [showColumnLines]="true"
-                            [showRowLines]="true"
-                            class="mt-3"
-                            [paging]="{ pageSize: 5 }"
-                          >
-                            <dxo-paging [enabled]="true"></dxo-paging>
-                            <dxo-pager [showInfo]="true"></dxo-pager>
-                            <dxo-selection mode="single"></dxo-selection>
-        
-                            <dxi-column
-                              *ngFor="let data of labourPricingHeadings"
-                              [dataField]="data.field"
-                              [caption]="data.caption"
-                              [allowEditing]="true"
-                              alignment="center"
-                              backgroundcolor="#000"
-                            >
-                            </dxi-column>
-                          </dx-data-grid>
-                        </div>
-                      </div>
-                    </mat-tab>
-                    <mat-tab label="Account Details">
-                      <div class="row pt-2">
-                        <div class="col-md-12 d-flex justify-content-between align-items-center">
-                            <menu-buttons
-                            [viewAddBtn]="true"
-                            [viewDeleteBtn]="true"
-                            [viewImportBtn]="false"
-                            (addClick)="openItemdetails()"
-                            (deleteClick)="removeItemDetails()"
-                          >
-                          </menu-buttons>
-                          <div class="d-flex">
+                        ></dxi-column> -->
+              </dx-data-grid>
+            </div>
+          </mat-tab>
 
-                            <div class="p-1 bd-highlight">
-                              <button type="button" id="ID055" class="btn btn-outline-primary metal-issue-del-btn"
-                              (click)="submitStone()">
-                                Save
-                              </button>
-                            </div>
-                            <!-- <button 
+          <mat-tab label="Labour Pricing">
+            <div class="row pt-2">
+              <div class="col-md-12">
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                  (addClick)="openlabetails()" (deleteClick)="removeItemDetails()">
+                </menu-buttons>
+                <dx-data-grid id="gridContainer" [showBorders]="true" [dataSource]="tableData2" [showColumnLines]="true"
+                  [showRowLines]="true" class="mt-3" [paging]="{ pageSize: 5 }">
+                  <dxo-paging [enabled]="true"></dxo-paging>
+                  <dxo-pager [showInfo]="true"></dxo-pager>
+                  <dxo-selection mode="single"></dxo-selection>
+
+
+                  <dxi-column dataField="SRNO" caption="SRNO"> </dxi-column>
+                  <dxi-column dataField="DIVISION" caption="Division" cellTemplate="divisionLabtemp">
+                  </dxi-column>
+                  <dxi-column dataField="LABTYPE" caption="Labour Type" cellTemplate="labtypetemp">
+                  </dxi-column>
+                  <dxi-column dataField="UNITCODE" caption="Unit" cellTemplate="unittemp">
+                  </dxi-column>
+                  <dxi-column dataField="METHOD" caption="Method" cellTemplate="methodtemp">
+                  </dxi-column>
+                  <dxi-column dataField="PROCESS_TYPE" caption="Type" cellTemplate="typelabtemp">
+                  </dxi-column>
+                  <dxi-column dataField="CUSTOMER_CODE" caption="Category" cellTemplate="categorylabtemp">
+                  </dxi-column>
+                  <dxi-column dataField="LABOUR_CODE" caption="Sub Category" cellTemplate="subCategorylabtemp">
+                  </dxi-column>
+                  <dxi-column dataField="SHAPE" caption="Shape" cellTemplate="shapelabtemp">
+                  </dxi-column>
+                  <dxi-column dataField="SIZE_FROM" caption="Sieve From" cellTemplate="sieveFromLabtemp">
+                  </dxi-column>
+                  <dxi-column dataField="SIZE_TO" caption="Sieve To" cellTemplate="sieveToLabtemp">
+                  </dxi-column>
+                  <dxi-column dataField="SIEVE" caption="Sieve Set" cellTemplate="sieveSetLabtemp">
+                  </dxi-column>
+                  <dxi-column dataField="CARATWT_FROM" caption="Ct Wt From" cellTemplate="ctfromtemp">
+                  </dxi-column>
+
+                    <div *dxTemplate="let data of 'divisionLabtemp'">
+
+                      <input type="text" [disabled]="viewMode" [value]="data.value"
+                        (change)="divisionLabtemp($event,data)" style="width: 100%;" />
+                    </div>
+
+                    <div *dxTemplate="let data of 'labtypetemp'">
+
+                      <input type="text" [disabled]="viewMode" [value]="data.value" (change)="labtypetemp($event,data)"
+                        style="width: 100%;" />
+                    </div>
+
+                    <div *dxTemplate="let data of 'unittemp'">
+
+                      <input type="text" [disabled]="viewMode" [value]="data.value"
+                        (change)="unittemp($event,data)" style="width: 100%;" />
+                    </div>
+                    <div *dxTemplate="let data of 'methodtemp'">
+
+                      <input type="text" [disabled]="viewMode" [value]="data.value"
+                        (change)="methodtemp($event,data)" style="width: 100%;" />
+                    </div>
+                    <div *dxTemplate="let data of 'typelabtemp'">
+
+                      <input type="text" [disabled]="viewMode" [value]="data.value" (change)="typelabtemp($event,data)"
+                        style="width: 100%;" />
+                    </div>
+                    <div *dxTemplate="let data of 'categorylabtemp'">
+
+                      <input type="text" [disabled]="viewMode" [value]="data.value"
+                        (change)="categorylabtemp($event,data)" style="width: 100%;" />
+                    </div>
+                    <div *dxTemplate="let data of 'subCategorylabtemp'">
+
+                      <input type="text" [disabled]="viewMode" [value]="data.value"
+                        (change)="subCategorylabtemp($event,data)" style="width: 100%;" />
+                    </div>
+                    <div *dxTemplate="let data of 'shapelabtemp'">
+
+                      <input type="text" [disabled]="viewMode" [value]="data.value"
+                        (change)="shapelabtemp($event,data)" style="width: 100%;" />
+                    </div>
+                    <div *dxTemplate="let data of 'sieveFromLabtemp'">
+
+                      <input type="text" [disabled]="viewMode" [value]="data.value"
+                        (change)="sieveFromLabtemp($event,data)" style="width: 100%;" />
+                    </div>
+                    <div *dxTemplate="let data of 'sieveToLabtemp'">
+
+                      <input type="text" [disabled]="viewMode" [value]="data.value"
+                        (change)="sieveToLabtemp($event,data)" style="width: 100%;" />
+                    </div>
+                    <div *dxTemplate="let data of 'sieveSetLabtemp'">
+
+                      <input type="text" [disabled]="viewMode" [value]="data.value" (change)="sieveSetLabtemp($event,data)"
+                        style="width: 100%;" />
+                    </div>
+                    <div *dxTemplate="let data of 'ctfromtemp'">
+
+                      <input type="number" [disabled]="viewMode" [value]="data.value"
+                        (change)="ctfromtemp($event,data)" style="width: 100%;" class="text-right"/>
+                    </div>
+
+
+                    <!-- <dxi-column *ngFor="let data of labourPricingHeadings" [dataField]="data.field"
+                    [caption]="data.caption" [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                  </dxi-column> -->
+                </dx-data-grid>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab label="Account Details">
+            <div class="row pt-2">
+              <div class="col-md-12 d-flex justify-content-between align-items-center">
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                  (addClick)="openAccountdetails()" (deleteClick)="removeItemDetails()">
+                </menu-buttons>
+                <div class="d-flex">
+
+                  <div class="p-1 bd-highlight">
+                    <button type="button" id="ID055" class="btn btn-outline-primary metal-issue-del-btn"
+                      (click)="submitStone()">
+                      Save
+                    </button>
+                  </div>
+                  <!-- <button 
                              
                               type="button"  class="p-1 bd-highlight"
                               (click)="submitStone()">
                               Save
                             </button> -->
-  
-                            <div class="p-1 bd-highlight">
-                              <button type="button" id="ID055" class="btn btn-outline-primary metal-issue-del-btn"
-                              (click)="cancelStone()">
-                                Cancel
-                              </button>
-                            </div>
-                            </div>
-                    
-                            <!-- <button 
+
+                  <div class="p-1 bd-highlight">
+                    <button type="button" id="ID055" class="btn btn-outline-primary metal-issue-del-btn"
+                      (click)="cancelStone()">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+
+                <!-- <button 
                        
                               type="button" class="p-1 bd-highlight"
                               (click)="cancelStone()">
                               Cancel 
                             </button> -->
-                          </div>
-                          <dx-data-grid
-                            id="gridContainer"
-                            [showBorders]="true"
-                            [dataSource]="accountDetails"
-                            [showColumnLines]="true"
-                            [showRowLines]="true"
-                            class="mt-3"
-                            [paging]="{ pageSize: 5 }"
-        
-                          >
-                          <dxo-paging [enabled]="true"></dxo-paging>
-                          <dxo-pager [showInfo]="true"></dxo-pager>
-                          <dxo-selection mode="single"></dxo-selection>
-        
-        
-                            <dxi-column
-                              *ngFor="let data of accountDetailsHeadings"
-                              [dataField]="data.field"
-                              [caption]="data.caption"
-                              [allowEditing]="true"
-                              alignment="center"
-                              backgroundcolor="#000"
-                            >
-                            </dxi-column>
-                          </dx-data-grid>
-                     
-                      </div>
-                    </mat-tab>
-                  </mat-tab-group>
-              
+              </div>
+              <dx-data-grid id="gridContainer" [showBorders]="true" [dataSource]="tableData3"
+                [showColumnLines]="true" [showRowLines]="true" class="mt-3" [paging]="{ pageSize: 5 }">
+                <dxo-paging [enabled]="true"></dxo-paging>
+                <dxo-pager [showInfo]="true"></dxo-pager>
+                <dxo-selection mode="single"></dxo-selection>
+
+                <dxi-column dataField="SRNO" caption="SRNO"> </dxi-column>
+                <dxi-column dataField="ACCODE" caption="AC CODE" cellTemplate="ACCODEtemp">
+                </dxi-column>
+                <dxi-column dataField="ACCOUNT_HEAD" caption="Account Name" cellTemplate="AccountNametemp">
+                </dxi-column>
+                <dxi-column dataField="CALC_ON_GROSS" caption="Calc On" cellTemplate="CalcOntemp">
+                </dxi-column>
+
+
+                <div *dxTemplate="let data2 of 'ACCODEtemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data2.value"
+                    (change)="ACCODEtemp($event,data2)" style="width: 100%;" />
+                </div>
+
+                <div *dxTemplate="let data2 of 'AccountNametemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data2.value"
+                    (change)="AccountNametemp($event,data2)" style="width: 100%;" />
+                </div>
+
+                
+                <div *dxTemplate="let data2 of 'CalcOntemp'">
+
+                  <input type="checkbox"  [checked]="data2.value" (change)="CalcOntemp($event,data2)"
+                      [disabled]="viewMode" style="width: 100%;" />
+              </div>
+
+
+                <!-- <dxi-column *ngFor="let data of accountDetailsHeadings" [dataField]="data.field"
+                  [caption]="data.caption" [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                </dxi-column> -->
+              </dx-data-grid>
+
             </div>
-            
-        </form>
-    </div>
+          </mat-tab>
+        </mat-tab-group>
+
+      </div>
+
+    </form>
+  </div>
 </div>

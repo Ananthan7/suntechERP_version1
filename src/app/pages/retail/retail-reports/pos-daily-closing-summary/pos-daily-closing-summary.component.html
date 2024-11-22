@@ -72,7 +72,7 @@
                 <div class="col-md-6">
                     <h6 class="header_title" id="ID008">Pending Sales Order Summary</h6>
                     <app-loader [isLoading]="isLoading"></app-loader>
-                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="202"
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="202" (onCellPrepared)="headerCellFormatting($event)"
                     [columnAutoWidth]="true"  [dataSource]="pendingSalesOrderSummaryArr" *ngIf="!isLoading">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
@@ -89,7 +89,7 @@
                 <div class="col-md-6">
                     <h6 class="header_title" id="ID009">Transaction wise Summary</h6>
                     <app-loader [isLoading]="isLoading"></app-loader>
-                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="200"
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="200" (onCellPrepared)="headerCellFormatting($event)"
                     [columnAutoWidth]="true"  [dataSource]="transactionWiseSummaryArr" *ngIf="!isLoading">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
@@ -272,7 +272,7 @@
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
                                 [allowColumnReordering]="true" height="200" [dataSource]="tableData" [columnAutoWidth]="true"
-                                *ngIf="!isLoading">
+                                *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
                                     
@@ -320,7 +320,7 @@
                         <app-loader [isLoading]="isLoading"></app-loader>
                         <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
                             [allowColumnReordering]="true" height="200" [dataSource]="DiamonDivsnTableData" [columnAutoWidth]="true"
-                            *ngIf="!isLoading">
+                            *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                 <dxo-paging [enabled]="false"></dxo-paging>
                                 <!-- <dxo-selection mode="multiple"></dxo-selection> -->
                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
@@ -353,7 +353,7 @@
             <div class="col-md-2">
                 <h6 class="header_title" id="ID013">Receipt Summary</h6>
                     <app-loader [isLoading]="isLoading"></app-loader>             
-                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true" (onCellPrepared)="headerCellFormatting($event)"
                     [allowColumnReordering]="true" height="200"  [columnAutoWidth]="false" [dataSource]="receiptSummaryArr" *ngIf="!isLoading">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
@@ -369,7 +369,7 @@
             <div class="col-md-4">
                 <h6 class="header_title" id="ID014">Scrap Purchase Summary</h6>
                 <app-loader [isLoading]="isLoading"></app-loader>   
-                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
+                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true" (onCellPrepared)="headerCellFormatting($event)"
                 [allowColumnReordering]="true" height="200" [dataSource]="scrapPurchseSummaryArr" [columnAutoWidth]="true" *ngIf="!isLoading">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
@@ -400,7 +400,7 @@
               <app-loader [isLoading]="isLoading"></app-loader>
                 <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
                 [allowColumnReordering]="true" height="200" [dataSource]="salesmanSummaryArr" [columnAutoWidth]="true"
-                *ngIf="!isLoading">
+                *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
                     <dxo-scrolling mode="virtual"></dxo-scrolling>

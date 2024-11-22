@@ -40,21 +40,191 @@ export class ZirconMasterComponent implements OnInit {
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   flag: any;
+  currentDate: Date = new Date();
   code: any;
   allowZeroPcs: any;
   excludeFromTransferWt: any;
   imageName: any;
   image: File | null = null;
   fetchedPicture: string | null = null;
+  branchCode: any;
 
-  countryCodeData: MasterSearchModel = {
+  costCenterCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: "COST_CODE",
+    SEARCH_HEADING: "COST CENTER CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPE='PRECIOUS STONES' ",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  priceCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: "PRICE_CODE",
+    SEARCH_HEADING: "PRICE CODE ",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Country Code",
+    SEARCH_HEADING: "CATEGORY CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
+    WHERECONDITION: " TYPES='CATEGORY MASTER' ",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  vendorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: "ACCODE",
+    SEARCH_HEADING: "VENDOR CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  vendorRefCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "VENDOR REF",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  shapeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "SHAPE CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='SHAPE MASTER' AND DIV_Z=1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "COLOR CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='COLOR MASTER AND DIV_Z=1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  subCategoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 31,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "SUB-CATEGORY CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='SUB CATEGORY MASTER' ",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  brandCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "BRAND CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='BRAND MASTER' AND DIV_Z=1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  sizeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "SIZE CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='SIZE MASTER' AND DIV_Z=1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "TYPE CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='TYPE MASTER' ",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  sieveSetCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "SIEVE SET CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='SIEVE SET MASTER' AND DIV_Z=1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  sieveCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "SIEVE CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='SIEVE MASTER' AND DIV_Z=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -77,7 +247,7 @@ export class ZirconMasterComponent implements OnInit {
     color: [""],
     vendor: [""],
     vendorRef: [""],
-    createdOn: [""],
+    createdOn: [this.currentDate],
     createdBy: [""],
     description: [""],
     brand: [""],
@@ -89,7 +259,7 @@ export class ZirconMasterComponent implements OnInit {
     firstTrans: [""],
     lastTrans: [""],
     currencyCode: [""],
-    currencyDesc: [""],
+    currencyRate: [""],
     weightAvgCostCode: [""],
     weightAvgCostDesc: [""],
     picture: [""],
@@ -118,14 +288,14 @@ export class ZirconMasterComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log(this.content);
-    
+    this.branchCode = this.commonService.branchCode;
+
     this.content
       ? (this.flag = this.content!.FLAG)
       : console.log("No Content, Due to you are in ADD");
 
     this.initialController(this.flag, this.content);
-    this.setFlag(this.flag)
+    this.setFlag(this.flag);
   }
 
   initialController(FLAG: any, DATA: any) {
@@ -241,7 +411,7 @@ export class ZirconMasterComponent implements OnInit {
               });
 
               response.status === "Success"
-                ? this.close("reloadMainGrid")
+                ? this.close("reloadMainGrid", true)
                 : console.log("Delete Error");
             },
             error: (err) => {
@@ -261,8 +431,23 @@ export class ZirconMasterComponent implements OnInit {
     });
   }
 
-  close(data?: any) {
-    this.activeModal.close(data);
+  close(data?: any, calling?: boolean) {
+    if (this.flag !== "VIEW" && !calling) {
+      Swal.fire({
+        title: "Are you sure you want to close this ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Close!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    } else {
+      this.activeModal.close(data);
+    }
   }
 
   openTab(event: any, formControlName: string) {
@@ -477,21 +662,21 @@ export class ZirconMasterComponent implements OnInit {
       STOCK_CODE: this.zirconMasterMainForm.value.code,
       STOCK_DESCRIPTION: this.zirconMasterMainForm.value.description,
       CURRENCY_CODE: this.zirconMasterMainForm.value.currencyCode,
-      CC_RATE: 0,
+      CC_RATE: this.zirconMasterMainForm.value.currencyRate,
       COST_CODE: "string",
       TYPE_CODE: this.zirconMasterMainForm.value.type,
       CATEGORY_CODE: this.zirconMasterMainForm.value.category,
       SUBCATEGORY_CODE: this.zirconMasterMainForm.value.subCategory,
       BRAND_CODE: this.zirconMasterMainForm.value.brand,
-      COUNTRY_CODE: "string",
-      SUPPLIER_CODE: "string",
-      SUPPLIER_REF: "string",
+      COUNTRY_CODE: this.zirconMasterMainForm.value.brand,
+      SUPPLIER_CODE: this.zirconMasterMainForm.value.vendor,
+      SUPPLIER_REF: this.zirconMasterMainForm.value.vendorRef,
       DESIGN_CODE: "string",
       SET_REF: "string",
       PICTURE_NAME: this.zirconMasterMainForm.value.picture,
       PICTURE_NAME1: "string",
-      STOCK_FCCOST: 0,
-      STOCK_LCCOST: 0,
+      STOCK_FCCOST: this.zirconMasterMainForm.value.weightAvgCostCode,
+      STOCK_LCCOST: this.zirconMasterMainForm.value.weightAvgCostDesc,
       PRICE1PER: this.zirconMasterMainForm.value.priceOnePercent,
       PRICE2PER: this.zirconMasterMainForm.value.priceTwoPercent,
       PRICE3PER: this.zirconMasterMainForm.value.priceThreePercent,
@@ -546,8 +731,8 @@ export class ZirconMasterComponent implements OnInit {
       GW: 0,
       MODEL_NO: "string",
       MODEL_YEAR: 0,
-      OPENED_ON: new Date(),
-      OPENED_BY: "string",
+      OPENED_ON: this.zirconMasterMainForm.value.createdOn,
+      OPENED_BY: this.zirconMasterMainForm.value.createdBy,
       FIRST_TRN: this.zirconMasterMainForm.value.firstTrans,
       LAST_TRN: this.zirconMasterMainForm.value.lastTrans,
       MID: 0,
@@ -896,7 +1081,7 @@ export class ZirconMasterComponent implements OnInit {
               confirmButtonText: "Ok",
             });
 
-            this.close("reloadMainGrid");
+            this.close("reloadMainGrid", true);
           } else {
             // Handle cases where the result is not successful or undefined
             Swal.fire({
@@ -922,7 +1107,7 @@ export class ZirconMasterComponent implements OnInit {
               confirmButtonText: "Ok",
             });
 
-            this.close("reloadMainGrid");
+            this.close("reloadMainGrid", true);
           } else {
             Swal.fire({
               title: "Failed",
@@ -998,5 +1183,37 @@ export class ZirconMasterComponent implements OnInit {
       this.zirconMasterMainForm.controls["allowZeroPcs"].enable();
       this.zirconMasterMainForm.controls["excludeFromTransferWt"].enable();
     }
+  }
+
+  diamondPriceCalculation() {
+    let payload = {
+      strBranchCode: this.branchCode,
+      strPriceCode: this.zirconMasterMainForm.value.priceOneCode,
+      dblCostValueFC: this.zirconMasterMainForm.value.weightAvgCostCode,
+      strCurrCode: this.zirconMasterMainForm.value.currencyCode,
+      dblConv_Rate: this.zirconMasterMainForm.value.currencyRate,
+    };
+    let API = `UspDiamondPriceCalculation/GetUspDiamondPriceCalculation`;
+    let sub: Subscription = this.apiService
+      .postDynamicAPI(API, payload)
+      .subscribe(
+        (result) => {
+          if (result.status.trim() === "Success" && result.response) {
+            console.log(result);
+
+            // this.itemDetailsData = result.response.map(
+            //   (item: any, index: number) => {
+            //     return { ...item, SELECT1: false, SRNO: index + 1 };
+            //   }
+            // );
+          } else {
+            this.commonService.toastErrorByMsgId("MSG1531");
+          }
+        },
+        (err) => {
+          console.error("Error fetching data:", err);
+          this.commonService.toastErrorByMsgId("MSG1531");
+        }
+      );
   }
 }

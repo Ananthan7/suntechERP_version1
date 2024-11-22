@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MetalIssueDetailsComponent } from './metal-issue-details/metal-issue-details.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-metal-issue',
@@ -20,6 +21,12 @@ export class MetalIssueComponent implements OnInit {
   @ViewChild('overlayworkerDes') overlayworkerDes!: MasterSearchComponent;
   @ViewChild('overlaysalesperson') overlaysalesperson!: MasterSearchComponent;
   @Input() content!: any;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+
   private subscriptions: Subscription[] = [];
   modalReference!: NgbModalRef;
 
@@ -167,6 +174,16 @@ export class MetalIssueComponent implements OnInit {
   minDate: any;
   maxDate: any;
   LOCKVOUCHERNO: boolean = true;
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
+  }
+
   setvoucherTypeMaster() {
     let frm = this.metalIssueForm.value
     const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)

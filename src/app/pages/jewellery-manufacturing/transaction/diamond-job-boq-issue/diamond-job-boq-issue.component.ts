@@ -8,12 +8,15 @@ import Swal from 'sweetalert2';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 @Component({
   selector: 'app-diamond-job-boq-issue',
   templateUrl: './diamond-job-boq-issue.component.html',
   styleUrls: ['./diamond-job-boq-issue.component.scss']
 })
 export class DiamondJobBoqIssueComponent implements OnInit {
+  
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
   @ViewChild('overlayenteredBy') overlayenteredBy!: MasterSearchComponent;
   @ViewChild('overlaylocation') overlaylocation!: MasterSearchComponent;
   @ViewChild('overlaymetalRateType') overlaymetalRateType!: MasterSearchComponent;
@@ -152,6 +155,20 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     this.setCompanyCurrency()
     this.basesetCompanyCurrency()
     this.setvalues()
+  }
+
+
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
   }
 
   setvalues() {

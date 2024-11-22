@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { retry } from 'rxjs/operators';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 
 
@@ -23,6 +24,7 @@ export class MeltingTypeComponent implements OnInit {
   @ViewChild('overlaycolorSearch') overlaycolorSearch!: MasterSearchComponent;
   @ViewChild('overlaykaratSearch') overlaykaratSearch!: MasterSearchComponent;
   @ViewChild('overlaystockCodeSearch') overlaystockCodeSearch!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
 
 
@@ -192,6 +194,20 @@ export class MeltingTypeComponent implements OnInit {
     } else {
       this.isDisableSaveBtn = false;
     }
+  }
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
   }
 
   /**use: validate all lookups to check data exists in db */

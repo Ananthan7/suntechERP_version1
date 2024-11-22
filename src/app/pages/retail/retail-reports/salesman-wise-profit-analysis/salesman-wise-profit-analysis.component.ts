@@ -50,13 +50,11 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
+  onCellPrepared(e: any) {
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
 
   setDateValue(event: any){
     if(event.FromDate){
@@ -138,6 +136,19 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
     console.log(this.salesmanWiseProfitAnalysisForm.controls.templateName.value)
   }
   saveTemplate_DB(){
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
     const payload = {
       "SPID": "0115",
       "parameter": {
@@ -155,7 +166,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
               "STRTODATE" : this.dateToPass.toDate,    
               "INTVALUE" : '',  
               "STRBRANCHES" : this.salesmanWiseProfitAnalysisForm.controls.branch.value || this.fetchedBranchData,
-              "LOGDATA" : ''
+              "LOGDATA" : JSON.stringify(logData)
             }
          })
       }
@@ -368,8 +379,9 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
     return this.commonService.setCommaSerperatedNumber(data.value, 'THREE');
   };
   customizeContent = (data: any) => {
-    // decimal point handler from commonService
-    return this.commonService.decimalQuantityFormat(data.value, 'THREE');
+    const formattedValue = this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+
+    return Number(formattedValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
 

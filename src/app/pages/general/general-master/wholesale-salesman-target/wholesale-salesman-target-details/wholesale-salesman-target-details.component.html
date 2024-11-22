@@ -222,8 +222,8 @@
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" #codeInput maxlength="15" matInput
                                         formControlName="detail_target_code1">
-                                    <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                        (newRowClick)="enteredCodeSelected($event)"></master-search>
+                                    <master-search [MasterSearchData]="inventorycodedata" class="masterSearch"
+                                        (newRowClick)="selectedinventory($event,'detail_target_code1')"></master-search>
                                 </mat-form-field>
                             </div>
 
@@ -258,8 +258,8 @@
                                       false
                                     )
                                   ">
-                                    <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                        (newRowClick)="enteredCodeSelected($event)"></master-search>
+                                    <master-search [MasterSearchData]="inventorycodedata" class="masterSearch"
+                                        (newRowClick)="selectedinventory($event,'detail_target_code2')"></master-search>
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
@@ -294,8 +294,8 @@
                                   false
                                 )
                               ">
-                                    <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                        (newRowClick)="enteredCodeSelected($event)"></master-search>
+                                    <master-search [MasterSearchData]="inventorycodedata" class="masterSearch"
+                                        (newRowClick)="selectedinventory($event,'detail_target_code3')"></master-search>
                                 </mat-form-field>
                             </div>
 
