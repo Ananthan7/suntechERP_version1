@@ -86,12 +86,12 @@ export class TdsMasterComponent implements OnInit {
   }
 
   ViewController(DATA: any) {
-    this.tdsform.controls.branchcode.setValue(this.content?.BRANCH_CODE);
-    this.tdsform.controls.date_from.setValue(this.content?.FROM_DATE);
-    this.tdsform.controls.finyear.setValue(this.content?.FYEARCODE);
-    this.tdsform.controls.dateto.setValue(this.content?.TO_DATE);
-    this.tdsform.controls.narration.setValue(this.content?.NARRATION);
-    this.tds = this.content?.FYEARCODE;
+    this.tdsform.controls.section_code.setValue(this.content?.TDS_CODE);
+    this.tdsform.controls.description.setValue(this.content?.TDS_DESCRIPTION);
+    this.tdsform.controls.credit_ac.setValue(this.content?.CREDIT_AC_CODE);
+    this.tdsform.controls.debit_ac.setValue(this.content?.DEBIT_AC_CODE);
+    this.tdsform.controls.call.setValue(this.content?.ON_TAXABLEAMT);
+    this.unq_id = this.content?.TDS_CODE;
   }
 
   detailsapi(fm_id: any) {
