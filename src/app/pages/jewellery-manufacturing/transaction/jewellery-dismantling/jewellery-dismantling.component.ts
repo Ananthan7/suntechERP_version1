@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-jewellery-dismantling',
@@ -21,7 +22,13 @@ export class JewelleryDismantlingComponent implements OnInit {
   @ViewChild('overlayMetalRateType') overlayMetalRateType!: MasterSearchComponent;
   @ViewChild('overlayStock') overlayStock!: MasterSearchComponent;
   @ViewChild('overlaylocation') overlaylocation!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+ 
   
 
   divisionMS: any = 'ID';
@@ -142,6 +149,15 @@ export class JewelleryDismantlingComponent implements OnInit {
       this.setvalues()
       this.setAllInitialValues()
     }
+  }
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
   }
 
   userDataSelected(value: any) {

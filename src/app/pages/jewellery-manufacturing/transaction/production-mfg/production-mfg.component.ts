@@ -10,6 +10,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstra
 import { ProductionEntryDetailsComponent } from "./production-entry-details/production-entry-details.component";
 import { SavedataModel } from "./savedata-model";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { AttachmentUploadComponent } from "src/app/shared/common/attachment-upload/attachment-upload.component";
 
 @Component({
   selector: "app-production-mfg",
@@ -19,6 +20,12 @@ import { MasterSearchComponent } from "src/app/shared/common/master-search/maste
 export class ProductionMfgComponent implements OnInit {
   @ViewChild('overlayuserName') overlayuserName!: MasterSearchComponent;
   @ViewChild('OverlayCurrencyRate') OverlayCurrencyRate!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+ 
   columnheads: any[] = [
     "JOB_NUMBER", "UNQ_JOB_ID", "DESIGN_CODE",
     "DIVCODE", 'PREFIX', 'STOCK_CODE', 'STOCK_DESCRIPTION', 'SET_REF',
@@ -193,6 +200,16 @@ export class ProductionMfgComponent implements OnInit {
     this.productionFrom.controls.YEARMONTH.setValue(this.commonService.yearSelected)
     this.branchCode = this.commonService.branchCode
   }
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
+  }
+
   // use: set saved values from production get API
   setInitialValues() {
     if (!this.content?.MID) return

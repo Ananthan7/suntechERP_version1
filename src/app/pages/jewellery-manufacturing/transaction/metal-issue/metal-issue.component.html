@@ -8,7 +8,11 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" [isloading]="isloading" [isViewAuditTrail]="true"
     [disableAuditTrail]="!isSaved" (cancelClick)="close()" [isViewDelete]="false"
-    [isViewSave]="!viewMode"></modal-header>
+    [isViewSave]="!viewMode"  [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+
+    <!-- component to upload attachment -->
+<attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
+   
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="metalIssueForm">

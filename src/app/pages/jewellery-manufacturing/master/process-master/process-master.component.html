@@ -14,7 +14,12 @@
         [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
         [isViewAttachment]="!viewMode" (cancelClick)="close()"
         (saveClick)="formSubmit()" (deleteClick)="deleteProcessMaster()"
-        [isViewDelete]="!viewMode && editableMode"></modal-header>
+        [isViewDelete]="!viewMode && editableMode"
+        [isViewAttachment]="!viewMode"
+        (attachmentClick)="attachmentClicked()"></modal-header>
+    <!-- component to upload attachment -->
+    <attachment-upload (uploadSubmit)="uploadSubmited($event)"
+        [savedAttachment]="savedAttachments"></attachment-upload>
     <!-- content section -->
     <div class="card py-3">
         <form [formGroup]="processMasterForm">

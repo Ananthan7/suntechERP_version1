@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { AddNewdetailComponent } from './add-newdetail/add-newdetail.component';
 import { CompanyDetailComponent } from './company-detail/company-detail.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 @Component({
   selector: 'app-diamond-salesorder',
   templateUrl: './diamond-salesorder.component.html',
@@ -20,6 +21,8 @@ export class DiamondSalesorderComponent implements OnInit {
   @ViewChild('overlaySalesmanCode') overlaySalesmanCode!: MasterSearchComponent;
   @ViewChild('overlaywholeSaleRate') overlaywholeSaleRate!: MasterSearchComponent;
   @ViewChild('overlayDeliveryTypeDesc') overlayDeliveryTypeDesc!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
   @Input() content!: any; //use: To get clicked row details from master grid
   private subscriptions: Subscription[] = [];
 
@@ -193,6 +196,21 @@ export class DiamondSalesorderComponent implements OnInit {
       this.getLabourChargeGridDetails()
     }
   }
+
+    Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+    
+  }
+
   setNewFormValues(){
     this.generateVocNo()
     this.getRateType()

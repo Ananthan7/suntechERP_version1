@@ -12,6 +12,7 @@ import themes from 'devextreme/ui/themes';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-metal-return',
@@ -25,6 +26,10 @@ export class MetalReturnComponent implements OnInit {
   @ViewChild('overlayprocess') overlayprocess!: MasterSearchComponent;
   @ViewChild('overlayworker') overlayworker!: MasterSearchComponent;
   @ViewChild('overlaylocation') overlaylocation!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
   selectedRowData: any[] = [];
   selectedRowData1: any;
   @Input() content!: any;
@@ -261,6 +266,16 @@ export class MetalReturnComponent implements OnInit {
     this.subscriptions.push(Sub)
 
   }
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
+  }
+
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)

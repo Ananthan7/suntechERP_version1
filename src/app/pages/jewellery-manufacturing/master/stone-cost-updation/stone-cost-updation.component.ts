@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-stone-cost-updation',
@@ -24,6 +25,7 @@ export class StoneCostUpdationComponent implements OnInit {
   @ViewChild('overlaycolorSearch') overlaycolorSearch!: MasterSearchComponent;
   @ViewChild('overlaysievesetSearch') overlaysievesetSearch!: MasterSearchComponent;
   @ViewChild('overlayclaritySearch') overlayclaritySearch!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
 
 
@@ -185,6 +187,22 @@ export class StoneCostUpdationComponent implements OnInit {
   //   // this.stonecostupdationFrom.controls.basecurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
 
   // }
+
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
+  }
+
   setNewFormValues() {
     this.stonecostupdationFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
     this.stonecostupdationFrom.controls.vocdate.setValue(this.comService.currentDate)

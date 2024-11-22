@@ -6,7 +6,13 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (auditTrailClick)="auditTrailClick()" [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (auditTrailClick)="auditTrailClick()" [isViewAuditTrail]="true" [isViewPost]="true"
+[isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"
+></modal-header>
+
+<!-- component to upload attachment -->
+<attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
+
 <!-- content section -->
 <div class="row">
     <div>

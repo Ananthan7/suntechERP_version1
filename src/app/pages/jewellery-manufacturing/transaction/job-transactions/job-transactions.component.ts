@@ -4,12 +4,13 @@ MENU_SCREEN_NAME : <ADD MENU NAME>
 DEVELOPER : ANANTHA
 */
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -20,6 +21,11 @@ import Swal from 'sweetalert2';
 
 export class JobTransactionsComponent implements OnInit {
   @Input() content!: any;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
 
   tableData: any[] = [];
   columnheadItemDetails: any[] = ['JoBNo', 'VocType', 'VocNo', 'Process Code', 'Worker Code', 'GrossWt', 'LossWt', 'PureWt', 'VocDate'];
@@ -36,6 +42,8 @@ export class JobTransactionsComponent implements OnInit {
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService
   ) { }
+
+
 
   ngOnInit(): void {
   }
@@ -64,6 +72,15 @@ export class JobTransactionsComponent implements OnInit {
       }
     }
     )
+  }
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
   }
 
   formSubmit() {
