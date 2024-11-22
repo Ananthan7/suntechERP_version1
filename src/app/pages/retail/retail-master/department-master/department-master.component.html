@@ -9,7 +9,7 @@
     <!-- modal header component -->
     <modal-header 
     [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-    (saveClick)="formSubmit()" (cancelClick)="close()"[isViewDelete]="!viewMode && editableMode"
+    (saveClick)="formSubmit()" (cancelClick)="close()"[isViewDelete]="viewMode"
         (deleteClick)="deleteDepartmentMaster()"></modal-header>
     <!-- content section -->
     <div class="row p-4 ">
@@ -24,7 +24,7 @@
                                         Code :</label>
                                     <div class="col-sm-4">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="code" UpperCaseDirective
+                                            <input type="text" matInput formControlName="code" maxlength="5" UpperCaseDirective
                                                 autocomplete="off" [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>

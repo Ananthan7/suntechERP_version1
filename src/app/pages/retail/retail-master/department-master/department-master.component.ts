@@ -18,6 +18,36 @@ export class DepartmentMasterComponent implements OnInit {
 
   @Input() content!: any;
 
+  @ViewChild('overlayBranchSearch') overlayBranchSearch!: MasterSearchComponent;
+  @ViewChild('overlayCountryCodeSearch') overlayCountryCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayoneTimeCodeSearch') overlayoneTimeCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayleaveSalaryCodeSearch') overlayleaveSalaryCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayairTicketCodeSearch') overlayairTicketCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayGratuityCodeSearch') overlayGratuityCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayAIDebitExpCodeSearch') overlayAIDebitExpCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayAICreditCodeSearch') overlayAICreditCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayDebitExpensesLeaveSalSearch') overlayDebitExpensesLeaveSalSearch!: MasterSearchComponent;
+  @ViewChild('overlayDebitExpensesAirTicketSearch') overlayDebitExpensesAirTicketSearch!: MasterSearchComponent;
+  @ViewChild('overlayDebitExpensesGratuitySearch') overlayDebitExpensesGratuitySearch!: MasterSearchComponent;
+  @ViewChild('overlayCreditExpensesLeaveSalSearch') overlayCreditExpensesLeaveSalSearch!: MasterSearchComponent;
+  @ViewChild('overlayCreditExpensesAirTicketSearch') overlayCreditExpensesAirTicketSearch!: MasterSearchComponent;
+  @ViewChild('overlayOtherAmountValueSearch') overlayOtherAmountValueSearch!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined1Search') overlayuserDefined1Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined2Search') overlayuserDefined2Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined3Search') overlayuserDefined3Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined4Search') overlayuserDefined4Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined5Search') overlayuserDefined5Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined6Search') overlayuserDefined6Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined7Search') overlayuserDefined7Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined8Search') overlayuserDefined8Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined9Search') overlayuserDefined9Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined10Search') overlayuserDefined10Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined11Search') overlayuserDefined11Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined12Search') overlayuserDefined12Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined13Search') overlayuserDefined13Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined14Search') overlayuserDefined14Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined15Search') overlayuserDefined15Search!: MasterSearchComponent;
+
   selectedTabIndex = 0;
   tableData: any = [];
   editMode: boolean = false;
@@ -585,17 +615,17 @@ export class DepartmentMasterComponent implements OnInit {
 
   leaveSalaryCodeDataSelected(e: any) {
     console.log(e);
-    this.departmentMasterForm.controls.leaveSalaryCode.setValue(e.ACCODE);
+    this.departmentMasterForm.controls.leaveSalaryCode.setValue(e.CODE);
   }
 
   airTicketCodeDataSelected(e: any) {
     console.log(e);
-    this.departmentMasterForm.controls.airTicketCode.setValue(e.ACCODE);
+    this.departmentMasterForm.controls.airTicketCode.setValue(e.CODE);
   }
 
   GratuityCodeSelected(e: any) {
     console.log(e);
-    this.departmentMasterForm.controls.GratuityCode.setValue(e.ACCODE);
+    this.departmentMasterForm.controls.GratuityCode.setValue(e.CODE);
   }
 
   AIDebitExpCodeSelected(e: any) {
@@ -705,35 +735,7 @@ export class DepartmentMasterComponent implements OnInit {
     this.departmentMasterForm.controls.UserDefined15.setValue(e.CODE);
   }
 
-  @ViewChild('overlayBranchSearch') overlayBranchSearch!: MasterSearchComponent;
-  @ViewChild('overlayCountryCodeSearch') overlayCountryCodeSearch!: MasterSearchComponent;
-  @ViewChild('overlayoneTimeCodeSearch') overlayoneTimeCodeSearch!: MasterSearchComponent;
-  @ViewChild('overlayleaveSalaryCodeSearch') overlayleaveSalaryCodeSearch!: MasterSearchComponent;
-  @ViewChild('overlayairTicketCodeSearch') overlayairTicketCodeSearch!: MasterSearchComponent;
-  @ViewChild('overlayGratuityCodeSearch') overlayGratuityCodeSearch!: MasterSearchComponent;
-  @ViewChild('overlayAIDebitExpCodeSearch') overlayAIDebitExpCodeSearch!: MasterSearchComponent;
-  @ViewChild('overlayAICreditCodeSearch') overlayAICreditCodeSearch!: MasterSearchComponent;
-  @ViewChild('overlayDebitExpensesLeaveSalSearch') overlayDebitExpensesLeaveSalSearch!: MasterSearchComponent;
-  @ViewChild('overlayDebitExpensesAirTicketSearch') overlayDebitExpensesAirTicketSearch!: MasterSearchComponent;
-  @ViewChild('overlayDebitExpensesGratuitySearch') overlayDebitExpensesGratuitySearch!: MasterSearchComponent;
-  @ViewChild('overlayCreditExpensesLeaveSalSearch') overlayCreditExpensesLeaveSalSearch!: MasterSearchComponent;
-  @ViewChild('overlayCreditExpensesAirTicketSearch') overlayCreditExpensesAirTicketSearch!: MasterSearchComponent;
-  @ViewChild('overlayOtherAmountValueSearch') overlayOtherAmountValueSearch!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined1Search') overlayuserDefined1Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined2Search') overlayuserDefined2Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined3Search') overlayuserDefined3Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined4Search') overlayuserDefined4Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined5Search') overlayuserDefined5Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined6Search') overlayuserDefined6Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined7Search') overlayuserDefined7Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined8Search') overlayuserDefined8Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined9Search') overlayuserDefined9Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined10Search') overlayuserDefined10Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined11Search') overlayuserDefined11Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefine2d1Search') overlayuserDefined12Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefin3ed1Search') overlayuserDefined13Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefi4ned1Search') overlayuserDefined14Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDef5ined1Search') overlayuserDefined15Search!: MasterSearchComponent;
+
 
 
 
@@ -796,46 +798,46 @@ export class DepartmentMasterComponent implements OnInit {
       case 'userDefined1':
         this.overlayuserDefined1Search.showOverlayPanel(event);
         break;
-      case 'userDefined2':
+      case 'UserDefined2':
         this.overlayuserDefined2Search.showOverlayPanel(event);
         break;
-      case 'userDefined3':
+      case 'UserDefined3':
         this.overlayuserDefined3Search.showOverlayPanel(event);
         break;
-      case 'userDefined4':
+      case 'UserDefined4':
         this.overlayuserDefined4Search.showOverlayPanel(event);
         break;
-      case 'userDefined5':
+      case 'UserDefined5':
         this.overlayuserDefined5Search.showOverlayPanel(event);
         break;
-      case 'userDefined6':
+      case 'UserDefined6':
         this.overlayuserDefined6Search.showOverlayPanel(event);
         break;
-      case 'userDefined7':
+      case 'UserDefined7':
         this.overlayuserDefined7Search.showOverlayPanel(event);
         break;
-      case 'userDefined8':
+      case 'UserDefined8':
         this.overlayuserDefined8Search.showOverlayPanel(event);
         break;
-      case 'userDefined9':
+      case 'UserDefined9':
         this.overlayuserDefined9Search.showOverlayPanel(event);
         break;
-      case 'userDefined10':
+      case 'UserDefined10':
         this.overlayuserDefined10Search.showOverlayPanel(event);
         break;
-      case 'userDefined11':
+      case 'UserDefined11':
         this.overlayuserDefined11Search.showOverlayPanel(event);
         break;
-      case 'userDefined12':
+      case 'UserDefined12':
         this.overlayuserDefined12Search.showOverlayPanel(event);
         break;
-      case 'userDefined13':
+      case 'UserDefined13':
         this.overlayuserDefined13Search.showOverlayPanel(event);
         break;
-      case 'userDefined14':
+      case 'UserDefined14':
         this.overlayuserDefined14Search.showOverlayPanel(event);
         break;
-      case 'userDefined15':
+      case 'UserDefined15':
         this.overlayuserDefined15Search.showOverlayPanel(event);
         break;
       default:
@@ -1006,6 +1008,8 @@ export class DepartmentMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
+        console.log(result.response);
+        
         const shift1FromTime = result.response.PDEPTMST_SHIFT1_FROM.split('T')[1].split('Z')[0].slice(0, 5);
         const shift2FromTime = result.response.PDEPTMST_SHIFT2_FROM.split('T')[1].split('Z')[0].slice(0, 5);
         const shift3FromTime = result.response.PDEPTMST_SHIFT3_FROM.split('T')[1].split('Z')[0].slice(0, 5);
@@ -1055,6 +1059,7 @@ export class DepartmentMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+console.log(this.content);
 
     this.departmentMasterForm.controls.code.setValue(this.content.PDEPTMST_CODE)
     this.departmentMasterForm.controls.Description.setValue(this.content.PDEPTMST_DESC)
@@ -1260,7 +1265,7 @@ export class DepartmentMasterComponent implements OnInit {
 
   /**USE: delete Melting Type From Row */
   deleteDepartmentMaster() {
-    if (this.content && this.content.FLAG == 'VIEW') return
+    // if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content?.PDEPTMST_CODE) {
       Swal.fire({
         title: '',
