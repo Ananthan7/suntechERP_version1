@@ -227,7 +227,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined2Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 131,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -242,7 +242,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined3Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 132,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -257,7 +257,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined4Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 133,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -272,7 +272,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined5Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 134,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -287,7 +287,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined6Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 135,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -302,7 +302,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined7Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 136,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -317,7 +317,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined8Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 137,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -332,7 +332,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined9Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 138,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -347,7 +347,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined10Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 139,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -362,7 +362,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined11Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 140,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -377,7 +377,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined12Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 141,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -392,7 +392,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined13Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 142,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -407,7 +407,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined14Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 143,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",
@@ -422,7 +422,7 @@ export class DepartmentMasterComponent implements OnInit {
   UserDefined15Data: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 130,
+    LOOKUPID: 144,
     ORDER_TYPE: 0,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "User Defined",

@@ -1,5 +1,12 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from "@angular/forms";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
@@ -37,6 +44,8 @@ export class BoxMasterComponent implements OnInit {
     WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   };
 
   locationCodeData: MasterSearchModel = {
@@ -49,6 +58,8 @@ export class BoxMasterComponent implements OnInit {
     WHERECONDITION: "LOCATION_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   };
 
   columnHeadings: any[] = [
@@ -77,18 +88,18 @@ export class BoxMasterComponent implements OnInit {
   }
 
   boxMasterMainForm: FormGroup = this.formBuilder.group({
-    boxno: [""],
-    formserialno: [""],
-    pcs: [""],
+    boxno: ["", [Validators.required]],
+    fromserialno: ["", [Validators.required]],
+    pcs: ["", [Validators.required]],
     subpcs: [""],
     toserialno: [""],
-    location: [""],
+    location: ["", [Validators.required]],
     stockcode: [""],
     stockcodedesc: [""],
   });
 
-  close(data?: any) {
-    if (this.flag !== "VIEW") {
+  close(data?: any, calling?: boolean) {
+    if (this.flag !== "VIEW" && !calling) {
       Swal.fire({
         title: "Are you sure you want to close this ?",
         icon: "warning",
@@ -124,7 +135,7 @@ export class BoxMasterComponent implements OnInit {
   ViewController(DATA: any) {
     this.boxNumber = DATA.BOX_NO;
     this.boxMasterMainForm.controls["boxno"].setValue(DATA.BOX_NO);
-    this.boxMasterMainForm.controls["formserialno"].setValue(
+    this.boxMasterMainForm.controls["fromserialno"].setValue(
       DATA.FROM_SERIALNO
     );
     this.boxMasterMainForm.controls["pcs"].setValue(DATA.PCS);
@@ -167,7 +178,7 @@ export class BoxMasterComponent implements OnInit {
               });
 
               response.status === "Success"
-                ? this.close("reloadMainGrid")
+                ? this.close("reloadMainGrid", true)
                 : console.log("Delete Error");
             },
             error: (err) => {
@@ -188,75 +199,94 @@ export class BoxMasterComponent implements OnInit {
   }
 
   boxMasterMainFormSubmit() {
-    const postData = {
-      MID: 0,
-      BOX_NO: this.boxMasterMainForm.value.boxno,
-      FROM_SERIALNO: this.boxMasterMainForm.value.formserialno,
-      PCS: this.boxMasterMainForm.value.pcs,
-      TO_SERIALNO: this.boxMasterMainForm.value.toserialno,
-      STOCK_CODE: this.boxMasterMainForm.value.stockcode,
-      PURCHASE_BRANCH: "",
-      PURCHASE_VOCTYPE: "",
-      PURCHASE_VOCNO: 0,
-      PURCHASE_VOCDATE: new Date(),
-      PURCHASE_PARTYCODE: "string",
-      LOCTYPE_CODE: this.boxMasterMainForm.value.location,
-      SUB_PCS: this.boxMasterMainForm.value.subpcs,
-      USERID: "",
-      SYSTEM_DATE: new Date(),
-    };
+    Object.keys(this.boxMasterMainForm.controls).forEach((controlName) => {
+      const control = this.boxMasterMainForm.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
 
-    if (this.flag === "EDIT") {
-      let API = `BoxMaster/UpdateBoxMaster/${this.boxNumber}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
+    const requiredFieldsInvalid = Object.keys(
+      this.boxMasterMainForm.controls
+    ).some((controlName) => {
+      const control = this.boxMasterMainForm.controls[controlName];
+      return control.hasError("required") && control.touched;
+    });
 
-            this.close("reloadMainGrid");
-          } else {
-            // Handle cases where the result is not successful or undefined
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+    if (!requiredFieldsInvalid) {
+      const postData = {
+        MID: 0,
+        BOX_NO: this.boxMasterMainForm.value.boxno,
+        FROM_SERIALNO: this.boxMasterMainForm.value.fromserialno,
+        PCS: this.boxMasterMainForm.value.pcs,
+        TO_SERIALNO: this.boxMasterMainForm.value.toserialno,
+        STOCK_CODE: this.boxMasterMainForm.value.stockcode,
+        PURCHASE_BRANCH: "",
+        PURCHASE_VOCTYPE: "",
+        PURCHASE_VOCNO: 0,
+        PURCHASE_VOCDATE: new Date(),
+        PURCHASE_PARTYCODE: "string",
+        LOCTYPE_CODE: this.boxMasterMainForm.value.location,
+        SUB_PCS: this.boxMasterMainForm.value.subpcs,
+        USERID: "",
+        SYSTEM_DATE: new Date(),
+      };
+
+      if (this.flag === "EDIT") {
+        let API = `BoxMaster/UpdateBoxMaster/${this.boxNumber}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `BoxMaster/InsertBoxMaster`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message
+                  ? result.message
+                  : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
     } else {
-      let API = `BoxMaster/InsertBoxMaster`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+      this.commonService.showSnackBarMsg("Please fill mandatory fields.");
     }
   }
 
@@ -330,5 +360,120 @@ export class BoxMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId("MSG1531");
       }
     );
+  }
+
+  SPvalidateLookupFieldModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAMES: string[],
+    isCurrencyField: boolean,
+    lookupFields?: string[],
+    FROMCODE?: boolean
+  ) {
+    const searchValue = event.target.value?.trim();
+
+    if (!searchValue || this.flag == "VIEW") return;
+
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.apiService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            console.log("In");
+
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Up");
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+                    this.boxMasterMainForm.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        },
+      });
+
+    this.subscriptions.push(sub);
+  }
+
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FORMNAMES.forEach((formName) => {
+      this.boxMasterMainForm.controls[formName].setValue("");
+    });
+  }
+
+  onKeyDown(event: KeyboardEvent, controllers: string[]) {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (event.key === "Backspace" || event.key === "Delete") {
+      setTimeout(() => {
+        if (inputElement.value.trim() === "") {
+          this.clearRelevantFields(controllers);
+        }
+      }, 0);
+    }
+  }
+
+  clearRelevantFields(controllers: string[]) {
+    controllers.forEach((controllerName) => {
+      const control = this.boxMasterMainForm.controls[controllerName];
+      if (control) {
+        control.setValue("");
+      } else {
+        console.warn(`Control ${controllerName} not found in the form.`);
+      }
+    });
+
+    this.clearLookupData(this.stockCodeData, controllers);
   }
 }

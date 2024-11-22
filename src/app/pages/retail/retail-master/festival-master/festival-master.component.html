@@ -20,8 +20,8 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Code</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="code"
-                            [readonly]="viewOnly || disable_code"  maxlength="6" />
+                            <input type="text" id="inputPassword" id="fes_code" matInput formControlName="code"
+                            [readonly]="viewOnly || disable_code"  maxlength="6" (focusout)="checkcode()" />
                         </mat-form-field>
                     </div>
 
@@ -30,9 +30,9 @@
                 <div class="row align-items-center my-2">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Description</label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%;" appearance="outline">
+                        <mat-form-field style="width: 100%;" id="fes_desc" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="description"
-                                [readonly]="viewOnly" />
+                                [readonly]="viewOnly" (focusout)="checkdesc()"/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -128,54 +128,39 @@
 
                 </dx-data-grid> -->
 
+                
                 <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
-                    [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
+                [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
 
-                    <dxo-selection mode="single"></dxo-selection>
+                <dxi-column dataField="SRNO" caption="S.NO">
+                </dxi-column>
+                <dxi-column dataField="YEAR" caption="year" cellTemplate="year"> </dxi-column>
 
-                    <dxi-column dataField="SRNO" caption="S.No"> </dxi-column>
+                <div *dxTemplate="let data of 'year'">
+                    <input type="number" [disabled]="viewMode" [value]="data.value" style="width: 100%;"  (change)="changeyear($event,data)"/>
+                </div>
 
-                    <dxi-column dataField="year" caption="Year">
-                        <ng-template dxTemplate="let data">
-                            <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput [value]="data.year" [readonly]="viewOnly" />
-                            </mat-form-field>
-                        </ng-template>
-                    </dxi-column>
+                <dxi-column dataField="FROMDATE" caption="From Date" cellTemplate="from_date"> </dxi-column>
 
+                <div *dxTemplate="let data of 'from_date'">
                     
-                    <dxi-column dataField="FROMDATE" caption="From date" cellTemplate="fromdate"> </dxi-column>
-                    <dxi-column dataField="TODATE" caption="To Date" cellTemplate="todate"> </dxi-column>
-                    <dxi-column dataField="FEST_TARGET" caption="Target" cellTemplate="target"> </dxi-column>
+                    <input type="date" [disabled]="viewMode"   [value]="data.value" style="width: 100%;"  (change)="changefromdate($event,data)" />
+                </div>
+                <dxi-column dataField="TODATE" caption="To Date" cellTemplate="to_date"> </dxi-column>
 
+                <div *dxTemplate="let data of 'to_date'">
+                    
+                    <input type="date" [disabled]="viewMode"  [value]="data.value" style="width: 100%;"  (change)="changetodate($event,data)"/>
+                    <!-- <dx-date-box [(value)]="data.value"  displayFormat="dd/MM/yyyy" [disabled]="viewMode" style="width: 100%;" (valueChanged)="changefromdate($event, data)"></dx-date-box>
+                    <dx-date-box [(value)]="data.value"  displayFormat="dd/MM/yyyy" [disabled]="viewMode" style="width: 100%;" (valueChanged)="changetodate($event, data)" style="height:20%"></dx-date-box> -->
+                </div>
+                <dxi-column dataField="FEST_TARGET" caption="Target" cellTemplate="target"> </dxi-column>
 
-
-                    <div *dxTemplate="let data of 'fromdate'">
-                        <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput [matDatepicker]="fromDate" placeholder="DD/MM/YYYY"
-                                [disabled]="viewMode" (change)="datechange($event,data)"/>
-                            <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
-                            <mat-datepicker #fromDate></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-
-                    <div *dxTemplate="let data1 of 'todate'">
-                        <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput [matDatepicker]="todate" placeholder="DD/MM/YYYY" formControlName="todate"
-                                [disabled]="viewMode" />
-                            <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
-                            <mat-datepicker #todate></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-
-                    <div *dxTemplate="let data of 'target'">
-                        <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="number" matInput formControlName="target" [readonly]="viewOnly" AmountDecimalInput
-                                style="text-align: right;" />
-                        </mat-form-field>
-                    </div>
-                </dx-data-grid>
-
+                <div *dxTemplate="let data of 'target'">
+                    
+                    <input type="number" [disabled]="viewMode"  (change)="tragetchange($event,data)" [value]="data.value" style="width: 100%;" AmountDecimalInput/>
+                </div>
+            </dx-data-grid>
 
             </div>
         </div>

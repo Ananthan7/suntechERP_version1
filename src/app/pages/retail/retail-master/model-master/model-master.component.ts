@@ -79,6 +79,233 @@ export class ModelMasterComponent implements OnInit {
   codeEnable:boolean = false;
   private subscriptions: Subscription[] = [];
   currentDate = new Date();
+
+  UserDefinedData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field1'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined2Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 131,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field2'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined3Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 132,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field3'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined4Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 133,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field4'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined5Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 134,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field5'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined6Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 135,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field6'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined7Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 136,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field7'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined8Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 137,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field8'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined9Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 138,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field9'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined10Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 139,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field10'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined11Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 140,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field11'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined12Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 141,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field12'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined13Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 142,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field13'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined14Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 143,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field14'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined15Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 144,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field15'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  
   modelMasterForm: FormGroup = this.formBuilder.group({
     mid: [0], 
     model_code: [''],
@@ -427,4 +654,66 @@ export class ModelMasterComponent implements OnInit {
       }
     });
   }
+
+  UserDefined1DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf1.setValue(e.CODE);
+  }
+  UserDefined2DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf2.setValue(e.CODE);
+  }
+  UserDefined3DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf3.setValue(e.CODE);
+  }
+  UserDefined4DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf4.setValue(e.CODE);
+  }
+  UserDefined5DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf5.setValue(e.CODE);
+  }
+  UserDefined6DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf6.setValue(e.CODE);
+  }
+  UserDefined7DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf7.setValue(e.CODE);
+  }
+  UserDefined8DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf8.setValue(e.CODE);
+  }
+  UserDefined9DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf9.setValue(e.CODE);
+  }
+  UserDefined10DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf10.setValue(e.CODE);
+  }
+  UserDefined11DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf11.setValue(e.CODE);
+  }
+  UserDefined12DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf12.setValue(e.CODE);
+  }
+  UserDefined13DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf13.setValue(e.CODE);
+  }
+  UserDefined14DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf14.setValue(e.CODE);
+  }
+  UserDefined15DataSelected(e: any) {
+    console.log(e);
+    this.modelMasterForm.controls.udf15.setValue(e.CODE);
+  }
+
 }

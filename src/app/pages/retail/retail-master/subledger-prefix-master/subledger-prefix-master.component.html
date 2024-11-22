@@ -12,7 +12,7 @@
 <!-- content section -->
 
 <div class="container-fluid pt-3">
-    <form [formGroup]="festivalmasterform" class="p-1">
+    <form [formGroup]="prefixmasterform" class="p-1">
         <div class="row mt-2">
             <div class="col-md-8">
                 <mat-tab-group>
@@ -23,13 +23,13 @@
                                     <label for="prefixcode" class="col-sm-2 col-form-label">Prefix Code:</label>
                                     <div class="col-md-4 p-0 ms-2">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input type="text" id="prefixcode" matInput   formControlName="prefixcode" [readonly]="viewOnly || disable_code" (change)="isexistingcode()"
-                                                class="p-0"/>
+                                            <input type="text" id="prefixcode" matInput id="prefixcodeInput"  formControlName="prefixcode" [readonly]="viewOnly || disable_code" (change)="isexistingcode()"
+                                                class="p-0" maxlength="2" UpperCaseDirective (focusout)="checkcode()"/>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4 p-0">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input type="text" id="prefixcodedesc" matInput 
+                                            <input type="text" id="prefixcodedesc" matInput  id="prefixdescInput" (focusout)="checkdesc()"
                                                 formControlName="prefixcodedesc" class="p-0" [readonly]="viewOnly" maxlength="6"/>
                                         </mat-form-field>
                                     </div>

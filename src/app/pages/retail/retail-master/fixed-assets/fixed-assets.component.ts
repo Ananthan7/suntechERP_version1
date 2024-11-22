@@ -94,6 +94,7 @@ export class FixedAssetsComponent implements OnInit {
     userdefined_5: [''],
     doc_type: [''],
     doc_no: [''],
+    doc_sr: [''],
   });
 
   ngOnInit(): void {
@@ -278,10 +279,11 @@ export class FixedAssetsComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 180,
-    SEARCH_FIELD: 'SUBLEDGER_CODE',
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: '',
     SEARCH_HEADING: 'Sub Ledger Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "SUBLEDGER_CODE<>''",
+    WHERECONDITION: "@SLACCODE=''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -289,8 +291,8 @@ export class FixedAssetsComponent implements OnInit {
   }
   subledgerCodeSelected(e: any) {
     console.log(e);
-    this.fixedassetsform.controls.subledger_code.setValue(e.SUBLEDGER_CODE);
-    this.fixedassetsform.controls.subledger_code_desc.setValue(e.SUBLEDGER_CODE);
+    this.fixedassetsform.controls.subledger_code.setValue(e.Code);
+    this.fixedassetsform.controls.subledger_code_desc.setValue(e.Description);
   }
 
   fixingassetscodedata: MasterSearchModel = {
@@ -552,24 +554,31 @@ export class FixedAssetsComponent implements OnInit {
 
 
   close(data?: any) {
-    // this.activeModal.close(data);
-    if(this.flag == undefined || this.flag == 'EDIT'){
-      Swal.fire({
-        title: "Confirm",
-        text: "Are you sure you want to close this window?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.activeModal.close(data);
-        }
-      });
-    }else{
+    if (data){
+      this.viewMode = true;
       this.activeModal.close(data);
+      return
     }
-  }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
+  }
 
   formSubmit() {
 

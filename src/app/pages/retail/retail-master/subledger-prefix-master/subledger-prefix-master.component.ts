@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -35,12 +35,14 @@ export class SubledgerPrefixMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private apiService: SuntechAPIService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2
+
 
 
 
   ) { }
 
-  festivalmasterform: FormGroup = this.formBuilder.group({
+  prefixmasterform: FormGroup = this.formBuilder.group({
     prefixcode: [""],
     prefixcodedesc: [""],
     last_no: ["0000"],
@@ -63,7 +65,7 @@ export class SubledgerPrefixMasterComponent implements OnInit {
     if(this.flag == 'VIEW' || this.flag == 'EDIT'){
       return;
     }
-    let code = this.festivalmasterform.controls.prefixcode.value;
+    let code = this.prefixmasterform.controls.prefixcode.value;
     if(code != ""){
       let API = `PrefixMaster/CheckIfPrefixCodePresent/${code}`;
       let Sub: Subscription = this.apiService.getDynamicAPI(API)
@@ -71,19 +73,37 @@ export class SubledgerPrefixMasterComponent implements OnInit {
          let code_exists = result.checkifExists;
          console.log(code_exists);;
          if(code_exists == true){
-          Swal.fire(
-            'Error',
-            'Code already exists',
-          );
-          this.festivalmasterform.controls.prefixcode.reset();
+           this.commonService.toastErrorByMsgId('MSG1121');
+          this.prefixmasterform.controls.prefixcode.reset();
+          this.renderer.selectRootElement('#prefixcodeInput')?.focus();
         }  
-          
         }, (err: any) => {
   
         })
       this.subscriptions.push(Sub);
     }
   }
+
+  checkcode() {
+
+    const prefixCodeControl = this.prefixmasterform.controls.prefixcode;
+  
+    if (!prefixCodeControl.value || prefixCodeControl.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1124');
+      this.renderer.selectRootElement('#prefixcodeInput')?.focus();
+    }
+  }
+
+  checkdesc() {
+ 
+    const prefixCodeControl = this.prefixmasterform.controls.prefixcodedesc;
+  
+    if (!prefixCodeControl.value || prefixCodeControl.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1193');
+      this.renderer.selectRootElement('#prefixdescInput')?.focus();
+    }
+  }
+
 
 
   ngOnInit(): void {
@@ -124,9 +144,9 @@ export class SubledgerPrefixMasterComponent implements OnInit {
 
   ViewController(DATA: any) {
     console.log(this.viewOnly);
-    this.festivalmasterform.controls.prefixcode.setValue(this.content?.PREFIX_CODE);
-    this.festivalmasterform.controls.prefixcodedesc.setValue(this.content?.DESCRIPTION);
-    this.festivalmasterform.controls.last_no.setValue(this.content?.LAST_NO);
+    this.prefixmasterform.controls.prefixcode.setValue(this.content?.PREFIX_CODE);
+    this.prefixmasterform.controls.prefixcodedesc.setValue(this.content?.DESCRIPTION);
+    this.prefixmasterform.controls.last_no.setValue(this.content?.LAST_NO);
   }
 
   detailsapi(fm_id: any) {
@@ -139,7 +159,7 @@ export class SubledgerPrefixMasterComponent implements OnInit {
       .subscribe((result: any) => {
         this.dyndatas = result.response;
         console.log(this.dyndatas);
-        this.festivalmasterform.controls.prefixcode.setValue(this.dyndatas?.PREFIX_CODE);
+        this.prefixmasterform.controls.prefixcode.setValue(this.dyndatas?.PREFIX_CODE);
         // this.flag = "EDIT";
       }, (err: any) => {
 
@@ -199,9 +219,9 @@ export class SubledgerPrefixMasterComponent implements OnInit {
   formSubmit() {
 
     const postData = {
-      "PREFIX_CODE": this.festivalmasterform.controls.prefixcode.value,
-      "DESCRIPTION": this.festivalmasterform.controls.prefixcodedesc.value,
-      "LAST_NO": this.festivalmasterform.controls.last_no.value,
+      "PREFIX_CODE": this.prefixmasterform.controls.prefixcode.value,
+      "DESCRIPTION": this.prefixmasterform.controls.prefixcodedesc.value,
+      "LAST_NO": this.prefixmasterform.controls.last_no.value,
       "CURRENCY_CODE": "" ,//"stri",
       "CONV_RATE": 0,
       "COST_CODE":  "" ,//"string",
