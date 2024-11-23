@@ -135,6 +135,8 @@ export class JobcardComponent implements OnInit {
     WHERECONDITION: "ACCODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   costCodeData: MasterSearchModel = {
@@ -653,14 +655,14 @@ export class JobcardComponent implements OnInit {
         "job_reference": this.jobCardFrom.value.jobno + '/' + sn,
         "part_code": e.Design_Code,
         "Description": e.Design_Description,
-        "Pcs": "",
-        "metal_color": "",
-        "metal_wt": "",
-        "stone_wt": "",
-        "gross_wt": "",
+        "Pcs": e.Pcs,
+        "metal_color": e.metal_color,
+        "metal_wt": e.metal_wt,
+        "stone_wt": e.stone_wt,
+        "gross_wt": e.gross_wt,
       };
       this.tableData.push(data);
-      console.log(this.tableData, 'tabledate')
+      console.log(data, 'tabledate')
     };
 
     this.getDesigncode();
@@ -755,6 +757,7 @@ export class JobcardComponent implements OnInit {
         // Get the first object from DESIGN_STNMTL_DETAIL array
 
         const firstDetail = result.response.DESIGN_STNMTL_DETAIL;
+        console.log(result.response.DESIGN_STNMTL_DETAIL,'response')
         if (firstDetail) {
           firstDetail.forEach((element: any) => {
             let obj =

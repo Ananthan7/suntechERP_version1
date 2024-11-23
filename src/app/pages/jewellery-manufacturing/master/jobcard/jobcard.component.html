@@ -59,7 +59,7 @@
                                         formControlName="jobno" maxlength="20"
                                         oninput="this.value = this.value.toUpperCase()"
                                         readonly
-                                        class="text-right" />
+                                        class="text-left" />
                                 </mat-form-field>
                             </div>
                             <label for="input" id="ID005"
@@ -927,7 +927,7 @@
                                     (change)="metal_wttemp($event,data)"
                                     style="width: 100%;" readonly
                                     [value]="data.value" MetalDecimalInput
-                                    class="text-left" />
+                                    class="text-right" />
                             </div>
 
                             <div *dxTemplate="let data of 'stone_wttemp'">
