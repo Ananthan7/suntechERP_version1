@@ -6,130 +6,120 @@
 </div>
 <!-- modal header component -->
 <modal-header
-  [isViewSave]="!viewMode"
-  [isViewCancel]="!viewMode"
-  [isViewMore]="!viewMode"
-  (saveClick)="formSubmit()"
+  *ngIf="flag !== 'VIEW'"
+  (saveClick)="OTPMasterFormSubmit()"
   (cancelClick)="close()"
-  [isViewDelete]="!viewMode && editableMode"
-  (deleteClick)="deleteRecord()"
+  (deleteClick)="DeleteController()"
+  [isViewDelete]="flag == 'VIEW'"
 ></modal-header>
-<div class="row">
-  <div class="col-md-12">
-    <form [formGroup]="otpForm">
-      <div class="container-fluid pt-3">
+<!-- Content component -->
+
+<form [formGroup]="OTPMasterForm">
+  <div class="container-fluid pt-3">
+    <div class="row">
+      <div class="col-md-9">
         <div class="row">
-          <div class="col-md-9">
-            <div class="row">
-              <div class="col-md-10">
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-2 col-form-label"
-                    >Branch * :</label
+          <div class="col-md-10">
+            <div class="mb-4 row align-items-center mb-1">
+              <label for="branchCode" class="col-sm-2 col-form-label"
+                >Branch<span class="text-danger">*</span></label
+              >
+              <div class="col-md-3">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    type="text"
+                    matInput
+                    formControlName="branchCode"
+                    (keydown)="
+                      onKeyDown(
+                        $event,
+                        ['branchCode', 'branchDesc'],
+                        branchCodeData
+                      )
+                    "
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        branchCodeData,
+                        ['branchCode', 'branchDesc'],
+                        false,
+                        ['BRANCH_CODE', 'BRANCH_NAME']
+                      )
+                    "
+                  />
+                  <master-search
+                    *ngIf="flag != 'VIEW'"
+                    (focusout)="openTab($event, 'branchCode')"
+                    [MasterSearchData]="branchCodeData"
+                    #overlayBranchCode
+                    (newRowClick)="
+                      lookupSelect(
+                        $event,
+                        ['branchCode', 'branchDesc'],
+                        ['BRANCH_CODE', 'BRANCH_NAME']
+                      )
+                    "
+                    class="masterSearch"
+                  ></master-search>
+
+                  <mat-error
+                    *ngIf="
+                      OTPMasterForm.controls['branchCode'].hasError('required')
+                    "
                   >
-                  <div class="col-md-3">
-                    <mat-form-field appearance="outline" style="width: 100%">
-                      <input
-                        type="text"
-                        matInput
-                        formControlName="branch"
-                        [readonly]="viewMode"
-                        (keydown)="
-                          onKeyDown(
-                            $event,
-                            ['branch', 'branchdesc'],
-                            branchCodeData
-                          )
-                        "
-                        (focusout)="
-                          SPvalidateLookupFieldModified(
-                            $event,
-                            branchCodeData,
-                            ['branch', 'branchdesc'],
-                            false,
-                            ['BRANCH_CODE', 'BRANCH_NAME'],
-                            false
-                          )
-                        "
-                      />
-                      <master-search
-                        [MasterSearchData]="branchCodeData"
-                        #overlayBranch
-                        (focusout)="openTab($event, 'branch')"
-                        (newRowClick)="
-                          lookupSelect(
-                            $event,
-                            ['branch', 'branchdesc'],
-                            ['BRANCH_CODE', 'BRANCH_NAME']
-                          )
-                        "
-                        *ngIf="!viewMode"
-                        class="masterSearch"
-                      ></master-search>
+                    Branch Code is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    type="text"
+                    matInput
+                    formControlName="branchDesc"
+                    (keydown)="
+                      onKeyDown(
+                        $event,
+                        ['branchCode', 'branchDesc'],
+                        branchCodeData
+                      )
+                    "
+                  />
 
-                      <mat-error
-                        *ngIf="
-                          otpForm.controls['branch'].hasError(
-                            'required'
-                          )
-                        "
-                      >
-                        Branch Code is required.
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-4">
-                    <mat-form-field appearance="outline" style="width: 100%">
-                      <input
-                        type="text"
-                        matInput
-                        formControlName="branchdesc"
-                        [readonly]="viewMode || codeEnable"
-                      />
-
-                      <mat-error
-                        *ngIf="
-                          otpForm.controls['branchdesc'].hasError(
-                            'required'
-                          )
-                        "
-                      >
-                        Branch Desc is required.
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
+                  <mat-error
+                    *ngIf="
+                      OTPMasterForm.controls['branchDesc'].hasError('required')
+                    "
+                  >
+                    Branch Desc is required.
+                  </mat-error>
+                </mat-form-field>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-12">
-          <dx-data-grid
-            #dataGrid
-            [dataSource]="data"
-            id="gridContainer"
-            [allowColumnResizing]="true"
-            [showBorders]="true"
-            (onSelectionChanged)="getRowData($event)"
-          >
-            <dxo-paging [enabled]="false"></dxo-paging>
-            <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>
-            <dxo-selection mode="multiple"></dxo-selection>
-            <dxi-column dataField="SrNo" caption="SrNo"> </dxi-column>
-            <dxi-column dataField="OTP_LEVEL" caption="Level "> </dxi-column>
-            <dxi-column dataField="LEVEL_USER" caption="User"> </dxi-column>
-            <dxi-column dataField="LEVEL_MOBILE1" caption="Mobile Number1">
-            </dxi-column>
-            <dxi-column dataField="LEVEL_MOBILE2" caption="Mobile Number2">
-            </dxi-column>
-            <dxi-column dataField="LEVEL_EMAIL" caption="Email"> </dxi-column>
-            <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-            <!-- <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
-                            [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                        </dxi-column> -->
-          </dx-data-grid>
-        </div>
       </div>
-    </form>
+    </div>
+    <div class="col-md-12">
+      <dx-data-grid
+        #dataGrid
+        [dataSource]="otpGridData"
+        id="gridContainer"
+        [allowColumnResizing]="true"
+        [showBorders]="true"
+      >
+        <dxi-column
+          *ngFor="let data of columnHeader"
+          dataField="{{ data.FIELD }}"
+          caption="{{ data.CAPTION }}"
+          [allowEditing]="true"
+          alignment="center"
+          backgroundcolor="#000"
+        >
+        </dxi-column>
+      </dx-data-grid>
+    </div>
   </div>
-</div>
+</form>

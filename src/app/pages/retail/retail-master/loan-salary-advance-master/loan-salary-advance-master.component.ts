@@ -1,11 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
-import { CommonServiceService } from 'src/app/services/common-service.service';
-import { SuntechAPIService } from 'src/app/services/suntech-api.service';
-import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import Swal from 'sweetalert2';
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { Subscription } from "rxjs";
+import { CommonServiceService } from "src/app/services/common-service.service";
+import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { MasterSearchModel } from "src/app/shared/data/master-find-model";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-loan-salary-advance-master",
@@ -16,23 +17,39 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
 
-  @ViewChild('overlayempCode') overlayempCode!: MasterSearchComponent;
-  @ViewChild('overlaystaffadvCodeSearch') overlaystaffadvCodeSearch!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined1Search') overlayuserDefined1Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined2Search') overlayuserDefined2Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined3Search') overlayuserDefined3Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined4Search') overlayuserDefined4Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined5Search') overlayuserDefined5Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined6Search') overlayuserDefined6Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined7Search') overlayuserDefined7Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined8Search') overlayuserDefined8Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined9Search') overlayuserDefined9Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined10Search') overlayuserDefined10Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined11Search') overlayuserDefined11Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined12Search') overlayuserDefined12Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined13Search') overlayuserDefined13Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined14Search') overlayuserDefined14Search!: MasterSearchComponent;
-  @ViewChild('overlayuserDefined15Search') overlayuserDefined15Search!: MasterSearchComponent;
+  @ViewChild("overlayempCode") overlayempCode!: MasterSearchComponent;
+  @ViewChild("overlaystaffadvCodeSearch")
+  overlaystaffadvCodeSearch!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined1Search")
+  overlayuserDefined1Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined2Search")
+  overlayuserDefined2Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined3Search")
+  overlayuserDefined3Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined4Search")
+  overlayuserDefined4Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined5Search")
+  overlayuserDefined5Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined6Search")
+  overlayuserDefined6Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined7Search")
+  overlayuserDefined7Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined8Search")
+  overlayuserDefined8Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined9Search")
+  overlayuserDefined9Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined10Search")
+  overlayuserDefined10Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined11Search")
+  overlayuserDefined11Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined12Search")
+  overlayuserDefined12Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined13Search")
+  overlayuserDefined13Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined14Search")
+  overlayuserDefined14Search!: MasterSearchComponent;
+  @ViewChild("overlayuserDefined15Search")
+  overlayuserDefined15Search!: MasterSearchComponent;
   selectedTabIndex = 0;
   tableData: any = [];
   BranchData: MasterSearchModel = {};
@@ -766,4 +783,194 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
     this.LoanSalaryAdvanceMasterForm.controls.udf15.setValue(e.CODE);
   }
 
+  onKeyDown(
+    event: KeyboardEvent,
+    controllers: string[],
+    LOOKUPDATA: MasterSearchModel
+  ) {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (event.key === "Backspace" || event.key === "Delete") {
+      console.log("DELETE");
+      setTimeout(() => {
+        if (inputElement.value.trim() === "") {
+          this.clearRelevantFields(controllers, LOOKUPDATA);
+        }
+      }, 0);
+    } else if (event.key == "Tab") {
+      console.log("Tab");
+      console.log(controllers);
+      console.log(event);
+
+      this.lookupKeyPress(event, controllers[0]);
+    }
+  }
+
+  clearRelevantFields(controllers: string[], LOOKUPDATA: MasterSearchModel) {
+    controllers.forEach((controllerName) => {
+      const control = this.LoanSalaryAdvanceMasterForm.controls[controllerName];
+      if (control) {
+        control.setValue("");
+      } else {
+        console.warn(`Control ${controllerName} not found in the form.`);
+      }
+    });
+
+    this.clearLookupData(LOOKUPDATA, controllers);
+  }
+
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FORMNAMES.forEach((formName) => {
+      this.LoanSalaryAdvanceMasterForm.controls[formName].setValue("");
+    });
+  }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == "Tab" && event.target.value == "") {
+      this.showOverleyPanel(event, form);
+    }
+    if (event.key === "Enter") {
+      if (event.target.value == "") this.showOverleyPanel(event, form);
+      event.preventDefault();
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case "userDefined1":
+        this.overlayuserDefined1Search.showOverlayPanel(event);
+        break;
+      case "UserDefined2":
+        this.overlayuserDefined2Search.showOverlayPanel(event);
+        break;
+      case "UserDefined3":
+        this.overlayuserDefined3Search.showOverlayPanel(event);
+        break;
+      case "UserDefined4":
+        this.overlayuserDefined4Search.showOverlayPanel(event);
+        break;
+      case "UserDefined5":
+        this.overlayuserDefined5Search.showOverlayPanel(event);
+        break;
+      case "UserDefined6":
+        this.overlayuserDefined6Search.showOverlayPanel(event);
+        break;
+      case "UserDefined7":
+        this.overlayuserDefined7Search.showOverlayPanel(event);
+        break;
+      case "UserDefined8":
+        this.overlayuserDefined8Search.showOverlayPanel(event);
+        break;
+      case "UserDefined9":
+        this.overlayuserDefined9Search.showOverlayPanel(event);
+        break;
+      case "UserDefined10":
+        this.overlayuserDefined10Search.showOverlayPanel(event);
+        break;
+      case "UserDefined11":
+        this.overlayuserDefined11Search.showOverlayPanel(event);
+        break;
+      case "UserDefined12":
+        this.overlayuserDefined12Search.showOverlayPanel(event);
+        break;
+      case "UserDefined13":
+        this.overlayuserDefined13Search.showOverlayPanel(event);
+        break;
+      case "UserDefined14":
+        this.overlayuserDefined14Search.showOverlayPanel(event);
+        break;
+      case "UserDefined15":
+        this.overlayuserDefined15Search.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
+  SPvalidateLookupFieldModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAMES: string[],
+    isCurrencyField: boolean,
+    lookupFields?: string[],
+    FROMCODE?: boolean
+  ) {
+    const searchValue = event.target.value?.trim();
+
+    // if (!searchValue || this.flag == "VIEW") return;
+
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.dataService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            console.log("In");
+
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Up");
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+                console.log(FORMNAMES);
+                console.log(matchedItem);
+
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+                    console.log(field);
+
+                    this.LoanSalaryAdvanceMasterForm.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        },
+      });
+
+    this.subscriptions.push(sub);
+  }
 }

@@ -1,7 +1,12 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { ToastrService } from "ngx-toastr";
 import { CommonServiceService } from "src/app/services/common-service.service";
@@ -15,61 +20,25 @@ import { MasterSearchComponent } from "src/app/shared/common/master-search/maste
   styleUrls: ["./otp-master.component.scss"],
 })
 export class OtpMasterComponent implements OnInit {
-  @ViewChild("overlayBranch") overlayBranch!: MasterSearchComponent;
-
+  @ViewChild("overlayBranchCode") overlayBranchCode!: MasterSearchComponent;
   @Input() content!: any;
-
-  selectedTabIndex = 0;
-  tableData: any = [];
-  editMode: boolean = false;
-  codeEnable: boolean = false;
   private subscriptions: Subscription[] = [];
-  isloading: boolean = false;
-  viewMode: boolean = false;
-  isDisabled: boolean = false;
-  editableMode: boolean = false;
-  currentDate = new Date();
-  columnheader: any[] = [
-    "S.No",
-    "Level",
-    "User",
-    "Mobile Number",
-    "Mobile Number",
-    "Email",
-  ];
-  countryCode: any;
-  data: any[] = [];
-  constructor(
-    private activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder,
-    private dataService: SuntechAPIService,
-    private toastr: ToastrService,
-    private commonService: CommonServiceService
-  ) {}
 
-  ngOnInit(): void {
-    this.countryCode = this.commonService.allbranchMaster.COUNTRY_CODE;
-    console.log(this.countryCode);
-    this.getData();
-    if (this.content?.FLAG) {
-      this.setFormValues();
-      if (this.content?.FLAG == "VIEW") {
-        this.isDisabled = true;
-        this.viewMode = true;
-      } else if (this.content?.FLAG == "EDIT") {
-        this.viewMode = false;
-        this.editMode = true;
-        this.codeEnable = false;
-      } else if (this.content?.FLAG == "DELETE") {
-        this.viewMode = true;
-        this.deleteRecord();
-      }
-    }
-  }
-  otpForm: FormGroup = this.formBuilder.group({
-    branch: ["", [Validators.required]],
-    branchdesc: ["", [Validators.required]],
-  });
+  flag: any;
+  code: any;
+  branchCode: any;
+  countryCode: any;
+  otpGridData: any[] = [];
+
+  columnHeader: any[] = [
+    { CAPTION: "SRNO", FIELD: "SrNo" },
+    { CAPTION: "USER", FIELD: "LEVEL_USER" },
+    { CAPTION: "MOBILE 1", FIELD: "LEVEL_MOBILE1" },
+    { CAPTION: "MOBILE 2", FIELD: "LEVEL_MOBILE2" },
+    { CAPTION: "E-MAIL", FIELD: "LEVEL_EMAIL" },
+  ];
+
+  data: any[] = [];
   branchCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -83,194 +52,58 @@ export class OtpMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true,
   };
-  branchSelected(e: any) {
-    console.log(e);
-    this.otpForm.controls.branch.setValue(e.BRANCH_CODE);
-    this.otpForm.controls.branchdesc.setValue(e.BRANCH_NAME);
+
+  OTPMasterForm: FormGroup = this.formBuilder.group({
+    branchCode: ["", [Validators.required]],
+    branchDesc: ["", [Validators.required]],
+  });
+
+  constructor(
+    private activeModal: NgbActiveModal,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private apiService: SuntechAPIService,
+    private toastr: ToastrService,
+    private commonService: CommonServiceService
+  ) {}
+
+  ngOnInit(): void {
+    this.flag = this.content
+      ? this.content.FLAG
+      : (this.content = { FLAG: "ADD" }).FLAG;
+    this.countryCode = this.commonService.allbranchMaster.COUNTRY_CODE;
+
+    this.initialController(this.flag, this.content);
+    this.OTPGridData();
   }
 
-  // close(data?: any) {
-  //   //TODO reset forms and data before closing
-  //   this.activeModal.close(data);
-  // }
-
-  getData() {
-    const api = "OTPMaster/GetOtpMasterGrid/" + this.countryCode;
-    console.log(api);
-
-    this.dataService.getDynamicAPI(api).subscribe((result: any) => {
-      const flatData: any[] = [];
-
-      if (Array.isArray(result.dynamicData)) {
-        result.dynamicData.forEach((subArray: any[]) => {
-          if (Array.isArray(subArray)) {
-            subArray.forEach((item: any) => {
-              flatData.push(item);
-            });
-          }
-        });
-      }
-
-      this.data = flatData;
-      console.log(this.data);
-    });
-  }
-
-  close(data?: any) {
-    if (data) {
-      this.viewMode = true;
-      this.activeModal.close(data);
-      return;
+  initialController(FLAG: any, DATA: any) {
+    if (FLAG === "ADD") {
     }
-    if (this.content && this.content.FLAG == "VIEW") {
-      this.activeModal.close(data);
-      return;
+    if (FLAG === "VIEW") {
+      this.ViewController(DATA);
     }
-    Swal.fire({
-      title: "Do you want to exit?",
-      text: "",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes!",
-      cancelButtonText: "No",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.activeModal.close(data);
-      }
-    });
-  }
-
-  setFormValues() {
-    this.otpForm.controls.branch.setValue(this.content.BRANCH_CODE);
-    this.otpForm.controls.branchdesc.setValue(this.content.BRANCH_DESCRIPTION);
-  }
-
-  submitValidation(form: any) {
-    if (this.commonService.nullToString(form.branch) == "") {
-      this.commonService.toastErrorByMsgId("MSG1076"); //"branch cannot be empty"
-      return true;
-    } else if (this.commonService.nullToString(form.branchdesc) == "") {
-      this.commonService.toastErrorByMsgId("MSG1194"); //"branchdesc cannot be empty"
-      return true;
+    if (FLAG === "EDIT") {
+      this.editController(DATA);
     }
-    return false;
-  }
-
-  formSubmit() {
-    if (this.content && this.content.FLAG == "VIEW") return;
-    if (this.content && this.content.FLAG == "EDIT") {
-      this.update();
-      return;
+    if (FLAG === "DELETE") {
+      this.DeleteController(DATA);
     }
-
-    if (this.submitValidation(this.otpForm.value)) return;
-
-    let API = "OTPMaster/InsertOTPMaster";
-    console.log(this.data);
-
-    const postData = this.data.map((item: any) => ({
-      BRANCH_CODE: this.otpForm.value.branch || "",
-      BRANCH_DESCRIPTION: this.otpForm.value.branchdesc || "",
-      OTP_LEVEL: item.OTP_LEVEL || "string",
-      LEVEL_USER: item.LEVEL_USER || "string",
-      LEVEL_MOBILE1: item.LEVEL_MOBILE1 || "string",
-      LEVEL_MOBILE2: item.LEVEL_MOBILE2 || "string",
-      LEVEL_EMAIL: item.LEVEL_EMAIL || "string",
-      SYSTEM_DATE: new Date().toISOString(),
-      MID: 0,
-    }));
-
-    console.log(postData);
-
-    let Sub: Subscription = this.dataService
-      .postDynamicAPI(API, postData)
-      .subscribe(
-        (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || "Success",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.otpForm.reset();
-                  this.tableData = [];
-                  this.close("reloadMainGrid");
-                }
-              });
-            }
-          } else {
-            this.commonService.toastErrorByMsgId("MSG2272"); //Error occured, please try again
-          }
-        },
-        (err) => alert(err)
-      );
-    this.subscriptions.push(Sub);
   }
-  update() {
-    if (this.submitValidation(this.otpForm.value)) return;
 
-    let API = "OTPMaster/UpdateOTPMaster/" + this.content.BRANCH_CODE;
-    let postData = {
-      BRANCH_CODE: "string",
-      BRANCH_DESCRIPTION: "string",
-      OTP_LEVEL: "string",
-      LEVEL_USER: "string",
-      LEVEL_MOBILE1: "string",
-      LEVEL_MOBILE2: "string",
-      LEVEL_EMAIL: "string",
-      SYSTEM_DATE: "2023-11-27T09:54:58.976Z",
-      MID: 0,
-    };
-
-    let Sub: Subscription = this.dataService
-      .putDynamicAPI(API, postData)
-      .subscribe(
-        (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || "Success",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.otpForm.reset();
-                  this.tableData = [];
-                  this.close("reloadMainGrid");
-                }
-              });
-            }
-          } else {
-            this.commonService.toastErrorByMsgId("MSG2272"); //Error occured, please try again
-          }
-        },
-        (err) => alert(err)
-      );
-    this.subscriptions.push(Sub);
+  ViewController(DATA: any) {
+    this.branchCode = DATA.BRANCH_CODE;
+    this.OTPMasterForm.controls["branch"].setValue(DATA.BRANCH_CODE);
+    this.OTPMasterForm.controls["branchdesc"].setValue(DATA.BRANCH_DESCRIPTION);
   }
-  deleteRecord() {
-    if (this.content && this.content.FLAG == "VIEW") return;
-    if (!this.content.BRANCH_CODE) {
-      Swal.fire({
-        title: "",
-        text: "Please Select data to delete!",
-        icon: "error",
-        confirmButtonColor: "#336699",
-        confirmButtonText: "Ok",
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return;
-    }
+
+  editController(DATA: any) {
+    this.ViewController(DATA);
+  }
+
+  DeleteController(DATA?: any) {
+    this.ViewController(DATA);
+
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -281,83 +114,182 @@ export class OtpMasterComponent implements OnInit {
       confirmButtonText: "Yes, delete!",
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = "OTPMaster/DeleteOTPMaster/" + this.content.BRANCH_CODE;
-        let Sub: Subscription = this.dataService
+        const API = `OTPMaster/DeleteOTPMaster/${this.branchCode}`;
+        const Sub: Subscription = this.apiService
           .deleteDynamicAPI(API)
-          .subscribe(
-            (result) => {
-              if (result) {
-                if (result.status == "Success") {
-                  Swal.fire({
-                    title: result.message || "Success",
-                    text: "",
-                    icon: "success",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.otpForm.reset();
-                      this.tableData = [];
-                      this.close("reloadMainGrid");
-                    }
-                  });
-                } else {
-                  Swal.fire({
-                    title: result.message || "Error please try again",
-                    text: "",
-                    icon: "error",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.otpForm.reset();
-                      this.tableData = [];
-                      this.close();
-                    }
-                  });
-                }
-              } else {
-                this.commonService.toastErrorByMsgId("MSG1880"); // Not Deleted
-              }
+          .subscribe({
+            next: (response) => {
+              Swal.fire({
+                title:
+                  response.status === "Success"
+                    ? "Deleted Successfully"
+                    : "Not Deleted",
+                icon: response.status === "Success" ? "success" : "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              response.status === "Success"
+                ? this.close("reloadMainGrid", true)
+                : console.log("Delete Error");
             },
-            (err) => alert(err)
-          );
+            error: (err) => {
+              Swal.fire({
+                title: "Error",
+                text: "Failed to delete the item.",
+                icon: "error",
+                confirmButtonColor: "#d33",
+              });
+              console.error(err);
+            },
+          });
         this.subscriptions.push(Sub);
+      } else {
+        this.flag = "VIEW";
       }
     });
   }
 
-  getRowData(e: any) {
-    console.log(e);
-    const selectedRows = e.selectedRowsData;
-    console.log("Selected Rows:", selectedRows);
-    this.data = selectedRows;
+  OTPMasterFormSubmit() {
+    Object.keys(this.OTPMasterForm.controls).forEach((controlName) => {
+      const control = this.OTPMasterForm.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
+
+    const requiredFieldsInvalid = Object.keys(this.OTPMasterForm.controls).some(
+      (controlName) => {
+        const control = this.OTPMasterForm.controls[controlName];
+        return control.hasError("required") && control.touched;
+      }
+    );
+
+    if (!requiredFieldsInvalid) {
+      const postData = this.otpGridData.map((item) => ({
+        BRANCH_CODE: this.OTPMasterForm.value.branchCode,
+        BRANCH_DESCRIPTION: this.OTPMasterForm.value.branchDesc,
+        OTP_LEVEL: item.OTP_LEVEL || "",
+        LEVEL_USER: item.LEVEL_USER || "",
+        LEVEL_MOBILE1: item.LEVEL_MOBILE1 || "",
+        LEVEL_MOBILE2: item.LEVEL_MOBILE2 || "",
+        LEVEL_EMAIL: item.LEVEL_EMAIL || "",
+        SYSTEM_DATE: new Date().toISOString(),
+        MID: 0,
+      }));
+
+      if (this.flag === "EDIT") {
+        let API = `OTPMaster/UpdateOTPMaster/${this.branchCode}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `OTPMaster/InsertOTPMaster`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message
+                  ? result.message
+                  : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
+    } else {
+      this.commonService.showSnackBarMsg("Please fill mandatory fields.");
+    }
   }
-  // lookupKeyPress(event: KeyboardEvent) {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //   }
-  // }
+
+  OTPGridData() {
+    let API = `OTPMaster/GetOtpMasterGrid/${this.countryCode}`;
+    let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result.status.trim() === "Success") {
+          console.log(result.dynamicData[0]);
+          this.otpGridData = result.dynamicData[0];
+        }
+      },
+      (err) => {
+        console.error("Error fetching data:", err);
+        this.commonService.toastErrorByMsgId("MSG1531");
+      }
+    );
+  }
+
+  close(data?: any, calling?: boolean) {
+    if (this.flag !== "VIEW" && !calling) {
+      Swal.fire({
+        title: "Are you sure you want to close this ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Close!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    } else {
+      this.activeModal.close(data);
+    }
+  }
 
   onKeyDown(
     event: KeyboardEvent,
     controllers: string[],
-    codeData: MasterSearchModel
+    LOOKUPDATA: MasterSearchModel
   ) {
     const inputElement = event.target as HTMLInputElement;
 
     if (event.key === "Backspace" || event.key === "Delete") {
       setTimeout(() => {
         if (inputElement.value.trim() === "") {
-          this.clearRelevantFields(controllers, codeData);
+          this.clearRelevantFields(controllers, LOOKUPDATA);
         }
       }, 0);
     }
   }
 
-  clearRelevantFields(controllers: string[], codeData: MasterSearchModel) {
+  clearRelevantFields(controllers: string[], LOOKUPDATA: MasterSearchModel) {
     controllers.forEach((controllerName) => {
-      const control = this.otpForm.controls[controllerName];
+      const control = this.OTPMasterForm.controls[controllerName];
       if (control) {
         control.setValue("");
       } else {
@@ -365,7 +297,7 @@ export class OtpMasterComponent implements OnInit {
       }
     });
 
-    this.clearLookupData(codeData, controllers);
+    this.clearLookupData(LOOKUPDATA, controllers);
   }
 
   SPvalidateLookupFieldModified(
@@ -378,7 +310,7 @@ export class OtpMasterComponent implements OnInit {
   ) {
     const searchValue = event.target.value?.trim();
 
-    // if (!searchValue || this.flag == "VIEW") return;
+    if (!searchValue || this.flag == "VIEW") return;
 
     LOOKUPDATA.SEARCH_VALUE = searchValue;
 
@@ -393,7 +325,7 @@ export class OtpMasterComponent implements OnInit {
 
     this.commonService.showSnackBarMsg("MSG81447");
 
-    const sub: Subscription = this.dataService
+    const sub: Subscription = this.apiService
       .postDynamicAPI("MasterLookUp", param)
       .subscribe({
         next: (result: any) => {
@@ -417,7 +349,7 @@ export class OtpMasterComponent implements OnInit {
                 FORMNAMES.forEach((formName, index) => {
                   const field = lookupFields?.[index];
                   if (field && field in matchedItem) {
-                    this.otpForm.controls[formName].setValue(
+                    this.OTPMasterForm.controls[formName].setValue(
                       matchedItem[field]
                     );
                   } else {
@@ -450,7 +382,7 @@ export class OtpMasterComponent implements OnInit {
   clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
     LOOKUPDATA.SEARCH_VALUE = "";
     FORMNAMES.forEach((formName) => {
-      this.otpForm.controls[formName].setValue("");
+      this.OTPMasterForm.controls[formName].setValue("");
     });
   }
 
@@ -462,9 +394,10 @@ export class OtpMasterComponent implements OnInit {
 
   openPanel(event: any, formControlName: string) {
     switch (formControlName) {
-      case "branch":
-        this.overlayBranch.showOverlayPanel(event);
+      case "branchCode":
+        this.overlayBranchCode.showOverlayPanel(event);
         break;
+
       default:
         console.warn(`Unknown form control name: ${formControlName}`);
     }
@@ -479,7 +412,7 @@ export class OtpMasterComponent implements OnInit {
           const field = modelfield[index];
           const value = e[field];
           if (value !== undefined) {
-            this.otpForm.controls[ctrl].setValue(value);
+            this.OTPMasterForm.controls[ctrl].setValue(value);
           } else {
             console.warn(`Model field '${field}' not found in event object.`);
           }
@@ -492,7 +425,7 @@ export class OtpMasterComponent implements OnInit {
     } else if (controller && modelfield) {
       const value = e[modelfield];
       if (value !== undefined) {
-        this.otpForm.controls[controller].setValue(value);
+        this.OTPMasterForm.controls[controller].setValue(value);
       } else {
         console.warn(`Model field '${modelfield}' not found in event object.`);
       }
