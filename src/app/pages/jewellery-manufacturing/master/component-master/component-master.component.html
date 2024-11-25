@@ -206,7 +206,8 @@
                                 <mat-form-field style="width: 100%;"
                                     appearance="outline">
                                     <input type="text" class="text-right"
-                                        MetalDecimalInput matInput NumberOnly
+                                        MetalDecimalInput matInput
+                                        max="2"
                                         formControlName="height"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -218,7 +219,7 @@
                                 <mat-form-field style="width: 100%;"
                                     appearance="outline">
                                     <input type="text" class="text-right"
-                                        MetalDecimalInput matInput NumberOnly
+                                        MetalDecimalInput matInput max="2"
                                         formControlName="length"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -233,7 +234,7 @@
                                 <mat-form-field style="width: 100%;"
                                     appearance="outline">
                                     <input type="text" class="text-right"
-                                        MetalDecimalInput matInput NumberOnly
+                                        MetalDecimalInput matInput max="2"
                                         formControlName="width"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -245,7 +246,7 @@
                                 <mat-form-field style="width: 100%;"
                                     appearance="outline">
                                     <input type="text" class="text-right"
-                                        MetalDecimalInput matInput NumberOnly
+                                        MetalDecimalInput matInput max="2"
                                         formControlName="radius"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -497,7 +498,7 @@
                                     </dxi-column>
                                     <dxi-column dataField="STOCK_FCCOST"
                                         caption="Stone Type"
-                                        cellTemplate="stockTypetemp">
+                                        cellTemplate="StoneTypetemp">
                                     </dxi-column>
                                     <dxi-column dataField="PCS" caption="Pcs"
                                         cellTemplate="pcstemp">
@@ -598,18 +599,16 @@
                                     </div>
 
                                     <div
-                                        *dxTemplate="let data of 'stockTypetemp'">
+                                        *dxTemplate="let data of 'StoneTypetemp'">
                                         <a href="javascript:void(0)"
                                             class="mx-1"
                                             [innerHTML]="data.value"></a>
                                         <master-search
-                                            (change)="stockType($event,data)"
+                                            (change)="stoneType($event,data)"
                                             *ngIf="!isPCSDisabled"
                                             [MasterSearchData]="stonetypeCodeData"
-                                            (newRowClick)="stocktypeCodeSelected($event,data,'stockTypetemp')">
+                                            (newRowClick)="stoneTypeCodeSelected($event,data)">
                                         </master-search>
-                                        <!-- <input type="text" (change)="stockType($event,data)" [value]="data.value"
-                                            style="width: 100%;" required [disabled]="isPCSDisabled" /> -->
                                     </div>
 
                                     <div *dxTemplate="let data of 'pcstemp'">

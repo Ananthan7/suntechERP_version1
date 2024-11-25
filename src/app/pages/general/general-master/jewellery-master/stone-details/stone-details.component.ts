@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import themes from 'devextreme/ui/themes';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-stone-details',
@@ -19,7 +20,32 @@ export class StoneDetailsComponent implements OnInit {
   @Input() content!: any;
   @Input() tablecount :any;
   tableData: any[] = [];
+  viewMode: boolean = false;
+  editMode: boolean = false;
 
+  @ViewChild('StockcodeDescodeSearch') StockcodeDescodeSearch!: MasterSearchComponent;
+  @ViewChild('ShapecodecodeSearch') ShapecodecodeSearch!: MasterSearchComponent;
+  @ViewChild('sieveSetcodeSearch') sieveSetcodeSearch!: MasterSearchComponent;
+  @ViewChild('sievecodeSearch') sievecodeSearch!: MasterSearchComponent;
+  @ViewChild('priceCodeSearch') priceCodeSearch!: MasterSearchComponent;
+  @ViewChild('stoneTypeCodeSearch') stoneTypeCodeSearch!: MasterSearchComponent;
+  @ViewChild('stockRefCodeSearch') stockRefCodeSearch!: MasterSearchComponent;
+  @ViewChild('ColorCodeSearch') ColorCodeSearch!: MasterSearchComponent;
+  @ViewChild('ClarityCodeSearch') ClarityCodeSearch!: MasterSearchComponent;
+  @ViewChild('SizeCodeSearch') SizeCodeSearch!: MasterSearchComponent;
+  @ViewChild('labourCodeSearch') labourCodeSearch!: MasterSearchComponent;
+
+
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -320,4 +346,134 @@ export class StoneDetailsComponent implements OnInit {
     this.close(postData);
 
   }
+
+  
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.enterStoneDetailsForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+  }
+
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'StockcodeDes':
+        this.StockcodeDescodeSearch.showOverlayPanel(event);
+        break;
+        case 'Shapecode':
+          this.ShapecodecodeSearch.showOverlayPanel(event);
+          break;
+          case 'sieveSet':
+            this.sieveSetcodeSearch.showOverlayPanel(event);
+            break;
+            case 'sieve':
+              this.sievecodeSearch.showOverlayPanel(event);
+              break;
+              case 'priceCode':
+                this.priceCodeSearch.showOverlayPanel(event);
+                break;
+                case 'stoneTypeCode':
+                  this.stoneTypeCodeSearch.showOverlayPanel(event);
+                  break;
+                  case 'stockRefCode':
+                    this.stockRefCodeSearch.showOverlayPanel(event);
+                    break;
+                    case 'ColorCode':
+                      this.ColorCodeSearch.showOverlayPanel(event);
+                      break;
+                      case 'ClarityCode':
+                        this.ClarityCodeSearch.showOverlayPanel(event);
+                        break;
+                        case 'SizeCode':
+                          this.SizeCodeSearch.showOverlayPanel(event);
+                          break;
+                          case 'labourCode':
+                            this.labourCodeSearch.showOverlayPanel(event);
+                            break;
+                
+                          
+      default:
+    }
+  }
+
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'StockcodeDes':
+        this.StockcodeDescodeSearch.showOverlayPanel(event);
+        break;
+        case 'Shapecode':
+          this.ShapecodecodeSearch.showOverlayPanel(event);
+          break;
+          case 'sieveSet':
+            this.sieveSetcodeSearch.showOverlayPanel(event);
+            break;
+            case 'sieve':
+              this.sievecodeSearch.showOverlayPanel(event);
+              break;
+              case 'priceCode':
+                this.priceCodeSearch.showOverlayPanel(event);
+                break;
+                case 'stoneTypeCode':
+                  this.stoneTypeCodeSearch.showOverlayPanel(event);
+                  break;
+                  case 'stockRefCode':
+                    this.stockRefCodeSearch.showOverlayPanel(event);
+                    break;
+                    case 'stockRefCode':
+                      this.stockRefCodeSearch.showOverlayPanel(event);
+                      break;
+                      case 'ColorCode':
+                        this.ColorCodeSearch.showOverlayPanel(event);
+                        break;
+                        case 'ClarityCode':
+                          this.ClarityCodeSearch.showOverlayPanel(event);
+                          break;
+                          case 'SizeCode':
+                            this.SizeCodeSearch.showOverlayPanel(event);
+                            break;
+                            case 'labourCode':
+                              this.labourCodeSearch.showOverlayPanel(event);
+                              break;
+                  
+                          
+              
+
+      default:
+        console.warn(`Unknown FORMNAME: ${FORMNAME}`);
+        break;
+    }
+  }
+
 }

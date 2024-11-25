@@ -228,8 +228,8 @@
           </label>
           <div class="col-md-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="number" matInput formControlName="pieces"
-                maxlength="13" class="text-right" NumberOnly
+              <input type="text" matInput formControlName="pieces"
+              maxlength="12"  class="text-right" NumberOnly
                 (focusout)="CalculatePiecesAndPointerWT()"
                 [readonly]="viewMode || codeEnable" />
             </mat-form-field>

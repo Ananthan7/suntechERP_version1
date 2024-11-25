@@ -28,6 +28,7 @@ import { CustomerPriceSettingComponent } from './customer-price-setting/customer
 import { CostCentreDiamondComponent } from './cost-centre-diamond/cost-centre-diamond.component';
 import { PriceschemesMasterComponent } from './priceschemes-master/priceschemes-master.component';
 import { OunceRateMasterComponent } from './ounce-rate-master/ounce-rate-master.component';
+import { AuthCheckerComponent } from 'src/app/shared/common/auth-checker/auth-checker.component';
 
 @Component({
   selector: 'app-wholesale-master',
@@ -36,6 +37,7 @@ import { OunceRateMasterComponent } from './ounce-rate-master/ounce-rate-master.
 })
 export class WholesaleMasterComponent implements OnInit {
   @ViewChild(MasterGridComponent) masterGridComponent?: MasterGridComponent;
+  @ViewChild(AuthCheckerComponent) authCheckerComponent?: AuthCheckerComponent;
 
   //variables
   menuTitle: any
@@ -101,13 +103,17 @@ export class WholesaleMasterComponent implements OnInit {
   editRowDetails(e: any) {
     this.dataToEdit = e.row.data;
     this.dataToEdit.FLAG = 'EDIT'
-    this.openModalView(this.dataToEdit)
+    // this.openModalView(this.dataToEdit)
+    this.authCheckerComponent?.openAuthModal();
   }
   deleteBtnClicked(e: any) {
     this.dataToEdit = e.row.data;
     this.dataToEdit.FLAG = 'DELETE'
+    // this.openModalView(this.dataToEdit)
+    this.authCheckerComponent?.openAuthModal();
+  }
+  authSubmit(){
     this.openModalView(this.dataToEdit)
-    // this.authCheckerComponent?.openAuthModal();
   }
   //  open Jobcard in modal
   openModalView(data?: any) {

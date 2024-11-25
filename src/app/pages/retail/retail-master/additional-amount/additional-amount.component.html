@@ -8,8 +8,12 @@
 
 <!-- modal header component -->
 <modal-header
+  [isViewSave]="!viewMode"
+  [isViewCancel]="!viewMode"
+  [isViewMore]="!viewMode"
   (saveClick)="formSave()"
   (cancelClick)="close()"
+  [isViewDelete]="viewMode"
   (deleteClick)="deleteMaster()"
 ></modal-header>
 
@@ -26,7 +30,7 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="code" />
+                  <input matInput="text" formControlName="code" maxlength="5"/>
                 </mat-form-field>
               </div>
             </div>
@@ -54,13 +58,25 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    matInput="text"
+                    formControlName="type_code"
+                    (keydown)="onKeyDown($event, ['type_code'], designCode)"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        designCode,
+                        ['type_code'],
+                        false,
+                        ['CODE']
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
+                    #typeCode
                     [MasterSearchData]="designCode"
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                    (newRowClick)="typeCodeSelected($event, 'CODE')"
                   ></master-search>
                 </mat-form-field>
               </div>
@@ -68,7 +84,7 @@
               <div class="col-md-2"></div>
 
               <div class="col-md-5 pt-2">
-                <mat-checkbox formControlName="includeForTax" id="ID060"
+                <mat-checkbox  formControlName="include_for_tax" id="ID060" 
                   >Include For Tax</mat-checkbox
                 >
               </div>
@@ -83,12 +99,13 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="type">
+                  
+                     <mat-select formControlName="calculated_type"   (selectionChange)="onTypeCode($event)" >
                     <mat-option
-                      *ngFor="let data of typeList"
-                      [value]="data.field"
+                      *ngFor="let data of calculatedValue"
+                      [value]="data.SRNO"
                     >
-                      {{ data.field }}
+                      {{ data.ENGLISH }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -96,7 +113,7 @@
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input matInput="text" formControlName="calculated_code" />
                 </mat-form-field>
               </div>
 
@@ -109,12 +126,12 @@
 
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="type">
+                  <mat-select formControlName="add_category" (selectionChange)="onCategoryCode($event)">
                     <mat-option
-                      *ngFor="let data of typeList"
-                      [value]="data.field"
+                      *ngFor="let data of categoryValue"
+                      [value]="data.SRNO"
                     >
-                      {{ data.field }}
+                      {{ data.ENGLISH }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -130,12 +147,12 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="type">
+                  <mat-select formControlName="transaction_type" (selectionChange)="onTransCode($event)">
                     <mat-option
-                      *ngFor="let data of typeList"
-                      [value]="data.field"
+                      *ngFor="let data of transcationValue"
+                      [value]="data.SRNO"
                     >
-                      {{ data.field }}
+                      {{ data.ENGLISH }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -143,19 +160,19 @@
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="type">
+                  <mat-select formControlName="transaction_code">
                     <mat-option
                       *ngFor="let data of typeList"
-                      [value]="data.field"
+                      [value]="data.ENGLISH"
                     >
-                      {{ data.field }}
+                      {{ data.ENGLISH }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
 
               <div class="col-md-5 pt-2">
-                <mat-checkbox formControlName="includeForTax" id="ID060"
+                <mat-checkbox formControlName="include_in_sales_analysis" id="ID061" value="0"
                   >Include In Sales Analysis
                 </mat-checkbox>
               </div>
@@ -170,12 +187,12 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="type">
+                  <mat-select formControlName="debit_type">
                     <mat-option
-                      *ngFor="let data of typeList"
-                      [value]="data.field"
+                      *ngFor="let data of debitValue"
+                      [value]="data.ENGLISH"
                     >
-                      {{ data.field }}
+                      {{ data.ENGLISH }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -183,13 +200,25 @@
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    matInput="text"
+                    formControlName="debit_code"
+                    (keydown)="onKeyDown($event, ['debit_code'], debitcode)"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        debitcode,
+                        ['debit_code'],
+                        false,
+                        ['ACCODE']
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    #debitCode
+                    [MasterSearchData]="debitcode"
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                    (newRowClick)="lookupCodeSelected($event, 'ACCODE')"
                   ></master-search>
                 </mat-form-field>
               </div>
@@ -210,12 +239,12 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="type">
+                  <mat-select formControlName="credit_type">
                     <mat-option
-                      *ngFor="let data of typeList"
-                      [value]="data.field"
+                      *ngFor="let data of creditValue"
+                      [value]="data.ENGLISH"
                     >
-                      {{ data.field }}
+                      {{ data.ENGLISH }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -223,13 +252,25 @@
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    matInput="text"
+                    formControlName="credit_code"
+                    (keydown)="onKeyDown($event, ['credit_code'], creditcode)"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        creditcode,
+                        ['credit_code'],
+                        false,
+                        ['ACCODE']
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    #creditCode
+                    [MasterSearchData]="creditcode"
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                    (newRowClick)="creditCodeSelected($event, 'ACCODE')"
                   ></master-search>
                 </mat-form-field>
               </div>
@@ -250,12 +291,12 @@
               >
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="type">
+                  <mat-select formControlName="narration" (selectionChange)="onNarrationChange($event)">
                     <mat-option
-                      *ngFor="let data of typeList"
-                      [value]="data.field"
+                      *ngFor="let data of narrationValue; let i = index"
+                      [value]="data.SRNO"
                     >
-                      {{ data.field }}
+                      {{ data.ENGLISH }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -277,7 +318,7 @@
                   <legend class="custom-legend">VAT Type</legend>
                   <mat-radio-group
                     aria-label="Select an option"
-                    formControlName="DailyTarget"
+                    formControlName="vat_type"
                   >
                     <mat-radio-button value="F" id="ID012" class="mx-2"
                       ><b>Direct</b></mat-radio-button

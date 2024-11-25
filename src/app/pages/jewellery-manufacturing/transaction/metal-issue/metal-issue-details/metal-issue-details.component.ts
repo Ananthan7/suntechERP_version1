@@ -508,7 +508,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "VOCDATE": this.comService.formatDateTime(form.VOCDATE),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
       "JOB_DATE": this.comService.nullToString(form.JOB_DATE),
-      "JOB_SO_NUMBER": this.comService.emptyToZero(form.jobNumber),
+      "JOB_SO_NUMBER": this.comService.emptyToZero(form.JOB_SO_NUMBER),
       "UNQ_JOB_ID": this.comService.nullToString(form.subJobNo),
       "JOB_DESCRIPTION": this.comService.nullToString(form.jobNumDes),
       "BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),

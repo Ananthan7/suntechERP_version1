@@ -255,6 +255,7 @@ export class YearlyBudgetPlannerComponent implements OnInit {
         this.maindetails
 
     }
+    // console.log(postData);return;
 
     if (this.flag === "EDIT") {
       let API = `BudgetMaster/UpdateBudgetMaster/${this.branch_code}/${this.unq_id}`;
@@ -307,10 +308,19 @@ export class YearlyBudgetPlannerComponent implements OnInit {
           }
         });
     }
-
-
-
   }
+
+  setamount(data: any, event: any) {
+    console.log('New Value:', event.target.value);
+    console.log(data);
+    const updatedSRNO = data.data.SLNO - 1; 
+    const budgetedAmt = parseFloat(event.target.value);
+    this.maindetails[updatedSRNO].BUDGETED_AMT = budgetedAmt.toFixed(2);
+    console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].BUDGETED_AMT);
+  }
+  
+
+
   addTableData() {
     if (this.yearlybudgetform.controls.branchcode.value == "") {
       Swal.fire({
@@ -318,18 +328,21 @@ export class YearlyBudgetPlannerComponent implements OnInit {
         text: 'Code Cannot be Empty',
       });
     } else {
+      // let tablecount = this.maindetails.length;
 
       this.modalReference = this.modalService.open(YearlyBudgetPlannerDetailsComponent, {
         size: 'xl',
-        backdrop: true,//'static'
+        backdrop: true,
         keyboard: false,
         windowClass: 'modal-full-width',
       });
+      // this.modalReference.componentInstance.tablecount = tablecount;
 
       this.modalReference.closed.subscribe((result) => {
         if (result) {
           console.log('Data received from modal:', result);
           this.maindetails = result;
+          // this.maindetails.push(result);
           console.log(result);
         }
       });

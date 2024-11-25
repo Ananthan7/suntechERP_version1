@@ -587,9 +587,9 @@ export class StoneIssueDetailComponent implements OnInit {
       "SRNO": this.comService.emptyToZero(this.content?.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
-      "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
+      "VOCDATE": this.comService.formatDateTime(form.VOCDATE),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
-      "JOB_DATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
+      "JOB_DATE": this.comService.formatDateTime(form.VOCDATE),
       "JOB_SO_NUMBER": this.comService.emptyToZero(form.JOB_SO_NUMBER),
       "UNQ_JOB_ID": this.comService.nullToString(form.subjobnumber),
       "JOB_DESCRIPTION": this.comService.nullToString(form.jobDes?.toUpperCase()),
@@ -1080,6 +1080,7 @@ export class StoneIssueDetailComponent implements OnInit {
           this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER.toUpperCase())
           this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC.toUpperCase())
           this.stoneIssueDetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
+          this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
           this.FillStnRequiredDetail()
@@ -1330,10 +1331,8 @@ export class StoneIssueDetailComponent implements OnInit {
       // Show confirmation dialog with the PCS message
       this.showConfirmationDialog("Issued Pcs is greater than the Required Pcs.")
         .then((result) => {
-          if (result.isConfirmed) {
-            console.log("Continuing with validation for PCS...");
+          if (result.isConfirmed) {  
           } else {
-            console.log("Action cancelled by user.");
             this.stoneIssueDetailsFrom.controls.pieces.setValue(''); // Clear the pieces field
           }
         });
@@ -1353,9 +1352,7 @@ export class StoneIssueDetailComponent implements OnInit {
       this.showConfirmationDialog("Issued Carat is greater than the Required Carat.")
         .then((result) => {
           if (result.isConfirmed) {
-            console.log("Continuing with validation for carat...");
           } else {
-            console.log("Action cancelled by user.");
             this.stoneIssueDetailsFrom.controls.carat.setValue(''); // Clear the carat field
           }
         });
