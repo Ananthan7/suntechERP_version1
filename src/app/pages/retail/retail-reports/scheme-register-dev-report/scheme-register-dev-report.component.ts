@@ -372,7 +372,20 @@ export class SchemeRegisterDevReportComponent implements OnInit {
 
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
-      //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
+
+      this.templateNameHasValue = !!ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME;
+      this.schemeRegisterDevReportForm.controls.templateName.setValue(ParcedPreFetchData?.CONTROL_HEADER.TEMPLATENAME);
+
+      this.schemeRegisterDevReportForm.controls.branch.setValue(ParcedPreFetchData?.CONTROL_DETAIL.strBRANCHES);
+      this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.strBRANCHES;
+
+      this.schemeRegisterDevReportForm.controls.status.setValue(ParcedPreFetchData?.CONTROL_DETAIL.Status);
+
+      this.dateToPass = {
+        fromDate: this.datePipe.transform(ParcedPreFetchData?.CONTROL_DETAIL.FrVocDate, 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(ParcedPreFetchData?.CONTROL_DETAIL.ToVocDate, 'yyyy-MM-dd')!
+      };
     }
     else{
       const userBranch = localStorage.getItem('userbranch');
