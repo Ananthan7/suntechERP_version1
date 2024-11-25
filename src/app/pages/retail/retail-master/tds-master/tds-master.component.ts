@@ -2,7 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -25,7 +27,7 @@ export class TdsMasterComponent implements OnInit {
   flag: any;
   curr_branch :any = localStorage.getItem('userbranch');
   disable_code:boolean = false;
-
+  finyears: string[] = [];
   
 
 
@@ -34,15 +36,25 @@ export class TdsMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private apiService: SuntechAPIService,
+    private commonService: CommonServiceService,
+
 
   ) { }
 
   ngOnInit(): void {
     this.flag = this.content?.FLAG;
-    this.unq_id = this.content?.PREFIX_CODE;
+    this.unq_id = this.content?.TDS_CODE;
     console.log(this.unq_id);
     console.log(this.content);
-    this.flag = this.content?.TDS_CODE;
+    const API = `TDSMaster/GetFinancialYearDropdown/`;
+    this.apiService.getDynamicAPI(API).subscribe((result) => {
+      if (result.status.trim() === 'Success') {
+        this.finyears = result.dynamicData[0].map((e: any) => e.FYEARCODE); 
+      } else {
+        this.finyears = [];
+      }
+    });
+
     if(this.flag == 'EDIT'){
       this.disable_code = true;
       this.editMode = true;
@@ -53,7 +65,6 @@ export class TdsMasterComponent implements OnInit {
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.unq_id);
     }
-
   }
 
   tdsform: FormGroup = this.formBuilder.group({
@@ -63,7 +74,43 @@ export class TdsMasterComponent implements OnInit {
     credit_ac:[''],
     debit_ac:[''],
     call:[''],
+    effdate:[''],
+    allbranch:[''],
   })
+
+   creditacdata: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION: "ACCODE <>'' and ACCOUNT_MODE in ('G','B','L')",
+    SEARCH_FIELD: "ACCODE",
+    SEARCH_VALUE: "",
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  creditcodeselected(e: any) {
+    console.log(e);
+    this.tdsform.controls.credit_ac.setValue(e.ACCODE);
+  }
+
+  debitacdata: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION: "ACCODE <>'' and ACCOUNT_MODE in ('G','B','L')",
+    SEARCH_FIELD: "ACCODE",
+    SEARCH_VALUE: "",
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  debitcodeselected(e: any) {
+    console.log(e);
+    this.tdsform.controls.debit_ac.setValue(e.ACCODE);
+  }
+
+
 
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
@@ -73,9 +120,7 @@ export class TdsMasterComponent implements OnInit {
     if (FLAG === "EDIT") {
       this.editController(DATA);
       this.editMode = true;
-      
     }
-
     if (FLAG === "DELETE") {
       this.DeleteController(DATA);
     }
@@ -87,6 +132,7 @@ export class TdsMasterComponent implements OnInit {
 
   ViewController(DATA: any) {
     this.tdsform.controls.section_code.setValue(this.content?.TDS_CODE);
+    this.tdsform.controls.financial_year.setValue(this.content?.TDS_CODE);
     this.tdsform.controls.description.setValue(this.content?.TDS_DESCRIPTION);
     this.tdsform.controls.credit_ac.setValue(this.content?.CREDIT_AC_CODE);
     this.tdsform.controls.debit_ac.setValue(this.content?.DEBIT_AC_CODE);
@@ -97,7 +143,7 @@ export class TdsMasterComponent implements OnInit {
   detailsapi(fm_id: any) {
     this.viewOnly = true;
 
-    let API = `TDSMaster/GetTDSHeaderAndDetails/${this.unq_id}/${this.curr_branch}`;
+    let API = `TDSMaster/GetTDSHeaderAndDetails/${this.unq_id}`;
     let Sub: Subscription = this.apiService.getDynamicAPI(API)
       .subscribe((result: any) => {
         this.dyndatas = result.response;
@@ -107,7 +153,6 @@ export class TdsMasterComponent implements OnInit {
 
       })
     this.subscriptions.push(Sub);
-    console.log(this.dyndatas.FA_CATEGORY);
   }
 
   DeleteController(DATA?: any) {
@@ -199,7 +244,7 @@ export class TdsMasterComponent implements OnInit {
       "COMPANY_PER": 0,
       "NOPAN_PER": 0,
       "DEBIT_AC_CODE":this.tdsform.controls.debit_ac.value,
-      "BRANCH_CODE": "string",
+      "BRANCH_CODE": this.curr_branch,
       "TDS_LIMIT": 0,
       "ON_TAXABLEAMT": this.tdsform.controls.call.value,
       "INCLUDE_GST": true,
@@ -223,7 +268,43 @@ export class TdsMasterComponent implements OnInit {
     }
 
     if (this.flag === "EDIT") {
-      let API = `TDSMaster/UpdateSubLedger/${this.unq_id}`;
+
+
+      const postData = {
+        "TDS_CODE": this.tdsform.controls.section_code.value,
+        "TDS_DESCRIPTION": this.tdsform.controls.description.value,
+        "CREDIT_AC_CODE": this.tdsform.controls.credit_ac.value,
+        "SYSTEM_DATE": new Date(),
+        "MID": 0,
+        "INDIVIDUAL_PER": 0,
+        "COMPANY_PER": 0,
+        "NOPAN_PER": 0,
+        "DEBIT_AC_CODE":this.tdsform.controls.debit_ac.value,
+        "BRANCH_CODE": this.curr_branch,
+        "TDS_LIMIT": 0,
+        "ON_TAXABLEAMT": this.tdsform.controls.call.value=='Y' ? true : false,
+        "INCLUDE_GST": true,
+        "tdsDetails": [
+          {
+            "UNIQUE_ID": 0,
+            "REFMID": 0,
+            "EFFECT_FROM_DATE": "2024-11-18T06:34:50.057Z",
+            "INDIVIDUAL_PER": 0,
+            "COMPANY_PER": 0,
+            "NOPAN_PER": 0,
+            "TDS_CODE": "string",
+            "SRNO": 0,
+            "BRANCH_CODE": "string",
+            "YEARCODE": "string",
+            "TDS_LIMIT": 0,
+            "ON_TAXABLEAMT": true,
+            "INCLUDE_GST": true
+          }
+        ]
+      }
+
+
+      let API = `TDSMaster/UpdateTDSMaster/${this.unq_id}`;
       let sub: Subscription = this.apiService
         .putDynamicAPI(API, postData)
         .subscribe((result) => {
@@ -273,14 +354,149 @@ export class TdsMasterComponent implements OnInit {
           }
         });
     }
+  }
 
+  SPvalidateLookupFieldModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAMES: string[],
+    isCurrencyField: boolean,
+    lookupFields?: string[],
+    FROMCODE?: boolean
+  ) {
+    const searchValue = event.target.value?.trim();
 
+    if (!searchValue || this.flag == "VIEW") return;
 
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.apiService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (FROMCODE === true) {
+                searchResult = [
+                  ...searchResult.filter(
+                    (item: any) =>
+                      item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
+                  ),
+                  ...searchResult.filter(
+                    (item: any) =>
+                      item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
+                  ),
+                ];
+              } else if (FROMCODE === false) {
+                searchResult = [
+                  ...searchResult.filter(
+                    (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
+                  ),
+                  ...searchResult.filter(
+                    (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
+                  ),
+                ];
+              }
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+
+                    this.tdsform.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        },
+      });
+
+    this.subscriptions.push(sub);
+  }
+
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FORMNAMES.forEach((formName) => {
+      this.tdsform.controls[formName].setValue("");
+    });
+  }
+
+  lookupSelect(e: any, controller?: any, modelfield?: any) {
+    console.log(e);
+    if (Array.isArray(controller) && Array.isArray(modelfield)) {
+      // Handle multiple controllers and fields
+      if (controller.length === modelfield.length) {
+        controller.forEach((ctrl, index) => {
+          const field = modelfield[index];
+          const value = e[field];
+          if (value !== undefined) {
+            this.tdsform.controls[ctrl].setValue(value);
+          } else {
+            console.warn(`Model field '${field}' not found in event object.`);
+          }
+        });
+      } else {
+        console.warn(
+          "Controller and modelfield arrays must be of equal length."
+        );
+      }
+    } else if (controller && modelfield) {
+      const value = e[modelfield];
+      if (value !== undefined) {
+        this.tdsform.controls[controller].setValue(value);
+      } else {
+        console.warn(`Model field '${modelfield}' not found in event object.`);
+      }
+    } else {
+      console.warn("Controller or modelfield is missing.");
+    }
   }
 
   
-  BranchDataSelected(e:any){
-
-  }
 
 }
