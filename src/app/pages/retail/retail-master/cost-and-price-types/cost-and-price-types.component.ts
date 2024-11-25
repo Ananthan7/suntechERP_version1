@@ -1,5 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
@@ -33,6 +38,7 @@ export class CostAndPriceTypesComponent implements OnInit {
   itemDetailsData: ItemDetailsRow[] = [];
   typeList: any;
   dialogBox: any;
+  branchCode: any;
 
   partyDropdown: any[] = [
     { FIELD: "Supplier", VALUE: 0 },
@@ -85,27 +91,28 @@ export class CostAndPriceTypesComponent implements OnInit {
   ) {}
 
   costAndPriceTypeMainForm: FormGroup = this.formBuilder.group({
-    code: [""],
-    description: [""],
-    party: [""],
-    division: [""],
+    code: ["", [Validators.required]],
+    description: ["", [Validators.required]],
+    party: ["", [Validators.required]],
+    division: ["", [Validators.required]],
     applyPriceValue: [""],
     forceMaking: [""],
     standardPrice: [this.stdMaxAndMinPriceDropdown[0].VALUE],
     minimumPrice: [this.stdMaxAndMinPriceDropdown[0].VALUE],
     maximumPrice: [this.stdMaxAndMinPriceDropdown[0].VALUE],
-    standardVariance: [""],
-    defaultWastage: [""],
+    standardVariance: ["", [Validators.required]],
+    defaultWastage: ["", [Validators.required]],
   });
 
   ngOnInit(): void {
-
+    this.branchCode = this.commonService.branchCode;
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
 
     this.initialController(this.flag, this.content);
     this.setFlag(this.flag, this.content);
+    this.stockMastersData();
   }
 
   openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
@@ -141,10 +148,10 @@ export class CostAndPriceTypesComponent implements OnInit {
     );
 
     this.costAndPriceTypeMainForm.controls["defaultWastage"].setValue(
-      DATA.DEFAULT_WASTAGE
+      this.commonService.decimalQuantityFormat(DATA.DEFAULT_WASTAGE, "AMOUNT")
     );
     this.costAndPriceTypeMainForm.controls["standardVariance"].setValue(
-      DATA.STD_VARIANCE
+      this.commonService.decimalQuantityFormat(DATA.STD_VARIANCE, "AMOUNT")
     );
     this.costAndPriceTypeMainForm.controls["applyPriceValue"].setValue(
       DATA.ISPRICECODE
@@ -198,7 +205,7 @@ export class CostAndPriceTypesComponent implements OnInit {
               });
 
               response.status === "Success"
-                ? this.close("reloadMainGrid")
+                ? this.close("reloadMainGrid", true)
                 : console.log("Delete Error");
             },
             error: (err) => {
@@ -218,8 +225,8 @@ export class CostAndPriceTypesComponent implements OnInit {
     });
   }
 
-  close(data?: any) {
-    if (this.flag !== "VIEW") {
+  close(data?: any, calling?: boolean) {
+    if (this.flag !== "VIEW" && !calling) {
       Swal.fire({
         title: "Are you sure you want to close this ?",
         icon: "warning",
@@ -238,99 +245,116 @@ export class CostAndPriceTypesComponent implements OnInit {
   }
 
   costAndPriceTypeMainFormSubmit() {
-    let postData = {
-      MID: 0,
-      CODE: this.costAndPriceTypeMainForm.value.code,
-      DESCRIPTION: this.costAndPriceTypeMainForm.value.description,
-      PARTY: this.costAndPriceTypeMainForm.value.party,
-      DEFAULT_WASTAGE: this.costAndPriceTypeMainForm.value.defaultWastage,
-      DIVISION_CODE: this.costAndPriceTypeMainForm.value.division,
-      STD_PRICE: this.costAndPriceTypeMainForm.value.standardPrice,
-      MIN_PRICE: this.costAndPriceTypeMainForm.value.minimumPrice,
-      MAX_PRICE: this.costAndPriceTypeMainForm.value.maximumPrice,
-      STD_VARIANCE: this.costAndPriceTypeMainForm.value.standardVariance,
-      ISPRICECODE: this.applyPriceValue,
-      LASTUPDATED: new Date(),
-      FORCEMAKINGCHGONNET: this.forceMaking,
-      costpricetypeMetalDetail: this.itemDetailsData,
+    Object.keys(this.costAndPriceTypeMainForm.controls).forEach(
+      (controlName) => {
+        const control = this.costAndPriceTypeMainForm.controls[controlName];
+        if (control.validator && control.validator({} as AbstractControl)) {
+          control.markAsTouched();
+        }
+      }
+    );
 
-      // [
-      //   {
-      //     REFMID: 0,
-      //     CODE: "string",
-      //     PARTY: 0,
-      //     DIVISION_CODE: "s",
-      //     STOCK_CODE: "string",
-      //     UNIT_CODE: "string",
-      //     COST: 0,
-      //     PURITY: 0,
-      //     WASTAGE: 0,
-      //     CURRENCY: "stri",
-      //     STD_PRICE: "string",
-      //     MIN_PRICE: "string",
-      //     MAX_PRICE: "string",
-      //     STD_VARIANCE: 0,
-      //     REMARK: "string",
-      //     STOCK_DESCRIPTION: "string",
-      //     DT_BRANCH_CODE: "string",
-      //     DT_VOCTYPE: "str",
-      //     DT_VOCNO: 0,
-      //     DT_YEARMONTH: "string",
-      //   },
-      // ]
-    };
+    const requiredFieldsInvalid = Object.keys(
+      this.costAndPriceTypeMainForm.controls
+    ).some((controlName) => {
+      const control = this.costAndPriceTypeMainForm.controls[controlName];
+      return control.hasError("required") && control.touched;
+    });
 
-    if (this.flag === "EDIT") {
-      let API = `CostPriceTypeMetal/UpdateCostPriceTypePriceMetal/${this.code}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
+    if (!requiredFieldsInvalid) {
+      let postData = {
+        MID: 0,
+        CODE: this.costAndPriceTypeMainForm.value.code,
+        DESCRIPTION: this.costAndPriceTypeMainForm.value.description,
+        PARTY: this.costAndPriceTypeMainForm.value.party,
+        DEFAULT_WASTAGE: this.costAndPriceTypeMainForm.value.defaultWastage,
+        DIVISION_CODE: this.costAndPriceTypeMainForm.value.division,
+        STD_PRICE: this.costAndPriceTypeMainForm.value.standardPrice || "",
+        MIN_PRICE: this.costAndPriceTypeMainForm.value.minimumPrice || "",
+        MAX_PRICE: this.costAndPriceTypeMainForm.value.maximumPrice || "",
+        STD_VARIANCE: this.costAndPriceTypeMainForm.value.standardVariance || 0,
+        ISPRICECODE: this.applyPriceValue,
+        LASTUPDATED: new Date(),
+        FORCEMAKINGCHGONNET: this.forceMaking,
+        costpricetypeMetalDetail: this.itemDetailsData.map((item) => ({
+          REFMID: 0,
+          CODE: this.costAndPriceTypeMainForm.value.code,
+          PARTY: this.costAndPriceTypeMainForm.value.party,
+          DIVISION_CODE: this.costAndPriceTypeMainForm.value.division,
+          STOCK_CODE: item.STOCK_CODE || "",
+          STOCK_DESCRIPTION: item.STOCK_DESCRIPTION || "",
+          UNIT_CODE: item.UNIT_CODE || "",
+          COST: Number(item.COST) || 0,
+          PURITY: Number(item.PURITY) || 0,
+          WASTAGE: Number(item.WASTAGE) || 0,
+          CURRENCY: item.CURRENCY || "",
+          STD_PRICE: item.STD_PRICE || "",
+          MIN_PRICE: item.MIN_PRICE || "",
+          MAX_PRICE: item.MAX_PRICE || "",
+          STD_VARIANCE: Number(item.STD_VARIANCE) || 0,
+          REMARK: "",
+          DT_BRANCH_CODE: this.branchCode,
+          DT_VOCTYPE: this.branchCode,
+          DT_VOCNO: 0,
+          DT_YEARMONTH: this.branchCode,
+        })),
+      };
 
-            this.close("reloadMainGrid");
-          } else {
-            // Handle cases where the result is not successful or undefined
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+      if (this.flag === "EDIT") {
+        let API = `CostPriceTypeMetal/UpdateCostPriceTypePriceMetal/${this.code}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `CostPriceTypeMetal/InsertCostPriceTypePriceMetal`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message
+                  ? result.message
+                  : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
     } else {
-      let API = `CostPriceTypeMetal/InsertCostPriceTypePriceMetal`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+      this.commonService.showSnackBarMsg("Please fill mandatory fields.");
     }
   }
 
@@ -340,11 +364,6 @@ export class CostAndPriceTypesComponent implements OnInit {
       newRow[col.FIELD] = "";
     });
     this.itemDetailsData = [...this.itemDetailsData, newRow];
-  }
-
-  onCellValueChanged(event: any) {
-    console.log("Cell Value Changed:", event);
-    console.log("Updated Data:", this.itemDetailsData);
   }
 
   updateCellData(cellData: any, field: string, event: any) {
@@ -568,5 +587,23 @@ export class CostAndPriceTypesComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  stockMastersData() {
+    let PARAMS = { MODE: this.flag };
+    let API = `CostPriceTypeMetal/GetSelectStockMasters/${this.branchCode}`;
+    let sub: Subscription = this.apiService
+      .getDynamicAPIwithParamsCustom(API, PARAMS)
+      .subscribe(
+        (result) => {
+          if (result.status.trim() === "Success") {
+            console.log(result);
+          }
+        },
+        (err) => {
+          console.error("Error fetching data:", err);
+          this.commonService.toastErrorByMsgId("MSG1531");
+        }
+      );
   }
 }

@@ -24,7 +24,7 @@
           <div class="col-md-3">
             <div class="row mb-1">
               <label for="code" class="col-sm-5 col-form-label" id="ID029"
-                >Code</label
+                >Code <span class="text-danger">*</span> </label
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
@@ -149,7 +149,7 @@
                 for="description"
                 class="col-sm-5 col-form-label"
                 id="ID029"
-                >Description</label
+                >Description <span class="text-danger">*</span> </label
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
@@ -162,9 +162,9 @@
 
                   <mat-error
                     *ngIf="
-                      certificateMasterMainForm.controls['description'].hasError(
-                        'required'
-                      )
+                      certificateMasterMainForm.controls[
+                        'description'
+                      ].hasError('required')
                     "
                   >
                     Description is required.
