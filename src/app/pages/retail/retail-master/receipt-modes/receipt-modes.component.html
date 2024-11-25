@@ -8,10 +8,11 @@
 
 <!-- modal header component -->
 <modal-header
+  *ngIf="flag !== 'VIEW'"
   (saveClick)="receiptModesMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
-  [isViewDelete]="flag == 'VIEW'"
+  [isViewDelete]="flag === 'VIEW'"
 ></modal-header>
 
 <!-- content section -->

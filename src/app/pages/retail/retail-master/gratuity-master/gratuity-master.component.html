@@ -37,7 +37,7 @@
                     >
                       <mat-option
                         *ngFor="let data of typeData"
-                        [value]="data.GRATTYPE"
+                        [value]="data.SRNO"
                       >
                         {{ data.GRATTYPE }}
                       </mat-option>
@@ -312,7 +312,7 @@
                     <mat-select formControlName="basedOn">
                       <mat-option
                         *ngFor="let data of basedOnDropdown"
-                        [value]="data.ENGLISH"
+                        [value]="data.SRNO"
                       >
                         {{ data.ENGLISH }}
                       </mat-option>

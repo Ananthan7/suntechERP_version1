@@ -60,6 +60,7 @@ export class ReceiptModesComponent implements OnInit {
       : (this.content = { FLAG: "ADD" }).FLAG;
 
     this.initialController(this.flag, this.content);
+    this.setFlag(this.flag, this.content);
   }
 
   initialController(FLAG: any, DATA: any) {
@@ -208,7 +209,7 @@ export class ReceiptModesComponent implements OnInit {
         ACCOUNT_HEAD: "",
         BANK: this.receiptModesMainForm.value.bank,
         CURRENCY_CODE: this.receiptModesMainForm.value.currencyCode,
-        COMMISION: this.receiptModesMainForm.value.commision,
+        COMMISION: Number(this.receiptModesMainForm.value.commision),
         COMMISION_CODE: this.receiptModesMainForm.value.commisionAccount,
         MID: 0,
         SYSTEM_DATE: new Date(),
@@ -302,6 +303,22 @@ export class ReceiptModesComponent implements OnInit {
         break;
       case "excludeTax":
         this.excludeTax = checked;
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  setFlag(currentFlag: string, DATA: any): void {
+    this.flag = currentFlag;
+
+    switch (this.flag) {
+      case "VIEW":
+        this.receiptModesMainForm.controls["loyalty"].disable();
+        this.receiptModesMainForm.controls["rcmCredit"].disable();
+        this.receiptModesMainForm.controls["excludeTax"].disable();
+
         break;
 
       default:

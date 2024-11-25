@@ -80,7 +80,7 @@
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="loan_divn_code" UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            <master-search class="masterSearch" [MasterSearchData]="glCodeData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
