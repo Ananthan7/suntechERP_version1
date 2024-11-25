@@ -16,10 +16,6 @@ import { BehaviorSubject, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class CommonServiceService {
-  toastError(arg0: string) {
-    throw new Error('Method not implemented.');
-  }
-
   // private chartDataSource = new BehaviorSubject<any>(null);
 
   // chartData$ = this.chartDataSource.asObservable();

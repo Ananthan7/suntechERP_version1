@@ -1151,7 +1151,6 @@ export class MetalIssueDetailsComponent implements OnInit {
             console.log("User cancelled the action.");
             // Clear the GROSS_WT field
             this.metalIssueDetailsForm.controls.GROSS_WT.setValue('');
-            this.comService.toastError("Gross Weight has been reset.");
           }
         })
         .catch((error) => console.error("Error in confirmation dialog:", error));
