@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
@@ -15,6 +16,7 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 export class YearlyBudgetPlannerDetailsComponent implements OnInit {
   branchCode?: any = localStorage.getItem("userbranch");
   maindetails: any = [];
+  maindetails_clone: any = [];
   data:any=[];
 
 
@@ -97,14 +99,14 @@ export class YearlyBudgetPlannerDetailsComponent implements OnInit {
           
           this.maindetails = Array.from(uniqueItems)
             .map((identifier: any) => {
-              return res.dynamicData[0].find((item: any) => item.CODE === identifier); // Replace 'CODE' with 'MID' if needed
+              return res.dynamicData[0].find((item: any) => item.CODE === identifier); 
             })
             .map((item: any) => ({
               ...item,
             }));
           
           this.maindetails.push(...res.dynamicData[1]);
-          
+          this.maindetails_clone = this.maindetails;
           console.log(this.maindetails);
 
         }
@@ -151,6 +153,23 @@ export class YearlyBudgetPlannerDetailsComponent implements OnInit {
 
     console.log(this.data);
 }
+
+filterbysearch() {
+  this.maindetails = this.maindetails_clone
+  let search_value = this.yearlybudgetdetailsform.controls.search.value;
+  if (search_value && search_value.trim() !== "") {
+    const lowerSearchValue = search_value.trim().toLowerCase();
+    this.maindetails = this.maindetails.filter((e: any) => {
+      const hasCode = e.CODE && e.CODE.toLowerCase().includes(lowerSearchValue);
+      const hasAccountHead = e.ACCOUNT_HEAD && e.ACCOUNT_HEAD.toLowerCase().includes(lowerSearchValue);
+      return hasCode || hasAccountHead;
+    });
+  } else {
+    this.maindetails = this.maindetails_clone
+  }
+}
+
+
 
   
   

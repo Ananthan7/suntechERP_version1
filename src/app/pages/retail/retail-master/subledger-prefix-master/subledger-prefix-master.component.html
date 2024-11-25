@@ -24,13 +24,19 @@
                                     <div class="col-md-4 p-0 ms-2">
                                         <mat-form-field style="width: 100%;" appearance="outline">
                                             <input type="text" id="prefixcode" matInput id="prefixcodeInput"  formControlName="prefixcode" [readonly]="viewOnly || disable_code" (change)="isexistingcode()"
-                                                class="p-0" maxlength="2" UpperCaseDirective (focusout)="checkcode()"/>
+                                                class="p-0" maxlength="6" UpperCaseDirective (focusout)="checkcode()"/>
+                                                <mat-error *ngIf="prefixmasterform.controls['prefixcode'].hasError('required')">
+                                                    PreCode is required.
+                                                </mat-error>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4 p-0">
                                         <mat-form-field style="width: 100%;" appearance="outline">
                                             <input type="text" id="prefixcodedesc" matInput  id="prefixdescInput" (focusout)="checkdesc()"
                                                 formControlName="prefixcodedesc" class="p-0" [readonly]="viewOnly" maxlength="6"/>
+                                                <mat-error *ngIf="prefixmasterform.controls['prefixcodedesc'].hasError('required')">
+                                                    Description is required.
+                                                </mat-error>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -42,8 +48,10 @@
                             <label for="last_no" class="col-sm-1 col-form-label me-4">Last No:</label>
                             <div class="col-md-4 ms-4">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" id="last_no" matInput formControlName="last_no" style="text-align: right;" [readonly]="viewOnly"
-                                        />
+                                    <input type="text" id="last_no" matInput formControlName="last_no" style="text-align: right;" [readonly]="viewOnly"/>
+                                    <mat-error *ngIf="prefixmasterform.controls['last_no'].hasError('required')">
+                                        Last No is required.
+                                    </mat-error>
                                 </mat-form-field>
                             </div>
                         </div>

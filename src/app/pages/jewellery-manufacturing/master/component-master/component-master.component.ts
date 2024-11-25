@@ -274,7 +274,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'TYPES',
-    SEARCH_HEADING: 'SETTING TYPE MASTER',
+    SEARCH_HEADING: 'GENERAL MASTER',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES='SETTING TYPE MASTER'",
     VIEW_INPUT: true,
@@ -427,13 +427,8 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   divisionCodeSelected(value: any, data: any, controlName: string) {
-    console.log(value);
-    console.log(data);
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
-    console.log(this.tableData);
-    this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
-    console.log(value.DIVISION)
-    console.log(value.DIVISION_CODE)
+    // this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
     if (value.DIVISION === 'M') {
       this.isPCSDisabled = true;
     } else {
@@ -444,9 +439,11 @@ export class ComponentMasterComponent implements OnInit {
     } else {
       this.iskaratDisabled = false;
     }
-
   }
-
+  viewKaratCodeSearch(item: any) {
+    if (item.data.DIVCODE == 'L') return false;
+    return true
+  }
   Attachedfile: any[] = [];
   savedAttachments: any[] = [];
 
@@ -460,15 +457,14 @@ export class ComponentMasterComponent implements OnInit {
     console.log(this.Attachedfile);
 
   }
-
-  stockCodeDataSelected(value: any, data: any, controlName: string,) {
-
-    console.log(this.tableData);
-    this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
-    this.tableData[data.data.SRNO - 1].DESCRIPTION = value.DESCRIPTION;
-    console.log(this.tableData);
-    this.stockCodeValidate(this.tableData[data.data.SRNO - 1]);
-    //  this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
+  stockClicked(param:any){
+    this.stockCodeData.WHERECONDITION = `DIVISION = '${param.data.DIVCODE}' and SUBCODE = 0`;
+  }
+  stockCodeDataSelected(value: any, object: any, controlName: string,) {
+    this.tableData[object.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
+    this.tableData[object.data.SRNO - 1].DESCRIPTION = value.DESCRIPTION;
+    // this.stockCodeData.WHERECONDITION = `DIVISION = '${object.data.DIVCODE}' and SUBCODE = 0`;
+    this.stockCodeValidate(this.tableData[object.data.SRNO - 1]);
   }
 
   codeEnabled() {
@@ -481,7 +477,7 @@ export class ComponentMasterComponent implements OnInit {
   }
 
 
- 
+
 
   checkCode(): boolean {
     if (this.componentmasterForm.value.code == '') {
@@ -550,13 +546,12 @@ export class ComponentMasterComponent implements OnInit {
   sieveToCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
     this.tableData[data.data.SRNO - 1].SIEVE_TO = value.CODE;
-    console.log(this.tableData);
   }
 
   sieveFromCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
     this.tableData[data.data.SRNO - 1].SIEVE_FROM = value.CODE;
-    this.sieveToCodeData.WHERECONDITION = `types = 'SIEVE MASTER' AND CODE > '${value.SIEVE_FROM}'`;
+    this.sieveToCodeData.WHERECONDITION = `types = 'SIEVE MASTER' AND CODE > '${data.data.SIEVE_FROM}'`;
   }
 
   extClarityCodeSelected(value: any, data: any, controlName: string) {
@@ -655,10 +650,7 @@ export class ComponentMasterComponent implements OnInit {
 
   sizeSetCodeSelected(e: any) {
     if (this.checkCode()) return;
-    console.log(e);
-    // Set the sizeSet form control value
     this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
-    console.log(this.componentmasterForm.value.sizeSet);
     // Set the WHERECONDITION with the correct syntax and value
     this.sizeCodeData.WHERECONDITION = `COMPSIZE_CODE IN (SELECT COMPSIZE_CODE FROM COMPONENTSIZESET_DETAIL WHERE COMPSET_CODE = '${this.componentmasterForm.value.sizeSet}')`;
   }
@@ -769,12 +761,12 @@ export class ComponentMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -878,7 +870,7 @@ export class ComponentMasterComponent implements OnInit {
     // this.selectedIndexes = indexes;
     // console.log(this.selectedIndexes);
 
-    
+
     const values = event.selectedRowKeys;
     console.log(values);
     let indexes: Number[] = [];
@@ -945,7 +937,7 @@ export class ComponentMasterComponent implements OnInit {
 
   deleteTableData() {
     console.log("After Selecting " + this.selectedIndexes);
-  
+
     if (this.selectedIndexes !== undefined && this.selectedIndexes.length > 0) {
       // Display confirmation dialog before deleting
       Swal.fire({
@@ -961,31 +953,31 @@ export class ComponentMasterComponent implements OnInit {
           if (this.tableData.length > 0) {
             // Log the selected indexes before filtering
             // console.log('Selected indexes to delete:', this.selectedIndexes);
-  
+
             if (this.selectedIndexes && this.selectedIndexes.length > 0) {
               // console.log('Before deletion, tableData length:', this.tableData.length);
-  
+
               // Filter out items whose index is included in the selectedIndexes
               this.tableData = this.tableData.filter((data, index) => {
                 const shouldDelete = !this.selectedIndexes.includes(index);
                 // console.log(`Index ${index} - Should Delete: ${!shouldDelete}`);
                 return shouldDelete;
               });
-  
+
               // console.log('After deletion, tableData length:', this.tableData.length);
               // console.log('Table data:', this.tableData);
               // Reset selectedIndexes after deletion
               this.selectedIndexes = [];
               // console.log('Selected indexes after reset:', this.selectedIndexes);
-  
+
               // Show success message after deletion
               this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
-  
+
               // Update serial numbers after deletion
               this.tableData.forEach((item: any, i: number) => {
                 item.SRNO = i + 1; // Reset serial numbers starting from 1
               });
-  
+
             } else {
               // console.warn('No indexes selected for deletion.');
             }

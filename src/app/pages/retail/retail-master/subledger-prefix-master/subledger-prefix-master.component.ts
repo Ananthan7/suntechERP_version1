@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -43,10 +43,9 @@ export class SubledgerPrefixMasterComponent implements OnInit {
   ) { }
 
   prefixmasterform: FormGroup = this.formBuilder.group({
-    prefixcode: [""],
-    prefixcodedesc: [""],
-    last_no: ["0000"],
-
+    prefixcode: ["",[Validators.required]],
+    prefixcodedesc: ["",[Validators.required]],
+    last_no: ["0000",[Validators.required]],
   });
 
   codeData: MasterSearchModel = {
@@ -85,9 +84,7 @@ export class SubledgerPrefixMasterComponent implements OnInit {
   }
 
   checkcode() {
-
     const prefixCodeControl = this.prefixmasterform.controls.prefixcode;
-  
     if (!prefixCodeControl.value || prefixCodeControl.value.trim() === "") {
       this.commonService.toastErrorByMsgId('MSG1124');
       this.renderer.selectRootElement('#prefixcodeInput')?.focus();
@@ -95,9 +92,7 @@ export class SubledgerPrefixMasterComponent implements OnInit {
   }
 
   checkdesc() {
- 
     const prefixCodeControl = this.prefixmasterform.controls.prefixcodedesc;
-  
     if (!prefixCodeControl.value || prefixCodeControl.value.trim() === "") {
       this.commonService.toastErrorByMsgId('MSG1193');
       this.renderer.selectRootElement('#prefixdescInput')?.focus();

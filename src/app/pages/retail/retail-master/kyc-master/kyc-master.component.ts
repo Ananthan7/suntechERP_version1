@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { log } from 'console';
 import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import Swal from 'sweetalert2';
 
@@ -29,6 +30,8 @@ export class KycMasterComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private apiService: SuntechAPIService,
+    private commonService: CommonServiceService,
+    private renderer: Renderer2
 
   ) { }
 
@@ -48,6 +51,7 @@ export class KycMasterComponent implements OnInit {
       this.editMode = true;
     }
     if(this.flag == 'VIEW'){
+      this.viewOnly =true;
       this.viewMode = true;
     }
     this.kyc_id = this.content?.KYC_CODE;
@@ -61,9 +65,26 @@ export class KycMasterComponent implements OnInit {
     }
   }
 
+  
+  checkcode() {
+    const kyc_code = this.kycform.controls.kyccode;
+    if (!kyc_code.value || kyc_code.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1124');
+      this.renderer.selectRootElement('#kyccode')?.focus();
+    }
+  }
+
+  checkdesc() {
+    const kyc_desc = this.kycform.controls.kyccodedesc;
+    if (!kyc_desc.value || kyc_desc.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1193');
+      this.renderer.selectRootElement('#kyccodedesc')?.focus();
+    }
+  }
+
 
   detailsapi(fm_id: any) {
-    this.viewOnly = true;
+    // this.viewOnly = true;
 
     let API = `KYCMaster/GetKYCMasterDetail/${this.kyc_id}`;
     let Sub: Subscription = this.apiService.getDynamicAPI(API)

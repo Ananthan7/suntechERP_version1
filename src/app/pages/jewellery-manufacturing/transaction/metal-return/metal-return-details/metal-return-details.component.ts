@@ -397,21 +397,23 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
   ProcessCodeSelected(e: any) {
-    console.log(e,'process')
+    console.log(e, 'process')
     this.metalReturnDetailsForm.controls.processCode.setValue(e.PROCESS);
     this.metalReturnDetailsForm.controls.processCodeDesc.setValue(e.PROCESSDESC);
     this.metalReturnDetailsForm.controls.workerCode.setValue(e.WORKER);
     this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(e.WORKERDESC);
+    this.processCodeValidate()
     // this.setLookup201WhereCondition()
-    this.setLookupStockCodeWhereCondition()
+    // this.setLookupStockCodeWhereCondition()
     // this.ProcessCodeData.WHERECONDITION = `@strBranch_Code='${this.comService.userName}'',@strJob_Number='${this.jobNumberData}'`
   }
 
   stockCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(e.STOCKDESC);
-    this.setLookup201WhereCondition()
+    // this.setLookup201WhereCondition()
     this.setLookupStockCodeWhereCondition();
+    this.stockCodeValidate()
   }
   ReturnTostockCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(e.STOCK_CODE);
@@ -756,22 +758,42 @@ export class MetalReturnDetailsComponent implements OnInit {
   }
 
   processCodeValidate(event?: any) {
-    this.showOverleyPanel(event, 'processCode'); 
+    this.showOverleyPanel(event, 'processCode');
     const form = this.metalReturnDetailsForm.value;
+
+    // Check if the `processCode` field is empty
+    if (!form.processCode || form.processCode.trim() === '') {
+      this.metalReturnDetailsForm.controls.processCodeDesc.setValue('');
+      this.metalReturnDetailsForm.controls.stockCode.setValue('');
+      this.metalReturnDetailsForm.controls.stockCodeDesc.setValue('');
+      this.metalReturnDetailsForm.controls.workerCode.setValue('');
+      this.metalReturnDetailsForm.controls.workerCodeDesc.setValue('');
+      this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue('');
+      this.metalReturnDetailsForm.controls.PURE_WT.setValue('');
+      this.metalReturnDetailsForm.controls.PURITY.setValue('');
+      this.metalReturnDetailsForm.controls.GROSS_WT.setValue('');
+      this.metalReturnDetailsForm.controls.NET_WT.setValue('');
+      this.metalReturnDetailsForm.controls.pcs.setValue('');
+      return;
+    }
+
+    // Show overlay panel
+    this.showOverleyPanel(event, 'processCode');
+
     // Set up any necessary conditions
     this.setLookup201WhereCondition();
 
     const postData = {
       SPID: "103",
       parameter: {
-        strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
-        strJob_Number: this.comService.nullToString(form.jobNumber),
-        strUnq_Job_Id: this.comService.nullToString(form.subJobNo),
-        strMetalStone: 'M',
-        strProcess_Code: this.comService.nullToString(form.processCode),
-        strWorker_Code: this.comService.nullToString(form.workerCode),
-        strStock_Code: this.comService.nullToString(form.stockCode),
-        strUserName: this.comService.nullToString(form.userName),
+        'strBranch_Code': this.comService.nullToString(form.BRANCH_CODE),
+        'strJob_Number': this.comService.nullToString(form.jobNumber),
+        'strUnq_Job_Id': this.comService.nullToString(form.subJobNo),
+        'strMetalStone': 'M',
+        'strProcess_Code': this.comService.nullToString(form.processCode),
+        'strWorker_Code': this.comService.nullToString(form.workerCode),
+        'strStock_Code': this.comService.nullToString(form.stockCode),
+        'strUserName': this.comService.nullToString(form.userName),
       }
     };
 
@@ -781,17 +803,36 @@ export class MetalReturnDetailsComponent implements OnInit {
       .subscribe((result) => {
         this.comService.closeSnackBarMsg();
 
-        if (result.dynamicData && result.dynamicData[0].length > 0) {
-          // Set description based on valid data
-          const data = result.dynamicData[0][0];
-          console.log(data,'data') // Assuming the first item contains the relevant data
-          this.metalReturnDetailsForm.controls.processCodeDesc.setValue(data.PROCESSDESC.toUpperCase());
-        } else {
-          this.overlayprocessCodeSearch.closeOverlayPanel();
-          this.metalReturnDetailsForm.controls.processCode.setValue('');
-          this.metalReturnDetailsForm.controls.processCodeDesc.setValue('');
-          this.comService.toastErrorByMsgId('MSG1531'); // Show error message
-          this.showOverleyPanel(event, 'processCode'); // Show overlay for correction
+        if (result.status === "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0];
+          console.log(data);
+          if (data && result.dynamicData[0][0]) {
+            // Set values based on valid data
+            const data = result.dynamicData[0][0];
+            console.log(data, 'data');
+            this.metalReturnDetailsForm.controls.processCodeDesc.setValue(data.PROCESSDESC.toUpperCase());
+            this.metalReturnDetailsForm.controls.stockCode.setValue(data.STOCK_CODE);
+            this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(data.STOCKDESC.toUpperCase());
+            this.metalReturnDetailsForm.controls.workerCode.setValue(data.WORKER.toUpperCase());
+            this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(data.WORKERDESC.toUpperCase());
+            this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(data.SUB_STOCK_CODE);
+            this.metalReturnDetailsForm.controls.PURE_WT.setValue(data.PUREWT);
+            this.metalReturnDetailsForm.controls.PURITY.setValue(data.PURITY);
+            this.metalReturnDetailsForm.controls.GROSS_WT.setValue(data.METAL);
+            this.metalReturnDetailsForm.controls.NET_WT.setValue(data.NETWT);
+            this.metalReturnDetailsForm.controls.pcs.setValue(data.PCS);
+            this.setValueWithDecimal('PURE_WT', data.PUREWT, 'THREE')
+            this.setValueWithDecimal('PURITY', data.PURITY, 'PURITY')
+            this.setValueWithDecimal('GROSS_WT', data.METAL, 'METAL')
+            this.setValueWithDecimal('NET_WT', data.NETWT, 'THREE')
+          }
+          else {
+            this.overlayprocessCodeSearch.closeOverlayPanel();
+            this.metalReturnDetailsForm.controls.processCode.setValue('');
+            this.metalReturnDetailsForm.controls.processCodeDesc.setValue('');
+            this.comService.toastErrorByMsgId('MSG1531'); // Show error message
+            this.showOverleyPanel(event, 'processCode'); // Show overlay for correction
+          }
         }
       }, err => {
         this.comService.closeSnackBarMsg();
@@ -800,9 +841,11 @@ export class MetalReturnDetailsComponent implements OnInit {
 
     this.subscriptions.push(Sub);
   }
+
+
   toreturnstockcodevalidate(event?: any) {
     this.showOverleyPanel(event, 'ReturnToStockCode'); // Show overlay panel initially
-    
+
     const postData = {
       SPID: "180",
       parameter: {
@@ -811,14 +854,14 @@ export class MetalReturnDetailsComponent implements OnInit {
         Division: this.metalReturnDetailsForm.value.DIVCODE,
       }
     };
-  
+
     const Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg();
-  
+
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           console.log("Validation successful:", result.dynamicData[0]);
-         
+
           this.overlayReturnToStockCodeSearch.closeOverlayPanel();
         } else {
           this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue('');
@@ -829,9 +872,9 @@ export class MetalReturnDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg();
         this.comService.toastErrorByMsgId('Error validating Stock Code'); // Show error if request fails
       });
-  
+
     this.subscriptions.push(Sub);
-  }  
+  }
 
 
   subJobNumberValidate(event?: any) {
@@ -877,9 +920,9 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
           this.setLookup201WhereCondition()
-          this.setLookupStockCodeWhereCondition();
+          // this.setLookupStockCodeWhereCondition();
           // this.processCodeValidate()
-         
+
         } else {
           // Handle case where no data is found
           this.comService.toastErrorByMsgId('MSG1531');
@@ -938,9 +981,8 @@ export class MetalReturnDetailsComponent implements OnInit {
             this.metalReturnDetailsForm.controls.designCode.setValue(data[0].DESIGN_CODE)
             this.setSubJobCondition()
             this.setLookup201WhereCondition()
-            this.setLookupStockCodeWhereCondition()
             this.subJobNumberValidate()
-       
+
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
             this.metalReturnDetailsForm.controls.jobNumber.setValue('')
@@ -959,14 +1001,17 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  stockCodeValidate(event: any) {
-    this.showOverleyPanel(event, 'stockCode')
-    if (event.target.value == '') return
+  stockCodeValidate(event?: any) {
+    if (this.viewMode) return;
+    if (event && event.target.value == '') {
+      this.showOverleyPanel(event, 'stockCode');
+      return
+    };
     this.setLookupStockCodeWhereCondition()
     let postData = {
       "SPID": "046",
       "parameter": {
-        strStockCode: event.target.value,
+        strStockCode: this.comService.nullToString(this.metalReturnDetailsForm.value.stockCode),
         strBranchCode: this.comService.nullToString(this.branchCode),
         strVocType: this.content.HEADERDETAILS.VOCTYPE,
         strUserName: this.comService.nullToString(this.userName),
