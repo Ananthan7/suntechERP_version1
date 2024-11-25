@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -18,6 +18,7 @@ export class YearlyBudgetPlannerDetailsComponent implements OnInit {
   maindetails: any = [];
   maindetails_clone: any = [];
   data:any=[];
+  @Input () tablecount :any;
 
 
 
@@ -129,7 +130,9 @@ export class YearlyBudgetPlannerDetailsComponent implements OnInit {
     console.log(e);
     this.data =[];
     const selectedRows = e.selectedRowsData;
+    // let count = this.tablecount;
     let count = 0;
+
     const existingACCodes = new Set();
 
     selectedRows.forEach((row: any) => {
