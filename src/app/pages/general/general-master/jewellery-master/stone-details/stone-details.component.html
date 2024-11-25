@@ -23,8 +23,8 @@
                           </div>
                           <div class="col-md-5">
                             <mat-form-field  style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput  formControlName="StockcodeDes" />
-                              <master-search  class="masterSearch" [MasterSearchData]="StockcodeData" (newRowClick)="StockcodeSelected($event)">
+                              <input type="text" matInput  formControlName="StockcodeDes" maxlength="6" (focusout)="validateLookupField($event,StockcodeData,'StockcodeDes')"  (keydown)="lookupKeyPress($event,'StockcodeDes')"/>
+                              <master-search  class="masterSearch" [MasterSearchData]="StockcodeData" (newRowClick)="StockcodeSelected($event)"   *ngIf=" viewMode == false"  #StockcodeDescodeSearch>
                               </master-search>
                             </mat-form-field>     
                           </div>
@@ -38,8 +38,8 @@
                           <label for="inputPassword" class="col-sm-5 col-form-label">Shape :</label>
                           <div class="col-md-7">
                             <mat-form-field   style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput formControlName="Shapecode" />
-                              <master-search class="masterSearch" [MasterSearchData]="ShapecodeData" (newRowClick)="ShapecodeSelected($event)">
+                              <input type="text" matInput formControlName="Shapecode"  (focusout)="validateLookupField($event,ShapecodeData,'Shapecode')"  (keydown)="lookupKeyPress($event,'Shapecode')"/>
+                              <master-search class="masterSearch" [MasterSearchData]="ShapecodeData" (newRowClick)="ShapecodeSelected($event)"  *ngIf=" viewMode == false"  #ShapecodecodeSearch>
                               </master-search>
                             </mat-form-field>
                           </div>
@@ -53,8 +53,8 @@
                           <label for="inputPassword" class="col-sm-5 col-form-label">Sieve Set :</label>
                           <div class="col-md-7">
                             <mat-form-field   style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput formControlName="sieveSet" />
-                              <master-search class="masterSearch" [MasterSearchData]="sieveSetcodeData" (newRowClick)="sieveSetcodeSelected($event)">
+                              <input type="text" matInput formControlName="sieveSet" (focusout)="validateLookupField($event,sieveSetcodeData,'sieveSet')"  (keydown)="lookupKeyPress($event,'sieveSet')"/>
+                              <master-search class="masterSearch" [MasterSearchData]="sieveSetcodeData" (newRowClick)="sieveSetcodeSelected($event)" *ngIf=" viewMode == false"  #sieveSetcodeSearch>
                               </master-search>
                             </mat-form-field>                      
                           </div>
@@ -68,8 +68,8 @@
                           <label for="inputPassword" class="col-sm-5 col-form-label">Sieve :</label>
                           <div class="col-md-7">
                             <mat-form-field   style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput formControlName="sieve" />
-                              <master-search class="masterSearch" [MasterSearchData]="sievecodeData" (newRowClick)="sievecodeSelected($event)">
+                              <input type="text" matInput formControlName="sieve" (focusout)="validateLookupField($event,sievecodeData,'sieve')"  (keydown)="lookupKeyPress($event,'sieve')"/>
+                              <master-search class="masterSearch" [MasterSearchData]="sievecodeData" (newRowClick)="sievecodeSelected($event)"  *ngIf=" viewMode == false"  #sievecodeSearch>
                               </master-search>
                             </mat-form-field> 
                           </div>
@@ -83,8 +83,8 @@
                           <label for="inputPassword" class="col-sm-5 col-form-label">Price Code :</label>
                           <div class="col-md-7">
                             <mat-form-field   style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput formControlName="priceCode" />
-                              <master-search class="masterSearch" [MasterSearchData]="priceCodeData" (newRowClick)="priceCodeSelected($event)">
+                              <input type="text" matInput formControlName="priceCode" (focusout)="validateLookupField($event,priceCodeData,'priceCode')"  (keydown)="lookupKeyPress($event,'priceCode')"/>
+                              <master-search class="masterSearch" [MasterSearchData]="priceCodeData" (newRowClick)="priceCodeSelected($event)" *ngIf=" viewMode == false"  #priceCodeSearch>
                               </master-search>
                             </mat-form-field>
                           </div>
@@ -98,8 +98,8 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Stone Type :</label>
                             <div class="col-md-7">
                               <mat-form-field   style="width: 100%;"  appearance="outline">
-                                <input type="text" matInput formControlName="stoneTypeCode" />
-                                <master-search class="masterSearch" [MasterSearchData]="stoneTypeCodeData" (newRowClick)="stoneTypeCodeSelected($event)">
+                                <input type="text" matInput formControlName="stoneTypeCode"  (focusout)="validateLookupField($event,stoneTypeCodeData,'stoneTypeCode')"  (keydown)="lookupKeyPress($event,'stoneTypeCode')"/>
+                                <master-search class="masterSearch" [MasterSearchData]="stoneTypeCodeData" (newRowClick)="stoneTypeCodeSelected($event)"  *ngIf=" viewMode == false"  #stoneTypeCodeSearch>
                                 </master-search>
                               </mat-form-field>
                             </div>
@@ -116,8 +116,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Stock Ref :</label>
                         <div class="col-md-9">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput  formControlName="stockRefCode"/>
-                            <master-search class="masterSearch" [MasterSearchData]="stockRefCodeData" (newRowClick)="stockRefCodeSelected($event)">
+                            <input type="text" matInput  formControlName="stockRefCode" (focusout)="validateLookupField($event,stockRefCodeData,'stockRefCode')"  (keydown)="lookupKeyPress($event,'stockRefCode')"/>
+                            <master-search class="masterSearch" [MasterSearchData]="stockRefCodeData" (newRowClick)="stockRefCodeSelected($event)"  *ngIf=" viewMode == false"  #stockRefCodeSearch>
                             </master-search>
                           </mat-form-field>                
                         </div>
@@ -128,8 +128,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Color :</label>
                         <div class="col-md-3">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput formControlName="ColorCode" />
-                            <master-search class="masterSearch" [MasterSearchData]="ColorCodeData" (newRowClick)="ColorCodeSelected($event)">
+                            <input type="text" matInput formControlName="ColorCode"  (focusout)="validateLookupField($event,ColorCodeData,'ColorCode')"  (keydown)="lookupKeyPress($event,'ColorCode')"/>
+                            <master-search class="masterSearch" [MasterSearchData]="ColorCodeData" (newRowClick)="ColorCodeSelected($event)" *ngIf=" viewMode == false"  #ColorCodeSearch>
                             </master-search>
                           </mat-form-field>
                         </div>
@@ -146,8 +146,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Clarity :</label>
                         <div class="col-md-3">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput  formControlName="ClarityCode" />
-                            <master-search class="masterSearch" [MasterSearchData]="ClarityCodeData" (newRowClick)="ClarityCodeSelected($event)">
+                            <input type="text" matInput  formControlName="ClarityCode" (focusout)="validateLookupField($event,ClarityCodeData,'ClarityCode')"  (keydown)="lookupKeyPress($event,'ClarityCode')"/>
+                            <master-search class="masterSearch" [MasterSearchData]="ClarityCodeData" (newRowClick)="ClarityCodeSelected($event)" *ngIf=" viewMode == false"  #ClarityCodeSearch>
                             </master-search>
                           </mat-form-field>
                         </div>
@@ -164,8 +164,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Size :</label>
                         <div class="col-md-3">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput formControlName="SizeCode"  />
-                            <master-search class="masterSearch" [MasterSearchData]="SizeCodeData" (newRowClick)="SizeCodeSelected($event)">
+                            <input type="text" matInput formControlName="SizeCode"  (focusout)="validateLookupField($event,SizeCodeData,'SizeCode')"  (keydown)="lookupKeyPress($event,'SizeCode')"/>
+                            <master-search class="masterSearch" [MasterSearchData]="SizeCodeData" (newRowClick)="SizeCodeSelected($event)" *ngIf=" viewMode == false"  #SizeCodeSearch>
                             </master-search>
                           </mat-form-field>
                         </div>
@@ -183,8 +183,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Labour Code :</label>
                         <div class="col-md-3">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput formControlName="labourCode"  />
-                            <master-search class="masterSearch" [MasterSearchData]="labourCodeData" (newRowClick)="labourCodeSelected($event)">
+                            <input type="text" matInput formControlName="labourCode"   (focusout)="validateLookupField($event,labourCodeData,'labourCode')"  (keydown)="lookupKeyPress($event,'labourCode')"/>
+                            <master-search class="masterSearch" [MasterSearchData]="labourCodeData" (newRowClick)="labourCodeSelected($event)" *ngIf=" viewMode == false"  #labourCodeSearch>
                             </master-search>
                           </mat-form-field>
                         </div>
@@ -207,7 +207,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Currency :</label>
                         <div class="col-md-1">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput  formControlName="currency" />
+                            <input type="text" matInput  formControlName="currency" maxlength="4"/>
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
