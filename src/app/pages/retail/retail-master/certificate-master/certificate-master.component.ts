@@ -450,7 +450,7 @@ export class CertificateMasterComponent implements OnInit {
                   : "Inserted successfully!",
                 icon: "success",
                 confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
+                confirmButtonText: "Ok",  
               });
 
               this.close("reloadMainGrid", true);
