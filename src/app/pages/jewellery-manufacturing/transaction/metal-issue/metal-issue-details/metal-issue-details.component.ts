@@ -624,8 +624,9 @@ export class MetalIssueDetailsComponent implements OnInit {
   grossValidate() {
     if (this.calculateNetWt()) {
       this.setValueWithDecimal('GROSS_WT', this.tableData[0].METAL, 'METAL')
-      this.setValueWithDecimal('STONE_WT', this.tableData[0].STONE, 'STONE')
+      this.setValueWithDecimal('STONE_WT', this.tableData[0].STONE, 'STONE') 
     }
+    this.validateStockAndGrossWt()
   }
 
 
@@ -1135,7 +1136,41 @@ export class MetalIssueDetailsComponent implements OnInit {
       default:
     }
   }
-
+  validateStockAndGrossWt() {
+    const stockBalance = parseFloat(this.metalIssueDetailsForm.value.stockCode || '0'); // Ensure numeric values
+    const grossWt = parseFloat(this.metalIssueDetailsForm.value.GROSS_WT || '0');
+  
+    // Compare Gross Weight with Stock Balance
+    if (grossWt > stockBalance) {
+      this.showConfirmationDialog("Gross Weight exceeds Stock Balance. Do you want to proceed?")
+        .then((result) => {
+          if (result.isConfirmed) {
+            console.log("User confirmed to proceed with the entered Gross Weight.");
+            // Optional: Handle logic if "Yes" is clicked
+          } else {
+            console.log("User cancelled the action.");
+            // Clear the GROSS_WT field
+            this.metalIssueDetailsForm.controls.GROSS_WT.setValue('');
+            this.comService.toastError("Gross Weight has been reset.");
+          }
+        })
+        .catch((error) => console.error("Error in confirmation dialog:", error));
+    }
+  }
+  
+  
+  showConfirmationDialog(message: string): Promise<any> {
+    return Swal.fire({
+      title: 'Confirmation',
+      text: message,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, continue',
+      cancelButtonText: 'No, cancel'
+    });
+  }
 }
 
 

@@ -489,12 +489,13 @@ export class StoneReturnDetailsComponent implements OnInit {
   }
 
   subJobNumberValidate(event?: any) {
+    if (event?.target.value == '' || this.viewMode) return;
     let postData = {
       "SPID": "040",
       "parameter": {
         'strUNQ_JOB_ID': this.stonereturndetailsFrom.value.subjobno,
         'strBranchCode': this.comService.nullToString(this.branchCode),
-        'strCurrenctUser': ''
+        'strCurrenctUser':  this.comService.nullToString(this.userName)
       }
     }
 
@@ -505,10 +506,10 @@ export class StoneReturnDetailsComponent implements OnInit {
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           console.log(data,'data')
-          this.stonereturndetailsFrom.controls.process.setValue(data.PROCESS)
-          this.stonereturndetailsFrom.controls.processname.setValue(data.PROCESSDESC)
-          this.stonereturndetailsFrom.controls.worker.setValue(data.WORKER)
-          this.stonereturndetailsFrom.controls.workername.setValue(data.WORKERDESC)
+          this.stonereturndetailsFrom.controls.process.setValue(data[0].PROCESS)
+          this.stonereturndetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
+          this.stonereturndetailsFrom.controls.worker.setValue(data[0].WORKER)
+          this.stonereturndetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
           // this.stonereturndetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
           // this.stonereturndetailsFrom.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
           // this.stonereturndetailsFrom.controls.designcode.setValue(data.DESIGN_CODE)
