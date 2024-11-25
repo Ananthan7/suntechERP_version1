@@ -84,9 +84,7 @@ export class BoxMasterComponent implements OnInit {
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
-      
-      console.log(this.flag);
-      
+            
     this.initialController(this.flag, this.content);
   }
 

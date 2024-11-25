@@ -335,22 +335,22 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label"><a href="#">Print Scheme</a></label>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="printscheme" />
+                      <input type="number" matInput formControlName="printscheme" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="printscheme2"/>
+                      <input type="number" matInput formControlName="printscheme2" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="printscheme3"/>
+                      <input type="number" matInput formControlName="printscheme3" class="text-right"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="printscheme4"/>
+                      <input type="number" matInput formControlName="printscheme4" class="text-right"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -872,7 +872,7 @@
           <mat-tab label="Stone Details">
             <div class="row mt-3">
               <div class="col-md-12">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true"  [dataSource]="StoneDetailsComponentData" >
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>

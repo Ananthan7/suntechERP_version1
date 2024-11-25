@@ -36,6 +36,15 @@
                     type="text"
                     formControlName="code"
                   />
+                  <mat-error
+                    *ngIf="
+                      costAndPriceTypeMainForm.controls['code'].hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    Code is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -56,6 +65,15 @@
                     type="text"
                     formControlName="description"
                   />
+                  <mat-error
+                    *ngIf="
+                      costAndPriceTypeMainForm.controls['description'].hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    Desc is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -74,6 +92,16 @@
                       {{ data.FIELD }}
                     </mat-option>
                   </mat-select>
+
+                  <mat-error
+                    *ngIf="
+                      costAndPriceTypeMainForm.controls['party'].hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    Party is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -113,6 +141,15 @@
                     "
                   >
                   </master-search>
+                  <mat-error
+                    *ngIf="
+                      costAndPriceTypeMainForm.controls['division'].hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    Division is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -219,6 +256,16 @@
                     formControlName="standardVariance"
                     (keydown)="preventInvalidInput($event)"
                   />
+
+                  <mat-error
+                    *ngIf="
+                      costAndPriceTypeMainForm.controls[
+                        'standardVariance'
+                      ].hasError('required')
+                    "
+                  >
+                    Standard Variance is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -241,12 +288,22 @@
                     formControlName="defaultWastage"
                     (keydown)="preventInvalidInput($event)"
                   />
+                  <mat-error
+                    *ngIf="
+                      costAndPriceTypeMainForm.controls[
+                        'defaultWastage'
+                      ].hasError('required')
+                    "
+                  >
+                    Default Wastage % is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
 
               <div class="col-md-4">
                 <button
                   type="button"
+                  (click)="stockMastersData()"
                   class="col-md-12 p-4 mb-4 btn btn-primary text-center"
                 >
                   Select Stock Masters
@@ -280,7 +337,6 @@
               [editing]="{ mode: 'cell', allowUpdating: true }"
               [selection]="{ mode: 'multiple' }"
               (onSelectionChanged)="onRowSelectionChanged($event)"
-              (onCellValueChanged)="onCellValueChanged($event)"
             >
               <dxo-paging [enabled]="true"></dxo-paging>
               <dxo-pager [showInfo]="true"></dxo-pager>

@@ -1,3 +1,4 @@
+import { sequence } from "@angular/animations";
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -48,6 +49,7 @@ export class ZirconMasterComponent implements OnInit {
   image: File | null = null;
   fetchedPicture: string | null = null;
   branchCode: any;
+  diamondPriceCalculated: any;
 
   costCenterCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -80,7 +82,7 @@ export class ZirconMasterComponent implements OnInit {
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 30,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "CATEGORY CODE",
     SEARCH_VALUE: "",
@@ -289,12 +291,10 @@ export class ZirconMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
-    console.log();
-    
 
-    this.content
-      ? (this.flag = this.content!.FLAG)
-      : console.log("No Content, Due to you are in ADD");
+    this.flag = this.content
+      ? this.content.FLAG
+      : (this.content = { FLAG: "ADD" }).FLAG;
 
     this.initialController(this.flag, this.content);
     this.setFlag(this.flag);
@@ -338,6 +338,17 @@ export class ZirconMasterComponent implements OnInit {
     this.zirconMasterMainForm.controls["excludeFromTransferWt"].setValue(
       DATA.EXCLUDE_TRANSFER_WT
     );
+    this.zirconMasterMainForm.controls["weightAvgCostCode"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.STOCK_FCCOST, "AMOUNT")
+    );
+    this.zirconMasterMainForm.controls["currencyRate"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.CC_RATE, "AMOUNT")
+    );
+
+    this.zirconMasterMainForm.controls["weightAvgCostDesc"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.STOCK_LCCOST, "AMOUNT")
+    );
+
     this.zirconMasterMainForm.controls["excludeFromTransferWt"].setValue(
       DATA.EXCLUDE_TRANSFER_WT
     );
@@ -351,31 +362,51 @@ export class ZirconMasterComponent implements OnInit {
       DATA.CURRENCY_CODE
     );
     this.zirconMasterMainForm.controls["priceOnePercent"].setValue(
-      DATA.PRICE1PER
+      this.commonService.decimalQuantityFormat(DATA.PRICE1PER, "AMOUNT")
     );
     this.zirconMasterMainForm.controls["priceTwoPercent"].setValue(
-      DATA.PRICE2PER
+      this.commonService.decimalQuantityFormat(DATA.PRICE2PER, "AMOUNT")
     );
     this.zirconMasterMainForm.controls["priceThreePercent"].setValue(
-      DATA.PRICE3PER
+      this.commonService.decimalQuantityFormat(DATA.PRICE3PER, "AMOUNT")
     );
     this.zirconMasterMainForm.controls["priceFourPercent"].setValue(
-      DATA.PRICE4PER
+      this.commonService.decimalQuantityFormat(DATA.PRICE4PER, "AMOUNT")
     );
     this.zirconMasterMainForm.controls["priceFivePercent"].setValue(
-      DATA.PRICE5PER
+      this.commonService.decimalQuantityFormat(DATA.PRICE5PER, "AMOUNT")
     );
 
-    this.zirconMasterMainForm.controls["priceOneLc"].setValue(DATA.PRICE1LC);
-    this.zirconMasterMainForm.controls["priceTwoLc"].setValue(DATA.PRICE2LC);
-    this.zirconMasterMainForm.controls["priceThreeLc"].setValue(DATA.PRICE3LC);
-    this.zirconMasterMainForm.controls["priceFourLc"].setValue(DATA.PRICE4LC);
-    this.zirconMasterMainForm.controls["priceFiveLc"].setValue(DATA.PRICE5LC);
-    this.zirconMasterMainForm.controls["priceOneFc"].setValue(DATA.PRICE1FC);
-    this.zirconMasterMainForm.controls["priceTwoFc"].setValue(DATA.PRICE2FC);
-    this.zirconMasterMainForm.controls["priceThreeFc"].setValue(DATA.PRICE3FC);
-    this.zirconMasterMainForm.controls["priceFourFc"].setValue(DATA.PRICE4FC);
-    this.zirconMasterMainForm.controls["priceFiveFc"].setValue(DATA.PRICE5FC);
+    this.zirconMasterMainForm.controls["priceOneLc"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.PRICE1LC, "AMOUNT")
+    );
+    this.zirconMasterMainForm.controls["priceTwoLc"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.PRICE2LC, "AMOUNT")
+    );
+    this.zirconMasterMainForm.controls["priceThreeLc"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.PRICE3LC, "AMOUNT")
+    );
+    this.zirconMasterMainForm.controls["priceFourLc"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.PRICE4LC, "AMOUNT")
+    );
+    this.zirconMasterMainForm.controls["priceFiveLc"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.PRICE5LC, "AMOUNT")
+    );
+    this.zirconMasterMainForm.controls["priceOneFc"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.PRICE1FC, "AMOUNT")
+    );
+    this.zirconMasterMainForm.controls["priceTwoFc"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.PRICE2FC, "AMOUNT")
+    );
+    this.zirconMasterMainForm.controls["priceThreeFc"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.PRICE3FC, "AMOUNT")
+    );
+    this.zirconMasterMainForm.controls["priceFourFc"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.PRICE4FC, "AMOUNT")
+    );
+    this.zirconMasterMainForm.controls["priceFiveFc"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.PRICE5FC, "AMOUNT")
+    );
   }
 
   editController(DATA: any) {
@@ -556,7 +587,9 @@ export class ZirconMasterComponent implements OnInit {
     FORMNAMES: string[],
     isCurrencyField: boolean,
     lookupFields?: string[],
-    FROMCODE?: boolean
+    FROMCODE?: boolean,
+    DIAMONDCALCULATION?: boolean,
+    DIAMONDSEQUENCE?: any
   ) {
     const searchValue = event.target.value?.trim();
 
@@ -593,28 +626,6 @@ export class ZirconMasterComponent implements OnInit {
 
               console.log("Filtered Search Result:", searchResult);
 
-              if (FROMCODE === true) {
-                searchResult = [
-                  ...searchResult.filter(
-                    (item: any) =>
-                      item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
-                  ),
-                  ...searchResult.filter(
-                    (item: any) =>
-                      item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
-                  ),
-                ];
-              } else if (FROMCODE === false) {
-                searchResult = [
-                  ...searchResult.filter(
-                    (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
-                  ),
-                  ...searchResult.filter(
-                    (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
-                  ),
-                ];
-              }
-
               if (searchResult?.length) {
                 const matchedItem = searchResult[0];
 
@@ -624,6 +635,12 @@ export class ZirconMasterComponent implements OnInit {
                     this.zirconMasterMainForm.controls[formName].setValue(
                       matchedItem[field]
                     );
+
+                    DIAMONDCALCULATION &&
+                      this.diamondPriceCalculation(
+                        FORMNAMES[0],
+                        DIAMONDSEQUENCE
+                      );
                   } else {
                     console.error(
                       `Property ${field} not found in matched item.`
@@ -1187,10 +1204,12 @@ export class ZirconMasterComponent implements OnInit {
     }
   }
 
-  diamondPriceCalculation() {
+  diamondPriceCalculation(CONTROLLER: any, sequence: any) {
+    console.log("CONTROLLER:", CONTROLLER, "SEQUENCE:", sequence);
+
     let payload = {
       strBranchCode: this.branchCode,
-      strPriceCode: this.zirconMasterMainForm.value.priceOneCode,
+      strPriceCode: this.zirconMasterMainForm.value[CONTROLLER],
       dblCostValueFC: this.zirconMasterMainForm.value.weightAvgCostCode,
       strCurrCode: this.zirconMasterMainForm.value.currencyCode,
       dblConv_Rate: this.zirconMasterMainForm.value.currencyRate,
@@ -1200,16 +1219,23 @@ export class ZirconMasterComponent implements OnInit {
       .postDynamicAPI(API, payload)
       .subscribe(
         (result) => {
-          if (result.status.trim() === "Success" && result.response) {
-            console.log(result);
+          if (result.status.trim() === "Success") {
+            console.log(result.dynamicData);
+            this.diamondPriceCalculated = result.dynamicData[0][0];
+            console.log(this.diamondPriceCalculated);
 
-            // this.itemDetailsData = result.response.map(
-            //   (item: any, index: number) => {
-            //     return { ...item, SELECT1: false, SRNO: index + 1 };
-            //   }
-            // );
-          } else {
-            this.commonService.toastErrorByMsgId("MSG1531");
+            this.zirconMasterMainForm.controls[`price${sequence}Code`].setValue(
+              this.diamondPriceCalculated.PRICECODE
+            );
+            this.zirconMasterMainForm.controls[
+              `price${sequence}Percent`
+            ].setValue(this.diamondPriceCalculated.PRICEPERCENTAGE);
+            this.zirconMasterMainForm.controls[`price${sequence}Fc`].setValue(
+              this.diamondPriceCalculated.PRICEFC
+            );
+            this.zirconMasterMainForm.controls[`price${sequence}Lc`].setValue(
+              this.diamondPriceCalculated.PRICECC
+            );
           }
         },
         (err) => {

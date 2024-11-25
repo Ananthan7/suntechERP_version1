@@ -8,9 +8,10 @@
 
 <!-- modal header component -->
 <modal-header
-  (saveClick)="formSave()"
+  (saveClick)="receiptModesMainFormSubmit()"
   (cancelClick)="close()"
-  (deleteClick)="deleteMaster()"
+  (deleteClick)="DeleteController()"
+  [isViewDelete]="flag == 'VIEW'"
 ></modal-header>
 
 <!-- content section -->
@@ -26,7 +27,14 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    min="0"
+                    type="number"
+                    formControlName="mode"
+                    (keydown)="preventInvalidInput($event)"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -38,58 +46,78 @@
 
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="code"
+                  />
                 </mat-form-field>
               </div>
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="code" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="desc"
+                  />
                 </mat-form-field>
               </div>
             </div>
 
             <div class="row mb-1">
-              <label
-                for="description"
-                class="col-sm-2 col-form-label"
-                id="ID029"
+              <label for="accode" class="col-sm-2 col-form-label" id="ID029"
                 >Accode</label
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="accode"
+                  />
                 </mat-form-field>
               </div>
 
-              <label
-                for="description"
-                class="col-sm-2 col-form-label"
-                id="ID029"
+              <label for="commision" class="col-sm-2 col-form-label" id="ID029"
                 >Commision %</label
               >
 
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    AmountDecimalInput
+                    class="text-right"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    min="0"
+                    type="number"
+                    formControlName="commision"
+                    (keydown)="preventInvalidInput($event)"
+                  />
                 </mat-form-field>
               </div>
             </div>
 
             <div class="row mb-1">
-              <label
-                for="description"
-                class="col-sm-2 col-form-label"
-                id="ID029"
+              <label for="currency" class="col-sm-2 col-form-label" id="ID029"
                 >Currency</label
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="currencyCode"
+                  />
                 </mat-form-field>
               </div>
 
               <label
-                for="description"
+                for="commisionAccount"
                 class="col-sm-2 col-form-label"
                 id="ID029"
                 >Commision Account</label
@@ -97,120 +125,174 @@
 
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="commisionAccount"
+                  />
                 </mat-form-field>
               </div>
             </div>
 
             <div class="row mb-1">
-              <label
-                for="description"
-                class="col-sm-2 col-form-label"
-                id="ID029"
+              <label for="bank" class="col-sm-2 col-form-label" id="ID029"
                 >Bank</label
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="bank"
+                  />
                 </mat-form-field>
               </div>
 
-              <label
-                for="description"
-                class="col-sm-2 col-form-label"
-                id="ID029"
+              <label for="maxCommAcc" class="col-sm-2 col-form-label" id="ID029"
                 >Max Comm Account</label
               >
 
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    AmountDecimalInput
+                    class="text-right"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="number"
+                    (keydown)="preventInvalidInput($event)"
+                    formControlName="maxCommAcc"
+                  />
                 </mat-form-field>
               </div>
             </div>
 
             <div class="row mb-1">
-              <label for="code" class="col-sm-2 col-form-label" id="ID029"
+              <label for="branches" class="col-sm-2 col-form-label" id="ID029"
                 >Branches</label
               >
 
               <div class="col-md-10">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="branches"
+                  />
                 </mat-form-field>
               </div>
             </div>
 
             <div class="row mb-1">
               <div class="col-md-2 pt-1">
-                <mat-checkbox formControlName="eidFest" 
+                <mat-checkbox
+                  (change)="matBoxChecker($event, 'loyalty')"
+                  formControlName="loyalty"
                   >Loyalty</mat-checkbox
                 >
               </div>
               <div class="col-md-2 pt-1">
-                <mat-checkbox formControlName="rcmCredit"
+                <mat-checkbox
+                  (change)="matBoxChecker($event, 'rcmCredit')"
+                  formControlName="rcmCredit"
                   >RCM Credit</mat-checkbox
                 >
               </div>
               <div class="col-md-2 pt-1">
-                <mat-checkbox formControlName="excludeTax"
+                <mat-checkbox
+                  (change)="matBoxChecker($event, 'excludeTax')"
+                  formControlName="excludeTax"
                   >Exclude Tax</mat-checkbox
                 >
               </div>
 
-              <label for="code" class="col-sm-2 col-form-label" id="ID029"
+              <label for="inputVat" class="col-sm-2 col-form-label" id="ID029"
                 >Input Vat</label
               >
 
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="inputVat"
+                  />
                 </mat-form-field>
               </div>
             </div>
 
             <div class="row mb-1">
               <div class="col-md-2 pt-1"></div>
-              <label for="code" class="col-sm-2 col-form-label" id="ID029"
+              <label for="rcmInput" class="col-sm-2 col-form-label" id="ID029"
                 >RCM Input</label
               >
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="rcmInput"
+                  />
                 </mat-form-field>
               </div>
 
-              <label for="code" class="col-sm-2 col-form-label" id="ID029"
+              <label for="outputVat" class="col-sm-2 col-form-label" id="ID029"
                 >Output Vat</label
               >
 
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="outputVat"
+                  />
                 </mat-form-field>
               </div>
             </div>
 
             <div class="row mb-1">
               <div class="col-md-2 pt-1"></div>
-              <label for="code" class="col-sm-2 col-form-label" id="ID029"
+              <label
+                for="rcmOutputVat"
+                class="col-sm-2 col-form-label"
+                id="ID029"
                 >RCM Output VAT</label
               >
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="rcmOutputVat"
+                  />
                 </mat-form-field>
               </div>
 
-              <label for="code" class="col-sm-2 col-form-label" id="ID029"
+              <label for="vat" class="col-sm-2 col-form-label" id="ID029"
                 >Vat %</label
               >
 
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    AmountDecimalInput
+                    class="text-right"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="number"
+                    (keydown)="preventInvalidInput($event)"
+                    formControlName="vat"
+                  />
                 </mat-form-field>
               </div>
             </div>

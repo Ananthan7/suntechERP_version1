@@ -27,8 +27,8 @@
                   id="ID001"
                   class="col-sm-2 col-form-label"
                 >
-                  Type :</label
-                >
+                  Type
+                </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <mat-select
@@ -51,8 +51,9 @@
                   id="ID001"
                   class="col-sm-2 col-form-label"
                 >
-                  Code :</label
-                >
+                  Code
+                  <span class="text-danger">*</span>
+                </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
@@ -80,8 +81,9 @@
                   id="ID001"
                   class="col-sm-2 col-form-label"
                 >
-                  Description :</label
-                >
+                  Description
+                  <span class="text-danger">*</span>
+                </label>
                 <div class="col-sm-7">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
@@ -120,7 +122,8 @@
                   for="inputPassword"
                   id="ID002"
                   class="col-sm-2 col-form-label"
-                  >Debit A/C :
+                  >Debit A/C
+                  <span class="text-danger">*</span>
                 </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
@@ -210,7 +213,8 @@
                   for="inputPassword"
                   id="ID002"
                   class="col-sm-2 col-form-label"
-                  >Country Code :
+                  >Country Code
+                  <span class="text-danger">*</span>
                 </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
@@ -301,8 +305,8 @@
                   id="ID001"
                   class="col-sm-2 col-form-label"
                 >
-                  Based On :</label
-                >
+                  Based On
+                </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <mat-select formControlName="basedOn">
@@ -320,8 +324,8 @@
                   id="ID001"
                   class="col-sm-1 col-form-label"
                 >
-                  Amount :</label
-                >
+                  Amount
+                </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
@@ -352,8 +356,8 @@
                   id="ID001"
                   class="col-sm-2 col-form-label"
                 >
-                  No.Days/year :</label
-                >
+                  No.Days/year
+                </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
@@ -374,8 +378,8 @@
                   id="ID001"
                   class="col-sm-2 col-form-label"
                 >
-                  No.Days/Month :</label
-                >
+                  No.Days/Month
+                </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
@@ -442,7 +446,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData1,
                           ['userDefined1'],
                           false,
                           ['CODE'],
@@ -455,11 +459,11 @@
                       formControlName="userDefined1"
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined1')"
                       #overlayUserDefined1
+                      (focusout)="openTab($event, 'userDefined1')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData1"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined1', 'CODE')
                       "
@@ -481,7 +485,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData2,
                           ['userDefined2'],
                           false,
                           ['CODE'],
@@ -495,11 +499,11 @@
                       UpperCaseDirective
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined2')"
                       #overlayUserDefined2
+                      (focusout)="openTab($event, 'userDefined2')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData2"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined2', 'CODE')
                       "
@@ -521,7 +525,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData3,
                           ['userDefined3'],
                           false,
                           ['CODE'],
@@ -535,11 +539,11 @@
                       UpperCaseDirective
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined3')"
                       #overlayUserDefined3
+                      (focusout)="openTab($event, 'userDefined3')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData3"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined3', 'CODE')
                       "
@@ -561,7 +565,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData4,
                           ['userDefined4'],
                           false,
                           ['CODE'],
@@ -575,11 +579,11 @@
                       UpperCaseDirective
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined4')"
                       #overlayUserDefined4
+                      (focusout)="openTab($event, 'userDefined4')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData4"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined4', 'CODE')
                       "
@@ -601,7 +605,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData5,
                           ['userDefined5'],
                           false,
                           ['CODE'],
@@ -615,11 +619,11 @@
                       UpperCaseDirective
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined5')"
                       #overlayUserDefined5
+                      (focusout)="openTab($event, 'userDefined5')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData5"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined5', 'CODE')
                       "
@@ -643,7 +647,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData6,
                           ['userDefined6'],
                           false,
                           ['CODE'],
@@ -657,11 +661,11 @@
                       UpperCaseDirective
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined6')"
                       #overlayUserDefined6
+                      (focusout)="openTab($event, 'userDefined6')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData6"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined6', 'CODE')
                       "
@@ -683,7 +687,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData7,
                           ['userDefined7'],
                           false,
                           ['CODE'],
@@ -697,11 +701,11 @@
                       UpperCaseDirective
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined7')"
                       #overlayUserDefined7
+                      (focusout)="openTab($event, 'userDefined7')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData7"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined7', 'CODE')
                       "
@@ -723,7 +727,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData8,
                           ['userDefined8'],
                           false,
                           ['CODE'],
@@ -737,9 +741,11 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined8
+                      (focusout)="openTab($event, 'userDefined8')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData8"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined8', 'CODE')
                       "
@@ -761,7 +767,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData9,
                           ['userDefined9'],
                           false,
                           ['CODE'],
@@ -775,11 +781,11 @@
                       UpperCaseDirective
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined9')"
                       #overlayUserDefined9
+                      (focusout)="openTab($event, 'userDefined9')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData9"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined9', 'CODE')
                       "
@@ -801,7 +807,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData10,
                           ['userDefined10'],
                           false,
                           ['CODE'],
@@ -815,11 +821,11 @@
                       UpperCaseDirective
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined10')"
                       #overlayUserDefined10
+                      (focusout)="openTab($event, 'userDefined10')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData10"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined10', 'CODE')
                       "
@@ -843,7 +849,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData11,
                           ['userDefined11'],
                           false,
                           ['CODE'],
@@ -857,11 +863,11 @@
                       UpperCaseDirective
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined11')"
                       #overlayUserDefined11
+                      (focusout)="openTab($event, 'userDefined11')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData11"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined11', 'CODE')
                       "
@@ -883,7 +889,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData12,
                           ['userDefined12'],
                           false,
                           ['CODE'],
@@ -897,11 +903,11 @@
                       UpperCaseDirective
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined12')"
                       #overlayUserDefined12
+                      (focusout)="openTab($event, 'userDefined12')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData12"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined12', 'CODE')
                       "
@@ -923,7 +929,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData13,
                           ['userDefined13'],
                           false,
                           ['CODE'],
@@ -937,11 +943,11 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      #overlayUserDefined3
                       (focusout)="openTab($event, 'userDefined13')"
-                      #overlayUserDefined13
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData13"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined13', 'CODE')
                       "
@@ -963,7 +969,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData14,
                           ['userDefined14'],
                           false,
                           ['CODE'],
@@ -977,11 +983,11 @@
                       UpperCaseDirective
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined14')"
                       #overlayUserDefined14
+                      (focusout)="openTab($event, 'userDefined14')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData14"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined14', 'CODE')
                       "
@@ -1003,7 +1009,7 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          userDefinedData,
+                          userDefinedData15,
                           ['userDefined15'],
                           false,
                           ['CODE'],
@@ -1017,11 +1023,11 @@
                       UpperCaseDirective
                     />
                     <master-search
-                      (focusout)="openTab($event, 'userDefined15')"
                       #overlayUserDefined15
+                      (focusout)="openTab($event, 'userDefined15')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="userDefinedData"
+                      [MasterSearchData]="userDefinedData15"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined15', 'CODE')
                       "

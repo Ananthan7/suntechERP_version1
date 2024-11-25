@@ -285,7 +285,7 @@
               </mat-checkbox>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <div class="row mb-1">
               <label
                 for="description"
@@ -345,7 +345,7 @@
                 for="subCategory"
                 class="col-sm-5 col-form-label"
                 id="ID029"
-                >Sub Category</label
+                >Sub Cate.</label
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
@@ -563,7 +563,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-5">
             <div class="row mb-1">
               <label for="currency" class="col-sm-3 col-form-label" id="ID029"
                 >Currency</label
@@ -627,7 +627,7 @@
               </div>
             </div>
 
-            <div class="row mb-1">
+            <!-- <div class="row mb-1">
               <div class="col-md-12 pt-3">
                 <button
                   type="button"
@@ -637,26 +637,26 @@
                   Price Schema
                 </button>
               </div>
-            </div>
+            </div> -->
 
             <div class="row">
               <div class="col-md-12">
                 <div class="row mb-1">
                   <label class="col-sm-2 col-form-label" id="ID029">Cost</label>
 
-                  <label class="col-sm-3 col-form-label" id="ID029">Code</label>
+                  <label class="col-sm-2 col-form-label" id="ID029">Code</label>
 
-                  <label class="col-sm-3 col-form-label" id="ID029">%</label>
+                  <label class="col-sm-2 col-form-label" id="ID029">%</label>
 
-                  <label class="col-sm-2 col-form-label" id="ID029">FC</label>
-                  <label class="col-sm-2 col-form-label" id="ID029">LC</label>
+                  <label class="col-sm-3 col-form-label" id="ID029">FC</label>
+                  <label class="col-sm-3 col-form-label" id="ID029">LC</label>
                 </div>
 
                 <div class="row mb-1">
                   <label for="price1" class="col-sm-2 col-form-label" id="ID029"
                     >Price 1</label
                   >
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -667,20 +667,12 @@
                           SPvalidateLookupFieldModified(
                             $event,
                             priceCodeData,
-                            [
-                              'priceOneCode',
-                              'priceOnePercent',
-                              'priceOneLc',
-                              'priceOneFc'
-                            ],
+                            ['priceOneCode'],
                             false,
-                            [
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE'
-                            ],
-                            false
+                            ['PRICE_CODE'],
+                            false,
+                            true,
+                            'One'
                           )
                         "
                       />
@@ -691,30 +683,18 @@
                         class="masterSearch"
                         [MasterSearchData]="priceCodeData"
                         (newRowClick)="
-                          lookupSelect(
-                            $event,
-                            [
-                              'priceOneCode',
-                              'priceOnePercent',
-                              'priceOneLc',
-                              'priceOneFc'
-                            ],
-                            [
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE'
-                            ]
-                          )
+                          lookupSelect($event, ['priceOneCode'], ['PRICE_CODE'])
                         "
                       >
                       </master-search>
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="text"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -723,9 +703,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="number"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -734,9 +716,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="number"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -750,7 +734,7 @@
                   <label for="price2" class="col-sm-2 col-form-label" id="ID029"
                     >Price 2</label
                   >
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -761,20 +745,12 @@
                           SPvalidateLookupFieldModified(
                             $event,
                             priceCodeData,
-                            [
-                              'priceTwoCode',
-                              'priceTwoPercent',
-                              'priceTwoLc',
-                              'priceTwoFc'
-                            ],
+                            ['priceTwoCode'],
                             false,
-                            [
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE'
-                            ],
-                            false
+                            ['PRICE_CODE'],
+                            false,
+                            true,
+                            'Two'
                           )
                         "
                       />
@@ -785,30 +761,18 @@
                         class="masterSearch"
                         [MasterSearchData]="priceCodeData"
                         (newRowClick)="
-                          lookupSelect(
-                            $event,
-                            [
-                              'priceTwoCode',
-                              'priceTwoPercent',
-                              'priceTwoLc',
-                              'priceTwoFc'
-                            ],
-                            [
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE'
-                            ]
-                          )
+                          lookupSelect($event, ['priceTwoCode'], ['PRICE_CODE'])
                         "
                       >
                       </master-search>
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="text"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -817,9 +781,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="number"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -828,9 +794,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="number"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -844,7 +812,7 @@
                   <label for="price3" class="col-sm-2 col-form-label" id="ID029"
                     >Price 3</label
                   >
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -855,20 +823,12 @@
                           SPvalidateLookupFieldModified(
                             $event,
                             priceCodeData,
-                            [
-                              'priceThreeCode',
-                              'priceThreePercent',
-                              'priceThreeLc',
-                              'priceThreeFc'
-                            ],
+                            ['priceThreeCode'],
                             false,
-                            [
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE'
-                            ],
-                            false
+                            ['PRICE_CODE'],
+                            false,
+                            true,
+                            'Three'
                           )
                         "
                       />
@@ -881,18 +841,8 @@
                         (newRowClick)="
                           lookupSelect(
                             $event,
-                            [
-                              'priceThreeCode',
-                              'priceThreePercent',
-                              'priceThreeLc',
-                              'priceThreeFc'
-                            ],
-                            [
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE'
-                            ]
+                            ['priceThreeCode'],
+                            ['PRICE_CODE']
                           )
                         "
                       >
@@ -900,9 +850,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="text"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -911,9 +863,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="number"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -922,9 +876,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="number"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -938,7 +894,7 @@
                   <label for="price4" class="col-sm-2 col-form-label" id="ID029"
                     >Price 4</label
                   >
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -949,20 +905,12 @@
                           SPvalidateLookupFieldModified(
                             $event,
                             priceCodeData,
-                            [
-                              'priceFourCode',
-                              'priceFourPercent',
-                              'priceFourLc',
-                              'priceFourFc'
-                            ],
+                            ['priceFourCode'],
                             false,
-                            [
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE'
-                            ],
-                            false
+                            ['PRICE_CODE'],
+                            false,
+                            true,
+                            'FOUR'
                           )
                         "
                       />
@@ -975,18 +923,8 @@
                         (newRowClick)="
                           lookupSelect(
                             $event,
-                            [
-                              'priceFourCode',
-                              'priceFourPercent',
-                              'priceFourLc',
-                              'priceFourFc'
-                            ],
-                            [
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE'
-                            ]
+                            ['priceFourCode'],
+                            ['PRICE_CODE']
                           )
                         "
                       >
@@ -994,9 +932,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="text"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -1005,9 +945,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="number"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -1016,9 +958,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="number"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -1032,7 +976,7 @@
                   <label for="price5" class="col-sm-2 col-form-label" id="ID029"
                     >Price 5</label
                   >
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -1043,20 +987,12 @@
                           SPvalidateLookupFieldModified(
                             $event,
                             priceCodeData,
-                            [
-                              'priceFiveCode',
-                              'priceFivePercent',
-                              'priceFiveLc',
-                              'priceFiveFc'
-                            ],
+                            ['priceFiveCode'],
                             false,
-                            [
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE'
-                            ],
-                            false
+                            ['PRICE_CODE'],
+                            false,
+                            true,
+                            'Five'
                           )
                         "
                       />
@@ -1069,18 +1005,8 @@
                         (newRowClick)="
                           lookupSelect(
                             $event,
-                            [
-                              'priceFiveCode',
-                              'priceFivePercent',
-                              'priceFiveLc',
-                              'priceFiveFc'
-                            ],
-                            [
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE',
-                              'PRICE_CODE'
-                            ]
+                            ['priceFiveCode'],
+                            ['PRICE_CODE']
                           )
                         "
                       >
@@ -1088,9 +1014,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="text"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -1099,9 +1027,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="number"
                         [readonly]="flag === 'VIEW'"
                         matInput
@@ -1110,9 +1040,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        class="text-right"
+                        AmountDecimalInput
                         type="number"
                         [readonly]="flag === 'VIEW'"
                         matInput
