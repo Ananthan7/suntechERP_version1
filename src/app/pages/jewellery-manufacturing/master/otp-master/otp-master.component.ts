@@ -169,11 +169,11 @@ export class OtpMasterComponent implements OnInit {
       const postData = this.otpGridData.map((item) => ({
         BRANCH_CODE: this.OTPMasterForm.value.branchCode,
         BRANCH_DESCRIPTION: this.OTPMasterForm.value.branchDesc,
-        OTP_LEVEL: item.OTP_LEVEL || "",
-        LEVEL_USER: item.LEVEL_USER || "",
-        LEVEL_MOBILE1: item.LEVEL_MOBILE1 || "",
-        LEVEL_MOBILE2: item.LEVEL_MOBILE2 || "",
-        LEVEL_EMAIL: item.LEVEL_EMAIL || "",
+        OTP_LEVEL: item.OTP_LEVEL || "string",
+        LEVEL_USER: item.LEVEL_USER || "string",
+        LEVEL_MOBILE1: item.LEVEL_MOBILE1 || "string",
+        LEVEL_MOBILE2: item.LEVEL_MOBILE2 || "string",
+        LEVEL_EMAIL: item.LEVEL_EMAIL || "string",
         SYSTEM_DATE: new Date().toISOString(),
         MID: 0,
       }));
