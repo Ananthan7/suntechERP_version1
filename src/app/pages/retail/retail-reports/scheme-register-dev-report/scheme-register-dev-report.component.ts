@@ -174,7 +174,64 @@ export class SchemeRegisterDevReportComponent implements OnInit {
     console.log(this.schemeRegisterDevReportForm.controls.templateName.value)
   }
   saveTemplate_DB(){
-
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
+    const payload = {
+      "SPID": "0115",
+      "parameter": {
+        "FLAG": 'INSERT',
+        "CONTROLS": JSON.stringify({
+            "CONTROL_HEADER": {
+              "USERNAME": localStorage.getItem('username'),
+              "TEMPLATEID": this.commonService.getModuleName(),
+              "TEMPLATENAME": this.schemeRegisterDevReportForm.controls.templateName.value,
+              "FORM_NAME": this.commonService.getModuleName(),
+              "ISDEFAULT": 1
+            },
+            "CONTROL_DETAIL": {
+              "strBRANCHES": this.schemeRegisterDevReportForm.controls.branch.value,
+              "FrVocDate": this.dateToPass.fromDate,
+              "ToVocDate": this.dateToPass.toDate,
+              "Status": this.schemeRegisterDevReportForm.controls.status.value,
+              "TillToVocDate": this.datePipe.transform(new Date(), 'yyyy-MM-dd'),
+              "LOGDATA" : JSON.stringify(logData)
+            }
+         })
+      }
+    };
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
+      let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
+      if (Notifdata == 1) {
+        this.commonService.closeSnackBarMsg()
+        Swal.fire({
+          title: data || 'Success',
+          text: '',
+          icon: 'success',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })
+        this.popupVisible = false;
+        this.activeModal.close(data);
+      }
+      else {
+        this.toastr.error(Notifdata)
+      }
+    }); 
   }
 
   previewClick(){
@@ -208,7 +265,7 @@ export class SchemeRegisterDevReportComponent implements OnInit {
     .subscribe((result: any) => {
       if(result.status != "Failed"){
         let data = result.dynamicData;
-        let printContent = data[0][0].HTMLOUT;
+        let printContent = data[0][0].HTML;
         if (printContent && Object.keys(printContent).length > 0) {
           this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
           const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
@@ -239,7 +296,75 @@ export class SchemeRegisterDevReportComponent implements OnInit {
   }
 
   printBtnClick(){
+    this.isLoading = true;
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
+    let postData = {
+      "SPID": "203",
+      "parameter": {
+        "strBRANCHES": this.schemeRegisterDevReportForm.controls.branch.value,
+        "FrVocDate": this.dateToPass.fromDate,
+        "ToVocDate": this.dateToPass.toDate,
+        "Status": this.schemeRegisterDevReportForm.controls.status.value,
+        "TillToVocDate": this.datePipe.transform(new Date(), 'yyyy-MM-dd'),
+        "LOGDATA" : JSON.stringify(logData)
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      let data = result.dynamicData;
+      if(result.status == "Success"){
+        
+        let printContent = data[0][0].HTML;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        if(this.htmlPreview.changingThisBreaksApplicationSecurity){
 
+          setTimeout(() => {
+            const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+
+            let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
+            userBranchDesc = JSON.parse(userBranchDesc)
+      
+            if (content && Object.keys(content).length !== 0) {
+              const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
+              const printWindow = window.open('', '', 'height=600,width=800');
+              printWindow?.document.write(modifiedContent);
+              printWindow?.focus();
+              printWindow?.print();
+              this.isLoading = false;
+            } else {
+              Swal.fire('No Data!', 'There is no data to print!', 'info');
+              this.commonService.closeSnackBarMsg();
+              this.isLoading = false;
+              return
+            }
+          }, 1500); 
+        }
+        else{
+          Swal.fire('No Data!', 'There is no data to print!', 'info');
+          this.commonService.closeSnackBarMsg();
+          this.isLoading = false;
+          return
+        }
+      }
+      else{
+        this.toastr.error(result.message);
+        this.isLoading = false;
+        return
+      }
+    });  
   }
 
 

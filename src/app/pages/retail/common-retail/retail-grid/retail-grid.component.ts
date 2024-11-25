@@ -402,7 +402,7 @@ export class RetailGridComponent implements OnInit {
 
   screenWisePayload(screenName: any, gridData: any){
     let payloadData;
-
+console.log(screenName)
     switch (screenName) {
         case 'POS Salesman Wise Profit Analysis':
           let logData =  {
@@ -485,6 +485,35 @@ export class RetailGridComponent implements OnInit {
           }
         break;
   
+        case 'Scheme Register Dev Report':
+          let schemRegDevRpt =  {
+            "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
+            "REFMID": "",
+            "USERNAME": this.CommonService.userName,
+            "MODE": "PRINT",
+            "DATETIME": this.CommonService.formatDateTime(new Date()),
+            "REMARKS":"",
+            "SYSTEMNAME": "",
+            "BRANCHCODE": this.CommonService.branchCode,
+            "VOCNO": "",
+            "VOCDATE": "",
+            "YEARMONTH" : this.CommonService.yearSelected
+          }
+          payloadData = {
+            "SPID": "203",
+            "parameter": {
+              "strBRANCHES": gridData.CONTROL_DETAIL.strBRANCHES,
+              "FrVocDate": gridData.CONTROL_DETAIL.FrVocDate,
+              "ToVocDate": gridData.CONTROL_DETAIL.ToVocDate,
+              "Status": gridData.CONTROL_DETAIL.Status,
+              "TillToVocDate": gridData.CONTROL_DETAIL.TillToVocDate,
+              "LOGDATA" : JSON.stringify(schemRegDevRpt)
+            }
+          }
+        break;
+  
+
+
         case 'Retail Customer Enquiry' :
         let CustomerEnquirylogData =  {
           "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
@@ -533,7 +562,7 @@ export class RetailGridComponent implements OnInit {
         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
         return;
       }
-      let printContent = data[0][0].HTMLINPUT || data[0][0].HTMLOUT || data[0][0].POS_Summary_HTML;;
+      let printContent = data[0][0].HTMLINPUT || data[0][0].HTMLOUT || data[0][0].POS_Summary_HTML || data[0][0].HTML;
       WindowPrt.document.write(printContent);
       WindowPrt.document.close();
       WindowPrt.focus();  
