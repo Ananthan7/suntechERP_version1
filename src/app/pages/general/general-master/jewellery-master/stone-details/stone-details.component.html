@@ -5,7 +5,7 @@
     </button>
   </div>
   <!-- modal header component -->
- <modal-header  (cancelClick)="close()" [isViewContinue]="true"> </modal-header> 
+ <modal-header  (cancelClick)="close()" [isViewContinue]="true" (saveClick)="formSubmit()"> </modal-header> 
 
       <form [formGroup]="enterStoneDetailsForm">
         <div class="container-fluid pt-3">
@@ -18,7 +18,7 @@
                           <label for="inputPassword" class="col-sm-5 col-form-label"> Stock Code :</label>
                           <div class="col-md-2">
                             <mat-form-field  style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput  formControlName="Stockcode" />
+                              <input type="text" matInput maxlength="15" formControlName="Stockcode" />
                             </mat-form-field>
                           </div>
                           <div class="col-md-5">
@@ -136,7 +136,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Pieces :</label>
                         <div class="col-md-3">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput  />
+                            <input type="text" matInput  formControlName="pieces"/>
                           </mat-form-field>
                         </div>
                       </div>
@@ -154,7 +154,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Carat :</label>
                         <div class="col-md-3">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput />
+                            <input type="text" matInput formControlName="karat" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -172,7 +172,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Carat Rate :</label>
                         <div class="col-md-3">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput  />
+                            <input type="number" matInput  formControlName="karatRate" class="text-right"/>
                           </mat-form-field>
                         </div>
                       </div>
@@ -191,7 +191,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Labour Rate :</label>
                         <div class="col-md-3">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput  />
+                            <input type="number" matInput  formControlName="labourRate"  class="text-right"/>
                           </mat-form-field>
                         </div>
                       </div>
@@ -201,18 +201,18 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Labour Amt :</label>
                         <div class="col-md-3">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput  />
+                            <input type="number" matInput  formControlName="labourAmt" AmountDecimalInput  class="text-right"/>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-3 col-form-label">Currency :</label>
                         <div class="col-md-1">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput  />
+                            <input type="text" matInput  formControlName="currency" />
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
                             <mat-form-field   style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput  />
+                              <input type="number" matInput  formControlName="currencyRate"  class="text-right"/>
                             </mat-form-field>
                           </div>
                       </div>
@@ -234,7 +234,7 @@
                     <label for="inputPassword" class="col-sm-5 col-form-label">Amount LC :</label>
                     <div class="col-md-7">
                       <mat-form-field   style="width: 100%;"  appearance="outline">
-                        <input type="text" matInput  />
+                        <input type="number" matInput   formControlName="amountLC" AmountDecimalInput  class="text-right"/>
                      </mat-form-field>
                     </div>
                   </div>
@@ -245,7 +245,7 @@
                 <label for="inputPassword" class="col-sm-5 col-form-label">Amount FC :</label>
                 <div class="col-md-7">
                   <mat-form-field   style="width: 100%;"  appearance="outline">
-                    <input type="text" matInput  />
+                    <input type="number" matInput   formControlName="amountFC" AmountDecimalInput  class="text-right"/>
                   </mat-form-field>
                   </div>
                 </div>
@@ -258,7 +258,7 @@
               <label for="inputPassword" class="col-sm-5 col-form-label">Percentage :</label>
               <div class="col-md-7">
                 <mat-form-field   style="width: 100%;"  appearance="outline">
-                  <input type="text" matInput  />
+                  <input type="number" matInput   formControlName="percentage"  class="text-right"/>
                 </mat-form-field>
               </div>
              </div>
@@ -272,7 +272,7 @@
                 <label for="inputPassword" class="col-sm-5 col-form-label">Selling Price LC :</label>
                 <div class="col-md-7">
                   <mat-form-field   style="width: 100%;"  appearance="outline">
-                    <input type="text" matInput  />
+                    <input type="number" matInput   formControlName="sellingPriceLC"  class="text-right"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -280,10 +280,10 @@
 
             <div class="col-md-4">
               <div class="row align-items-center mb-1">
-                <label for="inputPassword" class="col-sm-5 col-form-label">Selling Price LC :</label>
+                <label for="inputPassword" class="col-sm-5 col-form-label">Selling Price FC :</label>
                 <div class="col-md-7">
                   <mat-form-field   style="width: 100%;"  appearance="outline">
-                    <input type="text" matInput  />
+                    <input type="number" matInput   formControlName="sellingPriceFC"  class="text-right"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -294,7 +294,7 @@
             <label for="inputPassword" class="col-sm-5 col-form-label">Cert. Ref :</label>
                         <div class="col-md-7">
                           <mat-form-field   style="width: 100%;"  appearance="outline">
-                            <input type="text" matInput  />
+                            <input type="text" matInput   formControlName="certRef"/>
                           </mat-form-field>
                         </div>
 
