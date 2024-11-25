@@ -605,7 +605,7 @@ export class ComponentMasterComponent implements OnInit {
     this.tableData[data.data.SRNO - 1].DSIZE = value.CODE;
   }
 
-  stocktypeCodeSelected(value: any, data: any, controlName: string) {
+  stoneTypeCodeSelected(value: any, data: any) {
     if (this.checkCode()) return
     this.tableData[data.data.SRNO - 1].STOCK_FCCOST = value.CODE;
   }
@@ -1044,6 +1044,7 @@ export class ComponentMasterComponent implements OnInit {
       .subscribe((data) => {
         if (data.status == 'Success') {
           this.tableData = data.response.DESIGN_STNMTL_DETAIL;
+          this.maindetails = data.response
         }
       });
 
@@ -1873,7 +1874,7 @@ export class ComponentMasterComponent implements OnInit {
   //   }
   // }
 
-  stockType(data: any, value: any) {
+  stoneType(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].STOCK_FCCOST = data.target.value;
   }
   pcstemp(data: any, value: any) {
@@ -1935,14 +1936,10 @@ export class ComponentMasterComponent implements OnInit {
 
       }
     }
-    console.log('Post data:', postData); // Debugging statement
-
     this.comService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg();
-        console.log('API response:', result); // Debugging statement
-
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0];
           if (data) {
@@ -1957,7 +1954,6 @@ export class ComponentMasterComponent implements OnInit {
             this.tableData[event.SRNO - 1].SHAPE = data[0].SHAPE
             this.tableData[event.SRNO - 1].SIEVE_FROM = data[0].SIEVE_SET
 
-            console.log('Dynamic data:', data[0]); // Debugging statement
           } else {
             this.comService.toastErrorByMsgId('MSG1531');
             return;
@@ -1966,7 +1962,6 @@ export class ComponentMasterComponent implements OnInit {
           this.comService.toastErrorByMsgId('MSG1747');
         }
       }, (err) => {
-        console.error('API error:', err); // Debugging statement
         this.comService.closeSnackBarMsg();
         this.comService.toastErrorByMsgId('MSG1531');
       });
