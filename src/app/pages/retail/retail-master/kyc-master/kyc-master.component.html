@@ -71,7 +71,6 @@
                         <dxi-column dataField="KYC_DOCDESC" caption="Doc. Desc" cellTemplate="doc_desc"> </dxi-column>
 
                         <div *dxTemplate="let data of 'doc_desc'">
-                            
                             <input type="text" [disabled]="viewMode"  (change)="docTypeDes(data,$event)" [value]="data.value" style="width: 100%;" />
                         </div>
 

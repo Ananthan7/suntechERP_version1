@@ -6,9 +6,9 @@
         </button>
     </div>
 
-    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="DeleteController()"
-    [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-    ></modal-header>
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="DeleteController()"
+        [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+        [isViewMore]="!viewMode"></modal-header>
 
 
 
@@ -16,95 +16,137 @@
         <form [formGroup]="tdsform" class="p-1">
             <div class="row p-4">
                 <div class="col-md-12">
-                    <div class="col-md-6">
-                        <div class="row mb-2">
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
-                                        Section Code :</label>
-                                    <div class="col-sm-8">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="section_code"
-                                                UpperCaseDirective autocomplete="off" maxlength="6"/>
+                    <div class="row align-items-center">
 
-                                        </mat-form-field>
+                        <div class="col-md-6">
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                            Section Code :</label>
+                                        <div class="col-sm-8">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" #codeInput matInput formControlName="section_code"
+                                                    UpperCaseDirective autocomplete="off" maxlength="6" />
+
+                                            </mat-form-field>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <label for="financial_year" id="ID001" class="col-sm-4 col-form-label">
-                                        Financial Year :
-                                    </label>
-                                    <div class="col-sm-8">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-
-                                            <mat-select formControlName="financial_year">
-                                            </mat-select>
-                                        </mat-form-field>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <label for="financial_year" id="ID001" class="col-sm-4 col-form-label">
+                                            Financial Year :
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <mat-select formControlName="financial_year">
+                                                    <mat-option *ngFor="let year of finyears" [value]="year">
+                                                        {{ year }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
                                     </div>
-                                </div>
 
-                            </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <div class="col-md-2">
-                                <label for="inputPassword" id="ID001" class="col-sm-12 col-form-label">
-                                    Description (NP) :</label>
-                            </div>
-                            <div class="col-md-10">
-                                <mat-form-field style="width: 100%" appearance="outline">
-                                    <input type="text" #codeInput matInput formControlName="description"
-                                         autocomplete="off" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
-                                        Credit A/c :</label>
-                                    <div class="col-sm-8">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="credit_ac"
-                                                UpperCaseDirective autocomplete="off" />
-                                            <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                                (newRowClick)="BranchDataSelected($event)">
-                                            </master-search>
-                                        </mat-form-field>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <label for="datefrom" id="ID001" class="col-sm-4 col-form-label">
-                                        Debit A/c :
-                                    </label>
-                                    <!-- <mat-form-field style="width: 100%" appearance="outline">
+
+                            <div class="row mb-2">
+                                <div class="col-md-2">
+                                    <label for="inputPassword" id="ID001" class="col-sm-12 col-form-label">
+                                        Description (NP) :</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="description"
+                                            autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                            Credit A/c :</label>
+                                        <div class="col-sm-8">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" #codeInput matInput formControlName="credit_ac"
+                                                    UpperCaseDirective autocomplete="off" (focusout)="SPvalidateLookupFieldModified(
+                                                $event,
+                                                creditacdata,
+                                                ['credit_ac'],
+                                                false,
+                                                ['ACCODE'],
+                                                false
+                                            )" />
+                                                <master-search class="masterSearch" [MasterSearchData]="creditacdata"
+                                                    (newRowClick)="creditcodeselected($event)">
+                                                </master-search>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <label for="datefrom" id="ID001" class="col-sm-4 col-form-label">
+                                            Debit A/c :
+                                        </label>
+                                        <!-- <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="date" matInput id="datefrom" formControlName="dateto"
                                                 autocomplete="off" />
                                         </mat-form-field> -->
-                                    <div class="col-sm-8">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="debit_ac"
-                                                UpperCaseDirective autocomplete="off" />
-                                            <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                                (newRowClick)="BranchDataSelected($event)">
-                                            </master-search>
-                                        </mat-form-field>
+                                        <div class="col-sm-8">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" #codeInput matInput formControlName="debit_ac"
+                                                    UpperCaseDirective autocomplete="off" (focusout)="SPvalidateLookupFieldModified(
+                                                    $event,
+                                                    debitacdata,
+                                                    ['debit_ac'],
+                                                    false,
+                                                    ['ACCODE'],
+                                                    false
+                                                )" />
+                                                <master-search class="masterSearch" [MasterSearchData]="debitacdata"
+                                                    (newRowClick)="debitcodeselected($event)">
+                                                </master-search>
+                                            </mat-form-field>
+                                        </div>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="row text-center">
+                                <div class="col-sm-8">
+                                    <mat-checkbox formControlName="call" id="call"> Cal On Taxable Amt</mat-checkbox>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row text-center">
-                            <div class="col-sm-8">
-                                <mat-checkbox formControlName="call" id="call"> Cal On Taxable Amt</mat-checkbox>
+                        <div class="col-md-5">
+                            <div class="row text-center">
+                                <div class="col-sm-8">
+                                    <mat-checkbox formControlName="allbranch" id="call"> Apply to All
+                                        Branch</mat-checkbox>
+                                </div>
+                            </div>
+                            <div class="row ms-2">
+                                <label for="inputPassword" class="col-sm-3 col-form-label">Effective Date :</label>
+                                <div class="col-md-6">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <input matInput [matDatepicker]="effdate" [max]="effdate"
+                                            formControlName="effdate" placeholder="DD/MM/YYYY" DateValidation />
+                                        <mat-datepicker-toggle matSuffix [for]="effdate"></mat-datepicker-toggle>
+                                        <mat-datepicker #effdate></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
                             </div>
                         </div>
+
                     </div>
+
+
                 </div>
 
 

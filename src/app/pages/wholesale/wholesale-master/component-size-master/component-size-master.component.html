@@ -5,8 +5,10 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()" [isViewSave]="!viewMode"
-  [isViewCancel]="!viewMode" [isViewMore]="!viewMode" [isViewDelete]="editableMode">
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+  (deleteClick)="deleteRecord()" [isViewSave]="!viewMode"
+  [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+  [isViewDelete]="editableMode">
 </modal-header>
 <div class="container-fluid pt-3">
   <form [formGroup]="componentsizemasterForm">
@@ -15,13 +17,17 @@
         <div class="row">
           <div class="col-md-10">
             <div class="row align-items-center mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Code * :</label>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Code *
+                :</label>
               <div class="col-md-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput class="text-left" formControlName="code"
-                    [readonly]="editableMode || viewMode" id="code" (keyup)="codeEnabled()"
+                  <input type="text" matInput class="text-left"
+                    formControlName="code"
+                    [readonly]="editableMode || viewMode" id="code"
+                    (keyup)="codeEnabled()"
                     (focusout)="codeValidate($event)"
-                    oninput="this.value = this.value.toUpperCase()" maxlength="6" appNoEmptySpace />
+                    oninput="this.value = this.value.toUpperCase()"
+                    maxlength="6" appNoEmptySpace />
                 </mat-form-field>
               </div>
             </div>
@@ -30,10 +36,12 @@
         <div class="row">
           <div class="col-md-10">
             <div class="row align-items-center mb-1">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Description * :</label>
+              <label for="inputPassword"
+                class="col-sm-3 col-form-label">Description * :</label>
               <div class="col-md-9">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput class="text-left" formControlName="desc" maxlength="100"
+                  <input type="text" matInput class="text-left"
+                    formControlName="desc" maxlength="100"
                     [readonly]="viewMode || codeEnable" />
                 </mat-form-field>
               </div>
@@ -47,10 +55,13 @@
             <div class="row">
               <div class="col-md-5">
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Height :</label>
+                  <label for="inputPassword"
+                    class="col-sm-3 col-form-label">Height :</label>
                   <div class="col-md-5">
-                    <mat-form-field appearance="outline" style="width: 100%; text-align: right;">
-                      <input type="text" matInput class="text-left" formControlName="height" ThreeDecimalInput
+                    <mat-form-field appearance="outline"
+                      style="width: 100%; text-align: right;">
+                      <input type="text" matInput class="text-left"
+                        formControlName="height" ThreeDecimalInput
                         [readonly]="viewMode || codeEnable" [max]="3" />
                     </mat-form-field>
                   </div>
@@ -58,11 +69,15 @@
               </div>
               <div class="col-md-5">
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Length :</label>
+                  <label for="inputPassword"
+                    class="col-sm-3 col-form-label">Length :</label>
                   <div class="col-md-5">
-                    <mat-form-field appearance="outline" style="width: 100%; text-align: right;">
-                      <input type="text" matInput class="text-left" formControlName="length"
-                        [readonly]="viewMode || codeEnable" ThreeDecimalInput [max]="3" />
+                    <mat-form-field appearance="outline"
+                      style="width: 100%; text-align: right;">
+                      <input type="text" matInput class="text-left"
+                        formControlName="length"
+                        [readonly]="viewMode || codeEnable" ThreeDecimalInput
+                        [max]="3" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -72,22 +87,30 @@
             <div class="row">
               <div class="col-md-5">
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Width :</label>
+                  <label for="inputPassword"
+                    class="col-sm-3 col-form-label">Width :</label>
                   <div class="col-md-5">
-                    <mat-form-field appearance="outline" style="width: 100%; text-align: right;">
-                      <input type="text" matInput class="text-left" formControlName="width"
-                        [readonly]="viewMode || codeEnable" ThreeDecimalInput [max]="6" />
+                    <mat-form-field appearance="outline"
+                      style="width: 100%; text-align: right;">
+                      <input type="text" matInput class="text-left"
+                        formControlName="width"
+                        [readonly]="viewMode || codeEnable" ThreeDecimalInput
+                        [max]="6" />
                     </mat-form-field>
                   </div>
                 </div>
               </div>
               <div class="col-md-5">
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Radius :</label>
+                  <label for="inputPassword"
+                    class="col-sm-3 col-form-label">Radius :</label>
                   <div class="col-md-5">
-                    <mat-form-field appearance="outline" style="width: 100%; text-align: right;">
-                      <input type="text" matInput class="text-left" formControlName="radius" ThreeDecimalInput
-                        [value]="radius" [readonly]="viewMode || codeEnable" [max]="6">
+                    <mat-form-field appearance="outline"
+                      style="width: 100%; text-align: right;">
+                      <input type="text" matInput class="text-left"
+                        formControlName="radius" ThreeDecimalInput
+                        [value]="radius" [readonly]="viewMode || codeEnable"
+                        [max]="6">
                     </mat-form-field>
                   </div>
                 </div>

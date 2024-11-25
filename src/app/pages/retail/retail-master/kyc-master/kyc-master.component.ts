@@ -270,12 +270,9 @@ export class KycMasterComponent implements OnInit {
 
   docType(data: any, event: any) {
     console.log('New Value:', event.target.value);
-    console.log(data);
-    
-  
+    console.log(data);  
     const updatedSRNO = data.data.KYC_SRNO - 1; 
     this.maindetails[updatedSRNO].KYC_DOCTYPE = event.target.value;
-  
     console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].KYC_DOCTYPE);
   }
   

@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
-import { Subscription } from "rxjs";
-import { CommonServiceService } from "src/app/services/common-service.service";
-import { SuntechAPIService } from "src/app/services/suntech-api.service";
-import { MasterSearchModel } from "src/app/shared/data/master-find-model";
-import Swal from "sweetalert2";
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: "app-loan-salary-advance-master",
@@ -16,6 +16,23 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
 
+  @ViewChild('overlayempCode') overlayempCode!: MasterSearchComponent;
+  @ViewChild('overlaystaffadvCodeSearch') overlaystaffadvCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined1Search') overlayuserDefined1Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined2Search') overlayuserDefined2Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined3Search') overlayuserDefined3Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined4Search') overlayuserDefined4Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined5Search') overlayuserDefined5Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined6Search') overlayuserDefined6Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined7Search') overlayuserDefined7Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined8Search') overlayuserDefined8Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined9Search') overlayuserDefined9Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined10Search') overlayuserDefined10Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined11Search') overlayuserDefined11Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined12Search') overlayuserDefined12Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined13Search') overlayuserDefined13Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined14Search') overlayuserDefined14Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined15Search') overlayuserDefined15Search!: MasterSearchComponent;
   selectedTabIndex = 0;
   tableData: any = [];
   BranchData: MasterSearchModel = {};
@@ -748,4 +765,5 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
     console.log(e);
     this.LoanSalaryAdvanceMasterForm.controls.udf15.setValue(e.CODE);
   }
+
 }
