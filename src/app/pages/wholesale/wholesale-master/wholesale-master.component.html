@@ -1,5 +1,6 @@
 <!-- menu section -->
 <app-menubar [menuTitle]="menuTitle" (subMenuChange)="getMasterGridData($event)"></app-menubar>
+<auth-checker (authSubmit)="authSubmit()"></auth-checker>
 <!-- content section starts -->
 <div class="row d-flex justify-content-between"
     style="min-height: 100vh !important;">

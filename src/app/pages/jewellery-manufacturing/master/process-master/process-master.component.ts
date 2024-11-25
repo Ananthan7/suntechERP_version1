@@ -189,7 +189,6 @@ export class ProcessMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-
   maxInputLength: number = 2
   processMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
@@ -251,7 +250,6 @@ export class ProcessMasterComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService,
     private commonService: CommonServiceService,
     private renderer: Renderer2,
   ) {
@@ -310,7 +308,6 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.Position.setValue(0)
   }
   private setFormValues() {
-    console.log(this.content);
     if (!this.content) return
     this.processMasterForm.controls.processCode.setValue(this.content.PROCESS_CODE);
     this.processMasterForm.controls.processDesc.setValue(this.content.DESCRIPTION);
@@ -368,7 +365,6 @@ export class ProcessMasterComponent implements OnInit {
     this.setValueWithDecimal('loss_max', this.content.MAX_LOSS, 'AMOUNT')
     this.setValueWithDecimal('standard_end', this.content.RECOV_MIN, 'AMOUNT')
     this.setValueWithDecimal('min_end', this.content.RECOV_VAR1, 'AMOUNT')
-    // console.log(this.processMasterForm.value, '.....fired.....');
 
     // this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
     // this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
@@ -513,7 +509,6 @@ export class ProcessMasterComponent implements OnInit {
 
     // this.formattedMaxTime = `${this.maxContent.maximumTime.totalDays}:${this.maxContent.maximumTime.totalHours}:${this.maxContent.maximumTime.totalMinutes}`;
     this.formattedMaxTime = duration;
-    console.log(this.formattedMaxTime);
   }
   validateLossRange() {
     this.lossData = false;
@@ -572,21 +567,14 @@ export class ProcessMasterComponent implements OnInit {
     });
     this.subscriptions.push(Sub)
   }
-
-
   onchangeCheckBox(e: any) {
-    // console.log(e);
-
     if (e == true) {
       return true;
     } else {
       return false;
     }
   }
-
   onchangeCheckBoxNum(e: any) {
-    // console.log(e);
-
     if (e == true) {
       return 1;
     } else {
@@ -594,15 +582,12 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
   viewchangeYorN(e: any) {
-    // console.log(e);
-
     if (e == 'Y') {
       return true;
     } else {
       return false;
     }
   }
-
 
   submitValidations(form: any) {
     if (form.loss == true && this.validateLossRange()) {
@@ -712,8 +697,6 @@ export class ProcessMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG2497');
       return true;
     }
-
-
     return false;
   }
   setPostData() {
@@ -1030,10 +1013,6 @@ export class ProcessMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
-
-
-
   postionCodeValidate(event?: any) {
 
     let postData = {
@@ -1195,22 +1174,14 @@ export class ProcessMasterComponent implements OnInit {
 
 
   losscheckAccodeSelected(event: any, LOOKUPDATA: MasterSearchModel, formname: string) {
-    console.log(event.target.value);
-
     var checkValue = event.target.value;
-    console.log(checkValue);
-
-
     // LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '') {
       this.processMasterForm.controls[formname].setValue('');
       return
     }
-
     // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
     this.lossAccodeValidateSP();
-
-
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
       this.processMasterForm.controls[formname].setValue('');
       this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
@@ -1220,23 +1191,13 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   recovcheckAccodeSelected(event: any, LOOKUPDATA: MasterSearchModel, formname: string) {
-    console.log(event.target.value);
-
-    var checkValue = event.target.value;
-    console.log(checkValue);
-
-
     // LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '') {
       this.processMasterForm.controls[formname].setValue('');
       return
     }
-
     // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
     this.recovAccodeValidateSP();
-
-
-
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
       this.processMasterForm.controls[formname].setValue('');
       this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
@@ -1246,12 +1207,7 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   gaincheckAccodeSelected(event: any, LOOKUPDATA: MasterSearchModel, formname: string) {
-    console.log(event.target.value);
-
     var checkValue = event.target.value;
-    console.log(checkValue);
-
-
     // LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '') {
       this.processMasterForm.controls[formname].setValue('');
@@ -1260,9 +1216,6 @@ export class ProcessMasterComponent implements OnInit {
 
     // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
     this.gainAccodeValidateSP();
-
-
-
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
       this.processMasterForm.controls[formname].setValue('');
       this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
@@ -1301,8 +1254,6 @@ export class ProcessMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
-
   wipAccodeValidateSP() {
     let postData = {
       "SPID": "0176",
@@ -1345,9 +1296,6 @@ export class ProcessMasterComponent implements OnInit {
 
     this.subscriptions.push(Sub);
   }
-
-
-
   lossAccodeValidateSP() {
     let postData = {
       "SPID": "0176",
@@ -1582,8 +1530,6 @@ export class ProcessMasterComponent implements OnInit {
 
 
   showSuccessDialog(message: string): void {
-    console.log('sucess Icons');
-
     Swal.fire({
       title: message,
       text: '',
@@ -1643,31 +1589,16 @@ export class ProcessMasterComponent implements OnInit {
       this.processMasterForm.controls.LOSS_ACCODE.setValue('');
       this.processMasterForm.controls.RECOV_ACCODE.setValue('');
     }
-
-
-
-    //  this.processMasterForm.controls.min_end.setValue(0);
-
-    // Update the validation status after setting or clearing validators
-    //  this.processMasterForm.get('LOSS_ACCODE')?.updateValueAndValidity();
-
   }
-
-
-
   onRecovery() {
-
     // if(this.processMasterForm.value.RECOV_ACCODE == ''){
     //   this.toastr.error('Account Code Cannot be Empty');
     // }
-
-
     if (this.processMasterForm.value.recovery == true) {
       this.processMasterForm.get('RECOV_ACCODE')?.setValidators(Validators.required);
       this.isRecovReadOnly = false;
       this.searchModeRecov = true;
-    }
-    else {
+    } else {
       this.isRecovReadOnly = true;
       this.searchModeRecov = false;
       this.processMasterForm.get('RECOV_ACCODE')?.clearValidators();
@@ -1675,22 +1606,13 @@ export class ProcessMasterComponent implements OnInit {
       this.setValueWithDecimal('standard_end', 0, 'AMOUNT')
       this.processMasterForm.controls.RECOV_ACCODE.setValue('');
     }
-
-
-
     // this.processMasterForm.controls.standard_end.setValue('');
-
-
-    // console.log(event);
-
   }
 
   onAllowGain() {
-
     // if(this.processMasterForm.value.GAIN_ACCODE == ''){
     //   this.toastr.error('Account Code Cannot be Empty');
     // }
-
     if (this.processMasterForm.value.allowGain == true) {
       this.processMasterForm.get('GAIN_ACCODE')?.setValidators(Validators.required);
       this.isAlloWGainReadOnly = false;
@@ -1702,9 +1624,6 @@ export class ProcessMasterComponent implements OnInit {
       this.processMasterForm.get('GAIN_ACCODE')?.clearValidators();
       this.processMasterForm.controls.GAIN_ACCODE.setValue('');
     }
-
-
-
   }
 
   onRecovStockCode(event: any) {
@@ -1735,18 +1654,13 @@ export class ProcessMasterComponent implements OnInit {
       this.processMasterForm.get('approvalCode')?.clearValidators();
       this.processMasterForm.get('approvalProcess')?.clearValidators();
     }
-    console.log(event);
-
   }
-
 
   onInput(event: Event): void {
     const inputValue = (event.target as HTMLInputElement).value;
 
     // Remove any non-digit characters
     const numericValue = inputValue.replace(/[^0-9]/g, '');
-
-
     // Insert a dot after the first 3 digits
     let formattedValue = numericValue.slice(0, 3);
 
@@ -1809,33 +1723,5 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
-
-  // showOverleyPanel(event: any, formControlName: string) {
-
-  //   if (formControlName == 'WIPaccount') {
-  //     this.overlayWIPaccountSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'approvalCode') {
-  //     this.overlayapprovalCodeSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'approvalProcess') {
-  //     this.overlayapprovalProcessSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'recStockCode') {
-  //     this.overlayrecStockCodeSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'ADJUST_ACCODE') {
-  //     this.overlayadjustaccodeSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'LOSS_ACCODE') {
-  //     this.overlaylossaccodeSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'RECOV_ACCODE') {
-  //     this.overlayrecoveaccodeSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'GAIN_ACCODE') {
-  //     this.overlaygainaccodeSearch.showOverlayPanel(event)
-  //   }
-  // }
 }
 

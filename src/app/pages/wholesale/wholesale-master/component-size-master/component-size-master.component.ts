@@ -84,7 +84,7 @@ export class ComponentSizeMasterComponent implements OnInit {
     const height = this.commonService.emptyToZero(form.height);
     const width = this.commonService.emptyToZero(form.width);
 
-    if (height !== null && width !== null) {    
+    if (this.commonService.emptyToZero(height)!=0 && width !== null) {    
       const radiusValue = Math.pow(((width * width) / (8 * height) + (height / 2)), 3 / 3);
       
       console.log(this.commonService.decimalQuantityFormat(radiusValue, 'METAL'));      
@@ -117,7 +117,7 @@ export class ComponentSizeMasterComponent implements OnInit {
     const height = this.componentsizemasterForm.value.height || 0;
     const width = this.componentsizemasterForm.value.width || 0;
     const length = this.componentsizemasterForm.value.length || 0;
-
+    
     let radius: number = this.calculateRadius1();
     if (isNaN(radius)) {
       radius = 0;
