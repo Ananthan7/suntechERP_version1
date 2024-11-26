@@ -3,6 +3,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import Swal from 'sweetalert2';
@@ -15,7 +17,7 @@ import Swal from 'sweetalert2';
 export class FestivalSalesComparisonComponent implements OnInit {
   festivalSalesComparisonForm: FormGroup = this.formBuilder.group({
     branch: [''],
-    orderType: [''],
+    festivalType: [''],
     YearToCompareFrom: [''],
     YearToCompareTo: [''],
     fromdate: [''],
@@ -41,7 +43,8 @@ export class FestivalSalesComparisonComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.prefillScreenValues()
+    this.prefillScreenValues();
+    this.gridDataFetch();
   }
 
   close(data?: any) {
@@ -118,24 +121,6 @@ export class FestivalSalesComparisonComponent implements OnInit {
     // const plainText = uniqueArray.join('');
     this.formattedBranchDivisionData = branchDivisionData
     this.festivalSalesComparisonForm.controls.branch.setValue(this.formattedBranchDivisionData);
-  }
-
- prefillScreenValues(){
-    if ( Object.keys(this.content).length > 0) {
-      //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
-    }
-    else{
-      const userBranch = localStorage.getItem('userbranch');
-      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
-      this.festivalSalesComparisonForm.controls.branch.setValue(formattedUserBranch);
-      this.fetchedBranchDataParam = formattedUserBranch;
-      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
-   
-      this.dateToPass = {
-        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
-        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!
-      };
-    }
   }
 
   popupClosed(){
@@ -227,4 +212,59 @@ export class FestivalSalesComparisonComponent implements OnInit {
       this.isLoading = false;
     }, 300)  
   }
+
+  gridDataFetch(){
+    let API = "FestivalDashboard";
+    let postData = { 
+      "branchList": this.festivalSalesComparisonForm.controls.branch.value,
+      "festivalList": this.festivalSalesComparisonForm.controls.festivalType.value,
+      "noofYears": this.festivalSalesComparisonForm.controls.YearToCompareFrom.value - 
+        this.festivalSalesComparisonForm.controls.YearToCompareTo.value
+        
+      //correct payload
+      // "branchList": "DM#HO#MOE",
+      // "festivalList": "DIWALI#DSF#ONAM",
+      // "noofYears": "3"
+    };
+    this.dataService.postDynamicAPI(API, postData).pipe(
+      catchError((error) => {
+        console.error('API Error:', error);
+        return throwError('Something went wrong. Please try again later.');
+      })
+    ).subscribe(
+      (result) => {
+        if (result && result.dynamicData) {
+          if (result.dynamicData[0].length > 0) {
+            this.toastr.success(result.dynamicData.status || 'Success');
+          } else {
+            this.toastr.warning('No data available for the given criteria in Available Stock.');
+          }
+        } else {
+          this.toastr.warning('No data available for the given criteria in Available Stock.');
+        }
+      },
+      (err) => {
+        this.toastr.error(err.message || 'An error occurred while fetching the data.');
+      }
+    );
+  }
+
+  prefillScreenValues(){
+    if ( Object.keys(this.content).length > 0) {
+      //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+    }
+    else{
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.festivalSalesComparisonForm.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+   
+      this.dateToPass = {
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!
+      };
+    }
+  }
+
 }

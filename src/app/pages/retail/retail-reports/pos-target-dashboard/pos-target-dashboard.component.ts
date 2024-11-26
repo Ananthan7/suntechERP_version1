@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -32,8 +33,8 @@ export class PosTargetDashboardComponent implements OnInit {
 
   POSTargetStatusForm: FormGroup = this.formBuilder.group({
     branch : [''],
-    fromdate : [''],
-    todate : [''],
+    asonDate : [''],
+   
     POSTargetAnalysis: [''],
     templateName: [''],
     showSelection: ['']
@@ -44,12 +45,14 @@ export class PosTargetDashboardComponent implements OnInit {
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
   logDataParam: any;
-  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
+  dateToPass: { asonDate: string; } = { asonDate: '' };
 
   fetchedBranchDataParam: any = [];
   isLoading: boolean = false;
   htmlPreview: any;
 
+  ytdStatusArr: any = [];
+  mtdStatusArr: any = [];
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -62,7 +65,8 @@ export class PosTargetDashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.prefillScreenValues()
+    this.prefillScreenValues();
+    this.gridDataFetch();
 
     this.logDataParam =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
@@ -107,6 +111,20 @@ export class PosTargetDashboardComponent implements OnInit {
       event.target.value = ''; 
       console.error('Invalid date input');
     }
+  }
+
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
+
+
+  setDateValue(event: any){
+    if(event.asOnDate){
+      this.POSTargetStatusForm.controls.asonDate.setValue(event.asOnDate);
+      this.dateToPass.asonDate = this.datePipe.transform(event.asOnDate, 'yyyy-MM-dd')!
+    }
+    this.gridDataFetch();
   }
 
   headerCellFormatting(e: any) {
@@ -155,23 +173,6 @@ export class PosTargetDashboardComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
-  }
-
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
-
-
-  setDateValue(event: any){
-    if(event.FromDate){
-      this.POSTargetStatusForm.controls.fromdate.setValue(event.FromDate);
-      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
-    }
-    else if(event.ToDate){
-      this.POSTargetStatusForm.controls.todate.setValue(event.ToDate);
-      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
-    }
   }
 
   selectedData(data: any) {
@@ -259,7 +260,7 @@ export class PosTargetDashboardComponent implements OnInit {
             },
             "CONTROL_DETAIL": {
               "str_CurrFyear": localStorage.getItem('YEAR'),
-              "strAsOnDate": this.datePipe.transform(this.POSTargetStatusForm.controls.todate.value, 'yyyy-MM-dd'),
+              "strAsOnDate": this.dateToPass.asonDate,
               "StrBranchList": this.POSTargetStatusForm.controls.branch.value,
               "intShowSummary": this.POSTargetStatusForm.controls.showSelection.value,
               "LOGDATA ": JSON.stringify(this.logDataParam)
@@ -310,7 +311,7 @@ export class PosTargetDashboardComponent implements OnInit {
       "SPID": "0154",
       "parameter": { 
         "str_CurrFyear": localStorage.getItem('YEAR'),
-        "strAsOnDate": this.datePipe.transform(this.POSTargetStatusForm.controls.todate.value, 'yyyy-MM-dd'),
+        "strAsOnDate": this.dateToPass.asonDate,
         "StrBranchList": this.POSTargetStatusForm.controls.branch.value,
         "intShowSummary": this.POSTargetStatusForm.controls.showSelection.value,
         "LOGDATA ": JSON.stringify(logData)
@@ -345,35 +346,79 @@ export class PosTargetDashboardComponent implements OnInit {
   }
   
   printBtnClick(){
-    this.isLoading = true
-
+    this.isLoading = true;
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
     let postData = {
-      "SPID": "",
-      "parameter": {
-        
+      "SPID": "0154",
+      "parameter": { 
+        "str_CurrFyear": localStorage.getItem('YEAR'),
+        "strAsOnDate": this.dateToPass.asonDate,
+        "StrBranchList": this.POSTargetStatusForm.controls.branch.value,
+        "intShowSummary": this.POSTargetStatusForm.controls.showSelection.value,
+        "LOGDATA ": JSON.stringify(logData)
       }
     }
-    console.log(postData) 
-    setTimeout(()=>{
-      this.isLoading = false;
-    }, 300)  
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      let data = result.dynamicData;
+      if(result.status == "Success"){
+        
+        let printContent = data[0][0].HTML;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        if(this.htmlPreview.changingThisBreaksApplicationSecurity){
+
+          setTimeout(() => {
+            const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+
+            let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
+            userBranchDesc = JSON.parse(userBranchDesc)
+      
+            if (content && Object.keys(content).length !== 0) {
+              const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
+              const printWindow = window.open('', '', 'height=600,width=800');
+              printWindow?.document.write(modifiedContent);
+              printWindow?.focus();
+              printWindow?.print();
+              this.isLoading = false;
+            } else {
+              Swal.fire('No Data!', 'There is no data to print!', 'info');
+              this.commonService.closeSnackBarMsg();
+              this.isLoading = false;
+              return
+            }
+          }, 1500); 
+        }
+        else{
+          Swal.fire('No Data!', 'There is no data to print!', 'info');
+          this.commonService.closeSnackBarMsg();
+          this.isLoading = false;
+          return
+        }
+      }
+      else{
+        this.toastr.error(result.message);
+        this.isLoading = false;
+        return
+      }
+    });  
   }
 
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
-      // console.log(' pREfECTHED VALUES FOR THE SCREEN', this.content)
-      this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
-      this.POSTargetStatusForm.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
-
       var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
-      this.POSTargetStatusForm.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.StrBranchList);
-
-      this.dateToPass = {
-        fromDate:  paresedItem?.CONTROL_DETAIL.strAsOnDate,
-        toDate: paresedItem?.CONTROL_DETAIL.strAsOnDate
-      };
-
-      this.POSTargetStatusForm.controls.showSelection.setValue(paresedItem?.CONTROL_DETAIL.intShowSummary);
       console.log('parsed data', paresedItem?.CONTROL_DETAIL )
     }
     else{
@@ -384,13 +429,68 @@ export class PosTargetDashboardComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
-        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        asonDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
     }
   }
 
+  gridDataFetch(){
+    this.isLoading = true;
+    this.ytdStatusArr = [];
+    this.mtdStatusArr = [];
 
+    let API1 = "UspPOSTargetYTD";
+    let postData1 = { 
+      "str_CurrFyear": this.datePipe.transform(this.dateToPass.asonDate, 'yyyy'),
+      "strAsOnDate": this.dateToPass.asonDate,
+      "StrBranchList": this.POSTargetStatusForm.controls.branch.value,
+      "intShowSummary": true
+    };
+
+    let API2 = "UspPosTargetMTD"
+    let postData2 = { 
+      "str_CurrFyear": this.datePipe.transform(this.dateToPass.asonDate, 'yyyy'),
+      "strAsOnDate": this.dateToPass.asonDate,
+      "StrBranchList": this.POSTargetStatusForm.controls.branch.value, 
+      "intShowSummary": true 
+    };
+
+    forkJoin({
+      YTDstatusData: this.dataService.postDynamicAPI(API1, postData1),
+      MTDstatusData: this.dataService.postDynamicAPI(API2, postData2),
+    }).subscribe({
+        next: (result) => {
+          this.ytdStatusArr.push(result.YTDstatusData.dynamicData[0][0])
+          this.mtdStatusArr.push(result.MTDstatusData.dynamicData[0][0])
+
+          if(result.YTDstatusData.dynamicData[0][0].length>0 ||  result.MTDstatusData.dynamicData[0][0].length>0){
+            this.commonService.showSnackBarMsg('data loaded successfully!');
+            this.isLoading = false;
+          }
+          else{
+            this.commonService.showSnackBarMsg('No Data!');
+            this.isLoading = false;
+          }
+        },
+        error: (error) => {
+          this.commonService.showSnackBarMsg('Error loading data.');
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+    });
+  }
+
+
+  customizeContent= (data: any) => {
+    if (typeof data.value === 'object' && Object.keys(data.value).length === 0) {
+      return data.value = null;
+    } else if (typeof data.value === 'number') {
+      return this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT');
+    }
+    return
+  };
 }
 
 

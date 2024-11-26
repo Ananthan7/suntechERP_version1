@@ -22,7 +22,7 @@
       </div>
 
       <div class="col-md-7">
-          <app-date (selectedDate)="setDateValue($event)"  [dateValue]="dateToPass"></app-date>
+          <app-as-on-date (selectedDate)="setDateValue($event)"  [dateValue]="dateToPass"></app-as-on-date>
       </div> 
    </div>
 
@@ -82,14 +82,13 @@
         </div>
       </div>
       
-      <div class="col-md-5">
+      <!-- <div class="col-md-5">
         <div class="row">
 
           <div class="col-sm-9">
             <div class="position-relative d-flex">
               <mat-form-field appearance="outline" style="width: 100%;">
                 <input matInput type="text" placeholder="POS Target Analysis" formControlName="POSTargetAnalysis" />
-                <!-- <master-search class="masterSearch"></master-search> -->
               </mat-form-field>
             </div>
           </div>
@@ -101,40 +100,82 @@
             <button class="btn btn-primary" type="submit" id="ID003y">Refresh</button>
           </div>
         </div>
-      </div>
+      </div> -->
 
     </div>
 
 
     <div class="row  mt-1 pt-3 mb-3">
-      <mat-tab-group style="background-color: #f5f2ee;" [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
+      <mat-tab-group style="background-color: #f5f2ee;">
         <mat-tab label="M T D Status">
           <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
-          <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [allowColumnReordering]="true"
-            [allowColumnResizing]="true" [columnAutoWidth]="true" *ngIf="isLoading" (onCellPrepared)="headerCellFormatting($event)">
+          <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [allowColumnReordering]="true"
+            [allowColumnResizing]="true" [columnAutoWidth]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
+            [dataSource]="mtdStatusArr" >
             <dxo-paging [enabled]="false"></dxo-paging>
-            <dxo-editing mode="cell" [allowUpdating]="true">
-            </dxo-editing>
+            <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
             <dxo-selection mode="multiple"></dxo-selection>
             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-            <dxi-column *ngFor="let data of mtdcolumnhead" dataField="{{ data }}" caption="{{ data }}"
-              [allowEditing]="true" alignment="center" backgroundcolor="#000">
-            </dxi-column>
+            <dxi-column  dataField="Branch" caption="Branch" [allowResizing]="true"  [allowReordering]="true"></dxi-column>
+            <dxi-column  dataField="branch_name" caption="Branch Name" [allowResizing]="true"  [allowReordering]="true"></dxi-column>
+            <dxi-column  dataField="Monthday" caption="Date" [allowResizing]="true"  [allowReordering]="true"></dxi-column>
+            <dxi-column  dataField="Target" caption="MTD Target" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="Achieved" caption="Achieved" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="ach_per" caption="Ach %" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="variance" caption="Var Amount" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="var_per" caption="%" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="Sales_2023" caption="Prv Year 1" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="Y1_VAR" caption="Yoy %" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="Sales_2022" caption="Prv Year 2" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="Y2_VAR" caption="Yoy  %" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="revtarget" caption="New Daily Target" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
           </dx-data-grid>
         </mat-tab>
+
+
         <mat-tab label="Y T D Status">
-          <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [allowColumnReordering]="true"
-            [allowColumnResizing]="true" [columnAutoWidth]="true" *ngIf="isLoading" (onCellPrepared)="headerCellFormatting($event)">
+          <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
+          <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [allowColumnReordering]="true"
+            [allowColumnResizing]="true" [columnAutoWidth]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
+            [dataSource]="ytdStatusArr" >
             <dxo-paging [enabled]="false"></dxo-paging>
-            <dxo-editing mode="cell" [allowUpdating]="true">
-            </dxo-editing>
+            <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
             <dxo-selection mode="multiple"></dxo-selection>
             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-            <dxi-column *ngFor="let data of ytdcolumnhead" dataField="{{ data }}" caption="{{ data }}"
-              [allowEditing]="true" alignment="center" backgroundcolor="#000">
-            </dxi-column>
+            <dxi-column  dataField="Branch" caption="Branch" [allowResizing]="true"  [allowReordering]="true"></dxi-column>
+            <dxi-column  dataField="branch_name" caption="Branch Name" [allowResizing]="true"  [allowReordering]="true"></dxi-column>
+            <dxi-column  dataField="Month" caption="Month" [allowResizing]="true"  [allowReordering]="true"></dxi-column>
+            <dxi-column  dataField="Target" caption="YTD Target" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="Achieved" caption="Achieved" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="ach_per" caption="Ach %" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="variance" caption="Var Amount" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="var_per" caption="%" [allowResizing]="true"  [allowReordering]="true"></dxi-column>
+            <dxi-column  dataField="Sales_2023" caption="Previous Year 1" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="Y1_VAR" caption="YoY %" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="Sales_2022" caption="Previous Year2" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="Y2_VAR" caption="YoY  %" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
+            <dxi-column  dataField="revtarget" caption="New Monthly Target" [allowResizing]="true"  [allowReordering]="true"
+            [customizeText]="customizeContent"></dxi-column>
           </dx-data-grid>
         </mat-tab>
 
