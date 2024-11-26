@@ -18,7 +18,7 @@
             <div class="card-body sales-card-body p-2">
               <div class="col-md-12">
                 <div>
-                  <mat-radio-group aria-label="Select an option" formControlName="prefixSelect">
+                  <mat-radio-group aria-label="Select an option" formControlName="prefixSelect" (change)="onRadioChange($event)">
                     <mat-radio-button value="S" id="ID001" class="mx-2">Diamond</mat-radio-button>
                     <mat-radio-button value="M" id="ID002" class="mx-2">Metal</mat-radio-button>
                   </mat-radio-group>
@@ -68,7 +68,7 @@
                     <label for="inputPassword" id="ID006" class="col-sm-3 col-form-label">Attribute :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" UpperCaseDirective autocomplete="off" matInput />
+                        <input type="text" UpperCaseDirective autocomplete="off" matInput   formControlName="attribute" />
                       </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID007" class="col-sm-3 col-form-label">No Sub Items:</label>
@@ -93,7 +93,7 @@
                     <label for="inputPassword" id="ID009" class="col-sm-3 col-form-label">Set Ref:</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput />
+                        <input type="text" matInput formControlName="setref" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -111,7 +111,7 @@
                     <label for="inputPassword" id="ID011" class="col-sm-3 col-form-label">Pair Ref :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput />
+                        <input type="text" matInput formControlName="pairref"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -129,7 +129,7 @@
                     <label for="inputPassword" id="ID013" class="col-sm-3 col-form-label">Vendor Ref :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput />
+                        <input type="text" matInput formControlName="vendorref"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -147,7 +147,7 @@
                     <label for="inputPassword" id="ID015" class="col-sm-3 col-form-label">Surface :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput />
+                        <input type="text" matInput formControlName="surface"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -166,7 +166,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
                         <mat-label></mat-label>
-                        <mat-select>
+                        <mat-select formControlName="finishtype">
                           <mat-option value="mat" id="ID018">Mat</mat-option>
                           <mat-option value="glossy" id="ID019">Glossy</mat-option>
                         </mat-select>
@@ -200,7 +200,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
                         <input type="text" matInput formControlName="style"
-                          (focusout)="validateLookupField($event,StyleCodeData,'style')" class="text-right"
+                          (focusout)="validateLookupField($event,StyleCodeData,'style')" 
                           (keydown)="lookupKeyPress($event,'style')" />
                         <master-search [MasterSearchData]="StyleCodeData" class="masterSearch" #overlaystyleSearch
                           (newRowClick)="StyleCodeSelected($event)"></master-search>
@@ -229,18 +229,18 @@
                       </mat-form-field>
                     </div>
                     <div class="col-md-3 pl-5">
-                      <mat-checkbox class="example-margin" id="ID025">Making On Gross Wt</mat-checkbox>
+                      <mat-checkbox class="example-margin" id="ID025" formControlName="makinggrosswt">Making On Gross Wt</mat-checkbox>
                     </div>
                   </div>
                   <div class="row align-items-center mb-1">
                     <label for="inputPassword" class="col-sm-3 col-form-label" id="ID026">Purity :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" class="text-right" matInput SixDecimalInput />
+                        <input type="number" class="text-right" matInput SixDecimalInput formControlName="purity"/>
                       </mat-form-field>
                     </div>
                     <div class="col-md-3 pl-5">
-                      <mat-checkbox class="example-margin" id="ID027">Metal On Gross Wt</mat-checkbox>
+                      <mat-checkbox class="example-margin" id="ID027"  formControlName="metalgrosswt">Metal On Gross Wt</mat-checkbox>
                     </div>
                   </div>
                 </div>
@@ -254,13 +254,13 @@
                             <label for="inputPassword" id="ID028" class="col-sm-3 col-form-label">Cad Designer:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="cadDesigner"/>
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" id="ID029" class="col-sm-3 col-form-label">Width:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" class="text-right" matInput maxlength="27" NumberOnly />
+                                <input type="text" class="text-right" matInput maxlength="27" NumberOnly formControlName="widthCad"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -268,13 +268,13 @@
                             <label for="inputPassword" id="ID030" class="col-sm-3 col-form-label">Designer:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="designer"/>
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" id="ID031" class="col-sm-3 col-form-label">Thickness:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" class="text-right" matInput NumberOnly maxlength="20" />
+                                <input type="text" class="text-right" matInput NumberOnly maxlength="20" formControlName="thickness"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -282,14 +282,14 @@
                             <label for="inputPassword" id="ID032" class="col-sm-3 col-form-label">Grade:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="grade"/>
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" id="ID033" class="col-sm-3 col-form-label">Metal Wt :</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
                                 <input type="text" class="text-right" matInput MetalDecimalInput [max]="13"
-                                  (input)="onInputChange($event,'metal_wt', 12)" />
+                                  (input)="onInputChange($event,'metal_wt', 12)" formControlName="metal_wt"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -298,7 +298,7 @@
                               Maker:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="model"/>
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" id="ID035" class="col-sm-3 col-form-label">Currency *
@@ -317,7 +317,7 @@
                             <label for="inputPassword" id="ID036" class="col-sm-3 col-form-label">Instructor:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput />
+                                <input type="text" matInput formControlName="instructor"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -326,29 +326,44 @@
                               Size:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="number" class="text-right" matInput />
+                                <input type="number" class="text-right" matInput formControlName="jewellerySize"/>
                               </mat-form-field>
                             </div>
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                               <mat-radio-button name="unit" value="1" id="ID038">Cm</mat-radio-button>
                             </div>
                             <div class="col-md-3">
                               <mat-radio-button name="unit" value="2" id="ID039">Inch</mat-radio-button>
-                            </div>
+                            </div> -->
+                         
+                              <div class="col-md-6">
+                                <mat-radio-group formControlName="cm" class="d-flex align-items-center">
+                                  <mat-radio-button value="1" class="me-3">Cm</mat-radio-button>
+                                  <mat-radio-button value="2" class="me-3">Inch</mat-radio-button>
+                                </mat-radio-group>
+                              </div>
+                        
+                            
                           </div>
                           <div class="row align-items-center mb-1">
                             <label for="inputPassword" id="ID040" class="col-sm-3 col-form-label">Req Metal:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" class="text-right" matInput MetalDecimalInput />
+                                <input type="number" class="text-right" matInput MetalDecimalInput formControlName="reqmetal"/>
                               </mat-form-field>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
+                              <mat-radio-group formControlName="weightPerc" class="d-flex align-items-center">
+                                <mat-radio-button value="1"  class="me-3">%</mat-radio-button>
+                                <mat-radio-button value="2"  class="me-3"id="ID039">Weight</mat-radio-button>
+                              </mat-radio-group>
+                            </div>
+                            <!-- <div class="col-md-3">
                               <mat-radio-button name="type" value="1" id="ID041">%</mat-radio-button>
                             </div>
                             <div class="col-md-3">
                               <mat-radio-button name="type" value="2" is="ID042">Weight</mat-radio-button>
-                            </div>
+                            </div> -->
                           </div>
                           <div class="row align-items-center mb-1">
                             <label for="inputPassword" id="ID043" class="col-sm-6 col-form-label">Production
@@ -356,14 +371,14 @@
                           </div>
                           <div class="row align-items-center mb-1">
                             <div class="col-md-6">
-                              <textarea id="story" name="story" rows="5" cols="23"></textarea>
+                              <textarea id="story" name="story" rows="5" cols="23" formControlName="textbox1"></textarea>
                             </div>
                             <div class="col-md-3">
-                              <mat-checkbox class="example-margin" id="ID044">Customer
+                              <mat-checkbox class="example-margin" id="ID044" formControlName="customerexclusive">Customer
                                 Exclusive</mat-checkbox>
-                              <mat-checkbox class="example-margin" id="ID045">Keep On
+                              <mat-checkbox class="example-margin" id="ID045" formControlName="keeponhold">Keep On
                                 Hold</mat-checkbox>
-                              <mat-checkbox class="example-margin" id="ID046">Add
+                              <mat-checkbox class="example-margin" id="ID046" formControlName="addsteel">Add
                                 Steel</mat-checkbox>
                             </div>
                           </div>
@@ -561,7 +576,7 @@
                     <label for="inputPassword" id="ID057" class="col-sm-6 col-form-label">Engraving Text:</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput />
+                        <input type="text" matInput  formControlName="engravingtext"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -569,7 +584,7 @@
                     <label for="inputPassword" id="ID058" class="col-sm-6 col-form-label">Comments:</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput />
+                        <input type="text" matInput  formControlName="comments"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -577,7 +592,7 @@
                     <label for="inputPassword" id="ID059" class="col-sm-6 col-form-label">Fault Details:</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput />
+                        <input type="text" matInput  formControlName="faultdetails"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -619,7 +634,7 @@
                 <div class="col-md-6">
                   <mat-form-field style="width: 100%;" appearance="outline">
                     <input type="text" matInput formControlName="size"
-                      (focusout)="validateLookupField($event,sizeCodeData,'size')" class="text-right"
+                      (focusout)="validateLookupField($event,sizeCodeData,'size')" 
                       (keydown)="lookupKeyPress($event,'size')" />
                     <master-search [MasterSearchData]="sizeCodeData" class="masterSearch" #overlaysizeSearch
                       (newRowClick)="sizeCodeSelected($event)"></master-search>
@@ -647,7 +662,7 @@
                   :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="width" [max]="13" class="text-right"
+                    <input type="text" matInput formControlName="width" NumberOnly  class="text-right"
                       AmountDecimalInput />
                   </mat-form-field>
                 </div>
@@ -1071,7 +1086,7 @@
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
                         <dxi-column dataField="SINO" caption="SINO">
                         </dxi-column>
-                        <dxi-column dataField="Country Code" caption="Country Code">
+                        <dxi-column dataField="Country Code" caption="Dye Code">
                         </dxi-column>
                         <dxi-column dataField="Description" caption="Description">
                         </dxi-column>
@@ -1147,7 +1162,7 @@
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-                        <dxi-column dataField="SINO" caption="SINO">
+                        <dxi-column dataField="SINO" caption="Sr.NO">
                         </dxi-column>
                         <dxi-column dataField="Accode" caption="Accode">
                         </dxi-column>
@@ -1208,7 +1223,7 @@
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
                         <dxi-column dataField="SINO" caption="SINO">
                         </dxi-column>
-                        <dxi-column dataField="Comp Code" caption="Color Code">
+                        <dxi-column dataField="Comp Code" caption="Comp Code">
                         </dxi-column>
                         <dxi-column dataField="Description" caption="Description">
                         </dxi-column>
@@ -1266,8 +1281,7 @@
                         </dxi-column>
                         <dxi-column dataField="Description" caption="Description">
                         </dxi-column>
-                        <dxi-column dataField="Default" caption="Default">
-                        </dxi-column>
+                       
                       </dx-data-grid>
                     </div>
                   </mat-tab>
@@ -1293,6 +1307,8 @@
                         </dxi-column>
                         <dxi-column dataField="Description" caption="Description">
                         </dxi-column>
+                        <dxi-column dataField="Default" caption="Default">
+                        </dxi-column>
                       </dx-data-grid>
                     </div>
                   </mat-tab>
@@ -1315,7 +1331,7 @@
 
                         <dxi-column dataField="SINO" caption="SINO">
                         </dxi-column>
-                        <dxi-column dataField="Height Code" caption="Length Code">
+                        <dxi-column dataField="Height Code" caption="Height Code">
                         </dxi-column>
                         <dxi-column dataField="Description" caption="Description">
                         </dxi-column>
@@ -1424,7 +1440,7 @@
 
                         <dxi-column dataField="SINO" caption="SINO">
                         </dxi-column>
-                        <dxi-column dataField="Finishing Code" caption="Billing Code">
+                        <dxi-column dataField="Finishing Code" caption="Finishing Code">
                         </dxi-column>
                         <dxi-column dataField="Description" caption="Description">
                         </dxi-column>

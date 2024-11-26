@@ -11,6 +11,7 @@ import { DesignSequenceComponent } from './design-sequence/design-sequence.compo
 import { LabourChargesDetailsComponent } from './labour-charges-details/labour-charges-details.component';
 import { DesignTransactionComponent } from './design-transaction/design-transaction.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { MatRadioChange } from '@angular/material/radio';
 
 
 @Component({
@@ -90,6 +91,7 @@ export class DesignMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
   currentFilter: any; 
+  prefixselected:any;
   branchCode?: String;
   selectedTabIndex = 0;
   selectedTabIndex1 = 1;
@@ -182,43 +184,9 @@ export class DesignMasterComponent implements OnInit {
    // this.images = ['assets/images/transparentImg.png'] ;
 
     this.setAllInitialValues()
-    this.setFormValues()
+    //this.setFormValues()
   }
 
-  
-  setAllInitialValues() {
-    console.log(this.content)
-    if (!this.content) return
-    let API = `DesignMaster/InsertDesignMaster/${this.content.DESIGN_CODE}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          let data = result.response
-          console.log(data)
-          this.designmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
-          this.designmasterForm.controls.designdesc.setValue(this.content.DESIGN_DESCRIPTION)
-          this.designmasterForm.controls.costcenter.setValue(this.content.COST_CODE)
-          this.designmasterForm.controls.subcategory.setValue(this.content.SUBCATEGORY_CODE)
-          this.designmasterForm.controls.brand.setValue(this.content.BRAND_CODE)
-          this.designmasterForm.controls.style.setValue(this.content.STYLE)
-          this.designmasterForm.controls.range.setValue(this.content.RANGE_CODE)
-          this.designmasterForm.controls.description.setValue(this.content.DESCRIPTION)
-          this.designmasterForm.controls.metal.setValue(this.content.JOB_DESCRIPTION)
-          this.designmasterForm.controls.color.setValue(this.content.COLOR)
-          this.designmasterForm.controls.karat.setValue(this.content.Details.GROSS_WT)
-          this.designmasterForm.controls.purity.setValue(this.content.detail.PUREWT)
-          this.designmasterForm.controls.alloy.setValue(this.content.detail.PCS)
-          this.designmasterForm.controls.stockCode.setValue(this.content.detail.STOCK_CODE)
-          this.designmasterForm.controls.stockCodeDes.setValue(this.content.detail.PURITY)
-
-        } else {
-          this.commonService.toastErrorByMsgId('MSG1531')
-        }
-      }, err => {
-        this.commonService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
-  }
 
   onSelectionChanged(event: any) {
     const values = event.selectedRowKeys;
@@ -294,7 +262,31 @@ export class DesignMasterComponent implements OnInit {
     noOfSubItems: ['1'],
     division: [''],
     stock_Code: [''],
-
+    attribute: [''],
+    vendorref: [''],
+    finishtype: [''],
+    makinggrosswt: [''],
+    metalgrosswt: [''],
+    cadDesigner: [''],
+    designer: [''],
+    metal_wt: [''],
+    model: [''],
+    instructor: [''],
+    jewellerySize: [''],
+    unit: [''],
+    weightPerc: [''],
+    cm: [''],
+    reqmetal: [''],
+    customerexclusive: [''],
+    keeponhold: [''],
+    addsteel: [''],
+    engravingtext: [''],
+    comments: [''],
+    faultdetails: [''],
+    thickness: [''],
+    grade: [''],
+    textbox1: [''],
+    widthCad: [''],
 
   });
   
@@ -909,7 +901,7 @@ removedatas(){
     SEARCH_FIELD: 'DESIGN_CODE',
     SEARCH_HEADING: 'Design Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "DIVISION='" + this.designmasterForm.value.prefixSelect + "' AND DESIGN_PREFIX =1",
+   // WHERECONDITION: "DIVISION='" + this.designmasterForm.value.prefixSelect + "' AND DESIGN_PREFIX =1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -1166,22 +1158,22 @@ onFileChangedimage(event: any) {
   }
 
 }
-  setFormValues() {
-    if(!this.content) return
-    console.log(this.content);
+  // setFormValues() {
+  //   if(!this.content) return
+  //   console.log(this.content);
     
-    this.designmasterForm.controls.mid.setValue(this.content.MID);
-    this.designmasterForm.controls.code.setValue(this.content.MELTYPE_CODE);
-    this.designmasterForm.controls.description.setValue(this.content.MELTYPE_DESCRIPTION);
-    this.designmasterForm.controls.karat.setValue(this.content.KARAT_CODE);
-    this.designmasterForm.controls.purity.setValue(this.content.PURITY);
-    this.designmasterForm.controls.metal.setValue(this.content.METAL_PER);
-    this.designmasterForm.controls.alloy.setValue(this.content.ALLOY_PER);
-    this.designmasterForm.controls.color.setValue(this.content.COLOR);
-    this.designmasterForm.controls.stockCode.setValue(this.content.STOCK_CODE);
-    this.tableData = this.content.MELTING_TYPE_DETAIL;
+  //   this.designmasterForm.controls.mid.setValue(this.content.MID);
+  //   this.designmasterForm.controls.code.setValue(this.content.MELTYPE_CODE);
+  //   this.designmasterForm.controls.description.setValue(this.content.MELTYPE_DESCRIPTION);
+  //   this.designmasterForm.controls.karat.setValue(this.content.KARAT_CODE);
+  //   this.designmasterForm.controls.purity.setValue(this.content.PURITY);
+  //   this.designmasterForm.controls.metal.setValue(this.content.METAL_PER);
+  //   this.designmasterForm.controls.alloy.setValue(this.content.ALLOY_PER);
+  //   this.designmasterForm.controls.color.setValue(this.content.COLOR);
+  //   this.designmasterForm.controls.stockCode.setValue(this.content.STOCK_CODE);
+  //   this.tableData = this.content.MELTING_TYPE_DETAIL;
     
-  }
+  // }
 
  updateMeltingType() {
 
@@ -1333,44 +1325,122 @@ onFileChangedimage(event: any) {
     return false;
   }
 
+    
+  setAllInitialValues() {
+    console.log(this.content)
+    if (!this.content) return
+    let API = `DesignMaster/GetDesignMasterDetails/${this.content.DESIGN_CODE}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data)
 
-  formSubmit(){
-    if (this.content && this.content.FLAG == 'VIEW') return
-    if(this.content && this.content.FLAG == 'EDIT'){
-      this.update()
-      return
-    }
 
-    if (this.submitValidations(this.designmasterForm.value)) return;
-    // if (this.designmasterForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
-  
-    let API = 'DesignMaster/InsertDesignMaster'
-    let postData = {
-      "DESIGN_CODE": this.designmasterForm.value.code || "",
-      "DESIGN_DESCRIPTION":  this.designmasterForm.value.designdesc || "",
-      "CURRENCY_CODE":this.designmasterForm.value.currency,
+          this.designmasterForm.controls.code.setValue(data.DESIGN_CODE)
+          this.designmasterForm.controls.designdesc.setValue(data.DESIGN_DESCRIPTION)
+          this.designmasterForm.controls.currency.setValue(data.CURRENCY_CODE)
+          this.designmasterForm.controls.type.setValue(data.TYPE_CODE)
+          this.designmasterForm.controls.category.setValue(data.CATEGORY_CODE)
+          this.designmasterForm.controls.subcategory.setValue(data.SUBCATEGORY_CODE)
+          this.designmasterForm.controls.brand.setValue(data.BRAND_CODE)
+          this.designmasterForm.controls.country.setValue(data.COUNTRY_CODE)
+          this.designmasterForm.controls.setref.setValue(data.SET_REF)
+          this.designmasterForm.controls.price1.setValue(data.PRICE1PER)
+          this.designmasterForm.controls.price2.setValue(data.PRICE2PER)
+          this.designmasterForm.controls.price3.setValue(data.PRICE3PER)
+          this.designmasterForm.controls.price4.setValue(data.PRICE4PER)
+          this.designmasterForm.controls.price5.setValue(data.PRICE5PER)
+          this.designmasterForm.controls.color.setValue(data.COLOR)
+          this.designmasterForm.controls.clarity.setValue(data.CLARITY)
+          this.designmasterForm.controls.size.setValue(data.SIZE)
+          // this.designmasterForm.controls.siev.setValue(data.SIEVE)
+          this.designmasterForm.controls.shape.setValue(data.SHAPE)
+          this.designmasterForm.controls.pairref.setValue(data.PAIR_REF)
+          this.designmasterForm.controls.surface.setValue(data.SURFACEPROPERTY)
+          this.designmasterForm.controls.prefix.setValue(data.JOB_PREFIX)
+          this.designmasterForm.controls.parentDesign.setValue(data.PARENT_DSNG_CODE)
+          this.designmasterForm.controls.attribute.setValue(data.FLUOR)
+          this.designmasterForm.controls.costcenter.setValue(data.COST_CODE)
+          this.designmasterForm.controls.karat.setValue(data.KARAT_CODE)
+          this.designmasterForm.controls.vendorref.setValue(data.LAST_PROD_REF)
+          this.designmasterForm.controls.style.setValue(data.STYLE)
+          this.designmasterForm.controls.vendCust.setValue(data.LAST_CUST_ID)
+          this.designmasterForm.controls.range.setValue(data.RANGE_CODE)
+          this.designmasterForm.controls.metalgrosswt.setValue(data.METALCALC_GROSSWT)
+          this.designmasterForm.controls.makinggrosswt.setValue(data.MKGCALC_GROSSWT)
+          this.designmasterForm.controls.purity.setValue(data.PURITY)
+          this.designmasterForm.controls.width.setValue(data.WIDTH)
+          this.designmasterForm.controls.designer.setValue(data.DESIGNER)
+          this.designmasterForm.controls.thickness.setValue(data.THICKNESS)
+          this.designmasterForm.controls.grade.setValue(data.GRADE)
+          this.designmasterForm.controls.metal_wt.setValue(data.METAL_WT)
+          this.designmasterForm.controls.model.setValue(data.MODEL_NO)
+          this.designmasterForm.controls.instructor.setValue(data.INSTRUCTOR)
+          this.designmasterForm.controls.jewellerySize.setValue(data.JEWELLERY_SIZE)
+          // this.designmasterForm.controls.weightPerc.setValue(data.WAX_WEIGHT)
+          // this.designmasterForm.controls.cm.setValue(data.CAST_PCS_WEIGHT)
+          this.designmasterForm.controls.weightPerc.setValue(data.WAX_WEIGHT === 1.000 ? "1" : "2");
+          this.designmasterForm.controls.cm.setValue(data.CAST_PCS_WEIGHT === 1.000 ? "1" : "2");
+          this.designmasterForm.controls.reqmetal.setValue(data.REQ_METAL_WT)
+          this.designmasterForm.controls.keeponhold.setValue(data.DESIGN_HOLD)
+          this.designmasterForm.controls.customerexclusive.setValue(data.DESIGN_EXCLUSSIVE)
+          this.designmasterForm.controls.addsteel.setValue(data.ADD_STEEL)
+          this.designmasterForm.controls.comments.setValue(data.COMMENTS)
+          this.designmasterForm.controls.engravingtext.setValue(data.ENGRAVING_TEXT)
+          this.designmasterForm.controls.faultdetails.setValue(data.FAULT_DETAILS)
+          this.designmasterForm.controls.price1.setValue(data.PRICE1PER)
+          this.designmasterForm.controls.price2.setValue(data.PRICE2PER)
+          this.designmasterForm.controls.price3.setValue(data.PRICE3PER)
+          this.designmasterForm.controls.price4.setValue(data.PRICE4PER)
+          this.designmasterForm.controls.price5.setValue(data.PRICE5PER)
+          this.designmasterForm.controls.textbox1.setValue(data.PROD_INSTRUCTION)
+          this.designmasterForm.controls.sizeset.setValue(data.SIZE_UNIT)
+          this.designmasterForm.controls.height.setValue(data.HEIGHT)
+          this.designmasterForm.controls.length.setValue(data.RADIUS)
+          this.designmasterForm.controls.radius.setValue(data.LENGTH)
+          this.designmasterForm.controls.widthCad.setValue(data.DWIDTH)
+          this.designmasterForm.controls.collection.setValue(data.UDF1)
+          this.designmasterForm.controls.subCollection.setValue(data.UDF2)
+          this.designmasterForm.controls.stoneType.setValue(data.UDF3)
+          this.designmasterForm.controls.setting.setValue(data.UDF4)
+          this.designmasterForm.controls.shape.setValue(data.UDF5)
+          this.designmasterForm.controls.incCat.setValue(data.UDF6)
+          this.designmasterForm.controls.orderRef.setValue(data.UDF7)
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+
+
+  setPostData() {
+    return {
+      "DESIGN_CODE":  this.commonService.nullToString(this.designmasterForm.value.code),
+      "DESIGN_DESCRIPTION":   this.commonService.nullToString(this.designmasterForm.value.designdesc),
+      "CURRENCY_CODE":  this.commonService.nullToString(this.designmasterForm.value.currency),
       "CC_RATE": 0,
-      "COST_CODE": "",
-      "TYPE_CODE": this.designmasterForm.value.type|| "",
-      "CATEGORY_CODE": this.designmasterForm.value.category|| "",
-      "SUBCATEGORY_CODE": this.designmasterForm.value.subcategory || "",
-      "BRAND_CODE":  this.designmasterForm.value.brand || "",
-      "COUNTRY_CODE":  this.designmasterForm.value.country || "",
+      "COST_CODE": this.commonService.nullToString(this.designmasterForm.value.costcenter),
+      "TYPE_CODE":  this.commonService.nullToString(this.designmasterForm.value.type),
+      "CATEGORY_CODE":  this.commonService.nullToString(this.designmasterForm.value.category),
+      "SUBCATEGORY_CODE":  this.commonService.nullToString(this.designmasterForm.value.subcategory),
+      "BRAND_CODE":   this.commonService.nullToString(this.designmasterForm.value.brand),
+      "COUNTRY_CODE":   this.commonService.nullToString(this.designmasterForm.value.country),
       "SUPPLIER_CODE": "",
       "SUPPLIER_REF": "",
-      "SET_REF":this.designmasterForm.value.setref || "",
+      "SET_REF":  this.commonService.nullToString(this.designmasterForm.value.setref),
       "PICTURE_NAME": "",
       "PICTURE_NAME1": "",
       "STOCK_FCCOST": 0,
       "STOCK_LCCOST": 0,
-      "PRICE1PER": this.designmasterForm.value.price1 || "",
-      "PRICE2PER": this.designmasterForm.value.price2 || "",
-      "PRICE3PER": this.designmasterForm.value.price3 || "",
-      "PRICE4PER": this.designmasterForm.value.price4 || "",
-      "PRICE5PER":this.designmasterForm.value.price5 || "",
+      "PRICE1PER":  this.commonService.nullToString(this.designmasterForm.value.price1),
+      "PRICE2PER":  this.commonService.nullToString(this.designmasterForm.value.price2),
+      "PRICE3PER":  this.commonService.nullToString(this.designmasterForm.value.price3),
+      "PRICE4PER":  this.commonService.nullToString(this.designmasterForm.value.price4),
+      "PRICE5PER":  this.commonService.nullToString(this.designmasterForm.value.price5),
       "PRICE1FC": 0,
       "PRICE1LC": 0,
       "PRICE2FC": 0,
@@ -1392,14 +1462,14 @@ onFileChangedimage(event: any) {
       "CHARGE5FC": 0,
       "CHARGE5LC": 0,
       "SHORT_ID": "",
-      "COLOR":  this.designmasterForm.value.color || "",
-      "CLARITY":  this.designmasterForm.value.clarity || "",
-      "SIZE":  this.designmasterForm.value.size || "",
-      "SIEVE":  this.designmasterForm.value.sieve || "",
-      "SHAPE":  this.designmasterForm.value.shape || "",
-      "GRADE": "",
-      "FLUOR": "",
-      "FINISH": "",
+      "COLOR":   this.commonService.nullToString(this.designmasterForm.value.color),
+      "CLARITY":   this.commonService.nullToString(this.designmasterForm.value.clarity),
+      "SIZE":   this.commonService.nullToString(this.designmasterForm.value.size),
+      "SIEVE":   this.commonService.nullToString(this.designmasterForm.value.siev),
+      "SHAPE":   this.commonService.nullToString(this.designmasterForm.value.shape),
+      "GRADE": this.commonService.nullToString(this.designmasterForm.value.grade),
+      "FLUOR":  this.commonService.nullToString(this.designmasterForm.value.attribute),
+      "FINISH": this.commonService.nullToString(this.designmasterForm.value.finishtype),
       "CERT_BY": "",
       "CERT_NO": "",
       "CERT_DATE": "2023-11-27T06:54:03.761Z",
@@ -1412,13 +1482,13 @@ onFileChangedimage(event: any) {
       "MEASURE": "",
       "CERT_PICTURE_NAME": "",
       "TAG_LINES": "",
-      "COMMENTS": "",
+      "COMMENTS":this.commonService.nullToString(this.designmasterForm.value.comments) ,
       "WATCH_TYPE": 0,
       "PEARL_TYPE": 0,
       "STRAP_TYPE": "",
       "STRAP_COLOR": "",
       "GW": 0,
-      "MODEL_NO": "",
+      "MODEL_NO": this.commonService.nullToString(this.designmasterForm.value.model),
       "MODEL_YEAR": 0,
       "OPENED_ON": "2023-11-27T06:54:03.761Z",
       "OPENED_BY": "",
@@ -1456,10 +1526,10 @@ onFileChangedimage(event: any) {
       "WATCH_MOVEMENT": "",
       "WATCH_STATUS": "",
       "ITEM_IMAGE": "",
-      "DESIGN_HOLD": true,
-      "DESIGN_EXCLUSSIVE": true,
-      "JEWELLERY_SIZE": 0,
-      "SIZE_UNIT": "",
+      "DESIGN_HOLD": this.designmasterForm.value.keeponhold,
+      "DESIGN_EXCLUSSIVE": this.designmasterForm.value.customerexclusive,
+      "JEWELLERY_SIZE": this.commonService.emptyToZero(this.designmasterForm.value.jewellerySize),
+      "SIZE_UNIT": this.commonService.nullToString(this.designmasterForm.value.sizeset),
       "METAL_MAX_WT": 0,
       "METAL_MIN_WT": 0,
       "STONE_MAX_CT": 0,
@@ -1467,8 +1537,8 @@ onFileChangedimage(event: any) {
       "STONE_TOLARANCE": 0,
       "TOTAL_PROD_PCS": 0,
       "LAST_PROD_ON": "2023-11-27T06:54:03.761Z",
-      "LAST_PROD_REF": "",
-      "LAST_CUST_ID": "",
+      "LAST_PROD_REF": this.commonService.nullToString(this.designmasterForm.value.vendorref),
+      "LAST_CUST_ID": this.commonService.nullToString(this.designmasterForm.value.vendCust),
       "LAST_STOCK_ID": "",
       "PENDING_JOB_PCS": 0,
       "PENDING_JOBS": 0,
@@ -1489,14 +1559,14 @@ onFileChangedimage(event: any) {
       "PRL_TOLERANCE": 0,
       "OTH_STD_WT": 0,
       "OTH_TOLERANCE": 0,
-      "WAX_WEIGHT": 0,
-      "CAST_PCS_WEIGHT": 0,
+      "WAX_WEIGHT": this.commonService.emptyToZero(this.designmasterForm.value.weightPerc),
+      "CAST_PCS_WEIGHT": this.commonService.emptyToZero(this.designmasterForm.value.cm),
       "SLV_MODEL_WEIGHT": 0,
       "STD_TIME": 0,
       "MAX_TIME": 0,
       "MODEL_MAKER": "",
       "SKETCH_NAME": "",
-      "PROD_INSTRUCTION": "",
+      "PROD_INSTRUCTION": this.commonService.nullToString(this.designmasterForm.value.textbox1),
       "LABOUR_FCCOST": 0,
       "MATERIAL_FCCOST": 0,
       "GROSS_WT": 0,
@@ -1504,23 +1574,23 @@ onFileChangedimage(event: any) {
       "GENDER": "",
       "TAG_LINESWOENTER": "",
       "PICTURE_NAME_THUMBNAIL": "",
-      "KARAT_CODE": "",
+      "KARAT_CODE": this.commonService.nullToString(this.designmasterForm.value.karat),
       "PARTS": 0,
-      "JOB_PREFIX": "",
+      "JOB_PREFIX": this.commonService.nullToString(this.designmasterForm.value.prefix),
       "SETREF_PREFIX": "",
       "DSURFACEPROPERTY": "",
       "DREFERENCE": "",
-      "DWIDTH": 0,
+      "DWIDTH": this.commonService.emptyToZero(this.designmasterForm.value.widthCad),
       "DTHICKNESS": 0,
-      "METAL_WT":0,
-      "CAD_DESIGNER": "",
-      "DESIGNER": "",
-      "INSTRUCTOR": "",
+      "METAL_WT":this.commonService.emptyToZero(this.designmasterForm.value.metal_wt),
+      "CAD_DESIGNER": this.commonService.nullToString(this.designmasterForm.value.cadDesigner) ,
+      "DESIGNER": this.commonService.nullToString(this.designmasterForm.value.designer),
+      "INSTRUCTOR": this.commonService.nullToString(this.designmasterForm.value.instructor),
       "FINAL_APPROVAL": "",
       "TIME_CODE": "",
-      "RANGE_CODE": "",
+      "RANGE_CODE":  this.commonService.nullToString(this.designmasterForm.value.range),
       "COMMENTS_CODE": "",
-      "STYLE": "",
+      "STYLE": this.commonService.nullToString(this.designmasterForm.value.style),
       "CHKCOMPONENTSUMMARY": "",
       "CHKCOMPONENTDETAIL": "",
       "METALWT": 0,
@@ -1560,24 +1630,24 @@ onFileChangedimage(event: any) {
       "METAL_GROSSWT": 0,
       "METAL_VALUEFC": 0,
       "METAL_VALUECC": 0,
-      "PAIR_REF": this.designmasterForm.value.pairref || "",
-      "SURFACEPROPERTY": this.designmasterForm.value.surface || "",
-      "WIDTH": 0,
-      "THICKNESS": 0,
-      "ENGRAVING_TEXT": "",
+      "PAIR_REF":  this.commonService.nullToString(this.designmasterForm.value.pairref),
+      "SURFACEPROPERTY":  this.commonService.nullToString(this.designmasterForm.value.surface),
+      "WIDTH": this.commonService.emptyToZero(this.designmasterForm.value.width),
+      "THICKNESS": this.commonService.emptyToZero(this.designmasterForm.value.thickness),
+      "ENGRAVING_TEXT":  this.commonService.nullToString(this.designmasterForm.value.engravingtext),
       "ENGRAVING_FONT": "",
       "STYLEMASTER": "",
-      "PARENT_DSNG_CODE": "",
-      "FAULT_DETAILS": "",
+      "PARENT_DSNG_CODE": this.commonService.nullToString(this.designmasterForm.value.parentDesign),
+      "FAULT_DETAILS": this.commonService.nullToString(this.designmasterForm.value.faultdetails) ,
       "DESIGN_TYPE": "",
       "JEWELLERY_UNIT": "",
-      "UDF1": "",
-      "UDF2": "",
-      "UDF3": "",
-      "UDF4": "",
-      "UDF5": "",
-      "UDF6": "",
-      "UDF7": "",
+      "UDF1": this.commonService.nullToString(this.designmasterForm.value.collection),
+      "UDF2": this.commonService.nullToString(this.designmasterForm.value.subCollection),
+      "UDF3": this.commonService.nullToString(this.designmasterForm.value.stoneType),
+      "UDF4": this.commonService.nullToString(this.designmasterForm.value.setting),
+      "UDF5": this.commonService.nullToString(this.designmasterForm.value.shape),
+      "UDF6": this.commonService.nullToString(this.designmasterForm.value.incCat),
+      "UDF7": this.commonService.nullToString(this.designmasterForm.value.orderRef),
       "UDF8": "",
       "UDF9": "",
       "UDF10": "",
@@ -1604,15 +1674,15 @@ onFileChangedimage(event: any) {
       "CC_MAKING": "",
       "STONE_INCLUDED": true,
       "CAD_REQUIRED": true,
-      "HEIGHT": "",
-      "RADIUS": "",
-      "LENGTH": "",
+      "HEIGHT":  this.commonService.nullToString(this.designmasterForm.value.height),
+      "RADIUS":  this.commonService.nullToString(this.designmasterForm.value.length),
+      "LENGTH":  this.commonService.nullToString(this.designmasterForm.value.radius),
       "COMPSIZE_CODE": "",
       "COMPSET_CODE": "",
       "PROD_VARIANCE": 0,
-      "METALCALC_GROSSWT": true,
-      "MKGCALC_GROSSWT": true,
-      "PURITY": 0,
+      "METALCALC_GROSSWT": this.designmasterForm.value.metalgrosswt,
+      "MKGCALC_GROSSWT": this.designmasterForm.value.makinggrosswt,
+      "PURITY": this.commonService.emptyToZero( this.designmasterForm.value.purity),
       "DESIGN_DESC": "",
       "COST_CENTER_DESC": "",
       "karat_Desc": "",
@@ -1639,7 +1709,7 @@ onFileChangedimage(event: any) {
       "UDF13_DESC": "",
       "UDF14_DESC": "",
       "UDF15_DESC": "",
-      "REQ_METAL_WT": 0,
+      "REQ_METAL_WT": this.commonService.emptyToZero( this.designmasterForm.value.reqmetal),
       "REQ_METAL_TYPE": true,
       "CHARGE6FC": 0,
       "CHARGE6LC": 0,
@@ -1651,7 +1721,7 @@ onFileChangedimage(event: any) {
       "CHARGE9LC": 0,
       "CHARGE10FC": 0,
       "CHARGE10LC": 0,
-      "ADD_STEEL": 0,
+      "ADD_STEEL": this.designmasterForm.value.addsteel,
       "DESIGN_STNMTL_DETAIL": [
         {
           "UNIQUEID": 0,
@@ -1805,6 +1875,23 @@ onFileChangedimage(event: any) {
         }
       ]
     }
+  }
+
+  formSubmit(){
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if(this.content && this.content.FLAG == 'EDIT'){
+      this.update()
+      return
+    }
+
+    if (this.submitValidations(this.designmasterForm.value)) return;
+    // if (this.designmasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+  
+    let API = 'DesignMaster/InsertDesignMaster'
+    let postData = this.setPostData()
     
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -1847,464 +1934,7 @@ onFileChangedimage(event: any) {
   
     let API = 'DesignMaster/UpdateDesignMaster/'+ this.designmasterForm.value.code
 
-    let postData = {
-
-      "DESIGN_CODE": this.designmasterForm.value.code || "",
-      "DESIGN_DESCRIPTION":  this.designmasterForm.value.designdesc || "",
-      "CURRENCY_CODE": "",
-      "CC_RATE": 0,
-      "COST_CODE": "",
-      "TYPE_CODE": this.designmasterForm.value.type|| "",
-      "CATEGORY_CODE": this.designmasterForm.value.category|| "",
-      "SUBCATEGORY_CODE": this.designmasterForm.value.subcategory || "",
-      "BRAND_CODE":  this.designmasterForm.value.brand || "",
-      "COUNTRY_CODE":  this.designmasterForm.value.country || "",
-      "SUPPLIER_CODE": "",
-      "SUPPLIER_REF": "",
-      "SET_REF":this.designmasterForm.value.setref || "",
-      "PICTURE_NAME": "",
-      "PICTURE_NAME1": "",
-      "STOCK_FCCOST": 0,
-      "STOCK_LCCOST": 0,
-      "PRICE1PER": this.designmasterForm.value.price1 || "",
-      "PRICE2PER": this.designmasterForm.value.price2 || "",
-      "PRICE3PER": this.designmasterForm.value.price3 || "",
-      "PRICE4PER": this.designmasterForm.value.price4 || "",
-      "PRICE5PER":this.designmasterForm.value.price5 || "",
-      "PRICE1FC": 0,
-      "PRICE1LC": 0,
-      "PRICE2FC": 0,
-      "PRICE2LC": 0,
-      "PRICE3FC": 0,
-      "PRICE3LC": 0,
-      "PRICE4FC": 0,
-      "PRICE4LC": 0,
-      "PRICE5FC": 0,
-      "PRICE5LC": 0,
-      "CHARGE1FC": 0,
-      "CHARGE1LC": 0,
-      "CHARGE2FC": 0,
-      "CHARGE2LC": 0,
-      "CHARGE3FC": 0,
-      "CHARGE3LC": 0,
-      "CHARGE4FC": 0,
-      "CHARGE4LC": 0,
-      "CHARGE5FC": 0,
-      "CHARGE5LC": 0,
-      "SHORT_ID": "",
-      "COLOR":  this.designmasterForm.value.color || "",
-      "CLARITY":  this.designmasterForm.value.clarity || "",
-      "SIZE":  this.designmasterForm.value.size || "",
-      "SIEVE":  this.designmasterForm.value.sieve || "",
-      "SHAPE":  this.designmasterForm.value.shape || "",
-      "GRADE": "",
-      "FLUOR": "",
-      "FINISH": "",
-      "CERT_BY": "",
-      "CERT_NO": "",
-      "CERT_DATE": "2023-11-27T06:54:03.761Z",
-      "GRIDLE": "",
-      "CULET": "",
-      "TWIDTH": 0,
-      "CRHEIGHT": 0,
-      "PAVDEPTH": 0,
-      "OVERALL": "",
-      "MEASURE": "",
-      "CERT_PICTURE_NAME": "",
-      "TAG_LINES": "",
-      "COMMENTS": "",
-      "WATCH_TYPE": 0,
-      "PEARL_TYPE": 0,
-      "STRAP_TYPE": "",
-      "STRAP_COLOR": "",
-      "GW": 0,
-      "MODEL_NO": "",
-      "MODEL_YEAR": 0,
-      "OPENED_ON": "2023-11-27T06:54:03.761Z",
-      "OPENED_BY": "",
-      "FIRST_TRN": "",
-      "LAST_TRN": "",
-      "MID": 0,
-      "PRINTED": true,
-      "PURVOCTYPE_NO": "",
-      "PURPARTY": "",
-      "PURDATE": "2023-11-27T06:54:03.761Z",
-      "PURAMOUNT": 0,
-      "PURBRLOC": "",
-      "SALVOCTYPE_NO": "",
-      "SALPARTY": "",
-      "SALDATE": "2023-11-27T06:54:03.761Z",
-      "SALAMOUNT": 0,
-      "SALBRLOC": "",
-      "METAL_TOTALGROSSWT": 0,
-      "METAL_TOTALAMOUNT": 0,
-      "METAL_TOTALMAKING": 0,
-      "LOOSE_TOTALWT": 0,
-      "LOOSE_TOTALAMOUNT": 0,
-      "COLOR_TOTALWT": 0,
-      "COLOR_TOTALAMOUNT": 0,
-      "PEARL_TOTALWT": 0,
-      "PEARL_TOTALAMOUNT": 0,
-      "MANF_MID": 0,
-      "MANF_BR_VOCTYPE_NO": "",
-      "WATCH_REFNO": "",
-      "WATCH_MODELNAME": "",
-      "WATCH_MODELNO": "",
-      "WATCH_MATERIAL": "",
-      "WATCH_DIALCOLOR": "",
-      "WATCH_BAZEL": "",
-      "WATCH_MOVEMENT": "",
-      "WATCH_STATUS": "",
-      "ITEM_IMAGE": "",
-      "DESIGN_HOLD": true,
-      "DESIGN_EXCLUSSIVE": true,
-      "JEWELLERY_SIZE": 0,
-      "SIZE_UNIT": "",
-      "METAL_MAX_WT": 0,
-      "METAL_MIN_WT": 0,
-      "STONE_MAX_CT": 0,
-      "STONE_MIN_CT": 0,
-      "STONE_TOLARANCE": 0,
-      "TOTAL_PROD_PCS": 0,
-      "LAST_PROD_ON": "2023-11-27T06:54:03.761Z",
-      "LAST_PROD_REF": "",
-      "LAST_CUST_ID": "",
-      "LAST_STOCK_ID": "",
-      "PENDING_JOB_PCS": 0,
-      "PENDING_JOBS": 0,
-      "LAST_COST": 0,
-      "SEQ_CODE": "",
-      "SEQ_DESCRIPTION": "",
-      "EDITED_ON": "2023-11-27T06:54:03.761Z",
-      "EDITED_BY": "",
-      "MTL_STD_WT": 0,
-      "MTL_TOLERANCE": 0,
-      "LST_STD_WT": 0,
-      "LST_TOLERANCE": 0,
-      "CST_STD_WT": 0,
-      "CST_TOLERANCE": 0,
-      "ZIR_STD_WT": 0,
-      "ZIR_TOLERANCE": 0,
-      "PRL_STD_WT": 0,
-      "PRL_TOLERANCE": 0,
-      "OTH_STD_WT": 0,
-      "OTH_TOLERANCE": 0,
-      "WAX_WEIGHT": 0,
-      "CAST_PCS_WEIGHT": 0,
-      "SLV_MODEL_WEIGHT": 0,
-      "STD_TIME": 0,
-      "MAX_TIME": 0,
-      "MODEL_MAKER": "",
-      "SKETCH_NAME": "",
-      "PROD_INSTRUCTION": "",
-      "LABOUR_FCCOST": 0,
-      "MATERIAL_FCCOST": 0,
-      "GROSS_WT": 0,
-      "STONE_WT": 0,
-      "GENDER": "",
-      "TAG_LINESWOENTER": "",
-      "PICTURE_NAME_THUMBNAIL": "",
-      "KARAT_CODE": "",
-      "PARTS": 0,
-      "JOB_PREFIX": "",
-      "SETREF_PREFIX": "",
-      "DSURFACEPROPERTY": "",
-      "DREFERENCE": "",
-      "DWIDTH": 0,
-      "DTHICKNESS": 0,
-      "METAL_WT":0,
-      "CAD_DESIGNER": "",
-      "DESIGNER": "",
-      "INSTRUCTOR": "",
-      "FINAL_APPROVAL": "",
-      "TIME_CODE": "",
-      "RANGE_CODE": "",
-      "COMMENTS_CODE": "",
-      "STYLE": "",
-      "CHKCOMPONENTSUMMARY": "",
-      "CHKCOMPONENTDETAIL": "",
-      "METALWT": 0,
-      "TOTAL_OTHER_FC": 0,
-      "TOTAL_OTHER_LC": 0,
-      "TOTAL_STONE_LC": 0,
-      "TOTAL_STONE_FC": 0,
-      "TOTAL_METAL_LC": 0,
-      "TOTAL_METAL_FC": 0,
-      "TOTAL_METAL_QTY": 0,
-      "TOTAL_STONE_QTY": 0,
-      "TOTVFC": 0,
-      "TOTVLC": 0,
-      "TOTALFC": 0,
-      "TOTALCC": 0,
-      "TOTPCS": 0,
-      "TOTCARAT": 0,
-      "TOTGMS": 0,
-      "LAST_EDT_BY": "",
-      "LAST_EDT_ON": "2023-11-27T06:54:03.761Z",
-      "DIA_PCS": 0,
-      "DIA_CARAT": 0,
-      "DIA_VALUEFC": 0,
-      "DIA_VALUECC": 0,
-      "COLOR_PCS": 0,
-      "COLOR_CARAT": 0,
-      "COLOR_VALUEFC": 0,
-      "COLOR_VALUECC": 0,
-      "PEARL_PCS": 0,
-      "PEARL_CARAT": 0,
-      "PEARL_VALUEFC": 0,
-      "PEARL_VALUECC": 0,
-      "OTSTONES_PCS": 0,
-      "OTSTONES_CARAT": 0,
-      "OTSTONES_VALUEFC": 0,
-      "OTSTONES_VALUECC": 0,
-      "METAL_GROSSWT": 0,
-      "METAL_VALUEFC": 0,
-      "METAL_VALUECC": 0,
-      "PAIR_REF": this.designmasterForm.value.pairref || "",
-      "SURFACEPROPERTY": this.designmasterForm.value.surface || "",
-      "WIDTH": 0,
-      "THICKNESS": 0,
-      "ENGRAVING_TEXT": "",
-      "ENGRAVING_FONT": "",
-      "STYLEMASTER": "",
-      "PARENT_DSNG_CODE": "",
-      "FAULT_DETAILS": "",
-      "DESIGN_TYPE": "",
-      "JEWELLERY_UNIT": "",
-      "UDF1": "",
-      "UDF2": "",
-      "UDF3": "",
-      "UDF4": "",
-      "UDF5": "",
-      "UDF6": "",
-      "UDF7": "",
-      "UDF8": "",
-      "UDF9": "",
-      "UDF10": "",
-      "UDF11": "",
-      "UDF12": "",
-      "UDF13": "",
-      "UDF14": "",
-      "UDF15": "",
-      "CUSTOMERSKU": "",
-      "FINALAPPROVALDATE": "2023-11-27T06:54:03.761Z",
-      "PRINT_COUNT": 0,
-      "EXPIRY_DATE": "2023-11-27T06:54:03.761Z",
-      "PROCESS_TYPE": "",
-      "DYE_STRIP": true,
-      "CASTING_REQ": 0,
-      "WAXING_REQ": 0,
-      "PCS": 0,
-      "ISSUEDWT": 0,
-      "READYWT": 0,
-      "FITTINGWT": 0,
-      "CUTTINGWT": 0,
-      "INNERWT": 0,
-      "NON_CASTING": 0,
-      "CC_MAKING": "",
-      "STONE_INCLUDED": true,
-      "CAD_REQUIRED": true,
-      "HEIGHT": "",
-      "RADIUS": "",
-      "LENGTH": "",
-      "COMPSIZE_CODE": "",
-      "COMPSET_CODE": "",
-      "PROD_VARIANCE": 0,
-      "METALCALC_GROSSWT": true,
-      "MKGCALC_GROSSWT": true,
-      "PURITY": 0,
-      "DESIGN_DESC": "",
-      "COST_CENTER_DESC": "",
-      "karat_Desc": "",
-      "SUPPLIER_DESC": "",
-      "CATEGORY_DESC": "",
-      "SUBCATEGORY_DESC": "",
-      "TYPE_DESC": "",
-      "BRAND_DESC": "",
-      "STYLE_DESC": "",
-      "RANGE_DESC": "",
-      "COUNTRY_DESC": "",
-      "UDF1_DESC": "",
-      "UDF2_DESC": "",
-      "UDF3_DESC": "",
-      "UDF4_DESC": "",
-      "UDF5_DESC": "",
-      "UDF6_DESC": "",
-      "UDF7_DESC": "",
-      "UDF8_DESC": "",
-      "UDF9_DESC": "",
-      "UDF10_DESC": "",
-      "UDF11_DESC": "",
-      "UDF12_DESC": "",
-      "UDF13_DESC": "",
-      "UDF14_DESC": "",
-      "UDF15_DESC": "",
-      "REQ_METAL_WT": 0,
-      "REQ_METAL_TYPE": 0,
-      "CHARGE6FC": 0,
-      "CHARGE6LC": 0,
-      "CHARGE7FC": 0,
-      "CHARGE7LC": 0,
-      "CHARGE8FC": 0,
-      "CHARGE8LC": 0,
-      "CHARGE9FC": 0,
-      "CHARGE9LC": 0,
-      "CHARGE10FC": 0,
-      "CHARGE10LC": 0,
-      "ADD_STEEL": true,
-      "DESIGN_STNMTL_DETAIL": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "METALSTONE": "",
-          "DIVCODE": "",
-          "KARAT_CODE": "",
-          "CARAT": 0,
-          "GROSS_WT": 0,
-          "PCS": 0,
-          "RATE_TYPE": "",
-          "CURRENCY_CODE": "",
-          "RATE": 0,
-          "AMOUNTFC": 0,
-          "AMOUNTLC": 0,
-          "MAKINGRATE": 0,
-          "MAKINGAMOUNT": 0,
-          "SIEVE": "",
-          "COLOR": "",
-          "CLARITY": "",
-          "SHAPE": "",
-          "STOCK_CODE": "",
-          "DESIGN_CODE": "",
-          "KARAT": "",
-          "PRICEID": "",
-          "SIZE_FROM":"" ,
-          "SIZE_TO": "",
-          "RATEFC": 0,
-          "PART_CODE": "",
-          "DSIZE": "",
-          "LABCHGCODE": "",
-          "PRICECODE": "",
-          "DMMETALPERCENTAGE": 0,
-          "DLABCHGCODE": "",
-          "DPRICECODE": "",
-          "METALPER": 0,
-          "METALRATE": 0,
-          "CURR_RATE": 0,
-          "LABOURCODE": "",
-          "DETLINEREMARKS": "",
-          "PROCESS_TYPE": "",
-          "SIEVE_SET": "",
-          "STONE_TYPE": "",
-          "EXT_COLOR": "",
-          "EXT_CLARITY": "",
-          "D_REMARKS": "",
-          "POINTER_WT": 0,
-          "SIEVE_FROM": "",
-          "SIEVE_TO": "",
-          "PURITY": 0,
-          "OTHER_ATTR": ""
-        }
-      ],
-      "DESIGN_SEQUENCE_DETAILS_DJ": [
-        {
-          "DESIGN_CODE": "",
-          "SEQ_CODE": "",
-          "SEQ_NO": 0,
-          "PROCESS_CODE": "",
-          "PROCESS_TYPE": "",
-          "CURRENCY_CODE": "",
-          "UNIT_RATE": 0,
-          "UNIT": "",
-          "NO_OF_UNITS": 0,
-          "STD_TIME": 0,
-          "MAX_TIME": 0,
-          "STD_LOSS": 0,
-          "MIN_LOSS": 0,
-          "MAX_LOSS": 0,
-          "LOSS_ACCODE": "",
-          "WIP_ACCODE": "",
-          "POINTS": 0,
-          "DESCRIPTION": "",
-          "TIMEON_PROCESS": true,
-          "LABCHRG_PERHOUR": 0
-        }
-      ],
-      "DESIGN_PARTS": [
-        {
-          "DESIGN_CODE": "",
-          "PART_CODE": "",
-          "PART_DESCRIPTION": "",
-          "METAL_WT": 0,
-          "LS_PCS": 0,
-          "LS_WT": 0,
-          "CS_PCS": 0,
-          "CS_WT": 0,
-          "PL_PCS": 0,
-          "PL_WT": 0,
-          "OTH_PCS": 0,
-          "OTH_WT": 0,
-          "TOTAL_PCS": 0,
-          "GROSS_WT": 0,
-          "PICTURE_NAME": "",
-          "PART_COLOR": ""
-        }
-      ],
-      "DESIGN_ATTRIBUTES": [
-        {
-          "DESIGN_CODE": "",
-          "ATTR_TYPE": "",
-          "ATTR_CODE": "",
-          "ATTR_DESCRIPTION": "",
-          "WEIGHT": 0,
-          "PCS": 0,
-          "ST_PCS": 0,
-          "ST_WEIGHT": 0,
-          "DEFAULT_CODE": true
-        }
-      ],
-      "Picture_Attachment": [
-        {
-          "CODE": "",
-          "PICTURE_NAME": "",
-          "DEFAULTPICTURE": true,
-          "TYPE": "",
-          "PICTURE_TYPE": "",
-          "PICTURE_PATHOLD": ""
-        }
-      ],
-      "METAL_STOCK_MASTER_VENDOR": [
-        {
-          "UNIQUEID": 0,
-          "SRNO": 0,
-          "STOCK_CODE": "",
-          "ACCODE": "",
-          "DEL_DAYS": 0,
-          "CREDIT_DAYS": 0,
-          "PAYMENT_MODE": "",
-          "VENDOR_DESIGN": "",
-          "DESCRIPTION": ""
-        }
-      ],
-      "DESIGN_LABOUR_SUMMARY": [
-        {
-          "DESIGN_CODE": "",
-          "CODE": "",
-          "DESCRIPTION": "",
-          "COST": 0,
-          "STD_TIME": 0,
-          "MAX_TIME": 0,
-          "SLNO": 0,
-          "TYPE": "",
-          "METHOD": "",
-          "DIVISION": "",
-          "SHAPE": "",
-          "SIZE_FROM": "",
-          "SIZE_TO": "",
-          "UNIT": "",
-          "SELLING_RATE": 0
-        }
-      ]
-    }
+    let postData = this.setPostData()
     
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -2926,7 +2556,19 @@ onFileChangedimage(event: any) {
   //     this.overlayorderRefSearch.showOverlayPanel(event)
   //   }
   // }
+
+  onRadioChange(event: MatRadioChange): void {
+    console.log('Selected value:', event.value);
+    
+    this.prefixselected = event.value;
+
+    this.designCodeData.WHERECONDITION = `DIVISION='${this.prefixselected}' AND DESIGN_PREFIX=1`;
+  
+    
+  }
+  
 }
+
 
 
  
