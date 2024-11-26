@@ -88,17 +88,8 @@
                                         : </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="loan_divn_code" UpperCaseDirective  (keydown)="onKeyDown($event, ['loan_divn_code'], BranchData)"
-                                            (focusout)="
-                                              SPvalidateLookupFieldModified(
-                                                $event,
-                                                BranchData,
-                                                ['loan_divn_code'],
-                                                false,
-                                                ['CODE']
-                                              )
-                                            "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            <input type="text" matInput formControlName="loan_divn_code" UpperCaseDirective />
+                                            <master-search class="masterSearch" [MasterSearchData]="glCodeData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
                                         </mat-form-field>

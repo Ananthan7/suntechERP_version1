@@ -65,6 +65,9 @@ export class DeductionMasterComponent implements OnInit {
   avoidFraction!: any;
   considerForLeaveSalary!: any;
   isViewReport: boolean = false;
+  data: any;
+  data1: any;
+  data2: any;
 
   countryCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -354,6 +357,17 @@ export class DeductionMasterComponent implements OnInit {
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
     this.initialController(this.flag, this.content);
+    this.data = this.commonService.comboFilter;
+    console.log(JSON.stringify(this.data));
+
+    this.data1 = this.commonService
+      .getComboFilterByID("Addnl Wgtd Average")
+      .filter(
+        (value: any, index: any, self: any) =>
+          index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
+      );
+
+    console.log(this.data1);
   }
 
   initialController(FLAG: any, DATA: any) {
@@ -894,5 +908,13 @@ export class DeductionMasterComponent implements OnInit {
       default:
         console.warn(`Unknown form control name: ${formControlName}`);
     }
+  }
+
+  getUniqueValues(List: any[], field: string) {
+    return List.filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex((t) => t[field] === item[field] && t[field] !== "")
+    );
   }
 }

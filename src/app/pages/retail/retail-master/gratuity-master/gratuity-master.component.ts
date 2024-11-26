@@ -355,7 +355,6 @@ export class GratuityMasterComponent implements OnInit {
     private commonService: CommonServiceService
   ) {}
   ngOnInit(): void {
-
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
@@ -391,14 +390,29 @@ export class GratuityMasterComponent implements OnInit {
       );
     }
     if (FLAG === "VIEW") {
+      this.gratuityTypeData();
       this.ViewController(DATA);
+      this.basedOnDropdown = this.getUniqueValues(
+        this.commonService.getComboFilterByID("GRATUITY BASED ON"),
+        "ENGLISH"
+      );
     }
     if (FLAG === "EDIT") {
       this.gratuityTypeData();
       this.editController(DATA);
+      this.basedOnDropdown = this.getUniqueValues(
+        this.commonService.getComboFilterByID("GRATUITY BASED ON"),
+        "ENGLISH"
+      );
     }
 
     if (FLAG === "DELETE") {
+      this.gratuityTypeData();
+      this.ViewController(DATA);
+      this.basedOnDropdown = this.getUniqueValues(
+        this.commonService.getComboFilterByID("GRATUITY BASED ON"),
+        "ENGLISH"
+      );
       this.DeleteController(DATA);
     }
   }
@@ -582,7 +596,6 @@ export class GratuityMasterComponent implements OnInit {
     });
 
     if (!requiredFieldsInvalid) {
-
       this.postDataDetails = this.gridData
         ? this.gridData.map((item: any, index: number) => {
             return {
@@ -599,13 +612,13 @@ export class GratuityMasterComponent implements OnInit {
         CODE: this.gratuityMasterForm.value.code,
         DESCRIPTION: this.gratuityMasterForm.value.description,
         DEBITACCODE: this.gratuityMasterForm.value.debitAc,
-        BASED_ON: this.gratuityMasterForm.value.basedOn,
-        FIXAMOUNT: this.gratuityMasterForm.value.amount,
+        BASED_ON: Number(this.gratuityMasterForm.value.basedOn),
+        FIXAMOUNT: Number(this.gratuityMasterForm.value.amount),
         DED_ANNUALLEAVE: this.excludeAnnualLeaves == true ? 1 : 0,
         DED_PAIDLEAVE: this.excludePaidLeaves == true ? 1 : 0,
         DED_UPAIDLEAVE: this.excludeUnpaidLeaves == true ? 1 : 0,
         DED_HPAIDLEAVE: this.excludeHalfPaidLeaves == true ? 1 : 0,
-        YEARDAYS: this.gratuityMasterForm.value.noOfDaysAndYear,
+        YEARDAYS: Number(this.gratuityMasterForm.value.noOfDaysAndYear),
         GRATTYPE: this.gratuityMasterForm.value.type,
         COUNTRYCODE: this.gratuityMasterForm.value.countryCode,
         UDF1: this.gratuityMasterForm.value.userDefined1,
@@ -926,7 +939,13 @@ export class GratuityMasterComponent implements OnInit {
     let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
       (result) => {
         if (result.status.trim() === "Success") {
-          this.typeData = result.dynamicData[0] || [];
+          this.typeData = result.dynamicData[0].map(
+            (item: any, index: number) => ({
+              ...item,
+              SRNO: index.toString().toString(),
+            })
+          );
+          console.log(this.typeData);
         }
       },
       (err) => {
@@ -1006,5 +1025,14 @@ export class GratuityMasterComponent implements OnInit {
         index ===
         self.findIndex((t) => t[field] === item[field] && t[field] !== "")
     );
+  }
+
+  getIndexOfBasedOn(event: any) {
+    const selectedIndex = this.basedOnDropdown.findIndex(
+      (item: any) => item.ENGLISH === event.value
+    );
+    console.log("Selected index:", selectedIndex);
+
+    this.gratuityMasterForm.controls["basedOn"].setValue(selectedIndex);
   }
 }

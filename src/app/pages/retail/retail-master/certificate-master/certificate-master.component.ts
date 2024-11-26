@@ -48,10 +48,28 @@ export class CertificateMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
+    ORDER_TYPE: 0,
     SEARCH_FIELD: "LEDGER",
     SEARCH_HEADING: "LEDGER CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "LEDGER<> ''",
+    WHERECONDITION: "AC_OnHold = 0",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  offSetAccCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "LEDGER",
+    SEARCH_HEADING: "OFFSET ACCOUNT CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION:
+      "   VIEW_ACCMST_BRANCHWISE.ACCODE in (select ACCODE from ACCOUNT_MAIN where GROUP_LEVEL in ('3','4') and ISNULL(accode,'') <> '')",
+
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -432,14 +450,16 @@ export class CertificateMasterComponent implements OnInit {
                   : "Inserted successfully!",
                 icon: "success",
                 confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
+                confirmButtonText: "Ok",  
               });
 
               this.close("reloadMainGrid", true);
             } else {
               Swal.fire({
                 title: "Failed",
-                text: "Not Inserted Successfully",
+                 text: result.message
+                  ? result.message
+                  : "Not Inserted successfully!",
                 icon: "error",
                 confirmButtonColor: "#336699",
                 confirmButtonText: "Ok",

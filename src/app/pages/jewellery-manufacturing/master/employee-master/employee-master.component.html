@@ -493,10 +493,10 @@
                         [disabled]="viewMode"
                       >
                         <mat-option
-                          *ngFor="let option of GenderList"
-                          [value]="option.value"
+                          *ngFor="let option of genderList"
+                          [value]="option.SRNO"
                         >
-                          {{ option.name }}
+                          {{ option.ENGLISH }}
                         </mat-option>
                         <!-- <mat-option value="1">Male</mat-option>
                                                 <mat-option value="2">FEMALE</mat-option>
@@ -517,10 +517,10 @@
                         [disabled]="viewMode"
                       >
                         <mat-option
-                          *ngFor="let option of maritial"
-                          [value]="option.value"
+                          *ngFor="let option of maritalStatusList"
+                          [value]="option.SRNO"
                         >
-                          {{ option.name }}
+                          {{ option.ENGLISH }}
                         </mat-option>
                         <!-- <mat-option value="1">Married</mat-option>
                                                 <mat-option value="2">UnMarried</mat-option>

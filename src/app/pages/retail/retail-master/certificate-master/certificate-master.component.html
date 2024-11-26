@@ -24,8 +24,8 @@
           <div class="col-md-3">
             <div class="row mb-1">
               <label for="code" class="col-sm-5 col-form-label" id="ID029"
-                >Code <span class="text-danger">*</span> </label
-              >
+                >Code <span class="text-danger">*</span>
+              </label>
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
@@ -84,7 +84,7 @@
                         ledgerCodeData,
                         ['ledger'],
                         false,
-                        ['CODE'],
+                        ['ACCODE'],
                         false
                       )
                     "
@@ -96,7 +96,7 @@
                     #overlayLedger
                     class="masterSearch"
                     [MasterSearchData]="ledgerCodeData"
-                    (newRowClick)="lookupSelect($event, ['ledger'], ['CODE'])"
+                    (newRowClick)="lookupSelect($event, ['ledger'], ['ACCODE'])"
                   >
                   </master-search>
                 </mat-form-field>
@@ -149,8 +149,8 @@
                 for="description"
                 class="col-sm-5 col-form-label"
                 id="ID029"
-                >Description <span class="text-danger">*</span> </label
-              >
+                >Description <span class="text-danger">*</span>
+              </label>
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
@@ -208,10 +208,10 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        offSetAccCodeData,
                         ['offsetAccount'],
                         false,
-                        ['CODE'],
+                        ['ACCODE'],
                         false
                       )
                     "
@@ -221,10 +221,10 @@
                     *ngIf="flag != 'VIEW'"
                     (focusout)="openTab($event, 'offsetAccount')"
                     #overlayOffsetAccount
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="offSetAccCodeData"
                     class="masterSearch"
                     (newRowClick)="
-                      lookupSelect($event, ['offsetAccount'], ['CODE'])
+                      lookupSelect($event, ['offsetAccount'], ['ACCODE'])
                     "
                   ></master-search>
                 </mat-form-field>
