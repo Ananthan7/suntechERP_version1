@@ -110,6 +110,9 @@ export class SubLedgerMasterComponent implements OnInit {
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content?.FLAG == "VIEW") {
+        this.addContactTableData();
+        this.SubLedgerMasterForm.controls.active.setValue(this.content.ACTIVE);
+        this.SubLedgerMasterForm.controls.active.disable();
         this.isDisabled = true;
         this.viewMode = true;
       } else if (this.content?.FLAG == "EDIT") {
