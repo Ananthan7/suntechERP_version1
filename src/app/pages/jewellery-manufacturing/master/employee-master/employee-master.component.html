@@ -37,6 +37,7 @@
                   matInput
                   formControlName="code"
                   UpperCaseDirective
+                  maxlength="6"
                   [readonly]="viewMode || editMode"
                   autocomplete="off"
                 />
@@ -62,11 +63,11 @@
             <label
               for="inputPassword"
               id="ID001"
-              class="col-sm-3 col-form-label"
+              class="col-sm-2 col-form-label"
             >
               Other Language :</label
             >
-            <div class="col-sm-9">
+            <div class="col-sm-10">
               <mat-form-field style="width: 100%" appearance="outline">
                 <input
                   type="text"
@@ -157,7 +158,13 @@
                       ['DEPT_CODE', 'DEPT_NAME']
                     )
                   "
-                  (keydown)="onKeyDown($event, ['Department','DepartmentDes'], DepartmentData)"
+                  (keydown)="
+                    onKeyDown(
+                      $event,
+                      ['Department', 'DepartmentDes'],
+                      DepartmentData
+                    )
+                  "
                 />
                 <master-search
                   *ngIf="!viewMode"
@@ -174,7 +181,13 @@
                 <input
                   type="text"
                   matInput
-                  (keydown)="onKeyDown($event, ['Department','DepartmentDes'], DepartmentData)"
+                  (keydown)="
+                    onKeyDown(
+                      $event,
+                      ['Department', 'DepartmentDes'],
+                      DepartmentData
+                    )
+                  "
                   formControlName="DepartmentDes"
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
@@ -198,16 +211,20 @@
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
                   (focusout)="
-                  SPvalidateLookupFieldModified(
-                    $event,
-                    DesignationData,
-                    ['Designation', 'DesignationDes'],
-                    false,
-                    ['CODE', 'DESCRIPTION']
-                  )
-                "
+                    SPvalidateLookupFieldModified(
+                      $event,
+                      DesignationData,
+                      ['Designation', 'DesignationDes'],
+                      false,
+                      ['CODE', 'DESCRIPTION']
+                    )
+                  "
                   (keydown)="
-                    onKeyDown($event, ['Designation','DesignationDes'], DesignationData)
+                    onKeyDown(
+                      $event,
+                      ['Designation', 'DesignationDes'],
+                      DesignationData
+                    )
                   "
                 />
                 <master-search
@@ -227,8 +244,12 @@
                   matInput
                   formControlName="DesignationDes"
                   (keydown)="
-                  onKeyDown($event, ['Designation','DesignationDes'], DesignationData)
-                "
+                    onKeyDown(
+                      $event,
+                      ['Designation', 'DesignationDes'],
+                      DesignationData
+                    )
+                  "
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
                 />
@@ -281,15 +302,17 @@
                         autocomplete="off"
                         [readonly]="viewMode || codeEnable"
                         (focusout)="
-                        SPvalidateLookupFieldModified(
-                          $event,
-                          GradeData,
-                          ['Grade', 'GradeDes'],
-                          false,
-                          ['CODE', 'DESCRIPTION']
-                        )
-                      "
-                        (keydown)="onKeyDown($event, ['Grade','GradeDes'], GradeData)"
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            GradeData,
+                            ['Grade', 'GradeDes'],
+                            false,
+                            ['CODE', 'DESCRIPTION']
+                          )
+                        "
+                        (keydown)="
+                          onKeyDown($event, ['Grade', 'GradeDes'], GradeData)
+                        "
                       />
                       <master-search
                         *ngIf="!viewMode"
@@ -307,7 +330,9 @@
                         type="text"
                         #codeInput
                         matInput
-                        (keydown)="onKeyDown($event, ['Grade','GradeDes'], GradeData)"
+                        (keydown)="
+                          onKeyDown($event, ['Grade', 'GradeDes'], GradeData)
+                        "
                         formControlName="GradeDes"
                         UpperCaseDirective
                         autocomplete="off"
@@ -373,16 +398,12 @@
                   >
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <mat-select formControlName="BloodGroup">
-                        <mat-option value="1">A+</mat-option>
-                        <mat-option value="2">A-</mat-option>
-                        <mat-option value="3">B+</mat-option>
-                        <mat-option value="4">B-</mat-option>
-                        <mat-option value="5">AB+</mat-option>
-                        <mat-option value="6">AB-</mat-option>
-                        <mat-option value="7">O+</mat-option>
-                        <mat-option value="8">O-</mat-option>
-                        <mat-option value="9">Other</mat-option>
+                      <mat-select formControlName="bloodGroup">
+                        <mat-option
+                          *ngFor="let data of bloodGroupList"
+                          [value]="data.ENGLISH"
+                          >{{ data.ENGLISH }}</mat-option
+                        >
                       </mat-select>
                     </mat-form-field>
                   </div>
@@ -402,14 +423,14 @@
                         autocomplete="off"
                         [readonly]="viewMode || codeEnable"
                         (focusout)="
-                        SPvalidateLookupFieldModified(
-                          $event,
-                          NationalityData,
-                          ['Nationality'],
-                          false,
-                          ['CODE']
-                        )
-                      "
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            NationalityData,
+                            ['Nationality'],
+                            false,
+                            ['CODE']
+                          )
+                        "
                         (keydown)="
                           onKeyDown($event, ['Nationality'], NationalityData)
                         "
@@ -440,14 +461,14 @@
                         autocomplete="off"
                         [readonly]="viewMode || codeEnable"
                         (focusout)="
-                        SPvalidateLookupFieldModified(
-                          $event,
-                          ReligionData,
-                          ['Religion'],
-                          false,
-                          ['CODE']
-                        )
-                      "
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            ReligionData,
+                            ['Religion'],
+                            false,
+                            ['CODE']
+                          )
+                        "
                         (keydown)="
                           onKeyDown($event, ['Religion'], ReligionData)
                         "
@@ -605,14 +626,14 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                            SPvalidateLookupFieldModified(
-                              $event,
-                              CountryCodeData,
-                              ['Country'],
-                              false,
-                              ['CODE']
-                            )
-                          "
+                              SPvalidateLookupFieldModified(
+                                $event,
+                                CountryCodeData,
+                                ['Country'],
+                                false,
+                                ['CODE']
+                              )
+                            "
                             (keydown)="
                               onKeyDown($event, ['Country'], CountryCodeData)
                             "
@@ -649,14 +670,14 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                            SPvalidateLookupFieldModified(
-                              $event,
-                              StateCodeData,
-                              ['State'],
-                              false,
-                              ['CODE']
-                            )
-                          "
+                              SPvalidateLookupFieldModified(
+                                $event,
+                                StateCodeData,
+                                ['State'],
+                                false,
+                                ['CODE']
+                              )
+                            "
                             (keydown)="
                               onKeyDown($event, ['State'], StateCodeData)
                             "
@@ -693,14 +714,14 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                            SPvalidateLookupFieldModified(
-                              $event,
-                              CityCodeData,
-                              ['City'],
-                              false,
-                              ['CODE']
-                            )
-                          "
+                              SPvalidateLookupFieldModified(
+                                $event,
+                                CityCodeData,
+                                ['City'],
+                                false,
+                                ['CODE']
+                              )
+                            "
                             (keydown)="
                               onKeyDown($event, ['City'], CityCodeData)
                             "
@@ -729,11 +750,10 @@
                           appearance="outline"
                         >
                           <input
-                            type="text"
-                            #codeInput
+                            type="number"
+                            (keydown)="preventInvalidInput($event)"
                             matInput
                             formControlName="LandLineNum"
-                            UpperCaseDirective
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                           />
@@ -753,11 +773,10 @@
                           appearance="outline"
                         >
                           <input
-                            type="text"
-                            #codeInput
+                            type="number"
                             matInput
                             formControlName="MoblieCode"
-                            UpperCaseDirective
+                            (keydown)="preventInvalidInput($event)"
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                           />
@@ -769,11 +788,10 @@
                           appearance="outline"
                         >
                           <input
-                            type="text"
-                            #codeInput
+                            type="number"
+                            (keydown)="preventInvalidInput($event)"
                             matInput
                             formControlName="MoblieNum"
-                            UpperCaseDirective
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                           />
@@ -793,14 +811,22 @@
                           appearance="outline"
                         >
                           <input
-                            type="text"
+                            type="email"
                             #codeInput
                             matInput
                             formControlName="email"
-                            UpperCaseDirective
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                           />
+                          <mat-error
+                            *ngIf="
+                              employeeMasterForm
+                                .get('email')
+                                ?.hasError('domainInvalid')
+                            "
+                            >Email must end with a valid domain (e.g.,
+                            .com).</mat-error
+                          >
                         </mat-form-field>
                       </div>
                     </div>
@@ -878,14 +904,14 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                            SPvalidateLookupFieldModified(
-                              $event,
-                              PRCountryCodeData,
-                              ['PRCountry'],
-                              false,
-                              ['CODE']
-                            )
-                          "
+                              SPvalidateLookupFieldModified(
+                                $event,
+                                PRCountryCodeData,
+                                ['PRCountry'],
+                                false,
+                                ['CODE']
+                              )
+                            "
                             (keydown)="
                               onKeyDown(
                                 $event,
@@ -926,14 +952,14 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                            SPvalidateLookupFieldModified(
-                              $event,
-                              PRStateCodeData,
-                              ['PRState'],
-                              false,
-                              ['CODE']
-                            )
-                          "
+                              SPvalidateLookupFieldModified(
+                                $event,
+                                PRStateCodeData,
+                                ['PRState'],
+                                false,
+                                ['CODE']
+                              )
+                            "
                             (keydown)="
                               onKeyDown($event, ['PRState'], PRStateCodeData)
                             "
@@ -970,14 +996,14 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                            SPvalidateLookupFieldModified(
-                              $event,
-                              PRCityCodeData,
-                              ['PRCity'],
-                              false,
-                              ['CODE']
-                            )
-                          "
+                              SPvalidateLookupFieldModified(
+                                $event,
+                                PRCityCodeData,
+                                ['PRCity'],
+                                false,
+                                ['CODE']
+                              )
+                            "
                             (keydown)="
                               onKeyDown($event, ['PRCity'], PRCityCodeData)
                             "
@@ -1006,11 +1032,10 @@
                           appearance="outline"
                         >
                           <input
-                            type="text"
-                            #codeInput
+                            type="number"
+                            (keydown)="preventInvalidInput($event)"
                             matInput
                             formControlName="PRLand"
-                            UpperCaseDirective
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                           />
@@ -1030,11 +1055,10 @@
                           appearance="outline"
                         >
                           <input
-                            type="text"
-                            #codeInput
+                            type="number"
+                            (keydown)="preventInvalidInput($event)"
                             matInput
                             formControlName="PRMoblieCode"
-                            UpperCaseDirective
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                           />
