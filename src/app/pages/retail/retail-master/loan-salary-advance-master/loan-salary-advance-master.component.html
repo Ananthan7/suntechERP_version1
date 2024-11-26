@@ -15,7 +15,7 @@
     [isViewMore]="!viewMode"
     (saveClick)="formSubmit()"
     (cancelClick)="close()"
-    [isViewDelete]="!viewMode && editableMode"
+    [isViewDelete]="deleteMode"
     (deleteClick)="deleteRecord()"
   ></modal-header>
   <!-- content section -->
@@ -37,6 +37,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         #codeInput
                         matInput
@@ -49,6 +50,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         #codeInput
                         matInput
@@ -72,18 +74,22 @@
                     <div class="datepick">
                       <mat-form-field style="width: 100%" appearance="outline">
                         <input
+                          [readonly]="viewMode"
                           matInput
                           DateValidation
                           [matDatepicker]="vocDate"
                           formControlName="voc_date"
                           placeholder="DD/MM/YYYY"
+                          [disabled]="isDisabled" 
                         />
                         <mat-datepicker-toggle
                           matSuffix
                           [for]="vocDate"
+                          [disabled]="viewMode" 
                         ></mat-datepicker-toggle>
-                        <mat-datepicker #vocDate></mat-datepicker>
+                        <mat-datepicker #vocDate [disabled]="isDisabled"></mat-datepicker> <!-- Add this to disable the date picker itself -->
                       </mat-form-field>
+                      
                     </div>
                   </div>
                 </div>
@@ -97,6 +103,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="loan_emp_code"
@@ -115,9 +122,13 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayempCode
                         class="masterSearch"
                         [MasterSearchData]="BranchData"
-                        (newRowClick)="BranchDataSelected($event)"
+                        (newRowClick)="
+                          lookupSelect($event, 'loan_emp_code', 'ACCODE')
+                        "
                       >
                       </master-search>
                     </mat-form-field>
@@ -125,6 +136,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="loan_dept_code"
@@ -146,15 +158,40 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="loan_divn_code"
                         UpperCaseDirective
+                        (keydown)="
+                          onKeyDown(
+                            $event,
+                            ['loan_divn_code', 'loan_modified_by'],
+                            glCodeData
+                          )
+                        "
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            glCodeData,
+                            ['loan_divn_code', 'loan_modified_by'],
+                            false,
+                            ['ACCOUNT_MODE', 'ACCODE']
+                          )
+                        "
                       />
                       <master-search
+                        *ngIf="!viewMode"
                         class="masterSearch"
+                        #overlaystaffadvCodeSearch
                         [MasterSearchData]="glCodeData"
-                        (newRowClick)="BranchDataSelected($event)"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['loan_divn_code', 'loan_modified_by'],
+                            ['ACCOUNT_MODE', 'ACCODE']
+                          )
+                        "
                       >
                       </master-search>
                     </mat-form-field>
@@ -162,11 +199,16 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="loan_modified_by"
                         (keydown)="
-                          onKeyDown($event, ['loan_modified_by'], BranchData)
+                          onKeyDown(
+                            $event,
+                            ['loan_divn_code', 'loan_modified_by'],
+                            glCodeData
+                          )
                         "
                         UpperCaseDirective
                       />
@@ -183,6 +225,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         AmountDecimalInput
                         class="text-right"
@@ -201,6 +244,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         matInput
                         DateValidation
                         [matDatepicker]="loan_issue_date"
@@ -208,6 +252,7 @@
                         placeholder="DD/MM/YYYY"
                       />
                       <mat-datepicker-toggle
+                      [disabled]="viewMode" 
                         matSuffix
                         [for]="loan_issue_date"
                       ></mat-datepicker-toggle>
@@ -223,6 +268,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="loan_ref1"
@@ -241,6 +287,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         AmountDecimalInput
@@ -260,6 +307,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         matInput
                         DateValidation
                         [matDatepicker]="loan_deduction_fm_date"
@@ -267,6 +315,7 @@
                         placeholder="DD/MM/YYYY"
                       />
                       <mat-datepicker-toggle
+                      [disabled]="viewMode" 
                         matSuffix
                         [for]="loan_deduction_fm_date"
                       ></mat-datepicker-toggle>
@@ -282,6 +331,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="loan_ref2"
@@ -300,6 +350,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="loan_intervals"
@@ -317,6 +368,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         matInput
                         DateValidation
                         [matDatepicker]="loan_deduction_to_date"
@@ -324,6 +376,7 @@
                         placeholder="DD/MM/YYYY"
                       />
                       <mat-datepicker-toggle
+                      [disabled]="viewMode" 
                         matSuffix
                         [for]="loan_deduction_to_date"
                       ></mat-datepicker-toggle>
@@ -339,6 +392,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="loan_pay_doc_details"
@@ -358,6 +412,7 @@
                   <div class="col-sm-7">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="loan_narration"
@@ -424,6 +479,7 @@
                     <div class="col-sm-2">
                       <mat-form-field style="width: 100%" appearance="outline">
                         <input
+                          [readonly]="viewMode"
                           type="text"
                           AmountDecimalInput
                           class="text-right"
@@ -443,6 +499,7 @@
                     <div class="col-sm-2">
                       <mat-form-field style="width: 100%" appearance="outline">
                         <input
+                          [readonly]="viewMode"
                           type="text"
                           AmountDecimalInput
                           class="text-right"
@@ -462,6 +519,7 @@
                     <div class="col-sm-2">
                       <mat-form-field style="width: 100%" appearance="outline">
                         <input
+                          [readonly]="viewMode"
                           type="text"
                           class="text-right"
                           AmountDecimalInput
@@ -484,6 +542,7 @@
                     <div class="col-sm-4">
                       <mat-form-field style="width: 100%" appearance="outline">
                         <input
+                          [readonly]="viewMode"
                           type="date"
                           matInput
                           formControlName="loandet_closing_date"
@@ -512,6 +571,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf1"
@@ -528,6 +588,8 @@
                         (keydown)="onKeyDown($event, ['udf1'], UserDefinedData)"
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined1Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefinedData"
                         (newRowClick)="UserDefined1DataSelected($event)"
@@ -546,6 +608,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf2"
@@ -564,6 +627,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined2Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined2Data"
                         (newRowClick)="UserDefined2DataSelected($event)"
@@ -582,6 +647,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf3"
@@ -600,6 +666,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined3Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined3Data"
                         (newRowClick)="UserDefined3DataSelected($event)"
@@ -618,6 +686,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf4"
@@ -636,6 +705,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined4Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined4Data"
                         (newRowClick)="UserDefined4DataSelected($event)"
@@ -654,6 +725,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf5"
@@ -672,6 +744,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined5Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined5Data"
                         (newRowClick)="UserDefined5DataSelected($event)"
@@ -692,6 +766,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf6"
@@ -710,6 +785,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined6Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined6Data"
                         (newRowClick)="UserDefined6DataSelected($event)"
@@ -728,6 +805,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf7"
@@ -746,6 +824,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined7Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined7Data"
                         (newRowClick)="UserDefined7DataSelected($event)"
@@ -764,6 +844,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf8"
@@ -782,6 +863,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined8Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined8Data"
                         (newRowClick)="UserDefined8DataSelected($event)"
@@ -800,6 +883,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf9"
@@ -818,6 +902,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined9Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined9Data"
                         (newRowClick)="UserDefined9DataSelected($event)"
@@ -836,6 +922,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf10"
@@ -854,6 +941,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined10Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined10Data"
                         (newRowClick)="UserDefined10DataSelected($event)"
@@ -874,6 +963,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf11"
@@ -892,6 +982,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined11Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined11Data"
                         (newRowClick)="UserDefined11DataSelected($event)"
@@ -910,6 +1002,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf12"
@@ -928,6 +1021,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined12Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined12Data"
                         (newRowClick)="UserDefined12DataSelected($event)"
@@ -946,6 +1041,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf13"
@@ -964,7 +1060,9 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
                         class="masterSearch"
+                        #overlayuserDefined13Search
                         [MasterSearchData]="UserDefined13Data"
                         (newRowClick)="UserDefined13DataSelected($event)"
                       >
@@ -982,6 +1080,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf14"
@@ -1000,6 +1099,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined14Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined14Data"
                         (newRowClick)="UserDefined14DataSelected($event)"
@@ -1018,6 +1119,7 @@
                   <div class="col-sm-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        [readonly]="viewMode"
                         type="text"
                         matInput
                         formControlName="udf15"
@@ -1036,6 +1138,8 @@
                         "
                       />
                       <master-search
+                        *ngIf="!viewMode"
+                        #overlayuserDefined15Search
                         class="masterSearch"
                         [MasterSearchData]="UserDefined15Data"
                         (newRowClick)="UserDefined15DataSelected($event)"
