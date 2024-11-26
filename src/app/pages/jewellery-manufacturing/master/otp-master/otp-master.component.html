@@ -109,14 +109,15 @@
         id="gridContainer"
         [allowColumnResizing]="true"
         [showBorders]="true"
+        [selection]="{ mode: 'single', showCheckBoxesMode: 'always' }"
+        (onSelectionChanged)="onRowSelectionChanged($event)"
       >
         <dxi-column
           *ngFor="let data of columnHeader"
-          dataField="{{ data.FIELD }}"
-          caption="{{ data.CAPTION }}"
+          [dataField]="data.FIELD"
+          [caption]="data.CAPTION"
           [allowEditing]="true"
           alignment="center"
-          backgroundcolor="#000"
         >
         </dxi-column>
       </dx-data-grid>

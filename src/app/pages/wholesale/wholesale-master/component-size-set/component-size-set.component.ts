@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -10,6 +10,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import themes from 'devextreme/ui/themes';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectChange } from '@angular/material/select';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-component-size-set',
@@ -17,6 +18,7 @@ import { MatSelectChange } from '@angular/material/select';
   styleUrls: ['./component-size-set.component.scss']
 })
 export class ComponentSizeSetComponent implements OnInit {
+  @ViewChild('overlaycomponentSizecode') overlaycomponentSizecode!: MasterSearchComponent;
 
   columnheader: any[] = ['SN', 'Code', 'Description'];
   allMode: string;
@@ -35,48 +37,47 @@ export class ComponentSizeSetComponent implements OnInit {
   editableMode: boolean = false;
   codeSearchText: string = '';
   filteredComponentSizeType: any[] = [];
-  
+
+  componentSizeMaster: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 89,
+    SEARCH_FIELD: 'COMPSIZE_CODE',
+    SEARCH_HEADING: 'Component size code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "COMPSIZE_CODE <> '' ORDER BY COMPSIZE_CODE",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  componentsizesetmasterForm: FormGroup = this.formBuilder.group({
+    code: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    COMPSIZE_CODE: [''],
+  });
   constructor(
     private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
-    private cdRef: ChangeDetectorRef,
     private renderer: Renderer2,
   ) {
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
 
-  // codetemp(data: any, value: any) {
-  //   console.log(data);
-  //   this.tableData[value.data.SRNO - 1].COMPSIZE_CODE =  data.data.value;
-  // }
-
-  // descriptiontemp(data: any, value: any) {
-  //   this.tableData[value.data.SRNO - 1].COMPONENT_DESCRIPTION = data.data.value;
-  // }
-
   ngOnInit(): void {
-    console.log(this.content);
-    if (this.content) {
-      this.setFormValues()
-
-    }
-    this.getComponentSizeTypeOptions();
-
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setFormValues();
-      // this.processMasterForm();
     } else if (this.content.FLAG == 'EDIT') {
       this.setFormValues();
       this.editableMode = true;
       this.codeEnable = false;
-      this.getComponentSizeTypeOptions();
+    }else if (this.content.FLAG == 'DELETE') {
+      this.viewMode = true;
+      this.deleteRecord()
     }
   }
 
@@ -94,27 +95,14 @@ export class ComponentSizeSetComponent implements OnInit {
     const Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
       if (result.response) {
         this.componentSizeType = result.response;
-
         // Sort by COMPSIZE_CODE
         this.componentSizeType.sort((a, b) => a.COMPSIZE_CODE - b.COMPSIZE_CODE);
-
         // Initialize filtered list to show all options initially
         this.filteredComponentSizeType = this.componentSizeType;
-
-        console.log(this.componentSizeType); // Log here to check the data
-
-        this.setFormValues();
       }
     });
     this.subscriptions.push(Sub);
   }
-
-  // filterOptions() {
-  //   const searchText = this.codeSearchText.toLowerCase();
-  //   this.filteredComponentSizeType = this.componentSizeType.filter(option =>
-  //     option.COMPSIZE_CODE.toLowerCase().includes(searchText)
-  //   );
-  // }
 
   onCodeSelect(event: MatSelectChange, data: any) {
     const index = data.data.SRNO - 1;
@@ -125,50 +113,18 @@ export class ComponentSizeSetComponent implements OnInit {
     this.tableData[index].COMPSIZE_CODE = selectedCode;
   }
 
-  // onCodeSelect(event: MatSelectChange, data: any) {
-  //   console.log(event);
-
-  //   console.log(data);
-
-  //   let index = data.data.SRNO - 1;
-  //   const selectedCode = event.value.COMPSIZE_CODE;
-  //   const selectedDescription = this.componentSizeType.find(option => option.COMPSIZE_CODE === selectedCode)?.DESCRIPTION;
-
-  //   let lastIndex = this.tableData.length - 1
-
-  //   this.tableData[index].COMPONENT_DESCRIPTION = selectedDescription;
-  //   this.tableData[index].COMPSIZE_CODE = selectedCode;
-
-  // }
-
-
   setFormValues() {
-
     if (!this.content) return
     this.componentsizesetmasterForm.controls.code.setValue(this.content.COMPSET_CODE);
     this.componentsizesetmasterForm.controls.description.setValue(this.content.DESCRIPTION);
-
     this.dataService.getDynamicAPI('ComponentSizeSetMaster/GetComponentSizeSetMasterDetail/' + this.content.COMPSET_CODE)
       .subscribe((data) => {
         if (data.status == 'Success') {
-
           this.tableData = data.response.detail;
-          console.log(data.response.detail);
-          this.selectedOptions = this.tableData.map(item => this.componentSizeType.find(option => option.COMPSIZE_CODE));
-          this.selectedOptions = this.tableData.map(item => this.componentSizeType.find(option => option.COMPSIZE_CODE === item.COMPSIZE_CODE) || null);
-
+          // this.selectedOptions = this.tableData.map(item => this.componentSizeType.find(option => option.COMPSIZE_CODE === item.COMPSIZE_CODE) || null);
         }
       });
   }
-
-
-  componentsizesetmasterForm: FormGroup = this.formBuilder.group({
-    code: ['', [Validators.required]],
-    description: ['', [Validators.required]],
-
-  });
-
-
   getSelectedCompSize(): string {
     return this.componentsizesetmasterForm.value.COMPSIZE_CODE;
   }
@@ -231,7 +187,7 @@ export class ComponentSizeSetComponent implements OnInit {
 
   deleteTableData() {
     console.log("After Selecting " + this.selectedIndexes);
-  
+
     if (this.selectedIndexes !== undefined && this.selectedIndexes.length > 0) {
       // Display confirmation dialog before deleting
       Swal.fire({
@@ -247,35 +203,35 @@ export class ComponentSizeSetComponent implements OnInit {
           if (this.tableData.length > 0) {
             // Log the selected indexes before filtering
             console.log('Selected indexes to delete:', this.selectedIndexes);
-  
+
             if (this.selectedIndexes && this.selectedIndexes.length > 0) {
               console.log('Before deletion, tableData length:', this.tableData.length);
-  
+
               // Filter out items whose index is included in the selectedIndexes
               this.tableData = this.tableData.filter((data, index) => {
                 const shouldDelete = !this.selectedIndexes.includes(index);
                 console.log(`Index ${index} - Should Delete: ${!shouldDelete}`);
                 return shouldDelete;
               });
-  
+
               console.log('After deletion, tableData length:', this.tableData.length);
               console.log('Table data:', this.tableData);
-  
+
               // Remove corresponding entries from selectedOptions
               this.selectedOptions = this.selectedOptions.filter((_, index) => !this.selectedIndexes.includes(index));
-  
+
               // Reset selectedIndexes after deletion
               this.selectedIndexes = [];
               console.log('Selected indexes after reset:', this.selectedIndexes);
-  
+
               // Show success message after deletion
               this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
-  
+
               // Update serial numbers after deletion
               this.tableData.forEach((item: any, i: number) => {
                 item.SRNO = i + 1; // Reset serial numbers starting from 1
               });
-  
+
             } else {
               console.warn('No indexes selected for deletion.');
             }
@@ -288,11 +244,11 @@ export class ComponentSizeSetComponent implements OnInit {
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
   }
-  
+
 
   selectedOptions: any[] = Array(this.tableData.length).fill(null);
 
- 
+
 
   isOptionSelected(SRNO: number, option: any): boolean {
     // Check if the option is already selected for another row
@@ -513,7 +469,61 @@ export class ComponentSizeSetComponent implements OnInit {
 
     this.subscriptions.push(sub);
   }
+  compSizeCodeSelected(data:any,object:any){
+    this.tableData[object.data.SRNO - 1].COMPSIZE_CODE = data.COMPSIZE_CODE;
+    this.tableData[object.data.SRNO - 1].COMPONENT_DESCRIPTION = data.DESCRIPTION;
+    this.componentsizesetmasterForm.controls.COMPSIZE_CODE.setValue(data.COMPSIZE_CODE)
+  }
+ 
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string,griddata:any) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        debugger
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.componentsizesetmasterForm.controls[FORMNAME].setValue('')
+          if(FORMNAME == 'COMPSIZE_CODE'){
+            this.tableData[griddata.data.SRNO - 1].COMPSIZE_CODE = '';
+            this.tableData[griddata.data.SRNO - 1].COMPONENT_DESCRIPTION = '';
+          }
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
+        }
+        if(FORMNAME == 'COMPSIZE_CODE'){
+          this.tableData[griddata.data.SRNO - 1].COMPSIZE_CODE = data[0].COMPSIZE_CODE;
+          this.tableData[griddata.data.SRNO - 1].COMPONENT_DESCRIPTION = data[0].DESCRIPTION;
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')
+      })
+    this.subscriptions.push(Sub)
+  }
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
 
-
-
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'COMPSIZE_CODE':
+        this.overlaycomponentSizecode.showOverlayPanel(event)
+        break;
+        default:
+        break
+    }
+  }
 }
