@@ -282,6 +282,9 @@ export class EmployeeMasterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    console.log(this.content);
+    
     this.genderList = this.getUniqueValues(
       this.commonService.getComboFilterByID("gender"),
       "ENGLISH"
@@ -296,6 +299,8 @@ export class EmployeeMasterComponent implements OnInit {
       this.commonService.getComboFilterByID("Blood Group"),
       "ENGLISH"
     );
+    console.log(this.bloodGroupList);
+
     console.log(this.maritalStatusList);
 
     // this.renderer.selectRootElement('#code')?.focus();
@@ -625,17 +630,19 @@ export class EmployeeMasterComponent implements OnInit {
       this.content.EMPMST_NATIONALITY_CODE
     );
     this.employeeMasterForm.controls.DOB.setValue(this.content.EMPMST_DOB);
+    console.log(this.content.EMPMST_BLOOD_GROUP.toString());
+    
     this.employeeMasterForm.controls.BloodGroup.setValue(
-      this.content.EMPMST_BLOOD_GROUP
+      this.content.EMPMST_BLOOD_GROUP.toString()
     );
     this.employeeMasterForm.controls.FatherName.setValue(
       this.content.EMPMST_FATHER_NAME
     );
     this.employeeMasterForm.controls.Gender.setValue(
-      this.content.EMPMST_GENDER
+      this.content.EMPMST_GENDER.toString()
     );
     this.employeeMasterForm.controls.MaritialStatus.setValue(
-      this.content.EMPMST_MARITAL_STATUS
+      this.content.EMPMST_MARITAL_STATUS.toString()
     );
     this.employeeMasterForm.controls.HomeHouseName.setValue(
       this.content.EMPMST_HOUSENAME_HM
