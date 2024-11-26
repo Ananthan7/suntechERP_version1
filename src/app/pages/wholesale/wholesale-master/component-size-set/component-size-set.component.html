@@ -4,8 +4,10 @@
     <i class="feather icon-x close-icon"></i>
   </button>
 </div>
-<!-- modal header component --><modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode"
-  [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (saveClick)="formSubmit()" (cancelClick)="close()"
+<!-- modal header component --><modal-header [isViewDelete]="!viewMode"
+  [isViewSave]="!viewMode"
+  [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (saveClick)="formSubmit()"
+  (cancelClick)="close()"
   (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
   <div class="col-md-12">
@@ -16,12 +18,16 @@
             <div class="row">
               <div class="col-md-10">
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-2 col-form-label">Code * :</label>
+                  <label for="inputPassword"
+                    class="col-sm-2 col-form-label">Code * :</label>
                   <div class="col-md-3">
                     <mat-form-field appearance="outline" style="width: 100%;">
-                      <input type="text" formControlName="code" matInput #code id="code"
-                        (focusout)="checkCodeExists($event)" (keyup)="codeEnabled()"
-                        [readonly]="editableMode|| viewMode" (input)="code.value = code.value.toUpperCase()"
+                      <input type="text" formControlName="code" matInput #code
+                        id="code"
+                        (focusout)="checkCodeExists($event)"
+                        (keyup)="codeEnabled()"
+                        [readonly]="editableMode|| viewMode"
+                        (input)="code.value = code.value.toUpperCase()"
                         maxlength="6" appNoEmptySpace />
                     </mat-form-field>
 
@@ -33,12 +39,15 @@
             <div class="row">
               <div class="col-md-10">
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-2 col-form-label">Description * :</label>
+                  <label for="inputPassword"
+                    class="col-sm-2 col-form-label">Description * :</label>
                   <div class="col-md-6">
                     <mat-form-field appearance="outline" style="width: 100%;">
-                      <input type="text" formControlName="description" matInput #description
+                      <input type="text" formControlName="description" matInput
+                        #description
                         [readonly]="viewMode || codeEnable"
-                        (input)="description.value = description.value.toUpperCase()" maxlength="100" appNoEmptySpace />
+                        (input)="description.value = description.value.toUpperCase()"
+                        maxlength="100" appNoEmptySpace />
                     </mat-form-field>
                   </div>
                 </div>
@@ -47,14 +56,15 @@
 
           </div>
 
-
         </div>
         <div class="col-md-12">
           <div class="row">
             <div class="col-md-8">
               <div class="d-flex justify-content-start text-start">
-                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                  [viewAddBtn]="!viewMode && !codeEnable" [viewDeleteBtn]="!viewMode && !codeEnable"
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                  [viewImportBtn]="false"
+                  [viewAddBtn]="!viewMode && !codeEnable"
+                  [viewDeleteBtn]="!viewMode && !codeEnable"
                   (addClick)="addTableData()" (deleteClick)="deleteTableData()">
                 </menu-buttons>
               </div>
@@ -63,56 +73,60 @@
 
         </div>
         <div class="col-md-12">
-          <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [showColumnLines]="true"
-            [showRowLines]="true" class="mt-3" keyExpr="SRNO" (onSelectionChanged)="onSelectionChanged($event)">
+          <dx-data-grid id="gridContainer" [dataSource]="tableData"
+            [showBorders]="true" [showColumnLines]="true"
+            [showRowLines]="true" class="mt-3" keyExpr="SRNO"
+            (onSelectionChanged)="onSelectionChanged($event)">
             <dxo-editing mode="cell"></dxo-editing>
             <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
             <!-- <dxo-selection mode="multiple"></dxo-selection> -->
 
-            <dxo-selection [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode"
+            <dxo-selection [selectAllMode]="allMode"
+              [showCheckBoxesMode]="checkBoxesMode"
               mode="single"></dxo-selection>
             <dxi-column dataField="SRNO" caption="SN"> </dxi-column>
-            <dxi-column dataField="COMPSIZE_CODE" caption="Code" cellTemplate="codetemp"></dxi-column>
-            <dxi-column dataField="COMPONENT_DESCRIPTION" caption="Description" cellTemplate="descriptiontemp">
+            <dxi-column dataField="COMPSIZE_CODE" caption="Code"
+              cellTemplate="codetemp"></dxi-column>
+            <dxi-column dataField="COMPONENT_DESCRIPTION" caption="Description"
+              cellTemplate="descriptiontemp">
             </dxi-column>
 
-            <div *dxTemplate="let data of 'codetemp'">
+            <div *dxTemplate="let data of 'codetemp'" class="p-1">
+              <mat-form-field style="width: 90%;"
+                appearance="outline">
+                <input type="text" matInput
+                  [value]="data.value"
+                  [readonly]="viewMode"
+                  (focusout)="validateLookupField($event,componentSizeMaster,'COMPSIZE_CODE',data)"
+                  UpperCaseDirective
+                  autocomplete="off"
+                  (keydown)="lookupKeyPress($event,'COMPSIZE_CODE')" />
+                <master-search
+                  [MasterSearchData]="componentSizeMaster"
+                  class="mstrScrch"
+                  *ngIf="!viewMode"
+                  (newRowClick)="compSizeCodeSelected($event,data)"
+                  #overlaycomponentSizecode >
+                </master-search>
+              </mat-form-field>
               <!-- <mat-form-field appearance="outline" style="width: 100%;">
                 <mat-select [(value)]="selectedOptions[data.data.SRNO - 1]"
                   (selectionChange)="onCodeSelect($event, data)"
-                  *ngIf="componentSizeType && componentSizeType.length > 0">
-
-                  <mat-option *ngFor="let option of componentSizeType" [value]="option"
+                  *ngIf="componentSizeType && componentSizeType.length > 0"
+                  panelClass="custom-select-panel">
+                  <mat-option *ngFor="let option of filteredComponentSizeType"
+                    [value]="option"
                     [disabled]="isOptionSelected(data.data.SRNO, option) || viewMode || codeEnable">
                     {{ option.COMPSIZE_CODE }}
                   </mat-option>
                 </mat-select>
               </mat-form-field> -->
 
-              <mat-form-field appearance="outline" style="width: 100%;">
-                <mat-select [(value)]="selectedOptions[data.data.SRNO - 1]"
-                  (selectionChange)="onCodeSelect($event, data)"
-                  *ngIf="componentSizeType && componentSizeType.length > 0" panelClass="custom-select-panel">
-
-                  <!-- Input field for searching -->
-                  <!-- <mat-select-trigger>
-                    <input matInput placeholder="Search code..." [(ngModel)]="codeSearchText" (keyup)="filterOptions()"
-                      class="search-input">
-                  </mat-select-trigger> -->
-
-                  <!-- Filtered options based on search text -->
-                  <mat-option *ngFor="let option of filteredComponentSizeType" [value]="option"
-                    [disabled]="isOptionSelected(data.data.SRNO, option) || viewMode || codeEnable">
-                    {{ option.COMPSIZE_CODE }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-
             </div>
             <div *dxTemplate="let data of 'descriptiontemp'">
               <mat-form-field appearance="outline" style="width: 100%;">
-                <input type="text" matInput readonly style="width: 100%;" [value]="data.value"
+                <input type="text" matInput readonly style="width: 100%;"
+                  [value]="data.value"
                   [readonly]="viewMode || codeEnable" />
               </mat-form-field>
             </div>

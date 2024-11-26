@@ -38,7 +38,7 @@ export class ComponentMasterComponent implements OnInit {
   maindetails: any[] = [];
   selectedIndexes: any = [];
   columnhead: any[] = ['Srno', 'Div.', 'Stock Code', 'Karat', 'Stock Type', 'Pcs', 'Wt/Ct', 'Color', 'Clarity', 'Shape', 'Sieve Std.', 'Description', 'Size', 'Process Type', 'Remarks', 'Pointer Wt', 'Ext.Clarity', 'Sieve From', 'Description', 'Sieve To', 'Description']
-  columnhead2: any[] = ['Design', 'Description', 'Pcs', 'Type', 'Sub Category', 'Brand']
+  columnhead2: any[] = ['DESIGN_CODE', 'DESIGN_DESCRIPTION', 'PCS', 'DESIGN_TYPE', 'CATEGORY_CODE', 'BRAND_CODE']
   selectedTabIndex = 0;
   urls: string | ArrayBuffer | null | undefined;
   url: any;
@@ -411,7 +411,7 @@ export class ComponentMasterComponent implements OnInit {
         this.viewMode = true;
         this.viewDisable = true;
       } else if (this.content.FLAG == 'EDIT') {
-        this.maindesigndetails()
+        // this.maindesigndetails()
         this.editableMode = true;
         this.editMode = true;
       } else if (this.content?.FLAG == 'DELETE') {
@@ -1038,13 +1038,13 @@ export class ComponentMasterComponent implements OnInit {
         this.content.RADIUS));
 
     this.images = this.content.PICTURE_NAME
-    this.tableData = this.content.DESIGN_STNMTL_DETAIL
+    // this.tableData = this.content.DESIGN_STNMTL_DETAIL
 
     this.dataService.getDynamicAPI('DesignMaster/GetDesignMasterDetails/' + this.content.DESIGN_CODE)
       .subscribe((data) => {
         if (data.status == 'Success') {
           this.tableData = data.response.DESIGN_STNMTL_DETAIL;
-          this.maindetails = data.response
+          this.maindetails = [data.response]
         }
       });
 
