@@ -78,6 +78,7 @@ export class AdditionalAmountComponent implements OnInit {
   calculatedType: any;
   trasnCode: any;
   CategoryCode: any;
+  flag: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -112,16 +113,25 @@ export class AdditionalAmountComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.content);
 
+    this.flag = this.content
+      ? this.content.FLAG
+      : (this.content = { FLAG: "ADD" }).FLAG;
+
     if (this.content?.FLAG) {
-      this.setValues();
       if (this.content?.FLAG == "VIEW") {
+        this.setValues();
+
         this.isDisabled = true;
         this.viewMode = true;
       } else if (this.content?.FLAG == "EDIT") {
+        this.setValues();
+
         this.viewMode = false;
         this.editMode = true;
         this.codeEnable = false;
       } else if (this.content?.FLAG == "DELETE") {
+        this.setValues();
+
         this.viewMode = true;
         this.deleteMaster();
       }
@@ -175,6 +185,8 @@ export class AdditionalAmountComponent implements OnInit {
           index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
       );
     console.log(this.narrationValue);
+
+    this.setFlag(this.flag, this.content);
   }
 
   close(data?: any) {
@@ -468,7 +480,6 @@ export class AdditionalAmountComponent implements OnInit {
     let data1 = this.content.DEBIT_TYPE;
     console.log(data1);
 
-    
     this.debitValue = data1;
     this.costAndPriceTypeMainForm.controls["code"].setValue(
       this.content.ADDL_CODE
@@ -508,6 +519,9 @@ export class AdditionalAmountComponent implements OnInit {
     this.costAndPriceTypeMainForm.controls["include_for_tax"].setValue(
       this.content.INC_DEFAULT_TAX
     );
+    this.costAndPriceTypeMainForm.controls["vat_type"].setValue(
+      this.content.PERCENTAGE.toString()
+    );
   }
 
   setPostData() {
@@ -526,25 +540,21 @@ export class AdditionalAmountComponent implements OnInit {
       AVG_ON: this.commonService.emptyToZero(form.calculated_type),
       TRANS_TYPE: this.commonService.emptyToZero(form.transaction_type),
       PLUS_MINUS: "s",
-      DEBIT_TYPE: this.commonService.nullToString(
-        form.debit_type
-      ),
+      DEBIT_TYPE: this.commonService.nullToString(form.debit_type),
       DEBIT_CODE: this.commonService.nullToString(
         form.debit_code.toUpperCase()
       ),
-      CREDIT_TYPE: this.commonService.nullToString(
-        form.credit_type
-      ),
+      CREDIT_TYPE: this.commonService.nullToString(form.credit_type),
       CREDIT_CODE: this.commonService.nullToString(
         form.credit_code.toUpperCase()
       ),
       NARRATION: this.commonService.emptyToZero(form.narration),
-      INCLUDE_COSTING: form.include_in_sales_analysis == true ? 0 : 1,
+      INCLUDE_COSTING: form.include_in_sales_analysis == true ? 1 : 0,
       MID: this.commonService.emptyToZero(form.mid),
       SYSTEM_DATE: new Date(),
       STONEMETAL: this.commonService.emptyToZero(form.stone_metal),
-      PERCENTAGE: this.commonService.emptyToZero(form.percentage),
-      INC_DEFAULT_TAX: form.include_for_tax == 'y'? true:false,
+      PERCENTAGE: this.commonService.emptyToZero(form.vat_type),
+      INC_DEFAULT_TAX: form.include_for_tax == "y" ? true : false,
       ADDL_CATEGORY: this.commonService.emptyToZero(form.add_category),
     };
 
@@ -703,5 +713,33 @@ export class AdditionalAmountComponent implements OnInit {
 
   matBoxCheck(event: MatCheckboxChange, controller: any) {
     console.log(event.checked);
+  }
+
+  setFlag(currentFlag: string, DATA: any): void {
+    this.flag = currentFlag;
+
+    switch (this.flag) {
+      case "ADD":
+        break;
+
+      case "VIEW":
+        this.costAndPriceTypeMainForm.controls["calculated_type"].disable();
+        this.costAndPriceTypeMainForm.controls["transaction_type"].disable();
+        this.costAndPriceTypeMainForm.controls["debit_type"].disable();
+        this.costAndPriceTypeMainForm.controls["credit_type"].disable();
+        this.costAndPriceTypeMainForm.controls["narration"].disable();
+        this.costAndPriceTypeMainForm.controls["add_category"].disable();
+        this.costAndPriceTypeMainForm.controls["transaction_code"].disable();
+        this.costAndPriceTypeMainForm.controls["include_for_tax"].disable();
+        this.costAndPriceTypeMainForm.controls[
+          "include_in_sales_analysis"
+        ].disable();
+        this.costAndPriceTypeMainForm.controls["vat_type"].disable();
+
+        break;
+
+      default:
+        break;
+    }
   }
 }

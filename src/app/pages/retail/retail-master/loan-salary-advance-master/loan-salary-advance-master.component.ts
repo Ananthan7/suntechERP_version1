@@ -56,6 +56,7 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
   DepartmentData: MasterSearchModel = {};
   isloading: boolean = false;
   viewMode: boolean = false;
+  deleteMode: boolean = false;
   isDisabled: boolean = false;
   editableMode: boolean = false;
   editMode: boolean = false;
@@ -382,6 +383,7 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
     // })
   });
   branchCode: any;
+  flag: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -391,7 +393,14 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.content);
+
+    this.flag = this.content
+      ? this.content.FLAG
+      : (this.content = { FLAG: "ADD" }).FLAG;
     this.branchCode = this.commonService.branchCode;
+
+    this.flag === "ADD" && this.generateVocNo();
     if (this.content?.FLAG) {
       // this.setFormValues();
       if (this.content?.FLAG == "VIEW") {
@@ -403,10 +412,11 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
         this.codeEnable = false;
       } else if (this.content?.FLAG == "DELETE") {
         this.viewMode = true;
+        this.deleteMode = true;
         this.deleteRecord();
       }
     }
-    this.generateVocNo();
+
     this.setvoucherTypeMaster();
     this.LoanSalaryAdvanceMasterForm.controls.voc_type.setValue(
       this.commonService.getqueryParamVocType()
@@ -414,6 +424,8 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
     this.LoanSalaryAdvanceMasterForm.controls.voc_date.setValue(
       this.commonService.currentDate
     );
+
+    this.setView(this.content);
   }
   generateVocNo() {
     const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.commonService.getqueryParamVocType()}/${
@@ -428,6 +440,78 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
         this.LoanSalaryAdvanceMasterForm.controls.vocno.setValue(resp.newvocno);
       }
     });
+  }
+
+  setView(DATA: any) {
+    console.log(DATA);
+
+    this.LoanSalaryAdvanceMasterForm.controls["voc_type"].setValue(
+      DATA.VOCTYPE
+    );
+
+    this.LoanSalaryAdvanceMasterForm.controls["vocno"].setValue(DATA.VOCNO);
+
+    this.LoanSalaryAdvanceMasterForm.controls["loan_emp_code"].setValue(
+      DATA.LOAN_EMP_CODE
+    );
+    this.LoanSalaryAdvanceMasterForm.controls["loan_dept_code"].setValue(
+      DATA.LOAN_DEPT_CODE
+    );
+    this.LoanSalaryAdvanceMasterForm.controls["loan_divn_code"].setValue(
+      DATA.LOAN_DIVN_CODE
+    );
+    this.LoanSalaryAdvanceMasterForm.controls["loan_modified_by"].setValue(
+      DATA.LOAN_MODIFIED_BY
+    );
+    this.LoanSalaryAdvanceMasterForm.controls["loan_amount"].setValue(
+      DATA.LOAN_AMOUNT
+    );
+    this.LoanSalaryAdvanceMasterForm.controls["loan_issue_date"].setValue(
+      DATA.LOAN_ISSUE_DATE
+    );
+    this.LoanSalaryAdvanceMasterForm.controls["loan_ref1"].setValue(
+      DATA.LOAN_REF1
+    );
+    this.LoanSalaryAdvanceMasterForm.controls["loan_ref2"].setValue(
+      DATA.LOAN_REF2
+    );
+    this.LoanSalaryAdvanceMasterForm.controls["loan_installments"].setValue(
+      DATA.LOAN_INSTALLMENTS
+    );
+    this.LoanSalaryAdvanceMasterForm.controls[
+      "loan_deduction_fm_date"
+    ].setValue(DATA.LOAN_DEDUCTION_FM_DATE);
+    this.LoanSalaryAdvanceMasterForm.controls["loan_intervals"].setValue(
+      DATA.LOAN_INTERVALS
+    );
+    this.LoanSalaryAdvanceMasterForm.controls[
+      "loan_deduction_to_date"
+    ].setValue(DATA.LOAN_DEDUCTION_TO_DATE);
+    this.LoanSalaryAdvanceMasterForm.controls["loan_pay_doc_details"].setValue(
+      DATA.LOAN_PAY_DOC_DETAILS
+    );
+    this.LoanSalaryAdvanceMasterForm.controls["loan_narration"].setValue(
+      DATA.LOAN_NARRATION
+    );
+    this.LoanSalaryAdvanceMasterForm.controls["loan_narration"].setValue(
+      DATA.LOAN_NARRATION
+    );
+
+    this.LoanSalaryAdvanceMasterForm.controls["udf1"].setValue(DATA.UDF1);
+    this.LoanSalaryAdvanceMasterForm.controls["udf2"].setValue(DATA.UDF2);
+    this.LoanSalaryAdvanceMasterForm.controls["udf3"].setValue(DATA.UDF3);
+    this.LoanSalaryAdvanceMasterForm.controls["udf4"].setValue(DATA.UDF4);
+    this.LoanSalaryAdvanceMasterForm.controls["udf5"].setValue(DATA.UDF5);
+    this.LoanSalaryAdvanceMasterForm.controls["udf6"].setValue(DATA.UDF6);
+    this.LoanSalaryAdvanceMasterForm.controls["udf7"].setValue(DATA.UDF7);
+    this.LoanSalaryAdvanceMasterForm.controls["udf8"].setValue(DATA.UDF8);
+    this.LoanSalaryAdvanceMasterForm.controls["udf9"].setValue(DATA.UDF9);
+    this.LoanSalaryAdvanceMasterForm.controls["udf10"].setValue(DATA.UDF10);
+    this.LoanSalaryAdvanceMasterForm.controls["udf11"].setValue(DATA.UDF11);
+    this.LoanSalaryAdvanceMasterForm.controls["udf12"].setValue(DATA.UDF12);
+    this.LoanSalaryAdvanceMasterForm.controls["udf13"].setValue(DATA.UDF13);
+    this.LoanSalaryAdvanceMasterForm.controls["udf14"].setValue(DATA.UDF14);
+    this.LoanSalaryAdvanceMasterForm.controls["udf15"].setValue(DATA.UDF15);
   }
 
   setvoucherTypeMaster() {
@@ -838,49 +922,55 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
 
   showOverleyPanel(event: any, formControlName: string) {
     switch (formControlName) {
-      case "userDefined1":
+      case "loan_emp_code":
+        this.overlayempCode.showOverlayPanel(event);
+        break;
+      case "loan_divn_code":
+        this.overlaystaffadvCodeSearch.showOverlayPanel(event);
+        break;
+      case "udf1":
         this.overlayuserDefined1Search.showOverlayPanel(event);
         break;
-      case "UserDefined2":
+      case "udf2":
         this.overlayuserDefined2Search.showOverlayPanel(event);
         break;
-      case "UserDefined3":
+      case "udf3":
         this.overlayuserDefined3Search.showOverlayPanel(event);
         break;
-      case "UserDefined4":
+      case "udf4":
         this.overlayuserDefined4Search.showOverlayPanel(event);
         break;
-      case "UserDefined5":
+      case "udf5":
         this.overlayuserDefined5Search.showOverlayPanel(event);
         break;
-      case "UserDefined6":
+      case "udf6":
         this.overlayuserDefined6Search.showOverlayPanel(event);
         break;
-      case "UserDefined7":
+      case "udf7":
         this.overlayuserDefined7Search.showOverlayPanel(event);
         break;
-      case "UserDefined8":
+      case "udf8":
         this.overlayuserDefined8Search.showOverlayPanel(event);
         break;
-      case "UserDefined9":
+      case "udf9":
         this.overlayuserDefined9Search.showOverlayPanel(event);
         break;
-      case "UserDefined10":
+      case "udf10":
         this.overlayuserDefined10Search.showOverlayPanel(event);
         break;
-      case "UserDefined11":
+      case "udf11":
         this.overlayuserDefined11Search.showOverlayPanel(event);
         break;
-      case "UserDefined12":
+      case "udf12":
         this.overlayuserDefined12Search.showOverlayPanel(event);
         break;
-      case "UserDefined13":
+      case "udf13":
         this.overlayuserDefined13Search.showOverlayPanel(event);
         break;
-      case "UserDefined14":
+      case "udf14":
         this.overlayuserDefined14Search.showOverlayPanel(event);
         break;
-      case "UserDefined15":
+      case "udf15":
         this.overlayuserDefined15Search.showOverlayPanel(event);
         break;
       default:
@@ -944,9 +1034,9 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
                   if (field && field in matchedItem) {
                     console.log(field);
 
-                    this.LoanSalaryAdvanceMasterForm.controls[formName].setValue(
-                      matchedItem[field]
-                    );
+                    this.LoanSalaryAdvanceMasterForm.controls[
+                      formName
+                    ].setValue(matchedItem[field]);
                   } else {
                     console.error(
                       `Property ${field} not found in matched item.`
@@ -972,5 +1062,32 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
       });
 
     this.subscriptions.push(sub);
+  }
+
+  lookupSelect(e: any, controller?: any, modelfield?: any) {
+    if (Array.isArray(controller) && Array.isArray(modelfield)) {
+      // Handle multiple controllers and fields
+      if (controller.length === modelfield.length) {
+        controller.forEach((ctrl, index) => {
+          const field = modelfield[index];
+          const value = e[field];
+          if (value !== undefined) {
+            this.LoanSalaryAdvanceMasterForm.controls[ctrl].setValue(value);
+          }
+        });
+      } else {
+        console.warn(
+          "Controller and modelfield arrays must be of equal length."
+        );
+      }
+    } else if (controller && modelfield) {
+      // Handle single controller and field
+      const value = e[modelfield];
+      if (value !== undefined) {
+        this.LoanSalaryAdvanceMasterForm.controls[controller].setValue(value);
+      }
+    } else {
+      console.warn("Controller or modelfield is missing.");
+    }
   }
 }

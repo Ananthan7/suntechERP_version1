@@ -272,7 +272,9 @@ export class ReceiptModesComponent implements OnInit {
             } else {
               Swal.fire({
                 title: "Failed",
-                text: "Not Inserted Successfully",
+                text: result.message
+                  ? result.message
+                  : "Inserted successfully!",
                 icon: "error",
                 confirmButtonColor: "#336699",
                 confirmButtonText: "Ok",
