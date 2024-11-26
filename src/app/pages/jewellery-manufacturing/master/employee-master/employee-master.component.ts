@@ -1,6 +1,12 @@
 import { DatePipe } from "@angular/common";
 import { Component, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
@@ -219,32 +225,6 @@ export class EmployeeMasterComponent implements OnInit {
     FRONTENDFILTER: true,
   };
 
-  GenderList = [
-    {
-      name: "Male",
-      value: 1,
-    },
-    {
-      name: "FEMALE",
-      value: 2,
-    },
-    {
-      name: "Other",
-      value: 3,
-    },
-  ];
-
-  maritial = [
-    {
-      name: "Married",
-      value: 1,
-    },
-    {
-      name: "Single",
-      value: 2,
-    },
-  ];
-
   employeeMasterForm: FormGroup = this.formBuilder.group({
     code: [""],
     name: [""],
@@ -274,7 +254,7 @@ export class EmployeeMasterComponent implements OnInit {
     LandLineNum: [""],
     MoblieCode: [""],
     MoblieNum: [""],
-    email: [""],
+    email: ["", [Validators.email, this.domainValidator]],
     PRhouseName: [""],
     PRAddress: [""],
     PRCountry: [""],
@@ -291,6 +271,7 @@ export class EmployeeMasterComponent implements OnInit {
     media: [""],
   });
   maritalStatusList!: any[];
+  bloodGroupList!: any[];
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -311,6 +292,10 @@ export class EmployeeMasterComponent implements OnInit {
       "ENGLISH"
     );
 
+    this.bloodGroupList = this.getUniqueValues(
+      this.commonService.getComboFilterByID("Blood Group"),
+      "ENGLISH"
+    );
     console.log(this.maritalStatusList);
 
     // this.renderer.selectRootElement('#code')?.focus();
@@ -1117,5 +1102,19 @@ export class EmployeeMasterComponent implements OnInit {
         index ===
         self.findIndex((t) => t[field] === item[field] && t[field] !== "")
     );
+  }
+
+  preventInvalidInput(event: KeyboardEvent) {
+    if (["e", "E", "+", "-"].includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  domainValidator(control: AbstractControl): ValidationErrors | null {
+    const emailValue = control.value;
+    if (emailValue && !/^[\w-\.]+@([\w-]+\.)+[a-zA-Z]{2,}$/.test(emailValue)) {
+      return { domainInvalid: true };
+    }
+    return null;
   }
 }

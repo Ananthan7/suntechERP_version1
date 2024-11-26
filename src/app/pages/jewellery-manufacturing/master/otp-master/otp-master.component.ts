@@ -28,6 +28,7 @@ export class OtpMasterComponent implements OnInit {
   code: any;
   branchCode: any;
   countryCode: any;
+  selectedRow: any;
   otpGridData: any[] = [];
 
   columnHeader: any[] = [
@@ -74,11 +75,11 @@ export class OtpMasterComponent implements OnInit {
     this.countryCode = this.commonService.allbranchMaster.COUNTRY_CODE;
 
     this.initialController(this.flag, this.content);
-    this.OTPGridData();
   }
 
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "ADD") {
+      this.OTPGridData();
     }
     if (FLAG === "VIEW") {
       this.ViewController(DATA);
@@ -92,9 +93,20 @@ export class OtpMasterComponent implements OnInit {
   }
 
   ViewController(DATA: any) {
+    console.log(DATA);
+
     this.branchCode = DATA.BRANCH_CODE;
-    this.OTPMasterForm.controls["branch"].setValue(DATA.BRANCH_CODE);
-    this.OTPMasterForm.controls["branchdesc"].setValue(DATA.BRANCH_DESCRIPTION);
+    this.OTPMasterForm.controls["branchCode"].setValue(DATA.BRANCH_CODE);
+    this.OTPMasterForm.controls["branchDesc"].setValue(DATA.BRANCH_DESCRIPTION);
+    this.otpGridData = [
+      {
+        SrNo: DATA.MID,
+        LEVEL_USER: DATA.LEVEL_USER,
+        LEVEL_MOBILE1: DATA.LEVEL_MOBILE1,
+        LEVEL_MOBILE2: DATA.LEVEL_MOBILE2,
+        LEVEL_EMAIL: DATA.LEVEL_EMAIL,
+      },
+    ];
   }
 
   editController(DATA: any) {
@@ -166,17 +178,19 @@ export class OtpMasterComponent implements OnInit {
     );
 
     if (!requiredFieldsInvalid) {
-      const postData = this.otpGridData.map((item) => ({
-        BRANCH_CODE: this.OTPMasterForm.value.branchCode,
-        BRANCH_DESCRIPTION: this.OTPMasterForm.value.branchDesc,
-        OTP_LEVEL: item.OTP_LEVEL || "string",
-        LEVEL_USER: item.LEVEL_USER || "string",
-        LEVEL_MOBILE1: item.LEVEL_MOBILE1 || "string",
-        LEVEL_MOBILE2: item.LEVEL_MOBILE2 || "string",
-        LEVEL_EMAIL: item.LEVEL_EMAIL || "string",
-        SYSTEM_DATE: new Date().toISOString(),
-        MID: 0,
-      }));
+      const postData = [
+        {
+          BRANCH_CODE: this.OTPMasterForm.value.branchCode,
+          BRANCH_DESCRIPTION: this.OTPMasterForm.value.branchDesc,
+          OTP_LEVEL: this.selectedRow?.OTP_LEVEL || "string",
+          LEVEL_USER: this.selectedRow?.LEVEL_USER || "string",
+          LEVEL_MOBILE1: this.selectedRow?.LEVEL_MOBILE1 || "string",
+          LEVEL_MOBILE2: this.selectedRow?.LEVEL_MOBILE2 || "string",
+          LEVEL_EMAIL: this.selectedRow?.LEVEL_EMAIL || "string",
+          SYSTEM_DATE: new Date().toISOString(),
+          MID: 0,
+        },
+      ];
 
       if (this.flag === "EDIT") {
         let API = `OTPMaster/UpdateOTPMaster/${this.branchCode}`;
@@ -431,6 +445,15 @@ export class OtpMasterComponent implements OnInit {
       }
     } else {
       console.warn("Controller or modelfield is missing.");
+    }
+  }
+
+  onRowSelectionChanged(event: any) {
+    const selectedRowData = event.selectedRowsData[0]; // Get the selected row's data
+    if (selectedRowData) {
+      console.log("Selected Row Data:", selectedRowData); // Handle selected row data
+      // Perform additional actions, such as storing the selected row in a variable
+      this.selectedRow = selectedRowData; // Example usage
     }
   }
 }
