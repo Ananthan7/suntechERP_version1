@@ -382,6 +382,7 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
     // })
   });
   branchCode: any;
+  flag: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -391,6 +392,9 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.flag = this.content
+      ? this.content.FLAG
+      : (this.content = { FLAG: "ADD" }).FLAG;
     this.branchCode = this.commonService.branchCode;
     if (this.content?.FLAG) {
       // this.setFormValues();
@@ -944,9 +948,9 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
                   if (field && field in matchedItem) {
                     console.log(field);
 
-                    this.LoanSalaryAdvanceMasterForm.controls[formName].setValue(
-                      matchedItem[field]
-                    );
+                    this.LoanSalaryAdvanceMasterForm.controls[
+                      formName
+                    ].setValue(matchedItem[field]);
                   } else {
                     console.error(
                       `Property ${field} not found in matched item.`
