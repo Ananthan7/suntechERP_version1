@@ -31,6 +31,7 @@ export class YearlyBudgetPlannerComponent implements OnInit {
   viewMode: boolean = false;
   editMode: boolean = false;
   branch_code:any;
+  lastsr = 0;
 
 
   constructor(
@@ -242,6 +243,12 @@ export class YearlyBudgetPlannerComponent implements OnInit {
 
   formSubmit() {
 
+    console.log(this.maindetails_data);
+
+    this.maindetails.forEach((e:any) => {
+      e.FYEARCODE = this.yearlybudgetform.controls.finyear.value
+    });
+
     const postData = {
       "BRANCH_CODE": this.yearlybudgetform.controls.branchcode.value,
       "FYEARCODE": this.yearlybudgetform.controls.finyear.value,
@@ -255,7 +262,7 @@ export class YearlyBudgetPlannerComponent implements OnInit {
         this.maindetails
 
     }
-    // console.log(postData);return;
+    console.log(postData);return;
 
     if (this.flag === "EDIT") {
       let API = `BudgetMaster/UpdateBudgetMaster/${this.branch_code}/${this.unq_id}`;
@@ -314,10 +321,50 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     console.log('New Value:', event.target.value);
     console.log(data);
     const updatedSRNO = data.data.SLNO - 1; 
+    this.lastsr = updatedSRNO;
     const budgetedAmt = parseFloat(event.target.value);
     this.maindetails[updatedSRNO].BUDGETED_AMT = budgetedAmt.toFixed(2);
     console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].BUDGETED_AMT);
+    let amount =  this.maindetails[updatedSRNO].BUDGETED_AMT;
+    this.calculate_total(amount);
   }
+
+  
+
+  calculate_total(amount:any ,) {
+    this.maindetails_data =[];
+    let total = 0;
+   
+    let ind_amount = amount / 12;
+    let months = [
+      'January', 'February', 'March', 'April', 'May', 'June', 
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    let data = months.map((month, index) => ({
+      'SRNO': index + 1,
+      'MONTH': month,
+      'AMOUNT': ind_amount.toFixed(2)
+    }));
+  
+    this.maindetails_data.push(...data);
+  }
+
+  settotal(data: any, event: any) {
+    const updatedSRNO = data.data.SRNO - 1; 
+    const budgetedAmt = parseFloat(event.target.value);
+    this.maindetails_data[updatedSRNO].AMOUNT = budgetedAmt.toFixed(2);
+    this.cal_totalval(updatedSRNO);
+  }
+
+  cal_totalval(SRNO:any){
+    let amt = 0
+    this.maindetails_data.forEach((e:any) => {
+      amt += parseFloat(e.AMOUNT);     
+    });
+    console.log(this.lastsr)
+    this.maindetails[this.lastsr].BUDGETED_AMT = amt.toFixed(2);
+  }
+  
   
 
 
@@ -497,6 +544,14 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     } else {
       console.warn("Controller or modelfield is missing.");
     }
+  }
+
+  onSelectionChanged(e: any) {
+    console.log(e);
+    const selectedRows = e.selectedRowsData;
+
+
+    
   }
 
 }
