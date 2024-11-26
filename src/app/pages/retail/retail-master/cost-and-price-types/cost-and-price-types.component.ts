@@ -39,6 +39,8 @@ export class CostAndPriceTypesComponent implements OnInit {
   typeList: any;
   dialogBox: any;
   branchCode: any;
+  preFilledStandardVariance: string = "0";
+  preFilledWastage: string = "0";
 
   partyDropdown: any[] = [
     { FIELD: "Supplier", VALUE: 0 },
@@ -54,17 +56,17 @@ export class CostAndPriceTypesComponent implements OnInit {
   ];
 
   detailsGridColumnHeadings: any[] = [
-    { FIELD: "STOCK_CODE", CAPTION: "STOCK CODE" },
-    { FIELD: "STOCK_DESCRIPTION", CAPTION: "STOCK DESCRIPTION" },
+    { FIELD: "STOCK_CODE", CAPTION: "CODE" },
+    { FIELD: "DESCRIPTION", CAPTION: "DESCRIPTION" },
     { FIELD: "UNIT_CODE", CAPTION: "UNIT CODE" },
-    { FIELD: "COST", CAPTION: "COST" },
+    { FIELD: "STD_COST", CAPTION: "COST" },
     { FIELD: "STD_VARIANCE", CAPTION: "STD VARIANCE" },
     { FIELD: "PURITY", CAPTION: "PURITY" },
     { FIELD: "WASTAGE", CAPTION: "WASTAGE" },
     { FIELD: "CURRENCY", CAPTION: "CURRENCY" },
-    { FIELD: "CSTD_PRICE", CAPTION: "CSTD PRICE" },
-    { FIELD: "CMIN_PRICE", CAPTION: "CMIN PRICE" },
-    { FIELD: "CMAX_PRICE", CAPTION: "CMAX PRICE" },
+    // { FIELD: "CSTD_PRICE", CAPTION: "CSTD PRICE" },
+    // { FIELD: "CMIN_PRICE", CAPTION: "CMIN PRICE" },
+    // { FIELD: "CMAX_PRICE", CAPTION: "CMAX PRICE" },
   ];
   divisionCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -110,9 +112,11 @@ export class CostAndPriceTypesComponent implements OnInit {
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
 
+      console.log(this.flag);
+      
+
     this.initialController(this.flag, this.content);
     this.setFlag(this.flag, this.content);
-    this.stockMastersData();
   }
 
   openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
@@ -358,37 +362,6 @@ export class CostAndPriceTypesComponent implements OnInit {
     }
   }
 
-  openItemDetailsRow() {
-    const newRow: ItemDetailsRow = {};
-    this.detailsGridColumnHeadings.forEach((col) => {
-      newRow[col.FIELD] = "";
-    });
-    this.itemDetailsData = [...this.itemDetailsData, newRow];
-  }
-
-  updateCellData(cellData: any, field: string, event: any) {
-    console.log("Updating Field:", field, "Value:", event.target.value);
-    cellData.data[field] = event.target.value;
-    this.itemDetailsData = [...this.itemDetailsData];
-    console.log("Updated Data:", this.itemDetailsData);
-  }
-
-  onRowSelectionChanged(event: any) {
-    this.selectedRow = event.selectedRowsData[0];
-  }
-
-  removeItemDetailsRow() {
-    if (this.selectedRow) {
-      this.itemDetailsData = this.itemDetailsData.filter(
-        (row) => row !== this.selectedRow
-      );
-      this.selectedRow = null;
-    } else {
-      let message = `Row not Selected !`;
-      return this.openDialog("Warning", message, true);
-    }
-  }
-
   openTab(event: any, formControlName: string) {
     if (event.target.value === "") {
       this.openPanel(event, formControlName);
@@ -597,7 +570,27 @@ export class CostAndPriceTypesComponent implements OnInit {
       .subscribe(
         (result) => {
           if (result.status.trim() === "Success") {
-            console.log(result);
+            this.itemDetailsData = result.dynamicData[0].map((item: any) => ({
+              ...item,
+              // PURITY: this.commonService.transformDecimalVB(6, item.value),
+              CURRENCY: "AED",
+              WASTAGE: this.preFilledWastage,
+              STD_VARIANCE: this.preFilledStandardVariance,
+              STD_PRICE: this.commonService.decimalQuantityFormat(
+                this.commonService.emptyToZero(0),
+                "AMOUNT"
+              ),
+              MIN_PRICE: this.commonService.decimalQuantityFormat(
+                this.commonService.emptyToZero(0),
+                "AMOUNT"
+              ),
+              MAX_PRICE: this.commonService.decimalQuantityFormat(
+                this.commonService.emptyToZero(0),
+                "AMOUNT"
+              ),
+            }));
+
+            console.log(this.itemDetailsData);
           }
         },
         (err) => {
@@ -605,5 +598,53 @@ export class CostAndPriceTypesComponent implements OnInit {
           this.commonService.toastErrorByMsgId("MSG1531");
         }
       );
+  }
+
+  addToGrid(event: any, controller?: any) {
+    let value = event.target.value;
+    console.log("Event value:", value);
+
+    switch (controller) {
+      case "standardVariance":
+        !this.itemDetailsData.length
+          ? (this.preFilledStandardVariance =
+              this.commonService.decimalQuantityFormat(
+                this.commonService.emptyToZero(value),
+                "AMOUNT"
+              ))
+          : (this.itemDetailsData = this.itemDetailsData.map((item: any) => ({
+              ...item,
+              STD_VARIANCE: this.commonService.decimalQuantityFormat(
+                this.commonService.emptyToZero(value),
+                "AMOUNT"
+              ),
+            })));
+
+        console.log(this.preFilledStandardVariance);
+
+        break;
+
+      case "defaultWastage":
+        !this.itemDetailsData.length
+          ? (this.preFilledWastage = this.commonService.decimalQuantityFormat(
+              this.commonService.emptyToZero(value),
+              "AMOUNT"
+            ))
+          : (this.itemDetailsData = this.itemDetailsData.map((item: any) => ({
+              ...item,
+              WASTAGE: this.commonService.decimalQuantityFormat(
+                this.commonService.emptyToZero(value),
+                "AMOUNT"
+              ),
+            })));
+
+        console.log(this.preFilledWastage);
+
+        break;
+
+      default:
+        console.log("No matching case found for controller:", controller);
+        break;
+    }
   }
 }
