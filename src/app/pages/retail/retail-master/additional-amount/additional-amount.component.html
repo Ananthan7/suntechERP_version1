@@ -8,12 +8,10 @@
 
 <!-- modal header component -->
 <modal-header
-  [isViewSave]="!viewMode"
-  [isViewCancel]="!viewMode"
-  [isViewMore]="!viewMode"
+  *ngIf="flag !== 'VIEW'"
   (saveClick)="formSave()"
   (cancelClick)="close()"
-  [isViewDelete]="viewMode"
+  [isViewDelete]="flag == 'VIEW'"
   (deleteClick)="deleteMaster()"
 ></modal-header>
 
@@ -30,7 +28,12 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="code" maxlength="5"/>
+                  <input
+                    [readonly]="viewMode"
+                    matInput="text"
+                    formControlName="code"
+                    maxlength="5"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -44,7 +47,11 @@
               >
               <div class="col-md-10">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    [readonly]="viewMode"
+                    matInput="text"
+                    formControlName="description"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -59,6 +66,7 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [readonly]="viewMode"
                     matInput="text"
                     formControlName="type_code"
                     (keydown)="onKeyDown($event, ['type_code'], designCode)"
@@ -73,6 +81,7 @@
                     "
                   />
                   <master-search
+                    *ngIf="flag !== 'VIEW'"
                     #typeCode
                     [MasterSearchData]="designCode"
                     class="masterSearch"
@@ -84,7 +93,7 @@
               <div class="col-md-2"></div>
 
               <div class="col-md-5 pt-2">
-                <mat-checkbox  formControlName="include_for_tax" id="ID060" 
+                <mat-checkbox formControlName="include_for_tax" id="ID060"
                   >Include For Tax</mat-checkbox
                 >
               </div>
@@ -99,8 +108,10 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  
-                     <mat-select formControlName="calculated_type"   (selectionChange)="onTypeCode($event)" >
+                  <mat-select
+                    formControlName="calculated_type"
+                    (selectionChange)="onTypeCode($event)"
+                  >
                     <mat-option
                       *ngFor="let data of calculatedValue"
                       [value]="data.SRNO"
@@ -113,7 +124,11 @@
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="calculated_code" />
+                  <input
+                    [readonly]="viewMode"
+                    matInput="text"
+                    formControlName="calculated_code"
+                  />
                 </mat-form-field>
               </div>
 
@@ -126,7 +141,10 @@
 
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="add_category" (selectionChange)="onCategoryCode($event)">
+                  <mat-select
+                    formControlName="add_category"
+                    (selectionChange)="onCategoryCode($event)"
+                  >
                     <mat-option
                       *ngFor="let data of categoryValue"
                       [value]="data.SRNO"
@@ -147,7 +165,10 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="transaction_type" (selectionChange)="onTransCode($event)">
+                  <mat-select
+                    formControlName="transaction_type"
+                    (selectionChange)="onTransCode($event)"
+                  >
                     <mat-option
                       *ngFor="let data of transcationValue"
                       [value]="data.SRNO"
@@ -172,7 +193,9 @@
               </div>
 
               <div class="col-md-5 pt-2">
-                <mat-checkbox formControlName="include_in_sales_analysis" id="ID061" value="0"
+                <mat-checkbox
+                  formControlName="include_in_sales_analysis"
+                  id="ID061"
                   >Include In Sales Analysis
                 </mat-checkbox>
               </div>
@@ -201,6 +224,7 @@
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [readonly]="viewMode"
                     matInput="text"
                     formControlName="debit_code"
                     (keydown)="onKeyDown($event, ['debit_code'], debitcode)"
@@ -215,6 +239,7 @@
                     "
                   />
                   <master-search
+                    *ngIf="flag !== 'VIEW'"
                     #debitCode
                     [MasterSearchData]="debitcode"
                     class="masterSearch"
@@ -225,7 +250,11 @@
 
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    [readonly]="viewMode"
+                    matInput="text"
+                    formControlName="description"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -253,6 +282,7 @@
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [readonly]="viewMode"
                     matInput="text"
                     formControlName="credit_code"
                     (keydown)="onKeyDown($event, ['credit_code'], creditcode)"
@@ -267,6 +297,7 @@
                     "
                   />
                   <master-search
+                    *ngIf="flag !== 'VIEW'"
                     #creditCode
                     [MasterSearchData]="creditcode"
                     class="masterSearch"
@@ -277,7 +308,11 @@
 
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    [readonly]="viewMode"
+                    matInput="text"
+                    formControlName="description"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -291,7 +326,10 @@
               >
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="narration" (selectionChange)="onNarrationChange($event)">
+                  <mat-select
+                    formControlName="narration"
+                    (selectionChange)="onNarrationChange($event)"
+                  >
                     <mat-option
                       *ngFor="let data of narrationValue; let i = index"
                       [value]="data.SRNO"
@@ -320,10 +358,10 @@
                     aria-label="Select an option"
                     formControlName="vat_type"
                   >
-                    <mat-radio-button value="F" id="ID012" class="mx-2"
+                    <mat-radio-button value="0" id="ID012" class="mx-2"
                       ><b>Direct</b></mat-radio-button
                     >
-                    <mat-radio-button value="P" id="ID013" class="mx-2"
+                    <mat-radio-button value="1" id="ID013" class="mx-2"
                       ><b>Rcm</b></mat-radio-button
                     >
                   </mat-radio-group>
