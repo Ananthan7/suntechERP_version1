@@ -181,8 +181,12 @@
                                 <dxi-column dataField="MONTH" caption="Month" >
                                 </dxi-column>
 
-                                <dxi-column dataField="AMOUNT" caption="Amount">
+                               <dxi-column dataField="AMOUNT" caption="Amount" cellTemplate="total_amt" AmountDecimalInput>
                                 </dxi-column>
+
+                                <div *dxTemplate="let data of 'total_amt'">
+                                    <input type="number" [disabled]="viewMode"  (change)="settotal(data,$event)" [value]="data.value" style="width: 100%;" AmountDecimalInput />
+                                </div>
 
 
                             </dx-data-grid>

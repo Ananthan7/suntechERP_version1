@@ -219,8 +219,8 @@ export class JewelleryMasterComponent implements OnInit {
     size: [""],
     setref: [""],
     karat: [""],
-    printscheme: [""],
-    printscheme2: [""],
+    printscheme: ["AED"],
+    printscheme2: ["1.000000"],
     printscheme3: [""],
     printscheme4: [""],
     price1: [""],
@@ -838,26 +838,40 @@ export class JewelleryMasterComponent implements OnInit {
     this.dataService.getDynamicAPI('DiamondStockMaster/GetDiamondStockMasterHeaderAndDetail/' + this.content.STOCK_CODE)
     .subscribe((data) => {
       if (data.status == 'Success') {
-        console.log(data.response.CERT_DATE.split(' ')[0])
+        // console.log(data.response.CERT_DATE.split(' ')[0])
         // this.jewellerymasterForm.controls.certdate.setValue(data.response.CERT_DATE.split(' ')[0])
         // this.jewellerymasterForm.controls.createon.setValue(data.response.OPENED_ON)
         // this.jewellerymasterForm.controls.lastediton.setValue(data.response.LAST_EDT_ON)
  // Extract and format CERT_DATE
- const certDate = data.response.CERT_DATE ? data.response.CERT_DATE.split(' ')[0] : null;
+ //const certDate = data.response.CERT_DATE ? data.response.CERT_DATE.split(' ')[0] : null;
 
- // Safely parse OPENED_ON and LAST_EDT_ON
+
+
+ let cert_date = data.response.CERT_DATE;
+ let formattedDate: any;
+ if (cert_date) {
+     let [day, month, yearTime] = cert_date.split('/'); 
+     let [year] = yearTime.split(' '); 
+     formattedDate = `${year}-${month}-${day}`; 
+ }
+ 
+
+ let lastEditOn = data.response.LAST_EDT_ON;
+ let formattedDatelastEditOn: any;
+ if (lastEditOn) {
+     let [day, month, yearTime] = lastEditOn.split('/'); 
+     let [year] = yearTime.split(' '); 
+     formattedDatelastEditOn = `${year}-${month}-${day}`; 
+ }
+
  const openedOn = data.response.OPENED_ON && !isNaN(Date.parse(data.response.OPENED_ON))
-   ? new Date(data.response.OPENED_ON).toISOString().split('T')[0]
-   : null;
+ ? new Date(data.response.OPENED_ON).toISOString().split('T')[0]
+ : null;
 
- const lastEditOn = data.response.LAST_EDT_ON && !isNaN(Date.parse(data.response.LAST_EDT_ON))
-   ? new Date(data.response.LAST_EDT_ON).toISOString().split('T')[0]
-   : null;
 
- // Map values to the form controls
- this.jewellerymasterForm.controls.certdate.setValue(certDate);
+ this.jewellerymasterForm.controls.certdate.setValue(formattedDate);
  this.jewellerymasterForm.controls.createon.setValue(openedOn);
- this.jewellerymasterForm.controls.lastediton.setValue(lastEditOn);
+ this.jewellerymasterForm.controls.lastediton.setValue(formattedDatelastEditOn);
 
 
         // this.StoneDetailsComponentData.push(data.response.diamondStockDetails)
@@ -885,16 +899,26 @@ export class JewelleryMasterComponent implements OnInit {
         this.jewellerymasterForm.controls.price3.setValue(this.content.PRICE3PER)
         this.jewellerymasterForm.controls.price4.setValue(this.content.PRICE4PER)
         this.jewellerymasterForm.controls.price5.setValue(this.content.PRICE5PER)
-        this.jewellerymasterForm.controls.price1FC.setValue(this.content.PRICE1FC)
-        this.jewellerymasterForm.controls.price1LC.setValue(this.content.PRICE1LC)
-        this.jewellerymasterForm.controls.price2FC.setValue(this.content.PRICE2FC)
-        this.jewellerymasterForm.controls.price2LC.setValue(this.content.PRICE2LC)
-        this.jewellerymasterForm.controls.price3FC.setValue(this.content.PRICE3FC)
-        this.jewellerymasterForm.controls.price3LC.setValue(this.content.PRICE3LC)
-        this.jewellerymasterForm.controls.price4FC.setValue(this.content.PRICE4FC)
-        this.jewellerymasterForm.controls.price4LC.setValue(this.content.PRICE4LC)
-        this.jewellerymasterForm.controls.price5FC.setValue(this.content.PRICE5FC)
-        this.jewellerymasterForm.controls.price5LC.setValue(this.content.PRICE5LC)
+        this.jewellerymasterForm.controls.price1FC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PRICE1FC))
+        this.jewellerymasterForm.controls.price1LC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PRICE1LC))
+        this.jewellerymasterForm.controls.price2FC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PRICE2FC))
+        this.jewellerymasterForm.controls.price2LC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PRICE2LC))
+        this.jewellerymasterForm.controls.price3FC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PRICE3FC))
+        this.jewellerymasterForm.controls.price3LC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PRICE3LC))
+        this.jewellerymasterForm.controls.price4FC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PRICE4FC))
+        this.jewellerymasterForm.controls.price4LC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PRICE4LC))
+        this.jewellerymasterForm.controls.price5FC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PRICE5FC))
+        this.jewellerymasterForm.controls.price5LC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PRICE5LC))
         this.jewellerymasterForm.controls.price1per.setValue(this.content.CHARGE1FC)
         this.jewellerymasterForm.controls.price2per.setValue(this.content.CHARGE2FC)
         this.jewellerymasterForm.controls.price3per.setValue(this.content.CHARGE3FC)
@@ -916,29 +940,41 @@ export class JewelleryMasterComponent implements OnInit {
         this.jewellerymasterForm.controls.range.setValue(this.content.RANGE_CODE)
         this.jewellerymasterForm.controls.diamondsPcs.setValue(this.content.DIA_PCS)
         this.jewellerymasterForm.controls.diamondsCarat.setValue(this.content.DIA_CARAT)
-        this.jewellerymasterForm.controls.diamondsFC.setValue(this.content.DIA_VALUEFC)
-        this.jewellerymasterForm.controls.diamondsLC.setValue(this.content.DIA_VALUECC)
+        this.jewellerymasterForm.controls.diamondsFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.DIA_VALUEFC))
+        this.jewellerymasterForm.controls.diamondsLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.DIA_VALUECC))
         this.jewellerymasterForm.controls.colorstonePcs.setValue(this.content.COLOR_PCS)
         this.jewellerymasterForm.controls.colorstoneCarat.setValue(this.content.COLOR_CARAT)
-        this.jewellerymasterForm.controls.colorstoneFC.setValue(this.content.COLOR_VALUEFC)
-        this.jewellerymasterForm.controls.colorstoneLC.setValue(this.content.COLOR_VALUECC)
+        this.jewellerymasterForm.controls.colorstoneFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.COLOR_VALUEFC))
+        this.jewellerymasterForm.controls.colorstoneLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.COLOR_VALUECC))
         this.jewellerymasterForm.controls.pearlsPcs.setValue(this.content.PEARL_PCS)
         this.jewellerymasterForm.controls.pearlsCarat.setValue(this.content.PEARL_CARAT)
-        this.jewellerymasterForm.controls.pearlsFC.setValue(this.content.PEARL_VALUEFC)
-        this.jewellerymasterForm.controls.pearlsLC.setValue(this.content.PEARL_VALUECC)
+        this.jewellerymasterForm.controls.pearlsFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PEARL_VALUEFC))
+        this.jewellerymasterForm.controls.pearlsLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PEARL_VALUECC))
         this.jewellerymasterForm.controls.otstonesPcs.setValue(this.content.OTSTONES_PCS)
         this.jewellerymasterForm.controls.otstonesCarat.setValue(this.content.OTSTONES_CARAT)
-        this.jewellerymasterForm.controls.otstonesFC.setValue(this.content.OTSTONES_VALUEFC)
-        this.jewellerymasterForm.controls.otstonesLC.setValue(this.content.OTSTONES_VALUECC)
+        this.jewellerymasterForm.controls.otstonesFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.OTSTONES_VALUEFC))
+        this.jewellerymasterForm.controls.otstonesLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.OTSTONES_VALUECC))
         this.jewellerymasterForm.controls.metalGrams.setValue(this.content.METAL_GROSSWT)
-        this.jewellerymasterForm.controls.metalFC.setValue(this.content.METAL_VALUEFC)
+        this.jewellerymasterForm.controls.metalFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.METAL_VALUEFC))
         this.jewellerymasterForm.controls.lasttransaction.setValue(this.content.METAL_VALUECC)
-        this.jewellerymasterForm.controls.metalLC.setValue(this.content.METAL_VALUECC)
+        this.jewellerymasterForm.controls.metalLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.METAL_VALUECC))
         this.jewellerymasterForm.controls.totalPcs.setValue(this.content.TOTPCS)
         this.jewellerymasterForm.controls.totalCarat.setValue(this.content.TOTCARAT)
         this.jewellerymasterForm.controls.totalGrams.setValue(this.content.TOTGMS)
-        this.jewellerymasterForm.controls.totalFC.setValue(this.content.TOTVFC)
-        this.jewellerymasterForm.controls.totalLC.setValue(this.content.TOTVLC)
+        this.jewellerymasterForm.controls.totalFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.TOTVFC))
+        this.jewellerymasterForm.controls.totalLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.TOTVLC))
         this.jewellerymasterForm.controls.lasteditby.setValue(this.content.LAST_EDT_BY)
        // this.jewellerymasterForm.controls.lastediton.setValue(this.content.LAST_EDT_ON)
         this.jewellerymasterForm.controls.HSNcode.setValue(this.content.HSN_CODE)
@@ -985,22 +1021,38 @@ export class JewelleryMasterComponent implements OnInit {
         this.jewellerymasterForm.controls.colorstoneGrams.setValue(this.content.UDF11)
         this.jewellerymasterForm.controls.pearlsGrams.setValue(this.content.UDF12)
         this.jewellerymasterForm.controls.otstonesGrams.setValue(this.content.UDF13)
-        this.jewellerymasterForm.controls.platChargesFC.setValue(this.content.PLAT_CHARGESFC)
-        this.jewellerymasterForm.controls.platChargesLC.setValue(this.content.PLAT_CHARGESLC)
-        this.jewellerymasterForm.controls.certChargesLC.setValue(this.content.CERT_CHARGESLC)
-        this.jewellerymasterForm.controls.certChargesFC.setValue(this.content.CERT_CHARGESFC)
-        this.jewellerymasterForm.controls.polishingFC.setValue(this.content.HANDLING_CHARGEFC)
-        this.jewellerymasterForm.controls.polishingLC.setValue(this.content.HANDLING_CHARGELC)
-        this.jewellerymasterForm.controls.othersFC.setValue(this.content.ORG_COSTFC)
-        this.jewellerymasterForm.controls.othersLC.setValue(this.content.ORG_COSTLC)
-        this.jewellerymasterForm.controls.totalLBFC.setValue(this.content.TOTALFC)
-        this.jewellerymasterForm.controls.totalLBLC.setValue(this.content.TOTALCC)
-        this.jewellerymasterForm.controls.settingFC.setValue(this.content.ADDITIONAL_RATEFC)
-        this.jewellerymasterForm.controls.settingLC.setValue(this.content.ADDITIONAL_RATELC)
-        this.jewellerymasterForm.controls.rhodiumFC.setValue(this.content.RRR_PUR_CARAT)
-        this.jewellerymasterForm.controls.rhodiumLC.setValue(this.content.RRR_PUR_PERCENT)
-        this.jewellerymasterForm.controls.makingFC.setValue(this.content.RRR_SAL_PERCENT)
-        this.jewellerymasterForm.controls.makingLC.setValue(this.content.RRR_OTHER_PERCENT)
+        this.jewellerymasterForm.controls.platChargesFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PLAT_CHARGESFC))
+        this.jewellerymasterForm.controls.platChargesLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.PLAT_CHARGESLC))
+        this.jewellerymasterForm.controls.certChargesLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.CERT_CHARGESLC))
+        this.jewellerymasterForm.controls.certChargesFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.CERT_CHARGESFC))
+        this.jewellerymasterForm.controls.polishingFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.HANDLING_CHARGEFC))
+        this.jewellerymasterForm.controls.polishingLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.HANDLING_CHARGELC))
+        this.jewellerymasterForm.controls.othersFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.ORG_COSTFC))
+        this.jewellerymasterForm.controls.othersLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.ORG_COSTLC))
+        this.jewellerymasterForm.controls.totalLBFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.TOTALFC))
+        this.jewellerymasterForm.controls.totalLBLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.TOTALCC))
+        this.jewellerymasterForm.controls.settingFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.ADDITIONAL_RATEFC))
+        this.jewellerymasterForm.controls.settingLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.ADDITIONAL_RATELC))
+        this.jewellerymasterForm.controls.rhodiumFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.RRR_PUR_CARAT))
+        this.jewellerymasterForm.controls.rhodiumLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.RRR_PUR_PERCENT))
+        this.jewellerymasterForm.controls.makingFC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.RRR_SAL_PERCENT))
+        this.jewellerymasterForm.controls.makingLC.setValue( this.commonService.transformDecimalVB(
+          this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.RRR_OTHER_PERCENT))
     
       }
     });
@@ -1414,7 +1466,7 @@ export class JewelleryMasterComponent implements OnInit {
       .putDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-          if (result.response) {
+       
             if (result.status == "Success") {
               Swal.fire({
                 title: result.message || "Success",
@@ -1430,9 +1482,7 @@ export class JewelleryMasterComponent implements OnInit {
                 }
               });
             }
-          } else {
-            this.toastr.error("Not saved");
-          }
+         
         },
         (err) => alert(err)
       );

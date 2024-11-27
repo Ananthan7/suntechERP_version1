@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
@@ -10,7 +10,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class AsOnDateComponent implements OnInit {
   dateForm!: FormGroup;
   @Output() selectedDate = new EventEmitter();
-
+  @Input() dateValue?: { asonDate: string; };
+  
   constructor(private datePipe: DatePipe, private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -18,6 +19,9 @@ export class AsOnDateComponent implements OnInit {
       date: [new Date()],
     });
 
+    if(this.dateValue){
+      this.dateForm.controls.date.setValue(this.dateValue.asonDate)
+    }
   }
 
   formatDate(event: any) {

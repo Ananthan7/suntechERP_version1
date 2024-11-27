@@ -27,7 +27,7 @@
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="section_code"
-                                                    UpperCaseDirective autocomplete="off" maxlength="6" />
+                                                    UpperCaseDirective autocomplete="off" maxlength="6"  (change)="getgridvalues()" />
 
                                             </mat-form-field>
                                         </div>
@@ -155,7 +155,7 @@
                     <div class="col-md-8">
                         <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
                             [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO"
-                            style="height: 250px;">
+                            style="height: 250px;" [paging]="{ enabled: false }">
 
                             <dxi-column dataField="SRNO" caption="S.NO #">
                             </dxi-column>
@@ -164,20 +164,42 @@
                             </dxi-column>
 
 
-                            <dxi-column dataField="EFFECT_DATE" caption="Effect Date %">
+                            <dxi-column dataField="EFFECT_FROM_DATE" caption="Effect Date" cellTemplate="effdate">
                             </dxi-column>
 
-                            <dxi-column dataField="INDIVIDUAL" caption="Individual %">
+                            <div *dxTemplate="let data of 'effdate'">
+                                <input type="date" [disabled]="viewMode"   [value]="data.value" style="width: 100%;" />
+                            </div>
+
+
+                            <dxi-column dataField="INDIVIDUAL_PER" caption="Individual %" cellTemplate="individual_per">
                             </dxi-column>
 
-                            <dxi-column dataField="COMPANY" caption="Company %">
+                            <div *dxTemplate="let data of 'individual_per'">
+                                <input type="number" [disabled]="viewMode"   [value]="data.value" style="width: 100%;" (change)="individual_change($event,data)"/>
+                            </div>
+
+
+                            <dxi-column dataField="COMPANY_PER" caption="Company %" cellTemplate="company_per">
                             </dxi-column>
 
-                            <dxi-column dataField="NO_PAN" caption="No Pan %">
+                            <div *dxTemplate="let data of 'company_per'">
+                                <input type="number" [disabled]="viewMode"   [value]="data.value" style="width: 100%;" (change)="company_change($event,data)" />
+                            </div>
+
+                            <dxi-column dataField="NOPAN_PER" caption="No Pan %" cellTemplate="nopan_per">
                             </dxi-column>
 
-                            <dxi-column dataField="TDS_LIMIT" caption="TDS Limit">
+                            <div *dxTemplate="let data of 'nopan_per'">
+                                <input type="number" [disabled]="viewMode"   [value]="data.value" style="width: 100%;" (change)="nopan_change($event,data)" />
+                            </div>
+
+                            <dxi-column dataField="TDS_LIMIT" caption="TDS Limit" cellTemplate="tdslimit_per">
                             </dxi-column>
+
+                            <div *dxTemplate="let data of 'tdslimit_per'">
+                                <input type="number" [disabled]="viewMode"   [value]="data.value" style="width: 100%;"  (change)="tdslimit_chnage($event,data)"/>
+                            </div>
 
 
                         </dx-data-grid>

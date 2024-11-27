@@ -176,14 +176,7 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
 
   setFormValues() {
     if (!this.content) return
-    this.customerWiseStonePriceForm.controls.pricecode.setValue(this.content.PRICECODE)
-    this.customerWiseStonePriceForm.controls.currency.setValue(this.content.CURRENCY_CODE)
-    this.customerWiseStonePriceForm.controls.currencyDetail.setValue(this.content.CURRENCY_RATE)
-  //  this.customerWiseStonePriceForm.controls.applyinPOS.setValue(this.content.PRINT_COUNT)
-    this.customerWiseStonePriceForm.controls.applyinPOS.setValue(
-      this.content.PRINT_COUNT === 1 ? true : false
-    );
-    
+  
 
 
 
@@ -195,6 +188,14 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
           this.tableData = data.response.CUSTOMER_PRICE_DET;
           this.tableData2 = data.response.CUSTOMER_LABCHRG_DET;
           this.tableData3 = data.response.CUSTOMER_PRICE_ACCOUNT_DET;
+          this.customerWiseStonePriceForm.controls.pricecode.setValue(this.content.PRICECODE)
+          this.customerWiseStonePriceForm.controls.currency.setValue(this.content.CURRENCY_CODE)
+          this.customerWiseStonePriceForm.controls.currencyDetail.setValue(this.content.CURRENCY_RATE)
+        //  this.customerWiseStonePriceForm.controls.applyinPOS.setValue(this.content.PRINT_COUNT)
+          this.customerWiseStonePriceForm.controls.applyinPOS.setValue(
+            this.content.PRINT_COUNT === 1 ? true : false
+          );
+          
         }
       });
   }
@@ -240,7 +241,6 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe(
       (result) => {
         console.log('result', result)
-        if (result.response) {
           if (result.status == 'Success') {
             Swal.fire({
               title: 'Saved Successfully',
@@ -255,9 +255,7 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
               }
             });
           }
-        } else {
-          this.commonService.toastErrorByMsgId('MSG3577')
-        }
+       
       }, err => {
         this.commonService.toastErrorByMsgId('MSG3577')
       })

@@ -148,7 +148,17 @@ export class TdsMasterComponent implements OnInit {
       .subscribe((result: any) => {
         this.dyndatas = result.response;
         console.log(this.dyndatas);
-        this.flag = "EDIT";
+        this.dyndatas.tdsDetails.forEach((ele:any) => {
+          ele.EFFECT_FROM_DATE = new Date(ele.EFFECT_FROM_DATE).toISOString().split('T')[0];
+
+          ele.INDIVIDUAL_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.INDIVIDUAL_PER),"METAL");
+          ele.COMPANY_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.COMPANY_PER),"METAL");
+          ele.NOPAN_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.NOPAN_PER),"METAL");
+          ele.TDS_LIMIT = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.TDS_LIMIT),"METAL");
+        });
+        this.maindetails.push(... this.dyndatas.tdsDetails)
+
+        // this.flag = "EDIT";
       }, (err: any) => {
 
       })
@@ -496,6 +506,147 @@ export class TdsMasterComponent implements OnInit {
       console.warn("Controller or modelfield is missing.");
     }
   }
+
+  individual_change(e: any, data: any) {
+    e.preventDefault();
+    Swal.fire({
+      title: 'Do You Want to Apply for All?',
+      text: 'Do You Want to Apply for All?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        let curr_index = data.data.SRNO - 1; 
+        for (let i = curr_index; i < this.maindetails.length; i++) {
+          this.maindetails[i].INDIVIDUAL_PER = this.commonService.decimalQuantityFormat(
+            this.commonService.emptyToZero(e.target.value), "METAL"
+          );
+        }
+      } else {
+        const updatedSRNO = data.data.SRNO - 1;
+        this.maindetails[updatedSRNO].INDIVIDUAL_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(e.target.value), "METAL");
+      }
+    });
+  }
+
+  company_change(e: any, data: any) {
+    e.preventDefault();
+    Swal.fire({
+      title: 'Do You Want to Apply for All?',
+      text: 'Do You Want to Apply for All?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let curr_index = data.data.SRNO - 1; 
+        for (let i = curr_index; i < this.maindetails.length; i++) {
+          this.maindetails[i].COMPANY_PER = this.commonService.decimalQuantityFormat(
+            this.commonService.emptyToZero(e.target.value), "METAL"
+          );
+        }
+      } else {
+        const updatedSRNO = data.data.SRNO - 1;
+        this.maindetails[updatedSRNO].COMPANY_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(e.target.value), "METAL");
+      }
+    });
+  }
+
+  nopan_change(e: any, data: any) {
+    e.preventDefault();
+    Swal.fire({
+      title: 'Do You Want to Apply for All?',
+      text: 'Do You Want to Apply for All?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let curr_index = data.data.SRNO - 1; 
+        for (let i = curr_index; i < this.maindetails.length; i++) {
+          this.maindetails[i].NOPAN_PER = this.commonService.decimalQuantityFormat(
+            this.commonService.emptyToZero(e.target.value), "METAL"
+          );
+        }
+      } else {
+        const updatedSRNO = data.data.SRNO - 1;
+        this.maindetails[updatedSRNO].NOPAN_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(e.target.value), "METAL");
+      }
+    });
+  }
+
+  tdslimit_chnage(e: any, data: any) {
+    e.preventDefault();
+    Swal.fire({
+      title: 'Do You Want to Apply for All?',
+      text: 'Do You Want to Apply for All?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      let curr_index = data.data.SRNO - 1; 
+      if (result.isConfirmed) {
+        for (let i = curr_index; i < this.maindetails.length; i++) {
+          this.maindetails[i].TDS_LIMIT = this.commonService.decimalQuantityFormat(
+            this.commonService.emptyToZero(e.target.value), "METAL"
+          );
+        }
+      } else {
+        this.maindetails[curr_index].TDS_LIMIT = this.commonService.decimalQuantityFormat(
+          this.commonService.emptyToZero(e.target.value), "METAL"
+        );
+      }
+    });
+    
+  }
+
+
+  // getgriddata(){
+  //   let section_code = this.tdsform.controls.section_code.value;
+    
+    
+  // }
+
+  getgridvalues(){
+    let section_code = this.tdsform.controls.section_code.value;
+
+    let postData = {
+      "strDate": "",
+      "strIndivi": 0,
+      "strComp": 0,
+      "strNoPan": 0,
+      "strTDSCode": section_code,
+      "strTdsLimit": 0
+    }
+    let API = `TDSMaster/GetGetTDSFinancialDates/`;
+      let sub: Subscription = this.apiService
+        .postDynamicAPI(API, postData)
+        .subscribe((result) => {
+          if (result.status.trim() === "Success") {
+           console.log(result.dynamicData);
+           let dyndatas = result.dynamicData[0];
+           dyndatas.forEach((e:any) => {
+              e.EFFECT_FROM_DATE
+           });
+
+
+           this.maindetails = dyndatas;
+          } else {
+            console.log("error");
+           
+          }
+        });
+
+
+  }
+
+  
 
   
 

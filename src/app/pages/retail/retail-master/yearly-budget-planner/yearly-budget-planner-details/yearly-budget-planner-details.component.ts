@@ -19,6 +19,8 @@ export class YearlyBudgetPlannerDetailsComponent implements OnInit {
   maindetails_clone: any = [];
   data:any=[];
   @Input () tablecount :any;
+  curr_branch = localStorage.getItem('userbranch');
+  // @Input () fin_year :any;
 
 
 
@@ -140,7 +142,7 @@ export class YearlyBudgetPlannerDetailsComponent implements OnInit {
             count++;
             const post = {
                 "SLNO": count,               
-                "BRANCH_CODE": "string",      
+                "BRANCH_CODE": this.curr_branch,      
                 "FYEARCODE": "stri",         
                 "ACCODE": row.CODE,          
                 "ACCOUNT_HEAD": row.ACCOUNT_HEAD, 
