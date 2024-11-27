@@ -47,7 +47,7 @@
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="subjobnumber"
                 [readonly]="viewMode || codeEnable" UpperCaseDirective
-                (focusout)="subJobNumberValidate($event)"
+                (focusout)="validateLookupField($event,subJobNoCodeData,'subjobnumber')" 
                 (keydown)="lookupKeyPress($event,'subjobnumber')" />
               <master-search class="masterSearch"
                 [MasterSearchData]="subJobNoCodeData" #overlaysubjobnoSearch
@@ -283,9 +283,9 @@
             Rate:</label>
           <div class="col-md-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="number" matInput formControlName="unitrate"
+              <input type="text" matInput formControlName="unitrate"
                 AmountDecimalInput readonly class="text-right"
-                (focusout)="CalculateCaratAndUnitrate()" />
+                (focusout)="CalculateCaratAndUnitrate()" maxlength="12"/>
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Sieve:
