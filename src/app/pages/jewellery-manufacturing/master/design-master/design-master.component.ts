@@ -183,8 +183,23 @@ export class DesignMasterComponent implements OnInit {
 
    // this.images = ['assets/images/transparentImg.png'] ;
 
-    this.setAllInitialValues()
+   // this.setAllInitialValues()
     //this.setFormValues()
+
+    if (this.content?.FLAG) {
+      console.log(this.content)
+      this.setAllInitialValues()
+     // this.setFormValues();
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.editMode = true;
+      } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
+      }
+    }
   }
 
 
@@ -1374,7 +1389,8 @@ onFileChangedimage(event: any) {
           this.designmasterForm.controls.designer.setValue(data.DESIGNER)
           this.designmasterForm.controls.thickness.setValue(data.THICKNESS)
           this.designmasterForm.controls.grade.setValue(data.GRADE)
-          this.designmasterForm.controls.metal_wt.setValue(data.METAL_WT)
+          this.designmasterForm.controls.metal_wt.setValue(this.commonService.transformDecimalVB(
+            this.commonService.allbranchMaster?.BMQTYDECIMALS,data.METAL_WT))
           this.designmasterForm.controls.model.setValue(data.MODEL_NO)
           this.designmasterForm.controls.instructor.setValue(data.INSTRUCTOR)
           this.designmasterForm.controls.jewellerySize.setValue(data.JEWELLERY_SIZE)
@@ -1382,7 +1398,8 @@ onFileChangedimage(event: any) {
           // this.designmasterForm.controls.cm.setValue(data.CAST_PCS_WEIGHT)
           this.designmasterForm.controls.weightPerc.setValue(data.WAX_WEIGHT === 1.000 ? "1" : "2");
           this.designmasterForm.controls.cm.setValue(data.CAST_PCS_WEIGHT === 1.000 ? "1" : "2");
-          this.designmasterForm.controls.reqmetal.setValue(data.REQ_METAL_WT)
+          this.designmasterForm.controls.reqmetal.setValue(this.commonService.transformDecimalVB(
+            this.commonService.allbranchMaster?.BMQTYDECIMALS,data.REQ_METAL_WT))
           this.designmasterForm.controls.keeponhold.setValue(data.DESIGN_HOLD)
           this.designmasterForm.controls.customerexclusive.setValue(data.DESIGN_EXCLUSSIVE)
           this.designmasterForm.controls.addsteel.setValue(data.ADD_STEEL)
@@ -1987,19 +2004,19 @@ onFileChangedimage(event: any) {
 
   deleteRecord() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content.MID) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
+    // if (!this.content.MID) {
+    //   Swal.fire({
+    //     title: '',
+    //     text: 'Please Select data to delete!',
+    //     icon: 'error',
+    //     confirmButtonColor: '#336699',
+    //     confirmButtonText: 'Ok'
+    //   }).then((result: any) => {
+    //     if (result.value) {
+    //     }
+    //   });
+    //   return
+    // }
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",

@@ -358,7 +358,7 @@ export class JewelleryMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 14,
     SEARCH_FIELD: "",
-    SEARCH_HEADING: "Item Code",
+    SEARCH_HEADING: "Prefix code",
     SEARCH_VALUE: "",
     WHERECONDITION: "",
     VIEW_INPUT: true,
@@ -371,18 +371,18 @@ export class JewelleryMasterComponent implements OnInit {
     this.jewellerymasterForm.controls.itemcode.setValue(value.PREFIX_CODE);
     this.jewellerymasterForm.controls.itemcodedetail.setValue(value.DESCRIPTION)
   }
-
   stoneTypeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Stone Type Code',
+    SEARCH_HEADING: 'Stone Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "types = 'STONE TYPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  };
+    LOAD_ONCLICK: true,
+  }
 
   stoneTypeCodeSelected(value: any) {
     console.log(value);

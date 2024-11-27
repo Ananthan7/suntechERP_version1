@@ -6,7 +6,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 <!-- content section -->
 
 <div class="pos-sales-modalbody modelbody">
@@ -18,7 +18,7 @@
             <div class="card-body sales-card-body p-2">
               <div class="col-md-12">
                 <div>
-                  <mat-radio-group aria-label="Select an option" formControlName="prefixSelect" (change)="onRadioChange($event)">
+                  <mat-radio-group aria-label="Select an option" formControlName="prefixSelect" (change)="onRadioChange($event)" [disabled]="viewMode">
                     <mat-radio-button value="S" id="ID001" class="mx-2">Diamond</mat-radio-button>
                     <mat-radio-button value="M" id="ID002" class="mx-2">Metal</mat-radio-button>
                   </mat-radio-group>
@@ -30,15 +30,15 @@
                     <label for="inputPassword" id="ID003" class="col-sm-3 col-form-label">Design * :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="code" UpperCaseDirective autocomplete="off"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="code" UpperCaseDirective autocomplete="off"
                           (focusout)="checkCodeExists($event)" (keydown)="lookupKeyPress($event,'code')" />
-                        <master-search [MasterSearchData]="designCodeData" class="masterSearch" #overlaycodeSearch
+                        <master-search [MasterSearchData]="designCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaycodeSearch
                           (newRowClick)="designCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="designdesc" />
+                       <input [readonly]="viewMode" type="text" matInput formControlName="designdesc" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -46,20 +46,20 @@
                     <label for="inputPassword" id="ID004" class="col-sm-3 col-form-label">SKU Prefix * :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="prefix"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="prefix"
                           (focusout)="validateLookupField($event,prefixCodeData,'prefix')"
                           (keydown)="lookupKeyPress($event,'prefix')" />
-                        <master-search [MasterSearchData]="prefixCodeData" class="masterSearch" #overlayprefixSearch
+                        <master-search [MasterSearchData]="prefixCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlayprefixSearch
                           (newRowClick)="prefixCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID005" class="col-sm-3 col-form-label">Parent Design:</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="parentDesign"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="parentDesign"
                           (focusout)="validateLookupField($event,parentDesignCodeData,'parentDesign')"
                           (keydown)="lookupKeyPress($event,'parentDesign')" />
-                        <master-search [MasterSearchData]="parentDesignCodeData" class="masterSearch"
+                        <master-search [MasterSearchData]="parentDesignCodeData" *ngIf=" viewMode == false" class="masterSearch"
                           #overlayparentDesignSearch (newRowClick)="parentDesignCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
@@ -68,13 +68,13 @@
                     <label for="inputPassword" id="ID006" class="col-sm-3 col-form-label">Attribute :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" UpperCaseDirective autocomplete="off" matInput   formControlName="attribute" />
+                       <input [readonly]="viewMode" type="text" UpperCaseDirective autocomplete="off" matInput   formControlName="attribute" />
                       </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID007" class="col-sm-3 col-form-label">No Sub Items:</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="number" style="text-align: right;" (keyup)="noOfSubItems()" matInput
+                       <input [readonly]="viewMode" type="number" style="text-align: right;" (keyup)="noOfSubItems()" matInput
                           formControlName="noOfSubItems" />
                       </mat-form-field>
                     </div>
@@ -83,17 +83,17 @@
                     <label for="inputPassword" id="ID008" class="col-sm-3 col-form-label">Cost Center * :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="costcenter"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="costcenter"
                           (focusout)="validateLookupField($event,costCenterData,'costcenter')"
                           (keydown)="lookupKeyPress($event,'costcenter')" />
-                        <master-search [MasterSearchData]="costCenterData" class="masterSearch" #overlaycostcenterSearch
+                        <master-search [MasterSearchData]="costCenterData" *ngIf=" viewMode == false" class="masterSearch" #overlaycostcenterSearch
                           (newRowClick)="costCenterSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID009" class="col-sm-3 col-form-label">Set Ref:</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="setref" />
+                       <input [readonly]="viewMode" type="text" matInput formControlName="setref" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -101,17 +101,17 @@
                     <label for="inputPassword" id="ID010" class="col-sm-3 col-form-label">Karat * :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="karat"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="karat"
                           (focusout)="validateLookupField($event,karatCodeData,'karat')"
                           (keydown)="lookupKeyPress($event,'karat')" />
-                        <master-search [MasterSearchData]="karatCodeData" class="masterSearch" #overlaykaratSearch
+                        <master-search [MasterSearchData]="karatCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaykaratSearch
                           (newRowClick)="karatCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID011" class="col-sm-3 col-form-label">Pair Ref :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="pairref"/>
+                       <input [readonly]="viewMode" type="text" matInput formControlName="pairref"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -119,17 +119,17 @@
                     <label for="inputPassword" id="ID012" class="col-sm-3 col-form-label">Category :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="category"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="category"
                           (focusout)="validateLookupField($event,categoryCodeData,'category')"
                           (keydown)="lookupKeyPress($event,'category')" />
-                        <master-search [MasterSearchData]="categoryCodeData" class="masterSearch" #overlaycategorySearch
+                        <master-search [MasterSearchData]="categoryCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaycategorySearch
                           (newRowClick)="categoryCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID013" class="col-sm-3 col-form-label">Vendor Ref :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="vendorref"/>
+                       <input [readonly]="viewMode" type="text" matInput formControlName="vendorref"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -137,17 +137,17 @@
                     <label for="inputPassword" id="ID014" class="col-sm-3 col-form-label">Sub Category :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="subcategory"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="subcategory"
                           (focusout)="validateLookupField($event,subcategoryCodeData,'subcategory')"
                           (keydown)="lookupKeyPress($event,'subcategory')" />
-                        <master-search [MasterSearchData]="subcategoryCodeData" class="masterSearch"
+                        <master-search [MasterSearchData]="subcategoryCodeData" *ngIf=" viewMode == false" class="masterSearch"
                           #overlaysubcategorySearch (newRowClick)="subcategoryCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID015" class="col-sm-3 col-form-label">Surface :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="surface"/>
+                       <input [readonly]="viewMode" type="text" matInput formControlName="surface"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -155,10 +155,10 @@
                     <label for="inputPassword" id="ID016" class="col-sm-3 col-form-label">Type :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="type"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="type"
                           (focusout)="validateLookupField($event,typeCodeData,'type')"
                           (keydown)="lookupKeyPress($event,'type')" />
-                        <master-search [MasterSearchData]="typeCodeData" class="masterSearch" #overlaytypeSearch
+                        <master-search [MasterSearchData]="typeCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaytypeSearch
                           (newRowClick)="typeCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
@@ -166,7 +166,7 @@
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
                         <mat-label></mat-label>
-                        <mat-select formControlName="finishtype">
+                        <mat-select formControlName="finishtype"  [disabled]="viewMode">
                           <mat-option value="mat" id="ID018">Mat</mat-option>
                           <mat-option value="glossy" id="ID019">Glossy</mat-option>
                         </mat-select>
@@ -177,20 +177,20 @@
                     <label for="inputPassword" id="ID020" class="col-sm-3 col-form-label">Brand :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="brand"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="brand"
                           (focusout)="validateLookupField($event,BrandCodeData,'brand')"
                           (keydown)="lookupKeyPress($event,'brand')" />
-                        <master-search [MasterSearchData]="BrandCodeData" class="masterSearch" #overlaybrandSearch
+                        <master-search [MasterSearchData]="BrandCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaybrandSearch
                           (newRowClick)="brandCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID021" class="col-sm-3 col-form-label">Country:</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="country"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="country"
                           (focusout)="validateLookupField($event,countryCodeData,'country')"
                           (keydown)="lookupKeyPress($event,'country')" />
-                        <master-search [MasterSearchData]="countryCodeData" class="masterSearch" #overlaycountrySearch
+                        <master-search [MasterSearchData]="countryCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaycountrySearch
                           (newRowClick)="countryCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
@@ -199,20 +199,20 @@
                     <label for="inputPassword" id="ID022" class="col-sm-3 col-form-label">Style :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="style"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="style"
                           (focusout)="validateLookupField($event,StyleCodeData,'style')" 
                           (keydown)="lookupKeyPress($event,'style')" />
-                        <master-search [MasterSearchData]="StyleCodeData" class="masterSearch" #overlaystyleSearch
+                        <master-search [MasterSearchData]="StyleCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaystyleSearch
                           (newRowClick)="StyleCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID023" class="col-sm-3 col-form-label">Vend/Cust:</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="vendCust"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="vendCust"
                           (focusout)="validateLookupField($event,vendCustCodeData,'vendCust')"
                           (keydown)="lookupKeyPress($event,'vendCust')" />
-                        <master-search [MasterSearchData]="vendCustCodeData" class="masterSearch" #overlayvendCustSearch
+                        <master-search [MasterSearchData]="vendCustCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlayvendCustSearch
                           (newRowClick)="vendCustCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
@@ -221,26 +221,26 @@
                     <label for="inputPassword" id="ID024" class="col-sm-3 col-form-label">Range :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="range"
+                       <input [readonly]="viewMode" type="text" matInput formControlName="range"
                           (focusout)="validateLookupField($event,RangeCodeData,'range')"
                           (keydown)="lookupKeyPress($event,'range')" />
-                        <master-search [MasterSearchData]="RangeCodeData" class="masterSearch" #overlayrangeSearch
+                        <master-search [MasterSearchData]="RangeCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlayrangeSearch
                           (newRowClick)="RangeCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
                     <div class="col-md-3 pl-5">
-                      <mat-checkbox class="example-margin" id="ID025" formControlName="makinggrosswt">Making On Gross Wt</mat-checkbox>
+                      <mat-checkbox class="example-margin" id="ID025" formControlName="makinggrosswt"  [disabled]="viewMode">Making On Gross Wt</mat-checkbox>
                     </div>
                   </div>
                   <div class="row align-items-center mb-1">
                     <label for="inputPassword" class="col-sm-3 col-form-label" id="ID026">Purity :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="number" class="text-right" matInput SixDecimalInput formControlName="purity"/>
+                       <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="purity" PurityDecimal/>
                       </mat-form-field>
                     </div>
                     <div class="col-md-3 pl-5">
-                      <mat-checkbox class="example-margin" id="ID027"  formControlName="metalgrosswt">Metal On Gross Wt</mat-checkbox>
+                      <mat-checkbox class="example-margin" id="ID027"  formControlName="metalgrosswt"  [disabled]="viewMode">Metal On Gross Wt</mat-checkbox>
                     </div>
                   </div>
                 </div>
@@ -254,13 +254,13 @@
                             <label for="inputPassword" id="ID028" class="col-sm-3 col-form-label">Cad Designer:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput formControlName="cadDesigner"/>
+                               <input [readonly]="viewMode" type="text" matInput formControlName="cadDesigner"/>
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" id="ID029" class="col-sm-3 col-form-label">Width:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" class="text-right" matInput maxlength="27" NumberOnly formControlName="widthCad"/>
+                               <input [readonly]="viewMode" type="text" class="text-right" matInput maxlength="27" NumberOnly formControlName="widthCad"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -268,13 +268,13 @@
                             <label for="inputPassword" id="ID030" class="col-sm-3 col-form-label">Designer:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput formControlName="designer"/>
+                               <input [readonly]="viewMode" type="text" matInput formControlName="designer"/>
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" id="ID031" class="col-sm-3 col-form-label">Thickness:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" class="text-right" matInput NumberOnly maxlength="20" formControlName="thickness"/>
+                               <input [readonly]="viewMode" type="text" class="text-right" matInput NumberOnly maxlength="20" formControlName="thickness"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -282,14 +282,14 @@
                             <label for="inputPassword" id="ID032" class="col-sm-3 col-form-label">Grade:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput formControlName="grade"/>
+                               <input [readonly]="viewMode" type="text" matInput formControlName="grade"/>
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" id="ID033" class="col-sm-3 col-form-label">Metal Wt :</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" class="text-right" matInput MetalDecimalInput [max]="13"
-                                  (input)="onInputChange($event,'metal_wt', 12)" formControlName="metal_wt"/>
+                               <input [readonly]="viewMode" type="text" class="text-right" matInput  
+                                  (input)="onInputChange($event,'metal_wt', 12)" formControlName="metal_wt" MetalDecimalInput/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -298,17 +298,17 @@
                               Maker:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput formControlName="model"/>
+                               <input [readonly]="viewMode" type="text" matInput formControlName="model"/>
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" id="ID035" class="col-sm-3 col-form-label">Currency *
                               :</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput formControlName="currency"
+                               <input [readonly]="viewMode" type="text" matInput formControlName="currency"
                                   (focusout)="validateLookupField($event,currencyMasterData,'currency')"
                                   (keydown)="lookupKeyPress($event,'currency')" />
-                                <master-search class="masterSearch" [MasterSearchData]="currencyMasterData"
+                                <master-search class="masterSearch" *ngIf=" viewMode == false" [MasterSearchData]="currencyMasterData"
                                   #overlaycurrencySearch (newRowClick)="currencyCodeSelected($event)"></master-search>
                               </mat-form-field>
                             </div>
@@ -317,7 +317,7 @@
                             <label for="inputPassword" id="ID036" class="col-sm-3 col-form-label">Instructor:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput formControlName="instructor"/>
+                               <input [readonly]="viewMode" type="text" matInput formControlName="instructor"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -326,7 +326,7 @@
                               Size:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="number" class="text-right" matInput formControlName="jewellerySize"/>
+                               <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="jewellerySize"/>
                               </mat-form-field>
                             </div>
                             <!-- <div class="col-md-3">
@@ -337,7 +337,7 @@
                             </div> -->
                          
                               <div class="col-md-6">
-                                <mat-radio-group formControlName="cm" class="d-flex align-items-center">
+                                <mat-radio-group formControlName="cm" class="d-flex align-items-center"  [disabled]="viewMode">
                                   <mat-radio-button value="1" class="me-3">Cm</mat-radio-button>
                                   <mat-radio-button value="2" class="me-3">Inch</mat-radio-button>
                                 </mat-radio-group>
@@ -349,11 +349,11 @@
                             <label for="inputPassword" id="ID040" class="col-sm-3 col-form-label">Req Metal:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="number" class="text-right" matInput MetalDecimalInput formControlName="reqmetal"/>
+                               <input [readonly]="viewMode" type="number" class="text-right" matInput MetalDecimalInput formControlName="reqmetal"/>
                               </mat-form-field>
                             </div>
                             <div class="col-md-6">
-                              <mat-radio-group formControlName="weightPerc" class="d-flex align-items-center">
+                              <mat-radio-group formControlName="weightPerc" class="d-flex align-items-center"  [disabled]="viewMode">
                                 <mat-radio-button value="1"  class="me-3">%</mat-radio-button>
                                 <mat-radio-button value="2"  class="me-3"id="ID039">Weight</mat-radio-button>
                               </mat-radio-group>
@@ -374,11 +374,11 @@
                               <textarea id="story" name="story" rows="5" cols="23" formControlName="textbox1"></textarea>
                             </div>
                             <div class="col-md-3">
-                              <mat-checkbox class="example-margin" id="ID044" formControlName="customerexclusive">Customer
+                              <mat-checkbox class="example-margin" id="ID044" formControlName="customerexclusive"  [disabled]="viewMode">Customer
                                 Exclusive</mat-checkbox>
-                              <mat-checkbox class="example-margin" id="ID045" formControlName="keeponhold">Keep On
+                              <mat-checkbox class="example-margin" id="ID045" formControlName="keeponhold"  [disabled]="viewMode">Keep On
                                 Hold</mat-checkbox>
-                              <mat-checkbox class="example-margin" id="ID046" formControlName="addsteel">Add
+                              <mat-checkbox class="example-margin" id="ID046" formControlName="addsteel"  [disabled]="viewMode">Add
                                 Steel</mat-checkbox>
                             </div>
                           </div>
@@ -394,10 +394,10 @@
                           <label for="inputPassword" id="ID047" class="col-sm-3 col-form-label">Price 1</label>
                           <div class="col-md-3">
                             <mat-form-field style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput formControlName="price1"
+                             <input [readonly]="viewMode" type="text" matInput formControlName="price1"
                                 (focusout)="validateLookupField($event,price1CodeData,'price1')"
                                 (keydown)="lookupKeyPress($event,'price1')" />
-                                <master-search  class="masterSearch" [MasterSearchData]="price1CodeData" #overlayprice1Search
+                                <master-search  class="masterSearch" *ngIf=" viewMode == false" [MasterSearchData]="price1CodeData" #overlayprice1Search
                               (newRowClick)="price1CodeSelected($event)"></master-search>
                             </mat-form-field>
                             
@@ -408,10 +408,10 @@
                           <label for="inputPassword" id="ID048" class="col-sm-3 col-form-label">Price 2:</label>
                           <div class="col-md-3">
                             <mat-form-field style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput formControlName="price2"
+                             <input [readonly]="viewMode" type="text" matInput formControlName="price2"
                                 (focusout)="validateLookupField($event,price2CodeData,'price2')"
                                 (keydown)="lookupKeyPress($event,'price2')" />
-                                <master-search class="masterSearch" [MasterSearchData]="price2CodeData" #overlayprice2Search
+                                <master-search class="masterSearch" *ngIf=" viewMode == false" [MasterSearchData]="price2CodeData" #overlayprice2Search
                                 (newRowClick)="price2CodeSelected($event)"></master-search>
                             </mat-form-field>
                           </div>
@@ -421,10 +421,10 @@
                           <label for="inputPassword" id="ID049" class="col-sm-3 col-form-label">Price 3:</label>
                           <div class="col-md-3">
                             <mat-form-field  style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput formControlName="price3"
+                             <input [readonly]="viewMode" type="text" matInput formControlName="price3"
                                 (focusout)="validateLookupField($event,price3CodeData,'price3')"
                                 (keydown)="lookupKeyPress($event,'price3')" />
-                                <master-search class="masterSearch"  [MasterSearchData]="price3CodeData" #overlayprice3Search
+                                <master-search class="masterSearch" *ngIf=" viewMode == false"  [MasterSearchData]="price3CodeData" #overlayprice3Search
                                 (newRowClick)="price3CodeSelected($event)"></master-search>
                             </mat-form-field>
                          
@@ -435,10 +435,10 @@
                           <label for="inputPassword" id="ID050" class="col-sm-3 col-form-label">Price 4</label>
                           <div class="col-md-3">
                             <mat-form-field  style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput formControlName="price4"
+                             <input [readonly]="viewMode" type="text" matInput formControlName="price4"
                                 (focusout)="validateLookupField($event,price4CodeData,'price4')"
                                 (keydown)="lookupKeyPress($event,'price4')" />
-                                <master-search class="masterSearch"   [MasterSearchData]="price4CodeData" #overlayprice4Search
+                                <master-search class="masterSearch" *ngIf=" viewMode == false"   [MasterSearchData]="price4CodeData" #overlayprice4Search
                                 (newRowClick)="price4CodeSelected($event)"></master-search>
                             </mat-form-field>
                           
@@ -449,10 +449,10 @@
                           <label for="inputPassword" id="ID051" class="col-sm-3 col-form-label">Price 5</label>
                           <div class="col-md-3">
                             <mat-form-field  style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput formControlName="price5"
+                             <input [readonly]="viewMode" type="text" matInput formControlName="price5"
                                 (focusout)="validateLookupField($event,price5CodeData,'price5')"
                                 (keydown)="lookupKeyPress($event,'price5')" />
-                                <master-search class="masterSearch" [MasterSearchData]="price5CodeData" #overlayprice5Search
+                                <master-search class="masterSearch" *ngIf=" viewMode == false" [MasterSearchData]="price5CodeData" #overlayprice5Search
                                 (newRowClick)="price5CodeSelected($event)"></master-search>
                             </mat-form-field>
                           </div>
@@ -471,7 +471,7 @@
                           <img src={{image}} style="width:126px;height:124px">
 
                         </button>
-                        <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                       <input [readonly]="viewMode" type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
                           (change)="onFileChangedimage($event)">
                       </div>
                     </div> -->
@@ -486,7 +486,7 @@
                                   <button class="btn btnnew border-dark">
                                     <img src={{image}} style="width:126px;height:124px">
                                   </button>
-                                  <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                                 <input [readonly]="viewMode" type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
                                     (change)="onFileChangedimage($event)">
                                 </div>
                               </div>
@@ -533,7 +533,7 @@
                               <span class="visually-hidden" id="ID053">Next</span>
                             </button>
                           </div>
-                          <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                         <input [readonly]="viewMode" type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
                             (change)="onFileChangedimage($event)" multiple>
                         </div>
                       </div>
@@ -544,7 +544,7 @@
                             <button class="btn btnnew border-dark">
                               <img src={{image}} style="width:126px;height:124px">
                             </button>
-                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)">
+                           <input [readonly]="viewMode" type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)">
                           </div>
                         </div>
                       </div> -->
@@ -576,7 +576,7 @@
                     <label for="inputPassword" id="ID057" class="col-sm-6 col-form-label">Engraving Text:</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput  formControlName="engravingtext"/>
+                       <input [readonly]="viewMode" type="text" matInput  formControlName="engravingtext"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -584,7 +584,7 @@
                     <label for="inputPassword" id="ID058" class="col-sm-6 col-form-label">Comments:</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput  formControlName="comments"/>
+                       <input [readonly]="viewMode" type="text" matInput  formControlName="comments"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -592,7 +592,7 @@
                     <label for="inputPassword" id="ID059" class="col-sm-6 col-form-label">Fault Details:</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput  formControlName="faultdetails"/>
+                       <input [readonly]="viewMode" type="text" matInput  formControlName="faultdetails"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -621,10 +621,10 @@
                 <label for="inputPassword" class="col-sm-4 col-form-label" id="ID060">Size Set :</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="sizeset"
+                   <input [readonly]="viewMode" type="text" matInput formControlName="sizeset"
                       (focusout)="validateLookupField($event,sizesetCodeData,'sizeset')"
                       (keydown)="lookupKeyPress($event,'sizeset')" />
-                    <master-search [MasterSearchData]="sizesetCodeData" class="masterSearch" #overlaysizesetSearch
+                    <master-search [MasterSearchData]="sizesetCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaysizesetSearch
                       (newRowClick)="sizesetCodeSelected($event)"></master-search>
                   </mat-form-field>
                 </div>
@@ -633,10 +633,10 @@
                 <label for="inputPassword" id="ID061" class="col-sm-4 col-form-label">Size :</label>
                 <div class="col-md-6">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="size"
+                   <input [readonly]="viewMode" type="text" matInput formControlName="size"
                       (focusout)="validateLookupField($event,sizeCodeData,'size')" 
                       (keydown)="lookupKeyPress($event,'size')" />
-                    <master-search [MasterSearchData]="sizeCodeData" class="masterSearch" #overlaysizeSearch
+                    <master-search [MasterSearchData]="sizeCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaysizeSearch
                       (newRowClick)="sizeCodeSelected($event)"></master-search>
                   </mat-form-field>
                 </div>
@@ -647,13 +647,13 @@
                 <label for="inputPassword" id="ID062" class="col-sm-3 col-form-label">Height :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" class="text-right" matInput formControlName="height" NumberOnly />
+                   <input [readonly]="viewMode" type="text" class="text-right" matInput formControlName="height" NumberOnly />
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" id="ID063" class="col-sm-3 col-form-label">Length :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" class="text-right" matInput formControlName="length" NumberOnly />
+                   <input [readonly]="viewMode" type="text" class="text-right" matInput formControlName="length" NumberOnly />
                   </mat-form-field>
                 </div>
               </div>
@@ -662,14 +662,14 @@
                   :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="width" NumberOnly  class="text-right"
-                      AmountDecimalInput />
+                   <input [readonly]="viewMode" type="text" matInput formControlName="width" NumberOnly  class="text-right"
+                       />
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" id="ID065" class="col-sm-3 col-form-label">Radius :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="number" class="text-right" matInput formControlName="radius" NumberOnly />
+                   <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="radius" NumberOnly />
                   </mat-form-field>
                 </div>
               </div>
@@ -748,20 +748,20 @@
 
                   <div *dxTemplate="let data of 'divisiontemp'">
                     <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                    <master-search [MasterSearchData]="divisionCode"
+                    <master-search [MasterSearchData]="divisionCode" *ngIf=" viewMode == false"
                       (newRowClick)="divisionCodeSelected($event,data,'divisiontemp')">
                     </master-search>
                   </div>
 
                   <div *dxTemplate="let data of 'stoneTypetemp'">
-                    <input type="text" (change)="stoneTypetemp($event,data)" [value]="data.value"
+                   <input [readonly]="viewMode" type="text" (change)="stoneTypetemp($event,data)" [value]="data.value"
                       [disabled]="fieldDisable" style="width: 100%;" required UpperCaseDirective autocomplete="off" />
                   </div>
 
                   <div *dxTemplate="let data of 'stockCodetemp'">
                     <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
                     <master-search [MasterSearchData]="stockCodeData"
-                      (newRowClick)="stockCodeDataSelected($event,data,'stockCodetemp')" *ngIf="Disable == false">
+                      (newRowClick)="stockCodeDataSelected($event,data,'stockCodetemp')" *ngIf="Disable == false && viewMode == false">
                     </master-search>
                   </div>
 
@@ -773,95 +773,95 @@
                   </div> -->
 
                   <div *dxTemplate="let data of 'karattemp'">
-                    <input type="text" (change)="karattemp($event,data)" [disabled]="FieldEnable" [value]="data.value"
+                   <input [readonly]="viewMode" type="text" (change)="karattemp($event,data)" [disabled]="FieldEnable" [value]="data.value"
                       style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'shapetemp'">
-                    <input type="text" (change)="shapetemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                   <input [readonly]="viewMode" type="text" (change)="shapetemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
                       style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'colortemp'">
-                    <input type="text" (change)="colortemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                   <input [readonly]="viewMode" type="text" (change)="colortemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
                       style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'extColortemp'">
-                    <input type="text" (change)="extColortemp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="extColortemp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'claritytemp'">
-                    <input type="text" (change)="claritytemp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="claritytemp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'extClaritytemp'">
-                    <input type="text" (change)="extClaritytemp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="extClaritytemp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'sieveStdtemp'">
-                    <input type="text" (change)="sieveStdtemp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="sieveStdtemp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'descriptiontemp'">
-                    <input type="text" (change)="descriptiontemp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="descriptiontemp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
 
                   <div *dxTemplate="let data of 'sieveFromtemp'">
-                    <input type="text" (change)="sieveFromtemp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="sieveFromtemp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Sieve_Totemp'">
-                    <input type="text" (change)="SieveTotemp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="SieveTotemp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Description_detailtemp'">
-                    <input type="text" (change)="Description_detailtemp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="Description_detailtemp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Description_detail2temp'">
-                    <input type="text" (change)="Description_detail2temp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="Description_detail2temp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Sizetemp'">
-                    <input type="text" (change)="Sizetemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                   <input [readonly]="viewMode" type="text" (change)="Sizetemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
                       style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'WtCttemp'">
-                    <input type="text" (change)="WtCttemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                   <input [readonly]="viewMode" type="text" (change)="WtCttemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
                       style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'ProcessTypetemp'">
-                    <input type="text" (change)="ProcessTypetemp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="ProcessTypetemp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'PointerWttemp'">
-                    <input type="text" (change)="PointerWttemp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="PointerWttemp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Remarktemp'">
-                    <input type="text" (change)="Remarktemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                   <input [readonly]="viewMode" type="text" (change)="Remarktemp($event,data)" [disabled]="fieldDisable" [value]="data.value"
                       style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'currencytemp'">
-                    <input type="text" (change)="currencytemp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="currencytemp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Design_currencytemp'">
-                    <input type="text" (change)="Design_currencytemp($event,data)" [disabled]="fieldDisable"
+                   <input [readonly]="viewMode" type="text" (change)="Design_currencytemp($event,data)" [disabled]="fieldDisable"
                       [value]="data.value" style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Purity'">
-                    <input type="text" (change)="Puritytemp($event,data)" [disabled]="FieldEnable" [value]="data.value"
+                   <input [readonly]="viewMode" type="text" (change)="Puritytemp($event,data)" [disabled]="FieldEnable" [value]="data.value"
                       style="width: 100%;" required />
                   </div>
                   <div *dxTemplate="let data of 'Pcstemp'">
-                    <input type="text" (change)="Pcstempp($event,data)" [disabled]="fieldDisable" [value]="data.value"
+                   <input [readonly]="viewMode" type="text" (change)="Pcstempp($event,data)" [disabled]="fieldDisable" [value]="data.value"
                       style="width: 100%;" required />
                   </div>
 
@@ -891,51 +891,51 @@
                   <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a> -->
 
                   <div *dxTemplate="let datas of 'compCodetemp'">
-                    <input type="text" (change)="compCodetemp($event,datas)" style="width: 100%;" />
+                   <input [readonly]="viewMode" type="text" (change)="compCodetemp($event,datas)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let datas of 'Descriptiontemp'">
-                    <input type="text" (change)="Descriptiontemp($event,datas)" style="width: 100%;" />
+                   <input [readonly]="viewMode" type="text" (change)="Descriptiontemp($event,datas)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let datas of 'Pcstemp'">
-                    <input type="text" (change)="Pcstemp($event,datas)" style="width: 100%;" />
+                   <input [readonly]="viewMode" type="text" (change)="Pcstemp($event,datas)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let datas of 'sizeSetCodetemp'">
-                    <input type="text" (change)="sizeSetCodetemp($event,datas)" style="width: 100%;" />
+                   <input [readonly]="viewMode" type="text" (change)="sizeSetCodetemp($event,datas)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let datas of 'sizeCodetemp'">
-                    <input type="text" (change)="sizeCodetemp($event,datas)" style="width: 100%;" />
+                   <input [readonly]="viewMode" type="text" (change)="sizeCodetemp($event,datas)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let datas of 'typetemp'">
-                    <input type="text" (change)="typetemp($event,datas)" style="width: 100%;" />
+                   <input [readonly]="viewMode" type="text" (change)="typetemp($event,datas)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let datas of 'categorytemp'">
-                    <input type="text" (change)="categorytemp($event,datas)" style="width: 100%;" />
+                   <input [readonly]="viewMode" type="text" (change)="categorytemp($event,datas)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let datas of 'Shapetemp'">
-                    <input type="text" (change)="Shapetemp($event,datas)" style="width: 100%;" />
+                   <input [readonly]="viewMode" type="text" (change)="Shapetemp($event,datas)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let datas of 'heighttemp'">
-                    <input type="text" (change)="heighttemp($event,datas)" style="width: 100%;" />
+                   <input [readonly]="viewMode" type="text" (change)="heighttemp($event,datas)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let datas of 'widthtemp'">
-                    <input type="text" (change)="widthtemp($event,datas)" style="width: 100%;" />
+                   <input [readonly]="viewMode" type="text" (change)="widthtemp($event,datas)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let datas of 'lengthtemp'">
-                    <input type="text" (change)="lengthtemp($event,datas)" style="width: 100%;" />
+                   <input [readonly]="viewMode" type="text" (change)="lengthtemp($event,datas)" style="width: 100%;" />
                   </div>
 
                   <div *dxTemplate="let datas of 'radiustemp'">
-                    <input type="text" (change)="radiustemp($event,datas)" style="width: 100%;" />
+                   <input [readonly]="viewMode" type="text" (change)="radiustemp($event,datas)" style="width: 100%;" />
                   </div>
 
                 </dx-data-grid>
@@ -1461,10 +1461,10 @@
                 <label for="inputPassword" id="ID066" class="col-sm-4 col-form-label">Collection :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="collection"
+                   <input [readonly]="viewMode" type="text" matInput formControlName="collection"
                       (focusout)="validateLookupField($event,collectionCodeData,'collection')"
                       (keydown)="lookupKeyPress($event,'collection')" />
-                    <master-search [MasterSearchData]="collectionCodeData" class="masterSearch" #overlaycollectionSearch
+                    <master-search [MasterSearchData]="collectionCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaycollectionSearch
                       (newRowClick)="collectionCodeSelected($event)"></master-search>
                   </mat-form-field>
                 </div>
@@ -1473,10 +1473,10 @@
                 <label for="inputPassword" id="ID067" class="col-sm-4 col-form-label">Sub-Collection :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="subCollection"
+                   <input [readonly]="viewMode" type="text" matInput formControlName="subCollection"
                       (focusout)="validateLookupField($event,subCollectionCodeData,'subCollection')"
                       (keydown)="lookupKeyPress($event,'subCollection')" />
-                    <master-search [MasterSearchData]="subCollectionCodeData" class="masterSearch"
+                    <master-search [MasterSearchData]="subCollectionCodeData" *ngIf=" viewMode == false" class="masterSearch"
                       #overlaysubCollectionSearch (newRowClick)="subCollectionCodeSelected($event)"></master-search>
                   </mat-form-field>
                 </div>
@@ -1486,10 +1486,10 @@
                   Type/Lo :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="stoneType"
+                   <input [readonly]="viewMode" type="text" matInput formControlName="stoneType"
                       (focusout)="validateLookupField($event,stoneTypeCodeData,'stoneType')"
                       (keydown)="lookupKeyPress($event,'stoneType')" />
-                    <master-search [MasterSearchData]="stoneTypeCodeData" class="masterSearch" #overlaystoneTypeSearch
+                    <master-search [MasterSearchData]="stoneTypeCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaystoneTypeSearch
                       (newRowClick)="stoneTypeCodeSelected($event)"></master-search>
                   </mat-form-field>
                 </div>
@@ -1498,10 +1498,10 @@
                 <label for="inputPassword" id="ID069" class="col-sm-4 col-form-label">Setting :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="setting"
+                   <input [readonly]="viewMode" type="text" matInput formControlName="setting"
                       (focusout)="validateLookupField($event,settingCodeData,'setting')"
                       (keydown)="lookupKeyPress($event,'setting')" />
-                    <master-search [MasterSearchData]="settingCodeData" class="masterSearch" #overlaysettingSearch
+                    <master-search [MasterSearchData]="settingCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaysettingSearch
                       (newRowClick)="settingCodeSelected($event)"></master-search>
                   </mat-form-field>
                 </div>
@@ -1511,10 +1511,10 @@
                   :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="shape"
+                   <input [readonly]="viewMode" type="text" matInput formControlName="shape"
                       (focusout)="validateLookupField($event,shapeCodeData,'shape')"
                       (keydown)="lookupKeyPress($event,'shape')" />
-                    <master-search [MasterSearchData]="shapeCodeData" class="masterSearch" #overlayshapeSearch
+                    <master-search [MasterSearchData]="shapeCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlayshapeSearch
                       (newRowClick)="shapeCodeSelected($event)"></master-search>
                   </mat-form-field>
                 </div>
@@ -1523,10 +1523,10 @@
                 <label for="inputPassword" id="ID071" class="col-sm-4 col-form-label">Inc.Cat :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="incCat"
+                   <input [readonly]="viewMode" type="text" matInput formControlName="incCat"
                       (focusout)="validateLookupField($event,incCatCodeData,'incCat')"
                       (keydown)="lookupKeyPress($event,'incCat')" />
-                    <master-search [MasterSearchData]="incCatCodeData" class="masterSearch" #overlayincCatSearch
+                    <master-search [MasterSearchData]="incCatCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlayincCatSearch
                       (newRowClick)="incCatCodeSelected($event)"></master-search>
                   </mat-form-field>
                 </div>
@@ -1535,10 +1535,10 @@
                 <label for="inputPassword" id="ID072" class="col-sm-4 col-form-label">Order Ref :</label>
                 <div class="col-md-5">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                    <input type="text" matInput formControlName="orderRef"
+                   <input [readonly]="viewMode" type="text" matInput formControlName="orderRef"
                       (focusout)="validateLookupField($event,orderRefCodeData,'orderRef')"
                       (keydown)="lookupKeyPress($event,'orderRef')" />
-                    <master-search [MasterSearchData]="orderRefCodeData" class="masterSearch" #overlayorderRefSearch
+                    <master-search [MasterSearchData]="orderRefCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlayorderRefSearch
                       (newRowClick)="orderRefCodeSelected($event)"></master-search>
                   </mat-form-field>
                 </div>
