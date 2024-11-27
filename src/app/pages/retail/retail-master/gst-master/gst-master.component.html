@@ -136,7 +136,24 @@
                     matInput
                     type="text"
                     formControlName="group1"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        stockCodeData,
+                        ['group1'],
+                        ['CODE']
+                      )
+                    "
                   />
+
+                  <master-search
+                    *ngIf="flag != 'VIEW'"
+                    (focusout)="openTab($event, 'group1')"
+                    #overlayGroupOne
+                    [MasterSearchData]="stockCodeData"
+                    class="masterSearch"
+                    (newRowClick)="lookupSelect($event, ['group1'], ['CODE'])"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -153,7 +170,23 @@
                     matInput
                     type="text"
                     formControlName="group2"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        stockCodeData,
+                        ['group2'],
+                        ['CODE']
+                      )
+                    "
                   />
+                  <master-search
+                    *ngIf="flag != 'VIEW'"
+                    (focusout)="openTab($event, 'group2')"
+                    #overlayGroupTwo
+                    [MasterSearchData]="stockCodeData"
+                    class="masterSearch"
+                    (newRowClick)="lookupSelect($event, ['group2'], ['CODE'])"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -170,7 +203,24 @@
                     matInput
                     type="text"
                     formControlName="group3"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        stockCodeData,
+                        ['group3'],
+                        ['CODE']
+                      )
+                    "
                   />
+
+                  <master-search
+                    *ngIf="flag != 'VIEW'"
+                    (focusout)="openTab($event, 'group3')"
+                    #overlayGroupThree
+                    [MasterSearchData]="stockCodeData"
+                    class="masterSearch"
+                    (newRowClick)="lookupSelect($event, ['group3'], ['CODE'])"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -183,7 +233,7 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                  (input)="checkPercentage($event)"
+                    (input)="checkPercentage($event)"
                     [readonly]="flag === 'VIEW'"
                     matInput
                     type="text"
@@ -205,7 +255,26 @@
                     matInput
                     type="text"
                     formControlName="roundOffAc"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        stockCodeData,
+                        ['roundOffAc'],
+                        ['CODE']
+                      )
+                    "
                   />
+
+                  <master-search
+                    *ngIf="flag != 'VIEW'"
+                    (focusout)="openTab($event, 'roundOffAc')"
+                    #overlayRoundOffAcc
+                    [MasterSearchData]="stockCodeData"
+                    class="masterSearch"
+                    (newRowClick)="
+                      lookupSelect($event, ['roundOffAc'], ['CODE'])
+                    "
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
