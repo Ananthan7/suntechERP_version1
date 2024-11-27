@@ -5,10 +5,10 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="deleteRecord()"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="deleteRecord()"  [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
-        <form [formGroup]="locationForm">
+        <form [formGroup]="serviceForm">
             <div class="container-fluid pt-3">
                 <div class="row justify-content-between">
                     <div class="col-md-10">
@@ -16,21 +16,21 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Code :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput formControlName="locationcode"  />
+                            <input type="text" matInput formControlName="servicecode"  [readonly]="viewMode" />
                           </mat-form-field>
                         </div>
                         <div class="col-md-3">
-                            <mat-checkbox class="example-margin">Exclude TAX</mat-checkbox>
+                            <mat-checkbox class="example-margin" formControlName="excludeTax" [disabled]="viewMode">Exclude TAX</mat-checkbox>
                         </div>
                         <div class="col-md-5">
-                            <mat-checkbox class="example-margin">Ask A/C In transaction</mat-checkbox>
+                            <mat-checkbox class="example-margin" formControlName="askAcTrans" [disabled]="viewMode">Ask A/C In transaction</mat-checkbox>
                         </div>
                       </div>
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">Description :</label>
                         <div class="col-md-10">
                           <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput formControlName="type" />
+                            <input type="text" matInput formControlName="description" [readonly]="viewMode" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -38,16 +38,16 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Account :</label>
                         <div class="col-md-4">
                           <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput />
-                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
-                            (newRowClick)="PLACCodeCodeSelected($event)">
+                            <input type="text" matInput  formControlName="account" [readonly]="viewMode" (focusout)="validateLookupField($event,accountCodeData,'account')"  (keydown)="lookupKeyPress($event,'account')"/>
+                            <master-search [MasterSearchData]="accountCodeData"  *ngIf=" viewMode == false" class="masterSearch"
+                            (newRowClick)="accountCodeSelected($event)" #accountcodeSearch>
                         </master-search>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Amount(AED) :</label>
                         <div class="col-md-4">
                           <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput />
+                            <input type="number" matInput formControlName="amountAED" AmountDecimalInput class="text-right" [readonly]="viewMode" />
                           </mat-form-field>
                         </div>
                       
@@ -56,18 +56,18 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Design Code :</label>
                         <div class="col-md-4">
                           <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput />
-                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
-                            (newRowClick)="PLACCodeCodeSelected($event)">
+                            <input type="text" matInput formControlName="designCode" [readonly]="viewMode" (focusout)="validateLookupField($event,designCodeCodeData,'designCode')"  (keydown)="lookupKeyPress($event,'designCode')"/>
+                            <master-search [MasterSearchData]="designCodeCodeData"  *ngIf=" viewMode == false" class="masterSearch"
+                            (newRowClick)="designCodeSelected($event)"  #designCodeSearch>
                         </master-search>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">HSN :</label>
                         <div class="col-md-4">
                           <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput />
-                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
-                            (newRowClick)="PLACCodeCodeSelected($event)">
+                            <input type="text" matInput formControlName="hsn" [readonly]="viewMode"  (focusout)="validateLookupField($event,hsnCodeData,'hsn')"  (keydown)="lookupKeyPress($event,'hsn')"/>
+                            <master-search [MasterSearchData]="hsnCodeData"  *ngIf=" viewMode == false" class="masterSearch"
+                            (newRowClick)="hsnCodeSelected($event)" #hsnCodeSearch>
                         </master-search>
                           </mat-form-field>
                         </div>
@@ -77,9 +77,9 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">Filter Only in VocType :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput />
-                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
-                            (newRowClick)="PLACCodeCodeSelected($event)">
+                            <input type="text" matInput formControlName="filterinvoctype" maxlength="3" [readonly]="viewMode"  (focusout)="validateLookupField($event,FilterVoctypeCodedata,'filterinvoctype')"  (keydown)="lookupKeyPress($event,'filterinvoctype')"/>
+                            <master-search [MasterSearchData]="FilterVoctypeCodedata"  *ngIf=" viewMode == false" class="masterSearch"
+                            (newRowClick)="FilterVoctypeCodeSelected($event)" #filterinvoctypeCodeSearch>
                         </master-search>
                           </mat-form-field>
                         </div>
@@ -89,18 +89,18 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">FilterSales/PurchaseVoctypes :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput />
-                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
-                            (newRowClick)="PLACCodeCodeSelected($event)">
+                            <input type="text" matInput formControlName="filtersales" [readonly]="viewMode"  (focusout)="validateLookupField($event,FilterVoctypeCodedata,'filtersales')"  (keydown)="lookupKeyPress($event,'filtersales')"/>
+                            <master-search [MasterSearchData]=" FilterVoctypeCodedata"  *ngIf=" viewMode == false" class="masterSearch"
+                            (newRowClick)="FiltersalesVoctypeCodeSelected($event)" #filtersalesCodeSearch>
                         </master-search>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-4 col-form-label">FilterSalesReturn/PurchaseReturnVoctypes :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput />
-                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
-                            (newRowClick)="PLACCodeCodeSelected($event)">
+                            <input type="text" matInput formControlName="filtersalesreturn" [readonly]="viewMode"   (focusout)="validateLookupField($event,FiltersalesreturnCodedata,'filtersalesreturn')"  (keydown)="lookupKeyPress($event,'filtersalesreturn')"/>
+                            <master-search [MasterSearchData]="FiltersalesreturnCodedata"  *ngIf=" viewMode == false" class="masterSearch"
+                            (newRowClick)="FiltersalesreturnSelected($event)"  #filtersalesreturnCodeSearch>
                         </master-search>
                           </mat-form-field>
                         </div>
@@ -115,9 +115,9 @@
                                 <label for="inputPassword" class="col-sm-6 col-form-label">Purchase :</label>
                                 <div class="col-md-6">
                                   <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput />
-                                    <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
-                                    (newRowClick)="PLACCodeCodeSelected($event)">
+                                    <input type="text" matInput formControlName="purchase" [readonly]="viewMode"   (focusout)="validateLookupField($event,purchaseCodeData,'purchase')"  (keydown)="lookupKeyPress($event,'purchase')"/>
+                                    <master-search [MasterSearchData]="purchaseCodeData"  *ngIf=" viewMode == false" class="masterSearch"
+                                    (newRowClick)="purchaseSelected($event)" #purchaseCodeSearch>
                                 </master-search>
                                   </mat-form-field>
                                 </div>
@@ -128,9 +128,9 @@
                                 <label for="inputPassword" class="col-sm-6 col-form-label">Sales :</label>
                                 <div class="col-md-6">
                                   <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput />
-                                    <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
-                                    (newRowClick)="PLACCodeCodeSelected($event)">
+                                    <input type="text" matInput formControlName="sales" [readonly]="viewMode"  (focusout)="validateLookupField($event,salesCodeData,'sales')"  (keydown)="lookupKeyPress($event,'sales')"/>
+                                    <master-search [MasterSearchData]="salesCodeData"  *ngIf=" viewMode == false" class="masterSearch"
+                                    (newRowClick)="salesCodeSelected($event)" #salesCodeSearch>
                                 </master-search>
                                   </mat-form-field>
                                 </div>
@@ -142,9 +142,9 @@
                                 <label for="inputPassword" class="col-sm-6 col-form-label">Branch Transfer :</label>
                                 <div class="col-md-6">
                                   <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput />
-                                    <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
-                                    (newRowClick)="PLACCodeCodeSelected($event)">
+                                    <input type="text" matInput formControlName="branchtransfer" [readonly]="viewMode"  (focusout)="validateLookupField($event,branchtransferCodeData,'branchtransfer')"  (keydown)="lookupKeyPress($event,'branchtransfer')"/>
+                                    <master-search [MasterSearchData]="branchtransferCodeData"  *ngIf=" viewMode == false" class="masterSearch"
+                                    (newRowClick)="branchtransferCodeSelected($event)" #branchtransferCodeSearch>
                                 </master-search>
                                   </mat-form-field>
                                 </div>
