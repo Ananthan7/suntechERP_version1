@@ -1,7 +1,7 @@
 <form [formGroup]="dateForm">
   <div class="row">
       <label for="inputPassword" class="col-sm-2 col-form-label">As on Date :</label>
-      <div class="col-sm-2">
+      <div class="col-sm-4">
           <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
             <input matInput [matDatepicker]="date" formControlName="date" placeholder="DD/MM/YYYY" (dateChange)="formatDate($event)" DateValidation />
             <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
