@@ -630,8 +630,13 @@ export class TdsMasterComponent implements OnInit {
         .subscribe((result) => {
           if (result.status.trim() === "Success") {
            console.log(result.dynamicData);
-           this.maindetails = result.dynamicData[0]
-           
+           let dyndatas = result.dynamicData[0];
+           dyndatas.forEach((e:any) => {
+              e.EFFECT_FROM_DATE
+           });
+
+
+           this.maindetails = dyndatas;
           } else {
             console.log("error");
            
