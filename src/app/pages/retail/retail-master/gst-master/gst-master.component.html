@@ -8,9 +8,11 @@
 
 <!-- modal header component -->
 <modal-header
-  (saveClick)="formSave()"
+  *ngIf="flag !== 'VIEW'"
+  [isViewDelete]="flag == 'VIEW'"
+  (saveClick)="gstMasterMainFormSubmit()"
   (cancelClick)="close()"
-  (deleteClick)="deleteMaster()"
+  (deleteClick)="DeleteController()"
 ></modal-header>
 
 <!-- content section -->
@@ -21,55 +23,100 @@
         <div class="row">
           <div class="col-md-2">
             <div class="row mb-1">
-              <label for="mode" class="col-sm-4 col-form-label" id="ID029"
-                >GST Code</label
-              >
+              <label for="gstCode" class="col-sm-4 col-form-label" id="ID029"
+                >GST Code <span class="text-danger">*</span>
+              </label>
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    UpperCaseDirective
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="gstCode"
+                  />
+
+                  <mat-error
+                    *ngIf="
+                      gstMasterMainForm.controls['gstCode'].hasError('required')
+                    "
+                  >
+                    GST Code Is Required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-md-3">
             <div class="row mb-1">
-              <label for="mode" class="col-sm-3 col-form-label" id="ID029"
-                >GST Desc</label
+              <label for="gstDesc" class="col-sm-3 col-form-label" id="ID029"
+                >GST Desc<span class="text-danger">*</span></label
               >
               <div class="col-md-9">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    UpperCaseDirective
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="gstDesc"
+                  />
+                  <mat-error
+                    *ngIf="
+                      gstMasterMainForm.controls['gstDesc'].hasError('required')
+                    "
+                  >
+                    GST Desc Is Required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-md-2">
             <div class="row mb-1">
-              <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+              <label for="gstPercent" class="col-sm-4 col-form-label" id="ID029"
                 >GST %</label
               >
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    (input)="charAndDigitLimitChecker($event, 'gstPercent')"
+                    class="text-right"
+                    ThreeDecimalInput
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="number"
+                    formControlName="gstPercent"
+                  />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-md-2">
             <div class="row mb-1">
-              <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+              <label
+                for="cessPercent"
+                class="col-sm-4 col-form-label"
+                id="ID029"
                 >Cess %</label
               >
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    class="text-right"
+                    ThreeDecimalInput
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="cessPercent"
+                  />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-md-2">
             <div class="row mb-1">
-              <mat-checkbox formControlName="radio" id="ID058"
+              <mat-checkbox formControlName="applyAllBranches"
                 >Apply All Branches</mat-checkbox
               >
             </div>
@@ -79,60 +126,86 @@
         <div class="row">
           <div class="col-md-2">
             <div class="row mb-1">
-              <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+              <label for="group1" class="col-sm-4 col-form-label" id="ID029"
                 >Group1</label
               >
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="group1"
+                  />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-md-3">
             <div class="row mb-1">
-              <label for="mode" class="col-sm-3 col-form-label" id="ID029"
+              <label for="group2" class="col-sm-3 col-form-label" id="ID029"
                 >Group 2</label
               >
               <div class="col-md-9">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="group2"
+                  />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-md-2">
             <div class="row mb-1">
-              <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+              <label for="group3" class="col-sm-4 col-form-label" id="ID029"
                 >Group 3</label
               >
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="group3"
+                  />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-md-2">
             <div class="row mb-1">
-              <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+              <label for="roundOff" class="col-sm-4 col-form-label" id="ID029"
                 >Round Off</label
               >
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                  (input)="checkPercentage($event)"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="roundOff"
+                  />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-md-2">
             <div class="row mb-1">
-              <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+              <label for="roundOffAc" class="col-sm-4 col-form-label" id="ID029"
                 >Round Off A/C</label
               >
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="mode" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="roundOffAc"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -167,18 +240,31 @@
                 </div>
 
                 <div class="row mb-1">
-                  <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+                  <label
+                    for="regCgstAcCredit"
+                    class="col-sm-4 col-form-label"
+                    id="ID029"
                     >CGST A/C</label
                   >
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="regCgstAcCredit"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="regCgstAcDebit"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
@@ -189,30 +275,53 @@
                   >
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="regSgstAcCredit"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="regSgstAcDebit"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
 
                 <div class="row mb-1">
-                  <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+                  <label
+                    for="regIgstAcCredit"
+                    class="col-sm-4 col-form-label"
+                    id="ID029"
                     >IGST A/C</label
                   >
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="regIgstAcCredit"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="regIgstAcDebit"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
@@ -245,35 +354,61 @@
                 </div>
 
                 <div class="row mb-1">
-                  <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+                  <label
+                    for="unregCgstAcCredit"
+                    class="col-sm-4 col-form-label"
+                    id="ID029"
                     >CGST A/C</label
                   >
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="unregCgstAcCredit"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="unregCgstAcDebit"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
 
                 <div class="row mb-1">
-                  <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+                  <label
+                    for="unregSgstAcCredit"
+                    class="col-sm-4 col-form-label"
+                    id="ID029"
                     >SGST A/C</label
                   >
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="unregSgstAcCredit"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="unregSgstAcDebit"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
@@ -284,64 +419,113 @@
                   >
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="unregIgstAcCredit"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="unregIgstAcDebit"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
 
                 <div class="row mb-1">
-                  <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+                  <label
+                    for="unregCgstCtrlAcCredit"
+                    class="col-sm-4 col-form-label"
+                    id="ID029"
                     >CGST Ctrl. A/C</label
                   >
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="unregCgstCtrlAcCredit"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="unregCgstCtrlAcDebit"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
 
                 <div class="row mb-1">
-                  <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+                  <label
+                    for="unregSgstCtrlAcCredit"
+                    class="col-sm-4 col-form-label"
+                    id="ID029"
                     >SGST Ctrl. A/C</label
                   >
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="unregSgstCtrlAcCredit"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="unregSgstCtrlAcDebit"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
 
                 <div class="row mb-1">
-                  <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+                  <label
+                    for="unregIgstCtrlAcCredit"
+                    class="col-sm-4 col-form-label"
+                    id="ID029"
                     >IGST Ctrl. A/C</label
                   >
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="unregIgstCtrlAcCredit"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="unregIgstCtrlAcDebit"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
@@ -374,12 +558,20 @@
                 </div>
 
                 <div class="row mb-1">
-                  <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+                  <label
+                    for="impIgstAcCredit"
+                    class="col-sm-4 col-form-label"
+                    id="ID029"
                     >IGST A/C</label
                   >
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="impIgstAcCredit"
+                      />
                     </mat-form-field>
                   </div>
 
@@ -387,14 +579,22 @@
                 </div>
 
                 <div class="row mb-1">
-                  <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+                  <label
+                    for="impIgstCtrlAcDebit"
+                    class="col-sm-4 col-form-label"
+                    id="ID029"
                     >IGST Ctrl. A/C</label
                   >
                   <div class="col-md-4"></div>
 
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="impIgstCtrlAcDebit"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
@@ -402,7 +602,7 @@
             </div>
 
             <div class="row">
-              <div class="col-md-12 border border-2 mt-2  pt-2">
+              <div class="col-md-12 border border-2 mt-2 pt-2">
                 <h4 class="text-center heading">Export Accounts</h4>
                 <div class="row mb-1">
                   <label
@@ -427,25 +627,41 @@
                 </div>
 
                 <div class="row mb-1">
-                  <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+                  <label
+                    for="expIgstAcDebit"
+                    class="col-sm-4 col-form-label"
+                    id="ID029"
                     >IGST A/C</label
                   >
                   <div class="col-md-4"></div>
 
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="expIgstAcDebit"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
 
                 <div class="row mb-1">
-                  <label for="mode" class="col-sm-4 col-form-label" id="ID029"
+                  <label
+                    for="expIgstCtrlAcCredit"
+                    class="col-sm-4 col-form-label"
+                    id="ID029"
                     >IGST Ctrl. A/C</label
                   >
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="mode" />
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="expIgstCtrlAcCredit"
+                      />
                     </mat-form-field>
                   </div>
 

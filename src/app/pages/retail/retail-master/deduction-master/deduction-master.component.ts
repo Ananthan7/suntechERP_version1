@@ -495,7 +495,6 @@ export class DeductionMasterComponent implements OnInit {
     }
   }
 
-  BranchDataSelected(e: any) {}
 
   lookupSelect(e: any, controller?: any, modelfield?: any) {
     console.log(e);
