@@ -1672,9 +1672,9 @@ export class ProcessMasterComponent implements OnInit {
     (event.target as HTMLInputElement).value = formattedValue;
   }
   showAlertIfCodeIsEmpty(): void {
-    if (this.processMasterForm.value.processCode == '') {
-      this.commonService.toastErrorByMsgId('MSG1680')//Process Code cannot be empty
-    }
+    // if (this.processMasterForm.value.processCode == '') {
+    //   this.commonService.toastErrorByMsgId('MSG1680')//Process Code cannot be empty
+    // }
   }
 
   lookupKeyPress(event: any, form?: any) {

@@ -13,7 +13,7 @@
     [isViewMore]="!viewMode"
     (saveClick)="formSubmit()"
     (cancelClick)="close()"
-    [isViewDelete]="viewMode"
+    [isViewDelete]="deleteMode"
     (deleteClick)="deleteDepartmentMaster()"
   ></modal-header>
   <!-- content section -->
@@ -162,7 +162,7 @@
                         [disabled]="viewMode"
                       >
                         <mat-option
-                          *ngFor="let option of PDEPTMST_WEEKOFF1"
+                          *ngFor="let option of weekOff"
                           [value]="option.value"
                         >
                           {{ option.name }}
@@ -179,7 +179,7 @@
                         [disabled]="viewMode"
                       >
                         <mat-option
-                          *ngFor="let option of PDEPTMST_WEEKOFF1"
+                          *ngFor="let option of weekOffType"
                           [value]="option.value"
                         >
                           {{ option.name }}
@@ -209,7 +209,7 @@
                         [disabled]="viewMode"
                       >
                         <mat-option
-                          *ngFor="let option of PDEPTMST_WEEKOFF1"
+                          *ngFor="let option of weekOff"
                           [value]="option.value"
                         >
                           {{ option.name }}
@@ -226,7 +226,7 @@
                         [disabled]="viewMode"
                       >
                         <mat-option
-                          *ngFor="let option of PDEPTMST_WEEKOFF1"
+                          *ngFor="let option of weekOffType"
                           [value]="option.value"
                         >
                           {{ option.name }}

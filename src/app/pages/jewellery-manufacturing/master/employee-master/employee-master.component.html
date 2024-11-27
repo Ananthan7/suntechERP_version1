@@ -341,7 +341,7 @@
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-2 col-form-label">
-                    Date of Joinong</label
+                    Date of Joining</label
                   >
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
@@ -398,10 +398,10 @@
                   >
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <mat-select formControlName="bloodGroup">
+                      <mat-select formControlName="BloodGroup" [disabled]="viewMode">
                         <mat-option
                           *ngFor="let data of bloodGroupList"
-                          [value]="data.ENGLISH"
+                          [value]="data.SRNO"
                           >{{ data.ENGLISH }}</mat-option
                         >
                       </mat-select>

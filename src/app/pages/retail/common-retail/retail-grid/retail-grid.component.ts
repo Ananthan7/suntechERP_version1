@@ -402,7 +402,7 @@ export class RetailGridComponent implements OnInit {
 
   screenWisePayload(screenName: any, gridData: any){
     let payloadData;
-console.log(screenName)
+
     switch (screenName) {
         case 'POS Salesman Wise Profit Analysis':
           let logData =  {
@@ -511,6 +511,34 @@ console.log(screenName)
             }
           }
         break;
+
+        case 'POS Target Dashboard':
+        let targetDasboardRPT =  {
+          "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
+          "REFMID": "",
+          "USERNAME": this.CommonService.userName,
+          "MODE": "PRINT",
+          "DATETIME": this.CommonService.formatDateTime(new Date()),
+          "REMARKS":"",
+          "SYSTEMNAME": "",
+          "BRANCHCODE": this.CommonService.branchCode,
+          "VOCNO": "",
+          "VOCDATE": "",
+          "YEARMONTH" : this.CommonService.yearSelected
+        }
+        payloadData = {
+          "SPID": "0154",
+          "parameter": {
+            "str_CurrFyear": gridData.CONTROL_DETAIL.str_CurrFyear,
+            "strAsOnDate": gridData.CONTROL_DETAIL.strAsOnDate,
+            "StrBranchList": gridData.CONTROL_DETAIL.StrBranchList,
+            "intShowSummary": gridData.CONTROL_DETAIL.intShowSummary,
+            "LOGDATA ": JSON.stringify(targetDasboardRPT)
+          }
+        }
+      break;
+
+
   
 
 
@@ -546,7 +574,7 @@ console.log(screenName)
   }
   printGridData(data: any) {
     let gridData= JSON.parse(data.data['CONTROL_LIST_JSON'])
-    
+
     this.CommonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', this.screenWisePayload(this.templateFetched_Data.FORM_NAME, gridData))
     .subscribe((result: any) => {
@@ -562,7 +590,7 @@ console.log(screenName)
         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
         return;
       }
-      let printContent = data[0][0].HTMLINPUT || data[0][0].HTMLOUT || data[0][0].POS_Summary_HTML || data[0][0].HTML;
+      let printContent = data[0][0].HTMLINPUT || data[0][0].HTMLOUT || data[0][0].POS_Summary_HTML || data[0][0].HTML || data[0][0].Column1;
       WindowPrt.document.write(printContent);
       WindowPrt.document.close();
       WindowPrt.focus();  

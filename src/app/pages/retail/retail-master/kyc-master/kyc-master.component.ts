@@ -1,10 +1,11 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { ChangeDetectorRef, Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { log } from 'console';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -31,17 +32,42 @@ export class KycMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private apiService: SuntechAPIService,
     private commonService: CommonServiceService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private cdr: ChangeDetectorRef
 
   ) { }
 
   kycform: FormGroup = this.formBuilder.group({
     mid: [""],
-    kyccode: [""],
-    kyccodedesc: [""],
-    transactionlimit: [""],
+    kyccode: ["",[Validators.required]],
+    kyccodedesc: ["",[Validators.required]],
+    transactionlimit: [".000",[Validators.required]],
    
   });
+
+  kyccodetype: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 14,
+    LOOKUPID: 160,
+    ORDER_TYPE: 0,
+    WHERECONDITION: "",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: 'Doc. Code',
+    SEARCH_VALUE: "",
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  
+  selectedcodetype(e: any,data:any) {
+    console.log(data);
+    console.log(e);
+    const updatedSRNO = data.data.KYC_SRNO - 1; 
+    console.log(updatedSRNO)
+    this.maindetails[updatedSRNO].KYC_DOCTYPE = e.GENMST_CODE;
+    this.maindetails[updatedSRNO].KYC_DOCDESC = e.GENMST_DESC;
+    console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].GENMST_CODE);
+    console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].GENMST_DESC);
+  }
 
   ngOnInit(): void {
     console.log(this.content);
@@ -69,7 +95,7 @@ export class KycMasterComponent implements OnInit {
   checkcode() {
     const kyc_code = this.kycform.controls.kyccode;
     if (!kyc_code.value || kyc_code.value.trim() === "") {
-      this.commonService.toastErrorByMsgId('MSG1124');
+      this.commonService.toastErrorByMsgId('MSG1363');
       this.renderer.selectRootElement('#kyccode')?.focus();
     }
   }
@@ -119,6 +145,13 @@ export class KycMasterComponent implements OnInit {
     this.kycform.controls.kyccode.setValue(this.content?.KYC_CODE);
     this.kycform.controls.kyccodedesc.setValue(this.content?.KYC_DESC);
     this.kycform.controls.transactionlimit.setValue(this.content?.KYC_TRANSLIMIT);
+
+    this.kycform.controls.transactionlimit.setValue(
+      this.commonService.decimalQuantityFormat(
+        this.commonService.emptyToZero(this.content?.KYC_TRANSLIMIT),
+        "AMOUNT"
+      )
+    );
   }
 
   editController(DATA: any) {
@@ -300,12 +333,6 @@ export class KycMasterComponent implements OnInit {
       let srno = this.maindetails.length;
       srno+=1;
 
-      // let data = {
-      //   "SRNO": srno,
-      //   "DOC_TYPE" : "",
-      //   "DOC_DESC" : ""
-      // }
-
       let data = {
         "UNIQUEID": srno ,
         "KYC_DETCODE": "",
@@ -314,6 +341,7 @@ export class KycMasterComponent implements OnInit {
         "KYC_DOCDESC": ""
       }
       this.maindetails.push(data);
+      this.cdr.detectChanges();
       
     }
 
