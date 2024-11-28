@@ -1,7 +1,7 @@
 <div>
     <!-- header section starts -->
     <div class="card-content border-bottom d-flex justify-content-between p-2">
-        <h5 class="pos-modaltitle" id="modal-dia-metal">POS Salesperson Target Master</h5>
+        <h5 class="pos-modaltitle" id="modal-dia-metal">POS Salesperson Target</h5>
         <button type="button" class="btn btn-close close-btn" (click)="close()">
             <i class="feather icon-x close-icon"></i>
         </button>
@@ -20,8 +20,8 @@
                                     Code :</label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                            autocomplete="off" />
+                                        <input type="text" #codeInput matInput id="code" formControlName="code" UpperCaseDirective
+                                            autocomplete="off" maxlength="15" (focusout)="checkcode()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -90,7 +90,18 @@
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" #codeInput matInput formControlName="salesman"
-                                            UpperCaseDirective autocomplete="off" />
+                                            UpperCaseDirective autocomplete="off" (focusout)="SPvalidateLookupFieldModified(
+                                                $event,
+                                                SalesmanData,
+                                                ['salesman'],
+                                                false,
+                                                ['SALESPERSON_CODE'],
+                                                false
+                                            )"/>
+
+                                            <master-search [MasterSearchData]="SalesmanData" #overlaysalesman  class="masterSearch" 
+                                        (newRowClick)="salesmanSelected($event)">
+                                    </master-search>
 
                                     </mat-form-field>
                                 </div>
@@ -107,7 +118,7 @@
                                 </div>
                                 <div class="your-box-container">
                                     <div class="row">
-                                        <mat-radio-group aria-label="Select an option" formControlName="diamond_division">
+                                        <mat-radio-group aria-label="Select an option" formControlName="diamond_division" >
                                             <mat-radio-button value="F" id="diamond_sale_amount"
                                                 class="mx-4 mt-2"><b>Sale Amount</b></mat-radio-button>
                                             <mat-radio-button value="P" id="diamond_profit"
@@ -125,7 +136,7 @@
                                 </div>
                                 <div class="your-box-container">
                                     <div class="row">
-                                        <mat-radio-group aria-label="Select an option" formControlName="metal_division">
+                                        <mat-radio-group aria-label="Select an option" formControlName="metal_division" (change)="disabletable()">
                                             <mat-radio-button value="F" id="metal_qty"
                                                 class="mx-4 mt-2"><b>Qty</b></mat-radio-button>
                                             <mat-radio-button value="P" id="metal_making" class="mx-2 mt-2"><b>Making
@@ -153,8 +164,8 @@
                                         </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" matInput formControlName="diamondjewellery"
-                                                    UpperCaseDirective />
+                                                <input type="text" class="text-right" matInput formControlName="diamondjewellery" AmountDecimalInput (change)="addmonthtosubgrid()"
+                                                     />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -165,8 +176,8 @@
                                         </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" matInput formControlName="goldmakingcharge"
-                                                    UpperCaseDirective />
+                                                <input type="text" class="text-right" matInput formControlName="goldmakingcharge" AmountDecimalInput (change)="setdia_amount()"
+                                                     />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -176,8 +187,8 @@
                                         </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" matInput formControlName="goldquantity"
-                                                    UpperCaseDirective />
+                                                <input type="text" class="text-right" matInput formControlName="goldquantity"
+                                                    MetalDecimalInput (change)="setgold_amt()" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -197,19 +208,11 @@
                                         <div class="col-md-7">
                                             <mat-form-field style="width: 100%;" appearance="outline">
                                                 <mat-select formControlName="dia_division" multiple>
-                                                  <mat-option value="1">1</mat-option>
-                                                  <mat-option value="2">2</mat-option>
-                                                  <mat-option value="3">3</mat-option>
-                                                  <mat-option value="C">C</mat-option>
-                                                  <mat-option value="D">D</mat-option>
-                                                  <mat-option value="F">f</mat-option>
-                                                  <mat-option value="L">L</mat-option>
-                                                  <mat-option value="M">M</mat-option>
-                                                  <mat-option value="N">N</mat-option>
-                                                  <mat-option value="P">P</mat-option>
-                                                  <mat-option value="W">W</mat-option>
-                                                  <mat-option value="Y">y</mat-option>
-                                                  <mat-option value="Z">z</mat-option>
+                                                  <mat-option
+                                                    *ngFor="let option of diamond_drop"
+                                                    [value]="option.DIVISION_CODE">
+                                                    {{ option.DIVISION_CODE }}
+                                                </mat-option>
                                                 </mat-select>
                                               </mat-form-field>
                                               
@@ -221,9 +224,11 @@
                                         <div class="col-md-7">
                                             <mat-form-field style="width: 100%;" appearance="outline">
                                                 <mat-select formControlName="metal_divisions_" multiple>
-                                                  <mat-option value="g">G</mat-option>
-                                                  <mat-option value="s">S</mat-option>
-                                                  <mat-option value="u">U</mat-option>
+                                                    <mat-option
+                                                    *ngFor="let option of metal_drop"
+                                                    [value]="option.DIVISION_CODE">
+                                                    {{ option.DIVISION_CODE }}
+                                                </mat-option>
                                                 </mat-select>
                                               </mat-form-field>
                                         </div>
@@ -263,9 +268,21 @@
                         [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
                         <dxi-column dataField="SRNO" caption="SR NO"></dxi-column>
                         <dxi-column dataField="MONTH" caption="MONTH"></dxi-column>
-                        <dxi-column dataField="DIA_AMOUNT" caption="DIA AMOUNT"></dxi-column>
-                        <dxi-column dataField="GOLD_AMOUNT" caption="GOLD AMOUNT"></dxi-column>
-                        <dxi-column dataField="GOLD_QTY" caption="GOLD QTY"></dxi-column>
+
+                        <dxi-column dataField="DIA_TARGET" caption="DIA AMOUNT" cellTemplate="dia_amount" AmountDecimalInput></dxi-column>
+                        <div *dxTemplate="let data of 'dia_amount'">
+                            <input type="number" [disabled]="viewMode"  (change)="changediamond_amt(data,$event)" [value]="data.value.toFixed(2)" style="width: 100%;" AmountDecimalInput />
+                        </div>
+
+                        <dxi-column dataField="GOLD_AMOUNT" caption="GOLD AMOUNT" cellTemplate="gold_amt" AmountDecimalInput ></dxi-column>
+                        <div *dxTemplate="let data of 'gold_amt'" >
+                            <input type="number" [disabled]="viewMode"  (change)="chnagegold_amt(data,$event)" [value]="data.value" style="width: 100%;" AmountDecimalInput />
+                        </div>
+
+                        <dxi-column dataField="GOLD_QTY" caption="GOLD QTY" cellTemplate="gold_qty" AmountDecimalInput></dxi-column>
+                        <div *dxTemplate="let data of 'gold_qty'">
+                            <input type="number" [disabled]="viewMode"  (change)="changegold_qty(data,$event)" [value]="data.value" style="width: 100%;" AmountDecimalInput />
+                        </div>
 
                     </dx-data-grid>
                 </div>

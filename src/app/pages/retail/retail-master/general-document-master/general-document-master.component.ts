@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -32,6 +32,8 @@ export class GeneralDocumentMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private apiService: SuntechAPIService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
+
   ) { }
 
 
@@ -323,8 +325,8 @@ export class GeneralDocumentMasterComponent implements OnInit {
  
   
   generaldocumentform: FormGroup = this.formBuilder.group({
-    code:[''],
-    description:[''],
+    code:['',[Validators.required]],
+    description:['',[Validators.required]],
     reminderdays:[''],
     cust_applicable:[''],
     cust_mandatory:[''],
@@ -500,6 +502,21 @@ export class GeneralDocumentMasterComponent implements OnInit {
     });
   }
 
+  checkcode() {
+    const kyc_code = this.generaldocumentform.controls.code;
+    if (!kyc_code.value || kyc_code.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1124	');
+      this.renderer.selectRootElement('#code')?.focus();
+    }
+  }
+
+  checkdesc() {
+    const kyc_desc = this.generaldocumentform.controls.description;
+    if (!kyc_desc.value || kyc_desc.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1193');
+      this.renderer.selectRootElement('#description')?.focus();
+    }
+  }
 
   close(data?: any) {
     this.activeModal.close(data);
@@ -510,19 +527,21 @@ export class GeneralDocumentMasterComponent implements OnInit {
     // console.log( this.generaldocumentform.controls.cust_applicable.value)
     // console.log( this.generaldocumentform.controls.cust_mandatory.value)
     // return;
+
+
     const postData = {
       "MID": 0,
       "GENMST_CODE": this.generaldocumentform.controls.code.value,
       "GENMST_DESC": this.generaldocumentform.controls.description.value,
       "GENMST_REMAINDER_DAYS": this.generaldocumentform.controls.reminderdays.value,
-      "GENMST_CUST_APPLICABLE": this.generaldocumentform.controls.cust_applicable.value === true ? 1 : 0,
-      "GENMST_CUST_MANDATORY": this.generaldocumentform.controls.cust_mandatory.value === true ? 1 : 0,
-      "GENMST_BRANCH_APPLICABLE": this.generaldocumentform.controls.branch_applicable.value === true ? 1 : 0,
-      "GENMST_BRANCH_MANDATORY": this.generaldocumentform.controls.branch_mandatory.value === true ? 1 : 0,
-      "GENMST_SUPPLIER_APPLICABLE": this.generaldocumentform.controls.supplier_applicable.value === true ? 1 : 0,
-      "GENMST_SUPPLIER_MANDATORY": this.generaldocumentform.controls.supplier_mandatory.value === true ? 1 : 0,
-      "GENMST_EMP_APPLICABLE": this.generaldocumentform.controls.employee_applicable.value === true ? 1 : 0,
-      "GENMST_EMP_MANDATORY": this.generaldocumentform.controls.employee_mandatory.value ===  true ? 1 : 0,
+      "GENMST_CUST_APPLICABLE": this.generaldocumentform.controls.cust_applicable.value ? 1 : 0,
+      "GENMST_CUST_MANDATORY": this.generaldocumentform.controls.cust_mandatory.value ? 1 : 0,
+      "GENMST_BRANCH_APPLICABLE": this.generaldocumentform.controls.branch_applicable.value ? 1 : 0,
+      "GENMST_BRANCH_MANDATORY": this.generaldocumentform.controls.branch_mandatory.value ? 1 : 0,
+      "GENMST_SUPPLIER_APPLICABLE": this.generaldocumentform.controls.supplier_applicable.value ? 1 : 0,
+      "GENMST_SUPPLIER_MANDATORY": this.generaldocumentform.controls.supplier_mandatory.value ? 1 : 0,
+      "GENMST_EMP_APPLICABLE": this.generaldocumentform.controls.employee_applicable.value ? 1 : 0,
+      "GENMST_EMP_MANDATORY": this.generaldocumentform.controls.employee_mandatory.value ? 1 : 0,
       "UDF1":  this.generaldocumentform.controls.user_defined_1.value,
       "UDF2": this.generaldocumentform.controls.user_defined_2.value,
       "UDF3": this.generaldocumentform.controls.user_defined_3.value,

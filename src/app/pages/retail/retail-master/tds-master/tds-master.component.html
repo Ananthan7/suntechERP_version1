@@ -81,7 +81,7 @@
                                                 ['ACCODE'],
                                                 false
                                             )" />
-                                                <master-search class="masterSearch" [MasterSearchData]="creditacdata"
+                                                <master-search *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="creditacdata"
                                                     (newRowClick)="creditcodeselected($event)">
                                                 </master-search>
                                             </mat-form-field>
@@ -108,7 +108,7 @@
                                                     ['ACCODE'],
                                                     false
                                                 )" />
-                                                <master-search class="masterSearch" [MasterSearchData]="debitacdata"
+                                                <master-search *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="debitacdata"
                                                     (newRowClick)="debitcodeselected($event)">
                                                 </master-search>
                                             </mat-form-field>
@@ -119,7 +119,7 @@
 
                             <div class="row text-center">
                                 <div class="col-sm-8">
-                                    <mat-checkbox formControlName="call" id="call"> Cal On Taxable Amt</mat-checkbox>
+                                    <mat-checkbox formControlName="call" id="call" [disabled]="viewMode"> Cal On Taxable Amt</mat-checkbox>
                                 </div>
                             </div>
                         </div>
@@ -155,7 +155,7 @@
                     <div class="col-md-8">
                         <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
                             [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO"
-                            style="height: 250px;" [paging]="{ enabled: false }">
+                            style="height: 250px;" [paging]="{ enabled: true }">
 
                             <dxi-column dataField="SRNO" caption="S.NO #">
                             </dxi-column>

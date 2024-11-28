@@ -83,6 +83,7 @@ export class TdsMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 7,
     ORDER_TYPE: 0,
+    SEARCH_HEADING: 'Credit A/c',
     WHERECONDITION: "ACCODE <>'' and ACCOUNT_MODE in ('G','B','L')",
     SEARCH_FIELD: "ACCODE",
     SEARCH_VALUE: "",
@@ -99,6 +100,7 @@ export class TdsMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 7,
     ORDER_TYPE: 0,
+    SEARCH_HEADING: 'Debit A/c',
     WHERECONDITION: "ACCODE <>'' and ACCOUNT_MODE in ('G','B','L')",
     SEARCH_FIELD: "ACCODE",
     SEARCH_VALUE: "",
@@ -150,7 +152,6 @@ export class TdsMasterComponent implements OnInit {
         console.log(this.dyndatas);
         this.dyndatas.tdsDetails.forEach((ele:any) => {
           ele.EFFECT_FROM_DATE = new Date(ele.EFFECT_FROM_DATE).toISOString().split('T')[0];
-
           ele.INDIVIDUAL_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.INDIVIDUAL_PER),"METAL");
           ele.COMPANY_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.COMPANY_PER),"METAL");
           ele.NOPAN_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.NOPAN_PER),"METAL");
@@ -244,6 +245,14 @@ export class TdsMasterComponent implements OnInit {
 
   formSubmit() {
 
+    this.maindetails.forEach((e:any) => {
+      e.BRANCH_CODE = this.curr_branch;
+      e.UNIQUE_ID = e.SRNO;
+      e.REFMID = 0;
+      e.ON_TAXABLEAMT = true;
+      e.INCLUDE_GST = true;
+    });
+
     const postData = {
       "TDS_CODE": this.tdsform.controls.section_code.value,
       "TDS_DESCRIPTION": this.tdsform.controls.description.value,
@@ -258,23 +267,9 @@ export class TdsMasterComponent implements OnInit {
       "TDS_LIMIT": 0,
       "ON_TAXABLEAMT": this.tdsform.controls.call.value,
       "INCLUDE_GST": true,
-      "tdsDetails": [
-        {
-          "UNIQUE_ID": 0,
-          "REFMID": 0,
-          "EFFECT_FROM_DATE": "2024-11-18T06:34:50.057Z",
-          "INDIVIDUAL_PER": 0,
-          "COMPANY_PER": 0,
-          "NOPAN_PER": 0,
-          "TDS_CODE": "string",
-          "SRNO": 0,
-          "BRANCH_CODE": "string",
-          "YEARCODE": "string",
-          "TDS_LIMIT": 0,
-          "ON_TAXABLEAMT": true,
-          "INCLUDE_GST": true
-        }
-      ]
+      "tdsDetails": 
+       this.maindetails
+      
     }
 
     if (this.flag === "EDIT") {
@@ -294,23 +289,9 @@ export class TdsMasterComponent implements OnInit {
         "TDS_LIMIT": 0,
         "ON_TAXABLEAMT": this.tdsform.controls.call.value=='Y' ? true : false,
         "INCLUDE_GST": true,
-        "tdsDetails": [
-          {
-            "UNIQUE_ID": 0,
-            "REFMID": 0,
-            "EFFECT_FROM_DATE": "2024-11-18T06:34:50.057Z",
-            "INDIVIDUAL_PER": 0,
-            "COMPANY_PER": 0,
-            "NOPAN_PER": 0,
-            "TDS_CODE": "string",
-            "SRNO": 0,
-            "BRANCH_CODE": "string",
-            "YEARCODE": "string",
-            "TDS_LIMIT": 0,
-            "ON_TAXABLEAMT": true,
-            "INCLUDE_GST": true
-          }
-        ]
+        "tdsDetails": 
+          this.maindetails
+        
       }
 
 
@@ -632,7 +613,9 @@ export class TdsMasterComponent implements OnInit {
            console.log(result.dynamicData);
            let dyndatas = result.dynamicData[0];
            dyndatas.forEach((e:any) => {
-              e.EFFECT_FROM_DATE
+              let date = e.EFFECT_FROM_DATE.split('/');
+              e.EFFECT_FROM_DATE = date[2]+'-'+date[1]+'-'+date[0];
+
            });
 
 
