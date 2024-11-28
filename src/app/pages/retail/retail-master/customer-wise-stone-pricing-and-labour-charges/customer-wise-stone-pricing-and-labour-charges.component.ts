@@ -186,7 +186,7 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
     );
 
 
-    this.dataService.getDynamicAPI('CustomerPriceMaster/GetCustomerPriceMasterDetail/' + this.content.PRICECODE+'/'+this.content.PRICECODE)
+    this.dataService.getDynamicAPI('CustomerPriceMaster/GetCustomerPriceMasterWithPriceCode/' + this.content.PRICECODE)
       .subscribe((data) => {
         if (data.status == 'Success') {
 
@@ -206,7 +206,7 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
       "CUSTOMER_CODE":  this.commonService.nullToString(this.customerWiseStonePriceForm.value.pricecode),
       "DESCRIPTION": "string",
       "GOLD_LOSS_PER": 0,
-      "UPDATE_ON": "string",
+      "UPDATE_ON": "2024-11-27T11:06:03.169Z",
       "PRICECODE": this.commonService.nullToString(this.customerWiseStonePriceForm.value.pricecode),
       "MARGIN_PER": 0,
       "LAB_TYPE": "string",
@@ -264,7 +264,7 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
 
   update(){
 
-    let API = 'CustomerPriceMaster/UpdateCustomerPriceMaster/' + this.content.PRICECODE+'/'+this.content.PRICECODE;
+    let API = 'CustomerPriceMaster/UpdateCustStoneLabourMaster/' + this.content.PRICECODE;
     let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -305,7 +305,7 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'CustomerPriceMaster/DeleteCustomerPriceMaster/' + this.content.PRICECODE ;
+        let API = 'CustomerPriceMaster/DeleteCustStoneLabourMaster/' + this.content.PRICECODE ;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

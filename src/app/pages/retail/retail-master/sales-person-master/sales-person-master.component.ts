@@ -52,75 +52,25 @@ export class SalesPersonMasterComponent implements OnInit {
   
   salesPersonForm: FormGroup = this.formBuilder.group({
     code: [''],
-    prefixcodedes: ['',[Validators.required]],
-    currencyRate: ['',[Validators.required]],
-    currency: [''],
-    lastno: ['000000', ''],
-    costcode: ['',[Validators.required]],
-    brand: [''],
+    active: [''],
+    description: [''],
+    shortname: [''],
+    commisionMetal: [''],
+    commisionOthers: [''],
+    mobile: [''],
     branch: [''],
-    Category:[''],
-    subCategory:[''],
-    Country:[''],
-    Type:[''],
-    suffixcode: [''],
-    hsn: [''],
-    jobcardprefix:false,
-    setrefprefix: false,
-    Componentprefix: false,
-    refinervprefix: false,
-    designprefix: false,
-    userdefined_1: [''],
-    userdefined_2: [''],
-    userdefined_3: [''],
-    userdefined_4: [''],
-    userdefined_5: [''],
-    userdefined_6: [''],
-    userdefined_7: [''],
-    userdefined_8: [''],
-    userdefined_9: [''],
-    userdefined_10: [''],
-    userdefined_11: [''],
-    userdefined_12: [''],
-    userdefined_13: [''],
-    userdefined_14: [''],
-    userdefined_15: [''],
-    currencydes:[''],
-    boilProcessPrefix: false,
+    employeecode: [''],
+    glcode: [''],
+    emailId: [''],
   })
 
   setFormValues() {
     console.log(this.content);
     if (!this.content) return
     this.salesPersonForm.controls.prefixcode.setValue(this.content.PREFIX_CODE)
-    this.salesPersonForm.controls.prefixcodedes.setValue(this.content.DESCRIPTION)
-    this.salesPersonForm.controls.lastno.setValue(this.content.LAST_NO)
-    this.salesPersonForm.controls.currency.setValue(this.content.CURRENCY_CODE)
-    this.salesPersonForm.controls.currencyRate.setValue(this.content.CONV_RATE)
-    this.salesPersonForm.controls.refinervprefix.setValue(this.viewchangeYorN(this.content.REFINE_PREFIX))
-    this.salesPersonForm.controls.setrefprefix.setValue(this.viewchangeYorN(this.content.SETREF_PREFIX))
-    this.salesPersonForm.controls.jobcardprefix.setValue(this.viewchangeYorN(this.content.JOB_PREFIX))
-    this.salesPersonForm.controls.designprefix.setValue(this.viewchangeYorN(this.content.DESIGN_PREFIX))
-    this.salesPersonForm.controls.Componentprefix.setValue(this.viewchangeYorN(this.content.COMP_PREFIX))
-    this.salesPersonForm.controls.branch.setValue(this.content.BRANCH_CODE)
-    //this.salesPersonForm.controls.suffixcode.setValue(this.content.SCHEME_PREFIX)
-    this.salesPersonForm.controls.Country.setValue(this.content.COUNTRY_CODE)
-    this.salesPersonForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
-    this.salesPersonForm.controls.Type.setValue(this.content.TYPE_CODE)
-    this.salesPersonForm.controls.Category.setValue(this.content.CATEGORY_CODE)
-    this.salesPersonForm.controls.brand.setValue(this.content.BRAND_CODE)
-    this.salesPersonForm.controls.costcode.setValue(this.content.COUNTRY_CODE)
-    this.salesPersonForm.controls.hsn.setValue(this.content.HSN_CODE)
+   
   }
-  /**USE: to set currency from company parameter */
-  setCompanyCurrency() {
-    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
-    this.salesPersonForm.controls.currency.setValue(CURRENCY_CODE);
-    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == CURRENCY_CODE);
-    this.salesPersonForm.controls.currencyRate.setValue(
-      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-    );
-  }
+
 
   BranchCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -284,54 +234,54 @@ export class SalesPersonMasterComponent implements OnInit {
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
+
   setPostData(){
-    return{
-    "PREFIX_CODE": this.salesPersonForm.value.prefixcode?.toUpperCase(),
-    "DESCRIPTION": this.salesPersonForm.value.prefixcodedes?.toUpperCase(),
-    "LAST_NO": this.commonService.nullToString(this.salesPersonForm.value.lastno),
-    "CURRENCY_CODE": this.commonService.nullToString(this.salesPersonForm.value.currency),
-    "CONV_RATE": this.commonService.emptyToZero(this.salesPersonForm.value.currencyRate),
-    "COST_CODE": this.commonService.nullToString(this.salesPersonForm.value.costcode),
-    "CATEGORY_CODE":this.commonService.nullToString(this.salesPersonForm.value.Category),
-    "SUBCATEGORY_CODE":this.commonService.nullToString(this.salesPersonForm.value.subCategory),
-    "BRAND_CODE":this.commonService.nullToString(this.salesPersonForm.value.brand),
-    "TYPE_CODE": this.commonService.nullToString(this.salesPersonForm.value.Type),
-    "COUNTRY_CODE":this.commonService.nullToString(this.salesPersonForm.value.Country),
-    "MID":this.content?.MID || 0,
-    "DIVISION": "S",
-    "SYSTEM_DATE": "2023-11-28T08:50:38.675Z",
-    "PM_BRANCHCODE": "",
-    "JOB_PREFIX": this.onchangeCheckBox(this.salesPersonForm.value.jobcardprefix),
-    "SETREF_PREFIX": this.onchangeCheckBox(this.salesPersonForm.value.setrefprefix),
-    "BRANCH_CODE": this.commonService.branchCode,
-    "BOIL_PREFIX": true,
-    "SCHEME_PREFIX": true,
-    "UDF1": this.salesPersonForm.value.userdefined_1 || "",
-    "UDF2": this.salesPersonForm.value.userdefined_2 || "",
-    "UDF3": this.salesPersonForm.value.userdefined_3 || "",
-    "UDF4": this.salesPersonForm.value.userdefined_4 || "",
-    "UDF5": this.salesPersonForm.value.userdefined_5 || "",
-    "UDF6": this.salesPersonForm.value.userdefined_6 || "",
-    "UDF7": this.salesPersonForm.value.userdefined_7 || "",
-    "UDF8": this.salesPersonForm.value.userdefined_8 || "",
-    "UDF9": this.salesPersonForm.value.userdefined_9 || "",
-    "UDF10": this.salesPersonForm.value.userdefined_10 || "",
-    "UDF11": this.salesPersonForm.value.userdefined_11 || "",
-    "UDF12": this.salesPersonForm.value.userdefined_12 || "",
-    "UDF13": this.salesPersonForm.value.userdefined_13 || "",
-    "UDF14": this.salesPersonForm.value.userdefined_14 || "",
-    "UDF15": this.salesPersonForm.value.userdefined_15 || "",
-    "TAG_WT": 0,
-    "COMP_PREFIX": this.onchangeCheckBox(this.salesPersonForm.value.Componentprefix),
-    "DESIGN_PREFIX": this.onchangeCheckBox(this.salesPersonForm.value.designprefix),
-    "REFINE_PREFIX": this.onchangeCheckBox(this.salesPersonForm.value.refinervprefix),
-    "SUBLEDGER_PREFIX": true,
-    "SUFFIX_CODE": this.salesPersonForm.value.suffixcode || "",
-    "HSN_CODE": this.salesPersonForm.value.hsn || "",
-  }
+
+   
+    // mobile: [''],
+    // emailId: [''],
+
+
+    return {
+      "SALESPERSON_CODE": this.commonService.nullToString(this.salesPersonForm.value.code),
+      "DESCRIPTION": this.commonService.nullToString(this.salesPersonForm.value.description),
+      "COMMISSION": this.commonService.emptyToZero(this.salesPersonForm.value.commisionMetal),
+      "MID": 0,
+      "SALESMAN_IMAGE_PATH": "",
+      "SALESMAN_IMAGE": "",
+      "SYSTEM_DATE": "2024-11-27T11:06:03.169Z",
+      "SP_SHORTNAME": this.commonService.nullToString(this.salesPersonForm.value.shortname),
+      "SP_BRANCHCODE": this.commonService.nullToString(this.salesPersonForm.value.branch),
+      "EMPMST_CODE":this.commonService.nullToString(this.salesPersonForm.value.employeecode),
+      "ACTIVE": this.salesPersonForm.value.active,
+      "SPACCODE": this.commonService.nullToString(this.salesPersonForm.value.glcode),
+      "COMMISSIONDIA": this.commonService.emptyToZero(this.salesPersonForm.value.commisionOthers)
+    }
   }
 
   formSubmit() {
@@ -340,17 +290,13 @@ export class SalesPersonMasterComponent implements OnInit {
       this.update()
       return
     }
-    // if (this.salesPersonForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
+  
 
-    let API = 'PrefixMaster/InsertPrefixMaster'
+    let API = 'SalesPersonMaster/InsertSalesPersonMaster'
     let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
@@ -366,9 +312,6 @@ export class SalesPersonMasterComponent implements OnInit {
               }
             });
           }
-        } else {
-          this.showErrorDialog('Code Already Exists')
-        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -379,7 +322,7 @@ export class SalesPersonMasterComponent implements OnInit {
       return
     }
 
-    let API = 'PrefixMaster/UpdatePrefixMaster/' + this.salesPersonForm.value.prefixcode
+    let API = 'SalesPersonMaster/UpdateSalesPersonMaster/' + this.content.SALESPERSON_CODE;
     let postData = this.setPostData()
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -418,7 +361,7 @@ export class SalesPersonMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'PrefixMaster/DeletePrefixMaster/' + this.salesPersonForm.value.prefixcode
+        let API = 'SalesPersonMaster/DeleteSalesPersonMaster/' + this.content.SALESPERSON_CODE;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -459,17 +402,7 @@ export class SalesPersonMasterComponent implements OnInit {
       }
     });
   }
-  showErrorDialog(message: string): void {
-    Swal.fire({
-      title: message,
-      text: '',
-      icon: 'error',
-      confirmButtonColor: '#336699',
-      confirmButtonText: 'Ok'
-    }).then((result: any) => {
-      // this.afterSave(result.value)
-    });
-  }
+
 
 }
 
