@@ -800,8 +800,9 @@ export class ProcessMasterComponent implements OnInit {
         this.sequencesConfirmation().then((secondResult) => {
           this.saveFinalData()
         });
-      } else {
-        this.saveFinalData()
+      }else  if (firstResult.isDenied) {
+        console.log("No Data");
+        
       }
     });
   }

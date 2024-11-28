@@ -101,6 +101,7 @@ import { DateComponent } from './common/date/date.component';
 import { AsOnDateComponent } from './common/as-on-date/as-on-date.component';
 import { CommonButtonsComponent } from './common/common-buttons/common-buttons.component';
 import { AlphabetOnlyDirective } from './directives/appAlphabetOnly.directive';
+import { AlphaNumericOnlyDirective } from './directives/appAlphaNumericOnly';
 import { ApplyOnlyNumbersDirective } from './directives/apply-only-numbers.directive';
 import { ReportScreenButtonsComponent } from './common/report-screen-buttons/report-screen-buttons.component';
 
@@ -123,6 +124,7 @@ import { ReportScreenButtonsComponent } from './common/report-screen-buttons/rep
     MasterSearchComponent,
     AuditTrailComponent,
     AlphabetOnlyDirective,
+    AlphaNumericOnlyDirective,
     NumericWithoutCommaDirective,
     NumericInputDirective,
     DecimalInputDirective,
@@ -254,6 +256,7 @@ import { ReportScreenButtonsComponent } from './common/report-screen-buttons/rep
     AlphabetsOnlyDirective,
     DecimalInputDirective,
     AlphabetOnlyDirective,
+    AlphaNumericOnlyDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,
