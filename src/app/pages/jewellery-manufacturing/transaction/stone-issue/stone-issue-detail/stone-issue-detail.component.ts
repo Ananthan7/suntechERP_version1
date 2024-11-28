@@ -191,6 +191,7 @@ export class StoneIssueDetailComponent implements OnInit {
     RATEFC: [''],
     VOCNO: [''],
     VOCDATE: [''],
+    JOB_DATE: [''],
     SUB_STOCK_CODE: [''],
     BRANCH_CODE: [''],
     YEARMONTH: [''],
@@ -303,6 +304,10 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   setOnLoadDetails() {
+    let data = this.content.HEADERDETAILS
+    this.stoneIssueDetailsFrom.controls.VOCTYPE.setValue(data.VOCTYPE)
+    this.stoneIssueDetailsFrom.controls.VOCNO.setValue(data.VOCNO)
+    this.stoneIssueDetailsFrom.controls.VOCDATE.setValue(data.VOCDATE)
     let branchParam = this.comService.allbranchMaster;
     // Set LOCTYPE_CODE only if it's not already set
     if (!this.stoneIssueDetailsFrom.controls.Location.value) {
@@ -608,9 +613,9 @@ export class StoneIssueDetailComponent implements OnInit {
       "GROSS_WT": this.comService.emptyToZero(form.carat),
       "CURRENCY_CODE": this.comService.nullToString(form.CURRENCY_CODE),
       "CURRENCY_RATE": this.comService.emptyToZero(form.CURRENCY_RATE),
-      "RATEFC": this.comService.emptyToZero(form.unitrate),
+      "RATEFC": 0,
       "RATELC": this.comService.emptyToZero(form.RATELC),
-      "AMOUNTFC": this.comService.emptyToZero(form.unitrate),
+      "AMOUNTFC": 0,
       "AMOUNTLC": this.comService.emptyToZero(form.amount),
       "PROCESS_CODE": this.comService.nullToString(form.process),
       "PROCESS_NAME": this.comService.nullToString(form.processname),
@@ -626,7 +631,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "BASE_CONV_RATE": 0,
       "DT_BRANCH_CODE": this.comService.nullToString(this.comService.branchCode),
       "DT_VOCTYPE": this.comService.nullToString(form.VOCTYPE),
-      "DT_VOCNO": 0,
+      "DT_VOCNO": this.comService.emptyToZero(form.VOCNO),
       "DT_YEARMONTH": this.comService.nullToString(this.yearMonth),
       "CONSIGNMENT": this.onchangeCheckBox(form.consignment),
       "SIEVE_SET": this.comService.nullToString(form.SIEVE_SET),
@@ -641,14 +646,12 @@ export class StoneIssueDetailComponent implements OnInit {
   formSubmit(flag: any) {
     const carat = this.stoneIssueDetailsFrom.controls['carat'].value;
     const pcsValue = this.stoneIssueDetailsFrom.controls['pieces'].value;
-    console.log(carat, 'carat')
     // Check if carat is 0
     if (carat === 0 || carat === '0' || carat == null) {
       this.comService.toastErrorByMsgId('MSG1095');
       return;
     }
     if (pcsValue === 0 || pcsValue === '0' || pcsValue == null) {
-      // Show an alert message for PCS being 0
       this.comService.toastErrorByMsgId('MSG3665');
       return;
     }
@@ -688,7 +691,6 @@ export class StoneIssueDetailComponent implements OnInit {
     if (this.tableData && this.tableData.length > 0) {
       // Loop through each row in tableData and reset the relevant fields
       this.tableData.forEach((row) => {
-        console.log(row.CONSIGNMENT, 'consignment')
         row.STOCK_CODE = '';
         row.DIVCODE = '';
         row.SUB_STOCK_CODE = '';
@@ -761,8 +763,7 @@ export class StoneIssueDetailComponent implements OnInit {
         (result) => {
           this.comService.closeSnackBarMsg();
           if (result.status === "Success" && result.dynamicData && result.dynamicData.length > 0) {
-            console.log('Valid Response Data:', result.dynamicData);
-            let data = result.dynamicData[0]
+            let data = result.dynamicData[1]
             let RATEFC = data[0].RATEFC;
             this.stoneIssueDetailsFrom.controls.unitrate.setValue(RATEFC)
             this.setValueWithDecimal('unitrate',RATEFC,'AMOUNT')
@@ -815,7 +816,6 @@ export class StoneIssueDetailComponent implements OnInit {
         (result) => {
           this.comService.closeSnackBarMsg();
           if (result.status === "Success" && result.dynamicData && result.dynamicData.length > 0) {
-            console.log('Valid Response Data:', result.dynamicData);
             let data = result.dynamicData[0]
             let pointerWeight = data[0].POINTERWEIGHT;
             this.stoneIssueDetailsFrom.controls.pointerwt.setValue(pointerWeight);
@@ -1215,7 +1215,6 @@ export class StoneIssueDetailComponent implements OnInit {
 
   formatMainGrid() {
     this.tableData.forEach((item: any, index: any) => {
-      console.log(item.CARATWT_TO)
       item.CARATWT_TO = this.comService.setCommaSerperatedNumber(item.CARATWT_TO, 'METAL')
     })
   }

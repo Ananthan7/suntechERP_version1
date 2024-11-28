@@ -220,6 +220,7 @@ export class StoneIssueComponent implements OnInit {
           // this.stoneissueFrom.controls.unitrate.setValue(this.stoneIssueData[0].RATEFC)
 
           let detailData = data.Details
+          this.formatMainGrid()
           // if (detailData.length > 0) {
           //   detailData.forEach((element: any) => {
           //     element.FLAG = this.content ? this.content.FLAG : null
@@ -523,6 +524,7 @@ export class StoneIssueComponent implements OnInit {
       // this.recalculateSRNO()
       this.onSaveGridData
     }
+    this.formatMainGrid()
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
       this.comService.showSnackBarMsg('Details added successfully')//CHINNU -  MESSAGE HARD CODED
@@ -551,8 +553,8 @@ export class StoneIssueComponent implements OnInit {
       "MID": 0,
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
       "BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
-      "VOCNO": this.comService.emptyToZero(form.VOCNO),
-      "VOCDATE": (form.VOCDATE),
+      "VOCNO": this.comService.nullToString(form.VOCNO),
+      "VOCDATE": this.comService.formatDateTime(form.VOCDATE),
       "YEARMONTH": this.comService.nullToString(form.YEARMONTH),
       "DOCTIME": (form.VOCDATE),
       "CURRENCY_CODE": this.comService.nullToString(form.currency),
@@ -623,7 +625,13 @@ export class StoneIssueComponent implements OnInit {
     this.stoneissueFrom.controls.workername.setValue(this.content.WORKER_NAME?.toUpperCase())
     this.stoneissueFrom.controls.narration.setValue(this.content.REMARKS)
   }
-
+  formatMainGrid() {
+    this.stoneIssueData.forEach((item: any, index: any) => {
+      item.SRNO = index + 1
+      item.RATEFC = this.comService.setCommaSerperatedNumber(item.RATEFC, 'AMOUNT')
+      item.AMOUNTLC = this.comService.setCommaSerperatedNumber(item.AMOUNTLC, 'AMOUNT')
+    })
+  }
 
   update() {
     let FRM = this.stoneissueFrom.value
