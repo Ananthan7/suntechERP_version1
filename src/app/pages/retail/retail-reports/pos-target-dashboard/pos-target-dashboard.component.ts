@@ -34,10 +34,12 @@ export class PosTargetDashboardComponent implements OnInit {
   POSTargetStatusForm: FormGroup = this.formBuilder.group({
     branch : [''],
     asonDate : [''],
-   
+    showSelection: [''],
+    diamondSelection: [''],
+    
     POSTargetAnalysis: [''],
     templateName: [''],
-    showSelection: ['']
+
   });
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
@@ -53,6 +55,7 @@ export class PosTargetDashboardComponent implements OnInit {
 
   ytdStatusArr: any = [];
   mtdStatusArr: any = [];
+  prefetchedYearValue: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -259,7 +262,7 @@ export class PosTargetDashboardComponent implements OnInit {
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-              "str_CurrFyear": localStorage.getItem('YEAR'),
+              "str_CurrFyear": this.prefetchedYearValue? this.prefetchedYearValue : localStorage.getItem('YEAR'),
               "strAsOnDate": this.dateToPass.asonDate,
               "StrBranchList": this.POSTargetStatusForm.controls.branch.value,
               "intShowSummary": this.POSTargetStatusForm.controls.showSelection.value,
@@ -310,7 +313,7 @@ export class PosTargetDashboardComponent implements OnInit {
     let postData = {
       "SPID": "0154",
       "parameter": { 
-        "str_CurrFyear": localStorage.getItem('YEAR'),
+        "str_CurrFyear": this.prefetchedYearValue? this.prefetchedYearValue : localStorage.getItem('YEAR'),
         "strAsOnDate": this.dateToPass.asonDate,
         "StrBranchList": this.POSTargetStatusForm.controls.branch.value,
         "intShowSummary": this.POSTargetStatusForm.controls.showSelection.value,
@@ -323,7 +326,7 @@ export class PosTargetDashboardComponent implements OnInit {
     .subscribe((result: any) => {
       if(result.status != "Failed"){
         let data = result.dynamicData;
-        let printContent = data[0][0].HTMLOUT;
+        let printContent = data[0][0].Column1;
         if (printContent && Object.keys(printContent).length > 0) {
           this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
           const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
@@ -363,7 +366,7 @@ export class PosTargetDashboardComponent implements OnInit {
     let postData = {
       "SPID": "0154",
       "parameter": { 
-        "str_CurrFyear": localStorage.getItem('YEAR'),
+        "str_CurrFyear": this.prefetchedYearValue? this.prefetchedYearValue : localStorage.getItem('YEAR'),
         "strAsOnDate": this.dateToPass.asonDate,
         "StrBranchList": this.POSTargetStatusForm.controls.branch.value,
         "intShowSummary": this.POSTargetStatusForm.controls.showSelection.value,
@@ -376,7 +379,7 @@ export class PosTargetDashboardComponent implements OnInit {
       let data = result.dynamicData;
       if(result.status == "Success"){
         
-        let printContent = data[0][0].HTML;
+        let printContent = data[0][0].Column1;
         this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
         if(this.htmlPreview.changingThisBreaksApplicationSecurity){
 
@@ -419,7 +422,14 @@ export class PosTargetDashboardComponent implements OnInit {
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
       var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
-      console.log('parsed data', paresedItem?.CONTROL_DETAIL )
+      this.POSTargetStatusForm.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.StrBranchList);
+      this.POSTargetStatusForm.controls.asonDate.setValue(paresedItem?.CONTROL_DETAIL.strAsOnDate);
+      this.dateToPass.asonDate = paresedItem?.CONTROL_DETAIL.strAsOnDate;
+      this.prefetchedYearValue = paresedItem?.CONTROL_DETAIL.str_CurrFyear;
+      this.POSTargetStatusForm.controls.showSelection.setValue(paresedItem?.CONTROL_DETAIL.intShowSummary)
+
+      this.templateNameHasValue = !!paresedItem.CONTROL_HEADER.TEMPLATENAME;
+      this.POSTargetStatusForm.controls.templateName.setValue(paresedItem?.CONTROL_HEADER.TEMPLATENAME);
     }
     else{
       const userBranch = localStorage.getItem('userbranch');
