@@ -200,9 +200,9 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     LOOKUPID: 18,
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Code',
-    // SEARCH_VALUE: '',
+    SEARCH_VALUE: '',
     WHERECONDITION: "DIVISION='M'",
-    // VIEW_INPUT: true,
+    VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
