@@ -543,7 +543,7 @@ export class StoneIssueDetailComponent implements OnInit {
           this.comService.toastErrorByMsgId('MSG1531')
           this.stoneIssueDetailsFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'Location') {
+          if (FORMNAME === 'Location' || FORMNAME === 'subjobnumber') {
             this.showOverleyPanel(event, FORMNAME);
           }
           {
@@ -765,7 +765,7 @@ export class StoneIssueDetailComponent implements OnInit {
             let data = result.dynamicData[0]
             let RATEFC = data[0].RATEFC;
             this.stoneIssueDetailsFrom.controls.unitrate.setValue(RATEFC)
-            // this.setValueWithDecimal('unitrate',RATEFC,'AMOUNT')
+            this.setValueWithDecimal('unitrate',RATEFC,'AMOUNT')
           } else {
             this.comService.toastErrorByMsgId('MSG1747'); // "Not Found" error message
           }
@@ -1006,7 +1006,7 @@ export class StoneIssueDetailComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           this.tableData = result.dynamicData[0]
-          console.log(this.tableData);
+          console.log(JSON.stringify(this.tableData));
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
 
@@ -1049,7 +1049,6 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   subJobNumberValidate(event?: any) {
-    if (event?.target.value == '' || this.viewMode) return;
     // let postData = {
     //   "SPID": "071",
     //   "parameter": {
@@ -1072,7 +1071,7 @@ export class StoneIssueDetailComponent implements OnInit {
       .subscribe((result) => {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
-          let data = result.dynamicData[0]
+          let data = result.dynamicData[0] || []
           this.data = data[0].UNQ_JOB_ID;
           console.log(data[0].UNQ_JOB_ID, 'data')
           this.stoneIssueDetailsFrom.controls.process.setValue(data[0].PROCESS.toUpperCase())
@@ -1091,9 +1090,9 @@ export class StoneIssueDetailComponent implements OnInit {
 
         } else {
           // Handle case where no data is found
-          this.comService.toastErrorByMsgId('MSG1531');
-          this.stoneIssueDetailsFrom.controls.subjobnumber.setValue('');
-          this.stoneIssueDetailsFrom.controls.subjobDes.setValue('');
+          // this.comService.toastErrorByMsgId('MSG1531');
+          // this.stoneIssueDetailsFrom.controls.subjobnumber.setValue('');
+          // this.stoneIssueDetailsFrom.controls.subjobDes.setValue('');
           // this.showOverleyPanel(event, 'subjobnumber');
         }
       },
@@ -1132,7 +1131,7 @@ export class StoneIssueDetailComponent implements OnInit {
           let data = result.dynamicData[0]
           if (data[0] && data[0]?.UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
-            console.log(data, 'pick')
+            console.log(JSON.stringify(data), 'pick')
             this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION?.toUpperCase())
             this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
             this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION?.toUpperCase())
