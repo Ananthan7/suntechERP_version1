@@ -170,16 +170,28 @@ export class StoneDetailsComponent implements OnInit {
     this.enterStoneDetailsForm.controls.priceCode.setValue(value.PRICE_CODE);
   }
 
+  // stoneTypeCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 23,
+  //   SEARCH_FIELD: 'CODE',
+  //   SEARCH_HEADING: 'Stone Type Code',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "CODE<> ''",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
   stoneTypeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
+    LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Stone Type Code',
+    SEARCH_HEADING: 'Stone Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "types = 'STONE TYPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
   stoneTypeCodeSelected(value: any) {
     console.log(value);

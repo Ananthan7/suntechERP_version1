@@ -177,10 +177,16 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   setFormValues() {
     if (!this.content) return
   
+    this.customerWiseStonePriceForm.controls.pricecode.setValue(this.content.PRICECODE)
+    this.customerWiseStonePriceForm.controls.currency.setValue(this.content.CURRENCY_CODE)
+    this.customerWiseStonePriceForm.controls.currencyDetail.setValue(this.content.CURRENCY_RATE)
+  //  this.customerWiseStonePriceForm.controls.applyinPOS.setValue(this.content.PRINT_COUNT)
+    this.customerWiseStonePriceForm.controls.applyinPOS.setValue(
+      this.content.PRINT_COUNT === 1 ? true : false
+    );
 
 
-
-    this.dataService.getDynamicAPI('CustomerPriceMaster/GetCustomerPriceMasterDetail/' + this.content.PRICECODE)
+    this.dataService.getDynamicAPI('CustomerPriceMaster/GetCustomerPriceMasterDetail/' + this.content.PRICECODE+'/'+this.content.PRICECODE)
       .subscribe((data) => {
         if (data.status == 'Success') {
 
@@ -188,14 +194,6 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
           this.tableData = data.response.CUSTOMER_PRICE_DET;
           this.tableData2 = data.response.CUSTOMER_LABCHRG_DET;
           this.tableData3 = data.response.CUSTOMER_PRICE_ACCOUNT_DET;
-          this.customerWiseStonePriceForm.controls.pricecode.setValue(this.content.PRICECODE)
-          this.customerWiseStonePriceForm.controls.currency.setValue(this.content.CURRENCY_CODE)
-          this.customerWiseStonePriceForm.controls.currencyDetail.setValue(this.content.CURRENCY_RATE)
-        //  this.customerWiseStonePriceForm.controls.applyinPOS.setValue(this.content.PRINT_COUNT)
-          this.customerWiseStonePriceForm.controls.applyinPOS.setValue(
-            this.content.PRINT_COUNT === 1 ? true : false
-          );
-          
         }
       });
   }
@@ -205,7 +203,7 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   setPostData(){
     return {
       "MID": 0,
-      "CUSTOMER_CODE": "string",
+      "CUSTOMER_CODE":  this.commonService.nullToString(this.customerWiseStonePriceForm.value.pricecode),
       "DESCRIPTION": "string",
       "GOLD_LOSS_PER": 0,
       "UPDATE_ON": "string",
@@ -266,7 +264,7 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
 
   update(){
 
-    let API = 'CustomerPriceMaster/UpdateCustomerPriceMaster/' + this.content.PRICECODE ;
+    let API = 'CustomerPriceMaster/UpdateCustomerPriceMaster/' + this.content.PRICECODE+'/'+this.content.PRICECODE;
     let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -556,19 +554,30 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
     this.tableData3[value.data.SRNO - 1].ACCOUNT_HEAD = data.target.value;
   }
 
-  CalcOntemp(data:any,value: any){
-    console.log(data.target.value)
-    console.log(typeof(data.target.value))
+  // CalcOntemp(data:any,value: any){
+  //   console.log(data.target.value)
+  //   // console.log(typeof(data.target.value))
 
-    if(data.target.value === 'on'){
-      value = true;
-    }
-    else
-    {
-      value = false;
-    }
-    this.tableData3[value.data.SRNO - 1].CALC_ON_GROSS = value;
+  //   // if(data.target.value === 'on'){
+  //   //   value = true;
+  //   // }
+  //   // else
+  //   // {
+  //   //   value = false;
+  //   // }
+  //   this.tableData3[value.data.SRNO - 1].CALC_ON_GROSS = data.target.value;
+  // }
+
+  CalcOntemp(event: any, value: any): void {
+    // Convert the checkbox value to a boolean
+    const isChecked = event.target.checked;
+  
+    console.log(isChecked); // Logs true or false
+  
+    // Update the corresponding value in tableData3
+    this.tableData3[value.data.SRNO - 1].CALC_ON_GROSS = isChecked;
   }
+  
 
   
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {

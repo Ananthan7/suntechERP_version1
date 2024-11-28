@@ -58,16 +58,10 @@ export class DeductionMasterComponent implements OnInit {
   tableData: any = [];
   BranchData: MasterSearchModel = {};
   DepartmentData: MasterSearchModel = {};
-  calculationBasis = [
-    { field: "Yes", value: 1 },
-    { field: "No", value: 0 },
-  ];
+  calculationBasisDropdown: any;
   avoidFraction!: any;
   considerForLeaveSalary!: any;
   isViewReport: boolean = false;
-  data: any;
-  data1: any;
-  data2: any;
 
   countryCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -353,24 +347,24 @@ export class DeductionMasterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.calculationBasisDropdown = this.getUniqueValues(
+      this.commonService.getComboFilterByID("OVERTIME CALCULATION BY"),
+      "ENGLISH"
+    );
+
+    console.log(this.calculationBasisDropdown);
+
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
     this.initialController(this.flag, this.content);
-    this.data = this.commonService.comboFilter;
-    console.log(JSON.stringify(this.data));
 
-    this.data1 = this.commonService
-      .getComboFilterByID("Addnl Wgtd Average")
-      .filter(
-        (value: any, index: any, self: any) =>
-          index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
-      );
-
-    console.log(this.data1);
+    this.setFlag(this.flag, this.content);
   }
 
   initialController(FLAG: any, DATA: any) {
+    if (FLAG === "ADD") {
+    }
     if (FLAG === "VIEW") {
       this.ViewController(DATA);
     }
@@ -389,8 +383,9 @@ export class DeductionMasterComponent implements OnInit {
     this.deductionMasterForm.controls["period"].setValue(
       DATA.DEDMST_YEARMONTHLY
     );
+
     this.deductionMasterForm.controls["calculationBasis"].setValue(
-      DATA.DEDMST_BASIS
+      DATA.DEDMST_BASIS.toString()
     );
 
     this.deductionMasterForm.controls["method"].setValue(
@@ -500,7 +495,6 @@ export class DeductionMasterComponent implements OnInit {
     }
   }
 
-  BranchDataSelected(e: any) {}
 
   lookupSelect(e: any, controller?: any, modelfield?: any) {
     console.log(e);
@@ -586,25 +580,25 @@ export class DeductionMasterComponent implements OnInit {
         DEDMST_PERCENFIXED:
           this.deductionMasterForm.value.method == "F" ? true : false,
         DEDMST_AVOIDFRACTION: this.avoidFraction == true ? 1 : 0,
-        DEDMST_BASIS: this.deductionMasterForm.value.calculationBasis,
+        DEDMST_BASIS: Number(this.deductionMasterForm.value.calculationBasis),
         DEDMST_REPORTHEADINGTO: 0,
         DEDMST_YEARMONTHLY: this.deductionMasterForm.value.period,
         DEDMSTCOUNTRYCODE: this.deductionMasterForm.value.countryCode,
-        UDF1: this.deductionMasterForm.value.userDefined1 || "kjfbjkhbfj",
-        UDF2: this.deductionMasterForm.value.userDefined2 || "kjfbjkhbfj",
-        UDF3: this.deductionMasterForm.value.userDefined3 || "kjfbjkhbfj",
-        UDF4: this.deductionMasterForm.value.userDefined4 || "kjfbjkhbfj",
-        UDF5: this.deductionMasterForm.value.userDefined5 || "kjfbjkhbfj",
-        UDF6: this.deductionMasterForm.value.userDefined6 || "kjfbjkhbfj",
-        UDF7: this.deductionMasterForm.value.userDefined7 || "kjfbjkhbfj",
-        UDF8: this.deductionMasterForm.value.userDefined8 || "kjfbjkhbfj",
-        UDF9: this.deductionMasterForm.value.userDefined9 || "kjfbjkhbfj",
-        UDF10: this.deductionMasterForm.value.userDefined10 || "kjfbjkhbfj",
-        UDF11: this.deductionMasterForm.value.userDefined11 || "kjfbjkhbfj",
-        UDF12: this.deductionMasterForm.value.userDefined12 || "kjfbjkhbfj",
-        UDF13: this.deductionMasterForm.value.userDefined13 || "kjfbjkhbfj",
-        UDF14: this.deductionMasterForm.value.userDefined14 || "kjfbjkhbfj",
-        UDF15: this.deductionMasterForm.value.userDefined15 || "kjfbjkhbfj",
+        UDF1: this.deductionMasterForm.value.userDefined1 || "",
+        UDF2: this.deductionMasterForm.value.userDefined2 || " ",
+        UDF3: this.deductionMasterForm.value.userDefined3 || " ",
+        UDF4: this.deductionMasterForm.value.userDefined4 || " ",
+        UDF5: this.deductionMasterForm.value.userDefined5 || " ",
+        UDF6: this.deductionMasterForm.value.userDefined6 || " ",
+        UDF7: this.deductionMasterForm.value.userDefined7 || " ",
+        UDF8: this.deductionMasterForm.value.userDefined8 || " ",
+        UDF9: this.deductionMasterForm.value.userDefined9 || " ",
+        UDF10: this.deductionMasterForm.value.userDefined10 || " ",
+        UDF11: this.deductionMasterForm.value.userDefined11 || " ",
+        UDF12: this.deductionMasterForm.value.userDefined12 || " ",
+        UDF13: this.deductionMasterForm.value.userDefined13 || " ",
+        UDF14: this.deductionMasterForm.value.userDefined14 || " ",
+        UDF15: this.deductionMasterForm.value.userDefined15 || " ",
         DEDMST_LS: this.considerForLeaveSalary,
       };
 
@@ -916,5 +910,23 @@ export class DeductionMasterComponent implements OnInit {
         index ===
         self.findIndex((t) => t[field] === item[field] && t[field] !== "")
     );
+  }
+
+  setFlag(currentFlag: string, DATA: any): void {
+    this.flag = currentFlag;
+
+    switch (this.flag) {
+      case "VIEW":
+        this.deductionMasterForm.controls["considerForLeaveSalary"].disable();
+        this.deductionMasterForm.controls["period"].disable();
+        this.deductionMasterForm.controls["method"].disable();
+        this.deductionMasterForm.controls["avoidFraction"].disable();
+        this.deductionMasterForm.controls["calculationBasis"].disable();
+
+        break;
+
+      default:
+        break;
+    }
   }
 }
