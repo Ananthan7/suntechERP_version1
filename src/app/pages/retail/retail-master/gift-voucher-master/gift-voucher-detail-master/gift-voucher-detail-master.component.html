@@ -1,0 +1,67 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Gift Voucher Detail Master</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="delete()" [isViewDelete]="editMode"
+    [isViewSave]="!viewMode"></modal-header>
+
+
+<!-- content section -->
+<div class="container-fluid pt-3">
+    <form [formGroup]="giftVoucherMasterdetailForm">
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Quantity</label>
+                    <div class="col-md-9">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="text" matInput formControlName="quantity" 
+                                [readonly]=" viewMode" />
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+           
+
+            <div class="col-md-3">
+                <div class="row align-items-center mb-1">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">Amount</label>
+                    <div class="col-md-9">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="text" matInput formControlName="amount" 
+                                [readonly]=" viewMode" />
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="row align-items-center mb-1">
+                        <button type="button" class="btn btn-outline-primary metal-issue-del-btn" (click)="sequenceSearch()">Add</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true" [dataSource]="tableDataProcess" >
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-editing mode="cell" [allowUpdating]="true">
+                    </dxo-editing>
+                    <dxo-selection mode="multiple"></dxo-selection>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                    <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                      [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                    </dxi-column> -->
+                  <dxi-column dataField="Srno" caption="Srno"> </dxi-column>
+                  <dxi-column dataField="CompCode" caption="Gift Voucher No" cellTemplate="compCodetemp"></dxi-column>
+                  <dxi-column dataField="Description" caption="Description" cellTemplate="Descriptiontemp"></dxi-column>
+                  <dxi-column dataField="Pcs" caption="Pcs" cellTemplate="Gift Amount"></dxi-column>
+                  <dxi-column dataField="SizeSetCode" caption="Actual Amount"
+                    cellTemplate="sizeSetCodetemp"></dxi-column>
+                  </dx-data-grid>
+            </div>
+        </div>
+    </form>
+</div>
