@@ -21,7 +21,7 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3 pl-5">
-                                <mat-checkbox class="example-margin" id="ID025">Active</mat-checkbox>
+                                <mat-checkbox class="example-margin" id="ID025" formControlName="active" >Active</mat-checkbox>
                               </div>
 
                         </div>
@@ -29,7 +29,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Description :</label>
                             <div class="col-md-7">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="text" matInput formControlName="description" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -37,7 +37,15 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Short Name :</label>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="text" matInput formControlName="shortname" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-5 col-form-label">Commision Metal % :</label>
+                            <div class="col-md-5">
+                                <mat-form-field style="width: 100%;" appearance="outline">
+                                    <input type="text" matInput formControlName="commisionMetal" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -45,15 +53,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Commision Others % :</label>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label">Commision Others % :</label>
-                            <div class="col-md-5">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="text" matInput formControlName="commisionOthers" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                         <label for="inputPassword" class="col-sm-5 col-form-label">Mobile :</label>
                         <div class="col-md-5">
                             <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput formControlName="code" />
+                                <input type="text" matInput formControlName="mobile" />
                             </mat-form-field>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Branch :</label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="text" matInput formControlName="branch" />
                                     <master-search [MasterSearchData]="HSNCodeData" class="masterSearch" #overlayrangeSearch
                                     (newRowClick)="HSNCenterSelected($event)"></master-search>
                                 </mat-form-field>
@@ -85,7 +85,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Employee Code :</label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="text" matInput formControlName="employeecode" />
                                     <master-search [MasterSearchData]="HSNCodeData" class="masterSearch" #overlayrangeSearch
                                     (newRowClick)="HSNCenterSelected($event)"></master-search>
                                 </mat-form-field>
@@ -95,7 +95,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">GL Code :</label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="text" matInput formControlName="glcode" />
                                     <master-search [MasterSearchData]="HSNCodeData" class="masterSearch" #overlayrangeSearch
                                     (newRowClick)="HSNCenterSelected($event)"></master-search>
                                 </mat-form-field>
@@ -105,7 +105,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Email Id :</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="text" matInput formControlName="emailId" />
                                 </mat-form-field>
                             </div>
                         </div>

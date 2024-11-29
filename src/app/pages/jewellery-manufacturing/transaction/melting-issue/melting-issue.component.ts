@@ -189,7 +189,7 @@ export class MeltingIssueComponent implements OnInit {
     MID: [0],
     Karat: [''],
     voctype: ['', [Validators.required]],
-    vocdate: [''],
+    vocdate: ['', [Validators.required]],
     MAIN_VOCTYPE: [''],
     UNQ_JOB_ID: [''],
   });
@@ -330,7 +330,7 @@ export class MeltingIssueComponent implements OnInit {
           this.meltingIssueFrom.controls.MID.setValue(data.MID)
           this.meltingIssueFrom.controls.voctype.setValue(data.VOCTYPE)
           this.meltingIssueFrom.controls.vocno.setValue(data.VOCNO)
-          this.meltingIssueFrom.controls.vocdate.setValue(data.VOCDATE)
+          this.meltingIssueFrom.controls.vocdate.setValue(new Date(data.VOCDATE))
           this.meltingIssueFrom.controls.processcode.setValue(data.PROCESS_CODE)
           this.meltingIssueFrom.controls.worker.setValue(data.WORKER_CODE)
           this.meltingIssueFrom.controls.workerdes.setValue(data.WORKER_DESC)

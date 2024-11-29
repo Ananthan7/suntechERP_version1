@@ -947,29 +947,20 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   currencyDataSelected(e: any, controller?: any) {
-
-
-    console.log(e);
-
-
+    debugger
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls['currency'].setValue(e.CURRENCY_CODE);
     this.alloyMastereForm.controls['currencyRate'].setValue(e.CONV_RATE);
-
     if (e.CURRENCY_CODE != "AED") {
       this.isCurrencySelected = false;
     } else {
       this.isCurrencySelected = true;
     }
-
-
-
     if (this.alloyMastereForm.value.priceScheme != "") {
       this.fillPriceSchemeDetails();
     } else {
       this.validateStockLC();
     }
-
     if (controller) {
       let value = this.alloyMastereForm.value.weightAvgCostLC
       let form = this.alloyMastereForm.value;
@@ -1057,7 +1048,7 @@ export class AlloyMasterComponent implements OnInit {
           this.prefixMasterDetail = result.response;
           this.prefixMasterDetail.PREFIX_CODE = this.prefixMasterDetail.PREFIX_CODE.toUpperCase();
           this.prefixMasterDetail.DESCRIPTION = this.prefixMasterDetail.DESCRIPTION.toUpperCase();
-          // this.alloyMastereForm.controls.costCenter.setValue(this.prefixMasterDetail.COST_CODE)
+          this.alloyMastereForm.controls.costCenter.setValue(this.prefixMasterDetail.COST_CODE)//same in software
           this.alloyMastereForm.controls.type.setValue(this.prefixMasterDetail.TYPE_CODE)
           this.alloyMastereForm.controls.category.setValue(this.prefixMasterDetail.CATEGORY_CODE)
           this.alloyMastereForm.controls.subCategory.setValue(this.prefixMasterDetail.SUBCATEGORY_CODE)
@@ -1320,8 +1311,8 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   validateStockLC() {
-
-    if (this.alloyMastereForm.value.price1code.length > 0) {
+    let form = this.alloyMastereForm.value;
+    if (this.commonService.nullToString(form.price1code) != '') {
       if (this.price1Array.length > 0) {
         let LC = this.TagPrice_Calculation(this.price1Array[0])
         console.log(LC);
@@ -1329,37 +1320,28 @@ export class AlloyMasterComponent implements OnInit {
         this.price1LcChange();
       }
     }
-
-
-    if (this.alloyMastereForm.value.price2code.length > 0) {
+    if (this.commonService.nullToString(form.price2code) != '') {
       if (this.price2Array.length > 0) {
         let LC = this.TagPrice_Calculation(this.price2Array[0])
         this.setValueWithDecimal('price2Lc', LC, 'AMOUNT')
         this.price2LcChange();
       }
     }
-
-
-
-    if (this.alloyMastereForm.value.price3code.length > 0) {
+    if (this.commonService.nullToString(form.price3code) != '') {
       if (this.price3Array.length > 0) {
         let LC = this.TagPrice_Calculation(this.price3Array[0])
         this.setValueWithDecimal('price3Lc', LC, 'AMOUNT')
         this.price3LcChange();
       }
     }
-
-
-    if (this.alloyMastereForm.value.price4code.length > 0) {
+    if (this.commonService.nullToString(form.price4code) != '') {
       if (this.price4Array.length > 0) {
         let LC = this.TagPrice_Calculation(this.price4Array[0])
         this.setValueWithDecimal('price4Lc', LC, 'AMOUNT')
         this.price4LcChange();
       }
     }
-
-
-    if (this.alloyMastereForm.value.price5code.length > 0) {
+    if (this.commonService.nullToString(form.price5code) != '') {
       if (this.price5Array.length > 0) {
         let LC = this.TagPrice_Calculation(this.price5Array[0])
         this.setValueWithDecimal('price5Lc', LC, 'AMOUNT')

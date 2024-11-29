@@ -1,143 +1,342 @@
 <div>
-    <!-- header section starts -->
-    <div class="card-content border-bottom d-flex justify-content-between p-2">
-        <h5 class="pos-modaltitle" id="modal-dia-metal">Set Ref Master</h5>
-        <button type="button" class="btn btn-close close-btn" (click)="close()">
-            <i class="feather icon-x close-icon"></i>
-        </button>
-    </div>
-    <!-- modal header component -->
-    <modal-header></modal-header>
-    <!-- content section -->
-    <div class="p-4 ">
-        <form [formGroup]="SetRefMasterForm">
-            <div class="border p-2">
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="row">
-                            <label for="inputPassword" id="ID001" class="col-sm-3 col-form-label">
-                                Division :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%" appearance="outline">
-                                    <mat-select>
-                                        <mat-option></mat-option>
-                                        <mat-option></mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label for="inputPassword" id="ID002" class="col-sm-3 col-form-label">
-                                Set Ref Code :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%" appearance="outline">
-                                    <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                        autocomplete="off" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label for="inputPassword" id="ID003" class="col-sm-3 col-form-label">
-                                Party Number :</label>
-                            <div class="col-sm-3">
-                                <mat-form-field style="width: 100%" appearance="outline">
-                                    <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                    <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                        (newRowClick)="BranchDataSelected($event)">
-                                    </master-search>
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width: 100%" appearance="outline">
-                                    <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                        autocomplete="off" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="border p-2 mt-2">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <button class="btn btns-sm btn-primary rounded-2">Select Pending MBC Stock
-                                        Master</button>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="row">
-                                        <label for="inputPassword" id="ID004" class="col-sm-2 col-form-label">
-                                            Year </label>
-                                        <div class="col-sm-5">
-                                            <mat-form-field style="width: 100%" appearance="outline">
-                                                <mat-select>
-                                                    <mat-option></mat-option>
-                                                    <mat-option></mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" matInput formControlName="Branch"
-                                                    UpperCaseDirective />
-                                                <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                                    (newRowClick)="BranchDataSelected($event)">
-                                                </master-search>
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="row">
-                                        <label for="inputPassword" id="ID005" class="col-sm-6 col-form-label">
-                                            DPC Voc No</label>
-                                        <div class="col-sm-6">
-                                            <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="code"
-                                                    UpperCaseDirective autocomplete="off" />
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="boxed-label">
-                            <h6 class="mb-0">Set Image</h6>
-                        </div>
-                        <div class="image_box">
-                            <div class="img_box">
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <!-- header section starts -->
+  <div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Set Break</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <modal-header
+    [isViewSave]="!viewMode"
+    [isViewCancel]="!viewMode"
+    [isViewMore]="!viewMode"
+    (saveClick)="formSubmit()"
+    (cancelClick)="close()"
+    [isViewDelete]="!viewMode && editableMode"
+    (deleteClick)="deleteRecord()"
+  ></modal-header>
+  <!-- content section -->
+  <div class="p-4">
+    <form [formGroup]="SetRefMasterForm">
+      <div class="border p-2">
+        <div class="row">
+          <div class="col-md-10">
+            <div class="row">
+              <label
+                for="inputPassword"
+                id="ID001"
+                class="col-sm-3 col-form-label"
+              >
+                Division :</label
+              >
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <!-- <mat-option
+                                    *ngFor="let option of divisionCode"
+                                    [value]="option.value"
+                                  >
+                                    {{ option.name }}
+                                  </mat-option> -->
+                  <mat-select formControlName="division" [disabled]="viewMode">
+                    <mat-option value="yes">yes</mat-option>
+                    <mat-option value="No">No</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
             </div>
-            <div class="border p-2">
-                <div class="row">
-                    <div class="col-md-12">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false">
-                        </menu-buttons>
-
-                        <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                            [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3"
-                            keyExpr="SRNO">
-                            <dxo-selection mode="single"></dxo-selection>
-                            <dxi-column dataField="SRNO" caption="SR No" class="tab"></dxi-column>
-                            <dxi-column dataField="DIVISION_CODE" caption="Stock Code"></dxi-column>
-                            <dxi-column dataField="DIVISION_CODE" caption="Description"></dxi-column>
-                            <dxi-column dataField="DIVISION_CODE" caption="Description"></dxi-column>
-                            <dxi-column dataField="DIVISION_CODE" caption="Select"></dxi-column>
-                        </dx-data-grid>
-                        <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                            [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3"
-                            keyExpr="SRNO">
-                            <dxo-selection mode="single"></dxo-selection>
-                            <dxi-column dataField="SRNO" caption="SR No" class="tab"></dxi-column>
-                            <dxi-column dataField="DIVISION_CODE" caption="Stock Code"></dxi-column>
-                            <dxi-column dataField="DIVISION_CODE" caption="Description"></dxi-column>
-                            <dxi-column dataField="DIVISION_CODE" caption="Description"></dxi-column>
-                            <dxi-column dataField="DIVISION_CODE" caption="Select"></dxi-column>
-                        </dx-data-grid>
-                    </div>
-                </div>
+            <div class="row">
+              <label
+                for="inputPassword"
+                id="ID002"
+                class="col-sm-3 col-form-label"
+              >
+                Set Ref Code :</label
+              >
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    [readonly]="viewMode"
+                    type="text"
+                    #codeInput
+                    matInput
+                    formControlName="code"
+                    UpperCaseDirective
+                    autocomplete="off"
+                    formControlName="set_ref_code"
+                  />
+                </mat-form-field>
+              </div>
             </div>
-        </form>
-    </div>
+            <div class="row">
+              <label
+                for="inputPassword"
+                id="ID003"
+                class="col-sm-3 col-form-label"
+              >
+                Description :</label
+              >
+              <div class="col-sm-3">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    [readonly]="viewMode"
+                    type="text"
+                    matInput
+                    formControlName="code"
+                    UpperCaseDirective
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        codeData,
+                        ['code','decription'],
+                        false,
+                        ['CODE','DESCRIPTION']
+                      )
+                    "
+                    (keydown)="onKeyDown($event, ['code','decription'], codeData)"
+                  />
+                  <master-search
+                    class="masterSearch"
+                    #overlaycode
+                    [MasterSearchData]="codeData"
+                    (newRowClick)="CodeDataSelected($event)"
+                    (keydown)="onKeyDown($event, ['code','decription'], codeData)"
+                  >
+                  </master-search>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    [readonly]="viewMode"
+                    type="text"
+                    #codeInput
+                    matInput
+                    formControlName="decription"
+                    UpperCaseDirective
+                    autocomplete="off"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="border p-2 mt-2">
+              <div class="row">
+                <div class="col-md-4">
+                  <button class="btn btns-sm btn-primary rounded-2">
+                    Select Pending MBC Stock Master
+                  </button>
+                </div>
+                <div class="col-md-5">
+                  <div class="row">
+                    <label
+                      for="inputPassword"
+                      id="ID004"
+                      class="col-sm-2 col-form-label"
+                    >
+                      Year
+                    </label>
+                    <div class="col-sm-5">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <mat-select formControlName="year">
+                          <mat-option></mat-option>
+                          <mat-option></mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-5">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          [readonly]="viewMode"
+                          type="text"
+                          matInput
+                          formControlName="year_type"
+                          UpperCaseDirective
+                          (focusout)="
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              yearTypeData,
+                              ['year_type'],
+                              false,
+                              ['CODE']
+                            )
+                          "
+                          (keydown)="
+                            onKeyDown($event, ['year_type'], yearTypeData)
+                          "
+                        />
+                        <master-search
+                          class="masterSearch"
+                          #overlayYearCode
+                          [MasterSearchData]="yearTypeData"
+                          (keydown)="
+                            onKeyDown($event, ['year_type'], yearTypeData)
+                          "
+                          (newRowClick)="YearTypeDataSelected($event)"
+                        >
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="row">
+                    <label
+                      for="inputPassword"
+                      id="ID005"
+                      class="col-sm-6 col-form-label"
+                    >
+                      DPC Voc No</label
+                    >
+                    <div class="col-sm-6">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          [readonly]="viewMode"
+                          type="text"
+                          #codeInput
+                          matInput
+                          formControlName="voc_no"
+                          UpperCaseDirective
+                          autocomplete="off"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="boxed-label">
+              <h6 class="mb-0">Set Image</h6>
+            </div>
+            <div class="image_box">
+              <div class="img_box"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="border p-2">
+        <div class="row">
+          <div class="col-md-12">
+            <menu-buttons
+            *ngIf="!viewMode"
+              [viewAddBtn]="true"
+              [viewDeleteBtn]="true"
+              [viewImportBtn]="false"
+              (addClick)="addTableData()"
+              (deleteClick)="removedata()"
+            >
+            </menu-buttons>
+
+            <dx-data-grid
+              id="gridContainer"
+              [dataSource]="tableData"
+              [showBorders]="true"
+              [showColumnLines]="true"
+              [showRowLines]="true"
+              [allowColumnResizing]="true"
+              class="mt-3"
+              keyExpr="SRNO"
+              (onSelectionChanged)="onSelectionChanged($event)"
+            >
+              <dxo-selection mode="single"></dxo-selection>
+              <dxi-column
+                dataField="SRNO"
+                caption="SR No"
+                class="tab"
+              ></dxi-column>
+              <dxi-column
+                dataField="STOCKCODE"
+                caption="Stock Code"
+                cellTemplate="stock_code"
+              ></dxi-column>
+              <dxi-column
+                dataField="STOCKDESC"
+                caption="Description"
+                cellTemplate="description"
+              ></dxi-column>
+              <dxi-column
+                dataField="DIVISION_CODE"
+                caption="Select"
+              ></dxi-column>
+              <div *dxTemplate="let data of 'description'">
+                <input
+                  [readonly]="viewMode"
+                  class="form-control"
+                  type="text"
+                  id="description"
+                  [value]="data.value"
+                  (change)="getAccode($event, data)"
+                />
+              </div>
+              <div *dxTemplate="let data of 'stock_code'">
+                  <input
+                    [readonly]="viewMode"
+                    class="form-control"
+                    type="text"
+                    id="stock_code"
+                    [value]="data.value"
+                    (change)="getStockCode($event, data)"
+                  />
+                </div>
+            </dx-data-grid>
+            <dx-data-grid
+              id="gridContainer"
+              [dataSource]="tableData1"
+              [showBorders]="true"
+              [showColumnLines]="true"
+              [showRowLines]="true"
+              [allowColumnResizing]="true"
+              class="mt-3"
+              keyExpr="SRNO"
+              (onSelectionChanged)="onSelectionChanged($event)"
+            >
+              <dxo-selection mode="single"></dxo-selection>
+              <dxi-column
+                dataField="SRNO"
+                caption="SR No"
+                class="tab"
+              ></dxi-column>
+              <dxi-column
+                dataField="STOCKCODE"
+                caption="Stock Code"
+                cellTemplate="stock_code1"
+              ></dxi-column>
+              <dxi-column
+                dataField="STOCKDESC"
+                caption="Description"
+                cellTemplate="description1"
+              ></dxi-column>
+              <dxi-column
+                dataField="DIVISION_CODE"
+                caption="Select"
+              ></dxi-column>
+              <div>
+                <div *dxTemplate="let data of 'description1'">
+                  <input
+                    [readonly]="viewMode"
+                    class="form-control"
+                    type="text"
+                    id="description1"
+                    [value]="data.value"
+                    (change)="getAccode1($event, data)"
+                  />
+                </div>
+                <div *dxTemplate="let data of 'stock_code1'">
+                    <input
+                      [readonly]="viewMode"
+                      class="form-control"
+                      type="text"
+                      id="stock_code1"
+                      [value]="data.value"
+                      (change)="getStockCode1($event, data)"
+                    />
+                  </div>
+              </div>
+            </dx-data-grid>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
