@@ -440,7 +440,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   ngOnInit(): void {
     this.setInitialValues();
     this.setFormValues();
-    console.log(this.content)
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.viewDisable = true;
@@ -478,7 +477,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     }
   }
 
-  
+
   Attachedfile: any[] = [];
   savedAttachments: any[] = [];
 
@@ -523,6 +522,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   codeEnabledMetal() {
     if (this.metallabourMasterForm.value.metallabour_code == '') {
       this.codeEnableMetal = true;
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
     }
     else {
       this.codeEnableMetal = false;
@@ -530,7 +530,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   onlabourtypeChange() {
-    console.log(' Hi' + this.settingTypeList);
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       const settingTypeControl = this.diamondlabourMasterForm.get('settingType');
       const methodControl = this.diamondlabourMasterForm.get('method');
@@ -548,7 +547,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         this.diamondlabourMasterForm.controls.settingType.setValue('');
         this.diamondlabourMasterForm.controls.method.setValue('');
       }
-      console.log(this.settingTypeList);
+      // console.log(this.settingTypeList);
     });
   }
 
@@ -574,8 +573,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
-    console.log(this.content);
-
     //   this.diamondlabourMasterForm.controls.mid.setValue(this.content.MID);
     //   this.diamondlabourMasterForm.controls.labour_code.setValue(this.content.CODE);
     //   this.diamondlabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
@@ -729,7 +726,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     let API = 'LabourChargeMasterDj/GetLabourChargeMasterDetails/' + this.content.MID;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe((result) => {
       if (result.response) {
-        console.log(result.response);
         this.metallabourMasterForm.controls.purity.setValue(this.commonService.decimalQuantityFormat(result.response.PURITY, "RATE"));
 
       }
@@ -796,7 +792,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   metaldivisionCodeSelected(e: any) {
     //this.stockcodeDisable = false
-
     this.metallabourMasterForm.controls.stock_code.setValue('');
     this.metallabourMasterForm.controls.metalDivision.setValue(e.DIVISION_CODE);
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
@@ -820,36 +815,63 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   stockCodeSelected(e: any) {
-
     this.metallabourMasterForm.controls.stock_code.setValue(e.STOCK_CODE);
     this.metallabourMasterForm.controls.karat.setValue(e.KARAT_CODE);
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
-    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
     this.getKaratcode()
-    this.codeDisable()
-
-
+    if (this.metallabourMasterForm.value.stock_code == '') {
+      this.metallabourMasterForm.controls.karat.setValue('');
+      this.metallabourMasterForm.controls.typecode.setValue('');
+      this.metallabourMasterForm.controls.category.setValue('');
+      this.metallabourMasterForm.controls.subCategory.setValue('');
+      this.metallabourMasterForm.controls.brand.setValue('');
+      this.metallabourMasterForm.controls.purity.setValue('');
+    }
   }
 
   codeDisable() {
-    this.codedisable = true;
 
-    // if (this.metallabourMasterForm.value.stock_code == '') {
-    //   this.metallabourMasterForm.controls.karat.enable();
-    //   this.metallabourMasterForm.controls.color.enable();
-    //   this.metallabourMasterForm.controls.typecode.enable();
-    //   this.metallabourMasterForm.controls.category.enable();
-    //   this.metallabourMasterForm.controls.subCategory.enable();
-    //   this.metallabourMasterForm.controls.brand.enable();
-    // }
-    // else {
-    //   this.metallabourMasterForm.controls.karat.disable();
-    //   this.metallabourMasterForm.controls.color.disable();
-    //   this.metallabourMasterForm.controls.typecode.disable();
-    //   this.metallabourMasterForm.controls.category.disable();
-    //   this.metallabourMasterForm.controls.subCategory.disable();
-    //   this.metallabourMasterForm.controls.brand.disable();
-    // }
+    if (this.metallabourMasterForm.value.stock_code == '') {
+      this.codedisable = false;
+      this.metallabourMasterForm.controls.karat.setValue('');
+      this.metallabourMasterForm.controls.typecode.setValue('');
+      this.metallabourMasterForm.controls.category.setValue('');
+      this.metallabourMasterForm.controls.subCategory.setValue('');
+      this.metallabourMasterForm.controls.brand.setValue('');
+      this.metallabourMasterForm.controls.purity.setValue('');
+    } else {
+      this.codedisable = true;
+    }
+
+  }
+
+  getKaratcode() {
+    this.codeDisable()
+
+    let API = 'MetalStockMaster/GetMetalStockMasterHeaderAndDetail/' + this.metallabourMasterForm.value.stock_code + "/" + this.metallabourMasterForm.value.metalDivision;
+    if (this.metallabourMasterForm.value.stock_code != '') {
+      this.codedisable = true;
+      let Sub: Subscription = this.dataService.getDynamicAPI(API)
+        .subscribe((result) => {
+          if (result.status == "Success") {
+            this.metallabourMasterForm.controls['karat'].setValue(result.response.KARAT_CODE);
+            this.metallabourMasterForm.controls['purity'].setValue(this.commonService.decimalQuantityFormat(result.response.PURITY, "RATE"));
+            this.metallabourMasterForm.controls['brand'].setValue(result.response.BRAND_CODE);
+            this.metallabourMasterForm.controls['category'].setValue(result.response.CATEGORY_CODE);
+            this.metallabourMasterForm.controls['subCategory'].setValue(result.response.SUB_CATEGORY_CODE);
+            this.metallabourMasterForm.controls['typecode'].setValue(result.response.TYPE_CODE);
+            this.metallabourMasterForm.controls['color'].setValue(result.response.COLOR_CODE);
+          }
+
+        }, err => {
+          this.commonService.toastErrorByMsgId('MSG81451')//Server Error occured, please try again
+        })
+      this.subscriptions.push(Sub)
+
+    }else {
+      this.codedisable = false;
+    }
+
   }
 
   currencyCodeSelected(e: any) {
@@ -908,9 +930,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     // Retrieve the values of Ct Wt From and Ct Wt To from the form
     size_from = parseFloat(size_from.replace(/[+-]/g, ''));
     size_to = parseFloat(size_to.replace(/[+-]/g, ''));
-
-    console.log(size_from);
-    console.log(size_to);
     // if (data !== 'sizefrom') {
     // Check if Ct Wt From is greater than Ct Wt To
     if (size_from > size_to) {
@@ -1062,12 +1081,12 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -1089,28 +1108,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
 
-  getKaratcode() {
 
-    let API = 'MetalStockMaster/GetMetalStockMasterHeaderAndDetail/' + this.metallabourMasterForm.value.stock_code + "/" + this.metallabourMasterForm.value.metalDivision;
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        console.log(result.response);
-
-        this.metallabourMasterForm.controls['karat'].setValue(result.response.KARAT_CODE);
-        console.log("This Purity" + this.metallabourMasterForm.controls['purity'].setValue(result.response.PURITY));
-        this.metallabourMasterForm.controls['purity'].setValue(this.commonService.decimalQuantityFormat(result.response.PURITY, "RATE"));
-        this.metallabourMasterForm.controls['brand'].setValue(result.response.BRAND_CODE);
-        this.metallabourMasterForm.controls['category'].setValue(result.response.CATEGORY_CODE);
-        this.metallabourMasterForm.controls['subCategory'].setValue(result.response.SUB_CATEGORY_CODE);
-        this.metallabourMasterForm.controls['typecode'].setValue(result.response.TYPE_CODE);
-        this.metallabourMasterForm.controls['color'].setValue(result.response.COLOR_CODE);
-
-      }, err => {
-        this.commonService.toastErrorByMsgId('MSG81451')//Server Error occured, please try again
-      })
-    this.subscriptions.push(Sub)
-
-  }
 
   // metalDivision: ['', [Validators.required]],
   // metallabour_code: ['', [Validators.required]],
@@ -1189,9 +1187,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     }
 
 
-
-    // console.log(this.commonService.nullToString(form.metalSelling));
-
     // if (this.commonService.nullToString(form.metalselling_rate) == '' || this.commonService.nullToString(form.metalselling_rate) === "0.00"
     //   && this.commonService.nullToString(form.metalSelling) == '' || this.commonService.nullToString(form.metalselling) === '0.00') {
     if (this.metallabourMasterForm.controls.metalselling_rate.value === "0.00" &&
@@ -1268,7 +1263,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result: any) => {
-        console.log('Server Response:', result);
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
@@ -1427,8 +1421,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     if (isChecked) {
       this.metallabourMasterForm.get('metallabourType')?.setValue('GENERAL');
     }
-
-    console.log(event);
     if (event.checked === true) {
       // this.stockcodeDisable = true;
       this.viewDisable1 = true;
@@ -1479,17 +1471,14 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   DiaCostRatekeyupvalue(e: any) {
-    console.log(e);
     this.displayDiaCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   DiaSellingRatekeyupvalue(e: any) {
-    console.log(e)
     this.displayDiaSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   DiaCtWtFromkeyupvalue(e: any) {
-    console.log(e);
     this.displayDiaCtWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
@@ -1499,22 +1488,18 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   // }
 
   MetalCostRatekeyupvalue(e: any) {
-    console.log(e);
     this.displayMetalCostRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   MetalSellingRatekeyupvalue(e: any) {
-    console.log(e);
     this.displayMetalSellingRate = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   MetalWtFromkeyupvalue(e: any) {
-    console.log(e);
     this.displayMetalWtFrom = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   MetalWtTokeyupvalue(e: any) {
-    console.log(e);
     this.displayMetalWtTo = e.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
@@ -1607,11 +1592,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   salesChange(data: any, event?: any) {
-    console.log(data);
-
-    console.log(event);
-
-
     if (data == 'metalSelling') {
       this.viewsellingrateMetal = true;
       this.viewsellingMetal = false;
@@ -1638,7 +1618,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   // }
 
   salesChangesDia(data: any) {
-    console.log(data);
+    // console.log(data);
 
     if (data == 'selling') {
       this.viewsellingrate = true;

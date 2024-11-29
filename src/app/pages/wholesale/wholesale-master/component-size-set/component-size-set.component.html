@@ -126,7 +126,7 @@
             <div *dxTemplate="let data of 'descriptiontemp'">
               <mat-form-field appearance="outline" style="width: 100%;">
                 <input type="text" matInput readonly style="width: 100%;"
-                  [value]="data.value"
+                  [value]="data.value"   (change)="descriptionData($event, data)"
                   [readonly]="viewMode || codeEnable" />
               </mat-form-field>
             </div>

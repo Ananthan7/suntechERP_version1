@@ -68,6 +68,7 @@ export class ComponentSizeSetComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getComponentSizeTypeOptions();
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
       this.setFormValues();
@@ -111,6 +112,10 @@ export class ComponentSizeSetComponent implements OnInit {
 
     this.tableData[index].COMPONENT_DESCRIPTION = selectedDescription;
     this.tableData[index].COMPSIZE_CODE = selectedCode;
+  }
+
+  descriptionData(data: any, value: any) {
+    this.tableData[value.data.SRNO - 1].COMPONENT_DESCRIPTION = data.target.value;
   }
 
   setFormValues() {
@@ -486,7 +491,6 @@ export class ComponentSizeSetComponent implements OnInit {
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
     let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        debugger
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
