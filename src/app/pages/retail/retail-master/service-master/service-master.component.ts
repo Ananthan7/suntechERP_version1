@@ -368,7 +368,7 @@ export class ServiceMasterComponent implements OnInit {
   }
   purchaseSelected(e: any) {
     console.log(e);
-    this.serviceForm.controls.purchase.setValue(e.CODE);
+    this.serviceForm.controls.purchase.setValue(e.GST_CODE);
   }
 
   salesCodeData: MasterSearchModel = {
@@ -384,7 +384,7 @@ export class ServiceMasterComponent implements OnInit {
   }
   salesCodeSelected(e: any) {
     console.log(e);
-    this.serviceForm.controls.sales.setValue(e.CODE);
+    this.serviceForm.controls.sales.setValue(e.GST_CODE);
   }
 
   branchtransferCodeData: MasterSearchModel = {
@@ -400,7 +400,7 @@ export class ServiceMasterComponent implements OnInit {
   }
   branchtransferCodeSelected(e: any) {
     console.log(e);
-    this.serviceForm.controls.sales.setValue(e.CODE);
+    this.serviceForm.controls.sales.setValue(e.GST_CODE);
   }
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
