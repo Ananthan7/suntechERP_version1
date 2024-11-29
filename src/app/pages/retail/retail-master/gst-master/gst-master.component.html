@@ -1379,61 +1379,97 @@
 
                           <!-- ExpAcc Column -->
                           <div *dxTemplate="let data of 'expenseAccodeTemp'">
-                            <input
-                              [readonly]="flag === 'VIEW'"
-                              type="text"
-                              maxlength="6"
-                              (change)="
-                                updateField($event, data, 'EXPENSE_ACCODE')
-                              "
-                              [value]="data.value"
+                            <mat-form-field
                               style="width: 100%"
-                              required
-                            />
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="flag === 'VIEW'"
+                                type="text"
+                                maxlength="6"
+                                (change)="
+                                  updateField($event, data, 'EXPENSE_ACCODE')
+                                "
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+
+                              <master-search
+                                *ngIf="flag != 'VIEW'"
+                                #overlayGroupOne
+                                [MasterSearchData]="groupCodeData"
+                                class="masterSearch"
+                                (newRowClick)="expenseSelect($event, data)"
+                              ></master-search>
+                            </mat-form-field>
                           </div>
 
                           <!-- Exp Account Description Column -->
                           <div
                             *dxTemplate="let data of 'expenseAccodeDescTemp'"
                           >
-                            <input
-                              [readonly]="flag === 'VIEW'"
-                              type="text"
-                              (change)="
-                                updateField($event, data, 'EXPENSE_ACCODE_DESC')
-                              "
-                              [value]="data.value"
+                            <mat-form-field
                               style="width: 100%"
-                              required
-                            />
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="flag === 'VIEW'"
+                                type="text"
+                                (change)="
+                                  updateField(
+                                    $event,
+                                    data,
+                                    'EXPENSE_ACCODE_DESC'
+                                  )
+                                "
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+                            </mat-form-field>
                           </div>
 
                           <!-- HSN Code Column -->
                           <div *dxTemplate="let data of 'hsnSacCodeTemp'">
-                            <input
-                              [readonly]="flag === 'VIEW'"
-                              type="text"
-                              (change)="
-                                updateField($event, data, 'HSN_SAC_CODE')
-                              "
-                              [value]="data.value"
+                            <mat-form-field
                               style="width: 100%"
-                              required
-                            />
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="flag === 'VIEW'"
+                                type="text"
+                                (change)="
+                                  updateField($event, data, 'HSN_SAC_CODE')
+                                "
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+                            </mat-form-field>
                           </div>
 
                           <!-- HSN Description Column -->
                           <div *dxTemplate="let data of 'hsnSacDescTemp'">
-                            <input
-                              [readonly]="flag === 'VIEW'"
-                              type="text"
-                              (change)="
-                                updateField($event, data, 'HSN_SAC_DESC')
-                              "
-                              [value]="data.value"
+                            <mat-form-field
                               style="width: 100%"
-                              required
-                            />
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="flag === 'VIEW'"
+                                type="text"
+                                (change)="
+                                  updateField($event, data, 'HSN_SAC_DESC')
+                                "
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+                            </mat-form-field>
                           </div>
 
                           <!-- Tax Reg Column -->

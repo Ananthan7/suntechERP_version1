@@ -435,6 +435,8 @@ export class GstMasterComponent implements OnInit {
     this.gstMasterMainForm.controls["expIgstCtrlAcCredit"].setValue(
       DATA.EXPORT_IGST_CTRLDEBIT_ACCODE
     );
+
+    this.getGridDataObjects(this.code);
   }
 
   editController(DATA: any) {
@@ -486,6 +488,7 @@ export class GstMasterComponent implements OnInit {
         this.subscriptions.push(Sub);
       } else {
         this.flag = "VIEW";
+        this.close("reloadMainGrid", true);
       }
     });
   }
@@ -510,10 +513,6 @@ export class GstMasterComponent implements OnInit {
   }
 
   gstMasterMainFormSubmit() {
-    console.log(this.stateWiseGstDetailsData);
-    console.log(this.dateWiseGstDetailsData);
-    console.log(this.expenseHsnOrSacAllocationData);
-
     Object.keys(this.gstMasterMainForm.controls).forEach((controlName) => {
       const control = this.gstMasterMainForm.controls[controlName];
       if (control.validator && control.validator({} as AbstractControl)) {
@@ -1175,5 +1174,32 @@ export class GstMasterComponent implements OnInit {
           }
         });
     }
+  }
+
+  getGridDataObjects(CODE: any) {
+    let API = `GstMaster/GetGstMasterDetail/${CODE}`;
+    let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result.status.trim() === "Success") {
+          console.log(result.response);
+          this.expenseHsnOrSacAllocationData = result.response.gstMasterDetails;
+        }
+      },
+      (err) => {
+        console.error("Error fetching data:", err);
+        this.commonService.toastErrorByMsgId("MSG1531");
+      }
+    );
+  }
+
+  expenseSelect(event: any, data: any) {
+    // this.expenseHsnOrSacAllocationData=   data.data.EXPENSE_ACCODE = event.CODE;
+    // console.log(this.expenseHsnOrSacAllocationData);
+
+    let curr_sr_no = data.data.SRNO - 1;
+
+    this.expenseHsnOrSacAllocationData[curr_sr_no].EXPENSE_ACCODE = event.CODE;
+
+    console.log(this.expenseHsnOrSacAllocationData);
   }
 }
