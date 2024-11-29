@@ -33,7 +33,7 @@
                                     id="WorkerCode"
                                     formControlName="WorkerCode" id="code"
                                     [readonly]="viewMode || editMode" #code
-                                    appAlphabetOnly UpperCaseDirective
+                                    appAlphaNumericOnly UpperCaseDirective 
                                     (focusout)="checkWorkerExists($event)"
                                     (keyup)="codeEnabled()"
                                     autocomplete="off" />
@@ -46,7 +46,7 @@
                             <mat-form-field appearance="outline" class="mx-1"
                                 style="width: -webkit-fill-available;">
                                 <input type="text" matInput
-                                    placeholder="DESCRIPTION" appAlphabetOnly
+                                    placeholder="DESCRIPTION" appAlphaNumericOnly
                                     UpperCaseDirective maxlength="40"
                                     formControlName="WorkerDESCRIPTION"
                                     [readonly]="viewMode || codeEnable"

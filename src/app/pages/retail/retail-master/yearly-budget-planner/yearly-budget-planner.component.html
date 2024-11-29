@@ -149,7 +149,7 @@
                             <dxi-column dataField="ACCOUNT_HEAD" caption="Account Name">
                             </dxi-column>
 
-                            <dxi-column dataField="LAST_YEAR_AMOUNT" caption="Last Year Amount">
+                            <dxi-column dataField="PRV_YEAR_AMOUNT" caption="Last Year Amount">
                             </dxi-column>
 
                             <dxi-column dataField="BUDGETED_AMT" caption="Budgeted Amount" cellTemplate="bud_amount" AmountDecimalInput>
@@ -178,10 +178,10 @@
                                 [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
                                 keyExpr="SRNO" style="height: 220px;">
 
-                                <dxi-column dataField="MONTH" caption="Month" >
+                                <dxi-column dataField="MONTHNAME" caption="Month" >
                                 </dxi-column>
 
-                               <dxi-column dataField="AMOUNT" caption="Amount" cellTemplate="total_amt" AmountDecimalInput>
+                               <dxi-column dataField="BUDGET_AMOUNT" caption="Amount" cellTemplate="total_amt" AmountDecimalInput>
                                 </dxi-column>
 
                                 <div *dxTemplate="let data of 'total_amt'">
@@ -211,7 +211,7 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4 p-0">
-                                <button class="btn btn-sm btn-outline-primary w-100">Calculate %</button>
+                                <button class="btn btn-sm btn-outline-primary w-100" (click)="calculatepercent()">Calculate %</button>
                             </div>
                         </div>
                     </div>

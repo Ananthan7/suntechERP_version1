@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-diamond-prefix-master',
@@ -15,13 +16,40 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class DiamondPrefixMasterComponent implements OnInit {
   divisionMS: any = 'ID';
-  subscriptions: any;
+  private subscriptions: Subscription[] = [];
   @Input() content!: any;
   tableData: any[] = [];
   editableMode: boolean = false;
   viewMode: boolean = false;
   userbranch = localStorage.getItem('userbranch');
   editMode:boolean = false;
+
+
+
+  
+  @ViewChild('currencycodeSearch') currencycodeSearch!: MasterSearchComponent;
+  @ViewChild('costcodeSearch') costcodeSearch!: MasterSearchComponent;
+  @ViewChild('brandcodeSearch') brandcodeSearch!: MasterSearchComponent;
+  @ViewChild('CategorycodeSearch') CategorycodeSearch!: MasterSearchComponent;
+  @ViewChild('TypecodeSearch') TypecodeSearch!: MasterSearchComponent;
+  @ViewChild('subCategorycodeSearch') subCategorycodeSearch!: MasterSearchComponent;
+  @ViewChild('CountrycodeSearch') CountrycodeSearch!: MasterSearchComponent;
+  @ViewChild('branchcodeSearch') branchcodeSearch!: MasterSearchComponent;
+
+
+
+  
+
+  
+  
+  
+  @ViewChild('collectioncodeSearch') collectioncodeSearch!: MasterSearchComponent;
+  @ViewChild('sub_collectioncodeSearch') sub_collectioncodeSearch!: MasterSearchComponent;
+  @ViewChild('stone_typecodeSearch') stone_typecodeSearch!: MasterSearchComponent;
+  @ViewChild('settingcodeSearch') settingcodeSearch!: MasterSearchComponent;
+  @ViewChild('shapecodeSearch') shapecodeSearch!: MasterSearchComponent;
+  @ViewChild('inc_catcodeSearch') inc_catcodeSearch!: MasterSearchComponent;
+  @ViewChild('order_refcodeSearch') order_refcodeSearch!: MasterSearchComponent;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -70,21 +98,13 @@ export class DiamondPrefixMasterComponent implements OnInit {
     Componentprefix: false,
     refinervprefix: false,
     designprefix: false,
-    userdefined_1: [''],
-    userdefined_2: [''],
-    userdefined_3: [''],
-    userdefined_4: [''],
-    userdefined_5: [''],
-    userdefined_6: [''],
-    userdefined_7: [''],
-    userdefined_8: [''],
-    userdefined_9: [''],
-    userdefined_10: [''],
-    userdefined_11: [''],
-    userdefined_12: [''],
-    userdefined_13: [''],
-    userdefined_14: [''],
-    userdefined_15: [''],
+    collection: [""],
+    sub_collection: [""],
+    stone_type: [""],
+    setting: [""],
+    shape: [""],
+    inc_cat: [""],
+    order_ref: [""],
     currencydes:[''],
     boilProcessPrefix: false,
   })
@@ -103,7 +123,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     this.diamondprefixForm.controls.designprefix.setValue(this.viewchangeYorN(this.content.DESIGN_PREFIX))
     this.diamondprefixForm.controls.Componentprefix.setValue(this.viewchangeYorN(this.content.COMP_PREFIX))
     this.diamondprefixForm.controls.branch.setValue(this.content.BRANCH_CODE)
-    //this.diamondprefixForm.controls.suffixcode.setValue(this.content.SCHEME_PREFIX)
+    this.diamondprefixForm.controls.suffixcode.setValue(this.content.SUFFIX_CODE)
     this.diamondprefixForm.controls.Country.setValue(this.content.COUNTRY_CODE)
     this.diamondprefixForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
     this.diamondprefixForm.controls.Type.setValue(this.content.TYPE_CODE)
@@ -111,6 +131,18 @@ export class DiamondPrefixMasterComponent implements OnInit {
     this.diamondprefixForm.controls.brand.setValue(this.content.BRAND_CODE)
     this.diamondprefixForm.controls.costcode.setValue(this.content.COUNTRY_CODE)
     this.diamondprefixForm.controls.hsn.setValue(this.content.HSN_CODE)
+    this.diamondprefixForm.controls.boilProcessPrefix.setValue(this.viewchangeYorN(this.content.BOIL_PREFIX))
+    this.diamondprefixForm.controls.collection.setValue(this.content.UDF1)
+    this.diamondprefixForm.controls.sub_collection.setValue(this.content.UDF2)
+    this.diamondprefixForm.controls.stone_type.setValue(this.content.UDF3)
+    this.diamondprefixForm.controls.setting.setValue(this.content.UDF4)
+    this.diamondprefixForm.controls.shape.setValue(this.content.UDF5)
+    this.diamondprefixForm.controls.inc_cat.setValue(this.content.UDF6)
+    this.diamondprefixForm.controls.order_ref.setValue(this.content.UDF7)
+
+
+
+
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -260,6 +292,81 @@ export class DiamondPrefixMasterComponent implements OnInit {
     console.log(e);
     this.diamondprefixForm.controls.Country.setValue(e.CODE);
   }
+
+  
+  itemcodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "Prefix code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+
+  itemcodeSelected(value: any) {
+    console.log(value);
+    this.diamondprefixForm.controls.itemcode.setValue(value.PREFIX_CODE);
+    this.diamondprefixForm.controls.itemcodedetail.setValue(value.DESCRIPTION)
+  }
+
+  stoneTypeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Stone Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "types = 'STONE TYPE MASTER' ORDER BY CODE",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  stoneTypeCodeSelected(value: any) {
+    console.log(value);
+    this.diamondprefixForm.controls.stone_type.setValue(value.CODE);
+  }
+
+  settingTypeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Setting Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='SETTING TYPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    //LOAD_ONCLICK:true,
+  }
+  settingTypeCodeSelected(e: any) {
+
+    console.log(e);
+    this.diamondprefixForm.controls.setting.setValue(e.CODE);
+  }
+
+  shapeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Shape',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "types='SHAPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  shapeCodeSelected(e: any) {
+
+    console.log(e);
+    this.diamondprefixForm.controls.setting.setValue(e.CODE);
+  }
+
+
   toggleViewMode(): void {
     this.viewMode = !this.viewMode;
     if (this.viewMode) {
@@ -289,8 +396,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   setPostData(){
     return{
-    "PREFIX_CODE": this.diamondprefixForm.value.prefixcode?.toUpperCase(),
-    "DESCRIPTION": this.diamondprefixForm.value.prefixcodedes?.toUpperCase(),
+    "PREFIX_CODE": this.commonService.nullToString(this.diamondprefixForm.value.prefixcode?.toUpperCase() ),
+    "DESCRIPTION": this.commonService.nullToString(this.diamondprefixForm.value.prefixcodedes?.toUpperCase()),
     "LAST_NO": this.commonService.nullToString(this.diamondprefixForm.value.lastno),
     "CURRENCY_CODE": this.commonService.nullToString(this.diamondprefixForm.value.currency),
     "CONV_RATE": this.commonService.emptyToZero(this.diamondprefixForm.value.currencyRate),
@@ -306,31 +413,31 @@ export class DiamondPrefixMasterComponent implements OnInit {
     "PM_BRANCHCODE": "",
     "JOB_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.jobcardprefix),
     "SETREF_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.setrefprefix),
-    "BRANCH_CODE": this.commonService.branchCode,
-    "BOIL_PREFIX": true,
+    "BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
+    "BOIL_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.boilProcessPrefix),
     "SCHEME_PREFIX": true,
-    "UDF1": this.diamondprefixForm.value.userdefined_1 || "",
-    "UDF2": this.diamondprefixForm.value.userdefined_2 || "",
-    "UDF3": this.diamondprefixForm.value.userdefined_3 || "",
-    "UDF4": this.diamondprefixForm.value.userdefined_4 || "",
-    "UDF5": this.diamondprefixForm.value.userdefined_5 || "",
-    "UDF6": this.diamondprefixForm.value.userdefined_6 || "",
-    "UDF7": this.diamondprefixForm.value.userdefined_7 || "",
-    "UDF8": this.diamondprefixForm.value.userdefined_8 || "",
-    "UDF9": this.diamondprefixForm.value.userdefined_9 || "",
-    "UDF10": this.diamondprefixForm.value.userdefined_10 || "",
-    "UDF11": this.diamondprefixForm.value.userdefined_11 || "",
-    "UDF12": this.diamondprefixForm.value.userdefined_12 || "",
-    "UDF13": this.diamondprefixForm.value.userdefined_13 || "",
-    "UDF14": this.diamondprefixForm.value.userdefined_14 || "",
-    "UDF15": this.diamondprefixForm.value.userdefined_15 || "",
+    "UDF1": this.commonService.nullToString(this.diamondprefixForm.value.collection),
+    "UDF2": this.commonService.nullToString(this.diamondprefixForm.value.sub_collection),
+    "UDF3": this.commonService.nullToString(this.diamondprefixForm.value.stone_type),
+    "UDF4": this.commonService.nullToString(this.diamondprefixForm.value.setting),
+    "UDF5": this.commonService.nullToString(this.diamondprefixForm.value.shape),
+    "UDF6": this.commonService.nullToString(this.diamondprefixForm.value.inc_cat),
+    "UDF7": this.commonService.nullToString(this.diamondprefixForm.value.order_ref),
+    "UDF8": "",
+    "UDF9":  "",
+    "UDF10":  "",
+    "UDF11":  "",
+    "UDF12":  "",
+    "UDF13":  "",
+    "UDF14":  "",
+    "UDF15": "",
     "TAG_WT": 0,
     "COMP_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.Componentprefix),
     "DESIGN_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.designprefix),
     "REFINE_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.refinervprefix),
     "SUBLEDGER_PREFIX": true,
-    "SUFFIX_CODE": this.diamondprefixForm.value.suffixcode || "",
-    "HSN_CODE": this.diamondprefixForm.value.hsn || "",
+    "SUFFIX_CODE":  this.commonService.nullToString(this.diamondprefixForm.value.suffixcode),
+    "HSN_CODE":  this.commonService.nullToString(this.diamondprefixForm.value.hsn),
   }
   }
 
@@ -470,6 +577,162 @@ export class DiamondPrefixMasterComponent implements OnInit {
       // this.afterSave(result.value)
     });
   }
+
+  
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.diamondprefixForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+  }
+
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+
+      
+      case 'currency':
+        this.currencycodeSearch.showOverlayPanel(event);
+        break;
+        case 'costcode':
+          this.costcodeSearch.showOverlayPanel(event);
+          break;
+          case 'brand':
+            this.brandcodeSearch.showOverlayPanel(event);
+            break;
+            case 'Category':
+              this.CategorycodeSearch.showOverlayPanel(event);
+              break;
+              case 'Type':
+                this.TypecodeSearch.showOverlayPanel(event);
+                break;
+                case 'subCategory':
+                  this.subCategorycodeSearch.showOverlayPanel(event);
+                  break;
+                  case 'Country':
+                    this.CountrycodeSearch.showOverlayPanel(event);
+                    break;
+                    case 'branch':
+                      this.branchcodeSearch.showOverlayPanel(event);
+                      break;
+
+      case 'collection':
+        this.collectioncodeSearch.showOverlayPanel(event);
+        break;
+      case 'sub_collection':
+        this.sub_collectioncodeSearch.showOverlayPanel(event);
+        break;
+      case 'stone_type':
+        this.stone_typecodeSearch.showOverlayPanel(event);
+        break;
+      case 'setting':
+        this.settingcodeSearch.showOverlayPanel(event);
+        break;
+      case 'shape':
+        this.shapecodeSearch.showOverlayPanel(event);
+        break;
+      case 'inc_catc':
+        this.inc_catcodeSearch.showOverlayPanel(event);
+        break;
+        break;
+        case 'order_ref':
+          this.order_refcodeSearch.showOverlayPanel(event);
+          break;
+
+
+      default:
+    }
+  }
+
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+
+      case 'currency':
+        this.currencycodeSearch.showOverlayPanel(event);
+        break;
+        case 'costcode':
+          this.costcodeSearch.showOverlayPanel(event);
+          break;
+          case 'brand':
+            this.brandcodeSearch.showOverlayPanel(event);
+            break;
+            case 'Category':
+              this.CategorycodeSearch.showOverlayPanel(event);
+              break;
+              case 'Type':
+                this.TypecodeSearch.showOverlayPanel(event);
+                break;
+                case 'subCategory':
+                  this.subCategorycodeSearch.showOverlayPanel(event);
+                  break;
+                  case 'Country':
+                  this.CountrycodeSearch.showOverlayPanel(event);
+                  break;
+                  case 'branch':
+                    this.branchcodeSearch.showOverlayPanel(event);
+                    break;
+                  
+              
+      case 'collection':
+        this.collectioncodeSearch.showOverlayPanel(event);
+        break;
+      case 'sub_collection':
+        this.sub_collectioncodeSearch.showOverlayPanel(event);
+        break;
+      case 'stone_type':
+        this.stone_typecodeSearch.showOverlayPanel(event);
+        break;
+      case 'setting':
+        this.settingcodeSearch.showOverlayPanel(event);
+        break;
+      case 'shape':
+        this.shapecodeSearch.showOverlayPanel(event);
+        break;
+      case 'inc_catc':
+        this.inc_catcodeSearch.showOverlayPanel(event);
+        break;
+        case 'order_ref':
+          this.order_refcodeSearch.showOverlayPanel(event);
+          break;
+        
+
+      default:
+        console.warn(`Unknown FORMNAME: ${FORMNAME}`);
+        break;
+    }
+  }
+
 
 }
 

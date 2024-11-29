@@ -400,7 +400,6 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   jobNumberShow() {
-    // console.log(this.commonService.getCompanyParamValue('PROCESSBALANCETOJOB'));
     if (this.commonService.getCompanyParamValue('PROCESSBALANCETOJOB') == 1) {
       return true
     }
@@ -408,14 +407,12 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   mandatoryChecklist() {
-    // console.log(this.commonService.getCompanyParamValue('COMPACCODE'));
     if (this.commonService.getCompanyParamValue('COMPACCODE') == 'SUNTECH') {
       return true
     } return false
   }
 
   applySettinglist() {
-    // console.log(this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE'));
     if (this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE') == 4) {
       return true
     } return false
@@ -702,7 +699,6 @@ export class ProcessMasterComponent implements OnInit {
   setPostData() {
     let form = this.processMasterForm.value
     let AutopostingFlag = this.commonService.getAutopostingFlag()
-    console.log(form.processType);
     return {
       "MID": this.commonService.emptyToZero(this.content?.MID),
       "PROCESS_CODE": form.processCode?.toUpperCase(),
@@ -800,8 +796,6 @@ export class ProcessMasterComponent implements OnInit {
         this.sequencesConfirmation().then((secondResult) => {
           this.saveFinalData()
         });
-      } else {
-        this.saveFinalData()
       }
     });
   }
@@ -895,8 +889,7 @@ export class ProcessMasterComponent implements OnInit {
         this.isloading = false;
         this.commonService.closeSnackBarMsg()
         if (result) {
-          if (result.status === "Success") {
-            console.log(this.commonService.getMsgByID('MSG2443'));
+          if (result.status === "Success") {;
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           } else {
             this.showErrorDialog(result.message || 'Error please try again');
@@ -944,7 +937,6 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   ApprovalCodeSelected(e: any) {
-    console.log(e)
     if (this.checkCode()) return;
 
     this.processMasterForm.controls.approvalCode.setValue(e.APPR_CODE);
@@ -1040,11 +1032,7 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   postionCodeValidates() {
-    // console.log(this.positionCode);
     let curr_value = this.processMasterForm.controls.Position.value;
-    // console.log(curr_value);
-    // console.log(typeof(curr_value));
-    // console.log(typeof(this.positionCode));
     if (this.positionCode > curr_value) {
       Swal.fire({
         icon: "error",
@@ -1055,7 +1043,7 @@ export class ProcessMasterComponent implements OnInit {
 
   /** checking for same account code selection */
   private isSameAccountCodeSelected(accountCode: any, formControlName: string): boolean {
-    console.log(this.processMasterForm.value, 'this.processMasterForm.value');
+    // console.log(this.processMasterForm.value, 'this.processMasterForm.value');
     let flag = false;
     switch (formControlName) {
       case 'WIPaccount':
@@ -1114,7 +1102,6 @@ export class ProcessMasterComponent implements OnInit {
       return;
     }
     this.processMasterForm.controls.WIPaccount.setValue(event.ACCODE);
-    console.log(event);
     this.wipAccodeValidateSP();
     // this.accodeValidateSP(event, this.WipACCODEData, 'WIPaccount')
   }
@@ -1226,9 +1213,6 @@ export class ProcessMasterComponent implements OnInit {
 
   /**use: sp call to validate same accode to avoid same accode selection */
   accodeValidateSP(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    // console.log('This');
-
-    // console.log(event.target.value);
     // LOOKUPDATA.SEARCH_VALUE = event.target.value
     let values = event.target.value;
     if (values == '' || this.viewMode == true || this.editMode == true) return
@@ -1240,7 +1224,6 @@ export class ProcessMasterComponent implements OnInit {
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        console.log('this api working');
         // this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length > 0) {
@@ -1313,8 +1296,6 @@ export class ProcessMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           const responseData = result.dynamicData[0][0];
-          console.log(responseData);
-          console.log(responseData.LOSS_ACCODE);
           if (responseData.LOSS_ACCODE == this.processMasterForm.value.LOSS_ACCODE) {
             Swal.fire({
               title: '',
@@ -1352,8 +1333,6 @@ export class ProcessMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           const responseData = result.dynamicData[0][0];
-          console.log(responseData);
-          console.log(responseData.RECOV_ACCODE);
           if (responseData.RECOV_ACCODE == this.processMasterForm.value.RECOV_ACCODE) {
             Swal.fire({
               title: '',
@@ -1391,8 +1370,6 @@ export class ProcessMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           const responseData = result.dynamicData[0][0];
-          console.log(responseData);
-          console.log(responseData.GAIN_ACCODE);
           if (responseData.GAIN_ACCODE == this.processMasterForm.value.GAIN_ACCODE) {
             Swal.fire({
               title: '',
@@ -1431,12 +1408,49 @@ export class ProcessMasterComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.processMasterForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
           return
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
+  }
+
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'WIPaccount':
+        this.overlayWIPaccountSearch.showOverlayPanel(event);
+        break;
+      case 'approvalCode':
+        this.overlayapprovalCodeSearch.showOverlayPanel(event);
+        break;
+      case 'approvalProcess':
+        this.overlayapprovalProcessSearch.showOverlayPanel(event);
+        break;
+      case 'recStockCode':
+        this.overlayrecStockCodeSearch.showOverlayPanel(event);
+        break;
+      case 'ADJUST_ACCODE':
+        this.overlayadjustaccodeSearch.showOverlayPanel(event);
+        break;
+      case 'JOB_NO':
+        this.overlayjobNoSearch.showOverlayPanel(event);
+        break;
+      case 'LOSS_ACCODE':
+        this.overlaylossaccodeSearch.showOverlayPanel(event);//
+        break;
+      case 'RECOV_ACCODE':
+        this.overlayrecoveaccodeSearch.showOverlayPanel(event);
+        break;
+      case 'GAIN_ACCODE':
+        this.overlaygainaccodeSearch.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unknown FORMNAME: ${FORMNAME}`);
+        break;
+    }
   }
 
   // /**use: focusout fn for input valate */

@@ -1,7 +1,7 @@
 <div>
   <!-- header section starts -->
   <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Set Break</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Set Break Master</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
       <i class="feather icon-x close-icon"></i>
     </button>
@@ -14,8 +14,7 @@
     (saveClick)="formSubmit()"
     (cancelClick)="close()"
     [isViewDelete]="!viewMode && editableMode"
-    (deleteClick)="deleteRecord()"
-  ></modal-header>
+    (deleteClick)="deleteRecord()"></modal-header>
   <!-- content section -->
   <div class="p-4">
     <form [formGroup]="SetRefMasterForm">
@@ -26,21 +25,19 @@
               <label
                 for="inputPassword"
                 id="ID001"
-                class="col-sm-3 col-form-label"
-              >
-                Division :</label
-              >
+                class="col-sm-3 col-form-label">
+                Division :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <!-- <mat-option
-                                    *ngFor="let option of divisionCode"
-                                    [value]="option.value"
-                                  >
-                                    {{ option.name }}
-                                  </mat-option> -->
-                  <mat-select formControlName="division" [disabled]="viewMode">
-                    <mat-option value="yes">yes</mat-option>
-                    <mat-option value="No">No</mat-option>
+                  <mat-select
+                    formControlName="division"
+                    [disabled]="viewMode"
+                    (selectionChange)="getDivsionValue($event)">
+                    <mat-option
+                      *ngFor="let option of divisionCode"
+                      [value]="option.ENGLISH">
+                      {{ option.ENGLISH }}
+                    </mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -49,10 +46,8 @@
               <label
                 for="inputPassword"
                 id="ID002"
-                class="col-sm-3 col-form-label"
-              >
-                Set Ref Code :</label
-              >
+                class="col-sm-3 col-form-label">
+                Set Ref Code :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
@@ -64,7 +59,27 @@
                     UpperCaseDirective
                     autocomplete="off"
                     formControlName="set_ref_code"
-                  />
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        setRefCodeData,
+                        ['set_ref_code'],
+                        false,
+                        ['PREFIX_CODE']
+                      )
+                    "
+                    (keydown)="
+                      onKeyDown($event, ['set_ref_code'], setRefCodeData)
+                    " />
+                  <master-search
+                    class="masterSearch"
+                    #overlaySetRefCode
+                    [MasterSearchData]="setRefCodeData"
+                    (newRowClick)="CodeDataSelected($event)"
+                    (keydown)="
+                      onKeyDown($event, ['set_ref_code'], setRefCodeData)
+                    ">
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -72,10 +87,8 @@
               <label
                 for="inputPassword"
                 id="ID003"
-                class="col-sm-3 col-form-label"
-              >
-                Description :</label
-              >
+                class="col-sm-3 col-form-label">
+                Description :</label>
               <div class="col-sm-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
@@ -88,20 +101,22 @@
                       SPvalidateLookupFieldModified(
                         $event,
                         codeData,
-                        ['code','decription'],
+                        ['code', 'decription'],
                         false,
-                        ['CODE','DESCRIPTION']
+                        ['CODE', 'DESCRIPTION']
                       )
                     "
-                    (keydown)="onKeyDown($event, ['code','decription'], codeData)"
-                  />
+                    (keydown)="
+                      onKeyDown($event, ['code', 'decription'], codeData)
+                    " />
                   <master-search
                     class="masterSearch"
                     #overlaycode
                     [MasterSearchData]="codeData"
-                    (newRowClick)="CodeDataSelected($event)"
-                    (keydown)="onKeyDown($event, ['code','decription'], codeData)"
-                  >
+                    (newRowClick)="CodeSecSelected($event)"
+                    (keydown)="
+                      onKeyDown($event, ['code', 'decription'], codeData)
+                    ">
                   </master-search>
                 </mat-form-field>
               </div>
@@ -114,32 +129,33 @@
                     matInput
                     formControlName="decription"
                     UpperCaseDirective
-                    autocomplete="off"
-                  />
+                    autocomplete="off" />
                 </mat-form-field>
               </div>
             </div>
             <div class="border p-2 mt-2">
               <div class="row">
                 <div class="col-md-4">
-                  <button class="btn btns-sm btn-primary rounded-2">
+                  <button class="btn btns-sm btn-primary rounded-2" [disabled]="hideFields">
                     Select Pending MBC Stock Master
                   </button>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5" *ngIf="divisionCOde !== 'M'">
                   <div class="row">
                     <label
                       for="inputPassword"
                       id="ID004"
-                      class="col-sm-2 col-form-label"
-                    >
+                      class="col-sm-2 col-form-label">
                       Year
                     </label>
                     <div class="col-sm-5">
                       <mat-form-field style="width: 100%" appearance="outline">
                         <mat-select formControlName="year">
-                          <mat-option></mat-option>
-                          <mat-option></mat-option>
+                          <mat-option
+                            *ngFor="let option of yearData"
+                            [value]="option.FYEARCODE">
+                            {{ option.FYEARCODE }}
+                          </mat-option>
                         </mat-select>
                       </mat-form-field>
                     </div>
@@ -162,8 +178,7 @@
                           "
                           (keydown)="
                             onKeyDown($event, ['year_type'], yearTypeData)
-                          "
-                        />
+                          " />
                         <master-search
                           class="masterSearch"
                           #overlayYearCode
@@ -171,22 +186,19 @@
                           (keydown)="
                             onKeyDown($event, ['year_type'], yearTypeData)
                           "
-                          (newRowClick)="YearTypeDataSelected($event)"
-                        >
+                          (newRowClick)="YearTypeDataSelected($event)">
                         </master-search>
                       </mat-form-field>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3" *ngIf="divisionCOde !== 'M'">
                   <div class="row">
                     <label
                       for="inputPassword"
                       id="ID005"
-                      class="col-sm-6 col-form-label"
-                    >
-                      DPC Voc No</label
-                    >
+                      class="col-sm-6 col-form-label">
+                      DPC Voc No</label>
                     <div class="col-sm-6">
                       <mat-form-field style="width: 100%" appearance="outline">
                         <input
@@ -196,8 +208,7 @@
                           matInput
                           formControlName="voc_no"
                           UpperCaseDirective
-                          autocomplete="off"
-                        />
+                          autocomplete="off" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -217,17 +228,44 @@
       </div>
       <div class="border p-2">
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-1">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input
+                [readonly]="viewMode"
+                type="text"
+                matInput
+                UpperCaseDirective
+                formControlName="table_search"
+                (focusout)="
+                  SPvalidateLookupFieldModified(
+                    $event,
+                    gridDataSearch,
+                    ['table_search'],
+                    false,
+                    ['Stock_Code']
+                  )
+                "
+                (keydown)="onKeyDown($event, ['table_search'], gridDataSearch)" />
+              <master-search
+                class="masterSearch"
+                #overlayTableSearchCode
+                [MasterSearchData]="gridDataSearch"
+                (keydown)="onKeyDown($event, ['table_search'], gridDataSearch)"
+                (newRowClick)="TableDataSelected($event)">
+              </master-search>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
             <menu-buttons
-            *ngIf="!viewMode"
+              *ngIf="!viewMode"
               [viewAddBtn]="true"
               [viewDeleteBtn]="true"
               [viewImportBtn]="false"
               (addClick)="addTableData()"
-              (deleteClick)="removedata()"
-            >
+              (deleteClick)="removedata()">
             </menu-buttons>
-
+          </div>
+          <div class="col-md-12">
             <dx-data-grid
               id="gridContainer"
               [dataSource]="tableData"
@@ -237,28 +275,23 @@
               [allowColumnResizing]="true"
               class="mt-3"
               keyExpr="SRNO"
-              (onSelectionChanged)="onSelectionChanged($event)"
-            >
-              <dxo-selection mode="single"></dxo-selection>
+              (onSelectionChanged)="onSelectionChanged($event)">
+             
               <dxi-column
                 dataField="SRNO"
                 caption="SR No"
-                class="tab"
-              ></dxi-column>
+                class="tab"></dxi-column>
               <dxi-column
                 dataField="STOCKCODE"
                 caption="Stock Code"
-                cellTemplate="stock_code"
-              ></dxi-column>
+                cellTemplate="stock_code"></dxi-column>
               <dxi-column
                 dataField="STOCKDESC"
                 caption="Description"
-                cellTemplate="description"
-              ></dxi-column>
+                cellTemplate="description"></dxi-column>
               <dxi-column
                 dataField="DIVISION_CODE"
-                caption="Select"
-              ></dxi-column>
+                caption="Select" cellTemplate="limitTemplate"></dxi-column>
               <div *dxTemplate="let data of 'description'">
                 <input
                   [readonly]="viewMode"
@@ -266,19 +299,23 @@
                   type="text"
                   id="description"
                   [value]="data.value"
-                  (change)="getAccode($event, data)"
-                />
+                  (change)="getAccode($event, data)" />
               </div>
-              <div *dxTemplate="let data of 'stock_code'">
-                  <input
-                    [readonly]="viewMode"
-                    class="form-control"
-                    type="text"
-                    id="stock_code"
+              <div *dxTemplate="let data of 'limitTemplate'">
+                <mat-checkbox 
                     [value]="data.value"
-                    (change)="getStockCode($event, data)"
-                  />
-                </div>
+                    [disabled]="viewMode"
+                    (change)="changedCheckbox(data)"></mat-checkbox>
+            </div>
+              <div *dxTemplate="let data of 'stock_code'">
+                <input
+                  [readonly]="viewMode"
+                  class="form-control"
+                  type="text"
+                  id="stock_code"
+                  [value]="data.value"
+                  (change)="getStockCode($event, data)" />
+              </div>
             </dx-data-grid>
             <dx-data-grid
               id="gridContainer"
@@ -289,28 +326,23 @@
               [allowColumnResizing]="true"
               class="mt-3"
               keyExpr="SRNO"
-              (onSelectionChanged)="onSelectionChanged($event)"
-            >
-              <dxo-selection mode="single"></dxo-selection>
+             >
+            
               <dxi-column
                 dataField="SRNO"
                 caption="SR No"
-                class="tab"
-              ></dxi-column>
+                class="tab"></dxi-column>
               <dxi-column
                 dataField="STOCKCODE"
                 caption="Stock Code"
-                cellTemplate="stock_code1"
-              ></dxi-column>
+                cellTemplate="stock_code1"></dxi-column>
               <dxi-column
                 dataField="STOCKDESC"
                 caption="Description"
-                cellTemplate="description1"
-              ></dxi-column>
+                cellTemplate="description1"></dxi-column>
               <dxi-column
                 dataField="DIVISION_CODE"
-                caption="Select"
-              ></dxi-column>
+                caption="Select" cellTemplate="limitTemplate1"></dxi-column>
               <div>
                 <div *dxTemplate="let data of 'description1'">
                   <input
@@ -319,19 +351,23 @@
                     type="text"
                     id="description1"
                     [value]="data.value"
-                    (change)="getAccode1($event, data)"
-                  />
+                   />
                 </div>
                 <div *dxTemplate="let data of 'stock_code1'">
-                    <input
-                      [readonly]="viewMode"
-                      class="form-control"
-                      type="text"
-                      id="stock_code1"
-                      [value]="data.value"
-                      (change)="getStockCode1($event, data)"
+                  <input
+                    [readonly]="viewMode"
+                    class="form-control"
+                    type="text"
+                    id="stock_code1"
+                    [value]="data.value"
                     />
-                  </div>
+                </div>
+                <div *dxTemplate="let data of 'limitTemplate1'">
+                  <mat-checkbox 
+                      [value]="data.value"
+                      [disabled]="viewMode"
+                      (change)="changedCheckbox1(data)"></mat-checkbox>
+              </div>
               </div>
             </dx-data-grid>
           </div>

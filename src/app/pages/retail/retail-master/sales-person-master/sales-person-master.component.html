@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMetalPrefix()"
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"
     [isViewDelete]="editMode" [isViewSave]="!viewMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
@@ -17,11 +17,11 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Code :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="text" matInput formControlName="code"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3 pl-5">
-                                <mat-checkbox class="example-margin" id="ID025">Active</mat-checkbox>
+                                <mat-checkbox class="example-margin" id="ID025" formControlName="active" [disabled]="viewMode">Active</mat-checkbox>
                               </div>
 
                         </div>
@@ -29,7 +29,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Description :</label>
                             <div class="col-md-7">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="text" matInput formControlName="description"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -37,7 +37,15 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Short Name :</label>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="text" matInput formControlName="shortname" [readonly]="viewMode"  />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-5 col-form-label">Commision Metal % :</label>
+                            <div class="col-md-5">
+                                <mat-form-field style="width: 100%;" appearance="outline">
+                                    <input type="number" matInput formControlName="commisionMetal"  [readonly]="viewMode" class="text-right" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -45,15 +53,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Commision Others % :</label>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row align-items-center mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label">Commision Others % :</label>
-                            <div class="col-md-5">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="number" matInput formControlName="commisionOthers"  [readonly]="viewMode"  class="text-right" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                         <label for="inputPassword" class="col-sm-5 col-form-label">Mobile :</label>
                         <div class="col-md-5">
                             <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" matInput formControlName="code" />
+                                <input type="text" matInput formControlName="mobile"  [readonly]="viewMode" />
                             </mat-form-field>
                             </div>
                         </div>
@@ -73,9 +73,9 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Branch :</label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
-                                    <master-search [MasterSearchData]="HSNCodeData" class="masterSearch" #overlayrangeSearch
-                                    (newRowClick)="HSNCenterSelected($event)"></master-search>
+                                    <input type="text" matInput formControlName="branch"  [readonly]="viewMode" (focusout)="validateLookupField($event,BranchCodeData,'branch')"  (keydown)="lookupKeyPress($event,'branch')"/>
+                                    <master-search [MasterSearchData]="BranchCodeData"  *ngIf=" viewMode == false" class="masterSearch" #overlaybranchSearch
+                                    (newRowClick)="branchCodeSelected($event)"></master-search>
                                 </mat-form-field>
 
                             </div>
@@ -85,9 +85,9 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Employee Code :</label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
-                                    <master-search [MasterSearchData]="HSNCodeData" class="masterSearch" #overlayrangeSearch
-                                    (newRowClick)="HSNCenterSelected($event)"></master-search>
+                                    <input type="text" matInput formControlName="employeecode"  [readonly]="viewMode" (focusout)="validateLookupField($event,EmployeeCodeData,'employeecode')"  (keydown)="lookupKeyPress($event,'employeecode')"/>
+                                    <master-search [MasterSearchData]="EmployeeCodeData"  *ngIf=" viewMode == false" class="masterSearch" #overlayemployeecodeSearch
+                                    (newRowClick)="EmployeeSelected($event)"></master-search>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -95,9 +95,9 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">GL Code :</label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
-                                    <master-search [MasterSearchData]="HSNCodeData" class="masterSearch" #overlayrangeSearch
-                                    (newRowClick)="HSNCenterSelected($event)"></master-search>
+                                    <input type="text" matInput formControlName="glcode"  [readonly]="viewMode" (focusout)="validateLookupField($event,glCodeData,'glcode')"  (keydown)="lookupKeyPress($event,'glcode')"/>
+                                    <master-search [MasterSearchData]="glCodeData"  *ngIf=" viewMode == false" class="masterSearch" #overlayglcodeSearch
+                                    (newRowClick)="glSelected($event)"></master-search>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                             <label for="inputPassword" class="col-sm-4 col-form-label">Email Id :</label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" />
+                                    <input type="text" matInput formControlName="emailId"  [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>

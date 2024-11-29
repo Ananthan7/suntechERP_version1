@@ -458,7 +458,9 @@ export class ComponentMasterComponent implements OnInit {
 
   }
   stockClicked(param:any){
-    this.stockCodeData.WHERECONDITION = `DIVISION = '${param.data.DIVCODE}' and SUBCODE = 0`;
+    if(this.comService.nullToString(param.data.DIVCODE) != ''){
+      this.stockCodeData.WHERECONDITION = `DIVISION = '${param.data.DIVCODE}' and SUBCODE = 0`;
+    }
   }
   stockCodeDataSelected(value: any, object: any, controlName: string,) {
     this.tableData[object.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
