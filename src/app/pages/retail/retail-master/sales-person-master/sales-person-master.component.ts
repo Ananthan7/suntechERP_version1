@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-sales-person-master',
@@ -23,6 +24,12 @@ export class SalesPersonMasterComponent implements OnInit {
   userbranch = localStorage.getItem('userbranch');
   editMode:boolean = false;
 
+  @ViewChild('overlaybranchSearch') overlaybranchSearch!: MasterSearchComponent;
+  @ViewChild('overlayemployeecodeSearch') overlayemployeecodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayglcodeSearch') overlayglcodeSearch!: MasterSearchComponent;
+
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -34,19 +41,18 @@ export class SalesPersonMasterComponent implements OnInit {
 
  
   ngOnInit(): void {
-    // this.setCompanyCurrency()
-    this.setFormValues()
-    // this.setCompanyCurrency()
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true
-  
-    } else if (this.content.FLAG == 'EDIT') {
-      this.editableMode = true;
-      this.editMode = true
-    }
-    else if (this.content.FLAG == 'DELETE') {
-      this.viewMode = true;
-      this.deleteMetalPrefix()
+    if (this.content?.FLAG) {
+      console.log(this.content)
+      this.setFormValues();
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.editMode = true;
+      } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
+      }
     }
   }
   
@@ -67,7 +73,15 @@ export class SalesPersonMasterComponent implements OnInit {
   setFormValues() {
     console.log(this.content);
     if (!this.content) return
-    this.salesPersonForm.controls.prefixcode.setValue(this.content.PREFIX_CODE)
+    this.salesPersonForm.controls.code.setValue(this.content.SALESPERSON_CODE)
+    this.salesPersonForm.controls.description.setValue(this.content.DESCRIPTION)
+    this.salesPersonForm.controls.commisionMetal.setValue(this.content.COMMISSION)
+    this.salesPersonForm.controls.shortname.setValue(this.content.SP_SHORTNAME)
+    this.salesPersonForm.controls.branch.setValue(this.content.SP_BRANCHCODE)
+    this.salesPersonForm.controls.employeecode.setValue(this.content.EMPMST_CODE)
+    this.salesPersonForm.controls.active.setValue(this.content.ACTIVE === 'Y' ? true : false)
+    this.salesPersonForm.controls.glcode.setValue(this.content.SPACCODE)
+    this.salesPersonForm.controls.commisionOthers.setValue(this.content.COMMISSIONDIA)
    
   }
 
@@ -88,136 +102,38 @@ export class SalesPersonMasterComponent implements OnInit {
     this.salesPersonForm.controls.branch.setValue(e.BRANCH_CODE);
   }
 
-  HSNCodeData: MasterSearchModel = {
+  EmployeeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 61,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'HSN',
+    SEARCH_HEADING: 'Employee',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  HSNCenterSelected(e: any) {
+  EmployeeSelected(e: any) {
     console.log(e);
-    this.salesPersonForm.controls.hsn.setValue(e.CODE);
+    this.salesPersonForm.controls.employeecode.setValue(e.EMPMST_CODE);
   }
-  currencyCodeData: MasterSearchModel = {
+
+  glCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 176,
-    SEARCH_FIELD: 'CURRENCY_CODE',
-    SEARCH_HEADING: 'Currency',
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'GL CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CMBRANCH_CODE = '" + this.userbranch + "'",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
-  currencyCodeSelected(e: any) {
+  glSelected(e: any) {
     console.log(e);
-    this.salesPersonForm.controls.currency.setValue(e.CURRENCY_CODE);
-    this.salesPersonForm.controls.currencyRate.setValue(e.CONV_RATE);
+    this.salesPersonForm.controls.glcode.setValue(e.ACCODE);
   }
-  costCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 15,
-    SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Cost type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "COST_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  costCodeSelected(e: any) {
-    console.log(e);
-    this.salesPersonForm.controls.costcode.setValue(e.COST_CODE);
-  }
-  categoryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 30,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Category Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  categoryCodeSelected(e: any) {
-    this.salesPersonForm.controls.Category.setValue(e.CODE);
-  }
-  subcategoryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 31,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Subcategory Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  subcategoryCodeSelected(e: any) {
-    this.salesPersonForm.controls.subCategory.setValue(e.CODE);
-  }
-  typeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 62,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Type Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'TYPE MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  typeCodeSelected(e: any) {
-    this.salesPersonForm.controls.Type.setValue(e.CODE);
-  }
-  BrandCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 32,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Brand Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'BRAND MASTER' AND DIV_Y=1",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  brandCodeSelected(e: any) {
-    this.salesPersonForm.controls.brand.setValue(e.CODE);
-  }
-  countryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 26,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Country type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='COUNTRY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  countryCodeSelected(e: any) {
-    console.log(e);
-    this.salesPersonForm.controls.Country.setValue(e.CODE);
-  }
-  toggleViewMode(): void {
-    this.viewMode = !this.viewMode;
-    if (this.viewMode) {
-      this.salesPersonForm.controls.jobcardprefix.disable();
-    } else {
-      this.salesPersonForm.controls.jobcardprefix.enable();
-    }
-  }
+ 
   viewchangeYorN(e: any) {
     if (e == 'Y') {
       return true;
@@ -349,7 +265,7 @@ export class SalesPersonMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
-  deleteMetalPrefix() {
+  deleteRecord() {
     if (this.content && this.content.FLAG == 'VIEW') return
     Swal.fire({
       title: 'Are you sure?',
@@ -403,6 +319,82 @@ export class SalesPersonMasterComponent implements OnInit {
     });
   }
 
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.salesPersonForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+  }
+
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'branch':
+        this.overlaybranchSearch.showOverlayPanel(event);
+        break;
+        case 'employee':
+          this.overlayemployeecodeSearch.showOverlayPanel(event);
+          break;
+          case 'glcode':
+            this.overlayglcodeSearch.showOverlayPanel(event);
+            break;
+          
+        
+
+      default:
+    }
+  }
+
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'branch':
+        this.overlaybranchSearch.showOverlayPanel(event);
+        break;
+        case 'employee':
+          this.overlayemployeecodeSearch.showOverlayPanel(event);
+          break;
+          case 'glcode':
+            this.overlayglcodeSearch.showOverlayPanel(event);
+            break;
+          
+
+
+      default:
+        console.warn(`Unknown FORMNAME: ${FORMNAME}`);
+        break;
+    }
+  }
 
 }
 

@@ -21,6 +21,7 @@ export class YearlyBudgetPlannerDetailsComponent implements OnInit {
   @Input () tablecount :any;
   curr_branch = localStorage.getItem('userbranch');
   // @Input () fin_year :any;
+  detailmonth :any[]=[];
 
 
 
@@ -136,25 +137,45 @@ export class YearlyBudgetPlannerDetailsComponent implements OnInit {
     let count = 0;
 
     const existingACCodes = new Set();
-
-    selectedRows.forEach((row: any) => {
-        if (!existingACCodes.has(row.ACCODE)) {
-            count++;
-            const post = {
-                "SLNO": count,               
-                "BRANCH_CODE": this.curr_branch,      
-                "FYEARCODE": "stri",         
-                "ACCODE": row.CODE,          
-                "ACCOUNT_HEAD": row.ACCOUNT_HEAD, 
-                "BUDGET_AMOUNT": 0,          
-                "PRV_YEAR_AMOUNT": 0,       
-                "BUDGETED_AMT": 0
-            };
-            this.data.push(post);
-
-            existingACCodes.add(row.CODE);
-        }
-    });
+    let ind_amount = 0;
+    let months = [
+      'January', 'February', 'March', 'April', 'May', 'June', 
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    let data = months.map((month, index) => ({
+      "FYEARCODE": "",
+      "BRANCH_CODE": "",
+      "SRNO": 0,
+      "ACCODE": "string", 
+      "MONTHNAME": month,
+      "BUDGETED_AMT": 0,
+      "BUDGET_AMOUNT": 0
+  }));
+  
+  selectedRows.forEach((row: any) => {
+      if (!existingACCodes.has(row.ACCODE)) {
+          count++;
+          const post = {
+              "SLNO": count,
+              "BRANCH_CODE": this.curr_branch,
+              "FYEARCODE": "stri",
+              "ACCODE": row.CODE,
+              "ACCOUNT_HEAD": row.ACCOUNT_HEAD,
+              "BUDGET_AMOUNT": 0,
+              "PRV_YEAR_AMOUNT": 0,
+              "BUDGETED_AMT": 0,
+              "dtlMonth": data.map(item => ({
+                  ...item,  
+                  "ACCODE": row.CODE  
+              }))
+          };
+  
+          this.data.push(post);
+  
+          existingACCodes.add(row.CODE);
+      }
+  });
+  
 
     console.log(this.data);
 }

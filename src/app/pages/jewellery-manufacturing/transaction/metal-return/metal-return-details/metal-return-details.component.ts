@@ -979,6 +979,7 @@ export class MetalReturnDetailsComponent implements OnInit {
             this.metalReturnDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
             this.metalReturnDetailsForm.controls.designCode.setValue(data[0].DESIGN_CODE)
+            this.metalReturnDetailsForm.controls.JOB_PCS.setValue(data[0].JOB_PCS_TOTAL)
             this.setSubJobCondition()
             this.setLookup201WhereCondition()
             this.subJobNumberValidate()
