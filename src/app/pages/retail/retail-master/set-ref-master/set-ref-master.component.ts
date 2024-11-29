@@ -21,7 +21,7 @@ export class SetRefMasterComponent implements OnInit {
   @ViewChild("overlaySetRefCode") overlaySetRefCode!: MasterSearchComponent;
   @ViewChild("overlayTableSearchCode")
   overlayTableSearchCode!: MasterSearchComponent;
-  hideFields:boolean = false;
+  hideFields: boolean = false;
   tableData: any = [];
   tableData1: any = [];
   selectedIndexes: any = [];
@@ -101,6 +101,7 @@ export class SetRefMasterComponent implements OnInit {
   yearData: any;
   dataGrid: any = [];
   selectedData: any = [];
+  deleteMode: boolean = false;
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -110,8 +111,10 @@ export class SetRefMasterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.content);
+
     if (this.content?.FLAG) {
-      // this.setFormValues();
+      this.setFormValues();
       if (this.content?.FLAG == "VIEW") {
         this.addTableData();
         this.isDisabled = true;
@@ -123,7 +126,8 @@ export class SetRefMasterComponent implements OnInit {
         this.codeEnable = false;
       } else if (this.content?.FLAG == "DELETE") {
         this.viewMode = true;
-        // this.deleteRecord();
+        this.deleteMode = true;
+        this.deleteRecord();
       }
     }
 
@@ -183,6 +187,8 @@ export class SetRefMasterComponent implements OnInit {
         this.data = result.response;
         console.log(this.data);
         this.tableData = this.data.Details;
+        console.log(this.tableData);
+
         // console.log(details);
 
         // details.forEach((detail: any) => {
@@ -191,14 +197,16 @@ export class SetRefMasterComponent implements OnInit {
       });
     console.log(this.content);
 
-    this.SetRefMasterForm.controls.code.setValue(this.content.CODE);
-    this.SetRefMasterForm.controls.description.setValue(
+    this.divisionCOde = this.content.DIVISIONMS;
+    this.hideFields = this.divisionCOde === "M";
+    this.SetRefMasterForm.controls.code.setValue(this.content.DESCCODE);
+    this.SetRefMasterForm.controls.decription.setValue(
       this.content.DESCRIPTION
     );
-    this.SetRefMasterForm.controls.division.setValue(this.content.DIVISIONMS);
-    this.SetRefMasterForm.controls.set_ref_code.setValue(
-      this.content.SET_REF_CODE
+    this.SetRefMasterForm.controls.division.setValue(
+      this.content.DIVISIONMS === "M" ? "Metal" : "Diamond"
     );
+    this.SetRefMasterForm.controls.set_ref_code.setValue(this.content.CODE);
   }
 
   setPostData() {
@@ -220,10 +228,10 @@ export class SetRefMasterComponent implements OnInit {
 
     return {
       MID: 0,
-      CODE: this.commonService.nullToString(form.code),
-      DESCRIPTION: this.commonService.nullToString(form.description),
-      DIVISIONMS: this.commonService.nullToString(form.division),
-      SET_REF_CODE: this.commonService.nullToString(form.set_ref_code),
+      DESCCODE: this.commonService.nullToString(form.code),
+      DESCRIPTION: this.commonService.nullToString(form.decription),
+      DIVISIONMS: this.commonService.nullToString(this.divisionCOde),
+      CODE: this.commonService.nullToString(form.set_ref_code),
       SYSTEMDATE: new Date(),
       USERID: "string",
       SYSTEMID: "string",
@@ -232,6 +240,7 @@ export class SetRefMasterComponent implements OnInit {
       BROKEN_DATE: new Date(),
       BROKEN_USER: "string",
       SET_PICTURE_NAME: "string",
+      SET_REF_CODE: "string",
       Details: detailsArray,
     };
   }
@@ -399,7 +408,7 @@ export class SetRefMasterComponent implements OnInit {
   }
   CodeSecSelected(e: any) {
     this.SetRefMasterForm.controls["code"].setValue(e.CODE);
-    this.SetRefMasterForm.controls["description"].setValue(e.DESCRIPTION);
+    this.SetRefMasterForm.controls["decription"].setValue(e.DESCRIPTION);
   }
   changedCheckbox(data: any) {
     console.log("Moving row:", data.data);
@@ -412,8 +421,9 @@ export class SetRefMasterComponent implements OnInit {
     this.tableData1.push(this.dataGrid);
     console.log(this.tableData1);
 
-    this.tableData = this.tableData.filter((row: any) => row.SRNO !== data.data.SRNO);
-
+    this.tableData = this.tableData.filter(
+      (row: any) => row.SRNO !== data.data.SRNO
+    );
   }
 
   changedCheckbox1(data: any) {
@@ -427,8 +437,9 @@ export class SetRefMasterComponent implements OnInit {
     this.tableData.push(this.dataGrid);
     console.log(this.tableData);
 
-    this.tableData1 = this.tableData1.filter((row: any) => row.SRNO !== data.data.SRNO);
-
+    this.tableData1 = this.tableData1.filter(
+      (row: any) => row.SRNO !== data.data.SRNO
+    );
   }
 
   SPvalidateLookupFieldModified(
@@ -704,5 +715,16 @@ export class SetRefMasterComponent implements OnInit {
       this.hideFields = false;
     }
     this.setRefCodeData.WHERECONDITION = `SETREF_PREFIX=1 and DIVISION='${this.divisionCOde}'`;
+
+    let api = "SetRefMaster/GenerateSetRefCode/MOE/" + this.divisionCOde;
+    console.log(api);
+    let Sub: Subscription = this.dataService
+      .getDynamicAPICustom(api)
+      .subscribe((result: any) => {
+        console.log(result);
+        let data = result.setrefcode;
+        console.log(data);
+        this.SetRefMasterForm.controls["set_ref_code"].setValue(data);
+      });
   }
 }
