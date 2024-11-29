@@ -14,8 +14,10 @@
                     <div class="row mt-2">
                         <label for="prefixcode" class="col-sm-2 col-form-label">Code :</label>
                         <div class="col-md-2 p-0 ms-2">
-                            <mat-form-field style="width: 100%;" appearance="outline" formControlName="code">
-                                <input type="text" id="code" matInput class="p-0" />
+                            <mat-form-field style="width: 100%;" appearance="outline">
+                                <input type="text" id="code" matInput class="p-0" formControlName="code"
+                                    [readonly]="viewOnly || disable_code" (change)="isexistingcode()" maxlength="15"
+                                    UpperCaseDirective />
                             </mat-form-field>
                         </div>
                         <div class="col-md-4 p-0">
@@ -25,9 +27,9 @@
                         </div>
                         <div class="col-md-2">
                             <div class="col-md-3">
-                                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
-                                    [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
-                                    (deleteClick)="deleteTableData()">
+                                <menu-buttons *ngIf="viewOnly || disadd_btn" [viewAddBtn]="true" [viewDeleteBtn]="true "
+                                    [viewImportBtn]="false" [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode"
+                                    (addClick)="addTableData()" (deleteClick)="deleteTableData()">
                                 </menu-buttons>
                             </div>
                         </div>
@@ -42,10 +44,12 @@
                                     <div class="row">
                                         <label for="prefixcode" class="col-sm-4 col-form-label">Division :</label>
                                         <div class="col-md-7">
-                                            <mat-form-field style="width: 100%;" appearance="outline"
-                                                formControlName="division">
-                                                <mat-select>
-                                                    <mat-option></mat-option>
+                                            <mat-form-field style="width: 100%;" appearance="outline">
+                                                <mat-select formControlName="division">
+                                                    <mat-option *ngFor="let division of division_values"
+                                                        [value]="division.ENGLISH">
+                                                        {{ division.ENGLISH }}
+                                                    </mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
@@ -58,7 +62,7 @@
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="divisions"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                    autocomplete="off" />
                                                 <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                     (newRowClick)="BranchDataSelected($event)">
                                                 </master-search>
@@ -77,10 +81,12 @@
                                     <div class="row">
                                         <label for="prefixcode" class="col-sm-4 col-form-label">Group 1 :</label>
                                         <div class="col-md-7">
-                                            <mat-form-field style="width: 100%;" appearance="outline"
-                                                formControlName="group1">
-                                                <mat-select>
-                                                    <mat-option></mat-option>
+                                            <mat-form-field style="width: 100%;" appearance="outline">
+                                                <mat-select formControlName="group1">
+                                                    <mat-option *ngFor="let group of dropdownvalues"
+                                                        [value]="group.value">
+                                                        {{ group.value }}
+                                                    </mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
@@ -91,7 +97,7 @@
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="group1search"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                    autocomplete="off" />
                                                 <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                     (newRowClick)="BranchDataSelected($event)">
                                                 </master-search>
@@ -104,16 +110,18 @@
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div class="row mt-1">
                                 <div class="col-md-6">
                                     <div class="row">
                                         <label for="prefixcode" class="col-sm-4 col-form-label">Group 2 :</label>
                                         <div class="col-md-7">
-                                            <mat-form-field style="width: 100%;" appearance="outline"
-                                                formControlName="group2">
-                                                <mat-select>
-                                                    <mat-option></mat-option>
+                                            <mat-form-field style="width: 100%;" appearance="outline">
+                                                <mat-select formControlName="group2">
+                                                    <mat-option *ngFor="let group of dropdownvalues"
+                                                        [value]="group.value">
+                                                        {{ group.value }}
+                                                    </mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
@@ -124,7 +132,7 @@
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="group2search"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                    autocomplete="off" />
                                                 <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                     (newRowClick)="BranchDataSelected($event)">
                                                 </master-search>
@@ -137,16 +145,18 @@
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div class="row mt-1">
                                 <div class="col-md-6">
                                     <div class="row">
                                         <label for="prefixcode" class="col-sm-4 col-form-label">Group 3 :</label>
                                         <div class="col-md-7">
-                                            <mat-form-field style="width: 100%;" appearance="outline"
-                                                formControlName="group3">
-                                                <mat-select>
-                                                    <mat-option></mat-option>
+                                            <mat-form-field style="width: 100%;" appearance="outline">
+                                                <mat-select formControlName="group3">
+                                                    <mat-option *ngFor="let group of dropdownvalues"
+                                                        [value]="group.value">
+                                                        {{ group.value }}
+                                                    </mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
@@ -157,7 +167,7 @@
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="group3search"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                    autocomplete="off" />
                                                 <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                     (newRowClick)="BranchDataSelected($event)">
                                                 </master-search>
@@ -170,11 +180,12 @@
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div class="row mt-1">
                                 <div class="col-md-4">
                                     <div class="row">
-                                        <label for="prefixcode" class="col-sm-12 col-form-label">Standard Amount Spent For 1
+                                        <label for="prefixcode" class="col-sm-12 col-form-label">Standard Amount Spent
+                                            For 1
                                             Point </label>
                                     </div>
                                 </div>
@@ -183,35 +194,36 @@
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="standardamt1"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                    autocomplete="off" />
                                             </mat-form-field>
                                         </div>
-                                        <div class="col-md-2">
+                                        <!-- <div class="col-md-2">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="standardamt2"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                     autocomplete="off" />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-2">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="standardamt3"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                     autocomplete="off" />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-2">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="standardamt4"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                     autocomplete="off" />
                                             </mat-form-field>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div class="row mt-1">
                                 <div class="col-md-4">
                                     <div class="row">
-                                        <label for="prefixcode" class="col-sm-12 col-form-label">Standard Amount Redeem For
+                                        <label for="prefixcode" class="col-sm-12 col-form-label">Standard Amount Redeem
+                                            For
                                             1
                                             Point </label>
                                     </div>
@@ -221,95 +233,103 @@
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="redeem"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                    autocomplete="off" MetalDecimalInput />
                                             </mat-form-field>
                                         </div>
-    
+
                                         <div class="col-md-2">
-                                            <mat-checkbox id="ID022" formControlName="no_redeem_points"
-                                                class="example-margin">
+                                            <mat-checkbox formControlName="no_redeem_points" class="example-margin"
+                                                (change)="changeredeem()">
                                                 No Redeem Points Slab</mat-checkbox>
                                         </div>
-    
+
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div class="row mt-1">
                                 <div class="col-md-1">
-                                    <button class="btn btn-outline-primary">Apply</button>
+                                    <button class="btn btn-outline-primary" (click)="adddetails_data()">Apply</button>
                                 </div>
-    
-                                <div class="col-md-4">
-                                    <mat-checkbox id="ID022" formControlName="calculate_points" class="example-margin">
+
+                                <div class="col-md-3">
+                                    <mat-checkbox formControlName="calculate_points" class="example-margin">
                                         Don't Calculate Standard Points</mat-checkbox>
                                 </div>
-    
-                                <div class="col-md-4">
+
+                                <div class="col-md-3">
                                     <div class="row">
-                                        <label for="inputPassword" id="ID001" class="col-md-5 col-form-label">
+                                        <label for="inputPassword" id="ID001" class="col-md-6 col-form-label">
                                             1 st Reference % :</label>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="reference1"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                <input type="number" #codeInput matInput formControlName="reference1"
+                                                    autocomplete="off" MetalDecimalInput />
                                             </mat-form-field>
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div class="col-md-4">
                                     <div class="row">
                                         <label for="inputPassword" id="ID001" class="col-md-5 col-form-label">
-                                            Sub Reference % :</label>
+                                            Std Reference % :</label>
                                         <div class="col-md-4">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="subreference"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                <input type="number" #codeInput matInput formControlName="subreference"
+                                                    autocomplete="off" MetalDecimalInput />
                                             </mat-form-field>
                                         </div>
                                     </div>
                                 </div>
-    
-    
                             </div>
-
-
-
                         </div>
-
-
 
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="row mt-2">
-                                    <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
+                                    <dx-data-grid id="gridContainer" [dataSource]="maindetails2" [showBorders]="true"
                                         [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
                                         keyExpr="SRNO">
-                                        <dxi-column dataField="POINTS" caption="Points"></dxi-column>
-                                        <dxi-column dataField="AMOUNT" caption="Amount"></dxi-column>
+                                        <dxi-column dataField="POINTS" caption="Points"
+                                            cellTemplate="points"></dxi-column>
+                                        <div *dxTemplate="let data of 'points'">
+                                            <input type="text" class="text-right" [disabled]="viewMode || !disadd_btn"
+                                                (change)="pointsfield(data,$event)" [value]="data.value"
+                                                style="width: 100%;" />
+                                        </div>
+                                        <dxi-column dataField="AMOUNT" caption="Amount"
+                                            cellTemplate="amount"></dxi-column>
+                                        <div *dxTemplate="let data of 'amount'">
+                                            <input type="text" class="text-right" [disabled]="viewMode || !disadd_btn"
+                                                (change)="amountfield(data,$event)" [value]="data.value"
+                                                style="width: 100%;" />
+                                        </div>
                                     </dx-data-grid>
                                 </div>
                             </div>
                         </div>
-
-                       
-
-
                     </div>
-
-
 
                     <div class="row mt-2">
                         <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
-                            [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
+                            [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SLNO">
                             <dxi-column dataField="SLNO" caption="SL. NO"></dxi-column>
-                            <dxi-column dataField="DIA_METAL" caption="Dia/Metal"></dxi-column>
+                            <dxi-column dataField="DIA_METAL" caption="Dia/Metal" cellTemplate="dia_metal"></dxi-column>
+                            <div *dxTemplate="let data of 'dia_metal'">
+                                <input type="text" [disabled]="viewMode || !disadd_btn"
+                                    (change)="dia_metalfield(data,$event)" [value]="data.value" style="width: 100%;" />
+                            </div>
                             <dxi-column dataField="DIVISIONS" caption="Divisions"></dxi-column>
-                            <dxi-column dataField="INVFILTER1" caption="INVFILT1"></dxi-column>
+                            <!-- <dxi-column dataField="INVFILTER1" caption="INVFILT1"></dxi-column>
                             <dxi-column dataField="INVFILTER2" caption="INVFILT2"></dxi-column>
-                            <dxi-column dataField="INVFILTER3" caption="INVFILT3"></dxi-column>
-                            <dxi-column dataField="AMTSPENT" caption="1 Point For Amt Spent"></dxi-column>
+                            <dxi-column dataField="INVFILTER3" caption="INVFILT3"></dxi-column> -->
+                            <dxi-column dataField="AMTSPENT" caption="1 Point For Amt Spent"
+                                cellTemplate="amtspent"></dxi-column>
+                            <div *dxTemplate="let data of 'amtspent'">
+                                <input type="text" [disabled]="viewMode || !disadd_btn" (change)="amtfield(data,$event)"
+                                    [value]="data.value" style="width: 100%;" />
+                            </div>
                         </dx-data-grid>
                     </div>
                 </div>

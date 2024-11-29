@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-loyalty-card-master',
@@ -9,9 +13,27 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class LoyaltyCardMasterComponent implements OnInit {
   maindetails:any=[];
+  @Input() content!: any;
+  unq_id: any;
+  flag: any;
+  dyndatas: any;
+  private subscriptions: Subscription[] = [];
+  viewOnly: boolean = false;
+  codeedit: boolean = false;
+  curr_branch : any = localStorage.getItem('userbranch');
+  disable_code:boolean = false;
+  editMode:boolean = false;
+  viewMode:boolean = false;
+
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
+    private apiService: SuntechAPIService,
+    private commonService: CommonServiceService,
+    private renderer: Renderer2
+
   ) { }
 
   loyaltycardform: FormGroup = this.formBuilder.group({
@@ -28,14 +50,228 @@ export class LoyaltyCardMasterComponent implements OnInit {
   })
 
   ngOnInit(): void {
+    console.log(this.content);
+    this.unq_id = this.content?.CODE;
+    console.log(this.unq_id);
+    this.flag = this.content?.FLAG;
+    if(this.flag == 'EDIT'){
+      this.disable_code = true;
+      this.codeedit = true;
+      this.editMode = true;
+    }else if(this.flag == 'VIEW'){
+      this.viewMode = true;
+      this.codeedit = true;
+    }
+    this.initialController(this.flag, this.content);
+    if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
+      this.detailsapi(this.unq_id);
+    }
   }
+
+  initialController(FLAG: any, DATA: any) {
+    if (FLAG === "VIEW") {
+      this.viewOnly = true;
+      this.ViewController(DATA);
+    }
+    if (FLAG === "EDIT") {
+      this.editController(DATA);
+    }
+
+    if (FLAG === "DELETE") {
+      this.DeleteController(DATA);
+    }
+  }
+
+  editController(DATA: any) {
+    this.ViewController(DATA);
+  }
+
+  ViewController(DATA: any) {
+    console.log(this.viewOnly);
+    this.loyaltycardform.controls.code.setValue(this.content?.CODE);
+
+    // this.salespersontargetform.controls.dateto.setValue(this.content?.TO_DATE);
+    this.loyaltycardform.controls.codedesc.setValue(this.content?.DESCRIPTION);
+    this.loyaltycardform.controls.pointsfrom.setValue(this.content?.POINTS_FROM);
+    this.loyaltycardform.controls.pointsto.setValue(this.content?.POINTS_TO);
+    this.loyaltycardform.controls.pointexpdays.setValue(this.content?.POINT_EXP_DAYS);
+    this.loyaltycardform.controls.pointmulfact.setValue(this.content?.POINT_CONV_PER);
+    this.loyaltycardform.controls.sendmessage.setValue(this.content?.SEND_MSG);
+    this.loyaltycardform.controls.sendemail.setValue(this.content?.SEND_EMAIL);
+
+    this.loyaltycardform.controls.diamonddiscount.setValue(this.commonService.decimalQuantityFormat(
+      this.commonService.emptyToZero(this.content?.DIA_DISCOUNT_PER),"AMOUNT"));
+    this.loyaltycardform.controls.metaldiscount.setValue(this.commonService.decimalQuantityFormat(
+      this.commonService.emptyToZero(this.content?.MTL_DISCOUNT_PER),"AMOUNT"));
+
+  }
+
+  detailsapi(fm_id: any) {
+    if(this.flag == 'VIEW'){
+      this.viewOnly = true;
+    }
+
+    let API = `LoyaltyCardMaster/GetLoyaltyCardMasterDetailWithCode/${this.unq_id}`;
+    let Sub: Subscription = this.apiService.getDynamicAPI(API)
+      .subscribe((result: any) => {
+        this.dyndatas = result.response;
+        console.log(this.dyndatas);
+      }, (err: any) => {
+
+      })
+    this.subscriptions.push(Sub);
+  }
+
+
+
+
+  DeleteController(DATA?: any) {
+    this.ViewController(DATA);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const API = `LoyaltyCardMaster/DeleteLoyaltyCardMaster/${this.unq_id}`;
+        const Sub: Subscription = this.apiService
+          .deleteDynamicAPI(API)
+          .subscribe({
+            next: (response: any) => {
+              Swal.fire({
+                title:
+                  response.status === "Success"
+                    ? "Deleted Successfully"
+                    : "Not Deleted",
+                icon: response.status === "Success" ? "success" : "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              response.status === "Success"
+                ? this.close("reloadMainGrid")
+                : console.log("Delete Error");
+            },
+            error: (err: any) => {
+              Swal.fire({
+                title: "Error",
+                text: "Failed to delete the item.",
+                icon: "error",
+                confirmButtonColor: "#d33",
+              });
+              console.error(err);
+            },
+          });
+        this.subscriptions.push(Sub);
+      } else {
+        this.flag = "VIEW";
+      }
+    });
+  }
+
+
 
   close(data?: any) {
-    this.activeModal.close(data);
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+  }
+  )
   }
 
-  formSubmit(){
-    
+  formSubmit() {
+
+    const postData = {
+      "MID": 0,
+      "CODE": this.loyaltycardform.controls.code.value,
+      "DESCRIPTION": this.loyaltycardform.controls.codedesc.value,
+      "POINTS_FROM":  this.loyaltycardform.controls.pointsfrom.value,
+      "POINTS_TO":  this.loyaltycardform.controls.pointsto.value,
+      "MTL_DISCOUNT_PER": this.loyaltycardform.controls.metaldiscount.value,
+      "DIA_DISCOUNT_PER": this.loyaltycardform.controls.diamonddiscount.value,
+      "SEND_MSG": this.loyaltycardform.controls.sendmessage.value ? true : false,
+      "SEND_EMAIL": this.loyaltycardform.controls.sendemail.value ? true : false,
+      "POINT_EXP_DAYS": this.loyaltycardform.controls.pointexpdays.value,
+      "POINT_CONV_PER": this.loyaltycardform.controls.pointmulfact.value,
+      "PICTURE_NAME": "string"
+    }
+   
+    // console.log(postData);return;
+
+    if (this.flag === "EDIT") {
+      let API = `LoyaltyCardMaster/UpdateLoyaltyCardMaster/${this.unq_id}`;
+      let sub: Subscription = this.apiService
+        .putDynamicAPI(API, postData)
+        .subscribe((result) => {
+          if (result.status.trim() === "Success") {
+            Swal.fire({
+              title: "Success",
+              text: result.message ? result.message : "Updated successfully!",
+              icon: "success",
+              confirmButtonColor: "#336699",
+              confirmButtonText: "Ok",
+            });
+
+            this.close("reloadMainGrid");
+          } else {
+            Swal.fire({
+              title: "Failed",
+              text: result.message ? result.message : "Failed!",
+              icon: "error",
+              confirmButtonColor: "#336699",
+              confirmButtonText: "Ok",
+            });
+          }
+        });
+    } else {
+      let API = `LoyaltyCardMaster/InsertLoyaltyCardMaster`;
+      let sub: Subscription = this.apiService
+        .postDynamicAPI(API, postData)
+        .subscribe((result) => {
+          if (result.status.trim() === "Success") {
+            Swal.fire({
+              title: "Success",
+              text: result.message ? result.message : "Inserted successfully!",
+              icon: "success",
+              confirmButtonColor: "#336699",
+              confirmButtonText: "Ok",
+            });
+
+            this.close("reloadMainGrid");
+          } else {
+            Swal.fire({
+              title: "Failed",
+              text: "Not Inserted Successfully",
+              icon: "error",
+              confirmButtonColor: "#336699",
+              confirmButtonText: "Ok",
+            });
+          }
+        });
+    }
   }
 
   BranchDataSelected(e:any){
