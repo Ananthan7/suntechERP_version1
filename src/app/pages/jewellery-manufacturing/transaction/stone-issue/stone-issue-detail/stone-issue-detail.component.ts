@@ -281,8 +281,6 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.remarks.setValue(this.content.D_REMARKS)
     this.stoneIssueDetailsFrom.controls.amount.setValue(this.content.AMOUNTLC)
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(this.content.DIVCODE)
-    this.stoneIssueDetailsFrom.controls.pointerwt.setValue(this.content.POINTERWEIGHT)
-    this.stoneIssueDetailsFrom.controls.unitrate.setValue(this.content.RATEFC)
     this.stoneIssueDetailsFrom.controls.carat.setValue(this.content.GROSS_WT)
     this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(this.content.PART_CODE)
     this.stoneIssueDetailsFrom.controls.batchid.setValue(this.content.SUB_STOCK_CODE)
@@ -293,8 +291,8 @@ export class StoneIssueDetailComponent implements OnInit {
     this.setValueWithDecimal('stockbal', 0, 'THREE')
     this.setValueWithDecimal('carat', 0, 'METAL')
     this.getImageData()
-    this.CalculatePiecesAndPointerWT()
-
+    this.CollectPointerWtValidation()
+    this.CollectRate()
   }
 
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
@@ -728,6 +726,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.size.setValue('')
     this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue('')
     this.stoneIssueDetailsFrom.controls.sieve.setValue('')
+    this.stoneIssueDetailsFrom.controls.unitrate.setValue('')
     this.stoneIssueDetailsFrom.controls.color.setValue('')
     this.stoneIssueDetailsFrom.controls.pointerwt.setValue('')
     this.stoneIssueDetailsFrom.controls.stockbal.setValue('')
@@ -748,12 +747,12 @@ export class StoneIssueDetailComponent implements OnInit {
       "SPID": "140",
       "parameter": {
         SubJobNumber: this.comService.nullToString(form.subjobnumber),
-        SubStockCode:  this.comService.nullToString(form.batchid),
-        StockCode:  this.comService.nullToString(form.stockCode),
+        SubStockCode: this.comService.nullToString(form.batchid),
+        StockCode: this.comService.nullToString(form.stockCode),
         BranchCode: this.comService.nullToString(this.branchCode),
         DEFPRICESMANUF: '',
-        VocDate:  this.comService.nullToString(form.VOCDATE),
-        Divcode:  this.comService.nullToString(form.DIVCODE)
+        VocDate: this.comService.nullToString(form.VOCDATE),
+        Divcode: this.comService.nullToString(form.DIVCODE)
       }
     };
     this.comService.showSnackBarMsg('MSG81447'); // Loading message
@@ -766,7 +765,7 @@ export class StoneIssueDetailComponent implements OnInit {
             let data = result.dynamicData[1]
             let RATEFC = data[0].RATEFC;
             this.stoneIssueDetailsFrom.controls.unitrate.setValue(RATEFC)
-            this.setValueWithDecimal('unitrate',RATEFC,'AMOUNT')
+            this.setValueWithDecimal('unitrate', RATEFC, 'AMOUNT')
           } else {
             this.comService.toastErrorByMsgId('MSG1747'); // "Not Found" error message
           }
@@ -836,36 +835,49 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   divisionCodeValidate(event: any) {
-    // If the input value is empty, return early
-    if (event.target.value === '') return;
-    let postData = {
-      "SPID": "135",
-      "parameter": {
-        SubJobNumber: this.stoneIssueDetailsFrom.value.subjobnumber,
-        DivisionCode: this.stoneIssueDetailsFrom.value.DIVCODE,
-        DesignType: this.stoneIssueDetailsFrom.value.DESIGN_TYPE,
-      }
+    const divisionCode = event.target.value?.trim();
+    this.clearStockDetails();
+    if (!divisionCode) return;
+    const postData = {
+      SPID: "135",
+      parameter: {
+        SubJobNumber: this.stoneIssueDetailsFrom.value.subjobnumber || '',
+        DivisionCode: divisionCode,
+        DesignType: this.stoneIssueDetailsFrom.value.DESIGN_TYPE || '',
+      },
     };
-    // Show a loading message or spinner
-    this.comService.showSnackBarMsg('MSG81447')
-    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-      .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
-        if (result.status == "Success" && result.dynamicData[0]) {
-          let data = result.dynamicData[0]
-          console.log(data, 'division')
-          if (data.length == 0) {
-            console.log(data, 'di')
-            this.comService.toastErrorByMsgId('MSG1531')
-            return
+    this.comService.showSnackBarMsg('MSG81447');
+
+    const Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe(
+        (result) => {
+          this.comService.closeSnackBarMsg();
+
+          if (result.status === "Success" && result.dynamicData && result.dynamicData.length > 0) {
+            const data = result.dynamicData[0];
+            if (!data || data.length === 0) {
+              this.comService.toastErrorByMsgId('MSG1531');
+            }
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531');
           }
+        },
+        (error) => {
+          this.comService.closeSnackBarMsg();
+          this.comService.toastErrorByMsgId('MSG1531');
         }
-      }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
+      );
+
+    this.subscriptions.push(Sub);
   }
+
+  clearStockDetails() {
+    this.stoneIssueDetailsFrom.patchValue({
+      stockCode: '',
+      stockCodeDes: '',
+    });
+  }
+
   validateManualEntry(event: any) {
     const enteredValue = event.target.value.toUpperCase(); // Convert entered value to uppercase
     const validLetters = this.validLetters; // The array of valid letters
@@ -970,7 +982,7 @@ export class StoneIssueDetailComponent implements OnInit {
 
     this.subscriptions.push(Sub);
   }
- 
+
   emptyToZero(val: any) {
     return this.commonService.emptyToZero(val)
   }
@@ -1329,7 +1341,7 @@ export class StoneIssueDetailComponent implements OnInit {
       // Show confirmation dialog with the PCS message
       this.showConfirmationDialog("Issued Pcs is greater than the Required Pcs.")
         .then((result) => {
-          if (result.isConfirmed) {  
+          if (result.isConfirmed) {
           } else {
             this.stoneIssueDetailsFrom.controls.pieces.setValue(''); // Clear the pieces field
           }

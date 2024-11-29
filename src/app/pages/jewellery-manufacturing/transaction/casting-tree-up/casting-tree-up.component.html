@@ -7,9 +7,11 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-  (deleteClick)="deleteRecord()" [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
-  <!-- component to upload attachment -->
-<attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
+  (deleteClick)="deleteRecord()" [isViewAttachment]="!viewMode"
+  (attachmentClick)="attachmentClicked()"></modal-header>
+<!-- component to upload attachment -->
+<attachment-upload (uploadSubmit)="uploadSubmited($event)"
+  [savedAttachment]="savedAttachments"></attachment-upload>
 <div class="container-fluid pt-3">
   <div class="row">
     <div class="col-md-12">
@@ -17,7 +19,8 @@
         <div class="row mb-3">
           <div class="col-md-3">
             <div class="row md-4">
-              <label for="inputPassword" class="col-md-4 col-form-label" id="ID001">Voucher Type:</label>
+              <label for="inputPassword" class="col-md-4 col-form-label"
+                id="ID001">Voucher Type:</label>
               <div class="col-md-4">
                 <mat-form-field style="width: 110%;" appearance="outline">
                   <input type="text" matInput formControlName="vocType"
@@ -51,12 +54,14 @@
         <div class="row mb-3">
           <div class="col-md-3">
             <div class="row md-4">
-              <label for="inputPassword" class="col-sm-4 col-form-label" id="ID003">Voc Date * : </label>
+              <label for="inputPassword" class="col-sm-4 col-form-label"
+                id="ID003">Voc Date * : </label>
               <div class="col-md-6">
                 <!-- <mat-form-field style="width: 100%;">
                   <input type="date" matInput formControlName="vocDate" />
                 </mat-form-field> -->
-                <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                <mat-form-field appearance="outline"
+                  style="width: -webkit-fill-available;">
                   <input matInput DateValidation
                     (dateChange)="formatDate($event)" [matDatepicker]="dob"
                     formControlName="vocDate" placeholder="DD/MM/YYYY"
@@ -72,16 +77,21 @@
           <div class="col-md-2" style="padding-left: 0px">
             <div class="row md-4">
               <label for="inputPassword"
-                class="col-sm-4 col-form-label pt-1" id="ID004">Process: </label>
+                class="col-sm-4 col-form-label pt-1" id="ID004">Process:
+              </label>
               <div class="col-sm-7">
                 <mat-form-field appearance="outline"
                   style="width: -webkit-fill-available;">
                   <input type="text" matInput formControlName="processCode"
-                    [readonly]="viewMode"  (keydown)="lookupKeyPress($event,'processCode')"  
-                    (focusout)="validateLookupField($event,processCodeData,'processCode')"/>
-                  <master-search  class="masterSearch"  [MasterSearchData]="processCodeData"  #overlayProcesscode
-                      (newRowClick)="processCodeSelected($event)" *ngIf="!viewMode" class="masterSearch">
-                    </master-search>
+                    UpperCaseDirective
+                    [readonly]="viewMode"
+                    (keydown)="lookupKeyPress($event,'processCode')"
+                    (focusout)="validateLookupField($event,processCodeData,'processCode')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="processCodeData" #overlayProcesscode
+                    (newRowClick)="processCodeSelected($event)"
+                    *ngIf="!viewMode" class="masterSearch">
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -90,17 +100,21 @@
           <div class="col-md-2" style="padding-left: 0px">
             <div class="row md-4">
               <label for="inputPassword"
-                class="col-sm-4 col-form-label pt-1" id="ID005">Cylinder: </label>
+                class="col-sm-4 col-form-label pt-1" id="ID005">Cylinder:
+              </label>
               <div class="col-sm-7">
                 <mat-form-field appearance="outline"
                   style="width: -webkit-fill-available;">
                   <input type="text" matInput formControlName="cylinder"
-                    [readonly]="viewMode" (keydown)="lookupKeyPress($event,'cylinder')"   
-                    (focusout)="validateLookupField($event,cylinderCodeData,'cylinder')"/>
-                  <master-search  class="masterSearch"  [MasterSearchData]="cylinderCodeData" #overlaycylinder
-                      *ngIf="!viewMode" class="masterSearch"
-                      (newRowClick)="cylinderCodeSelected($event)">
-                    </master-search>
+                    UpperCaseDirective
+                    [readonly]="viewMode"
+                    (keydown)="lookupKeyPress($event,'cylinder')"
+                    (focusout)="validateLookupField($event,cylinderCodeData,'cylinder')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="cylinderCodeData" #overlaycylinder
+                    *ngIf="!viewMode" class="masterSearch"
+                    (newRowClick)="cylinderCodeSelected($event)">
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -114,8 +128,8 @@
                 <mat-form-field appearance="outline"
                   style="width: 100%;">
                   <input type="number" matInput formControlName="tree"
-                    style="text-align: right;" [readonly]="viewMode"
-                    (focusout)="calculateTreeMode($event)" ThreeDecimalInput />
+                    style="text-align: right;" [readonly]="viewMode" max="13"
+                    (focusout)="calculateTreeMode($event)" ThreeDecimalInput/>
                 </mat-form-field>
               </div>
             </div>
@@ -123,10 +137,11 @@
 
           <div class="col-md-2" style="padding-left: 0px">
             <div class="row md-4">
-              <label for="inputPassword" class="col-sm-5 col-form-label pt-1" id="ID007">Stone Wt * :</label>
+              <label for="inputPassword" class="col-sm-5 col-form-label pt-1"
+                id="ID007">Stone Wt * :</label>
               <div class="col-sm-7">
                 <mat-form-field style="width: 100%;" appearance="outline">
-                  <input type="text" matInput formControlName="stoneWt"
+                  <input type="text" matInput formControlName="stoneWt" max="18"
                     style="text-align: right;" [readonly]="viewMode"
                     StoneDecimalInput />
                 </mat-form-field>
@@ -141,11 +156,13 @@
         <div class="row">
           <div class="col-md-3">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-4 col-form-label" id="ID008">Tree No: </label>
+              <label for="inputPassword" class="col-sm-4 col-form-label"
+                id="ID008">Tree No: </label>
               <div class="col-sm-6">
                 <mat-form-field appearance="outline"
                   style="width: -webkit-fill-available;">
                   <input type="text" matInput formControlName="treeNo"
+                    maxlength="18"
                     [readonly]="viewMode" NumberOnly />
                 </mat-form-field>
               </div>
@@ -154,16 +171,21 @@
 
           <div class="col-md-2" style="padding-left: 0px">
             <div class="row md-4">
-              <label for="inputPassword" class="col-sm-4 col-form-label pt-1" id="ID009">Worker:</label>
+              <label for="inputPassword" class="col-sm-4 col-form-label pt-1"
+                id="ID009">Worker:</label>
               <div class="col-sm-7">
                 <mat-form-field appearance="outline"
                   style="width: -webkit-fill-available;">
                   <input type="text" matInput formControlName="worker"
-                    [readonly]="viewMode" (keydown)="lookupKeyPress($event,'worker')"  
-                    (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
-                  <master-search  class="masterSearch"  [MasterSearchData]="WorkerCodeData" #overlayworker
-                      (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode" class="masterSearch">
-                    </master-search>
+                    UpperCaseDirective
+                    [readonly]="viewMode"
+                    (keydown)="lookupKeyPress($event,'worker')"
+                    (focusout)="validateLookupField($event,WorkerCodeData,'worker')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="WorkerCodeData" #overlayworker
+                    (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode"
+                    class="masterSearch">
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -172,7 +194,8 @@
           <div class="col-md-2" style="padding-left: 0px">
             <div class="row mb-1">
               <label for="inputPassword"
-                class="col-sm-4 col-form-label pt-1" id="ID010">Conv.Fact:</label>
+                class="col-sm-4 col-form-label pt-1"
+                id="ID010">Conv.Fact:</label>
               <div class="col-sm-7">
                 <mat-form-field appearance="outline"
                   style="width: -webkit-fill-available;">
@@ -186,11 +209,13 @@
 
           <div class="col-md-2" style="padding-left: 0px">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-4 col-form-label pt-1" id="ID011">Wax Wt * : </label>
+              <label for="inputPassword" class="col-sm-4 col-form-label pt-1"
+                id="ID011">Wax Wt * : </label>
               <div class="col-sm-7">
-                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
+                <mat-form-field style="width: -webkit-fill-available;"
+                  appearance="outline">
                   <input type="text" matInput formControlName="waxWt"
-                    style="text-align: right;" [readonly]="viewMode"
+                    style="text-align: right;" [readonly]="viewMode" max="18"
                     (focusout)="calculateWaxMetal($event)" MetalDecimalInput />
                 </mat-form-field>
               </div>
@@ -199,10 +224,13 @@
 
           <div class="col-md-2" style="padding-left: 0px">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label pt-0" id="ID012">Req Metal:</label>
+              <label for="inputPassword" class="col-sm-5 col-form-label pt-0"
+                id="ID012">Req Metal:</label>
               <div class="col-sm-7">
-                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
+                <mat-form-field style="width: -webkit-fill-available;"
+                  appearance="outline">
                   <input type="text" matInput formControlName="reqMetal"
+                    max="18"
                     [readonly]="viewMode" class="text-right"
                     MetalDecimalInput />
                 </mat-form-field>
@@ -226,16 +254,21 @@
         <div class="row mb-3">
           <div class="col-md-3">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-4 col-form-label" id="ID013">Entered By:</label>
+              <label for="inputPassword" class="col-sm-4 col-form-label"
+                id="ID013">Entered By:</label>
               <div class="col-sm-6">
-                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
+                <mat-form-field style="width: -webkit-fill-available;"
+                  appearance="outline">
                   <input type="text" matInput formControlName="enteredBy"
-                    [readonly]="viewMode" (keydown)="lookupKeyPress($event,'enteredBy')" 
-                    (focusout)="validateLookupField($event,salesmanCodeData,'enteredBy')"/>
-                  <master-search  class="masterSearch"  [MasterSearchData]="salesmanCodeData" #overlayenteredBy
-                      *ngIf="!viewMode" class="masterSearch"
-                      (newRowClick)="salesmanCodeSelected($event)">
-                    </master-search>
+                    UpperCaseDirective
+                    [readonly]="viewMode"
+                    (keydown)="lookupKeyPress($event,'enteredBy')"
+                    (focusout)="validateLookupField($event,salesmanCodeData,'enteredBy')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="salesmanCodeData" #overlayenteredBy
+                    *ngIf="!viewMode" class="masterSearch"
+                    (newRowClick)="salesmanCodeSelected($event)">
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -246,14 +279,18 @@
               <label for="inputPassword"
                 class="col-sm-4 col-form- pt-1" id="ID014">Karat:</label>
               <div class="col-sm-7">
-                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
+                <mat-form-field style="width: -webkit-fill-available;"
+                  appearance="outline">
                   <input type="text" matInput formControlName="karatCode"
-                    [readonly]="viewMode" (keydown)="lookupKeyPress($event,'karatCode')" 
+                    UpperCaseDirective
+                    [readonly]="viewMode"
+                    (keydown)="lookupKeyPress($event,'karatCode')"
                     (focusout)="validateLookupField($event,karatCodeData,'karatCode')">
-                  <master-search  class="masterSearch"  [MasterSearchData]="karatCodeData" #overlaykaratCode
-                      *ngIf="!viewMode" class="masterSearch"
-                      (newRowClick)="karatCodeSelected($event)">
-                    </master-search>
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="karatCodeData" #overlaykaratCode
+                    *ngIf="!viewMode" class="masterSearch"
+                    (newRowClick)="karatCodeSelected($event)">
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -273,21 +310,26 @@
               <label for="inputPassword"
                 class="col-sm-4 col-form-label pt-0" id="ID015">Base:</label>
               <div class="col-sm-7">
-                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
+                <mat-form-field style="width: -webkit-fill-available;"
+                  appearance="outline">
                   <input type="text" matInput formControlName="base"
                     [readonly]="viewMode" class="text-right" MetalDecimalInput
+                    max="18"
                     (focusout)="calcualteBaseMode($event)" />
                 </mat-form-field>
               </div>
             </div>
           </div>
-          
+
           <div class="col-md-2" style="padding-left: 0px">
             <div class="row md-3">
-              <label for="inputPassword" class="col-sm-5 col-form-label pt-0" id="ID016">Rec Metal *:</label>
+              <label for="inputPassword" class="col-sm-5 col-form-label pt-0"
+                id="ID016">Rec Metal *:</label>
               <div class="col-sm-7">
-                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
+                <mat-form-field style="width: -webkit-fill-available;"
+                  appearance="outline">
                   <input type="text" matInput formControlName="recMetal"
+                    max="13"
                     [readonly]="viewMode" class="text-right"
                     MetalDecimalInput />
                 </mat-form-field>
@@ -311,19 +353,25 @@
         <div class="row mb-3">
           <div class="col-2 offset-sm-3" style="padding-left:0px">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label" id="ID017">Color :</label>
+              <label for="inputPassword" class="col-sm-5 col-form-label"
+                id="ID017">Color :</label>
               <div class="col-sm-7">
-                <mat-form-field style="width:96%; margin-left:-22px; margin-top: -3px;" appearance="outline">
+                <mat-form-field
+                  style="width:96%; margin-left:-22px; margin-top: -3px;"
+                  appearance="outline">
                   <input type="text" matInput formControlName="color"
-                    [readonly]="viewMode" (keydown)="lookupKeyPress($event,'color')" 
-                    (focusout)="validateLookupField($event,colorData,'color')"/>
+                    UpperCaseDirective
+                    [readonly]="viewMode"
+                    (keydown)="lookupKeyPress($event,'color')"
+                    (focusout)="validateLookupField($event,colorData,'color')" />
                 </mat-form-field>
               </div>
             </div>
           </div>
           <div class="col-1 mx-4">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-5 col-form-label mx-5" id="ID018">From</label>
+              <label for="inputPassword" class="col-sm-5 col-form-label mx-5"
+                id="ID018">From</label>
             </div>
           </div>
 
@@ -358,37 +406,50 @@
 
                   <dxi-column dataField="SRNO" caption="SNo" class="tab">
                   </dxi-column>
-                  <dxi-column dataField="Job_Code" caption="Job Code">
+                  <dxi-column dataField="Job_Code" caption="Job Code"
+                    alignment="left">
                   </dxi-column>
                   <dxi-column dataField="Unique_job_ID" caption="Unique job ID"
-                    [allowEditing]="false"> </dxi-column>
-                  <dxi-column dataField="Design_Code" caption="Design Code">
+                    alignment="left"> </dxi-column>
+                  <dxi-column dataField="Design_Code" caption="Design Code"
+                    alignment="left">
                   </dxi-column>
-                  <dxi-column dataField="Gross_Weight" caption="Gross Weight">
+                  <dxi-column dataField="Gross_Weight" caption="Gross Weight"
+                    alignment="right">
                   </dxi-column>
-                  <dxi-column dataField="Metal_Weight" caption="Metal Weight">
+                  <dxi-column dataField="Metal_Weight" caption="Metal Weight"
+                    alignment="right">
                   </dxi-column>
-                  <dxi-column dataField="Stone_Weight" caption="Stone Weight">
+                  <dxi-column dataField="Stone_Weight" caption="Stone Weight"
+                    alignment="right">
                   </dxi-column>
                   <dxi-column dataField="RCVD_Gross_Weight"
-                    caption="RCVD Gross Weight"> </dxi-column>
-                  <dxi-column dataField="Karat_Code" caption="Karat Code">
+                    caption="RCVD Gross Weight" alignment="right"> </dxi-column>
+                  <dxi-column dataField="Karat_Code" caption="Karat Code"
+                    alignment="left">
                   </dxi-column>
-                  <dxi-column dataField="Purity" caption="Purity"> </dxi-column>
-                  <dxi-column dataField="Pure_Weight" caption="Pure Weight">
+                  <dxi-column dataField="Purity" caption="Purity"
+                    alignment="right"> </dxi-column>
+                  <dxi-column dataField="Pure_Weight" caption="Pure Weight"
+                    alignment="right">
                   </dxi-column>
-                  <dxi-column dataField="Metal_Color" caption="Metal Color">
+                  <dxi-column dataField="Metal_Color" caption="Metal Color"
+                    alignment="left">
                   </dxi-column>
                   <dxi-column dataField="RCVD_Pure_Weight"
-                    caption="RCVD Pure Weight"> </dxi-column>
+                    caption="RCVD Pure Weight" alignment="right"> </dxi-column>
                   <dxi-column dataField="Stock_Code" caption="Stock Code">
                   </dxi-column>
-                  <dxi-column dataField="Pieces" caption="Pieces"> </dxi-column>
-                  <dxi-column dataField="Job_Pcs" caption="Job Pcs">
+                  <dxi-column dataField="Pieces" caption="Pieces"
+                    alignment="right"> </dxi-column>
+                  <dxi-column dataField="Job_Pcs" caption="Job Pcs"
+                    alignment="right">
                   </dxi-column>
-                  <dxi-column dataField="Loss_Wt" caption="Loss Wt">
+                  <dxi-column dataField="Loss_Wt" caption="Loss Wt"
+                    alignment="right">
                   </dxi-column>
-                  <dxi-column dataField="Loss_Pure" caption="Loss Pure">
+                  <dxi-column dataField="Loss_Pure" caption="Loss Pure"
+                    alignment="right">
                   </dxi-column>
 
                   <dxo-summary>
