@@ -29,6 +29,7 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    (change)="onInput($event, 'gstCode', true)"
                     UpperCaseDirective
                     [readonly]="flag === 'VIEW'"
                     matInput
@@ -139,18 +140,18 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        stockCodeData,
+                        groupCodeData,
                         ['group1'],
                         ['CODE']
                       )
                     "
+                    (keydown)="openTab($event, 'group1')"
                   />
 
                   <master-search
                     *ngIf="flag != 'VIEW'"
-                    (focusout)="openTab($event, 'group1')"
                     #overlayGroupOne
-                    [MasterSearchData]="stockCodeData"
+                    [MasterSearchData]="groupCodeData"
                     class="masterSearch"
                     (newRowClick)="lookupSelect($event, ['group1'], ['CODE'])"
                   ></master-search>
@@ -173,17 +174,18 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        stockCodeData,
+                        groupCodeData,
                         ['group2'],
                         ['CODE']
                       )
                     "
+                    (keydown)="openTab($event, 'group2')"
                   />
+
                   <master-search
                     *ngIf="flag != 'VIEW'"
-                    (focusout)="openTab($event, 'group2')"
                     #overlayGroupTwo
-                    [MasterSearchData]="stockCodeData"
+                    [MasterSearchData]="groupCodeData"
                     class="masterSearch"
                     (newRowClick)="lookupSelect($event, ['group2'], ['CODE'])"
                   ></master-search>
@@ -206,18 +208,18 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        stockCodeData,
+                        groupCodeData,
                         ['group3'],
                         ['CODE']
                       )
                     "
+                    (keydown)="openTab($event, 'group3')"
                   />
 
                   <master-search
                     *ngIf="flag != 'VIEW'"
-                    (focusout)="openTab($event, 'group3')"
                     #overlayGroupThree
-                    [MasterSearchData]="stockCodeData"
+                    [MasterSearchData]="groupCodeData"
                     class="masterSearch"
                     (newRowClick)="lookupSelect($event, ['group3'], ['CODE'])"
                   ></master-search>
@@ -233,6 +235,9 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    class="text-right"
+                    ThreeDecimalInput
+                    [readonly]="flag === 'VIEW'"
                     (input)="checkPercentage($event)"
                     [readonly]="flag === 'VIEW'"
                     matInput
@@ -258,21 +263,21 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        stockCodeData,
+                        roundOffAcCodeData,
                         ['roundOffAc'],
-                        ['CODE']
+                        ['ACCODE']
                       )
                     "
+                    (keydown)="openTab($event, 'roundOffAc')"
                   />
 
                   <master-search
                     *ngIf="flag != 'VIEW'"
-                    (focusout)="openTab($event, 'roundOffAc')"
                     #overlayRoundOffAcc
-                    [MasterSearchData]="stockCodeData"
+                    [MasterSearchData]="roundOffAcCodeData"
                     class="masterSearch"
                     (newRowClick)="
-                      lookupSelect($event, ['roundOffAc'], ['CODE'])
+                      lookupSelect($event, ['roundOffAc'], ['ACCODE'])
                     "
                   ></master-search>
                 </mat-form-field>
@@ -322,7 +327,25 @@
                         matInput
                         type="text"
                         formControlName="regCgstAcCredit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            CGSTACCodeData,
+                            ['regCgstAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'regCgstAcCredit')"
                       />
+                      <master-search
+                        #overlayRegCgstAcCredit
+                        *ngIf="flag != 'VIEW'"
+                        [MasterSearchData]="CGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['regCgstAcCredit'], ['ACCODE'])
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -333,7 +356,25 @@
                         matInput
                         type="text"
                         formControlName="regCgstAcDebit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            CGSTACCodeData,
+                            ['regCgstAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'regCgstAcDebit')"
                       />
+                      <master-search
+                        #overlayRegCgstAcDebit
+                        *ngIf="flag != 'VIEW'"
+                        [MasterSearchData]="CGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['regCgstAcDebit'], ['ACCODE'])
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
                 </div>
@@ -349,7 +390,25 @@
                         matInput
                         type="text"
                         formControlName="regSgstAcCredit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            SGSTACCodeData,
+                            ['regSgstAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'regSgstAcCredit')"
                       />
+                      <master-search
+                        #overlayRegSgstAcCredit
+                        *ngIf="flag != 'VIEW'"
+                        [MasterSearchData]="SGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['regSgstAcCredit'], ['ACCODE'])
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -360,7 +419,25 @@
                         matInput
                         type="text"
                         formControlName="regSgstAcDebit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            SGSTACCodeData,
+                            ['regSgstAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'regSgstAcDebit')"
                       />
+                      <master-search
+                        #overlayRegSgstAcDebit
+                        *ngIf="flag != 'VIEW'"
+                        [MasterSearchData]="SGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['regSgstAcDebit'], ['ACCODE'])
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
                 </div>
@@ -379,7 +456,26 @@
                         matInput
                         type="text"
                         formControlName="regIgstAcCredit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            IGSTACCodeData,
+                            ['regIgstAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'regIgstAcCredit')"
                       />
+                      <master-search
+                        #overlayRegIgstAcCredit
+                        *ngIf="flag != 'VIEW'"
+                        #overlayRoundOffAcc
+                        [MasterSearchData]="IGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['regIgstAcCredit'], ['ACCODE'])
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -390,7 +486,25 @@
                         matInput
                         type="text"
                         formControlName="regIgstAcDebit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            IGSTACCodeData,
+                            ['regIgstAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'regIgstAcDebit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayRegIgstAcDebit
+                        [MasterSearchData]="IGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['regIgstAcDebit'], ['ACCODE'])
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
                 </div>
@@ -436,7 +550,29 @@
                         matInput
                         type="text"
                         formControlName="unregCgstAcCredit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            CGSTACCodeData,
+                            ['unregCgstAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'unregCgstAcCredit')"
                       />
+                      <master-search
+                        #overlayUnregCgstAcCredit
+                        *ngIf="flag != 'VIEW'"
+                        [MasterSearchData]="CGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['unregCgstAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -447,7 +583,25 @@
                         matInput
                         type="text"
                         formControlName="unregCgstAcDebit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            CGSTACCodeData,
+                            ['unregCgstAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'unregCgstAcDebit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayUnregCgstAcDebit
+                        [MasterSearchData]="CGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['unregCgstAcDebit'], ['ACCODE'])
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
                 </div>
@@ -466,7 +620,29 @@
                         matInput
                         type="text"
                         formControlName="unregSgstAcCredit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            SGSTACCodeData,
+                            ['unregSgstAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'unregSgstAcCredit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayUnregSgstAcCredit
+                        [MasterSearchData]="SGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['unregSgstAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -477,7 +653,25 @@
                         matInput
                         type="text"
                         formControlName="unregSgstAcDebit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            SGSTACCodeData,
+                            ['unregSgstAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'unregSgstAcDebit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayUnregSgstAcDebit
+                        [MasterSearchData]="SGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['unregSgstAcDebit'], ['ACCODE'])
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
                 </div>
@@ -493,7 +687,29 @@
                         matInput
                         type="text"
                         formControlName="unregIgstAcCredit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            IGSTACCodeData,
+                            ['unregIgstAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'unregIgstAcCredit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayUnregIgstAcCredit
+                        [MasterSearchData]="IGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['unregIgstAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -504,7 +720,25 @@
                         matInput
                         type="text"
                         formControlName="unregIgstAcDebit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            IGSTACCodeData,
+                            ['unregIgstAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'unregIgstAcDebit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayUnregIgstAcDebit
+                        [MasterSearchData]="IGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['unregIgstAcDebit'], ['ACCODE'])
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
                 </div>
@@ -523,7 +757,29 @@
                         matInput
                         type="text"
                         formControlName="unregCgstCtrlAcCredit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            CGSTCTRLACCodeData,
+                            ['unregCgstCtrlAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'unregCgstCtrlAcCredit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayUnregCgstCtrlAcCredit
+                        [MasterSearchData]="CGSTCTRLACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['unregCgstCtrlAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -534,7 +790,29 @@
                         matInput
                         type="text"
                         formControlName="unregCgstCtrlAcDebit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            CGSTCTRLACCodeData,
+                            ['unregCgstCtrlAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'unregCgstCtrlAcDebit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayUnregCgstCtrlAcDebit
+                        [MasterSearchData]="CGSTCTRLACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['unregCgstCtrlAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
                 </div>
@@ -553,7 +831,29 @@
                         matInput
                         type="text"
                         formControlName="unregSgstCtrlAcCredit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            SGSTCTRLACCodeData,
+                            ['unregSgstCtrlAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'unregSgstCtrlAcCredit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayUnregSgstCtrlAcCredit
+                        [MasterSearchData]="SGSTCTRLACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['unregSgstCtrlAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -564,7 +864,29 @@
                         matInput
                         type="text"
                         formControlName="unregSgstCtrlAcDebit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            SGSTCTRLACCodeData,
+                            ['unregSgstCtrlAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'unregSgstCtrlAcDebit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayUnregSgstCtrlAcDebit
+                        [MasterSearchData]="SGSTCTRLACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['unregSgstCtrlAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
                 </div>
@@ -583,7 +905,29 @@
                         matInput
                         type="text"
                         formControlName="unregIgstCtrlAcCredit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            IGSTCTRLACCodeData,
+                            ['unregIgstCtrlAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'unregIgstCtrlAcCredit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayUnregIgstCtrlAcCredit
+                        [MasterSearchData]="IGSTCTRLACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['unregIgstCtrlAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -594,7 +938,29 @@
                         matInput
                         type="text"
                         formControlName="unregIgstCtrlAcDebit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            IGSTCTRLACCodeData,
+                            ['unregIgstCtrlAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'unregIgstCtrlAcDebit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayUnregIgstCtrlAcDebit
+                        [MasterSearchData]="IGSTCTRLACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['unregIgstCtrlAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
                 </div>
@@ -640,11 +1006,56 @@
                         matInput
                         type="text"
                         formControlName="impIgstAcCredit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            IGSTACCodeData,
+                            ['impIgstAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'impIgstAcCredit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayImpIgstAcCredit
+                        [MasterSearchData]="IGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['impIgstAcCredit'], ['ACCODE'])
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-4"></div>
+                  <div class="col-md-4">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="impIgstAcDebit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            IGSTACCodeData,
+                            ['impIgstAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'impIgstAcDebit')"
+                      />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayimpIgstAcDebit
+                        [MasterSearchData]="IGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['impIgstAcDebit'], ['ACCODE'])
+                        "
+                      ></master-search>
+                    </mat-form-field>
+                  </div>
                 </div>
 
                 <div class="row mb-1">
@@ -654,7 +1065,38 @@
                     id="ID029"
                     >IGST Ctrl. A/C</label
                   >
-                  <div class="col-md-4"></div>
+                  <div class="col-md-4">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="impIgstCtrlAcCredit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            IGSTCTRLACCodeData,
+                            ['impIgstCtrlAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'impIgstCtrlAcCredit')"
+                      />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayImpIgstCtrlAcCredit
+                        [MasterSearchData]="IGSTCTRLACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['impIgstCtrlAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                      ></master-search>
+                    </mat-form-field>
+                  </div>
 
                   <div class="col-md-4">
                     <mat-form-field style="width: 100%" appearance="outline">
@@ -663,7 +1105,29 @@
                         matInput
                         type="text"
                         formControlName="impIgstCtrlAcDebit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            IGSTCTRLACCodeData,
+                            ['impIgstCtrlAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'impIgstCtrlAcDebit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayImpIgstCtrlAcDebit
+                        [MasterSearchData]="IGSTCTRLACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['impIgstCtrlAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
                 </div>
@@ -711,7 +1175,25 @@
                         matInput
                         type="text"
                         formControlName="expIgstAcDebit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            IGSTACCodeData,
+                            ['expIgstAcDebit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'expIgstAcDebit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayExpIgstAcDebit
+                        [MasterSearchData]="IGSTACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['expIgstAcDebit'], ['ACCODE'])
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
                 </div>
@@ -730,7 +1212,29 @@
                         matInput
                         type="text"
                         formControlName="expIgstCtrlAcCredit"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            IGSTCTRLACCodeData,
+                            ['expIgstCtrlAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                        (keydown)="openTab($event, 'expIgstCtrlAcCredit')"
                       />
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayExpIgstCtrlAcCredit
+                        [MasterSearchData]="IGSTCTRLACCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['expIgstCtrlAcCredit'],
+                            ['ACCODE']
+                          )
+                        "
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -751,7 +1255,7 @@
                       [showColumnLines]="true"
                       [showRowLines]="true"
                       class="mt-3"
-                      [paging]="{ pageSize: 5 }"
+                      [paging]="{ pageSize: 20 }"
                     >
                       <dxo-paging [enabled]="true"></dxo-paging>
                       <dxo-pager [showInfo]="true"></dxo-pager>
@@ -780,7 +1284,7 @@
                       [showColumnLines]="true"
                       [showRowLines]="true"
                       class="mt-3"
-                      [paging]="{ pageSize: 5 }"
+                      [paging]="{ pageSize: 20 }"
                     >
                       <dxo-paging [enabled]="true"></dxo-paging>
                       <dxo-pager [showInfo]="true"></dxo-pager>
@@ -804,40 +1308,177 @@
                   <div class="col-md-12">
                     <div class="row mb-1">
                       <menu-buttons
+                        *ngIf="flag !== 'VIEW'"
                         [viewAddBtn]="true"
                         [viewDeleteBtn]="true"
                         [viewImportBtn]="false"
-                        (addClick)="openDetails()"
-                        (deleteClick)="removeData()"
+                        (addClick)="addRowFunc()"
+                        (deleteClick)="deleteRowFunc()"
                       >
                       </menu-buttons>
                     </div>
                     <div class="row pt-2">
                       <div class="col-md-12">
                         <dx-data-grid
+                          #dataGrid
                           id="gridContainer"
-                          [showBorders]="true"
                           [dataSource]="expenseHsnOrSacAllocationData"
+                          [showBorders]="true"
+                          [allowColumnReordering]="true"
+                          [allowColumnResizing]="true"
+                          class="mt-3"
+                          [columnAutoWidth]="true"
                           [showColumnLines]="true"
                           [showRowLines]="true"
-                          class="mt-3"
-                          [paging]="{ pageSize: 5 }"
+                          keyExpr="SRNO"
+                          (onSelectionChanged)="onSelectionChanged($event)"
                         >
-                          <dxo-paging [enabled]="true"></dxo-paging>
-                          <dxo-pager [showInfo]="true"></dxo-pager>
                           <dxo-selection mode="single"></dxo-selection>
+                          <dxo-scrolling mode="virtual"></dxo-scrolling>
 
+                          <!-- Columns -->
                           <dxi-column
-                            *ngFor="
-                              let data of expenseHsnOrSacAllocationColumnHeadings
-                            "
-                            [dataField]="data.field"
-                            [caption]="data.caption"
-                            [allowEditing]="true"
-                            alignment="center"
-                            backgroundcolor="#000"
+                            dataField="SRNO"
+                            caption="SRNO"
+                          ></dxi-column>
+                          <dxi-column
+                            dataField="EXPENSE_ACCODE"
+                            caption="EXPENSE_ACCODE"
+                            cellTemplate="expenseAccodeTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            dataField="EXPENSE_ACCODE_DESC"
+                            caption="EXPENSE_ACCODE_DESC"
+                            cellTemplate="expenseAccodeDescTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            dataField="HSN_SAC_CODE"
+                            caption="HSN_SAC_CODE"
+                            cellTemplate="hsnSacCodeTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            dataField="HSN_SAC_DESC"
+                            caption="HSN_SAC_DESC"
+                            cellTemplate="hsnSacDescTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            dataField="TAX_REG"
+                            caption="TAX_REG"
+                            cellTemplate="taxRegTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            dataField="REVERSECHARGE_UNREG"
+                            caption="REVERSECHARGE_UNREG"
+                            cellTemplate="reverseChargeUnregTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            dataField="ELIGIBLE_INPUTCREDIT"
+                            caption="ELIGIBLE_INPUTCREDIT"
+                            cellTemplate="eligibleInputCrediTTemp"
+                          ></dxi-column>
+
+                          <!-- ExpAcc Column -->
+                          <div *dxTemplate="let data of 'expenseAccodeTemp'">
+                            <input
+                              [readonly]="flag === 'VIEW'"
+                              type="text"
+                              maxlength="6"
+                              (change)="
+                                updateField($event, data, 'EXPENSE_ACCODE')
+                              "
+                              [value]="data.value"
+                              style="width: 100%"
+                              required
+                            />
+                          </div>
+
+                          <!-- Exp Account Description Column -->
+                          <div
+                            *dxTemplate="let data of 'expenseAccodeDescTemp'"
                           >
-                          </dxi-column>
+                            <input
+                              [readonly]="flag === 'VIEW'"
+                              type="text"
+                              (change)="
+                                updateField($event, data, 'EXPENSE_ACCODE_DESC')
+                              "
+                              [value]="data.value"
+                              style="width: 100%"
+                              required
+                            />
+                          </div>
+
+                          <!-- HSN Code Column -->
+                          <div *dxTemplate="let data of 'hsnSacCodeTemp'">
+                            <input
+                              [readonly]="flag === 'VIEW'"
+                              type="text"
+                              (change)="
+                                updateField($event, data, 'HSN_SAC_CODE')
+                              "
+                              [value]="data.value"
+                              style="width: 100%"
+                              required
+                            />
+                          </div>
+
+                          <!-- HSN Description Column -->
+                          <div *dxTemplate="let data of 'hsnSacDescTemp'">
+                            <input
+                              [readonly]="flag === 'VIEW'"
+                              type="text"
+                              (change)="
+                                updateField($event, data, 'HSN_SAC_DESC')
+                              "
+                              [value]="data.value"
+                              style="width: 100%"
+                              required
+                            />
+                          </div>
+
+                          <!-- Tax Reg Column -->
+                          <div *dxTemplate="let data of 'taxRegTemp'">
+                            <dx-check-box
+                              [value]="data.value"
+                              [disabled]="flag === 'VIEW'"
+                              (valueChange)="
+                                updateField($event, data, 'TAX_REG')
+                              "
+                            >
+                            </dx-check-box>
+                          </div>
+
+                          <!-- Rev Un Column -->
+                          <div
+                            *dxTemplate="let data of 'reverseChargeUnregTemp'"
+                          >
+                            <dx-check-box
+                              [value]="data.value"
+                              [disabled]="flag === 'VIEW'"
+                              (valueChange)="
+                                updateField($event, data, 'REVERSECHARGE_UNREG')
+                              "
+                            >
+                            </dx-check-box>
+                          </div>
+
+                          <!-- I/p Cre Column -->
+                          <div
+                            *dxTemplate="let data of 'eligibleInputCrediTTemp'"
+                          >
+                            <dx-check-box
+                              [value]="data.value"
+                              [disabled]="flag === 'VIEW'"
+                              (valueChange)="
+                                updateField(
+                                  $event,
+                                  data,
+                                  'ELIGIBLE_INPUTCREDIT'
+                                )
+                              "
+                            >
+                            </dx-check-box>
+                          </div>
                         </dx-data-grid>
                       </div>
                     </div>
