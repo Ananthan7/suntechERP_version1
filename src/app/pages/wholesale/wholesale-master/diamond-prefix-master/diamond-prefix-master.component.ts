@@ -139,10 +139,6 @@ export class DiamondPrefixMasterComponent implements OnInit {
     this.diamondprefixForm.controls.shape.setValue(this.content.UDF5)
     this.diamondprefixForm.controls.inc_cat.setValue(this.content.UDF6)
     this.diamondprefixForm.controls.order_ref.setValue(this.content.UDF7)
-
-
-
-
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -391,9 +387,32 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
+  
   setPostData(){
     return{
     "PREFIX_CODE": this.commonService.nullToString(this.diamondprefixForm.value.prefixcode?.toUpperCase() ),

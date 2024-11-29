@@ -8,6 +8,8 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { Flag } from 'angular-feather/icons';
+import { GiftVoucherDetailMasterComponent } from './gift-voucher-detail-master/gift-voucher-detail-master.component';
 
 @Component({
   selector: 'app-gift-voucher-master',
@@ -38,6 +40,8 @@ export class GiftVoucherMasterComponent implements OnInit {
   ngOnInit(): void {
     this.getmetal_divisionvalues();
     if (this.content?.FLAG) {
+     
+      this.setFormValues();
       console.log(this.content)
       //this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
@@ -69,7 +73,6 @@ export class GiftVoucherMasterComponent implements OnInit {
     issueType: [""],
     prefix: [""],
     active: [false],
-    status: [""],
     dob: [""],
 
   })
@@ -88,7 +91,7 @@ export class GiftVoucherMasterComponent implements OnInit {
   }
 
   prefixCodeSelected(e: any) {
-    this.giftVoucherMasterForm.controls.prefix.setValue(e.CODE);
+    this.giftVoucherMasterForm.controls.prefix.setValue(e.PREFIX_CODE);
   }
 
 
@@ -113,24 +116,50 @@ export class GiftVoucherMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  getmetal_divisionvalues(){
-    let API = 'POSTargetMaster/GetDiaDivisonsDropdown';
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result: any) => {
-        console.log(result);
-        this.diamond_drop = result.dynamicData[0]
-        console.log(this.diamond_drop)
-        const allDivisionCodes = this.diamond_drop.map(option => option.DIVISION_CODE);
-        const diaDivisionControl = this.giftVoucherMasterForm?.get('division');
-        // if (diaDivisionControl) {
-        //   if(this.flag == undefined){
-        //     diaDivisionControl.setValue(allDivisionCodes); 
-        //   }
-        // } 
-        }, (err: any) => {
-
-      })
+  getmetal_divisionvalues() {
+    const API = 'POSTargetMaster/GetDiaDivisonsDropdown';
+    const Sub: Subscription = this.dataService.getDynamicAPI(API)
+        .subscribe(
+            (result: any) => {
+                console.log(result);
+                if (result?.dynamicData?.length) {
+                    this.diamond_drop = result.dynamicData[0];
+                    const allDivisionCodes = this.diamond_drop.map(option => option.DIVISION_CODE);
+                    const diaDivisionControl = this.giftVoucherMasterForm?.get('division');
+                    // if (diaDivisionControl) {
+                    //   if(this.content?.Flag == undefined){
+                    //     diaDivisionControl.setValue(allDivisionCodes); // Pre-select all divisions
+                    //   }
+                     
+                    // }
+                }
+            },
+            (err: any) => {
+                console.error('Error fetching division values:', err);
+            }
+        );
     this.subscriptions.push(Sub);
+}
+
+
+setFormValues() {
+  console.log(this.content);
+  if (!this.content) return
+  this.giftVoucherMasterForm.controls.code.setValue(this.content.BRANCH_CODE)
+  this.giftVoucherMasterForm.controls.giftOn.setValue(this.content.GIFT_CODE)
+  this.giftVoucherMasterForm.controls.description.setValue(this.content.GIFT_NAME)
+  this.giftVoucherMasterForm.controls.amount.setValue(this.content.GIFT_AMOUNT)
+  this.giftVoucherMasterForm.controls.actualAmt.setValue(this.content.ACTUAL_AMOUNT)
+  this.giftVoucherMasterForm.controls.minInvoiceAmt.setValue(this.content.MIN_INVOICE_AMOUNT)
+  this.giftVoucherMasterForm.controls.validity.setValue(this.content.GIFT_VALID_DAYS)
+  this.giftVoucherMasterForm.controls.skip.setValue(this.content.SKIP_VALID_DAYS === 'Y' ? true : false)
+  const divisionValue = this.content.DIVISION; 
+  this.giftVoucherMasterForm.controls.division.setValue(divisionValue.split(','));
+    this.giftVoucherMasterForm.controls.prefix.setValue(this.content.PREFIX_CODE)
+  this.giftVoucherMasterForm.controls.issueType.setValue(this.content.ISSUE_TYPE === 'Y' ? 'D' : 'M')
+  this.giftVoucherMasterForm.controls.active.setValue(this.content.STATUS === 'Y' ? true : false)
+  this.giftVoucherMasterForm.controls.costCentre.setValue(this.content.COST_CODE)
+  this.giftVoucherMasterForm.controls.baseCurrency.setValue(this.content.START_SKU_NO)
 }
 
 
@@ -145,17 +174,17 @@ export class GiftVoucherMasterComponent implements OnInit {
       "ACTUAL_AMOUNT": this.commonService.emptyToZero(this.giftVoucherMasterForm.value.actualAmt),
       "MIN_INVOICE_AMOUNT": this.commonService.emptyToZero(this.giftVoucherMasterForm.value.minInvoiceAmt),
       "GIFT_VALID_DAYS": this.commonService.emptyToZero(this.giftVoucherMasterForm.value.validity),
-      "SKIP_VALID_DAYS": this.giftVoucherMasterForm.value.skip,
-      "DIVISION":  this.commonService.nullToString(this.giftVoucherMasterForm.value.division),
+      "SKIP_VALID_DAYS": this.giftVoucherMasterForm.value.skip ,
+      "DIVISION": this.giftVoucherMasterForm.value.division.join(','),
       "PREFIX_CODE":  this.commonService.nullToString(this.giftVoucherMasterForm.value.prefix),
-      "ISSUE_TYPE": this.giftVoucherMasterForm.value.issueType,
+      "ISSUE_TYPE": this.giftVoucherMasterForm.value.issueType === 'D' ? true : false,
       "GIFT_CURRENCY_CODE": "stri",
-      "STATUS":  this.giftVoucherMasterForm.value.status,
+      "STATUS":  this.giftVoucherMasterForm.value.active,
       "SYSTEM_DATE": "2024-11-28T12:22:41.287Z",
       "USERNAME": "string",
       "COST_CODE": this.commonService.nullToString(this.giftVoucherMasterForm.value.costCentre),
       "GIFT_QUNATITY": 0,
-      "START_SKU_NO": this.giftVoucherMasterForm.value.active,
+      "START_SKU_NO": this.commonService.emptyToZero(this.giftVoucherMasterForm.value.baseCurrency),
       "Details": [
         {
           "SRNO": 0,
@@ -179,6 +208,17 @@ export class GiftVoucherMasterComponent implements OnInit {
   }
 
 
+  openaddGiftVoucherDetail() {
+    const modalRef: NgbModalRef = this.modalService.open(GiftVoucherDetailMasterComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
+  
+
+
   formSubmit(){
     
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -191,7 +231,8 @@ export class GiftVoucherMasterComponent implements OnInit {
     // }
 
     let API = 'GiftVoucherMaster'
-    let postData = this.setPostData()
+    let postData = this.setPostData();
+    console.log(postData);
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
        
@@ -215,10 +256,88 @@ export class GiftVoucherMasterComponent implements OnInit {
   }
 
   update(){
+    if (this.giftVoucherMasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = 'GiftVoucherMaster/' + this.content.BRANCH_CODE +'/'+ this.content.GIFT_CODE;
+    let postData = this.setPostData()
+  
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.giftVoucherMasterForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
 
   }
 
-  deleteRecord() {}
+  deleteRecord() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = 'GiftVoucherMaster/' + this.content.BRANCH_CODE +'/'+ this.content.GIFT_CODE;
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result.status == "Success") {
+              Swal.fire({
+                title: result.message || 'Success',
+                text: '',
+                icon: 'success',
+                confirmButtonColor: '#336699',
+                confirmButtonText: 'Ok'
+              }).then((result: any) => {
+                if (result.value) {
+                  this.giftVoucherMasterForm.reset()
+                  this.tableData = []
+                  this.close('reloadMainGrid')
+                }
+              });
+            } else {
+              Swal.fire({
+                title: result.message || 'Error please try again',
+                text: '',
+                icon: 'error',
+                confirmButtonColor: '#336699',
+                confirmButtonText: 'Ok'
+              }).then((result: any) => {
+                if (result.value) {
+                  this.giftVoucherMasterForm.reset()
+                  this.tableData = []
+                  this.close()
+                }
+              });
+            }
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
+      }
+    });
+  }
 
 
   dobValueSetting(event: any) {
