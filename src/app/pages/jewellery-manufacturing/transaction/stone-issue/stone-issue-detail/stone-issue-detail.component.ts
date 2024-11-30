@@ -787,14 +787,15 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.carat.setValue(calculatedCarat.toFixed(3));
     this.CollectRate()
     this.checkPcsRequired()
+    this.CalculateCaratAndUnitrate()
   }
 
   CalculateCaratAndUnitrate() {
-    const carat = this.stoneIssueDetailsFrom.controls.carat.value || 0;
-    const unitrate = this.stoneIssueDetailsFrom.controls.unitrate.value || 0;
+    // Ensure the values are numbers and handle null or undefined cases
+    const carat = parseFloat(this.stoneIssueDetailsFrom.controls.carat.value) || 0;
+    const unitrate = parseFloat(this.stoneIssueDetailsFrom.controls.unitrate.value) || 0;
     const calculateamount = carat * unitrate;
-    this.stoneIssueDetailsFrom.controls.amount.setValue(calculateamount.toFixed(2))
-    this.checkCaratRequired()
+    this.stoneIssueDetailsFrom.controls.amount.setValue(calculateamount);
   }
 
   CollectPointerWtValidation() {

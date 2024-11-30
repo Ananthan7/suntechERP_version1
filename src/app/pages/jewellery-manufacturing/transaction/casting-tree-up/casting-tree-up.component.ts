@@ -38,6 +38,11 @@ export class CastingTreeUpComponent implements OnInit {
   editMode: boolean = false;
   isDisableSaveBtn: boolean = false;
   isloading: boolean = false;
+  minDate: any;
+  maxDate: any;
+  LOCKVOUCHERNO: boolean = true;
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
   // columnhead:any[] = ['Job Code','Unique job ID','Design Code','Gross Weight','Metal Weight','Stone Weight','RCVD Gross Weight','Karat Code','Purity','Pure Weight','Metal Color','RCVD Pure Weight','Stock Code','Pieces','Job Pcs','Loss Wt','Loss Pure'];
   // columnheader : any[] = ['Type','Location Code','Stock Code','Sub Stock Code','Divcode','Gross Weight','Party','Pure Weiht','Balance','Pcs','','']
 
@@ -152,33 +157,74 @@ export class CastingTreeUpComponent implements OnInit {
     this.yearMonth = this.commonService.yearSelected;
     this.castingTreeUpFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())
 
-    
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.setFormValues()
-      this.setAllInitialValues()
-    }
-    if (this.content && this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.LOCKVOUCHERNO = true;
+      }
       this.isSaved = true;
-      this.setFormValues()
+      if (this.content.FLAG == 'DELETE') {
+        this.deleteRecord()
+      }
+      // this.castingTreeUpFrom.controls.FLAG.setValue(this.content.FLAG)
       this.setAllInitialValues()
+    } else {
+      this.generateVocNo()
+      this.setNewFormValues()
+      this.setvoucherTypeMaster()
     }
   }
 
-  Attachedfile: any[] = [];
-  savedAttachments: any[] = [];
+  castingTreeUpFrom: FormGroup = this.formBuilder.group({
+    vocType: [''],
+    vocNo: ['1', [Validators.required]],
+    vocDate: [''],
+    processCode: [''],
+    cylinder: [''],
+    tree: ['',[Validators.required]],
+    stoneWt: ['',[Validators.required]],
+    treeNo: ['',[Validators.required]],
+    worker: [''],
+    convFact: [''],
+    waxWt: ['',[Validators.required]],
+    reqMetal: [''],
+    toProcess: [''],
+    enteredBy: [''],
+    karatCode: [''],
+    base: [''],
+    recMetal: [''],
+    toWorker: ['',[Validators.required]],
+    color: [''],
+    YEARMONTH: [''],
+    BRANCH_CODE: [''],
+    MAIN_VOCTYPE: [''],
+  });
+
+
 
   attachmentClicked() {
     this.attachmentUploadComponent?.showDialog()
   }
-
   uploadSubmited(file: any) {
-
     this.Attachedfile = file
     console.log(this.Attachedfile);
     
   }
+  setNewFormValues() {
+    this.branchCode = this.commonService.branchCode;
+    this.castingTreeUpFrom.controls.YEARMONTH.setValue(this.commonService.yearSelected)
+    this.castingTreeUpFrom.controls.vocDate.setValue(this.currentDate)
+    this.castingTreeUpFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())
+    this.castingTreeUpFrom.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
+    this.castingTreeUpFrom.controls.MAIN_VOCTYPE.setValue(
+      this.commonService.getqueryParamMainVocType()
+    )
+    this.setvoucherTypeMaster()
 
+  }
   setInitialValues(){
   this.castingTreeUpFrom.controls.recMetal.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   this.castingTreeUpFrom.controls.stoneWt.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
@@ -213,6 +259,48 @@ export class CastingTreeUpComponent implements OnInit {
       }
     }
     )
+  }
+  setvoucherTypeMaster() {
+    let frm = this.castingTreeUpFrom.value
+    const vocTypeMaster = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+  }
+  ValidatingVocNo() {
+    if (this.content?.FLAG == 'VIEW') return
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.commonService.getqueryParamMainVocType()}/${this.castingTreeUpFrom.value.vocNo}`
+    API += `/${this.commonService.branchCode}/${this.commonService.getqueryParamVocType()}`
+    API += `/${this.commonService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.commonService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
+
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
+      })
+    this.subscriptions.push(Sub)
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.commonService.getqueryParamVocType()}/${this.commonService.branchCode}/${this.commonService.yearSelected}/${this.commonService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.castingTreeUpFrom.controls.vocNo.setValue(resp.newvocno);
+        }
+      });
   }
 
   formatDate(event: any) {
@@ -318,29 +406,6 @@ export class CastingTreeUpComponent implements OnInit {
 
   // }
 
-
-  castingTreeUpFrom: FormGroup = this.formBuilder.group({
-    vocType: [''],
-    vocNo: ['1', [Validators.required]],
-    vocDate: [''],
-    processCode: [''],
-    cylinder: [''],
-    tree: ['',[Validators.required]],
-    stoneWt: ['',[Validators.required]],
-    treeNo: ['',[Validators.required]],
-    worker: [''],
-    convFact: [''],
-    waxWt: ['',[Validators.required]],
-    reqMetal: [''],
-    toProcess: [''],
-    enteredBy: [''],
-    karatCode: [''],
-    base: [''],
-    recMetal: [''],
-    toWorker: ['',[Validators.required]],
-    color: [''],
-  });
-
   adddata() {
     console.log(this.tableData,'eee')
     let length = this.tableData.length;
@@ -349,19 +414,19 @@ export class CastingTreeUpComponent implements OnInit {
       "UNIQUEID": 12345,
       "APPR_CODE": "string",
       "SRNO": srno,
-      "Job_Code": 0,
-      'Unique_job_ID': 0,
-      'Design_Code': 0,
+      "Job_Code": '',
+      'Unique_job_ID': '',
+      'Design_Code': '',
       'Gross_Weight': 0,
       'Metal_Weight': 0,
       'Stone_Weight': 0,
       'RCVD_Gross_Weight': 0,
-      'Karat_Code': 0,
+      'Karat_Code': '',
       'Purity': 0,
       'Pure_Weight': 0,
-      'Metal_Color': 0,
+      'Metal_Color': '',
       'RCVD_Pure_Weight': 0,
-      'Stock_Code': 0,
+      'Stock_Code':'',
       'Pieces': 0,
       'Job_Pcs': 0,
       'Loss_Wt': 0,
@@ -400,6 +465,7 @@ export class CastingTreeUpComponent implements OnInit {
     console.log(e);
     this.castingTreeUpFrom.controls.processCode.setValue(e.Process_Code);
     this.castingTreeUpFrom.controls.toProcess.setValue(e.Process_Code)
+    this.processCodeValidate()
   }
 
   WorkerCodeSelected(e: any) {
@@ -425,7 +491,7 @@ export class CastingTreeUpComponent implements OnInit {
 
   karatCodeSelected(e: any) {
     console.log(e);
-    this.castingTreeUpFrom.controls.karatCode.setValue(e['Karat Code']);
+    this.castingTreeUpFrom.controls.karatCode.setValue(e.KARAT_CODE);
   }
   lookupKeyPress(event: any, form?: any) {
     if(event.key == 'Tab' && event.target.value == ''){
@@ -651,6 +717,37 @@ export class CastingTreeUpComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+  processCodeValidate(event?: any) {
+    if (event.target.value == '' || this.viewMode == true) {
+      this.showOverleyPanel(event, 'processCode')
+      return
+    };
+    let form = this.castingTreeUpFrom.value;
+    let postData = {
+      "SPID": "205",
+      "parameter": {
+        '@PROCESSCODE': this.commonService.nullToString(form.processCode),
+     
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0]
+          
+        } else {
+          this.overlayProcesscode.showOverlayPanel(event)
+          this.castingTreeUpFrom.controls.processCode.setValue('')
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1747')
+      })
+    this.subscriptions.push(Sub)
+  }
 
   //  setFormValues() {
   //    if(!this.content) return
@@ -817,13 +914,12 @@ calculateWaxMetal(event: any){
   this.castingTreeUpFrom.controls.reqMetal.setValue((convFact * waxWt).toFixed(3));
   
 }
-calculateTreeMode(event: any){
-  console.log("output changed: ", event.target.value);
-  var tree = parseFloat(event.target.value); // Parse as float or integer
-  var base = this.castingTreeUpFrom.value.base;
- 
 
-  this.castingTreeUpFrom.controls.waxWt.setValue(tree - base);
+calculateTreeMode() {
+  const tree = parseFloat(this.castingTreeUpFrom.controls.tree.value) || 0;
+  const base = parseFloat(this.castingTreeUpFrom.controls.base.value) || 0;
+  const calculatewaxWt = tree * base;
+  this.castingTreeUpFrom.controls.waxWt.setValue(calculatewaxWt);
 }
 
 calcualteBaseMode(event: any) {
@@ -831,7 +927,23 @@ calcualteBaseMode(event: any) {
   var base = event.target.value;
   var tree = this.castingTreeUpFrom.value.tree;
   this.castingTreeUpFrom.controls.waxWt.setValue(tree - base);
+  this.validateBaseWeight(event)
 }
+validateBaseWeight(event: any) {
+  const treeValue: number = parseFloat(this.castingTreeUpFrom.value.tree);
+  const baseValue: number = parseFloat(this.castingTreeUpFrom.value.base);
+    if (baseValue > treeValue) {
+      Swal.fire({
+        title: event.message || 'Base Weight Must be lesser then Tree Weight',
+        text: '',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      });
+      this.castingTreeUpFrom.controls.base.setValue('');
+    }
+}
+
 showOverleyPanel(event: any, formControlName: string) {
   if (this.castingTreeUpFrom.value[formControlName] != '') return;
 

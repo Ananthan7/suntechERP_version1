@@ -63,12 +63,16 @@
                 <mat-form-field appearance="outline"
                   style="width: -webkit-fill-available;">
                   <input matInput DateValidation
-                    (dateChange)="formatDate($event)" [matDatepicker]="dob"
-                    formControlName="vocDate" placeholder="DD/MM/YYYY"
-                    readonly />
+                    (dateChange)="formatDate($event)"
+                    [matDatepicker]="vocDate"
+                    formControlName="vocDate" readonly
+                    placeholder="DD/MM/YYYY" [min]="minDate"
+                    [max]="currentDate" />
                   <mat-datepicker-toggle matSuffix
-                    [for]="dob"></mat-datepicker-toggle>
-                  <mat-datepicker #dob [disabled]="isSaved"></mat-datepicker>
+                    [for]="vocDate"></mat-datepicker-toggle>
+                  <mat-datepicker #vocDate
+                    [startAt]="currentDate"
+                    [disabled]="isSaved"></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -86,7 +90,7 @@
                     UpperCaseDirective
                     [readonly]="viewMode"
                     (keydown)="lookupKeyPress($event,'processCode')"
-                    (focusout)="validateLookupField($event,processCodeData,'processCode')" />
+                    (focusout)="processCodeValidate($event)"/>
                   <master-search class="masterSearch"
                     [MasterSearchData]="processCodeData" #overlayProcesscode
                     (newRowClick)="processCodeSelected($event)"
@@ -127,9 +131,9 @@
               <div class="col-sm-7">
                 <mat-form-field appearance="outline"
                   style="width: 100%;">
-                  <input type="number" matInput formControlName="tree"
+                  <input type="text" matInput formControlName="tree"
                     style="text-align: right;" [readonly]="viewMode" max="13"
-                    (focusout)="calculateTreeMode($event)" ThreeDecimalInput/>
+                    (focusout)="calculateTreeMode()" MetalDecimalInput />
                 </mat-form-field>
               </div>
             </div>
@@ -215,7 +219,7 @@
                 <mat-form-field style="width: -webkit-fill-available;"
                   appearance="outline">
                   <input type="text" matInput formControlName="waxWt"
-                    style="text-align: right;" [readonly]="viewMode" max="18"
+                    style="text-align: right;" readonly max="18"
                     (focusout)="calculateWaxMetal($event)" MetalDecimalInput />
                 </mat-form-field>
               </div>
@@ -231,7 +235,7 @@
                   appearance="outline">
                   <input type="text" matInput formControlName="reqMetal"
                     max="18"
-                    [readonly]="viewMode" class="text-right"
+                    readonly class="text-right"
                     MetalDecimalInput />
                 </mat-form-field>
               </div>
@@ -364,6 +368,11 @@
                     [readonly]="viewMode"
                     (keydown)="lookupKeyPress($event,'color')"
                     (focusout)="validateLookupField($event,colorData,'color')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="colorData"
+                    #overlaycolorSearch
+                    (newRowClick)="colorDataSelected($event)">
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
