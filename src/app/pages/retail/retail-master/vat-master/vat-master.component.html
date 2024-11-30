@@ -47,7 +47,7 @@
               <div class="col-md-9">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    (input)="codeAlert($event,'vatDesc')"
+                    (input)="codeAlert($event, 'vatDesc')"
                     UpperCaseDirective
                     [readonly]="flag === 'VIEW'"
                     matInput
@@ -98,7 +98,7 @@
                         $event,
                         groupCodeData,
                         ['group1'],
-                        ['CODE']
+                        ['ACCODE']
                       )
                     "
                     (keydown)="openTab($event, 'group1')"
@@ -109,7 +109,7 @@
                     #overlayGroupOne
                     [MasterSearchData]="groupCodeData"
                     class="masterSearch"
-                    (newRowClick)="lookupSelect($event, ['group1'], ['CODE'])"
+                    (newRowClick)="lookupSelect($event, ['group1'], ['ACCODE'])"
                   ></master-search>
                 </mat-form-field>
               </div>
@@ -132,7 +132,7 @@
                         $event,
                         groupCodeData,
                         ['group2'],
-                        ['CODE']
+                        ['ACCODE']
                       )
                     "
                     (keydown)="openTab($event, 'group2')"
@@ -143,7 +143,7 @@
                     #overlayGroupTwo
                     [MasterSearchData]="groupCodeData"
                     class="masterSearch"
-                    (newRowClick)="lookupSelect($event, ['group2'], ['CODE'])"
+                    (newRowClick)="lookupSelect($event, ['group2'], ['ACCODE'])"
                   ></master-search>
                 </mat-form-field>
               </div>
@@ -166,7 +166,7 @@
                         $event,
                         groupCodeData,
                         ['group3'],
-                        ['CODE']
+                        ['ACCODE']
                       )
                     "
                     (keydown)="openTab($event, 'group3')"
@@ -177,7 +177,7 @@
                     #overlayGroupThree
                     [MasterSearchData]="groupCodeData"
                     class="masterSearch"
-                    (newRowClick)="lookupSelect($event, ['group3'], ['CODE'])"
+                    (newRowClick)="lookupSelect($event, ['group3'], ['ACCODE'])"
                   ></master-search>
                 </mat-form-field>
               </div>
@@ -237,9 +237,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['regVatAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'regVatAccCredit')"
@@ -248,13 +248,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayRegVatAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['regVatAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -274,9 +274,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['regVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'regVatAccDebit')"
@@ -285,13 +285,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayRegVatAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['regVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -319,9 +319,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    RCMACCodeData,
                                     ['regRcmAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'regRcmAccCredit')"
@@ -330,13 +330,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayRegRcmAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="RCMACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['regRcmAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -356,9 +356,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    RCMACCodeData,
                                     ['regRcmAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'regRcmAccDebit')"
@@ -367,13 +367,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayRegRcmAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="RCMACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['regRcmAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -401,9 +401,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATCTRLACCodeData,
                                     ['regVatCtrlAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -414,13 +414,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayRegVatCtrlAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATCTRLACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['regVatCtrlAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -440,9 +440,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATCTRLACCodeData,
                                     ['regVatCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -453,13 +453,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayRegVatCtrlAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATCTRLACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['regVatCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -510,9 +510,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['unregVatAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'unregVatAccCredit')"
@@ -521,13 +521,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayUnregVatAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['unregVatAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -547,9 +547,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['unregVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'unregVatAccDebit')"
@@ -558,13 +558,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayUnregVatAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['unregVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -592,9 +592,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    RCMACCodeData,
                                     ['unregRcmAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'unregRcmAccCredit')"
@@ -603,13 +603,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayUnregRcmAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="RCMACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['unregRcmAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -629,9 +629,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    RCMACCodeData,
                                     ['unregRcmAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'unregRcmAccDebit')"
@@ -640,13 +640,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayUnregRcmAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="RCMACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['unregRcmAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -674,9 +674,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATCTRLACCodeData,
                                     ['unregVatCtrlAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -687,13 +687,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayUnregVatCtrlAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATCTRLACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['unregVatCtrlAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -713,9 +713,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATCTRLACCodeData,
                                     ['unregVatCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -726,13 +726,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayUnregVatCtrlAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATCTRLACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['unregVatCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -783,9 +783,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['impVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'impVatAccDebit')"
@@ -794,13 +794,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayImpVatAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['impVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -830,9 +830,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    RCMACCodeData,
                                     ['impRcmAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'impRcmAccCredit')"
@@ -841,13 +841,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayImpRcmAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="RCMACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['impRcmAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -879,9 +879,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATCTRLACCodeData,
                                     ['impVatCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -892,13 +892,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayImpVatCtrlAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATCTRLACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['impVatCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -928,9 +928,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    RCMCTRLACCodeData,
                                     ['impRcmCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -941,13 +941,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayImpRcmCtrlAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="RCMCTRLACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['impRcmCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -1000,9 +1000,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['expVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'expVatAccDebit')"
@@ -1011,13 +1011,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayExpVatAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['expVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -1045,9 +1045,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['expVatAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'expVatAccCredit')"
@@ -1056,13 +1056,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayExpVatAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['expVatAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -1117,9 +1117,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    POSVATACCodeData,
                                     ['posVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'posVatAccDebit')"
@@ -1128,13 +1128,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayPosVatAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="POSVATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['posVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -1162,9 +1162,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    POSVATREFUNDCodeData,
                                     ['posVatRefundCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -1175,13 +1175,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayPosVatRefundCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="POSVATREFUNDCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['posVatRefundCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>

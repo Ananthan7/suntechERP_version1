@@ -75,6 +75,7 @@ export class VatMasterComponent implements OnInit {
   flag: any;
   code: any;
   dialogBox: any;
+  branchCode: any = this.commonService.branchCode;
 
   groupCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -84,6 +85,116 @@ export class VatMasterComponent implements OnInit {
     WHERECONDITION: " TYPES='GSTGROUP'",
     SEARCH_FIELD: "",
     SEARCH_HEADING: "GROUP CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  VATACCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "account_mode not in ('P','R') and isnull(accode,'')<>'' and BRANCH_CODE='" +
+      this.branchCode +
+      "'  ",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "VAT A/C CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  RCMACCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "account_mode not in ('P','R') and isnull(accode,'')<>'' and BRANCH_CODE='" +
+      this.branchCode +
+      "'  ",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "RCM A/C CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  VATCTRLACCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "account_mode not in ('P','R') and isnull(accode,'')<>'' and BRANCH_CODE='" +
+      this.branchCode +
+      "'  ",
+
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "VAT CTRL A/C CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  RCMCTRLACCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "account_mode not in ('P','R') and isnull(accode,'')<>'' and BRANCH_CODE='" +
+      this.branchCode +
+      "'  ",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "RCM CTRL A/C CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  POSVATACCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "account_mode not in ('P','R') and isnull(accode,'')<>'' and BRANCH_CODE='" +
+      this.branchCode +
+      "'  ",
+
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "POS VAT CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  POSVATREFUNDCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "account_mode not in ('P','R') and isnull(accode,'')<>'' and BRANCH_CODE='" +
+      this.branchCode +
+      "'  ",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "POS VAT REFUND",
     SEARCH_VALUE: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
@@ -153,7 +264,6 @@ export class VatMasterComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.content);
 
-    // this.branchCode = this.commonService.branchCode;
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
