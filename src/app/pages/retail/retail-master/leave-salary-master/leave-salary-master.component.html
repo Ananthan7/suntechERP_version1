@@ -7,7 +7,13 @@
     </button>
   </div>
   <!-- modal header component -->
-  <modal-header></modal-header>
+  <modal-header
+    *ngIf="content?.FLAG !== 'VIEW'"
+    (saveClick)="formSubmit()"
+    (cancelClick)="close()"
+    [isViewDelete]="deleteMode"
+    (deleteClick)="deleteRecord()"
+  ></modal-header>
   <!-- content section -->
   <div class="p-4">
     <form [formGroup]="LeaveSalaryMasterForm">
@@ -27,6 +33,7 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       type="text"
+                      [readonly]="viewMode"
                       #codeInput
                       matInput
                       formControlName="code"
@@ -47,10 +54,11 @@
                 <div class="col-sm-6">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       #codeInput
                       matInput
-                      formControlName="code"
+                      formControlName="description"
                       UpperCaseDirective
                       autocomplete="off"
                     />
@@ -59,7 +67,8 @@
                 <div class="col-sm-3 offset-md-1">
                   <mat-checkbox
                     id="ID022"
-                    formControlName="FinalProcess"
+                    [disabled]="viewMode"
+                    formControlName="excludeAnnualLeave"
                     class="example-margin"
                   >
                     Exclude Annual Leaves</mat-checkbox
@@ -76,14 +85,27 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="debit"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          debitCode,
+                          ['debit'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="onKeyDown($event, ['debit'], debitCode)"
                     />
                     <master-search
+                      *ngIf="!viewMode"
+                      #overlayDebit
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
+                      [MasterSearchData]="debitCode"
                       (newRowClick)="BranchDataSelected($event)"
                     >
                     </master-search>
@@ -96,7 +118,11 @@
                   >Based On :
                 </label>
                 <div class="col-sm-2">
-                  <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-form-field
+                    style="width: 100%"
+                    appearance="outline"
+                    formControlName="basedOn"
+                  >
                     <mat-select>
                       <mat-option></mat-option>
                       <mat-option></mat-option>
@@ -105,8 +131,9 @@
                 </div>
                 <div class="col-sm-3 offset-md-1">
                   <mat-checkbox
-                    id="ID022"
-                    formControlName="FinalProcess"
+                    id="ID023"
+                    [disabled]="viewMode"
+                    formControlName="excludeUnpaidLeave"
                     class="example-margin"
                   >
                     Exclude Un-Paid Leaves</mat-checkbox
@@ -123,9 +150,10 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="noOfYr"
                       UpperCaseDirective
                     />
                   </mat-form-field>
@@ -139,17 +167,21 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="BranchDes"
+                      AmountDecimalInput
+                      class="text-right"
+                      formControlName="amount"
                       UpperCaseDirective
                     />
                   </mat-form-field>
                 </div>
                 <div class="col-sm-3 offset-md-1">
                   <mat-checkbox
-                    id="ID022"
-                    formControlName="FinalProcess"
+                    id="ID024"
+                    [disabled]="viewMode"
+                    formControlName="excludeHalfPaidLeave"
                     class="example-margin"
                   >
                     Exclude Paid Leaves</mat-checkbox
@@ -166,9 +198,10 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="noOfTime"
                       UpperCaseDirective
                     />
                   </mat-form-field>
@@ -182,9 +215,10 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="BranchDes"
+                      formControlName="in"
                       UpperCaseDirective
                     />
                   </mat-form-field>
@@ -197,11 +231,12 @@
                 </label>
                 <div class="col-sm-3">
                   <mat-checkbox
-                    id="ID022"
-                    formControlName="FinalProcess"
+                    id="ID025"
+                    [disabled]="viewMode"
+                    formControlName="excludeHalfUnPaidLeave"
                     class="example-margin"
                   >
-                    Exclude Paid Leaves</mat-checkbox
+                    Exclude Half-Paid Leaves</mat-checkbox
                   >
                 </div>
               </div>
@@ -221,15 +256,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined1"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefinedData,
+                          ['userDefined1'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined1'], UserDefinedData)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
+                      #userDefined1
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      [MasterSearchData]="UserDefinedData"
+                      (newRowClick)="UserDefined1DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -245,15 +295,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined2"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined2Data,
+                          ['userDefined2'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined2'], UserDefined2Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
+                      #userDefined2
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      [MasterSearchData]="UserDefined2Data"
+                      (newRowClick)="UserDefined2DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -269,15 +334,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined3"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined3Data,
+                          ['userDefined3'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined3'], UserDefined3Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
+                      #userDefined3
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      [MasterSearchData]="UserDefined3Data"
+                      (newRowClick)="UserDefined3DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -293,15 +373,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined4"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined4Data,
+                          ['userDefined4'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined4'], UserDefined4Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
+                      #userDefined4
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      [MasterSearchData]="UserDefined4Data"
+                      (newRowClick)="UserDefined4DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -317,15 +412,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined5"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined5Data,
+                          ['userDefined5'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined5'], UserDefined5Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
+                      #userDefined5
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      [MasterSearchData]="UserDefined5Data"
+                      (newRowClick)="UserDefined5DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -343,15 +453,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined6"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined6Data,
+                          ['userDefined6'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined6'], UserDefined6Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
+                      #userDefined6
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      [MasterSearchData]="UserDefined6Data"
+                      (newRowClick)="UserDefined6DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -367,15 +492,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined7"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined7Data,
+                          ['userDefined7'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined7'], UserDefined7Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
+                      #userDefined7
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      [MasterSearchData]="UserDefined7Data"
+                      (newRowClick)="UserDefined7DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -391,15 +531,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined8"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined8Data,
+                          ['userDefined8'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined8'], UserDefined8Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
+                      #userDefined8
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      [MasterSearchData]="UserDefined8Data"
+                      (newRowClick)="UserDefined8DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -415,15 +570,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined9"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined9Data,
+                          ['userDefined9'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined9'], UserDefined9Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
+                      #userDefined9
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      [MasterSearchData]="UserDefined9Data"
+                      (newRowClick)="UserDefined9DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -439,15 +609,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined10"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined10Data,
+                          ['userDefined10'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined10'], UserDefined10Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      #userDefined10
+                      [MasterSearchData]="UserDefined10Data"
+                      (newRowClick)="UserDefined10DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -465,15 +650,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined11"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined11Data,
+                          ['userDefined11'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined11'], UserDefined11Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      #userDefined11
+                      [MasterSearchData]="UserDefined11Data"
+                      (newRowClick)="UserDefined11DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -489,15 +689,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined12"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined12Data,
+                          ['userDefined12'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined12'], UserDefined12Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      #userDefined12
+                      [MasterSearchData]="UserDefined12Data"
+                      (newRowClick)="UserDefined12DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -513,15 +728,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined13"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined13Data,
+                          ['userDefined13'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined13'], UserDefined13Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      #userDefined13
+                      [MasterSearchData]="UserDefined13Data"
+                      (newRowClick)="UserDefined13DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -537,15 +767,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined14"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined14Data,
+                          ['userDefined14'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined14'], UserDefined14Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
+                      #userDefined14
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      [MasterSearchData]="UserDefined14Data"
+                      (newRowClick)="UserDefined14DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>
@@ -561,15 +806,30 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
-                      formControlName="Branch"
+                      formControlName="userDefined15"
                       UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined15Data,
+                          ['userDefined15'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined15'], UserDefined15Data)
+                      "
                     />
                     <master-search
+                      *ngIf="!viewMode"
+                      #userDefined15
                       class="masterSearch"
-                      [MasterSearchData]="BranchData"
-                      (newRowClick)="BranchDataSelected($event)"
+                      [MasterSearchData]="UserDefined15Data"
+                      (newRowClick)="UserDefined15DataSelected($event)"
                     >
                     </master-search>
                   </mat-form-field>

@@ -1,193 +1,439 @@
 <div>
-    <!-- header section starts -->
-    <div class="card-content border-bottom d-flex justify-content-between p-2">
-        <h5 class="pos-modaltitle" id="modal-dia-metal">Refinery Charge Master</h5>
-        <button type="button" class="btn btn-close close-btn" (click)="close()">
-            <i class="feather icon-x close-icon"></i>
-        </button>
-    </div>
-    <!-- modal header component -->
-    <modal-header></modal-header>
-    <!-- content section -->
-    <div class="p-4 ">
-        <form [formGroup]="refiningChargePostingMasterForm">
-            <div class="row">
-                <div class="col-md-6">
-                    <h6>HO</h6>
-                    <div class="row">
-                        <label for="inputPassword" id="ID001" class="col-sm-3 col-form-label">
-                            Voc Date :</label>
-                        <div class="col-sm-3">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                    autocomplete="off" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-3 offset-md-3">
-                            <h6>Posted</h6>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" id="ID002" class="col-sm-3 col-form-label">
-                            Voc Type :</label>
-                        <div class="col-sm-3">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                    autocomplete="off" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" id="ID003" class="col-sm-3 col-form-label">
-                            Voc Number :</label>
-                        <div class="col-sm-3">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                    autocomplete="off" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" id="ID004" class="col-sm-3 col-form-label">
-                            Party Number :</label>
-                        <div class="col-sm-3">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                    (newRowClick)="BranchDataSelected($event)">
-                                </master-search>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="border p-1 mb-1">
-                                <mat-radio-group aria-label="Select an option" formControlName="DailyTarget">
-                                    <mat-radio-button value="F" id="ID005" class="mx-2">Job wise</mat-radio-button>
-                                    <mat-radio-button value="P" id="ID006" class="mx-2">Receipt wise</mat-radio-button>
-                                </mat-radio-group>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-9 offset-md-3">
-                            <mat-radio-group aria-label="Select an option" formControlName="DailyTarget">
-                                <mat-radio-button value="R" id="ID007" class="mx-2">Refining Chrg</mat-radio-button>
-                                <mat-radio-button value="S" id="ID008" class="mx-2">Stone Sepration</mat-radio-button>
-                                <mat-radio-button value="C" id="ID009" class="mx-2">CR Power</mat-radio-button>
-                            </mat-radio-group>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" id="ID010" class="col-sm-3 col-form-label">
-                            Service Code :</label>
-                        <div class="col-sm-3">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                    (newRowClick)="BranchDataSelected($event)">
-                                </master-search>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" id="ID011" class="col-sm-3 col-form-label">
-                            Sales Man :</label>
-                        <div class="col-sm-3">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                    (newRowClick)="BranchDataSelected($event)">
-                                </master-search>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" id="ID012" class="col-sm-3 col-form-label">
-                            Currency :</label>
-                        <div class="col-sm-3">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                    (newRowClick)="BranchDataSelected($event)">
-                                </master-search>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                        [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3"
-                        keyExpr="SRNO">
-                        <dxo-selection mode="multiple" selectAllMode="page" showCheckBoxesMode="always"></dxo-selection>
-
-                        <!-- Columns -->
-                        <dxi-column dataField="SRNO" caption="SR No" class="tab"></dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="Voc No"></dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="Voc Date"></dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="Pur"></dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="Gross Wt"></dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="R"></dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="Sil"></dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="Di"></dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="Brink Ref No"></dxi-column>
-                    </dx-data-grid>
-                    <div class="row my-2">
-                        <div class="col-md-9">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                            autocomplete="off" />
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-sm-3">
-                                    <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                            autocomplete="off" />
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-sm-3">
-                                    <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                            autocomplete="off" />
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-sm-3">
-                                    <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                            autocomplete="off" />
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <button class="btn btn-outline-primary btn-sm rounded-2 w-100">Select</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                        [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3"
-                        keyExpr="SRNO">
-                        <!-- Columns -->
-                        <dxi-column dataField="DIVISION_CODE" caption="Receipt Ref." class="tab"></dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="Gross Wt"></dxi-column>
-                        <dxi-column dataField="Pure_Wt" caption="Pure Wt"></dxi-column>
-                        <dxi-column dataField="Silver_Wt" caption="Silver Wt"></dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="Silver %"></dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="Refine Code"></dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="Rate"></dxi-column>
-                        <dxi-column dataField="Refine_charge" caption="Refine Charge"></dxi-column>
-                        <dxo-summary>
-                            <dxi-total-item column="Pure_Wt" summaryType="sum" displayFormat="{0}">
-                            </dxi-total-item>
-                            <dxi-total-item column="Silver_Wt" summaryType="sum" displayFormat="{0}">
-                            </dxi-total-item>
-                            <dxi-total-item column="Refine_charge" summaryType="sum" displayFormat="{0}">
-                            </dxi-total-item>
-                        </dxo-summary>
-                    </dx-data-grid>
-                </div>
+  <!-- header section starts -->
+  <div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Refinery Charge Master</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <modal-header
+    [isViewSave]="!viewMode"
+    [isViewCancel]="!viewMode"
+    [isViewMore]="!viewMode"
+    (saveClick)="formSubmit()"
+    (cancelClick)="close()"
+    [isViewDelete]="deleteMode"
+    (deleteClick)="deleteRecord()"
+  ></modal-header>
+  <!-- content section -->
+  <div class="p-4">
+    <form [formGroup]="refiningChargePostingMasterForm">
+      <div class="row">
+        <div class="col-md-6">
+          <h6>HO</h6>
+          <div class="row">
+            <label
+              for="inputPassword"
+              id="ID001"
+              class="col-sm-3 col-form-label"
+            >
+              Voc Date :</label
+            >
+            <div class="col-sm-3">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  #codeInput
+                  matInput
+                  formControlName="vocDate"
+                  UpperCaseDirective
+                  autocomplete="off"
+                />
+              </mat-form-field>
             </div>
-        </form>
-    </div>
+            <div class="col-md-3 offset-md-3">
+              <h6>Posted</h6>
+            </div>
+          </div>
+          <div class="row">
+            <label
+              for="inputPassword"
+              id="ID002"
+              class="col-sm-3 col-form-label"
+            >
+              Voc Type :</label
+            >
+            <div class="col-sm-3">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  #codeInput
+                  matInput
+                  formControlName="vocType"
+                  UpperCaseDirective
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <label
+              for="inputPassword"
+              id="ID003"
+              class="col-sm-3 col-form-label"
+            >
+              Voc Number :</label
+            >
+            <div class="col-sm-3">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  #codeInput
+                  matInput
+                  formControlName="vocNumber"
+                  UpperCaseDirective
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <label
+              for="inputPassword"
+              id="ID004"
+              class="col-sm-3 col-form-label"
+            >
+              Party Number :</label
+            >
+            <div class="col-sm-3">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  matInput
+                  formControlName="partNumber"
+                  UpperCaseDirective
+                  (focusout)="
+                    SPvalidateLookupFieldModified(
+                      $event,
+                      partyCode,
+                      ['partNumber'],
+                      false,
+                      ['CODE']
+                    )
+                  "
+                  (keydown)="onKeyDown($event, ['partNumber'], partyCode)"
+                />
+                <master-search
+                *ngIf="!viewMode"
+                  class="masterSearch"
+                  #overlayPartyNumber
+                  [MasterSearchData]="partyCode"
+                  (keydown)="onKeyDown($event, ['partNumber'], partyCode)"
+                  (newRowClick)="BranchDataSelected($event)"
+                >
+                </master-search>
+              </mat-form-field>
+            </div>
+            <div class="col-md-5">
+              <div class="border p-1 mb-1">
+                <mat-radio-group
+                  aria-label="Select an option"
+                  formControlName="checkBox1"
+                >
+                  <mat-radio-button value="F" id="ID005" class="mx-2"
+                    >Job wise</mat-radio-button
+                  >
+                  <mat-radio-button value="P" id="ID006" class="mx-2"
+                    >Receipt wise</mat-radio-button
+                  >
+                </mat-radio-group>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-9 offset-md-3">
+              <mat-radio-group
+                aria-label="Select an option"
+                formControlName="checkBox2"
+              >
+                <mat-radio-button value="R" id="ID007" class="mx-2"
+                  >Refining Chrg</mat-radio-button
+                >
+                <mat-radio-button value="S" id="ID008" class="mx-2"
+                  >Stone Sepration</mat-radio-button
+                >
+                <mat-radio-button value="C" id="ID009" class="mx-2"
+                  >CR Power</mat-radio-button
+                >
+              </mat-radio-group>
+            </div>
+          </div>
+          <div class="row">
+            <label
+              for="inputPassword"
+              id="ID010"
+              class="col-sm-3 col-form-label"
+            >
+              Service Code :</label
+            >
+            <div class="col-sm-3">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  matInput
+                  formControlName="serviceCode"
+                  UpperCaseDirective
+                  (focusout)="
+                    SPvalidateLookupFieldModified(
+                      $event,
+                      serviceCOde,
+                      ['serviceCode'],
+                      false,
+                      ['CODE']
+                    )
+                  "
+                  (keydown)="onKeyDown($event, ['serviceCode'], serviceCOde)"
+                />
+                <master-search
+                *ngIf="!viewMode"
+                  class="masterSearch"
+                  [MasterSearchData]="serviceCOde"
+                  #overlayServiceCode
+                  (keydown)="onKeyDown($event, ['serviceCode'], serviceCOde)"
+                  (newRowClick)="BranchDataSelected($event)"
+                >
+                </master-search>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <label
+              for="inputPassword"
+              id="ID011"
+              class="col-sm-3 col-form-label"
+            >
+              Sales Man :</label
+            >
+            <div class="col-sm-3">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  matInput
+                  formControlName="salesMan"
+                  UpperCaseDirective
+                  (focusout)="
+                    SPvalidateLookupFieldModified(
+                      $event,
+                      salesMan,
+                      ['salesMan'],
+                      false,
+                      ['CODE']
+                    )
+                  "
+                  (keydown)="onKeyDown($event, ['salesMan'], salesMan)"
+                />
+                <master-search
+                *ngIf="!viewMode"
+                  class="masterSearch"
+                  [MasterSearchData]="salesMan"
+                  #overlaySalesManCode
+                  (keydown)="onKeyDown($event, ['salesMan'], salesMan)"
+                  (newRowClick)="BranchDataSelected($event)"
+                >
+                </master-search>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <label
+              for="inputPassword"
+              id="ID012"
+              class="col-sm-3 col-form-label"
+            >
+              Currency :</label
+            >
+            <div class="col-sm-3">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  matInput
+                  formControlName="currency"
+                  UpperCaseDirective
+                  (focusout)="
+                    SPvalidateLookupFieldModified(
+                      $event,
+                      currencyCode,
+                      ['currency'],
+                      false,
+                      ['CODE']
+                    )
+                  "
+                  (keydown)="onKeyDown($event, ['currency'], currencyCode)"
+                />
+                <master-search
+                *ngIf="!viewMode"
+                  class="masterSearch"
+                  [MasterSearchData]="currencyCode"
+                  #overlayCurrencyCode
+                  (keydown)="onKeyDown($event, ['currency'], currencyCode)"
+                  (newRowClick)="BranchDataSelected($event)"
+                >
+                </master-search>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <dx-data-grid
+            id="gridContainer"
+            [dataSource]="tableData"
+            [showBorders]="true"
+            [showColumnLines]="true"
+            [showRowLines]="true"
+            [allowColumnResizing]="true"
+            class="mt-3"
+            keyExpr="SRNO"
+          >
+            <dxo-selection
+              mode="multiple"
+              selectAllMode="page"
+              showCheckBoxesMode="always"
+            ></dxo-selection>
+
+            <!-- Columns -->
+            <dxi-column
+              dataField="SRNO"
+              caption="SR No"
+              class="tab"
+            ></dxi-column>
+            <dxi-column dataField="DIVISION_CODE" caption="Voc No"></dxi-column>
+            <dxi-column
+              dataField="DIVISION_CODE"
+              caption="Voc Date"
+            ></dxi-column>
+            <dxi-column dataField="DIVISION_CODE" caption="Pur"></dxi-column>
+            <dxi-column
+              dataField="DIVISION_CODE"
+              caption="Gross Wt"
+            ></dxi-column>
+            <dxi-column dataField="DIVISION_CODE" caption="R"></dxi-column>
+            <dxi-column dataField="DIVISION_CODE" caption="Sil"></dxi-column>
+            <dxi-column dataField="DIVISION_CODE" caption="Di"></dxi-column>
+            <dxi-column
+              dataField="DIVISION_CODE"
+              caption="Brink Ref No"
+            ></dxi-column>
+          </dx-data-grid>
+          <div class="row my-2">
+            <div class="col-md-9">
+              <div class="row">
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      type="text"
+                      #codeInput
+                      matInput
+                      formControlName="code"
+                      UpperCaseDirective
+                      autocomplete="off"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      type="text"
+                      #codeInput
+                      matInput
+                      formControlName="code"
+                      UpperCaseDirective
+                      autocomplete="off"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      type="text"
+                      #codeInput
+                      matInput
+                      formControlName="code"
+                      UpperCaseDirective
+                      autocomplete="off"
+                    />
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      type="text"
+                      #codeInput
+                      matInput
+                      formControlName="code"
+                      UpperCaseDirective
+                      autocomplete="off"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-outline-primary btn-sm rounded-2 w-100">
+                Select
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <dx-data-grid
+            id="gridContainer"
+            [dataSource]="tableData"
+            [showBorders]="true"
+            [showColumnLines]="true"
+            [showRowLines]="true"
+            [allowColumnResizing]="true"
+            class="mt-3"
+            keyExpr="SRNO"
+          >
+            <!-- Columns -->
+            <dxi-column
+              dataField="DIVISION_CODE"
+              caption="Receipt Ref."
+              class="tab"
+            ></dxi-column>
+            <dxi-column
+              dataField="DIVISION_CODE"
+              caption="Gross Wt"
+            ></dxi-column>
+            <dxi-column dataField="Pure_Wt" caption="Pure Wt"></dxi-column>
+            <dxi-column dataField="Silver_Wt" caption="Silver Wt"></dxi-column>
+            <dxi-column
+              dataField="DIVISION_CODE"
+              caption="Silver %"
+            ></dxi-column>
+            <dxi-column
+              dataField="DIVISION_CODE"
+              caption="Refine Code"
+            ></dxi-column>
+            <dxi-column dataField="DIVISION_CODE" caption="Rate"></dxi-column>
+            <dxi-column
+              dataField="Refine_charge"
+              caption="Refine Charge"
+            ></dxi-column>
+            <dxo-summary>
+              <dxi-total-item
+                column="Pure_Wt"
+                summaryType="sum"
+                displayFormat="{0}"
+              >
+              </dxi-total-item>
+              <dxi-total-item
+                column="Silver_Wt"
+                summaryType="sum"
+                displayFormat="{0}"
+              >
+              </dxi-total-item>
+              <dxi-total-item
+                column="Refine_charge"
+                summaryType="sum"
+                displayFormat="{0}"
+              >
+              </dxi-total-item>
+            </dxo-summary>
+          </dx-data-grid>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
