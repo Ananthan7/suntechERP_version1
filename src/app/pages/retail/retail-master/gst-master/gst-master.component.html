@@ -56,6 +56,7 @@
               <div class="col-md-9">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    (input)="codeAlert($event, 'gstDesc')"
                     UpperCaseDirective
                     [readonly]="flag === 'VIEW'"
                     matInput
@@ -81,7 +82,7 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    (input)="charAndDigitLimitChecker($event, 'gstPercent')"
+                    (input)="codeAlert($event, 'gstPercent')"
                     class="text-right"
                     ThreeDecimalInput
                     [readonly]="flag === 'VIEW'"
@@ -1338,40 +1339,48 @@
 
                           <!-- Columns -->
                           <dxi-column
+                            alignment="center"
                             dataField="SRNO"
                             caption="SRNO"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="EXPENSE_ACCODE"
                             caption="EXPENSE_ACCODE"
                             cellTemplate="expenseAccodeTemp"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="EXPENSE_ACCODE_DESC"
                             caption="EXPENSE_ACCODE_DESC"
                             cellTemplate="expenseAccodeDescTemp"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="HSN_SAC_CODE"
                             caption="HSN_SAC_CODE"
                             cellTemplate="hsnSacCodeTemp"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="HSN_SAC_DESC"
                             caption="HSN_SAC_DESC"
                             cellTemplate="hsnSacDescTemp"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="TAX_REG"
                             caption="TAX_REG"
                             cellTemplate="taxRegTemp"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="REVERSECHARGE_UNREG"
                             caption="REVERSECHARGE_UNREG"
                             cellTemplate="reverseChargeUnregTemp"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="ELIGIBLE_INPUTCREDIT"
                             caption="ELIGIBLE_INPUTCREDIT"
                             cellTemplate="eligibleInputCrediTTemp"
@@ -1388,9 +1397,7 @@
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
                                 maxlength="6"
-                                (change)="
-                                  updateField($event, data, 'EXPENSE_ACCODE')
-                                "
+                                [readonly]="true"
                                 [value]="data.value"
                                 style="width: 100%"
                                 required
@@ -1418,6 +1425,7 @@
                                 matInput
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
+                                [readonly]="true"
                                 (change)="
                                   updateField(
                                     $event,
