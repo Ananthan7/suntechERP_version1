@@ -8,9 +8,7 @@
   </div>
   <!-- modal header component -->
   <modal-header
-    [isViewSave]="!viewMode"
-    [isViewCancel]="!viewMode"
-    [isViewMore]="!viewMode"
+    *ngIf="content?.FLAG !== 'VIEW'"
     (saveClick)="formSubmit()"
     (cancelClick)="close()"
     [isViewDelete]="deleteMode"
@@ -35,6 +33,7 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       type="text"
+                      [readonly]="viewMode"
                       #codeInput
                       matInput
                       formControlName="code"
@@ -55,6 +54,7 @@
                 <div class="col-sm-6">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       #codeInput
                       matInput
@@ -85,6 +85,7 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="debit"
@@ -101,7 +102,7 @@
                       (keydown)="onKeyDown($event, ['debit'], debitCode)"
                     />
                     <master-search
-                    *ngIf="!viewMode"
+                      *ngIf="!viewMode"
                       #overlayDebit
                       class="masterSearch"
                       [MasterSearchData]="debitCode"
@@ -149,6 +150,7 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="noOfYr"
@@ -165,6 +167,7 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       AmountDecimalInput
@@ -176,7 +179,8 @@
                 </div>
                 <div class="col-sm-3 offset-md-1">
                   <mat-checkbox
-                    id="ID024" [disabled]="viewMode "
+                    id="ID024"
+                    [disabled]="viewMode"
                     formControlName="excludeHalfPaidLeave"
                     class="example-margin"
                   >
@@ -194,6 +198,7 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="noOfTime"
@@ -210,6 +215,7 @@
                 <div class="col-sm-2">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="in"
@@ -250,6 +256,7 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined1"
@@ -263,11 +270,13 @@
                           ['CODE']
                         )
                       "
-                      (keydown)="onKeyDown($event, ['userDefined1'], UserDefinedData)"
+                      (keydown)="
+                        onKeyDown($event, ['userDefined1'], UserDefinedData)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
-                    #userDefined1
+                      *ngIf="!viewMode"
+                      #userDefined1
                       class="masterSearch"
                       [MasterSearchData]="UserDefinedData"
                       (newRowClick)="UserDefined1DataSelected($event)"
@@ -286,6 +295,7 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined2"
@@ -299,11 +309,13 @@
                           ['CODE']
                         )
                       "
-                      (keydown)="onKeyDown($event, ['userDefined2'], UserDefined2Data)"
+                      (keydown)="
+                        onKeyDown($event, ['userDefined2'], UserDefined2Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
-                    #userDefined2
+                      *ngIf="!viewMode"
+                      #userDefined2
                       class="masterSearch"
                       [MasterSearchData]="UserDefined2Data"
                       (newRowClick)="UserDefined2DataSelected($event)"
@@ -322,24 +334,27 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined3"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined3Data,
-                        ['userDefined3'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined3'], UserDefined3Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined3Data,
+                          ['userDefined3'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined3'], UserDefined3Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
-                    #userDefined3
+                      *ngIf="!viewMode"
+                      #userDefined3
                       class="masterSearch"
                       [MasterSearchData]="UserDefined3Data"
                       (newRowClick)="UserDefined3DataSelected($event)"
@@ -358,24 +373,27 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined4"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined4Data,
-                        ['userDefined4'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined4'], UserDefined4Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined4Data,
+                          ['userDefined4'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined4'], UserDefined4Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
-                    #userDefined4
+                      *ngIf="!viewMode"
+                      #userDefined4
                       class="masterSearch"
                       [MasterSearchData]="UserDefined4Data"
                       (newRowClick)="UserDefined4DataSelected($event)"
@@ -394,24 +412,27 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined5"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined5Data,
-                        ['userDefined5'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined5'], UserDefined5Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined5Data,
+                          ['userDefined5'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined5'], UserDefined5Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
-                    #userDefined5
+                      *ngIf="!viewMode"
+                      #userDefined5
                       class="masterSearch"
                       [MasterSearchData]="UserDefined5Data"
                       (newRowClick)="UserDefined5DataSelected($event)"
@@ -432,24 +453,27 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined6"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined6Data,
-                        ['userDefined6'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined6'], UserDefined6Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined6Data,
+                          ['userDefined6'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined6'], UserDefined6Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
-                    #userDefined6
+                      *ngIf="!viewMode"
+                      #userDefined6
                       class="masterSearch"
                       [MasterSearchData]="UserDefined6Data"
                       (newRowClick)="UserDefined6DataSelected($event)"
@@ -468,24 +492,27 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined7"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined7Data,
-                        ['userDefined7'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined7'], UserDefined7Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined7Data,
+                          ['userDefined7'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined7'], UserDefined7Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
-                    #userDefined7
+                      *ngIf="!viewMode"
+                      #userDefined7
                       class="masterSearch"
                       [MasterSearchData]="UserDefined7Data"
                       (newRowClick)="UserDefined7DataSelected($event)"
@@ -504,24 +531,27 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined8"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined8Data,
-                        ['userDefined8'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined8'], UserDefined8Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined8Data,
+                          ['userDefined8'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined8'], UserDefined8Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
-                    #userDefined8
+                      *ngIf="!viewMode"
+                      #userDefined8
                       class="masterSearch"
                       [MasterSearchData]="UserDefined8Data"
                       (newRowClick)="UserDefined8DataSelected($event)"
@@ -540,24 +570,27 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined9"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined9Data,
-                        ['userDefined9'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined9'], UserDefined9Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined9Data,
+                          ['userDefined9'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined9'], UserDefined9Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
-                    #userDefined9
+                      *ngIf="!viewMode"
+                      #userDefined9
                       class="masterSearch"
                       [MasterSearchData]="UserDefined9Data"
                       (newRowClick)="UserDefined9DataSelected($event)"
@@ -576,23 +609,26 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined10"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined10Data,
-                        ['userDefined10'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined10'], UserDefined10Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined10Data,
+                          ['userDefined10'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined10'], UserDefined10Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
+                      *ngIf="!viewMode"
                       class="masterSearch"
                       #userDefined10
                       [MasterSearchData]="UserDefined10Data"
@@ -614,23 +650,26 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined11"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined11Data,
-                        ['userDefined11'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined11'], UserDefined11Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined11Data,
+                          ['userDefined11'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined11'], UserDefined11Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
+                      *ngIf="!viewMode"
                       class="masterSearch"
                       #userDefined11
                       [MasterSearchData]="UserDefined11Data"
@@ -650,23 +689,26 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined12"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined12Data,
-                        ['userDefined12'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined12'], UserDefined12Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined12Data,
+                          ['userDefined12'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined12'], UserDefined12Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
+                      *ngIf="!viewMode"
                       class="masterSearch"
                       #userDefined12
                       [MasterSearchData]="UserDefined12Data"
@@ -686,23 +728,26 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined13"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined13Data,
-                        ['userDefined13'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined13'], UserDefined13Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined13Data,
+                          ['userDefined13'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined13'], UserDefined13Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
+                      *ngIf="!viewMode"
                       class="masterSearch"
                       #userDefined13
                       [MasterSearchData]="UserDefined13Data"
@@ -722,24 +767,27 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined14"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined14Data,
-                        ['userDefined14'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined14'], UserDefined14Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined14Data,
+                          ['userDefined14'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined14'], UserDefined14Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
-                    #userDefined14
+                      *ngIf="!viewMode"
+                      #userDefined14
                       class="masterSearch"
                       [MasterSearchData]="UserDefined14Data"
                       (newRowClick)="UserDefined14DataSelected($event)"
@@ -758,24 +806,27 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="viewMode"
                       type="text"
                       matInput
                       formControlName="userDefined15"
                       UpperCaseDirective
                       (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        UserDefined15Data,
-                        ['userDefined15'],
-                        false,
-                        ['CODE']
-                      )
-                    "
-                    (keydown)="onKeyDown($event, ['userDefined15'], UserDefined15Data)"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined15Data,
+                          ['userDefined15'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined15'], UserDefined15Data)
+                      "
                     />
                     <master-search
-                    *ngIf="!viewMode"
-                    #userDefined15
+                      *ngIf="!viewMode"
+                      #userDefined15
                       class="masterSearch"
                       [MasterSearchData]="UserDefined15Data"
                       (newRowClick)="UserDefined15DataSelected($event)"
