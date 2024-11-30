@@ -630,10 +630,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
           // let result3 = result.dynamicData[2]
           // this.setVendorRef(result) //supplier ref 
 
-          this.setFormNullToString('PROCESS_CODE', data[0].PROCESS)
-          this.setFormNullToString('PROCESS_NAME', data[0].PROCESSDESC)
-          this.setFormNullToString('WORKER_CODE', data[0].WORKER)
-          this.setFormNullToString('WORKER_NAME', data[0].WORKERDESC)
+          // this.setFormNullToString('PROCESS_CODE', data[0].PROCESS)
+          // this.setFormNullToString('PROCESS_NAME', data[0].PROCESSDESC)
+          // this.setFormNullToString('WORKER_CODE', data[0].WORKER)
+          // this.setFormNullToString('WORKER_NAME', data[0].WORKERDESC)
           this.setFormNullToString('UNQ_DESIGN_ID', data[0].UNQ_DESIGN_ID)
           this.setFormNullToString('JOB_SO_NUMBER', data[0].JOB_SO_NUMBER)
           this.setFormNullToString('STOCK_CODE', data[0].STOCK_CODE)

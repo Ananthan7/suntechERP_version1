@@ -170,70 +170,36 @@
                   </div>
                 </div>
               </div>
-              <!-- <div class="col-md-3">
-                          <label for="inputPassword" class="col-sm-5 col-form-label text-center">Customer Code</label>
-                             <div class="row pt-4">
-                                <div class="col-md-4">
-                                    <mat-radio-button value="1">By Value</mat-radio-button>
-                                </div>
-                                <div class="col-md-3">
-                                    <mat-radio-button value="2" class="pl-3">By %</mat-radio-button>
-                                </div>                             
-                                 <div class="col-md-2">
-                                     <mat-radio-button value="1">Fixed</mat-radio-button>
-                                 </div>
-                             </div>
-                             <div class="row align-items-center mb-1 form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-                                    <label class="col-md-3 form-check-label" for="flexSwitchCheckChecked">Add</label>
-                                   <div class="col-md-7">
-                                     <mat-form-field style="width: 100%;">
-                                       <input type="text" matInput />
-                                     </mat-form-field>
-                                   </div>
-                                 </div>
-                             <div class="row align-items-center mb-1"></div>
-                                     <div class="col-md-8 offset-5">
-                                         <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-                                             Change Value
-                                           </button>
-                                     </div>
-                             </div>          -->
-
+              <!-- change price section starts -->
               <div class="col-md-3">
                 <div class="container mt-3">
                   <div class="row align-items-center border">
                     <h5 class="offset-3 pt-1" id="ID009">Change Price</h5>
                   </div>
-
                   <div class="row justify-content-between mb-2 border">
                     <div class="row pt-4">
-                      <div class="col-md-5">
-                        <mat-radio-button value="1" id="ID010" checked
-                          [disabled]="viewMode">By Value</mat-radio-button>
-                      </div>
-                      <div class="col-md-4">
-                        <mat-radio-button value="2" id="ID011" class="pl-3"
-                          [disabled]="viewMode">By
-                          %</mat-radio-button>
-                      </div>
-                      <div class="col-md-2">
-                        <mat-radio-button value="1" id="ID012"
-                          [disabled]="viewMode">Fixed</mat-radio-button>
+                      <div class="col-md-10">
+                        <mat-radio-group formControlName="calculateMethod">
+                          <mat-radio-button *ngFor="let option of priceOptions" [value]="option">
+                            <b>{{ option }} &nbsp;</b>
+                          </mat-radio-button>
+                        </mat-radio-group>
                       </div>
                     </div>
                     <div class="row align-items-center mb-1 form-switch st-1">
                       <input class="form-check-input" type="checkbox"
                         role="switch" id="flexSwitchCheckChecked"
+                        formControlName="AddOrDeductFlag"
                         [disabled]="viewMode" (change)="change($event)">
                       <label class="col-md-3 form-check-label"
-                        for="flexSwitchCheckChecked" id="ID013">{{text}}</label>
+                        for="flexSwitchCheckChecked"
+                        id="ID013">{{AddOrDeductText}}</label>
                       <div class="col-md-9">
                         <mat-form-field style="width: 100%;"
                           appearance="outline">
                           <input type="number" AmountDecimalInput maxlength="12"
-                            matInput [(ngModel)]="myNumber"
-                            NumberOnly formControlName="changePrice" min="0"
+                            matInput NumberOnly formControlName="changePrice"
+                            min="0"
                             style="text-align: right;"
                             [readonly]="viewMode" />
                         </mat-form-field>
@@ -242,6 +208,7 @@
 
                     <div class="col-md-8 offset-5 p-b1">
                       <button type="button" id="ID014" [disabled]="viewMode"
+                        (click)="Change_Prices()"
                         class="btn btn-outline-primary metal-issue-del-btn">
                         Change Value
                       </button>
@@ -274,53 +241,53 @@
                 <dxi-column dataField="PRICE_CODE" width="auto"
                   caption="PRICE_CODE" alignment="center">
                 </dxi-column>
-                <dxi-column dataField="SIEVE" width="auto" caption="Sieve"
+                <dxi-column dataField="SIEVE" width="auto" caption="SIEVE"
                   [allowEditing]="true" alignment="center">
                 </dxi-column>
                 <dxi-column dataField="SIEVE_TO" width="auto" caption="Sieve_To"
                   [allowEditing]="true"
                   alignment="center"> </dxi-column>
                 <dxi-column dataField="SIEVE_SET" width="auto"
-                  caption="Sieve_Set" [allowEditing]="true"
+                  caption="SIEVE_SET" [allowEditing]="true"
                   alignment="center"> </dxi-column>
-                <dxi-column dataField="SHAPE" width="auto" caption="Shape"
+                <dxi-column dataField="SHAPE" width="auto" caption="SHAPE"
                   [allowEditing]="true" alignment="center">
                 </dxi-column>
-                <dxi-column dataField="COLOR" width="auto" caption="Color"
+                <dxi-column dataField="COLOR" width="auto" caption="COLOR"
                   [allowEditing]="true" alignment="center">
                 </dxi-column>
-                <dxi-column dataField="CLARITY" width="auto" caption="Clarity"
+                <dxi-column dataField="CLARITY" width="auto" caption="CLARITY"
                   [allowEditing]="true" alignment="center">
                 </dxi-column>
                 <dxi-column dataField="SIZE_FROM" width="auto"
-                  caption="Size_From" [allowEditing]="true"
+                  caption="SIZE_FROM" [allowEditing]="true"
                   alignment="center">
                 </dxi-column>
-                <dxi-column dataField="SIZE_TO" width="auto" caption="Size_To"
+                <dxi-column dataField="SIZE_TO" width="auto" caption="SIZE_TO"
                   [allowEditing]="true" alignment="center">
                 </dxi-column>
                 <dxi-column dataField="WEIGHT_FROM" width="auto"
-                  caption="Weight_From" [allowEditing]="true"
+                  caption="WEIGHT_FROM" [allowEditing]="true"
                   alignment="center">
                 </dxi-column>
                 <dxi-column dataField="WEIGHT_TO" width="auto"
-                  caption="Wight_To" [allowEditing]="true"
+                  caption="WEIGHT_TO" [allowEditing]="true"
                   alignment="center">
                 </dxi-column>
-                <dxi-column dataField="CARAT_WT" width="auto" caption="Carat_Wt"
+                <dxi-column dataField="CARAT_WT" width="auto" caption="CARAT_WT"
                   [allowEditing]="true"
                   alignment="center">
                 </dxi-column>
-                <dxi-column dataField="CURRANCY" width="auto" caption="Currency"
+                <dxi-column dataField="CURRANCY" width="auto" caption="CURRANCY"
                   [allowEditing]="true"
                   alignment="center">
                 </dxi-column>
                 <dxi-column dataField="ISSUE_RATE" width="auto"
-                  caption="issue_rate" [allowEditing]="true"
+                  caption="ISSUE_RATE" [allowEditing]="true"
                   alignment="center">
                 </dxi-column>
                 <dxi-column dataField="SELLING_RATE" width="auto"
-                  caption="selling_rate" [allowEditing]="true"
+                  caption="SELLING_RATE" [allowEditing]="true"
                   alignment="center">
                 </dxi-column>
                 <dxi-column dataField="SELLING_PER" width="auto"
@@ -328,27 +295,6 @@
                   alignment="center">
                 </dxi-column>
               </dx-data-grid>
-
-              <!-- <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [height]="250" [showBorders]="true" 
-              [dataSource]="tableDatastone" [allowColumnResizing]="true" [showRowLines]="true"  [disabled]="viewMode" >
-                <dxo-paging [enabled]="false"></dxo-paging>
-                <dxo-editing mode="cell" [allowUpdating]="true">
-                </dxo-editing>
-                <dxo-selection  [selectAllMode]="allMode" [showCheckBoxesMode]="checkBoxesMode" mode="multiple" ></dxo-selection>
-                <dxo-scrolling mode="virtual"></dxo-scrolling>
-                <dxi-column width="auto" dataField="SELECT1" caption
-                                cellTemplate="limitTemplate"
-                                alignment="right"></dxi-column>
-                            <div *dxTemplate="let data of 'limitTemplate'">
-                                <mat-checkbox [checked]="data.value"
-                                    [disabled]="viewMode"
-                                    (change)="changedCheckbox(data)"></mat-checkbox>
-                            </div>
-                <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
-                  [allowEditing]="true" alignment="center" backgroundcolor="#000" [width]="100">
-                  <dxo-format type="fixedPoint" precision="2"></dxo-format>
-                </dxi-column>
-              </dx-data-grid> -->
             </mat-tab>
             <mat-tab label="Labour Charges">
               <!-- <dx-data-grid #dataGrid id="gridContainer"  [height]="250" [showBorders]="true"
