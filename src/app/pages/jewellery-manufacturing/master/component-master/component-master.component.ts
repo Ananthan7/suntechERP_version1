@@ -429,10 +429,14 @@ export class ComponentMasterComponent implements OnInit {
   divisionCodeSelected(value: any, data: any, controlName: string) {
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
     // this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
+    console.log(value.DIVISION_CODE);
+    
     if (value.DIVISION === 'M') {
       this.isPCSDisabled = true;
+      this.iskaratDisabled = false;
     } else {
       this.isPCSDisabled = false;
+      this.iskaratDisabled = true;
     }
     if (value.DIVISION === 'S') {
       this.iskaratDisabled = true;
