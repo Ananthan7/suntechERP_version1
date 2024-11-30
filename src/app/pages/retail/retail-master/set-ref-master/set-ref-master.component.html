@@ -13,7 +13,7 @@
     [isViewMore]="!viewMode"
     (saveClick)="formSubmit()"
     (cancelClick)="close()"
-    [isViewDelete]="!viewMode && editableMode"
+    [isViewDelete]="deleteMode"
     (deleteClick)="deleteRecord()"></modal-header>
   <!-- content section -->
   <div class="p-4">
@@ -58,28 +58,7 @@
                     formControlName="code"
                     UpperCaseDirective
                     autocomplete="off"
-                    formControlName="set_ref_code"
-                    (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        setRefCodeData,
-                        ['set_ref_code'],
-                        false,
-                        ['PREFIX_CODE']
-                      )
-                    "
-                    (keydown)="
-                      onKeyDown($event, ['set_ref_code'], setRefCodeData)
-                    " />
-                  <master-search
-                    class="masterSearch"
-                    #overlaySetRefCode
-                    [MasterSearchData]="setRefCodeData"
-                    (newRowClick)="CodeDataSelected($event)"
-                    (keydown)="
-                      onKeyDown($event, ['set_ref_code'], setRefCodeData)
-                    ">
-                  </master-search>
+                    formControlName="set_ref_code" />
                 </mat-form-field>
               </div>
             </div>
@@ -129,14 +108,19 @@
                     matInput
                     formControlName="decription"
                     UpperCaseDirective
-                    autocomplete="off" />
+                    autocomplete="off"
+                    (keydown)="
+                      onKeyDown($event, ['code', 'decription'], codeData)
+                    " />
                 </mat-form-field>
               </div>
             </div>
             <div class="border p-2 mt-2">
               <div class="row">
                 <div class="col-md-4">
-                  <button class="btn btns-sm btn-primary rounded-2" [disabled]="hideFields">
+                  <button
+                    class="btn btns-sm btn-primary rounded-2"
+                    [disabled]="hideFields">
                     Select Pending MBC Stock Master
                   </button>
                 </div>
@@ -276,7 +260,6 @@
               class="mt-3"
               keyExpr="SRNO"
               (onSelectionChanged)="onSelectionChanged($event)">
-             
               <dxi-column
                 dataField="SRNO"
                 caption="SR No"
@@ -291,7 +274,8 @@
                 cellTemplate="description"></dxi-column>
               <dxi-column
                 dataField="DIVISION_CODE"
-                caption="Select" cellTemplate="limitTemplate"></dxi-column>
+                caption="Select"
+                cellTemplate="limitTemplate"></dxi-column>
               <div *dxTemplate="let data of 'description'">
                 <input
                   [readonly]="viewMode"
@@ -302,11 +286,12 @@
                   (change)="getAccode($event, data)" />
               </div>
               <div *dxTemplate="let data of 'limitTemplate'">
-                <mat-checkbox 
-                    [value]="data.value"
-                    [disabled]="viewMode"
-                    (change)="changedCheckbox(data)"></mat-checkbox>
-            </div>
+                <mat-checkbox
+                  [value]="data.value"
+                  [disabled]="viewMode"
+                  (change)="changedCheckbox(data)"></mat-checkbox>
+
+              </div>
               <div *dxTemplate="let data of 'stock_code'">
                 <input
                   [readonly]="viewMode"
@@ -325,9 +310,7 @@
               [showRowLines]="true"
               [allowColumnResizing]="true"
               class="mt-3"
-              keyExpr="SRNO"
-             >
-            
+              keyExpr="SRNO">
               <dxi-column
                 dataField="SRNO"
                 caption="SR No"
@@ -342,7 +325,8 @@
                 cellTemplate="description1"></dxi-column>
               <dxi-column
                 dataField="DIVISION_CODE"
-                caption="Select" cellTemplate="limitTemplate1"></dxi-column>
+                caption="Select"
+                cellTemplate="limitTemplate1"></dxi-column>
               <div>
                 <div *dxTemplate="let data of 'description1'">
                   <input
@@ -350,8 +334,7 @@
                     class="form-control"
                     type="text"
                     id="description1"
-                    [value]="data.value"
-                   />
+                    [value]="data.value" />
                 </div>
                 <div *dxTemplate="let data of 'stock_code1'">
                   <input
@@ -359,15 +342,15 @@
                     class="form-control"
                     type="text"
                     id="stock_code1"
-                    [value]="data.value"
-                    />
+                    [value]="data.value" />
                 </div>
                 <div *dxTemplate="let data of 'limitTemplate1'">
-                  <mat-checkbox 
-                      [value]="data.value"
-                      [disabled]="viewMode"
-                      (change)="changedCheckbox1(data)"></mat-checkbox>
-              </div>
+                  <mat-checkbox
+                    [value]="data.value"
+                    [disabled]="viewMode"
+                    (change)="changedCheckbox1(data)"></mat-checkbox>
+
+                </div>
               </div>
             </dx-data-grid>
           </div>
