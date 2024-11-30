@@ -89,6 +89,7 @@
                       onKeyDown($event, ['code', 'decription'], codeData)
                     " />
                   <master-search
+                  *ngIf="!viewMode"
                     class="masterSearch"
                     #overlaycode
                     [MasterSearchData]="codeData"
@@ -164,6 +165,7 @@
                             onKeyDown($event, ['year_type'], yearTypeData)
                           " />
                         <master-search
+                        *ngIf="!viewMode"
                           class="masterSearch"
                           #overlayYearCode
                           [MasterSearchData]="yearTypeData"
@@ -231,6 +233,7 @@
                 "
                 (keydown)="onKeyDown($event, ['table_search'], gridDataSearch)" />
               <master-search
+              *ngIf="!viewMode"
                 class="masterSearch"
                 #overlayTableSearchCode
                 [MasterSearchData]="gridDataSearch"
