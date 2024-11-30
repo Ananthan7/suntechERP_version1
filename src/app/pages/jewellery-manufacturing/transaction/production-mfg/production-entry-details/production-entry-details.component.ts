@@ -579,13 +579,14 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.setFormNullToString('METAL_STOCK_CODE', data[0].METAL_STOCK_CODE)
             this.setFormNullToString('SUPPLIER_REF', data[0].DESIGN_CODE + "-" + data[0].METAL_COLOR)
             this.setFormNullToString('PREFIX', data[0].PREFIX)
-            this.setFormNullToString('PREFIX_LASTNO', data[0].LAST_NO)
+            // this.setFormNullToString('PREFIX_LASTNO', data[0].LAST_NO)
             this.setFormNullToString('PREFIXNO', data[0].PREFIX_NUMBER)
             this.setFormNullToString('COST_CODE', data[0].COST_CODE)
             this.setFormNullToString('PART_CODE', data[0].DESIGN_CODE)
             this.setFormNullToString('PART_NAME', data[0].DESCRIPTION)
             this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
             this.subJobNumberValidate()
+            this.prefixCodeValidate()
             this.getDesignimagecode()
           } else {
             this.setFormNullToString('JOB_NUMBER', '')
