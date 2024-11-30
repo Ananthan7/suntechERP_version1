@@ -7,7 +7,7 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <modal-header *ngIf="this.flag != 'VIEW'" (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
     <!-- content section -->
     <div class="p-4 ">
         <form [formGroup]="salespersontargetform">
@@ -21,7 +21,7 @@
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" #codeInput matInput id="code" formControlName="code" UpperCaseDirective
-                                            autocomplete="off" maxlength="15" (focusout)="checkcode()" />
+                                            autocomplete="off" maxlength="15" (focusout)="checkcode()" [readonly]="viewOnly || codeedit"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -34,8 +34,8 @@
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" #codeInput matInput formControlName="finyear"
-                                            UpperCaseDirective autocomplete="off" />
-                                            <master-search class="masterSearch" [MasterSearchData]="finyearcodedata"
+                                            UpperCaseDirective autocomplete="off"  [readonly]="viewOnly" />
+                                            <master-search *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="finyearcodedata"
                                             (newRowClick)="selectedfinyear($event)">
                                         </master-search>
                                     </mat-form-field>
@@ -89,7 +89,7 @@
                                     Sales Man :</label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="salesman"
+                                        <input type="text" #codeInput matInput formControlName="salesman"  [readonly]="viewOnly"
                                             UpperCaseDirective autocomplete="off" (focusout)="SPvalidateLookupFieldModified(
                                                 $event,
                                                 SalesmanData,
@@ -99,7 +99,7 @@
                                                 false
                                             )"/>
 
-                                            <master-search [MasterSearchData]="SalesmanData" #overlaysalesman  class="masterSearch" 
+                                            <master-search  *ngIf="this.flag != 'VIEW'"  [MasterSearchData]="SalesmanData" #overlaysalesman  class="masterSearch" 
                                         (newRowClick)="salesmanSelected($event)">
                                     </master-search>
 
@@ -118,7 +118,7 @@
                                 </div>
                                 <div class="your-box-container">
                                     <div class="row">
-                                        <mat-radio-group aria-label="Select an option" formControlName="diamond_division" >
+                                        <mat-radio-group aria-label="Select an option" formControlName="diamond_division" [disabled]="viewOnly" >
                                             <mat-radio-button value="F" id="diamond_sale_amount"
                                                 class="mx-4 mt-2"><b>Sale Amount</b></mat-radio-button>
                                             <mat-radio-button value="P" id="diamond_profit"
@@ -136,7 +136,7 @@
                                 </div>
                                 <div class="your-box-container">
                                     <div class="row">
-                                        <mat-radio-group aria-label="Select an option" formControlName="metal_division" (change)="disabletable()">
+                                        <mat-radio-group aria-label="Select an option" formControlName="metal_division"  [disabled]="viewOnly" (change)="disabletable()"  >
                                             <mat-radio-button value="F" id="metal_qty"
                                                 class="mx-4 mt-2"><b>Qty</b></mat-radio-button>
                                             <mat-radio-button value="P" id="metal_making" class="mx-2 mt-2"><b>Making
@@ -165,7 +165,7 @@
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" class="text-right" matInput formControlName="diamondjewellery" AmountDecimalInput (change)="addmonthtosubgrid()"
-                                                     />
+                                                [readonly]="viewOnly" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -177,7 +177,7 @@
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" class="text-right" matInput formControlName="goldmakingcharge" AmountDecimalInput (change)="setdia_amount()"
-                                                     />
+                                                [readonly]="viewOnly" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -188,7 +188,7 @@
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" class="text-right" matInput formControlName="goldquantity"
-                                                    MetalDecimalInput (change)="setgold_amt()" />
+                                                [readonly]="viewOnly"   MetalDecimalInput (change)="setgold_amt()" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -207,7 +207,7 @@
                                             :</label>
                                         <div class="col-md-7">
                                             <mat-form-field style="width: 100%;" appearance="outline">
-                                                <mat-select formControlName="dia_division" multiple>
+                                                <mat-select formControlName="dia_division" multiple  [disabled]="viewOnly">
                                                   <mat-option
                                                     *ngFor="let option of diamond_drop"
                                                     [value]="option.DIVISION_CODE">
@@ -223,7 +223,7 @@
                                             :</label>
                                         <div class="col-md-7">
                                             <mat-form-field style="width: 100%;" appearance="outline">
-                                                <mat-select formControlName="metal_divisions_" multiple>
+                                                <mat-select formControlName="metal_divisions_" multiple  [disabled]="viewOnly">
                                                     <mat-option
                                                     *ngFor="let option of metal_drop"
                                                     [value]="option.DIVISION_CODE">

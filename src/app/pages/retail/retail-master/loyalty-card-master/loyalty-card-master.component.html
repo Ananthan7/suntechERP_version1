@@ -7,7 +7,7 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <modal-header  *ngIf="this.flag != 'VIEW'"  (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
     <!-- content section -->
     <div class="p-4 ">
         <form [formGroup]="loyaltycardform">
@@ -20,13 +20,13 @@
                                 <label for="prefixcode" class="col-sm-2 col-form-label">Code:</label>
                                 <div class="col-md-2 p-0 ms-2">
                                     <mat-form-field style="width: 100%;" appearance="outline">
-                                        <input type="text" id="code" matInput class="p-0" />
+                                        <input type="text" id="code" matInput class="p-0" maxlength="15" formControlName="code" UpperCaseDirective  [readonly]="viewOnly || codeedit"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-6 p-0">
                                     <mat-form-field style="width: 100%;" appearance="outline">
                                         <input type="text" id="codedesc" matInput formControlName="codedesc"
-                                            class="p-0" />
+                                        [readonly]="viewOnly"  class="p-0" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -38,8 +38,8 @@
                                             Points From :</label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="pointsfrom"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                <input type="number" #codeInput matInput formControlName="pointsfrom"
+                                                [readonly]="viewOnly"    autocomplete="off"  />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -51,8 +51,8 @@
                                             Points To :</label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="pointsto"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                <input type="number" #codeInput matInput formControlName="pointsto"
+                                                [readonly]="viewOnly" autocomplete="off"  />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -66,8 +66,8 @@
                                             Metal Discount % : </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="metaldiscount"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                <input type="number" #codeInput matInput formControlName="metaldiscount" class="text-right"
+                                                [readonly]="viewOnly"    autocomplete="off" AmountDecimalInput />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -79,8 +79,8 @@
                                             Diamond Discount % :</label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="diamonddiscount"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                <input type="number" class="text-right" #codeInput matInput formControlName="diamonddiscount"
+                                                [readonly]="viewOnly"    autocomplete="off" AmountDecimalInput />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -95,8 +95,8 @@
                                             Points Exp. Days : </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="pointexpdays"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                <input type="number" #codeInput matInput formControlName="pointexpdays"
+                                                [readonly]="viewOnly"   autocomplete="off" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -105,14 +105,14 @@
                                 <div class="col-md-6">
                                     <div class="row mt-2">
                                         <div class="col-md-6">
-                                            <mat-checkbox id="ID022" formControlName="sendmessage"
-                                                class="example-margin">Send Message
+                                            <mat-checkbox  formControlName="sendmessage"
+                                                class="example-margin" [disabled]="viewOnly">Send Message
                                             </mat-checkbox>
                                         </div>
 
                                         <div class="col-md-6">
-                                            <mat-checkbox id="ID022" formControlName="sendemail"
-                                                class="example-margin">Send Email
+                                            <mat-checkbox  formControlName="sendemail"
+                                                class="example-margin"  [disabled]="viewOnly">Send Email
                                             </mat-checkbox>
                                         </div>
                                     </div>
@@ -123,11 +123,11 @@
                                 <div class="col-md-6">
                                     <div class="row mt-2">
                                         <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
-                                            Poins Multiply Fact : </label>
+                                            Points Multiply Fact : </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="pointmulfact"
-                                                    UpperCaseDirective autocomplete="off" />
+                                                <input type="number" #codeInput matInput formControlName="pointmulfact"
+                                                [readonly]="viewOnly"   autocomplete="off" />
                                             </mat-form-field>
                                         </div>
                                     </div>
