@@ -54,13 +54,13 @@ export class CustomerPriceMasterComponent implements OnInit {
   currentDate: any = this.commonService.currentDate;
   value: any;
   rateInput: any;
-  text = "Deduct";
+  AddOrDeductText = "Add";
   myNumber: any;
   allMode: string;
   selectedKeys: any[] = [];
   dele: boolean = false;
   isDisableSaveBtn: boolean = false;
-
+  priceOptions = ['By Value', 'By %', 'Fixed']
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -83,6 +83,8 @@ export class CustomerPriceMasterComponent implements OnInit {
     metal_loss: [''],
     date: [new Date(), ''],
     text: [''],
+    AddOrDeductFlag: [true],
+    calculateMethod: [''],
     changePrice: [''],
     CURRENCY_CODE: [''],
     YEARMONTH: [''],
@@ -92,7 +94,6 @@ export class CustomerPriceMasterComponent implements OnInit {
   });
   constructor(
     private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
@@ -164,9 +165,40 @@ export class CustomerPriceMasterComponent implements OnInit {
     }
   }
 
+  Change_Prices() {
+    if (this.tableDatastone?.length > 0) {
+      let form = this.customerpricemasterForm.value;
+      if (this.commonService.emptyToZero(form.changePrice) <= 0) return
+      let percentage = 0
+      let nNewRate = 0
+      this.tableDatastone.forEach((item: any) => {
+        if (item.SELECT1) {
+          nNewRate = this.commonService.emptyToZero(item.SELLING_RATE)
+          if (form.calculateMethod == this.priceOptions[0]) {
+            //by value calculation
+            if (form.AddOrDeductFlag) {
+              nNewRate = nNewRate + this.commonService.emptyToZero(form.changePrice)
+            } else {
+              nNewRate = nNewRate - this.commonService.emptyToZero(form.changePrice)
+            }
+          } else if (form.calculateMethod == this.priceOptions[1]) {
+            //by % calculation
+            percentage = nNewRate * (this.commonService.emptyToZero(form.changePrice) / 100)
+            if (form.AddOrDeductFlag) {
+              nNewRate = nNewRate + percentage
+            } else {
+              nNewRate = nNewRate - percentage
+            }
+          } else if (form.calculateMethod == this.priceOptions[2]) {
+            //fixed
+            nNewRate = form.this.commonService.emptyToZero(form.changePrice)
+          }
+          item.SELLING_RATE = this.commonService.decimalQuantityFormat(nNewRate, 'AMOUNT')
+        }
+      })
+    }
+  }
   stonepricing() {
-
-    //this.customerpricemasterForm.controls.priceScheme.setValue(e.PRICE_CODE)
     let postData = {
       "SPID": "097",
       "parameter": {
@@ -179,9 +211,8 @@ export class CustomerPriceMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           this.tableDatastone = result.dynamicData[0] || []
-          if (this.tableDatastone?.length > 0) {
-            // this.fillPriceSchemeDetails()
-          } else {
+          this.tableDatastone.forEach((item)=> item.SELECT1 = true)
+          if (this.tableDatastone?.length == 0) {
             this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
           }
 
@@ -208,10 +239,7 @@ export class CustomerPriceMasterComponent implements OnInit {
         if (result.status == "Success") {
 
           this.tableDatalabour = result.dynamicData[0] || []
-          if (this.tableDatalabour?.length > 0) {
-            console.log(result.dynamicData[0]);
-            // this.fillPriceSchemeDetails()
-          } else {
+          if (this.tableDatalabour?.length == 0) {
             this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
           }
 
@@ -237,10 +265,8 @@ export class CustomerPriceMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           this.designChanges = result.dynamicData[0] || []
-          if (this.designChanges?.length > 0) {
-            // this.fillPriceSchemeDetails()
-          } else {
-            this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
+          if (this.designChanges?.length == 0) {
+            // this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
           }
 
         }
@@ -296,19 +322,19 @@ export class CustomerPriceMasterComponent implements OnInit {
       this.selectedKeys.push(rowKey); // Add the row key to the selected keys array
     }
   }
-  
+
   // close(data?: any) {
   //   //TODO reset forms and data before closing
   //   this.activeModal.close(data);
   // }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -407,8 +433,7 @@ export class CustomerPriceMasterComponent implements OnInit {
   }
 
   change(event: any) {
-    console.log(event);
-    this.text = event.target.checked ? "Add" : "Deduct";
+    this.AddOrDeductText = event.target.checked ? "Add" : "Deduct";
   }
 
 
@@ -551,13 +576,13 @@ export class CustomerPriceMasterComponent implements OnInit {
 
 
   submitValidations(form: any) {
-    if (this.commonService.nullToString(form.customercode) == '' ) {
+    if (this.commonService.nullToString(form.customercode) == '') {
       this.commonService.toastErrorByMsgId('MSG7822')//"customercode cannot be empty" MSG7822 
       return true
     }
     else if (this.commonService.nullToString(form.pricecode) == '') {
       this.commonService.toastErrorByMsgId('MSG1660') //"pricecode cannot be empty"
-      console.log( this.commonService.toastErrorByMsgId); 
+      console.log(this.commonService.toastErrorByMsgId);
       return true
     }
 

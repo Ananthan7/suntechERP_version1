@@ -243,7 +243,7 @@ export class ProductionStockDetailComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
-          this.componentDataList = result.dynamicData[0]
+          this.componentDataList = result.dynamicData[0] || []
           let metalValue: number = 0
           let stoneValue: number = 0
           let wastage: number = 0
@@ -309,7 +309,6 @@ export class ProductionStockDetailComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
-        debugger
         if (result.status == "Success" && result.dynamicData[0]) {
           this.createTagLine(result.dynamicData[0])
         } else {

@@ -31,6 +31,7 @@ export class PosSalespersonTargetComponent implements OnInit {
   curr_target_on:any;
   _isdis_goldqty:boolean =false;
   _isdis_goldmakingcharge:boolean =false;
+  codeedit:boolean =false;
 
 
 
@@ -108,8 +109,12 @@ export class PosSalespersonTargetComponent implements OnInit {
     if(this.flag == 'EDIT'){
       this.disable_code = true;
       this.editMode = true;
+      this.codeedit = true;
     }else if(this.flag == 'VIEW'){
       this.viewMode = true;
+      this.codeedit = true;
+      this.viewOnly = true;
+
     }
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {

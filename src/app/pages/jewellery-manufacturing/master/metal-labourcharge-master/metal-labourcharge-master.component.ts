@@ -450,6 +450,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.stockcodeDisable = false;
       this.editModeKarat = true;
       this.editDisableModeKarat = true;
+      this.codeDisable()
       this.unitSelected();
     } else if (this.content.FLAG == 'DELETE') {
       this.viewMode = true;

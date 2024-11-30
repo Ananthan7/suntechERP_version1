@@ -579,13 +579,14 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.setFormNullToString('METAL_STOCK_CODE', data[0].METAL_STOCK_CODE)
             this.setFormNullToString('SUPPLIER_REF', data[0].DESIGN_CODE + "-" + data[0].METAL_COLOR)
             this.setFormNullToString('PREFIX', data[0].PREFIX)
-            this.setFormNullToString('PREFIX_LASTNO', data[0].LAST_NO)
+            // this.setFormNullToString('PREFIX_LASTNO', data[0].LAST_NO)
             this.setFormNullToString('PREFIXNO', data[0].PREFIX_NUMBER)
             this.setFormNullToString('COST_CODE', data[0].COST_CODE)
             this.setFormNullToString('PART_CODE', data[0].DESIGN_CODE)
             this.setFormNullToString('PART_NAME', data[0].DESCRIPTION)
             this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
             this.subJobNumberValidate()
+            this.prefixCodeValidate()
             this.getDesignimagecode()
           } else {
             this.setFormNullToString('JOB_NUMBER', '')
@@ -630,10 +631,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
           // let result3 = result.dynamicData[2]
           // this.setVendorRef(result) //supplier ref 
 
-          this.setFormNullToString('PROCESS_CODE', data[0].PROCESS)
-          this.setFormNullToString('PROCESS_NAME', data[0].PROCESSDESC)
-          this.setFormNullToString('WORKER_CODE', data[0].WORKER)
-          this.setFormNullToString('WORKER_NAME', data[0].WORKERDESC)
+          // this.setFormNullToString('PROCESS_CODE', data[0].PROCESS)
+          // this.setFormNullToString('PROCESS_NAME', data[0].PROCESSDESC)
+          // this.setFormNullToString('WORKER_CODE', data[0].WORKER)
+          // this.setFormNullToString('WORKER_NAME', data[0].WORKERDESC)
           this.setFormNullToString('UNQ_DESIGN_ID', data[0].UNQ_DESIGN_ID)
           this.setFormNullToString('JOB_SO_NUMBER', data[0].JOB_SO_NUMBER)
           this.setFormNullToString('STOCK_CODE', data[0].STOCK_CODE)
