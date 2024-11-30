@@ -1,9 +1,11 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DxDataGridComponent } from 'devextreme-angular';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -31,7 +33,16 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
   disable_code: boolean = false;
   editMode: boolean = false;
   disadd_btn: boolean = true;
-  dropdownvalues:any[]=[];
+  dropdownvalues: any[] = [];
+  curr_div = "";
+  group1_val: any;
+  group2_val: any;
+  group3_val: any;
+  @ViewChild('grid') grid!: DxDataGridComponent;
+  filter_1:any;
+  filter_2:any;
+  filter_3:any;
+
 
 
   loyaltysettingform: FormGroup = this.formBuilder.group({
@@ -65,8 +76,131 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     private commonService: CommonServiceService,
     private renderer: Renderer2
 
+
   ) { }
 
+  BranchDataSelected(data: any) {
+
+  }
+
+  divisiondata: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 18,
+    LOOKUPID: 18,
+    ORDER_TYPE: 0,
+    WHERECONDITION: "",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "Division Code",
+    SEARCH_VALUE: "",
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  group1data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 18,
+    LOOKUPID: 111,
+    ORDER_TYPE: 0,
+    SEARCH_HEADING: 'Group 1',
+    WHERECONDITION: "",
+    SEARCH_FIELD: "",
+    SEARCH_VALUE: ""
+  }
+
+  group2data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 18,
+    LOOKUPID: 111,
+    ORDER_TYPE: 0,
+    SEARCH_HEADING: 'Group 2',
+    WHERECONDITION: "",
+    SEARCH_FIELD: "",
+    SEARCH_VALUE: ""
+  }
+
+  group3data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 18,
+    LOOKUPID: 111,
+    ORDER_TYPE: 0,
+    SEARCH_HEADING: 'Group 3',
+    WHERECONDITION: "",
+    SEARCH_FIELD: "",
+    SEARCH_VALUE: ""
+  }
+
+
+  change_curr_div() {
+    let division = this.loyaltysettingform.controls.division.value;
+    if (division == 'Diamond') {
+      this.curr_div = 'S';
+    } else {
+      this.curr_div = 'M';
+    }
+    this.divisiondata.WHERECONDITION = "DIVISION = '" + this.curr_div + "' and DIVISION_CODE not in (select DivisionCode from tbl_AllPossibleDivision)";
+  }
+
+  setmastergroup1() {
+    this.filter_1 = this.loyaltysettingform.controls.group1.value;
+    if(this.filter_1 == this.filter_2 || this.filter_1 == this.filter_3){
+      this.loyaltysettingform.controls['group1'].reset();
+      Swal.fire({
+        title: 'Code Already Entered',
+        text: '',
+        icon: 'warning',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'ok',
+      })
+      return;
+    }    
+    let group = this.loyaltysettingform.controls.group1.value;
+    this.loyaltysettingform.controls['group1search'].reset();
+    this.group1data.WHERECONDITION = "   @strSelectedField='" + group + "' ";
+  }
+
+  groupselected(e: any, field: string) {
+    console.log(e);
+    this.loyaltysettingform.controls[field].setValue(e.Code);    
+  }
+
+
+  setmastergroup2() {
+    this.filter_2 = this.loyaltysettingform.controls.group2.value;
+    if(this.filter_2 == this.filter_1 || this.filter_2 == this.filter_3){
+      this.loyaltysettingform.controls['group2'].reset();
+      return;
+    }
+    let group = this.loyaltysettingform.controls.group2.value;
+    this.loyaltysettingform.controls['group2search'].reset();
+    this.group2data.WHERECONDITION = "   @strSelectedField='" + group + "' ";
+  }
+
+  group2selected(e: any) {
+    console.log(e);
+    this.loyaltysettingform.controls.group2search.setValue(e.Code)
+  }
+
+  setmastergroup3() {
+    this.filter_3 = this.loyaltysettingform.controls.group3.value;
+    if(this.filter_3 == this.filter_1 || this.filter_3 == this.filter_2){
+      this.loyaltysettingform.controls['group3'].reset();
+      return;
+    }
+    let group = this.loyaltysettingform.controls.group3.value;
+    this.loyaltysettingform.controls['group3search'].reset();
+    this.group3data.WHERECONDITION = "   @strSelectedField='" + group + "' ";
+  }
+
+  group3selected(e: any) {
+    console.log(e);
+    this.loyaltysettingform.controls.group3search.setValue(e.Code);
+  }
+
+  divisiondataselected(e: any) {
+    console.log(e);
+    this.loyaltysettingform.controls.divisions.setValue(e.DIVISION_CODE);
+
+  }
 
   ngOnInit(): void {
     console.log(this.content);
@@ -78,8 +212,6 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
       this.commonService.getComboFilterByID("division"),
       "ENGLISH"
     );
-
-
     console.log(this.division_values)
     this.getdropdownvalues();
 
@@ -166,9 +298,9 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     let API = `LoyaltySettingMaster/GetLoyaltySettingGroupDropdown`;
     let Sub: Subscription = this.apiService.getDynamicAPI(API)
       .subscribe((result: any) => {
-       if(result.status == 'Success'){
-        this.dropdownvalues = result.response;
-       }
+        if (result.status == 'Success') {
+          this.dropdownvalues = result.dynamicData[0];
+        }
       }, (err: any) => {
 
       })
@@ -276,44 +408,45 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
 
   formSubmit() {
 
+    let datas = this.maindetails;
+    let allgroup_1 = '';
+    let allgroup_2 = '';
+    let allgroup_3 = '';
+
+    if(Array.isArray(datas)){
+      datas.forEach((e: any) => {
+        allgroup_1 += e.INVFILT1_VALUES + ',';  
+        allgroup_2 += e.INVFILT2_VALUES + ',';  
+        allgroup_3 += e.INVFILT3_VALUES + ','; 
+      });
+    }
+    allgroup_1 = allgroup_1.slice(0, -1); 
+    allgroup_2 = allgroup_2.slice(0, -1); 
+    allgroup_3 = allgroup_3.slice(0, -1); 
+
     const postData = {
       "MID": 0,
       "CODE": this.loyaltysettingform.controls.code.value,
       "DESCRIPTION": this.loyaltysettingform.controls.codedesc.value,
-      "ALL_DIVISION": "string",
-      "FILTER1": "string",
-      "FILTER2": "string",
-      "FILTER3": "string",
-      "ALL_GRP1": "string",
-      "ALL_GRP2": "string",
-      "ALL_GRP3": "string",
+      "ALL_DIVISION": this.loyaltysettingform.controls.division.value,//"string",
+      "FILTER1": this.loyaltysettingform.controls.group1.value,
+      "FILTER2": this.loyaltysettingform.controls.group2.value,
+      "FILTER3": this.loyaltysettingform.controls.group3.value,
+      "ALL_GRP1": allgroup_1,//"string",
+      "ALL_GRP2": allgroup_2,//"string",
+      "ALL_GRP3": allgroup_3,//"string",
       "STD_AMT_PERPOINT": this.loyaltysettingform.controls.standardamt1.value,
       "CREATED_BY": this.curr_user,
       "CREATED_ON": new Date(),
-      "FILTERFILED1": "string",
-      "FILTERFILED2": "string",
-      "FILTERFILED3": "string",
+      "FILTERFILED1": this.loyaltysettingform.controls.group1search.value,
+      "FILTERFILED2": this.loyaltysettingform.controls.group2search.value,
+      "FILTERFILED3": this.loyaltysettingform.controls.group3search.value,
       "DONT_CAL_POINTS": this.loyaltysettingform.controls.calculate_points.value ? true : false,
       "STD_AMT_REDEEMPOINT": this.loyaltysettingform.controls.redeem.value,
       "NO_POINTSSLAB": this.loyaltysettingform.controls.no_redeem_points.value ? true : false,
       "FIRST_REF_PER": this.loyaltysettingform.controls.reference1.value,
       "STD_REF_PER": this.loyaltysettingform.controls.subreference.value,
-      "Detail": [
-        {
-          "SLNO": 0,
-          "REFMID": 0,
-          "CODE": "string",
-          "DIA_OR_MTL": "string",
-          "DIVISIONS": "string",
-          "INVFILT1_VALUES": "string",
-          "INVFILT2_VALUES": "string",
-          "INVFILT3_VALUES": "string",
-          "INVFILT1_FIELD": "string",
-          "INVFILT2_FIELD": "string",
-          "INVFILT3_FIELD": "string",
-          "AMOUNT_SPENT": 0
-        }
-      ]
+      "Detail": this.maindetails
     }
 
     console.log(postData); return;
@@ -371,9 +504,6 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     }
   }
 
-  BranchDataSelected(data: any) {
-
-  }
 
   clear(element: any) {
     this.loyaltysettingform.controls[element].reset();
@@ -400,6 +530,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
       "POINTS": '',
       "AMOUNT": ''
     }
+
     this.maindetails2.push(data);
 
   }
@@ -420,36 +551,84 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     }
   }
 
-  adddetails_data(){
+
+  adddetails_data() {
+    let group_1 = this.loyaltysettingform.controls.group1.value;
+    let group_2 = this.loyaltysettingform.controls.group2.value;
+    let group_3 = this.loyaltysettingform.controls.group3.value;
+    this.loyaltysettingform.controls['group1'].disable();
+    this.loyaltysettingform.controls['group2'].disable();
+    this.loyaltysettingform.controls['group3'].disable();
+
+
+    if (this.grid) {
+      this.grid.instance.columnOption('INVFILTER1', 'caption', group_1);
+      this.grid.instance.columnOption('INVFILTER2', 'caption', group_2);
+      this.grid.instance.columnOption('INVFILTER3', 'caption', group_3);
+    } else {
+      console.log("grid not found");
+    }
+
+
+
+
     let data_count = this.maindetails.length;
-    let curr_division ;
-    let curr_points ;
+    let curr_division;
+    let curr_points;
     console.log(this.loyaltysettingform.controls.division.value)
-    if(this.loyaltysettingform.controls.division.value == 'Metal'){
+    if (this.loyaltysettingform.controls.division.value == 'Metal') {
       curr_division = 'M'
-    }else{
+    } else {
       curr_division = 'S'
     }
     curr_points = this.loyaltysettingform.controls.standardamt1.value;
-  
+    let divisions = this.loyaltysettingform.controls.divisions.value;
+    let g1_val = this.loyaltysettingform.controls.group1search.value;
+    let g2_val = this.loyaltysettingform.controls.group2search.value;
+    let g3_val = this.loyaltysettingform.controls.group3search.value;
+
+    // let data = {
+    //   'SLNO': data_count + 1,
+    //   'DIA_METAL' : curr_division,
+    //   'DIVISIONS' : divisions,
+    //   'AMTSPENT' : curr_points,
+    //   'INVFILTER1' : g1_val,
+    //   'INVFILTER2' : g2_val,
+    //   'INVFILTER3' : g3_val,
+    // };
+    let grid_len = this.maindetails.length;
+
     let data = {
-      'SLNO': data_count + 1,
-      'DIA_METAL' : curr_division,
-      'DIVISIONS' : '',
-      'AMTSPENT' : ''
-      // 'INVFILTER1' : '',
-      // 'INVFILTER2' : '',
-      // 'INVFILTER3' : '',
-    };
+      "SLNO": grid_len + 1,
+      "REFMID": 0,
+      "CODE": this.loyaltysettingform.controls.code.value,
+      "DIA_OR_MTL": this.loyaltysettingform.controls.division.value,
+      "DIVISIONS": divisions,
+      "INVFILT1_VALUES": g1_val,
+      "INVFILT2_VALUES": g2_val,
+      "INVFILT3_VALUES": g3_val,
+      "INVFILT1_FIELD": this.loyaltysettingform.controls.group1.value,
+      "INVFILT2_FIELD": this.loyaltysettingform.controls.group2.value,
+      "INVFILT3_FIELD": this.loyaltysettingform.controls.group3.value,
+      "AMOUNT_SPENT": curr_points
+    }
+
+
+    console.log(data);
     this.maindetails.push(data);
+    this.loyaltysettingform.controls['group1search'].reset();
+    this.loyaltysettingform.controls['group2search'].reset();
+    this.loyaltysettingform.controls['group3search'].reset();
+    this.loyaltysettingform.controls['divisions'].reset();
+
   }
 
-  dia_metalfield(data:any , event:any){
+  dia_metalfield(data: any, event: any) {
     const updatedSLNO = data.data.SLNO - 1;
     this.maindetails[updatedSLNO].DIA_METAL = event.target.value;
   }
 
-  amtfield(data:any , event:any){
+  amtfield(data: any, event: any) {
     const updatedSLNO = data.data.SLNO - 1;
     this.maindetails[updatedSLNO].AMTSPENT = event.target.value;
   }
