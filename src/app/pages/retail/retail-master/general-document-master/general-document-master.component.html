@@ -20,8 +20,11 @@
                                     Code :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective [readonly]="viewOnly || codeedit"
-                                            autocomplete="off" />
+                                        <input type="text" #codeInput matInput id="code" formControlName="code" UpperCaseDirective [readonly]="viewOnly || codeedit"
+                                            autocomplete="off" (focusout)="checkcode()"/>
+                                            <mat-error *ngIf="generaldocumentform.controls['code'].hasError('required')">
+                                                Code is required.
+                                            </mat-error>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -30,8 +33,11 @@
                                     Description :</label>
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="description" UpperCaseDirective [readonly]="viewOnly"
-                                            autocomplete="off" />
+                                        <input type="text" #codeInput id="description" matInput formControlName="description"  [readonly]="viewOnly"
+                                            autocomplete="off" (focusout)="checkdesc()"/>
+                                            <mat-error *ngIf="generaldocumentform.controls['description'].hasError('required')">
+                                                description is required.
+                                            </mat-error>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -40,7 +46,8 @@
                                     (+/-) : </label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="number" matInput formControlName="reminderdays" UpperCaseDirective  [readonly]="viewOnly"/>
+                                        <input type="text" matInput formControlName="reminderdays" 
+                                        [readonly]="viewOnly" maxlength="4"/>
                                     </mat-form-field>
                                 </div>
                             </div>

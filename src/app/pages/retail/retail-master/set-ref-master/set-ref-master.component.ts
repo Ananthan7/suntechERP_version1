@@ -17,18 +17,36 @@ import Swal from "sweetalert2";
 export class SetRefMasterComponent implements OnInit {
   @Input() content!: any;
   @ViewChild("overlaycode") overlaycode!: MasterSearchComponent;
-  @ViewChild("overlayYearCode")overlayYearCode!: MasterSearchComponent;
+  @ViewChild("overlayYearCode") overlayYearCode!: MasterSearchComponent;
+  @ViewChild("overlaySetRefCode") overlaySetRefCode!: MasterSearchComponent;
+  @ViewChild("overlayTableSearchCode")
+  overlayTableSearchCode!: MasterSearchComponent;
+  hideFields:boolean = false;
   tableData: any = [];
-  tableData1:any=[];
-  selectedIndexes:any=[]
-  codeData: MasterSearchModel = {
+  tableData1: any = [];
+  selectedIndexes: any = [];
+  divisionCOde: string = "";
+  setRefCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
+    LOOKUPID: 14,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Set Ref Code",
+    SEARCH_VALUE: "",
+    // WHERECONDITION: `SETREF_PREFIX=1 and DIVISION='${this.divisionCOde}'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+  codeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 14,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Country Code",
+    SEARCH_HEADING: "Set Ref Master ",
     SEARCH_VALUE: "",
-    WHERECONDITION: "",
+    WHERECONDITION: "TYPES='SET REFERENCE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -47,6 +65,19 @@ export class SetRefMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true,
   };
+  gridDataSearch: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 4,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Data",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
   isloading: boolean = false;
   viewMode: boolean = false;
   isDisabled: boolean = false;
@@ -55,25 +86,27 @@ export class SetRefMasterComponent implements OnInit {
   codeEnable: boolean = false;
   private subscriptions: Subscription[] = [];
   currentDate = new Date();
-  divisionCode:any;
+  divisionCode: any;
   SetRefMasterForm: FormGroup = this.formBuilder.group({
-    division:[''],
-    set_ref_code:[''],
-    code:[''],
-    decription:[''],
-    year:[''],
-    year_type:[''],
-    voc_no:['']
+    division: [""],
+    set_ref_code: [""],
+    code: [""],
+    decription: [""],
+    year: [""],
+    year_type: [""],
+    voc_no: [""],
+    table_search: [""],
   });
   data: any;
-
+  yearData: any;
+  dataGrid: any = [];
+  selectedData: any = [];
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private commonService: CommonServiceService,
     private dataService: SuntechAPIService,
-    private snackBar: MatSnackBar,
-
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -95,12 +128,21 @@ export class SetRefMasterComponent implements OnInit {
     }
 
     this.divisionCode = this.commonService
-    .getComboFilterByID("Days of Week")
-    .filter(
-      (value: any, index: any, self: any) =>
-        index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
-    );
+      .getComboFilterByID("Division")
+      .filter(
+        (value: any, index: any, self: any) =>
+          index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
+      );
     console.log(this.divisionCode);
+
+    let api = "TDSMaster/GetFinancialYearDropdown";
+    console.log(api);
+    let Sub: Subscription = this.dataService
+      .getDynamicAPI(api)
+      .subscribe((result: any) => {
+        this.yearData = result.dynamicData[0];
+        console.log(this.yearData);
+      });
   }
 
   close(data?: any) {
@@ -132,9 +174,8 @@ export class SetRefMasterComponent implements OnInit {
   setFormValues() {
     if (!this.content) return;
     console.log(this.content);
-    
-    let api =
-      "SetRefMaster/GetSetRefDetailWithCode/" + this.content.CODE;
+
+    let api = "SetRefMaster/GetSetRefDetailWithCode/" + this.content.CODE;
     console.log(api);
     let Sub: Subscription = this.dataService
       .getDynamicAPI(api)
@@ -155,24 +196,28 @@ export class SetRefMasterComponent implements OnInit {
       this.content.DESCRIPTION
     );
     this.SetRefMasterForm.controls.division.setValue(this.content.DIVISIONMS);
-    this.SetRefMasterForm.controls.set_ref_code.setValue(this.content.SET_REF_CODE);
+    this.SetRefMasterForm.controls.set_ref_code.setValue(
+      this.content.SET_REF_CODE
+    );
   }
-  
+
   setPostData() {
     let form = this.SetRefMasterForm.value;
-  
-    let detailsArray = [...this.tableData, ...this.tableData1].map((item, index) => {
-      return {
-        REFMID: 0,
-        CODE: "", 
-        SRNO: index + 1, 
-        STOCKCODE: this.commonService.nullToString(item.STOCKCODE || ""),
-        SUBSTOCKCODE: "", 
-        STOCKDESC: this.commonService.nullToString(item.STOCKDESC || ""),
-        GRIDREF: "", 
-      };
-    });
-  
+
+    let detailsArray = [...this.tableData, ...this.tableData1].map(
+      (item, index) => {
+        return {
+          REFMID: 0,
+          CODE: "",
+          SRNO: index + 1,
+          STOCKCODE: this.commonService.nullToString(item.STOCKCODE || ""),
+          SUBSTOCKCODE: "",
+          STOCKDESC: this.commonService.nullToString(item.STOCKDESC || ""),
+          GRIDREF: "",
+        };
+      }
+    );
+
     return {
       MID: 0,
       CODE: this.commonService.nullToString(form.code),
@@ -181,16 +226,15 @@ export class SetRefMasterComponent implements OnInit {
       SET_REF_CODE: this.commonService.nullToString(form.set_ref_code),
       SYSTEMDATE: new Date(),
       USERID: "string",
-      SYSTEMID: "string", 
+      SYSTEMID: "string",
       SOLD: true,
-      BROKEN: true, 
+      BROKEN: true,
       BROKEN_DATE: new Date(),
-      BROKEN_USER: "string", 
-      SET_PICTURE_NAME: "string", 
+      BROKEN_USER: "string",
+      SET_PICTURE_NAME: "string",
       Details: detailsArray,
     };
   }
-  
 
   formSubmit() {
     if (this.content && this.content.FLAG == "VIEW") return;
@@ -268,7 +312,7 @@ export class SetRefMasterComponent implements OnInit {
 
   deleteRecord() {
     if (this.content && this.content.FLAG == "VIEW") return;
-    if (!this.content.CODE ) {
+    if (!this.content.CODE) {
       Swal.fire({
         title: "",
         text: "Please Select data to delete!",
@@ -291,7 +335,7 @@ export class SetRefMasterComponent implements OnInit {
       confirmButtonText: "Yes, delete!",
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = "SetRefMaster/DeleteSetRefMaster/" + this.content.CODE ;
+        let API = "SetRefMaster/DeleteSetRefMaster/" + this.content.CODE;
         let Sub: Subscription = this.dataService
           .deleteDynamicAPI(API)
           .subscribe(
@@ -337,11 +381,56 @@ export class SetRefMasterComponent implements OnInit {
     });
   }
   CodeDataSelected(e: any) {
-    this.SetRefMasterForm.controls['code'].setValue(e.CODE)
+    this.SetRefMasterForm.controls["set_ref_code"].setValue(e.PREFIX_CODE);
   }
   YearTypeDataSelected(e: any) {
-    this.SetRefMasterForm.controls['year_type'].setValue(e.CODE)
+    this.SetRefMasterForm.controls["year_type"].setValue(e.CODE);
   }
+  TableDataSelected(e: any) {
+    this.SetRefMasterForm.controls["table_search"].setValue(e.Stock_Code);
+
+    this.selectedData = {
+      REFMID: 0,
+      SRNO: this.tableData.length + 1,
+      STOCKCODE: e.Stock_Code,
+      STOCKDESC: e.Stock_Description,
+    };
+    // this.dataGrid.push( this.selectedData);
+  }
+  CodeSecSelected(e: any) {
+    this.SetRefMasterForm.controls["code"].setValue(e.CODE);
+    this.SetRefMasterForm.controls["description"].setValue(e.DESCRIPTION);
+  }
+  changedCheckbox(data: any) {
+    console.log("Moving row:", data.data);
+    this.dataGrid = {
+      REFMID: 0,
+      SRNO: data.data.SRNO,
+      STOCKCODE: data.data.STOCKCODE,
+      STOCKDESC: data.data.STOCKDESC,
+    };
+    this.tableData1.push(this.dataGrid);
+    console.log(this.tableData1);
+
+    this.tableData = this.tableData.filter((row: any) => row.SRNO !== data.data.SRNO);
+
+  }
+
+  changedCheckbox1(data: any) {
+    console.log("Moving row:", data.data);
+    this.dataGrid = {
+      REFMID: 0,
+      SRNO: data.data.SRNO,
+      STOCKCODE: data.data.STOCKCODE,
+      STOCKDESC: data.data.STOCKDESC,
+    };
+    this.tableData.push(this.dataGrid);
+    console.log(this.tableData);
+
+    this.tableData1 = this.tableData1.filter((row: any) => row.SRNO !== data.data.SRNO);
+
+  }
+
   SPvalidateLookupFieldModified(
     event: any,
     LOOKUPDATA: MasterSearchModel,
@@ -499,7 +588,12 @@ export class SetRefMasterComponent implements OnInit {
       case "year_type":
         this.overlayYearCode.showOverlayPanel(event);
         break;
-
+      case "set_ref_code":
+        this.overlaySetRefCode.showOverlayPanel(event);
+        break;
+      case "table_search":
+        this.overlayTableSearchCode.showOverlayPanel(event);
+        break;
       default:
     }
   }
@@ -508,11 +602,10 @@ export class SetRefMasterComponent implements OnInit {
     const values = event.selectedRowKeys;
     // console.log(values);
     let indexes: Number[] = [];
-    this.tableData.reduce((acc:any, value:any, index:any) => {
+    this.tableData.reduce((acc: any, value: any, index: any) => {
       if (values.includes(parseFloat(value.SRNO))) {
         acc.push(index);
         // console.log(acc);
-
       }
       return acc;
     }, indexes);
@@ -549,17 +642,21 @@ export class SetRefMasterComponent implements OnInit {
   }
 
   addTableData() {
-    let len = this.tableData.length;
-    const data = {
-      REFMID: 0,
-      SRNO: len + 1,
-      STOCKCODE: "",
-      STOCKDESC: "",
-    };
+    this.tableData.push(this.selectedData);
+    this.selectedData = null;
+    this.SetRefMasterForm.controls["table_search"].setValue("");
+    // this.tableData = this.dataGrid;
+    // let len = this.tableData.length;
+    // const data = {
+    //   REFMID: 0,
+    //   SRNO: len + 1,
+    //   STOCKCODE: "",
+    //   STOCKDESC: "",
+    // };
 
-    console.log(data);
-    this.tableData.push(data);
-    this.tableData1.push({ ...data });
+    // console.log(data);
+    // this.tableData.push(data);
+    // this.tableData1.push({ ...data });
   }
 
   removedata() {
@@ -567,30 +664,45 @@ export class SetRefMasterComponent implements OnInit {
 
     if (this.selectedIndexes.length > 0) {
       Swal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete!'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete!",
       }).then((result) => {
         if (result.isConfirmed) {
           // Simulate deletion without using an actual API call
           if (this.tableData.length > 0) {
-            this.tableData = this.tableData.filter((data:any, index:any) => !this.selectedIndexes.includes(index));
-            this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+            this.tableData = this.tableData.filter(
+              (data: any, index: any) => !this.selectedIndexes.includes(index)
+            );
+            this.snackBar.open("Data deleted successfully!", "OK", {
+              duration: 2000,
+            });
             this.tableData.forEach((item: any, i: any) => {
               item.SRNO = i + 1;
             });
-
           } else {
-            this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
+            this.snackBar.open("No data to delete!", "OK", { duration: 2000 });
           }
         }
       });
     } else {
-      this.snackBar.open('Please select record', 'OK', { duration: 2000 });
+      this.snackBar.open("Please select record", "OK", { duration: 2000 });
     }
+  }
+
+  getDivsionValue(e: any) {
+    console.log(e);
+    if (e.value == "Metal") {
+      this.hideFields = true;
+      this.divisionCOde = "M";
+    } else {
+      this.divisionCOde = "S";
+      this.hideFields = false;
+    }
+    this.setRefCodeData.WHERECONDITION = `SETREF_PREFIX=1 and DIVISION='${this.divisionCOde}'`;
   }
 }
