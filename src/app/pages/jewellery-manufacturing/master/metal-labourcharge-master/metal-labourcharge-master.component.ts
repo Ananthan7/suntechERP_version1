@@ -188,7 +188,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 18,
     SEARCH_FIELD: 'DIVISION_CODE',
-    SEARCH_HEADING: 'Division Code',
+    SEARCH_HEADING: 'Division',
     SEARCH_VALUE: '',
     WHERECONDITION: "DIVISION='S'",
     VIEW_INPUT: true,
@@ -199,7 +199,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 18,
     SEARCH_FIELD: 'DIVISION_CODE',
-    SEARCH_HEADING: 'Division Code',
+    SEARCH_HEADING: 'Division',
     SEARCH_VALUE: '',
     WHERECONDITION: "DIVISION='M'",
     VIEW_INPUT: true,
@@ -333,7 +333,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Category Data',
+    SEARCH_HEADING: 'Category',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
     VIEW_INPUT: true,
@@ -346,7 +346,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Subcategory Data',
+    SEARCH_HEADING: 'Subcategory',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
     VIEW_INPUT: true,
@@ -359,7 +359,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Brand Data',
+    SEARCH_HEADING: 'Brand',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'BRAND MASTER'",
     VIEW_INPUT: true,
@@ -557,7 +557,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 23,
     SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Type',
+    SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
     WHERECONDITION: `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`,
     VIEW_INPUT: true,
@@ -683,9 +683,9 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     //     this.commonService.allbranchMaster?.BAMTDECIMALS,
     //     this.content.SELLING_RATE));
 
-    // this.metallabourMasterForm.controls.metalcost_rate.setValue(
-    //   this.commonService.commaSeperation(this.content.COST_RATE)
-    // )
+    this.metallabourMasterForm.controls.metalcost_rate.setValue(
+      this.commonService.commaSeperation(this.content.COST_RATE)
+    )
 
     // this.metallabourMasterForm.controls.metalcost_rate.setValue(
     //   this.commonService.transformDecimalVB(
