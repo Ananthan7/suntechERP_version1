@@ -74,6 +74,7 @@ import { FixedAssetsCategoryMasterComponent } from './fixed-assets-category-mast
 import { DocumentPrintSetupComponent } from './document-print-setup/document-print-setup.component';
 import { EmailTemplateComponent } from './email-template/email-template.component';
 import { FixedAssetsComponent } from './fixed-assets/fixed-assets.component';
+import { GiftVoucherDetailMasterComponent } from './gift-voucher-master/gift-voucher-detail-master/gift-voucher-detail-master.component';
 
 
 @NgModule({
@@ -153,7 +154,8 @@ import { FixedAssetsComponent } from './fixed-assets/fixed-assets.component';
     FixedAssetsCategoryMasterComponent,
     DocumentPrintSetupComponent,
     EmailTemplateComponent,
-    FixedAssetsComponent
+    FixedAssetsComponent,
+    GiftVoucherDetailMasterComponent
     
   ],
   imports: [
