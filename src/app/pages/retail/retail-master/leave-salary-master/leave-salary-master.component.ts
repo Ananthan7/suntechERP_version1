@@ -287,15 +287,15 @@ export class LeaveSalaryMasterComponent implements OnInit {
     code: [""],
     description: [""],
     debit: [""],
-    basedOn: [""],
+    basedOn: [0],
     noOfYr: [""],
     noOfTime: [""],
     amount: [""],
     in: [""],
-    excludeAnnualLeave: [""],
-    excludeUnpaidLeave: [""],
-    excludeHalfPaidLeave: [""],
-    excludeHalfUnPaidLeave: [""],
+    excludeAnnualLeave: [false],
+    excludeHalfPaidLeave: [false],
+    excludeHalfUnPaidLeave: [false],
+    excludeUnPaidLeave: [false],
     userDefined1: [""],
     userDefined2: [""],
     userDefined3: [""],
@@ -313,6 +313,7 @@ export class LeaveSalaryMasterComponent implements OnInit {
     userDefined15: [""],
   });
   data: any;
+  basedOne: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -340,7 +341,16 @@ export class LeaveSalaryMasterComponent implements OnInit {
         this.deleteRecord();
       }
     }
+
+    this.basedOne = this.commonService
+    .getComboFilterByID("OVERTIME BASED ON")
+    .filter(
+      (value: any, index: any, self: any) =>
+        index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
+    );
+    console.log(this.basedOne);
   }
+  
 
   close(data?: any) {
     if (data) {
@@ -377,6 +387,7 @@ export class LeaveSalaryMasterComponent implements OnInit {
       .subscribe((result: any) => {
         this.data = result.response;
         console.log(this.data);
+      
       });
 
     this.LeaveSalaryMasterForm.controls.code.setValue(
@@ -406,59 +417,61 @@ export class LeaveSalaryMasterComponent implements OnInit {
     this.LeaveSalaryMasterForm.controls.excludeAnnualLeave.setValue(
       this.content?.DED_ANNUALLEAVE
     );
+    console.log(this.content?.DED_ANNUALLEAVE);
+    
     this.LeaveSalaryMasterForm.controls.excludeHalfPaidLeave.setValue(
       this.content?.DED_PAIDLEAVE
     );
     this.LeaveSalaryMasterForm.controls.excludeUnPaidLeave.setValue(
-      this.data?.DED_UPAIDLEAVE 
+      this.content?.DED_UPAIDLEAVE 
     );
     this.LeaveSalaryMasterForm.controls.excludeHalfUnPaidLeave.setValue(
-      this.data?.DED_HPAIDLEAVE
+      this.content?.DED_HPAIDLEAVE
     );
     this.LeaveSalaryMasterForm.controls.userDefined1.setValue(
-      this.data.UDF1
+      this.data?.UDF1
     );
     this.LeaveSalaryMasterForm.controls.userDefined2.setValue(
-      this.data.UDF2
+      this.content?.UDF2
     );
     this.LeaveSalaryMasterForm.controls.userDefined3.setValue(
-      this.data.UDF3
+      this.data?.UDF3
     );
     this.LeaveSalaryMasterForm.controls.userDefined4.setValue(
-      this.data.UDF4
+      this.data?.UDF4
     );
     this.LeaveSalaryMasterForm.controls.userDefined5.setValue(
-      this.data.UDF5
+      this.data?.UDF5
     );
     this.LeaveSalaryMasterForm.controls.userDefined6.setValue(
-      this.data.UDF6
+      this.data?.UDF6
     );
     this.LeaveSalaryMasterForm.controls.userDefined7.setValue(
-      this.data.UDF7
+      this.data?.UDF7
     );
     this.LeaveSalaryMasterForm.controls.userDefined8.setValue(
-      this.data.UDF8
+      this.data?.UDF8
     );
     this.LeaveSalaryMasterForm.controls.userDefined9.setValue(
-      this.data.UDF9
+      this.data?.UDF9
     );
     this.LeaveSalaryMasterForm.controls.userDefined10.setValue(
-      this.data.UDF10
+      this.data?.UDF10
     );
     this.LeaveSalaryMasterForm.controls.userDefined11.setValue(
-      this.data.UDF11
+      this.data?.UDF11
     );
     this.LeaveSalaryMasterForm.controls.userDefined12.setValue(
-      this.data.UDF12
+      this.data?.UDF12
     );
     this.LeaveSalaryMasterForm.controls.userDefined13.setValue(
-      this.data.UDF13
+      this.data?.UDF13
     );
     this.LeaveSalaryMasterForm.controls.userDefined14.setValue(
-      this.data.UDF14
+      this.data?.UDF14
     );
     this.LeaveSalaryMasterForm.controls.userDefined15.setValue(
-      this.data.UDF15
+      this.data?.UDF15
     );
   }
   setPostData() {
@@ -477,7 +490,7 @@ export class LeaveSalaryMasterComponent implements OnInit {
       NO_OF_MONTHS: this.commonService.emptyToZero(form.in),
       DED_ANNUALLEAVE: this.commonService.emptyToZero(form.excludeAnnualLeave == true? 1:0),
       DED_PAIDLEAVE: this.commonService.emptyToZero(form.excludeHalfPaidLeave == true? 1:0),
-      DED_UPAIDLEAVE: this.commonService.emptyToZero(form.excludeUnpaidLeave == true? 1:0),
+      DED_UPAIDLEAVE: this.commonService.emptyToZero(form.excludeUnPaidLeave == true? 1:0),
       DED_HPAIDLEAVE: this.commonService.emptyToZero(
         form.excludeHalfUnPaidLeave == true? 1:0
       ),

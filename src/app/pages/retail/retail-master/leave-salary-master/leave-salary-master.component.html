@@ -121,11 +121,15 @@
                   <mat-form-field
                     style="width: 100%"
                     appearance="outline"
-                    formControlName="basedOn"
+                    
                   >
-                    <mat-select>
-                      <mat-option></mat-option>
-                      <mat-option></mat-option>
+                    <mat-select formControlName="basedOn">
+                      <mat-option
+                      *ngFor="let option of basedOne"
+                      [value]="option.ENGLISH"
+                    >
+                      {{ option.ENGLISH }}
+                    </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -133,7 +137,7 @@
                   <mat-checkbox
                     id="ID023"
                     [disabled]="viewMode"
-                    formControlName="excludeUnpaidLeave"
+                    formControlName="excludeUnPaidLeave"
                     class="example-margin"
                   >
                     Exclude Un-Paid Leaves</mat-checkbox

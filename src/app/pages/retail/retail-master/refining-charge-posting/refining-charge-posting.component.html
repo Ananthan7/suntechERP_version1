@@ -33,13 +33,21 @@
             <div class="col-sm-3">
               <mat-form-field style="width: 100%" appearance="outline">
                 <input
-                  type="text"
-                  #codeInput
-                  matInput
-                  formControlName="vocDate"
-                  UpperCaseDirective
-                  autocomplete="off"
-                />
+                matInput
+                [matDatepicker]="date"
+                formControlName="vocDate"
+                placeholder="DD/MM/YYYY"
+                [readonly]="codeEnable"
+                DateValidation
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="date"
+              ></mat-datepicker-toggle>
+              <mat-datepicker
+                [disabled]="viewMode"
+                #date
+              ></mat-datepicker>
               </mat-form-field>
             </div>
             <div class="col-md-3 offset-md-3">
