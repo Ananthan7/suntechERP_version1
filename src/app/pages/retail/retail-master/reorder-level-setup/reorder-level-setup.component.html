@@ -7,11 +7,7 @@
 </div>
 
 <!-- modal header component -->
-<modal-header
-  (saveClick)="formSave()"
-  (cancelClick)="close()"
-  (deleteClick)="deleteMaster()"
-></modal-header>
+<modal-header  (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"  [isViewDelete]="editMode" [isViewSave]="!viewMode"></modal-header>
 
 <!-- content section -->
 <div class="container-fluid pt-3">
@@ -21,14 +17,9 @@
         <div class="row">
           <div class="col-md-8">
             <div class="row mb-1">
-              <label for="mode" class="col-sm-2 col-form-label" id="ID029"
-                >Branchs</label
-              >
+              <label for="mode" class="col-sm-2 col-form-label" id="ID029">Branchs</label>
               <div class="col-md-4">
-                <button
-                  type="button"
-                  class="w-full btn btn-primary text-center m-2"
-                >
+                <button type="button" class="w-full btn btn-primary text-center m-2">
                   Branch
                 </button>
               </div>
@@ -39,24 +30,29 @@
         <div class="row">
           <div class="col-md-8">
             <div class="row mb-1">
-              <label for="code" class="col-sm-2 col-form-label" id="ID029"
-                >Code</label
-              >
+              <label for="code" class="col-sm-2 col-form-label" id="ID029">Code</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="code" />
+                  <input matInput type="text" formControlName="code" [readonly]="viewMode || editMode" #code (input)="code.value = code.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
-              <div class="col-md-6">
-                <mat-radio-group
-                  formControlName="radio"
-                  fxLayout="column"
-                  fxLayoutGap="10px"
-                >
-                  <mat-radio-button value="RA">Metal</mat-radio-button>
-                  <mat-radio-button value="RA">Diamond</mat-radio-button>
+              <!-- <div class="col-md-6">
+                <mat-radio-group formControlName="radio" >
+                  <mat-radio-button value="metal" style="font-size: 14px; padding: 5px 0;">Metal</mat-radio-button>
+                  <mat-radio-button value="diamond" style="font-size: 14px; padding: 5px 0;">Diamond</mat-radio-button>
                 </mat-radio-group>
-              </div>
+              </div> -->
+              <div class="col-md-6">
+                <div>
+                    <mat-radio-group aria-label="Select an option" 
+                        formControlName="Metalsoption" [disabled]="viewMode">
+                        <mat-radio-button value="metal"  class="mx-2">Metal</mat-radio-button>
+                        <mat-radio-button value="diamond"  class="mx-2">Diamond</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+            </div>
+              
             </div>
           </div>
         </div>
@@ -64,29 +60,10 @@
         <div class="row">
           <div class="col-md-8">
             <div class="row mb-1">
-              <label
-                for="code"
-                class="col-sm-2 col-form-label"
-                id="ID029"
-              ></label>
-              <label
-                for="code"
-                class="text-center col-sm-2 col-form-label"
-                id="ID029"
-                >Group 1</label
-              >
-              <label
-                for="code"
-                class="text-center col-sm-2 col-form-label"
-                id="ID029"
-                >Group 2</label
-              >
-              <label
-                for="code"
-                class="text-center col-sm-2 col-form-label"
-                id="ID029"
-                >Group 3</label
-              >
+              <label for="code" class="col-sm-2 col-form-label" id="ID029"></label>
+              <label for="code" class="text-center col-sm-2 col-form-label" id="ID029">Group 1</label>
+              <label for="code" class="text-center col-sm-2 col-form-label" id="ID029">Group 2</label>
+              <label for="code" class="text-center col-sm-2 col-form-label" id="ID029">Group 3</label>
               <div class="col-md-2">
                 <button type="button" class="btn btn-primary text-center m-2">
                   Group Filter
@@ -96,71 +73,111 @@
           </div>
         </div>
 
+        <!-- <div class="row">
+          <div class="col-md-8">
+            <div class="row mb-1">
+              <label for="code" class="col-sm-2 col-form-label" id="ID029"></label>
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput type="text" formControlName="group1" [readonly]="viewMode"/>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput type="text" formControlName="group2" [readonly]="viewMode"/>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput type="text" formControlName="group3" [readonly]="viewMode"/>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-2">
+                <button type="button" class="w-20 btn btn-primary text-center m-2">
+                  Apply
+                </button>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
         <div class="row">
           <div class="col-md-8">
             <div class="row mb-1">
-              <label
-                for="code"
-                class="col-sm-2 col-form-label"
-                id="ID029"
-              ></label>
+              <label for="code" class="col-sm-2 col-form-label" id="ID029"></label>
+        
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="code" />
+                  <mat-select formControlName="group1" (selectionChange)="onGroupChange()" [disabled]="viewMode">
+                    <mat-option value="None">None</mat-option>
+                    <mat-option value="Category">Category</mat-option>
+                    <mat-option value="Sub Category">Sub Category</mat-option>
+                    <mat-option value="Brand Code">Brand Code</mat-option>
+                    <mat-option value="Karat">Karat</mat-option>
+                    <mat-option value="Type">Type</mat-option>
+                    <mat-option value="Country">Country</mat-option>
+                    <mat-option value="Cost Code">Cost Code</mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
-
+        
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="code" />
+                  <mat-select formControlName="group2" (selectionChange)="onGroupChange()" [disabled]="viewMode">
+                    <mat-option value="None">None</mat-option>
+                    <mat-option value="Category">Category</mat-option>
+                    <mat-option value="Sub Category">Sub Category</mat-option>
+                    <mat-option value="Brand Code">Brand Code</mat-option>
+                    <mat-option value="Karat">Karat</mat-option>
+                    <mat-option value="Type">Type</mat-option>
+                    <mat-option value="Country">Country</mat-option>
+                    <mat-option value="Cost Code">Cost Code</mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
-
+        
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="code" />
+                  <mat-select formControlName="group3" (selectionChange)="onGroupChange()" [disabled]="viewMode">
+                    <mat-option value="None">None</mat-option>
+                    <mat-option value="Category">Category</mat-option>
+                    <mat-option value="Sub Category">Sub Category</mat-option>
+                    <mat-option value="Brand Code">Brand Code</mat-option>
+                    <mat-option value="Karat">Karat</mat-option>
+                    <mat-option value="Type">Type</mat-option>
+                    <mat-option value="Country">Country</mat-option>
+                    <mat-option value="Cost Code">Cost Code</mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
-
+        
               <div class="col-md-2">
-                <button
-                  type="button"
-                  class="w-20 btn btn-primary text-center m-2"
-                >
+                <button type="button" class="w-20 btn btn-primary text-center m-2">
                   Apply
                 </button>
               </div>
             </div>
           </div>
         </div>
+        
 
         <div class="row pt-2">
-            <div class="col-md-12">
-              <dx-data-grid
-                id="gridContainer"
-                [showBorders]="true"
-                [dataSource]="tableData"
-                [showColumnLines]="true"
-                [showRowLines]="true"
-                class="mt-3"
-                [paging]="{ pageSize: 5 }"
-              >
-                <dxo-paging [enabled]="true"></dxo-paging>
-                <dxo-pager [showInfo]="true"></dxo-pager>
-                <dxo-selection mode="single"></dxo-selection>
+          <div class="col-md-12">
+            <dx-data-grid id="gridContainer" [showBorders]="true" [dataSource]="tableData" [showColumnLines]="true"
+              [showRowLines]="true" class="mt-3" [paging]="{ pageSize: 5 }">
+              <dxo-paging [enabled]="true"></dxo-paging>
+              <dxo-pager [showInfo]="true"></dxo-pager>
+              <dxo-selection mode="single"></dxo-selection>
 
-                <dxi-column
-                  *ngFor="let data of columnHeadings"
-                  [dataField]="data.field"
-                  [caption]="data.caption"
-                  [allowEditing]="true"
-                  alignment="center"
-                  backgroundcolor="#000"
-                >
-                </dxi-column>
-              </dx-data-grid>
-            </div>
+              <dxi-column *ngFor="let data of columnHeadings" [dataField]="data.field" [caption]="data.caption"
+                [allowEditing]="true" alignment="center" backgroundcolor="#000">
+              </dxi-column>
+            </dx-data-grid>
           </div>
+        </div>
       </div>
     </div>
   </form>
