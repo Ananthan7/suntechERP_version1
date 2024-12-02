@@ -154,7 +154,7 @@
                             <master-search [MasterSearchData]="karatCodeData"
                                 (newRowClick)="karatCodeSelected($event)"
                                 #overlaykaratSearch
-                                *ngIf="viewDisable == false && codedisable  == false && editDisableModeKarat == false"
+                                *ngIf="viewDisable == false && codedisable  == false && viewDisable1 == false"
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -195,7 +195,7 @@
                             <master-search [MasterSearchData]="colorData"
                                 (newRowClick)="colorDataSelected($event)"
                                 #overlaycolorSearch
-                                *ngIf=" viewDisable== false && codedisable  == false"
+                                *ngIf=" viewDisable== false && viewDisable1 == false"
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -229,7 +229,7 @@
                             <master-search [MasterSearchData]="typeCodeData"
                                 (newRowClick)="typeCodeSelected($event)"
                                 #overlaytypeSearch
-                                *ngIf="viewDisable== false && codedisable  == false"
+                                *ngIf="viewDisable == false && viewDisable1 == false"
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -266,7 +266,7 @@
                             <master-search [MasterSearchData]="categoryCodeData"
                                 (newRowClick)="categorySelected($event)"
                                 #overlaycategorySearch
-                                *ngIf=" viewDisable== false && codedisable  == false"
+                                *ngIf=" viewDisable== false && viewDisable1 == false"
                                 class="masterSearch">
                             </master-search>
                         </mat-form-field>
@@ -307,7 +307,7 @@
                                 class="masterSearch"
                                 #overlaysubCategorySearch
                                 (newRowClick)="subcategorySelected($event)"
-                                *ngIf=" viewDisable== false && codedisable  == false"></master-search>
+                                *ngIf=" viewDisable == false && viewDisable1 == false"></master-search>
                         </mat-form-field>
                     </div>
                     <label for="input" id="ID016"
@@ -340,7 +340,7 @@
                             <master-search [MasterSearchData]="brandCodeData"
                                 (newRowClick)="brandSelected($event)"
                                 #overlaybrandSearch
-                                *ngIf=" viewDisable== false && codedisable  == false"
+                                *ngIf=" viewDisable== false"
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>

@@ -6,10 +6,15 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-    (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMeltingType()" [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
-    <!-- component to upload attachment -->
-    <attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
+<modal-header [isViewDelete]="editMode" [isViewSave]="!viewMode"
+    [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    (saveClick)="formSubmit()" (cancelClick)="close()"
+    (deleteClick)="deleteMeltingType()"
+    [isViewAttachment]="!viewMode"
+    (attachmentClick)="attachmentClicked()"></modal-header>
+<!-- component to upload attachment -->
+<attachment-upload (uploadSubmit)="uploadSubmited($event)"
+    [savedAttachment]="savedAttachments"></attachment-upload>
 <!-- content section -->
 <div class="row">
     <form [formGroup]="meltingTypeForm">
@@ -17,12 +22,17 @@
             <div class="row">
                 <div class="col-md-5">
                     <div class="row mb-2">
-                        <label for="input" is="ID001" class="col-sm-3 col-form-label">Code
+                        <label for="input" is="ID001"
+                            class="col-sm-3 col-form-label">Code
                             * :</label>
                         <div class="col-sm-4">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" [readonly]="editCode" matInput
-                                    formControlName="code" (focusout)="checkCodeExists($event)" UpperCaseDirective
+                            <mat-form-field appearance="outline"
+                                style="width: 100%;">
+                                <input type="text" #codeInput maxlength="15"
+                                    [readonly]="editCode" matInput
+                                    formControlName="code"
+                                    (focusout)="checkCodeExists($event)"
+                                    UpperCaseDirective
                                     autocomplete="off" (keyup)="codeEnabled()">
                             </mat-form-field>
                         </div>
@@ -33,37 +43,54 @@
             <div class="row">
                 <div class="col-md-5">
                     <div class="row">
-                        <label id="ID002" for="input" class="col-md-3 col-form-label">Description *
+                        <label id="ID002" for="input"
+                            class="col-md-3 col-form-label">Description *
                             :</label>
                         <div class="col-sm-9">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" maxlength="85" matInput [readonly]="viewMode || codeEnable"
-                                    formControlName="description" UpperCaseDirective autocomplete="off" />
+                            <mat-form-field appearance="outline"
+                                style="width: 100%;">
+                                <input type="text" maxlength="85" matInput
+                                    [readonly]="viewMode || codeEnable"
+                                    formControlName="description"
+                                    UpperCaseDirective autocomplete="off" />
                             </mat-form-field>
                         </div>
                     </div>
                     <div class="row">
-                        <label for="input" id="ID005" class="col-sm-3 col-form-label">Karat
+                        <label for="input" id="ID005"
+                            class="col-sm-3 col-form-label">Karat
                             :</label>
                         <div class="col-sm-3">
-                            <mat-form-field appearance="outline" style="width: 100%; ">
-                                <input type="text" [readonly]="viewMode || codeEnable" matInput formControlName="karat"
-                                    (input)="inputValidate($event)" UpperCaseDirective
-                                    (focusout)="validateLookupField($event,karatcodeData,'karat')" appNoEmptySpace
+                            <mat-form-field appearance="outline"
+                                style="width: 100%; ">
+                                <input type="text"
+                                    [readonly]="viewMode || codeEnable" matInput
+                                    formControlName="karat"
+                                    (input)="inputValidate($event)"
+                                    UpperCaseDirective
+                                    (focusout)="validateLookupField($event,karatcodeData,'karat')"
+                                    appNoEmptySpace (change)="karatCodeEmty()"
                                     (keydown)="lookupKeyPress($event,'karat')" />
-                                <master-search [MasterSearchData]="karatcodeData"
-                                    (newRowClick)="karatcodeSelected($event)" class="masterSearch" #overlaykaratSearch
+                                <master-search
+                                    [MasterSearchData]="karatcodeData"
+                                    (newRowClick)="karatcodeSelected($event)"
+                                    class="masterSearch" #overlaykaratSearch
                                     *ngIf="SearchDisable == viewMode">
                                 </master-search>
                             </mat-form-field>
 
                         </div>
-                        <label for="input" id="ID006" class="col-sm-3 col-form-label">Purity
+                        <label for="input" id="ID006"
+                            class="col-sm-3 col-form-label">Purity
                             :</label>
                         <div class="col-sm-3">
-                            <mat-form-field appearance="outline" style="width: 100%; ">
-                                <input type="number" matInput [readonly]="viewModeField || codeEnable"
-                                    formControlName="purity" style="text-align: right;" appNoEmptySpace />
+                            <mat-form-field appearance="outline"
+                                style="width: 100%; ">
+                                <input type="number" matInput
+                                    [readonly]="viewModeField || codeEnable"
+                                    formControlName="purity"
+                                    style="text-align: right;"
+                                    appNoEmptySpace />
                             </mat-form-field>
 
                         </div>
@@ -71,23 +98,34 @@
                 </div>
                 <div class="col-md-3">
                     <div class="row">
-                        <label for="input" id="ID003" class="col-sm-3 col-form-label">Metal %
+                        <label for="input" id="ID003"
+                            class="col-sm-3 col-form-label">Metal %
                             :</label>
                         <div class="col-sm-9">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" matInput [readonly]="viewModeField || codeEnable" step="0.001"
-                                    min="0" formControlName="metal" (input)="onInput($event)" style="text-align: right;"
+                            <mat-form-field appearance="outline"
+                                style="width: 100%;">
+                                <input type="number" matInput
+                                    [readonly]="viewModeField || codeEnable"
+                                    step="0.001"
+                                    min="0" formControlName="metal"
+                                    (input)="onInput($event)"
+                                    style="text-align: right;"
                                     appNoEmptySpace />
                             </mat-form-field>
                         </div>
                     </div>
                     <div class="row">
-                        <label for="input" id="ID007" class="col-sm-3 col-form-label">Alloy %
+                        <label for="input" id="ID007"
+                            class="col-sm-3 col-form-label">Alloy %
                             :</label>
                         <div class="col-sm-9">
-                            <mat-form-field appearance="outline" style="width: 100%; ">
-                                <input type="number" matInput [readonly]="viewModeField || codeEnable"
-                                    formControlName="alloy" (input)="onInput($event)" style="text-align: right;"
+                            <mat-form-field appearance="outline"
+                                style="width: 100%; ">
+                                <input type="number" matInput
+                                    [readonly]="viewModeField || codeEnable"
+                                    formControlName="alloy"
+                                    (input)="onInput($event)"
+                                    style="text-align: right;"
                                     appNoEmptySpace />
                             </mat-form-field>
 
@@ -96,34 +134,50 @@
                 </div>
                 <div class="col-md-4">
                     <div class="row">
-                        <label for="input" id="ID004" class="col-sm-3 col-form-label">Color *
+                        <label for="input" id="ID004"
+                            class="col-sm-3 col-form-label">Color *
                             :</label>
                         <div class="col-sm-9">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" matInput maxlength="6" formControlName="color"
-                                    [readonly]="viewMode || codeEnable" (input)="inputValidate($event)"
-                                    UpperCaseDirective (focusout)="validateLookupField($event,colorData,'color')"
-                                    appNoEmptySpace (keydown)="lookupKeyPress($event,'color')" />
-                                <master-search [MasterSearchData]="colorData" (newRowClick)="colorDataSelected($event)"
-                                    class="masterSearch" #overlaycolorSearch *ngIf="SearchDisable == viewMode">
+                            <mat-form-field appearance="outline"
+                                style="width: 100%;">
+                                <input type="text" matInput maxlength="6"
+                                    formControlName="color"
+                                    [readonly]="viewMode || codeEnable"
+                                    (input)="inputValidate($event)"
+                                    UpperCaseDirective
+                                    (focusout)="validateLookupField($event,colorData,'color')"
+                                    appNoEmptySpace
+                                    (keydown)="lookupKeyPress($event,'color')" />
+                                <master-search [MasterSearchData]="colorData"
+                                    (newRowClick)="colorDataSelected($event)"
+                                    class="masterSearch" #overlaycolorSearch
+                                    *ngIf="SearchDisable == viewMode">
                                 </master-search>
                             </mat-form-field>
 
                         </div>
                     </div>
                     <div class="row">
-                        <label for="input" id="ID008" class="col-sm-3 col-form-label">Stock Code
+                        <label for="input" id="ID008"
+                            class="col-sm-3 col-form-label">Stock Code
                             :</label>
                         <div class="col-sm-9">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" matInput formControlName="stockCode"
-                                    [readonly]="viewMode || codeEnable" (input)="inputValidate($event)"
+                            <mat-form-field appearance="outline"
+                                style="width: 100%;">
+                                <input type="text" matInput
+                                    formControlName="stockCode"
+                                    [readonly]="viewMode || codeEnable"
+                                    (input)="inputValidate($event)"
                                     UpperCaseDirective
-                                    (focusout)="validateLookupField($event,stockCodeData,'stockCode')" appNoEmptySpace
+                                    (focusout)="validateLookupField($event,stockCodeData,'stockCode')"
+                                    appNoEmptySpace
                                     (keydown)="lookupKeyPress($event,'stockCode')" />
-                                <master-search [MasterSearchData]="stockCodeData"
-                                    (newRowClick)="StockCodeSelected($event)" class="masterSearch"
-                                    #overlaystockCodeSearch *ngIf="SearchDisable == viewMode">
+                                <master-search
+                                    [MasterSearchData]="stockCodeData"
+                                    (newRowClick)="StockCodeSelected($event)"
+                                    class="masterSearch"
+                                    #overlaystockCodeSearch
+                                    *ngIf="SearchDisable == viewMode">
                                 </master-search>
                             </mat-form-field>
 
@@ -139,40 +193,80 @@
                 <h6 id="ID009">Alloy Details</h6>
                 <div class="col-md-12">
 
-                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
-                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
+                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true "
+                        [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode"
+                        (addClick)="addTableData()"
                         (deleteClick)="deleteTableData()">
                     </menu-buttons>
 
-                    <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                        [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3"
-                        keyExpr="SRNO" (onSelectionChanged)="onSelectionChanged($event)">
+                    <dx-data-grid id="gridContainer" [dataSource]="tableData"
+                        [showBorders]="true"
+                        [showColumnLines]="true" [showRowLines]="true"
+                        [allowColumnResizing]="true" class="mt-3"
+                        keyExpr="SRNO"
+                        (onSelectionChanged)="onSelectionChanged($event)">
                         <dxo-selection mode="single"></dxo-selection>
-                        <dxi-column dataField="SRNO" caption="SR No" class="tab"> </dxi-column>
-                        <dxi-column dataField="DIVISION_CODE" caption="Division" cellTemplate="division">
+                        <dxi-column dataField="SRNO" caption="SR No"
+                            class="tab"> </dxi-column>
+                        <dxi-column dataField="DIVISION_CODE" caption="Division"
+                            cellTemplate="division">
                         </dxi-column>
-                        <dxi-column dataField="DEF_ALLOY_STOCK" caption="Default Alloy" cellTemplate="defaultAlloy">
+                        <dxi-column dataField="DEF_ALLOY_STOCK"
+                            caption="Default Alloy" cellTemplate="defaultAlloy">
                         </dxi-column>
-                        <dxi-column dataField="DEF_ALLOY_DESCRIPTION" caption="Description"> </dxi-column>
-                        <dxi-column dataField="ALLOY_PER" caption="Alloy %" cellTemplate="alloyper">
+                        <dxi-column dataField="DEF_ALLOY_DESCRIPTION"
+                            caption="Description"> </dxi-column>
+                        <dxi-column dataField="ALLOY_PER" caption="Alloy %"
+                            cellTemplate="alloyper">
                         </dxi-column>
 
                         <div *dxTemplate="let data of 'division'">
-                            <input type="text" [value]="data.value" [disabled]="data.value == ''" style="width: 100%;"
-                                required readonly UpperCaseDirective autocomplete="off" />
+                            <mat-form-field appearance="outline"
+                                style="width: 100%;">
+                                <input type="text" matInput style="width: 100%;"
+                                    [value]="data.value"
+                                    [disabled]="data.value == ''"
+                                    [readonly]="viewMode || codeEnable || true"
+                                    autocomplete="off" />
+                            </mat-form-field>
+                            <!-- <input type="text" [value]="data.value" [disabled]="data.value == ''" style="width: 100%;"
+                                required readonly UpperCaseDirective autocomplete="off" /> -->
                         </div>
 
                         <div *dxTemplate="let data of 'defaultAlloy'">
-                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                            <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
                             <master-search [MasterSearchData]="defaultAlloy" *ngIf="!viewMode"
-                                (newRowClick)="defaultAlloySelected($event,data,'defaultAlloy')" style="width: 60%;">
-                            </master-search>
+                                (newRowClick)="defaultAlloySelected($event,data)" style="width: 60%;">
+                            </master-search> -->
+
+                            <mat-form-field style="width: 100%;"
+                                appearance="outline">
+                                <input type="text" matInput [value]="data.value"
+                                    [readonly]="viewMode"
+                                    UpperCaseDirective autocomplete="off" />
+                                <master-search [MasterSearchData]="defaultAlloy"
+                                    class="masterSearch" *ngIf="!viewMode"
+                                    (newRowClick)="defaultAlloySelected($event,data)">
+                                </master-search>
+                            </mat-form-field>
                         </div>
 
                         <div *dxTemplate="let data of 'alloyper'">
-                            <input type="text" style="text-align: right;" AmountDecimalInput [max]="3"
-                                (keydown)="alloyPer($event,data)" (change)="alloyPer($event,data)" [value]="data.value"
-                                required [readonly]="viewMode" /><span>%</span>
+                            <!-- <input type="text" style="text-align: right;" AmountDecimalInput [max]="3"
+                                (change)="alloyPer($event, data)" [value]="data.value" required [readonly]="viewMode" />
+                            <span>%</span> -->
+
+                            <mat-form-field appearance="outline"
+                                style="width: 100%;">
+                                <input type="text" matInput class="text-end"
+                                    [value]="data.value"
+                                    [disabled]="data.value == ''"
+                                    [readonly]="viewMode || codeEnable"
+                                    AmountDecimalInput
+                                    autocomplete="off"
+                                    (change)="alloyPer($event, data)" /><span>%</span>
+                            </mat-form-field>
                         </div>
 
                     </dx-data-grid>

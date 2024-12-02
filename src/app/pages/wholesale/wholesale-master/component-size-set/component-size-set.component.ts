@@ -43,7 +43,7 @@ export class ComponentSizeSetComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 89,
     SEARCH_FIELD: 'COMPSIZE_CODE',
-    SEARCH_HEADING: 'Component size code',
+    SEARCH_HEADING: 'Component Size Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "COMPSIZE_CODE <> '' ORDER BY COMPSIZE_CODE",
     VIEW_INPUT: true,
