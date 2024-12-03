@@ -64,7 +64,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   displayMetalWtTo: any;
   viewDisable: boolean = false;
   viewDisable1: boolean = false;
-
+  checkDesignCodedisable: boolean = false;
   viewselling: boolean = false;
   viewsellingrate: boolean = false;
 
@@ -449,8 +449,9 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.codeEnableMetal = false;
       this.stockcodeDisable = false;
       this.editModeKarat = true;
-      this.editDisableModeKarat = true;
-      this.codeDisable()
+      // this.editDisableModeKarat = true;
+      this.codeDisable();
+      this.checkBoxValue();
       this.unitSelected();
     } else if (this.content.FLAG == 'DELETE') {
       this.viewMode = true;
@@ -465,8 +466,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
 
     this.metallabourMasterForm.controls['stock_code'].enable();
-    this.metallabourMasterForm.controls['color'].enable();
-    this.metallabourMasterForm.controls['metallabourType'].enable();
+    // this.metallabourMasterForm.controls['color'].enable();
+    // this.metallabourMasterForm.controls['metallabourType'].enable();
     this.getcurrencyOptions()
   }
 
@@ -491,6 +492,33 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.Attachedfile = file
     console.log(this.Attachedfile);
 
+  }
+
+
+  checkBoxValue(){
+    if (this.viewchangeYorN(this.content.FOR_DESIGN) === true) {
+      // this.stockcodeDisable = true;
+      this.viewDisable1 = true;
+      this.metallabourMasterForm.get('metallabourType')?.setValue('GENERAL');
+      this.metallabourMasterForm.controls['stock_code'].disable();
+      this.metallabourMasterForm.controls['stock_code'].setValue('');
+      this.metallabourMasterForm.controls['karat'].disable();
+      this.metallabourMasterForm.controls['karat'].setValue('');
+      this.metallabourMasterForm.controls['color'].disable();
+      this.metallabourMasterForm.controls['color'].setValue('');
+      this.metallabourMasterForm.controls['metallabourType'].disable();
+      //  this.metallabourMasterForm.controls['metallabourType'].setValue('');
+      // this.metallabourMasterForm.controls['metalunitList'].disable();
+      // this.metallabourMasterForm.controls['metalunitList'].setValue('');
+      this.metallabourMasterForm.controls['typecode'].disable();
+      this.metallabourMasterForm.controls['typecode'].setValue('');
+      this.metallabourMasterForm.controls['category'].disable();
+      this.metallabourMasterForm.controls['category'].setValue('');
+      this.metallabourMasterForm.controls['subCategory'].disable();
+      this.metallabourMasterForm.controls['subCategory'].setValue('');
+    }else{
+      this.viewDisable1 = false;
+    }
   }
 
   ngAfterViewInit() {
@@ -574,49 +602,9 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
-    //   this.diamondlabourMasterForm.controls.mid.setValue(this.content.MID);
-    //   this.diamondlabourMasterForm.controls.labour_code.setValue(this.content.CODE);
-    //   this.diamondlabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
-    //  // this.diamondlabourMasterForm.controls.metallabourType.setValue(this.content.LABTYPE);
-    //   this.diamondlabourMasterForm.controls.method.setValue(this.content.METHOD);
-    //   this.diamondlabourMasterForm.controls.divisions.setValue(this.content.DIVISION);
-    //   this.diamondlabourMasterForm.controls.shape.setValue(this.content.SHAPE);
-    //   this.diamondlabourMasterForm.controls.size_from.setValue(this.content.SIZE_FROM);
-    //   this.diamondlabourMasterForm.controls.size_to.setValue(this.content.SIZE_TO);
-    //   this.diamondlabourMasterForm.controls.currency.setValue(this.content.CURRENCYCODE);
-    //   this.diamondlabourMasterForm.controls.sieve.setValue(this.content.SIEVE);
-    //   this.diamondlabourMasterForm.controls.process.setValue(this.content.PROCESS_TYPE);
-    //   this.diamondlabourMasterForm.controls.sieve_desc.setValue(this.content.SIEVEFROM_DESC);
-
-    //   this.diamondlabourMasterForm.controls.ctWtFrom.setValue(
-    //     this.commonService.transformDecimalVB(
-    //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //       this.content.CARATWT_FROM));
-
-    //   this.diamondlabourMasterForm.controls.ctWtTo.setValue(
-    //     this.commonService.transformDecimalVB(
-    //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //       this.content.CARATWT_TO));
-
-    //   this.diamondlabourMasterForm.controls.selling_rate.setValue(
-    //     this.commonService.transformDecimalVB(
-    //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //       this.content.SELLING_RATE));
-
-    //   this.diamondlabourMasterForm.controls.selling.setValue(
-    //     this.commonService.transformDecimalVB(
-    //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //       this.content.SELLING_PER));
-
-    //   this.diamondlabourMasterForm.controls.cost_rate.setValue(
-    //     this.commonService.transformDecimalVB(
-    //       this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //       this.content.COST_RATE));
-
-    // this.metallabourMasterForm.controls.ctWtFrom.setValue(
-    //   this.commonService.transformDecimalVB(
-    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //     this.content.CARATWT_FROM));
+    console.log(this.viewchangeYorN(this.content.FOR_DESIGN));
+    
+   
 
     this.metallabourMasterForm.controls.metallabourType.setValue(this.content.LABTYPE);
     this.metallabourMasterForm.controls.metalunitList.setValue(this.content.UNITCODE);
@@ -1635,12 +1623,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     }
 
   }
-
-  // lookupKeyPress(event: KeyboardEvent) {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //   }
-  // }
 
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {

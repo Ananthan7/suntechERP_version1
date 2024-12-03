@@ -493,6 +493,7 @@ export class ProductionMfgComponent implements OnInit {
         this.isloading = false;
         if (result && result.status == "Success") {
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success')
+          this.viewMode = true
         } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
@@ -528,6 +529,7 @@ export class ProductionMfgComponent implements OnInit {
           this.isloading = false;
           if (result && result.status == "Success") {
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success')
+            this.viewMode = true
           } else {
             this.commonService.toastErrorByMsgId('MSG3577')
           }

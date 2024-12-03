@@ -262,8 +262,6 @@ export class VatMasterComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log(this.content);
-
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
@@ -287,6 +285,84 @@ export class VatMasterComponent implements OnInit {
 
   ViewController(DATA: any) {
     this.code = DATA.GST_CODE;
+
+    this.vatMasterMainForm.controls["vatCode"].setValue(DATA.GST_CODE);
+    this.vatMasterMainForm.controls["vatDesc"].setValue(DATA.GST_DESCRIPTION);
+    this.vatMasterMainForm.controls["vatPercent"].setValue(
+      this.commonService.decimalQuantityFormat(
+        this.commonService.emptyToZero(DATA.GST_PER),
+        "THREE"
+      )
+    );
+    this.vatMasterMainForm.controls["group1"].setValue(DATA.GROUP_CODE1);
+    this.vatMasterMainForm.controls["group2"].setValue(DATA.GROUP_CODE2);
+    this.vatMasterMainForm.controls["group3"].setValue(DATA.GROUP_CODE3);
+    this.vatMasterMainForm.controls["regRcmAccCredit"].setValue(
+      DATA.REG_IGST_CREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["regRcmAccDebit"].setValue(
+      DATA.REG_IGST_DEBIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["regRcmAccDebit"].setValue(
+      DATA.REG_IGST_DEBIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["unregVatAccCredit"].setValue(
+      DATA.UNREG_IGST_CREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["unregVatAccDebit"].setValue(
+      DATA.UNREG_IGST_DEBIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["unregVatCtrlAccCredit"].setValue(
+      DATA.UNREG_IGST_CTRLCREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["unregVatCtrlAccDebit"].setValue(
+      DATA.UNREG_IGST_CTRLDEBIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["impVatAccDebit"].setValue(
+      DATA.IMPORT_IGST_DEBIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["impVatCtrlAccDebit"].setValue(
+      DATA.IMPORT_IGST_CTRLCREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["expVatAccCredit"].setValue(
+      DATA.EXPORT_IGST_CREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["expVatAccDebit"].setValue(
+      DATA.EXPORT_IGST_CTRLDEBIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["posVatRefundCredit"].setValue(
+      DATA.POSVAT_CREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["regVatCtrlAccCredit"].setValue(
+      DATA.REG_IGST_CTRLCREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["regVatCtrlAccDebit"].setValue(
+      DATA.REG_IGST_CTRLDEBIT_ACCODE
+    );
+
+    this.vatMasterMainForm.controls["regVatCtrlAccDebit"].setValue(
+      DATA.UNREG_RCM_DEBIT
+    );
+    this.vatMasterMainForm.controls["unregRcmAccDebit"].setValue(
+      DATA.UNREG_RCM_CREDIT
+    );
+    this.vatMasterMainForm.controls["regRcmAccDebit"].setValue(
+      DATA.REG_RCM_DEBIT
+    );
+    this.vatMasterMainForm.controls["regRcmAccCredit"].setValue(
+      DATA.REG_RCM_CREDIT
+    );
+    this.vatMasterMainForm.controls["impRcmAccCredit"].setValue(
+      DATA.IMP_RCM_DEBIT
+    );
+    this.vatMasterMainForm.controls["impRcmCtrlAccDebit"].setValue(
+      DATA.IMP_RCM_CTRL_CREDIT
+    );
+    this.vatMasterMainForm.controls["posVatAccDebit"].setValue(
+      DATA.POSVATREFUND_DEBIT_ACCODE
+    );
+
+    this.getGridDataObjects(this.code);
   }
 
   editController(DATA: any) {
@@ -306,7 +382,7 @@ export class VatMasterComponent implements OnInit {
       confirmButtonText: "Yes, delete!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const API = `/GstMaster/DeleteGstMaster/${this.code}`;
+        const API = `/VatMaster/DeleteVatMaster/${this.code}`;
         const Sub: Subscription = this.apiService
           .deleteDynamicAPI(API)
           .subscribe({
@@ -382,7 +458,79 @@ export class VatMasterComponent implements OnInit {
     });
 
     if (!requiredFieldsInvalid) {
-      const postData = {};
+      const postData = {
+        MID: 0,
+        GST_CODE: this.vatMasterMainForm.value.vatCode || "",
+        GST_DESCRIPTION: this.vatMasterMainForm.value.vatDesc || "",
+        GST_PER: Number(this.vatMasterMainForm.value.vatPercent) || 0,
+        GROUP_CODE1: this.vatMasterMainForm.value.group1 || "",
+        GROUP_CODE2: this.vatMasterMainForm.value.group2 || "",
+        GROUP_CODE3: this.vatMasterMainForm.value.group3 || "",
+        REG_IGST_CREDIT_ACCODE:
+          this.vatMasterMainForm.value.regRcmAccCredit || "",
+        REG_IGST_DEBIT_ACCODE:
+          this.vatMasterMainForm.value.regRcmAccDebit || "",
+        UNREG_IGST_CREDIT_ACCODE:
+          this.vatMasterMainForm.value.unregVatAccCredit || "",
+        UNREG_IGST_DEBIT_ACCODE:
+          this.vatMasterMainForm.value.unregVatAccDebit || "",
+        UNREG_IGST_CTRLCREDIT_ACCODE:
+          this.vatMasterMainForm.value.unregVatCtrlAccCredit || "",
+        UNREG_IGST_CTRLDEBIT_ACCODE:
+          this.vatMasterMainForm.value.unregVatCtrlAccDebit || "",
+        IMPORT_IGST_DEBIT_ACCODE:
+          this.vatMasterMainForm.value.impVatAccDebit || "",
+        IMPORT_IGST_CTRLCREDIT_ACCODE:
+          this.vatMasterMainForm.value.impVatCtrlAccDebit || "",
+        EXPORT_IGST_CREDIT_ACCODE:
+          this.vatMasterMainForm.value.expVatAccCredit || "",
+        EXPORT_IGST_CTRLDEBIT_ACCODE:
+          this.vatMasterMainForm.value.expVatAccDebit || "",
+        GST_ROUNDOFF: 0,
+        ROUNDOFF_ACCODE: "string",
+        POSVAT_CREDIT_ACCODE:
+          this.vatMasterMainForm.value.posVatRefundCredit || "",
+        REG_IGST_CTRLCREDIT_ACCODE:
+          this.vatMasterMainForm.value.regVatCtrlAccCredit || "",
+        REG_IGST_CTRLDEBIT_ACCODE:
+          this.vatMasterMainForm.value.regVatCtrlAccDebit || "",
+        UNREG_RCM_DEBIT: this.vatMasterMainForm.value.unregRcmAccCredit || "",
+        UNREG_RCM_CREDIT: this.vatMasterMainForm.value.unregRcmAccDebit || "",
+        REG_RCM_DEBIT: this.vatMasterMainForm.value.regRcmAccDebit || "",
+        REG_RCM_CREDIT: this.vatMasterMainForm.value.regRcmAccCredit || "",
+        IMP_RCM_DEBIT: this.vatMasterMainForm.value.impRcmAccCredit || "",
+        IMP_RCM_CTRL_CREDIT:
+          this.vatMasterMainForm.value.impRcmCtrlAccDebit || "",
+        POSVATREFUND_DEBIT_ACCODE:
+          this.vatMasterMainForm.value.posVatAccDebit || "",
+        vatMasterGst: this.expenseHsnOrSacAllocationData.map((item) => ({
+          UNIQUEID: 0,
+          SN: item.SRNO || 0,
+          GST_CODE: this.vatMasterMainForm.value.vatCode || "",
+          GST_DESCRIPTION: this.vatMasterMainForm.value.vatDesc || "",
+          GST_PER: 0,
+          EXPENSE_ACCODE: item.EXPENSE_ACCODE || "",
+          EXPENSE_ACCODE_DESC: item.EXPENSE_ACCODE_DESC || "",
+          HSN_SAC_CODE: item.HSN_SAC_CODE || "",
+          HSN_SAC_DESC: item.HSN_SAC_DESC || "",
+          TAX_REG: item.TAX_REG || "",
+          REVERSECHARGE_UNREG: item.REVERSECHARGE_UNREG || "",
+          ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT || "",
+          EXPENSE_ACCTYPE: "str",
+          COST_CODE: "string",
+        })),
+        VatMasterDetails: [
+          {
+            BRANCH_CODE: this.branchCode,
+            UNIQUEID: 0,
+            SRNO: 0,
+            VAT_CODE: "string",
+            VAT_PER: 0,
+            YEARCODE: "string",
+            VAT_DATE: "2024-12-02T10:11:31.735Z",
+          },
+        ],
+      };
 
       if (this.flag === "EDIT") {
         let API = `/GstMaster/InsertGstMaster/${this.code}`;
@@ -948,5 +1096,28 @@ export class VatMasterComponent implements OnInit {
     if (GSTCODE && GSTPERCENT) {
       this.getDatewiseListData();
     }
+  }
+
+  getGridDataObjects(CODE: any) {
+    let API = `VatMaster/GetVatMasterDetail/${CODE}`;
+    let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result.status.trim() === "Success") {
+          console.log(result.response);
+          this.expenseHsnOrSacAllocationData = result.response.gstMasterGst.map(
+            (item: any) => ({
+              SRNO: item.SRNO || item.SN,
+              ...item,
+            })
+          );
+
+          console.log(this.expenseHsnOrSacAllocationData);
+        }
+      },
+      (err) => {
+        console.error("Error fetching data:", err);
+        this.commonService.toastErrorByMsgId("MSG1531");
+      }
+    );
   }
 }
