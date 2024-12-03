@@ -2,7 +2,6 @@ import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
-import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -37,6 +36,7 @@ export class ComponentMasterComponent implements OnInit {
   tableData: any[] = [];
   maindetails: any[] = [];
   selectedIndexes: any = [];
+  savedAttachment: any = [];
   columnhead: any[] = ['Srno', 'Div.', 'Stock Code', 'Karat', 'Stock Type', 'Pcs', 'Wt/Ct', 'Color', 'Clarity', 'Shape', 'Sieve Std.', 'Description', 'Size', 'Process Type', 'Remarks', 'Pointer Wt', 'Ext.Clarity', 'Sieve From', 'Description', 'Sieve To', 'Description']
   columnhead2: any[] = ['DESIGN_CODE', 'DESIGN_DESCRIPTION', 'PCS', 'DESIGN_TYPE', 'CATEGORY_CODE', 'BRAND_CODE']
   selectedTabIndex = 0;
@@ -370,6 +370,7 @@ export class ComponentMasterComponent implements OnInit {
 
 
   componentmasterForm: FormGroup = this.formBuilder.group({
+    VOCTYPE: ["", [Validators.required]],
     code: ["", [Validators.required]],
     codedes: ["", [Validators.required]],
     sizeSet: [""],
@@ -393,11 +394,10 @@ export class ComponentMasterComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService,
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
-    private comService: CommonServiceService,
     private renderer: Renderer2,
+    private modalService: NgbModal,
   ) { }
 
   ngOnInit(): void {
@@ -422,7 +422,7 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.currencyCode.setValue(CURRENCY_CODE);
     let currrate = this.commonService.getCurrRate(CURRENCY_CODE)
     this.componentmasterForm.controls.currencyRate.setValue(currrate);
-
+    this.componentmasterForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType());
   }
 
   divisionCodeSelected(value: any, data: any, controlName: string) {
@@ -459,7 +459,7 @@ export class ComponentMasterComponent implements OnInit {
 
   }
   stockClicked(param: any) {
-    if (this.comService.nullToString(param.data.DIVCODE) != '') {
+    if (this.commonService.nullToString(param.data.DIVCODE) != '') {
       this.stockCodeData.WHERECONDITION = `DIVISION = '${param.data.DIVCODE}' and SUBCODE = 0`;
     }
   }
@@ -648,12 +648,11 @@ export class ComponentMasterComponent implements OnInit {
     //   this.editOnly = true;
     // }
 
-    this.snackBar.open("Loading...");
+    this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService
       .getDynamicAPI(
         `DesignMaster/GetComponentsGridinCompMaster/${this.componentmasterForm.value.code}`
       ).subscribe((result) => {
-        this.snackBar.dismiss();
         if (result.status == "Success") {
           const data = result.dynamicData;
         }
@@ -1453,11 +1452,12 @@ export class ComponentMasterComponent implements OnInit {
     }
     if (this.submitValidations(this.componentmasterForm.value)) return;
     let postdata = this.setPostData()
-    if (this.images.length > 0) {
+    if (this.Attachedfile.length > 0) {
       this.detailArray.push(postdata)
       this.submitImageFormData()
     }
-
+    return
+    this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postdata)
       .subscribe((result) => {
         if (result.status == "Success") {
@@ -1485,17 +1485,18 @@ export class ComponentMasterComponent implements OnInit {
 
   /**USE: set form data for saving */
   submitImageFormData() {
+    let form = this.componentmasterForm.value;
     this.detailArray.forEach((item: any, i: any) => {
-      this.formdata.append(`Model.Type`, 'CMP');
-      this.formdata.append(`Model.Code`, 'V5');
-      if (this.images.length > 0) {
-        for (let i: number = 0; i < this.images.length; i++) {
+      this.formdata.append(`Model.Type`, this.commonService.nullToString(form.VOCTYPE));
+      this.formdata.append(`Model.Code`, this.commonService.nullToString(form.code));
+      if (this.Attachedfile.length > 0) {
+        for (let i: number = 0; i < this.Attachedfile.length; i++) {
           this.formdata.append(`Model.imageData[0].Picture_name`, 'test');
-          this.formdata.append(`Model.imageData[0].DefaultPicture`, '');
+          this.formdata.append(`Model.imageData[0].DefaultPicture`, 'true');
           this.formdata.append(`Model.imageData[0].Picture_Type`, 'jgp');
         }
-        for (let i: number = 0; i < this.images.length; i++) {
-          this.formdata.append("Model.Images[" + i + "].Image.File", this.images[i]);
+        for (let i: number = 0; i < this.Attachedfile.length; i++) {
+          this.formdata.append("Model.Images[" + i + "].Image.File", this.Attachedfile[i]);
         }
       }
     })
@@ -1521,7 +1522,7 @@ export class ComponentMasterComponent implements OnInit {
 
     let API = 'DesignMaster/UpdateDesignMaster/' + this.content.DESIGN_CODE
     let postData = this.setPostData()
-
+    this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
 
@@ -1701,8 +1702,16 @@ export class ComponentMasterComponent implements OnInit {
       this.prefixCodeValidate()
     }
   }
-
-  onFileChangedimage(event: any): void {
+  onFileChangedimage(input: any) {
+    if (input.target.files.length > 0) {
+      const file: File = input.target.files[0];
+      for (let x = 0; x < input.target.files.length; x++) {
+        this.Attachedfile.push(file);
+      }
+      this.onFileChangedBase64(input)
+    }
+  }
+  onFileChangedBase64(event: any): void {
     // Clear the previous images and names
     this.images = [];
     this.imageNames = [];
@@ -1734,7 +1743,27 @@ export class ComponentMasterComponent implements OnInit {
       }
     }
   }
+  openAttachment(e: any) {
+    console.log(e.data, 'e');
+    window.open(e.data.file, '_blank'); // <- This is what makes it open in a new window.
+  }
+  @ViewChild('imageUpload') public imageUpload!: NgbModal;
+  modalReference!: NgbModalRef;
 
+  openimageUploadModal() {
+    this.modalReference = this.modalService.open(this.imageUpload, {
+      size: 'lg',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: false,
+    });
+  }
+ 
+  defaultCheckboxChange(data: any, value: any) {
+    if(value.rowIndex){
+      this.Attachedfile
+    }
+    this.tableData[value.data.SRNO - 1].STOCK_FCCOST = data.target.value;
+  }
   stoneType(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].STOCK_FCCOST = data.target.value;
   }
@@ -1792,10 +1821,10 @@ export class ComponentMasterComponent implements OnInit {
 
       }
     }
-    this.comService.showSnackBarMsg('MSG81447');
+    this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg();
+        this.commonService.closeSnackBarMsg();
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0];
           if (data) {
@@ -1811,15 +1840,15 @@ export class ComponentMasterComponent implements OnInit {
             this.tableData[event.SRNO - 1].SIEVE_FROM = data[0].SIEVE_SET
 
           } else {
-            this.comService.toastErrorByMsgId('MSG1531');
+            this.commonService.toastErrorByMsgId('MSG1531');
             return;
           }
         } else {
-          this.comService.toastErrorByMsgId('MSG1747');
+          this.commonService.toastErrorByMsgId('MSG1747');
         }
       }, (err) => {
-        this.comService.closeSnackBarMsg();
-        this.comService.toastErrorByMsgId('MSG1531');
+        this.commonService.closeSnackBarMsg();
+        this.commonService.toastErrorByMsgId('MSG1531');
       });
 
     this.subscriptions.push(Sub);

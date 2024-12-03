@@ -5,11 +5,15 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" [isViewDelete]="!viewMode && editableMode" [isViewSave]="!viewMode"
-    [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="close()" (deleteClick)="deleteComponentMaster()"
-    [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+<modal-header (saveClick)="formSubmit()"
+    [isViewDelete]="!viewMode && editableMode" [isViewSave]="!viewMode"
+    [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="close()"
+    (deleteClick)="deleteComponentMaster()"
+    [isViewAttachment]="!viewMode"
+    (attachmentClick)="attachmentClicked()"></modal-header>
 <!-- component to upload attachment -->
-<attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
+<attachment-upload (uploadSubmit)="uploadSubmited($event)"
+    [savedAttachment]="savedAttachments"></attachment-upload>
 <div class="container-fluid pt-3">
     <form [formGroup]="componentmasterForm">
         <div class="col-md-12">
@@ -18,51 +22,76 @@
                     <div class="col-md-6">
 
                         <div class="row mb-2">
-                            <label for="input" id="ID001" class="col-sm-2 col-form-label">Code * :</label>
+                            <label for="input" id="ID001"
+                                class="col-sm-2 col-form-label">Code * :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" id="code"
-                                        [readonly]="editableMode || viewMode" [disabled]="viewMode" #code
-                                        (focusout)="validateLookupField($event,codeCodeData,'code')" UpperCaseDirective
-                                        autocomplete="off" (keyup)="codeEnabled()"
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        formControlName="code" id="code"
+                                        [readonly]="editableMode || viewMode"
+                                        [disabled]="viewMode" #code
+                                        (focusout)="validateLookupField($event,codeCodeData,'code')"
+                                        UpperCaseDirective
+                                        autocomplete="off"
+                                        (keyup)="codeEnabled()"
                                         (keydown)="lookupKeyPress($event,'code')" />
-                                    <master-search [MasterSearchData]="codeCodeData" class="mstrScrch"
-                                        (newRowClick)="codeCodeSelected($event)" #overlaycodedescSearch
+                                    <master-search
+                                        [MasterSearchData]="codeCodeData"
+                                        class="mstrScrch"
+                                        (newRowClick)="codeCodeSelected($event)"
+                                        #overlaycodedescSearch
                                         *ngIf="!editMode && !viewMode">
                                     </master-search>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-6">
-                                <mat-form-field style="width: 80%;" appearance="outline">
-                                    <input type="text" matInput formControlName="codedes" UpperCaseDirective
-                                        autocomplete="off" [readonly]="viewMode" />
+                                <mat-form-field style="width: 80%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        formControlName="codedes"
+                                        UpperCaseDirective
+                                        autocomplete="off"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
 
                         <div class="row mb-2">
-                            <label for="input" id="ID002" class="col-sm-2 col-form-label">Size Set
+                            <label for="input" id="ID002"
+                                class="col-sm-2 col-form-label">Size Set
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput UpperCaseDirective formControlName="sizeSet"
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        UpperCaseDirective
+                                        formControlName="sizeSet"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,sizeSetCodeData,'sizeSet')"
                                         (keydown)="lookupKeyPress($event,'sizeSet')" />
-                                    <master-search class="mstrScrch" [MasterSearchData]="sizeSetCodeData"
-                                        *ngIf="viewMode == false" #overlaysizeSetSearch
+                                    <master-search class="mstrScrch"
+                                        [MasterSearchData]="sizeSetCodeData"
+                                        *ngIf="viewMode == false"
+                                        #overlaysizeSetSearch
                                         (newRowClick)="sizeSetCodeSelected($event)">
                                     </master-search>
                                 </mat-form-field>
                             </div>
-                            <label for="input" id="ID003" class="col-sm-2 col-form-label">Type :</label>
+                            <label for="input" id="ID003"
+                                class="col-sm-2 col-form-label">Type :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 95%;" appearance="outline">
-                                    <input type="text" matInput UpperCaseDirective formControlName="type"
+                                <mat-form-field style="width: 95%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        UpperCaseDirective
+                                        formControlName="type"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,typeCodeData,'type')"
                                         (keydown)="lookupKeyPress($event,'type')" />
-                                    <master-search [MasterSearchData]="typeCodeData" *ngIf="viewMode == false"
+                                    <master-search
+                                        [MasterSearchData]="typeCodeData"
+                                        *ngIf="viewMode == false"
                                         class="mstrScrch" #overlaytypeSearch
                                         (newRowClick)="typeCodeSelected($event)"></master-search>
                                 </mat-form-field>
@@ -71,27 +100,40 @@
                         </div>
 
                         <div class="row mb-2">
-                            <label for="input" id="ID004" class="col-sm-2 col-form-label">Size :</label>
+                            <label for="input" id="ID004"
+                                class="col-sm-2 col-form-label">Size :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="size" [readonly]="viewMode"
-                                        UpperCaseDirective (focusout)="validateLookupField($event,sizeCodeData,'size')"
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        formControlName="size"
+                                        [readonly]="viewMode"
+                                        UpperCaseDirective
+                                        (focusout)="validateLookupField($event,sizeCodeData,'size')"
                                         (keydown)="lookupKeyPress($event,'size')" />
-                                    <master-search [MasterSearchData]="sizeCodeData" class="mstrScrch"
-                                        *ngIf="viewMode == false" #overlaysizeSearch
+                                    <master-search
+                                        [MasterSearchData]="sizeCodeData"
+                                        class="mstrScrch"
+                                        *ngIf="viewMode == false"
+                                        #overlaysizeSearch
                                         (newRowClick)="sizeCodeSelected($event)">
                                     </master-search>
                                 </mat-form-field>
                             </div>
-                            <label for="input" id="ID005" class="col-sm-2 col-form-label">Category
+                            <label for="input" id="ID005"
+                                class="col-sm-2 col-form-label">Category
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 95%;" appearance="outline">
-                                    <input type="text" matInput formControlName="category" [readonly]="viewMode"
+                                <mat-form-field style="width: 95%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        formControlName="category"
+                                        [readonly]="viewMode"
                                         UpperCaseDirective
                                         (focusout)="validateLookupField($event,categoryCodeData,'category')"
                                         (keydown)="lookupKeyPress($event,'category')" />
-                                    <master-search class="mstrScrch" [MasterSearchData]="categoryCodeData"
+                                    <master-search class="mstrScrch"
+                                        [MasterSearchData]="categoryCodeData"
                                         *ngIf="!viewMode" #overlaycategorySearch
                                         (newRowClick)="categoryCodeSelected($event)"></master-search>
                                 </mat-form-field>
@@ -99,28 +141,40 @@
                         </div>
 
                         <div class="row mb-2">
-                            <label for="input" id="ID006" class="col-sm-2 col-form-label">Shape :</label>
+                            <label for="input" id="ID006"
+                                class="col-sm-2 col-form-label">Shape :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="shape" [readonly]="viewMode"
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        formControlName="shape"
+                                        [readonly]="viewMode"
                                         UpperCaseDirective
                                         (focusout)="validateLookupField($event,shapeCodeData,'shape')"
                                         (keydown)="lookupKeyPress($event,'shape')" />
-                                    <master-search class="mstrScrch" [MasterSearchData]="shapeCodeData"
-                                        *ngIf="!viewMode" #overlayshapeSearch (newRowClick)="shapeCodeSelected($event)">
+                                    <master-search class="mstrScrch"
+                                        [MasterSearchData]="shapeCodeData"
+                                        *ngIf="!viewMode" #overlayshapeSearch
+                                        (newRowClick)="shapeCodeSelected($event)">
                                     </master-search>
                                 </mat-form-field>
                             </div>
-                            <label for="input" id="ID007" class="col-sm-2 col-form-label">Setting
+                            <label for="input" id="ID007"
+                                class="col-sm-2 col-form-label">Setting
                                 Type:</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 95%;" appearance="outline">
-                                    <input type="text" matInput formControlName="settingType" [readonly]="viewMode"
+                                <mat-form-field style="width: 95%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        formControlName="settingType"
+                                        [readonly]="viewMode"
                                         UpperCaseDirective
                                         (focusout)="validateLookupField($event,settingTypeCodeData,'settingType')"
                                         (keydown)="lookupKeyPress($event,'settingType')" />
-                                    <master-search class="mstrScrch" [MasterSearchData]="settingTypeCodeData"
-                                        *ngIf="!viewMode" #overlaysettingTypeSearch
+                                    <master-search class="mstrScrch"
+                                        [MasterSearchData]="settingTypeCodeData"
+                                        *ngIf="!viewMode"
+                                        #overlaysettingTypeSearch
                                         (newRowClick)="settingTypeCodeSelected($event)">
                                     </master-search>
                                 </mat-form-field>
@@ -128,10 +182,13 @@
                         </div>
 
                         <div class="row mb-2">
-                            <label for="input" id="ID008" class="col-sm-2 col-form-label">Remarks:</label>
+                            <label for="input" id="ID008"
+                                class="col-sm-2 col-form-label">Remarks:</label>
                             <div class="col-sm-8">
-                                <mat-form-field style="width: 99%;" appearance="outline">
-                                    <input type="text" matInput maxlength="100" formControlName="remarks"
+                                <mat-form-field style="width: 99%;"
+                                    appearance="outline">
+                                    <input type="text" matInput maxlength="100"
+                                        formControlName="remarks"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
 
@@ -143,55 +200,77 @@
                     <div class="col-md-4">
 
                         <div class="row mb-2">
-                            <label for="input" id="ID009" class="col-sm-2 col-form-label">Height :</label>
+                            <label for="input" id="ID009"
+                                class="col-sm-2 col-form-label">Height :</label>
                             <div class="col-sm-4">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" class="text-right" MetalDecimalInput matInput max="2"
-                                        formControlName="height" [readonly]="viewMode" />
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" class="text-right"
+                                        MetalDecimalInput matInput max="2"
+                                        formControlName="height"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
 
                             </div>
-                            <label for="input" id="ID010" class="col-sm-2 col-form-label">Length :</label>
+                            <label for="input" id="ID010"
+                                class="col-sm-2 col-form-label">Length :</label>
                             <div class="col-sm-4">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" class="text-right" MetalDecimalInput matInput max="2"
-                                        formControlName="length" [readonly]="viewMode" />
-                                </mat-form-field>
-
-                            </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <label for="input" id="ID011" class="col-sm-2 col-form-label">Width :</label>
-                            <div class="col-sm-4">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" class="text-right" MetalDecimalInput matInput max="2"
-                                        formControlName="width" [readonly]="viewMode" />
-                                </mat-form-field>
-
-                            </div>
-                            <label for="input" id="ID012" class="col-sm-2 col-form-label">Radius :</label>
-                            <div class="col-sm-4">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" class="text-right" MetalDecimalInput matInput max="2"
-                                        formControlName="radius" [readonly]="viewMode" />
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" class="text-right"
+                                        MetalDecimalInput matInput max="2"
+                                        formControlName="length"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
 
                             </div>
                         </div>
 
                         <div class="row mb-2">
-                            <label for="input" id="ID013" class="col-sm-4 col-form-label">Process Sequence
+                            <label for="input" id="ID011"
+                                class="col-sm-2 col-form-label">Width :</label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" class="text-right"
+                                        MetalDecimalInput matInput max="2"
+                                        formControlName="width"
+                                        [readonly]="viewMode" />
+                                </mat-form-field>
+
+                            </div>
+                            <label for="input" id="ID012"
+                                class="col-sm-2 col-form-label">Radius :</label>
+                            <div class="col-sm-4">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
+                                    <input type="text" class="text-right"
+                                        MetalDecimalInput matInput max="2"
+                                        formControlName="radius"
+                                        [readonly]="viewMode" />
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <label for="input" id="ID013"
+                                class="col-sm-4 col-form-label">Process Sequence
                                 *
                                 :</label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 115%;" appearance="outline">
-                                    <input type="text" matInput UpperCaseDirective formControlName="processSeq"
+                                <mat-form-field style="width: 115%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        UpperCaseDirective
+                                        formControlName="processSeq"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,processSeqCodeData,'processSeq')"
                                         (keydown)="lookupKeyPress($event,'processSeq')" />
-                                    <master-search class="mstrScrch" [MasterSearchData]="processSeqCodeData"
-                                        *ngIf="!viewMode" #overlayprocessSeqSearch
+                                    <master-search class="mstrScrch"
+                                        [MasterSearchData]="processSeqCodeData"
+                                        *ngIf="!viewMode"
+                                        #overlayprocessSeqSearch
                                         (newRowClick)="processSeqCodeSelected($event)">
                                     </master-search>
                                 </mat-form-field>
@@ -199,16 +278,22 @@
                         </div>
 
                         <div class="row mb-2">
-                            <label for="input" id="ID014" class="col-sm-4 col-form-label">Cost Center *
+                            <label for="input" id="ID014"
+                                class="col-sm-4 col-form-label">Cost Center *
                                 :</label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 115%;" appearance="outline">
-                                    <input type="text" matInput UpperCaseDirective formControlName="costCenter"
+                                <mat-form-field style="width: 115%;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        UpperCaseDirective
+                                        formControlName="costCenter"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,costCenterCodeData,'costCenter')"
                                         (keydown)="lookupKeyPress($event,'costCenter')" />
-                                    <master-search class="mstrScrch" [MasterSearchData]="costCenterCodeData"
-                                        *ngIf="!viewMode" #overlaycostCenterSearch
+                                    <master-search class="mstrScrch"
+                                        [MasterSearchData]="costCenterCodeData"
+                                        *ngIf="!viewMode"
+                                        #overlaycostCenterSearch
                                         (newRowClick)="costCenterCodeSelected($event)">
                                     </master-search>
                                 </mat-form-field>
@@ -219,35 +304,49 @@
                     <!-- image -->
                     <div class="col-md-2">
                         <div class="container">
-                            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel"
+                            <div id="carouselExampleControls"
+                                class="carousel slide" data-bs-ride="carousel"
                                 data-bs-pause="hover" data-bs-interval="false">
                                 <div class="box-wrap">
                                     <div class="carousel-inner">
-                                        <div class="carousel-item" *ngFor="let img of images; let i = index"
+                                        <div class="carousel-item"
+                                            *ngFor="let img of images; let i = index"
                                             [class.active]="i === 0">
                                             <div class="upload-btn-wrapper">
-                                                <button class="btn btnnew border-dark" [disabled]="viewMode">
-                                                    <img [src]="img" style="width:126px;height:124px">
+                                                <button
+                                                    class="btn btnnew border-dark"
+                                                    [disabled]="viewMode">
+                                                    <img [src]="img"
+                                                        style="width:126px;height:124px">
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <button class="carousel-control-prev" type="button" id="ID015"
-                                    data-bs-target="#carouselExampleControls" data-bs-slide="prev"
+                                <button class="carousel-control-prev"
+                                    type="button" id="ID015"
+                                    data-bs-target="#carouselExampleControls"
+                                    data-bs-slide="prev"
                                     [disabled]="viewMode">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
+                                    <span class="carousel-control-prev-icon"
+                                        aria-hidden="true"></span>
+                                    <span
+                                        class="visually-hidden">Previous</span>
                                 </button>
-                                <button class="carousel-control-next" type="button" id="ID016"
-                                    data-bs-target="#carouselExampleControls" data-bs-slide="next"
+                                <button class="carousel-control-next"
+                                    type="button" id="ID016"
+                                    data-bs-target="#carouselExampleControls"
+                                    data-bs-slide="next"
                                     [disabled]="viewMode">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="carousel-control-next-icon"
+                                        aria-hidden="true"></span>
                                     <span class="visually-hidden">Next</span>
                                 </button>
                             </div>
-                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
-                                (change)="onFileChangedimage($event)" multiple [disabled]="viewMode">
+                            <input type="file" class="uploadproduct"
+                                accept=".png, .jpg, .jpeg" #fileInput
+                                (change)="onFileChangedimage($event)" multiple
+                                [disabled]="viewMode">
                         </div>
                     </div>
 
@@ -259,8 +358,10 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-sm-3 d-flex">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="false" [viewImportBtn]="false"
-                            [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
+                        <menu-buttons [viewAddBtn]="true"
+                            [viewDeleteBtn]="false" [viewImportBtn]="false"
+                            [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode"
+                            (addClick)="addTableData()"
                             (deleteClick)="deleteTableData()">
                         </menu-buttons>
                     </div>
@@ -269,80 +370,125 @@
                     <div class="col-md-12">
                         <mat-tab-group [(selectedIndex)]="selectedTabIndex">
                             <mat-tab label="Components">
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true"
-                                    [allowColumnReordering]="true" [allowColumnResizing]="true" [dataSource]="tableData"
-                                    class="mt-3" [columnAutoWidth]="true" [showColumnLines]="true" [showRowLines]="true"
+                                <dx-data-grid #dataGrid id="gridContainer"
+                                    keyExpr="SRNO" [showBorders]="true"
+                                    [allowColumnReordering]="true"
+                                    [allowColumnResizing]="true"
+                                    [dataSource]="tableData"
+                                    class="mt-3" [columnAutoWidth]="true"
+                                    [showColumnLines]="true"
+                                    [showRowLines]="true"
                                     (onSelectionChanged)="onSelectionChanged($event)">
-                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-selection
+                                        mode="multiple"></dxo-selection>
                                     <!-- <dxo-editing mode="cell" [allowUpdating]="true">
                                     </dxo-editing> -->
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxo-scrolling
+                                        mode="virtual"></dxo-scrolling>
 
                                     <dxi-column dataField="SRNO" caption="Srno">
                                     </dxi-column>
-                                    <dxi-column dataField="DIVCODE" caption="Div." cellTemplate="divisiontemp">
+                                    <dxi-column dataField="DIVCODE"
+                                        caption="Div."
+                                        cellTemplate="divisiontemp">
                                     </dxi-column>
-                                    <dxi-column dataField="STOCK_CODE" caption="Stock Code"
+                                    <dxi-column dataField="STOCK_CODE"
+                                        caption="Stock Code"
                                         cellTemplate="stockCodetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="KARAT_CODE" caption="Karat" cellTemplate="karattemp">
+                                    <dxi-column dataField="KARAT_CODE"
+                                        caption="Karat"
+                                        cellTemplate="karattemp">
                                     </dxi-column>
-                                    <dxi-column dataField="STOCK_FCCOST" caption="Stone Type"
+                                    <dxi-column dataField="STOCK_FCCOST"
+                                        caption="Stone Type"
                                         cellTemplate="StoneTypetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="PCS" caption="Pcs" cellTemplate="pcstemp" [width]="100">
+                                    <dxi-column dataField="PCS" caption="Pcs"
+                                        cellTemplate="pcstemp" [width]="100">
                                     </dxi-column>
-                                    <dxi-column dataField="GROSS_WT" caption="Wt/Ct" cellTemplate="wtCttemp"
+                                    <dxi-column dataField="GROSS_WT"
+                                        caption="Wt/Ct" cellTemplate="wtCttemp"
                                         [width]="100">
                                     </dxi-column>
-                                    <dxi-column dataField="COLOR" caption="Color" cellTemplate="colortemp">
+                                    <dxi-column dataField="COLOR"
+                                        caption="Color"
+                                        cellTemplate="colortemp">
                                     </dxi-column>
-                                    <dxi-column dataField="CLARITY" caption="Clarity" cellTemplate="claritytemp">
+                                    <dxi-column dataField="CLARITY"
+                                        caption="Clarity"
+                                        cellTemplate="claritytemp">
                                     </dxi-column>
-                                    <dxi-column dataField="SHAPE" caption="Shape" cellTemplate="shapetemp">
+                                    <dxi-column dataField="SHAPE"
+                                        caption="Shape"
+                                        cellTemplate="shapetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="SIEVE" caption="Sieve Std." cellTemplate="sievetemp">
+                                    <dxi-column dataField="SIEVE"
+                                        caption="Sieve Std."
+                                        cellTemplate="sievetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="DESCRIPTION" caption="Description"
+                                    <dxi-column dataField="DESCRIPTION"
+                                        caption="Description"
                                         cellTemplate="descriptiontemp">
                                     </dxi-column>
-                                    <dxi-column dataField="DSIZE" caption="Size" cellTemplate="sizetemp">
+                                    <dxi-column dataField="DSIZE" caption="Size"
+                                        cellTemplate="sizetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="PROCESS_TYPE" caption="Process Type"
+                                    <dxi-column dataField="PROCESS_TYPE"
+                                        caption="Process Type"
                                         cellTemplate="processTypetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="D_REMARKS" caption="Remarks" cellTemplate="remarktemp"
+                                    <dxi-column dataField="D_REMARKS"
+                                        caption="Remarks"
+                                        cellTemplate="remarktemp"
                                         [width]="100">
                                     </dxi-column>
-                                    <dxi-column dataField="POINTER_WT" caption="Pointer Wt" [width]="100"
+                                    <dxi-column dataField="POINTER_WT"
+                                        caption="Pointer Wt" [width]="100"
                                         cellTemplate="pointerWttemp">
                                     </dxi-column>
-                                    <dxi-column dataField="EXT_Color" caption="Ext.Color" cellTemplate="extColortemp">
+                                    <dxi-column dataField="EXT_Color"
+                                        caption="Ext.Color"
+                                        cellTemplate="extColortemp">
                                     </dxi-column>
-                                    <dxi-column dataField="EXT_CLARITY" caption="Ext.Clarity"
+                                    <dxi-column dataField="EXT_CLARITY"
+                                        caption="Ext.Clarity"
                                         cellTemplate="extClaritytemp">
                                     </dxi-column>
-                                    <dxi-column dataField="SIEVE_FROM" caption="Sieve from"
+                                    <dxi-column dataField="SIEVE_FROM"
+                                        caption="Sieve from"
                                         cellTemplate="sieveFromtemp">
                                     </dxi-column>
-                                    <dxi-column dataField="Description" caption="Description"
+                                    <dxi-column dataField="Description"
+                                        caption="Description"
                                         cellTemplate="descriptiontemp">
                                     </dxi-column>
-                                    <dxi-column dataField="SIEVE_TO" caption="Sieve To" cellTemplate="sieveTotemp">
+                                    <dxi-column dataField="SIEVE_TO"
+                                        caption="Sieve To"
+                                        cellTemplate="sieveTotemp">
                                     </dxi-column>
-                                    <dxi-column dataField="Description" caption="Description"
+                                    <dxi-column dataField="Description"
+                                        caption="Description"
                                         cellTemplate="descriptiontemp">
                                     </dxi-column>
-                                    <div *dxTemplate="let data of 'divisiontemp'">
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="divisionCode"
+                                    <div
+                                        *dxTemplate="let data of 'divisiontemp'">
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            [MasterSearchData]="divisionCode"
                                             (newRowClick)="divisionCodeSelected($event,data,'divisiontemp')">
                                         </master-search>
                                     </div>
 
-                                    <div *dxTemplate="let data of 'stockCodetemp'">
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search (iconClick)="stockClicked(data)"
+                                    <div
+                                        *dxTemplate="let data of 'stockCodetemp'">
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            (iconClick)="stockClicked(data)"
                                             [MasterSearchData]="stockCodeData"
                                             *ngIf="!iskaratDisabled || !isPCSDisabled"
                                             (newRowClick)="stockCodeDataSelected($event,data,'stockCodetemp')">
@@ -350,16 +496,23 @@
                                     </div>
 
                                     <div *dxTemplate="let data of 'karattemp'">
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
                                         <master-search *ngIf="!iskaratDisabled"
-                                            [MasterSearchData]="karatCodeData" 
+                                            [MasterSearchData]="karatCodeData"
                                             (newRowClick)="karatCodeSelected($event,data,'karattemp')">
                                         </master-search>
                                     </div>
 
-                                    <div *dxTemplate="let data of 'StoneTypetemp'">
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search (change)="stoneType($event,data)" *ngIf="!isPCSDisabled"
+                                    <div
+                                        *dxTemplate="let data of 'StoneTypetemp'">
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            (change)="stoneType($event,data)"
+                                            *ngIf="!isPCSDisabled"
                                             [MasterSearchData]="stonetypeCodeData"
                                             (newRowClick)="stoneTypeCodeSelected($event,data)">
                                         </master-search>
@@ -372,9 +525,13 @@
                                             class="text-right"
                                             [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                        <mat-form-field appearance="outline" style="width: 100%;">
-                                            <input type="text" matInput readonly class="text-right"
-                                                [value]="data.value" (change)="pcstemp($event,data)" NumberOnly
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
+                                            <input type="text" matInput readonly
+                                                class="text-right"
+                                                [value]="data.value"
+                                                (change)="pcstemp($event,data)"
+                                                NumberOnly
                                                 [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
@@ -393,9 +550,13 @@
                                     <div *dxTemplate="let data of 'wtCttemp'">
                                         <!-- <input type="number" (change)="wtCtt($event,data)" NumberOnly class="text-right"
                                             [value]="data.value" style="width: 100%;" required /> -->
-                                        <mat-form-field appearance="outline" style="width: 100%;">
-                                            <input type="text" matInput readonly class="text-right"
-                                                [value]="data.value" (change)="wtCtt($event,data)" NumberOnly
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
+                                            <input type="text" matInput readonly
+                                                class="text-right"
+                                                [value]="data.value"
+                                                (change)="wtCtt($event,data)"
+                                                NumberOnly
                                                 [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
@@ -403,17 +564,26 @@
                                     <div *dxTemplate="let data of 'colortemp'">
                                         <!-- <input type="text" (change)="color($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="colorCodeData" *ngIf="!isPCSDisabled"
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            [MasterSearchData]="colorCodeData"
+                                            *ngIf="!isPCSDisabled"
                                             (newRowClick)="colorCodeSelected($event,data,'colortemp')">
                                         </master-search>
                                     </div>
 
-                                    <div *dxTemplate="let data of 'claritytemp'">
+                                    <div
+                                        *dxTemplate="let data of 'claritytemp'">
                                         <!-- <input type="text" (change)="clarity($event,data)" [value]="data.value"
                                             style="width: 100%;" required [disabled]="isPCSDisabled" /> -->
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="clarityCodeData" *ngIf="!isPCSDisabled"
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            [MasterSearchData]="clarityCodeData"
+                                            *ngIf="!isPCSDisabled"
                                             (newRowClick)="clarityCodeSelected($event,data,'claritytemp')">
                                         </master-search>
                                     </div>
@@ -421,8 +591,12 @@
                                     <div *dxTemplate="let data of 'shapetemp'">
                                         <!-- <input type="text" (change)="shape($event,data)" [value]="data.value"
                                             style="width: 100%;" required [disabled]="isPCSDisabled" /> -->
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="shapeCodeData" *ngIf="!isPCSDisabled"
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            [MasterSearchData]="shapeCodeData"
+                                            *ngIf="!isPCSDisabled"
                                             (newRowClick)="shapegridCodeSelected($event,data,'shapetemp')">
                                         </master-search>
                                     </div>
@@ -430,17 +604,26 @@
                                     <div *dxTemplate="let data of 'sievetemp'">
                                         <!-- <input type="text" (change)="sieve($event,data)" [value]="data.value"
                                             style="width: 100%;" required [disabled]="isPCSDisabled" /> -->
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="sieveCodeData" *ngIf="!isPCSDisabled"
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            [MasterSearchData]="sieveCodeData"
+                                            *ngIf="!isPCSDisabled"
                                             (newRowClick)="sieveCodeSelected($event,data,'sievetemp')">
                                         </master-search>
                                     </div>
 
-                                    <div *dxTemplate="let data of 'descriptiontemp'">
+                                    <div
+                                        *dxTemplate="let data of 'descriptiontemp'">
                                         <!-- <input type="text" (change)="description($event,data)" [value]="data.value"
                                             style="width: 100%;" required [disabled]="isPCSDisabled" /> -->
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="descriptionCodeData" *ngIf="!isPCSDisabled"
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            [MasterSearchData]="descriptionCodeData"
+                                            *ngIf="!isPCSDisabled"
                                             (newRowClick)="descriptionCodeSelected($event,data,'descriptiontemp')">
                                         </master-search>
                                     </div>
@@ -448,18 +631,26 @@
                                     <div *dxTemplate="let data of 'sizetemp'">
                                         <!-- <input type="text" (change)="size($event,data)" [value]="data.value"
                                             style="width: 100%;" required [disabled]="isPCSDisabled" /> -->
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="sizegridCodeData" *ngIf="!isPCSDisabled"
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            [MasterSearchData]="sizegridCodeData"
+                                            *ngIf="!isPCSDisabled"
                                             (newRowClick)="sizegridCodeSelected($event,data,'sizetemp')">
                                         </master-search>
 
                                     </div>
 
-                                    <div *dxTemplate="let data of 'processTypetemp'">
+                                    <div
+                                        *dxTemplate="let data of 'processTypetemp'">
                                         <!-- <input type="text" (change)="processType($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="processCodeData"
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            [MasterSearchData]="processCodeData"
                                             *ngIf="!iskaratDisabled || !isPCSDisabled"
                                             (newRowClick)="processCodeSelected($event,data,'processTypetemp')">
                                         </master-search>
@@ -468,19 +659,28 @@
                                     <div *dxTemplate="let data of 'remarktemp'">
                                         <!-- <input type="text" (change)="remark($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                        <mat-form-field appearance="outline" style="width: 100%;">
-                                            <input type="text" matInput readonly style="width: 100%;"
-                                                [value]="data.value" (change)="remark($event,data)" NumberOnly
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
+                                            <input type="text" matInput readonly
+                                                style="width: 100%;"
+                                                [value]="data.value"
+                                                (change)="remark($event,data)"
+                                                NumberOnly
                                                 [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
 
-                                    <div *dxTemplate="let data of 'pointerWttemp'">
+                                    <div
+                                        *dxTemplate="let data of 'pointerWttemp'">
                                         <!-- <input type="number" (change)="pointerWt($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                        <mat-form-field appearance="outline" style="width: 100%;">
-                                            <input type="text" matInput readonly class="text-right" 
-                                                [value]="data.value" (change)="pointerWt($event,data)" NumberOnly
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
+                                            <input type="text" matInput readonly
+                                                class="text-right"
+                                                [value]="data.value"
+                                                (change)="pointerWt($event,data)"
+                                                NumberOnly
                                                 [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                         <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
@@ -489,38 +689,58 @@
                                         </master-search> -->
                                     </div>
 
-                                    <div *dxTemplate="let data of 'extColortemp'">
+                                    <div
+                                        *dxTemplate="let data of 'extColortemp'">
                                         <!-- <input type="text" (change)="extColor($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="extColorCodeData" *ngIf="!isPCSDisabled"
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            [MasterSearchData]="extColorCodeData"
+                                            *ngIf="!isPCSDisabled"
                                             (newRowClick)="extColorCodeSelected($event,data,'extColortemp')">
                                         </master-search>
                                     </div>
 
-                                    <div *dxTemplate="let data of 'extClaritytemp'">
+                                    <div
+                                        *dxTemplate="let data of 'extClaritytemp'">
                                         <!-- <input type="text" (change)="extClarity($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="extClarityCodeData" *ngIf="!isPCSDisabled"
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            [MasterSearchData]="extClarityCodeData"
+                                            *ngIf="!isPCSDisabled"
                                             (newRowClick)="extClarityCodeSelected($event,data,'extClaritytemp')">
                                         </master-search>
                                     </div>
 
-                                    <div *dxTemplate="let data of 'sieveFromtemp'">
+                                    <div
+                                        *dxTemplate="let data of 'sieveFromtemp'">
                                         <!-- <input type="email" (change)="sieveFrom($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="sieveFromCodeData" *ngIf="!isPCSDisabled"
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            [MasterSearchData]="sieveFromCodeData"
+                                            *ngIf="!isPCSDisabled"
                                             (newRowClick)="sieveFromCodeSelected($event,data,'sieveFromtemp')">
                                         </master-search>
                                     </div>
 
-                                    <div *dxTemplate="let data of 'sieveTotemp'">
+                                    <div
+                                        *dxTemplate="let data of 'sieveTotemp'">
                                         <!-- <input type="email" (change)="sieveTo($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="sieveToCodeData" *ngIf="!isPCSDisabled"
+                                        <a href="javascript:void(0)"
+                                            class="mx-1"
+                                            [innerHTML]="data.value"></a>
+                                        <master-search
+                                            [MasterSearchData]="sieveToCodeData"
+                                            *ngIf="!isPCSDisabled"
                                             (newRowClick)="sieveToCodeSelected($event,data,'sieveTotemp')">
                                         </master-search>
                                     </div>
@@ -529,17 +749,25 @@
                             </mat-tab>
 
                             <mat-tab label="Main Design Details">
-                                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true"
-                                    [allowColumnReordering]="true" [allowColumnResizing]="true"
-                                    [dataSource]="maindetails" [columnAutoWidth]="true">
+                                <dx-data-grid #dataGrid id="gridContainer"
+                                    [showBorders]="true"
+                                    [allowColumnReordering]="true"
+                                    [allowColumnResizing]="true"
+                                    [dataSource]="maindetails"
+                                    [columnAutoWidth]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true">
+                                    <dxo-editing mode="cell"
+                                        [allowUpdating]="true">
                                     </dxo-editing>
-                                    <dxo-selection mode="multiple"></dxo-selection>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxo-selection
+                                        mode="multiple"></dxo-selection>
+                                    <dxo-scrolling
+                                        mode="virtual"></dxo-scrolling>
 
-                                    <dxi-column *ngFor="let data of columnhead2" dataField="{{ data }}"
-                                        caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                    <dxi-column *ngFor="let data of columnhead2"
+                                        dataField="{{ data }}"
+                                        caption="{{ data }}"
+                                        [allowEditing]="true" alignment="center"
                                         backgroundcolor="#000">
                                     </dxi-column>
                                 </dx-data-grid>
@@ -553,10 +781,12 @@
         <div class="col-md-12">
             <div class="row mb-2">
                 <div class="col-md-5 offset-sm-11">
-                    <button type="button" class="btn btn-outline-primary  add-btn">
+                    <button type="button"
+                        class="btn btn-outline-primary  add-btn"
+                        (click)="openimageUploadModal()">
                         Image
-                        <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
-                            (change)="onFileChangedimage($event)" multiple [readonly]="viewMode" />
+                        <!-- <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                            (change)="onFileChangedimage($event)" multiple [readonly]="viewMode" /> -->
                     </button>
                 </div>
             </div>
@@ -564,3 +794,80 @@
 
     </form>
 </div>
+<!-- image upload ui -->
+<ng-template #imageUpload let-modal modal-lg>
+    <div class="card">
+        <div class="modal-header">
+            <h4 class="modal-title">Attachment</h4>
+            <button type="button" class="btn-close" aria-label="Close"
+                (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body" *ngIf="savedAttachment.length > 0">
+            <div class="row">
+                <dx-data-grid id="gridContainer"
+                    [dataSource]="savedAttachment"
+                    [showRowLines]="true"
+                    height="150" [columnAutoWidth]="true"
+                    [showBorders]="true"
+                    [allowColumnResizing]="true">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-selection mode="single"></dxo-selection>
+                    <!-- <dxi-column dataField="BRANCH_CODE" caption="Remarks"
+                    alignment="left">
+                </dxi-column> -->
+                    <dxi-column dataField="file"
+                        cellTemplate="attachmentTemp" caption="Attachment"
+                        [allowEditing]="true"
+                        alignment="center">
+                    </dxi-column>
+                    <div *dxTemplate="let data of 'attachmentTemp'">
+                        <a (click)="openAttachment(data)"
+                            [hidden]="data.value === false">
+                            <i class="fa fa-paperclip"
+                                style="color: #337ab7"></i></a>
+                        <dxi-button icon="fa fa-paperclip"></dxi-button>
+                    </div>
+                </dx-data-grid>
+            </div>
+        </div>
+        <div class="modal-body" *ngIf="!viewMode">
+            <div class="row">
+                <div class="col-md-6 col-sm-12"
+                    style="border-left: 2px dashed #d3d3d3;">
+                    <div class="d-flex align-items-center">
+                        <div class="p-2">
+                            <input class="fileAttach pt-2"
+                                type="file"
+                                (change)="onFileChangedimage($event)"
+                                [disabled]="viewMode" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <dx-data-grid id="gridContainer"
+                    [dataSource]="Attachedfile"
+                    [showRowLines]="true"
+                    height="150" [columnAutoWidth]="true"
+                    [showBorders]="true"
+                    [allowColumnResizing]="true">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-selection mode="single"></dxo-selection>
+                    <dxi-column dataField="name"
+                        caption="Name"
+                        alignment="left">
+                    </dxi-column>
+                    <dxi-column dataField="Default"
+                        cellTemplate="defualtAttach" caption="Default"
+                        [allowEditing]="true"
+                        alignment="center">
+                    </dxi-column>
+                    <div *dxTemplate="let data of 'defualtAttach'">
+                        <mat-checkbox (change)="defaultCheckboxChange($event,data)">
+                        </mat-checkbox>
+                    </div>
+                </dx-data-grid>
+            </div>
+        </div>
+    </div>
+</ng-template>
