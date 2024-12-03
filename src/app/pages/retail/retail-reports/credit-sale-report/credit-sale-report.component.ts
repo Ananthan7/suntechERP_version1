@@ -2,7 +2,10 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { catchError } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 @Component({
@@ -40,8 +43,8 @@ export class CreditSaleReportComponent implements OnInit {
     todate: [''],
     templateName: [''],
 
-    customerfrom: [''],
-    customerto: [''],
+    customerCode: [''],
+    customer: [''],
     approvedby: [''],
   
 
@@ -54,14 +57,17 @@ export class CreditSaleReportComponent implements OnInit {
   fetchedBranchDataParam: any= [];
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
+  isLoading: boolean = false;
 
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private commonService: CommonServiceService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe, private dataService: SuntechAPIService, private toastr: ToastrService,
+    
   ) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
+    this.apiGridDataFetch();
   }
 
   close(data?: any) {
@@ -69,9 +75,41 @@ export class CreditSaleReportComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  apiGridDataFetch(){
+    this.isLoading = true;
+    const apiUrl = 'CreditSaleReport'
+    let postData = {
+      "frmDate": this.dateToPass.fromDate,
+      "toDate": this.dateToPass.toDate,
+      "brList": "",
+      "vocType": "",
+      "customer": this.creditSaleReportForm.controls.customer.value,
+      "approvedBy": this.creditSaleReportForm.controls.approvedby.value,
+      "crAccode": this.creditSaleReportForm.controls.customerCode.value
+    }
+    this.dataService.postDynamicAPI(apiUrl, postData).pipe( 
+      catchError((error) => {
+       this.toastr.error('An error occurred while processing the request');
+       this.isLoading = false;
+       return [];
+     }),
+    ).subscribe((resp: any) => {
+      if (resp.status == 'Success') {
+        console.log( resp )
+        this.isLoading = false;
+        this.toastr.success(resp.status);
+      }
+      else{
+        this.isLoading = false;
+        this.toastr.error(resp.message);
+      }
+    });    
+  }
+
+
   customerCodeSelected(e: any) {
-    this.creditSaleReportForm.controls.customerfrom.setValue(e.ACCODE);
-    this.creditSaleReportForm.controls.customerto.setValue(e.ACCOUNT_HEAD);
+    this.creditSaleReportForm.controls.customerCode.setValue(e.ACCODE);
+    this.creditSaleReportForm.controls.customer.setValue(e.ACCOUNT_HEAD);
   }
 
   ApprovedbyCodeSelected(e: any) {
@@ -103,6 +141,7 @@ export class CreditSaleReportComponent implements OnInit {
       this.creditSaleReportForm.controls.todate.setValue(event.ToDate);
       this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
+    this.apiGridDataFetch();
   }
 
   popupClosed(){
@@ -183,8 +222,6 @@ export class CreditSaleReportComponent implements OnInit {
   printBtnClick(){
 
   }
-
-
 
 
   prefillScreenValues(){

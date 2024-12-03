@@ -4,12 +4,13 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
-import { Subscription } from 'rxjs';
+import { forkJoin, of, Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatSelectChange } from '@angular/material/select';
 import { DatePipe } from '@angular/common';
+import { catchError, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-pos-crm-dashboard',
@@ -70,10 +71,8 @@ export class PosCrmDashboardComponent implements OnInit {
 
 
   ngOnInit(): void {
- 
-
-    
     this.initAPI()
+    this.prefillScreenValues();
 
     this.logDataParam =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
@@ -88,12 +87,13 @@ export class PosCrmDashboardComponent implements OnInit {
       "VOCDATE": "",
       "YEARMONTH" : this.commonService.yearSelected
     }
+    this.performPostRequests();
   }
 
   initAPI(){
     this.isLoading = true;
+
     const apiUrl = '/UspGetPosCRMDashboardFilterFields/GetUspPosCRMDashboardFilter/'
-  
     this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
       if (resp.status == 'Success') {
         console.log( resp.dynamicData )
@@ -105,8 +105,72 @@ export class PosCrmDashboardComponent implements OnInit {
         this.diamondSectionArr = resp.dynamicData[2];
         this.metalSectionArr = resp.dynamicData[3];
 
-        this.prefillScreenValues();
         this.isLoading = false;
+      }
+    });
+  }
+
+  performPostRequests() {
+    const apiUrl1 = 'UspPosCrmInvoiceDetails'
+    const apiUrl2 = 'UspSuggestNewDIaJewCRMDBoard';
+    const apiUrl3 = 'UspSuggestNewMtlJewCRMDBoard';
+
+
+    const postData1 = { 
+       "str_SqlId": ""
+    };
+    const postData2 = { 
+      "str_FilterField": "",
+      "str_FilterValues": "",
+      "str_PriceField": "",
+      "str_PriceFm": this.dateToPass.fromDate,
+      "str_PriceTo": this.dateToPass.toDate
+    };
+    const postData3 = {  
+      "str_FilterField": "",
+      "str_FilterValues": "",
+      "str_QtyFm": this.dateToPass.fromDate,
+      "str_QtyTo": this.dateToPass.toDate
+    };
+
+    // Perform POST requests in parallel using forkJoin
+    forkJoin({
+      request1: this.dataService.postDynamicAPI(apiUrl1, postData1),
+      request2: this.dataService.postDynamicAPI(apiUrl2, postData2),
+      request3: this.dataService.postDynamicAPI(apiUrl3, postData3),
+    }).pipe(
+      // Handling errors globally using catchError
+      catchError(error => {
+        this.toastr.error('An error occurred while making requests');
+        this.isLoading = false;
+        return of({ request1: null, request2: null, request3: null });
+      }),
+
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
+      next: (responses: any) => {
+        if (responses.request1) {
+          console.log('Response from request1:', responses.request1);
+        } else {
+          console.log('Request 1 failed');
+        }
+
+        if (responses.request2) {
+          console.log('Response from request2:', responses.request2);
+        } else {
+          console.log('Request 2 failed');
+        }
+
+        if (responses.request3) {
+          console.log('Response from request3:', responses.request3);
+        } else {
+          console.log('Request 3 failed');
+        }
+      },
+      error: (err: any) => {
+        console.error('Error in any of the requests:', err);
       }
     });
   }
@@ -443,9 +507,9 @@ export class PosCrmDashboardComponent implements OnInit {
       };
 
       this.posCRMdasbordForm.controls.festival.setValue(1)
-      this.posCRMdasbordForm.controls.diamondsection.setValue(this.diamondSectionArr[0].MASFIELD);
-      this.posCRMdasbordForm.controls.divisions.setValue(this.divisionsArr[0].Code);
-      this.posCRMdasbordForm.controls.metal.setValue(this.metalSectionArr[0].MASFIELD);
+      this.posCRMdasbordForm.controls.diamondsection.setValue(this.diamondSectionArr[0]?.MASFIELD);
+      this.posCRMdasbordForm.controls.divisions.setValue(this.divisionsArr[0]?.Code);
+      this.posCRMdasbordForm.controls.metal.setValue(this.metalSectionArr[0]?.MASFIELD);
       
     }
   }

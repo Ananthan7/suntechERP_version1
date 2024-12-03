@@ -33,7 +33,7 @@
                 <label for="input" id="ID005" class="col-sm-1 col-form-label" id="ID002">Customer</label>
                 <div class="col-sm-3">
                     <mat-form-field style="width: 100%;" appearance="outline">
-                        <input type="text" matInput formControlName="customerfrom" maxlength="30"
+                        <input type="text" matInput formControlName="customer" maxlength="30"
                             oninput="this.value = this.value.toUpperCase()"  />
                         <master-search [MasterSearchData]="customerCodeData" class="masterSearch" #overlaycustomerSearch
                             (newRowClick)="customerCodeSelected($event)"></master-search>
