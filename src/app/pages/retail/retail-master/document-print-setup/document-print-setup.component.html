@@ -7,7 +7,13 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header></modal-header>
+    <modal-header
+    *ngIf="content?.FLAG !== 'VIEW'"
+    (saveClick)="formSubmit()"
+    (cancelClick)="close()"
+    [isViewDelete]="deleteMode"
+    (deleteClick)="deleteRecord()"
+  ></modal-header>
     <!-- content section -->
     <div class="p-4 ">
         <form [formGroup]="DocumentPrintSetupForm">
@@ -24,7 +30,7 @@
                     Description :</label>
                 <div class="col-sm-3">
                     <mat-form-field style="width: 100%" appearance="outline">
-                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                        <input type="text" #codeInput matInput formControlName="description" UpperCaseDirective
                             autocomplete="off" />
                     </mat-form-field>
                 </div>
@@ -40,42 +46,60 @@
                     <div class="your-box-container mb-2">
                         <div class="row">
                             <div class="col-md-3">
-                                <mat-checkbox> Show Only Logo</mat-checkbox>
+                                <mat-checkbox formControlName="show_only_logo"> Show Only Logo</mat-checkbox>
                                 <div class="boxed-label">
                                     <h6>Logo Position</h6>
                                 </div>
+                                <!-- <div class="your-box-container mb-2">
+                                    <div class="row">
+                                        <mat-radio-group formControlName="logo_position">
+                                        <div class="col-md-12">
+                                            <mat-checkbox value="Left"> Left</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <mat-checkbox value="Right"> Right</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <mat-checkbox value="Center"> Center</mat-checkbox>
+                                        </div>
+                                        </mat-radio-group>
+                                    </div>
+                                </div> -->
                                 <div class="your-box-container mb-2">
                                     <div class="row">
+                                      <mat-radio-group formControlName="logo_position">
                                         <div class="col-md-12">
-                                            <mat-checkbox> Left</mat-checkbox>
+                                          <mat-radio-button value="Left">Left</mat-radio-button>
                                         </div>
                                         <div class="col-md-12">
-                                            <mat-checkbox> Right</mat-checkbox>
+                                          <mat-radio-button value="Right">Right</mat-radio-button>
                                         </div>
                                         <div class="col-md-12">
-                                            <mat-checkbox> Center</mat-checkbox>
+                                          <mat-radio-button value="Center">Center</mat-radio-button>
                                         </div>
+                                      </mat-radio-group>
                                     </div>
-                                </div>
+                                  </div>
+                                  
                             </div>
                             <div class="col-md-9">
-                                <mat-checkbox> Show As Header</mat-checkbox>
+                                <mat-checkbox formControlName="show_as_header" > Show As Header</mat-checkbox>
                                 <div class="boxed-label">
                                     <h6>Header</h6>
                                 </div>
                                 <div class="your-box-container mb-2">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <mat-checkbox> English</mat-checkbox>
+                                            <mat-checkbox formControlName="header_english"> English</mat-checkbox>
                                             <mat-form-field style="width: 100%;" appearance="outline">
-                                                <textarea matInput id="inputAddress" formControlName="address"
+                                                <textarea matInput id="inputAddress" formControlName="english_header_images"
                                                     rows="4"></textarea>
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-6">
-                                            <mat-checkbox> English & Arabic</mat-checkbox>
+                                            <mat-checkbox formControlName="header_arabic"> English & Arabic</mat-checkbox>
                                             <mat-form-field style="width: 100%;" appearance="outline">
-                                                <textarea matInput id="inputAddress" formControlName="address"
+                                                <textarea matInput id="inputAddress" formControlName="other_header_images"
                                                     rows="4"></textarea>
                                             </mat-form-field>
                                         </div>
@@ -83,7 +107,7 @@
                                 </div>
                             </div>
                             <div class="col-md-9">
-                                <mat-checkbox> Show Combined Header(A4)</mat-checkbox>
+                                <mat-checkbox formControlName="show_combined_header"> Show Combined Header(A4)</mat-checkbox>
                                 <div class="boxed-label">
                                     <h6>Header</h6>
                                 </div>
@@ -91,14 +115,14 @@
                                     <div class="row">
                                         <div class="col-md-12 mb-3">
                                             <mat-form-field style="width: 100%;" appearance="outline">
-                                                <textarea matInput id="inputAddress" formControlName="address"
+                                                <textarea matInput id="inputAddress" formControlName="combined_header_images"
                                                     rows="4"></textarea>
                                             </mat-form-field>
                                         </div>
-                                        <mat-checkbox> Show Combined Header(A5)</mat-checkbox>
+                                        <mat-checkbox formControlName="show_combined_headerA5"> Show Combined Header(A5)</mat-checkbox>
                                         <div class="col-md-8">
                                             <mat-form-field style="width: 100%;" appearance="outline">
-                                                <textarea matInput id="inputAddress" formControlName="address"
+                                                <textarea matInput id="inputAddress" formControlName="combined_header_a5images"
                                                     rows="4"></textarea>
                                             </mat-form-field>
                                         </div>
@@ -110,7 +134,8 @@
                                     <h6>Footer Setting</h6>
                                 </div>
                                 <div class="your-box-container mb-2">
-                                    <div class="row">
+                                    <div class="row" >
+                                        <mat-radio-group formControlName="footer_settings">
                                         <div class="col-md-12">
                                             <mat-checkbox> Footer Party Signature</mat-checkbox>
                                         </div>
@@ -123,6 +148,7 @@
                                         <div class="col-md-12">
                                             <mat-checkbox> Footer Authorized By</mat-checkbox>
                                         </div>
+                                    </mat-radio-group>
                                     </div>
                                 </div>
                             </div>
