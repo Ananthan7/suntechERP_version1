@@ -23,6 +23,7 @@ export class ReorderLevelSetupComponent implements OnInit {
   tableData: any[] = [];
   viewMode: boolean = false;
   editMode:boolean = false;
+  groupOptions: any[] = [];
 
   columnHeadings: any[] = [
     { field: "PARTYCODE", caption: "Sr" },
@@ -56,9 +57,9 @@ export class ReorderLevelSetupComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.getGroup();
 
     if (this.content?.FLAG) {
-     
       this.setFormValues();
       console.log(this.content)
       //this.setFormValues();
@@ -299,5 +300,15 @@ export class ReorderLevelSetupComponent implements OnInit {
       return;
     }
   }
+
+  getGroup() {
+    this.dataService.getDynamicAPI('WhlSmanTargetHeader/GetInventoryCombofilters/')
+      .subscribe((data) => {
+        if (data.status === 'Success' && data.dynamicData.length > 0) {
+          this.groupOptions = data.dynamicData[0].map((item: any) => item.DispName);
+        }
+      });
+  }
+  
 
 }
