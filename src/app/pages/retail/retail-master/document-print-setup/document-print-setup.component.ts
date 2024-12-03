@@ -222,7 +222,7 @@ export class DocumentPrintSetupComponent implements OnInit {
 
   updateMaster() {
     let API =
-      "PayTicketSchemeMaster/UpdatePayTicketSchemeMaster/" +
+      "Branchwise_Document_Print_Setting/UpdateBranchwise_Document_Print_Setting/" +
       this.DocumentPrintSetupForm.value.code;
     let postData = this.setPostData();
 
@@ -282,7 +282,7 @@ export class DocumentPrintSetupComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         let API =
-          "PayTicketSchemeMaster/DeletePayTicketSchemeMaster/" +
+          "Branchwise_Document_Print_Setting/Delete_Branchwise_Document_Print_Setting/" +
           this.content?.CODE;
         let Sub: Subscription = this.dataService
           .deleteDynamicAPI(API)
