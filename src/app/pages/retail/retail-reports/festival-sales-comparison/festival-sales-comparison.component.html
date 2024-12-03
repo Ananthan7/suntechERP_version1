@@ -24,42 +24,32 @@
                     </mat-form-field>
                 </div>
     
-                <div class="col-md-7">
+                <!-- <div class="col-md-7">
                     <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
-                </div> 
-            </div>
+                </div>  -->
 
-            <div class="check_radio_btn">
-                             
-                <div class="row">
-                    <div class="row mb-12">
-                        <label for="input" class="col-sm-1 col-form-label" id="ID001">Festival</label>
-                        <div class="col-sm-2">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" matInput formControlName="festivalType" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-sm-2">
-                            <label for="input" class="col-sm-10 col-form-label" id="ID002">Years to compare</label>
-                        </div>
-                        <div class="col-sm-2">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" matInput formControlName="YearToCompareFrom" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-sm-2">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" matInput formControlName="YearToCompareTo" />
-                            </mat-form-field>
-                        </div>
-                        <div class="col-sm-1">
-                            <div class="p-2 bd-highlight">
-                                <button type="button" class="btn btn-primary metal-issue-add-btn" id="ID003">
-                                    Refresh
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <label for="input" class="col-sm-1 col-form-label" id="ID001">Festival</label>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <mat-select formControlName="festivalType" multiple (selectionChange)="onFestivalTypeChange($event)">
+                        <mat-option *ngFor="let festival of festivals" [value]="festival.CODE">
+                            {{ festival.DESCRIPTION }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <label for="input" class="col-sm-10 col-form-label" id="ID002">Years to compare</label>
+                </div>
+                <div class="col-sm-2 px-0">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <input type="text" matInput formControlName="YearToCompareFrom" />
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <input type="text" matInput formControlName="YearToCompareTo"/>
+                    </mat-form-field>
                 </div>
             </div>
         </div>
@@ -68,7 +58,38 @@
             <mat-tab-group style="background-color: #f5f2ee;">
                 <mat-tab label="Diamond Division">
                     <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
-                    <dx-data-grid (onCellPrepared)="headerCellFormatting($event)" *ngIf="!isLoading"></dx-data-grid>
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
+                    [columnAutoWidth]="true" [dataSource]="diamondDivisionDtlArr" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
+                        <dxo-paging [pageSize]="6"></dxo-paging>
+                        <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                        <dxo-scrolling mode="standard"></dxo-scrolling>
+
+                        <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+                        <dxo-group-panel [visible]="true"></dxo-group-panel>
+
+                        <dxi-column  dataField="BRANCH_CODE" caption="Branch Code" [allowResizing]="true"
+                        [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+                        <dxi-column  dataField="FESTIVAL_CODE" caption="Festival Code" [allowResizing]="true"
+                        [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+                        <dxi-column  dataField="YEAR" caption="Festival Code" [allowResizing]="true"
+                        [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+                        <dxi-column  dataField="SALES_AMOUNT" caption="Sales Amount" [allowResizing]="true"  [customizeText]="customizeContent"
+                        [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+
+                        <dxo-summary>
+                            <dxi-total-item column="Sales Amount" summaryType="sum" displayFormat="{0}" alignment="right"
+                            [customizeText]="customizeContent"></dxi-total-item>
+                        </dxo-summary>
+                    </dx-data-grid>
+
+                    <dx-chart *ngIf="diamondDivisionDtlArr.length > 0" [dataSource]="diamondDivisionDtlArr">
+                        <dxi-series argumentField="SALES_AMOUNT" valueField="SALES_AMOUNT" type="bar">
+                        </dxi-series>
+                    
+                        <dxo-legend [visible]="true"></dxo-legend>
+                        <dxo-tooltip [enabled]="true"></dxo-tooltip>
+                        <!-- <dxo-title text="Branch Code vs Value"></dxo-title> -->
+                    </dx-chart>
                 </mat-tab>
                 <mat-tab label="Metal Division">
                 </mat-tab>

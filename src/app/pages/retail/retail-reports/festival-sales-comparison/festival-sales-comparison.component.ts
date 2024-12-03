@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { stringify } from 'querystring';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -34,6 +35,9 @@ export class FestivalSalesComparisonComponent implements OnInit {
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
   fetchedBranchDataParam: any= [];
   isLoading: boolean = false;
+  festivals: any =[];
+  formattedFestivalSelections: any;
+  diamondDivisionDtlArr: any = [];
 
 
   constructor( private formBuilder: FormBuilder,
@@ -44,7 +48,7 @@ export class FestivalSalesComparisonComponent implements OnInit {
 
   ngOnInit(): void {
     this.prefillScreenValues();
-    this.gridDataFetch();
+    this.festivalDataFetch();
   }
 
   close(data?: any) {
@@ -213,34 +217,30 @@ export class FestivalSalesComparisonComponent implements OnInit {
     }, 300)  
   }
 
-  gridDataFetch(){
-    let API = "FestivalDashboard";
-    let postData = { 
-      "branchList": this.festivalSalesComparisonForm.controls.branch.value,
-      "festivalList": this.festivalSalesComparisonForm.controls.festivalType.value,
-      "noofYears": this.festivalSalesComparisonForm.controls.YearToCompareFrom.value - 
-        this.festivalSalesComparisonForm.controls.YearToCompareTo.value
-        
-      //correct payload
-      // "branchList": "DM#HO#MOE",
-      // "festivalList": "DIWALI#DSF#ONAM",
-      // "noofYears": "3"
-    };
-    this.dataService.postDynamicAPI(API, postData).pipe(
+  festivalDataFetch(){
+    this.isLoading = true;
+    let API = "FestivalMaster/GetFestivalMasterList";
+    this.dataService.getDynamicAPI(API).pipe(
       catchError((error) => {
         console.error('API Error:', error);
         return throwError('Something went wrong. Please try again later.');
       })
     ).subscribe(
       (result) => {
-        if (result && result.dynamicData) {
-          if (result.dynamicData[0].length > 0) {
-            this.toastr.success(result.dynamicData.status || 'Success');
+        if (result && result.status == 'Success') {
+          if (result.response.length > 0) {
+            this.festivals = result.response;
+            this.festivalSalesComparisonForm.controls.festivalType.setValue([result.response[0].CODE]);
+
+            this.formattedFestivalSelections = result.response[0].CODE;
+            if(this.formattedFestivalSelections){
+              this.gridDataFetch();
+            }
           } else {
-            this.toastr.warning('No data available for the given criteria in Available Stock.');
+            this.toastr.warning('No data available !');
           }
         } else {
-          this.toastr.warning('No data available for the given criteria in Available Stock.');
+          this.toastr.warning('No data available !');
         }
       },
       (err) => {
@@ -249,6 +249,27 @@ export class FestivalSalesComparisonComponent implements OnInit {
     );
   }
 
+  onFestivalTypeChange(event: any){
+    this.formattedFestivalSelections = event.value.map((festivalCode: string) => `${festivalCode}#`).join("");
+    this.gridDataFetch();
+  }
+
+  gridDataFetch(){
+    this.isLoading = true;
+    let APIUrl = 'FestivalDashboard';
+    let postData = {
+      "branchList": this.festivalSalesComparisonForm.controls.branch.value,
+      "festivalList": this.formattedFestivalSelections,
+      "noofYears": JSON.stringify(this.festivalSalesComparisonForm.controls.YearToCompareFrom.value),
+    }
+    this.dataService.postDynamicAPI(APIUrl, postData).subscribe((response)=>{
+      this.diamondDivisionDtlArr = response.dtDiaFestivals;
+      this.toastr.success(response.status || 'Success');
+
+      this.isLoading = false;
+    })
+  }
+  
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
       //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
@@ -264,7 +285,13 @@ export class FestivalSalesComparisonComponent implements OnInit {
         fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
         toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!
       };
+
+      this.festivalSalesComparisonForm.controls.YearToCompareFrom.setValue(3)
     }
   }
 
+  customizeContent = (data: any) => {
+    // value separation handler from commonService
+    return this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT');
+  };
 }
