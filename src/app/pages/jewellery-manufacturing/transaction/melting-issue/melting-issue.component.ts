@@ -66,6 +66,7 @@ export class MeltingIssueComponent implements OnInit {
   editMode: boolean = false;
   isloading: boolean = false;
   codeEnable: boolean = true;
+  isFieldsReadonly = false
   gridAmountDecimalFormat: any;
   isJobNumberSearchVisible: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
@@ -93,7 +94,7 @@ export class MeltingIssueComponent implements OnInit {
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "@strProcess='',@blnActive=1",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -110,6 +111,7 @@ export class MeltingIssueComponent implements OnInit {
     WHERECONDITION: "ISNULL(PROCESS_TYPE, '') = '3'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    
   }
 
   MeltingCodeData: MasterSearchModel = {
@@ -214,10 +216,12 @@ export class MeltingIssueComponent implements OnInit {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.LOCKVOUCHERNO = true;
+        this.isFieldsReadonly = true;
       }
       if (this.content.FLAG == 'EDIT') {
         this.editMode = true;
         this.LOCKVOUCHERNO = true;
+        this.isFieldsReadonly = true;
       }
       this.isSaved = true;
       if (this.content.FLAG == 'DELETE') {
@@ -514,21 +518,30 @@ export class MeltingIssueComponent implements OnInit {
     console.log(e);
     this.meltingIssueFrom.controls.worker.setValue(e.WORKER_CODE);
     this.meltingIssueFrom.controls.workerdes.setValue(e.DESCRIPTION);
+    this.WorkerCodeValidate()
   }
+  workerWhereCondtion(){
+    let form = this.meltingIssueFrom.value
+    console.log(form, 'form')
+    this.workerCodeData.WHERECONDITION = `@strProcess='${form.processcode}'`
+  }
+
+  
   WorkerCodeValidate(event?: any) {
     if (event && event.target.value == '') {
       return
     }
+    this.workerWhereCondtion()
     let form = this.meltingIssueFrom.value;
     let postData = {
       "SPID": "103",
       "parameter": {
         strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
-        strJob_Number: '',
-        strUnq_Job_Id: '',
+        strJob_Number: this.commonService.nullToString(form.jobno),
+        strUnq_Job_Id: this.commonService.nullToString(form.subjobno),
         strMetalStone: '',
-        strProcess_Code: this.comService.nullToString(form.PROCESS_CODE),
-        strWorker_Code: this.comService.nullToString(form.WORKER_CODE),
+        strProcess_Code: this.comService.nullToString(form.processcode),
+        strWorker_Code: this.comService.nullToString(form.worker),
         strStock_Code: '',
         strUserName: '',
       }
@@ -729,6 +742,10 @@ export class MeltingIssueComponent implements OnInit {
       this.meltingISsueDetailsData.push(detailDataToParent);
       this.recalculateSRNO()
     }
+    if (this.meltingISsueDetailsData.length > 0) {
+      this.isFieldsReadonly = true; // Use this flag in the template
+    }
+  
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
       this.commonService.showSnackBarMsg('MSG81512')
@@ -1109,11 +1126,7 @@ export class MeltingIssueComponent implements OnInit {
 
   jobNumberValidate(event: any) {
     if (event.target.value == '') return;
-
-    // Capture the form values
     let form = this.meltingIssueFrom.value;
-
-    // Prepare the data for the API call
     let postData = {
       "SPID": "108",
       "parameter": {
@@ -1124,16 +1137,11 @@ export class MeltingIssueComponent implements OnInit {
 
       }
     };
-    // Show a message indicating that validation is in progress
-    this.commonService.showSnackBarMsg('Validating Job Number...');
 
-    // Make the API call for job number validation
+    this.commonService.showSnackBarMsg('Validating Job Number...');
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        // Close the progress message
         this.commonService.closeSnackBarMsg();
-
-        // If the API call is successful and data is valid
         if (result.status === "Success" && result.dynamicData && result.dynamicData[0] && result.dynamicData[0][0]) {
           let data = result.dynamicData[0][0];
           console.log(data, 'data')
