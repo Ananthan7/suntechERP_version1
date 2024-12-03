@@ -430,7 +430,7 @@ export class ComponentMasterComponent implements OnInit {
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
     // this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
     console.log(value.DIVISION_CODE);
-    
+
     if (value.DIVISION === 'M') {
       this.isPCSDisabled = true;
       this.iskaratDisabled = false;
@@ -461,8 +461,8 @@ export class ComponentMasterComponent implements OnInit {
     console.log(this.Attachedfile);
 
   }
-  stockClicked(param:any){
-    if(this.comService.nullToString(param.data.DIVCODE) != ''){
+  stockClicked(param: any) {
+    if (this.comService.nullToString(param.data.DIVCODE) != '') {
       this.stockCodeData.WHERECONDITION = `DIVISION = '${param.data.DIVCODE}' and SUBCODE = 0`;
     }
   }
@@ -808,7 +808,7 @@ export class ComponentMasterComponent implements OnInit {
       "CARAT": 0,
       "STOCK_FCCOST": "",
       "PCS": 0,
-      "GROSS_WT": "",
+      "GROSS_WT": 0,
       "COLOR": "",
       "CLARITY": "",
       "SHAPE": "",
@@ -1067,8 +1067,6 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   setPostData() {
-
-    console.log(this.tableData);
 
     let form = this.componentmasterForm.value
     // let heightValueData = form.height.toFixed(2);
@@ -1560,16 +1558,20 @@ export class ComponentMasterComponent implements OnInit {
     }
     return false;
   }
-
+  detailArray: any[] = []
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
     if (this.submitValidations(this.componentmasterForm.value)) return;
-    let postData = this.setPostData()
+    let postdata = this.setPostData()
+    if (this.images.length > 0) {
+      this.detailArray.push(postdata)
+      this.submitImageFormData()
+    }
 
-    let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postData)
+    let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postdata)
       .subscribe((result) => {
         if (result.status == "Success") {
           this.updatePrefixMaster()
@@ -1586,6 +1588,40 @@ export class ComponentMasterComponent implements OnInit {
           })
           // this.commonService.toastErrorByMsgId('MSG3577')
 
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
+    this.subscriptions.push(Sub)
+  }
+  formdata = new FormData();
+
+  /**USE: set form data for saving */
+  submitImageFormData() {
+    this.detailArray.forEach((item: any, i: any) => {
+      this.formdata.append(`Model.Type`, 'CMP');
+      this.formdata.append(`Model.Code`, 'V5');
+      if (this.images.length > 0) {
+        for (let i: number = 0; i < this.images.length; i++) {
+          this.formdata.append(`Model.imageData[0].Picture_name`, 'test');
+          this.formdata.append(`Model.imageData[0].DefaultPicture`, '');
+          this.formdata.append(`Model.imageData[0].Picture_Type`, 'jgp');
+        }
+        for (let i: number = 0; i < this.images.length; i++) {
+          this.formdata.append("Model.Images[" + i + "].Image.File", this.images[i]);
+        }
+      }
+    })
+
+    let Sub: Subscription = this.dataService.postDynamicAPI('PictureAttachment/InsertWithAttachments', this.formdata)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.updatePrefixMaster()
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
+        } else if (result.status == "Failed") {
+          this.commonService.toastErrorByMsgId('MSG1121')
+        } else {
+          this.commonService.toastErrorByMsgId('Image not uploaded')
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG3577')
@@ -1783,37 +1819,6 @@ export class ComponentMasterComponent implements OnInit {
     }
   }
 
-  // onFileChangedimage(event: any): void {
-  //   this.images = [];
-  //   this.imageNames = [];
-  //   this.PICTURE_NAME = "";  // Clear PICTURE_NAME initially
-
-  //   if (event.target.files && event.target.files.length > 0) {
-  //     const files = event.target.files;
-  //     const totalFiles = files.length;
-  //     let loadedFiles = 0;
-
-  //     for (let i = 0; i < totalFiles; i++) {
-  //       const reader = new FileReader();
-  //       const file = files[i];
-
-  //       // Save file names or other metadata instead of the entire base64 data
-  //       this.imageNames.push(file.name);
-
-  //       reader.readAsDataURL(file);
-  //       reader.onload = (() => {
-  //         this.images.push(reader.result as string);
-  //         loadedFiles++;
-
-  //         // Update PICTURE_NAME after all files are loaded
-  //         if (loadedFiles === totalFiles) {
-  //           this.PICTURE_NAME = this.imageNames.join(',') || "";
-  //         }
-  //       }).bind(this);  // Ensure `this` context is maintained
-  //     }
-  //   }
-  // }
-
   onFileChangedimage(event: any): void {
     // Clear the previous images and names
     this.images = [];
@@ -1846,39 +1851,6 @@ export class ComponentMasterComponent implements OnInit {
       }
     }
   }
-
-
-  // onFileChangedimage(event: any): void {
-  //   this.images = [];
-  //   this.imageNames = [];
-
-  //   if (event.target.files && event.target.files.length > 0) {
-  //     const files = event.target.files;
-  //     const totalFiles = files.length;
-  //     let loadedFiles = 0;
-
-  //     for (let i = 0; i < totalFiles; i++) {
-  //       const reader = new FileReader();
-  //       const file = files[i];
-
-  //       // Save file names or other metadata instead of the entire base64 data
-  //       this.imageNames.push(file.name);
-
-  //       reader.readAsDataURL(file);
-  //       reader.onload = () => {
-  //         this.images.push(reader.result as string);
-  //         loadedFiles++;
-
-  //         // Update PICTURE_NAME after all files are loaded
-  //         if (loadedFiles === totalFiles) {
-  //           this.PICTURE_NAME = this.imageNames.join(',') || "";
-  //         }
-  //       };
-  //     }
-  //   } else {
-  //     this.PICTURE_NAME = "";  // Clear PICTURE_NAME if no files are selected
-  //   }
-  // }
 
   stoneType(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].STOCK_FCCOST = data.target.value;
@@ -1933,7 +1905,6 @@ export class ComponentMasterComponent implements OnInit {
   // }
 
   stockCodeValidate(event: any) {
-    console.log(this.stockCodeData)
     let postData = {
       "SPID": "082",
       "parameter": {

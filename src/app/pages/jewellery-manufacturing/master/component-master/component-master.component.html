@@ -216,102 +216,7 @@
                         </div>
 
                     </div>
-                    <!-- <div class="col-md-2">
-                        <div class="container">
-
-                            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel"
-                                data-bs-pause="hover" data-bs-interval="false">
-                                <div class="box-wrap">
-                                    <div class="carousel-inner ">
-                                        <div class="carousel-item active" *ngFor="let img of images; let i = index"
-                                            [class.active]="i === 0">
-                                            <div class="upload-btn-wrapper">
-                                                <div *ngIf="!viewMode">
-                                                    <button class="btn btnnew border-dark">
-                                                        <img src={{img}} style="width:126px;height:124px">
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" id="ID015"
-                                    data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" id="ID016"
-                                    data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            </div>
-                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
-                                (change)="onFileChangedimage($event)" multiple [readonly]="viewMode">
-                        </div>
-                    </div> -->
-
-                    <!-- <div class="col-md-2">
-                        <div class="container">
-                            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel"
-                                data-bs-pause="hover" data-bs-interval="false">
-                                <div class="box-wrap">
-                                    <div class="carousel-inner">
-                                        <div class="carousel-item" *ngFor="let img of images; let i = index"
-                                            [class.active]="i === 0">
-                                            <div class="upload-btn-wrapper">
-                                                <button class="btn btnnew border-dark" [disabled]="viewMode">
-                                                    <img [src]="img" style="width:126px;height:124px">
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="carousel-control-prev" type="button" id="ID015"
-                                    data-bs-target="#carouselExampleControls" data-bs-slide="prev"
-                                    [disabled]="viewMode">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" id="ID016"
-                                    data-bs-target="#carouselExampleControls" data-bs-slide="next"
-                                    [disabled]="viewMode">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            </div>
-                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
-                                (change)="onFileChangedimage($event)" multiple [disabled]="viewMode">
-                        </div>
-                    </div> -->
-
-                    <!-- <div class="col-md-2">
-                        <div class="container">
-                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-pause="hover" data-bs-interval="false">
-                            <div class="box-wrap">
-                              <div class="carousel-inner">
-                                <div class="carousel-item" *ngFor="let img of images; let i = index" [class.active]="i === 0">
-                                  <div class="upload-btn-wrapper">
-                                    <button class="btn btnnew border-dark" [disabled]="viewMode">
-                                      <img [src]="img" style="width:126px;height:124px">
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <button class="carousel-control-prev" type="button" id="ID015" data-bs-target="#carouselExampleControls" data-bs-slide="prev" [disabled]="viewMode">
-                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                              <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" id="ID016" data-bs-target="#carouselExampleControls" data-bs-slide="next" [disabled]="viewMode">
-                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                              <span class="visually-hidden">Next</span>
-                            </button>
-                          </div>
-                          <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)" multiple [disabled]="viewMode">
-                        </div>
-                      </div>
-                       -->
+                    <!-- image -->
                     <div class="col-md-2">
                         <div class="container">
                             <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel"
@@ -653,13 +558,6 @@
                         <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
                             (change)="onFileChangedimage($event)" multiple [readonly]="viewMode" />
                     </button>
-
-                    <!-- <button type="button" id="ID017" [disabled]="viewMode"
-                            class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
-                            Image
-                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
-                                (change)="onFileChangedimage($event)" multiple [readonly]="viewMode" />
-                        </button> -->
                 </div>
             </div>
         </div>
