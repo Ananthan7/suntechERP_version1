@@ -98,7 +98,7 @@
                         $event,
                         groupCodeData,
                         ['group1'],
-                        ['ACCODE']
+                        ['CODE']
                       )
                     "
                     (keydown)="openTab($event, 'group1')"
@@ -109,7 +109,7 @@
                     #overlayGroupOne
                     [MasterSearchData]="groupCodeData"
                     class="masterSearch"
-                    (newRowClick)="lookupSelect($event, ['group1'], ['ACCODE'])"
+                    (newRowClick)="lookupSelect($event, ['group1'], ['CODE'])"
                   ></master-search>
                 </mat-form-field>
               </div>
@@ -132,7 +132,7 @@
                         $event,
                         groupCodeData,
                         ['group2'],
-                        ['ACCODE']
+                        ['CODE']
                       )
                     "
                     (keydown)="openTab($event, 'group2')"
@@ -143,7 +143,7 @@
                     #overlayGroupTwo
                     [MasterSearchData]="groupCodeData"
                     class="masterSearch"
-                    (newRowClick)="lookupSelect($event, ['group2'], ['ACCODE'])"
+                    (newRowClick)="lookupSelect($event, ['group2'], ['CODE'])"
                   ></master-search>
                 </mat-form-field>
               </div>
@@ -166,7 +166,7 @@
                         $event,
                         groupCodeData,
                         ['group3'],
-                        ['ACCODE']
+                        ['CODE']
                       )
                     "
                     (keydown)="openTab($event, 'group3')"
@@ -177,7 +177,7 @@
                     #overlayGroupThree
                     [MasterSearchData]="groupCodeData"
                     class="masterSearch"
-                    (newRowClick)="lookupSelect($event, ['group3'], ['ACCODE'])"
+                    (newRowClick)="lookupSelect($event, ['group3'], ['CODE'])"
                   ></master-search>
                 </mat-form-field>
               </div>
@@ -1564,7 +1564,6 @@
                                 matInput
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
-                                [readonly]="true"
                                 (change)="
                                   updateField($event, data, 'COSTCENTER')
                                 "
@@ -1576,7 +1575,7 @@
                           </div>
 
                           <!-- Exp Account Description Column -->
-                          <div *dxTemplate="let data of 'gpcAccodeTemp'">
+                          <div *dxTemplate="let data of 'gpcAccodeTemp'"> 
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
