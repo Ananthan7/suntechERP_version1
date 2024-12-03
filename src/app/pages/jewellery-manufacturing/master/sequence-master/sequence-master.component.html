@@ -11,8 +11,8 @@
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
         (deleteClick)="deleteSequenceMaster()"
         [isViewDelete]="editMode" [isViewSave]="!viewMode"
-        [isViewCancel]="!viewMode"
-        [isViewMore]="!viewMode" [isViewAttachment]="!viewMode"
+        [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+        [isViewAttachment]="!viewMode"
         (attachmentClick)="attachmentClicked()"></modal-header>
     <!-- component to upload attachment -->
     <attachment-upload (uploadSubmit)="uploadSubmited($event)"
@@ -215,7 +215,6 @@
                                     <input type="number"
                                         [disabled]="!data['isChecked']"
                                         [(ngModel)]="data['STD_LOSS']"
-                                        (change)="stdLossChanged(data)"
                                         MetalDecimalInput [readonly]="viewMode"
                                         style="text-align: right; width: 86px;" />
                                 </td>
