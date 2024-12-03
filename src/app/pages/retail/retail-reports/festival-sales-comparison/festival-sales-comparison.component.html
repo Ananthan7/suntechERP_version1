@@ -82,14 +82,23 @@
                         </dxo-summary>
                     </dx-data-grid>
 
-                    <dx-chart *ngIf="diamondDivisionDtlArr.length > 0" [dataSource]="diamondDivisionDtlArr">
-                        <dxi-series argumentField="SALES_AMOUNT" valueField="SALES_AMOUNT" type="bar">
+                    <dx-chart *ngIf="!isLoading" [dataSource]="diamondDivisionDtlArr">
+                        <dxi-series argumentField="FESTIVAL_CODE" valueField="SALES_AMOUNT" type="bar">
+                            <dxo-label [visible]="true" [position]="'outside'"></dxo-label>
                         </dxi-series>
-                    
-                        <dxo-legend [visible]="true"></dxo-legend>
-                        <dxo-tooltip [enabled]="true"></dxo-tooltip>
-                        <!-- <dxo-title text="Branch Code vs Value"></dxo-title> -->
+                      
+                        <dxi-series argumentField="FESTIVAL_CODE" valueField="QTY" type="bar">
+                            <dxo-label [visible]="true" [position]="'outside'"></dxo-label>
+                        </dxi-series>
+                      
+                        <dxi-series argumentField="FESTIVAL_CODE" valueField="GP" type="bar">
+                            <dxo-label [visible]="true" [position]="'outside'"></dxo-label>
+                        </dxi-series>
+                      
+                        
                     </dx-chart>
+                      
+                      
                 </mat-tab>
                 <mat-tab label="Metal Division">
                 </mat-tab>
