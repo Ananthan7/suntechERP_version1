@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-pos-sales-stock-comparison',
@@ -34,10 +37,14 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
 
-  constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder) { }
+  constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService, private commonService: CommonServiceService,  private toastr: ToastrService,
+  ) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
+    this.apiCallFunction();
+    
   }
 
   close(data?: any) {
@@ -135,6 +142,34 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
 
   onTabChange(event: any){
 
+  }
+
+  apiCallFunction(){
+    this.isLoading = true;
+    let APIurl = "PosSalesAndStockComparison";
+    let postData = {
+      "parameter": {
+        "frmDate": "2024-11-30",
+        "toDate": "2024-11-30",
+        "strBranch": "ALL",
+        "mtlType": "Type",
+        "diaType": "Type",
+        "transaction": 0
+      }
+    }
+
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI(APIurl, postData)
+    .subscribe((response: any) => {
+      if(response.status == 'Failed'){
+        this.toastr.error(response.message);
+        this.isLoading = false;
+        return
+      }
+      else{
+        this.isLoading = false;
+      }
+    })
   }
 
  saveTemplate(){

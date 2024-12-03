@@ -156,9 +156,49 @@ export class RefiningChargePostingComponent implements OnInit {
 
   setPostData() {
     let form = this.refiningChargePostingMasterForm.value;
-
-    return {};
+  
+    let postData = {
+      MID: this.commonService.emptyToZero(this.content?.MID),
+      VOCTYPE: this.commonService.nullToString(form.vocType.toUpperCase()),
+      VOCNO: this.commonService.emptyToZero(form.vocNumber),
+      VOCDATE: this.commonService.nullToString(form.vocDate),
+      YEARMONTH: this.commonService.nullToString(form.yearMonth),
+      PARTYCODE: this.commonService.nullToString(form.partNumber.toUpperCase()),
+      SALESPERSON_CODE: this.commonService.nullToString(form.salesMan.toUpperCase()),
+      PARTY_CURRENCY: this.commonService.nullToString(form.currency.toUpperCase()),
+      AUTOPOSTING: form.checkBox1 === true ? 1 : 0,
+      AUTHORIZEDPOSTING: form.checkBox2 === true ? 1 : 0,
+      SYSTEM_DATE: new Date(),
+      SERVICE_CODE: this.commonService.nullToString(form.serviceCode.toUpperCase()),
+      // Details: [
+      //   {
+      //     UNIQUEID: 0,
+      //     REFCHRG_CODE: this.commonService.nullToString(form.refChargeCode || ""),
+      //     REFCHRG_TYPE: form.refChargeType === true ? 1 : 0,
+      //     REFINE_RATEFC: this.commonService.emptyToZero(form.refineRateFC),
+      //     REFINE_RATECC: this.commonService.emptyToZero(form.refineRateCC),
+      //     REFINE_AMOUNTFC: this.commonService.emptyToZero(form.refineAmountFC),
+      //     REFINE_AMOUNTCC: this.commonService.emptyToZero(form.refineAmountCC),
+      //     CGST_PER: this.commonService.emptyToZero(form.cgstPercent),
+      //     CGST_AMOUNTFC: this.commonService.emptyToZero(form.cgstAmountFC),
+      //     CGST_AMOUNTCC: this.commonService.emptyToZero(form.cgstAmountCC),
+      //     SGST_PER: this.commonService.emptyToZero(form.sgstPercent),
+      //     SGST_AMOUNTFC: this.commonService.emptyToZero(form.sgstAmountFC),
+      //     SGST_AMOUNTCC: this.commonService.emptyToZero(form.sgstAmountCC),
+      //     IGST_PER: this.commonService.emptyToZero(form.igstPercent),
+      //     IGST_AMOUNTFC: this.commonService.emptyToZero(form.igstAmountFC),
+      //     IGST_AMOUNTCC: this.commonService.emptyToZero(form.igstAmountCC),
+      //     TOTAL_AMOUNTFC: this.commonService.emptyToZero(form.totalAmountFC),
+      //     TOTAL_AMOUNTCC: this.commonService.emptyToZero(form.totalAmountCC),
+      //     GST_CODE: this.commonService.nullToString(form.gstCode || ""),
+      //     HSN_CODE: this.commonService.nullToString(form.hsnCode || ""),
+      //   },
+      // ],
+    };
+  
+    return postData;
   }
+  
   formSubmit() {
     if (this.content && this.content.FLAG == "VIEW") return;
     if (this.content && this.content.FLAG == "EDIT") {

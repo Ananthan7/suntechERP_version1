@@ -69,7 +69,7 @@ export class RetailReportsComponent implements OnInit {
     };
  
     this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
-      console.log('Retailsales API call data', response);
+      // console.log('Retailsales API call data', response);
       this.ReportVouchers = response.dynamicData[0] || [];
 
   
