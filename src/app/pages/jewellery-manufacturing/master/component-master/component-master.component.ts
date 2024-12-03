@@ -401,7 +401,6 @@ export class ComponentMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.content)
     this.setInitialValues();
     // this.getDesignDetails();
     this.renderer.selectRootElement('#code')?.focus();
@@ -429,7 +428,6 @@ export class ComponentMasterComponent implements OnInit {
   divisionCodeSelected(value: any, data: any, controlName: string) {
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
     // this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
-    console.log(value.DIVISION_CODE);
 
     if (value.DIVISION === 'M') {
       this.isPCSDisabled = true;
@@ -458,7 +456,6 @@ export class ComponentMasterComponent implements OnInit {
   uploadSubmited(file: any) {
 
     this.Attachedfile = file
-    console.log(this.Attachedfile);
 
   }
   stockClicked(param: any) {
@@ -539,7 +536,6 @@ export class ComponentMasterComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             // this.commonService.toastSuccessByText('Last number updated')
-            console.log('Last number updated');
 
           }
         } else {
@@ -623,12 +619,10 @@ export class ComponentMasterComponent implements OnInit {
 
   categoryCodeSelected(e: any) {
     if (this.checkCode()) return
-    console.log(e);
     this.componentmasterForm.controls.category.setValue(e.CODE);
   }
 
   codeCodeSelected(e: any) {
-    console.log(e);
     const prefixCode = e.PREFIX_CODE.toUpperCase();
     const des = e.DESCRIPTION.toUpperCase();
     this.componentmasterForm.controls.code.setValue(prefixCode);
@@ -638,21 +632,8 @@ export class ComponentMasterComponent implements OnInit {
   }
   typeCodeSelected(e: any) {
     if (this.checkCode()) return
-    console.log(e);
     this.componentmasterForm.controls.type.setValue(e.CODE);
   }
-
-  // sizeSetCodeSelected(e: any) {
-  //   if (this.checkCode()) return
-  //   console.log(e);
-
-  //   this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
-  //   console.log(this.componentmasterForm.value.sizeSet);
-
-  //   //this.sizeCodeData.WHERECONDITION = `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`;
-  //  // this.componentmasterForm.controls.PROD_INSTRUCTION.setValue(e.DESCRIPTION);
-  //  this.sizeCodeData.WHERECONDITION = COMPSIZE_CODE IN (SELECT COMPSIZE_CODE FROM COMPONENTSIZESET_DETAIL WHERE COMPSET_CODE = '${this.componentmasterForm.value.sizeSet}')
-  // }
 
   sizeSetCodeSelected(e: any) {
     if (this.checkCode()) return;
@@ -662,10 +643,8 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   getDesignDetails() {
-    console.log("this.content", this.content);
     // if (this.content.FLAG == "VIEW") this.viewOnly = true;
     // if (this.content.FLAG == "EDIT") {
-    //   console.log(this.comService.EditDetail.REASON);
     //   this.editOnly = true;
     // }
 
@@ -683,7 +662,6 @@ export class ComponentMasterComponent implements OnInit {
 
   sizeCodeSelected(e: any) {
     if (this.checkCode()) return
-    console.log(e);
 
     const apiDescription = e.DESCRIPTION;
 
@@ -700,19 +678,10 @@ export class ComponentMasterComponent implements OnInit {
     length = descriptionArray[1];
     radius = descriptionArray[3];
 
-
-    console.log("Height:", height);
-    console.log("Width:", width);
-    console.log("Length:", length);
-    console.log("Radius:", radius);
-
-
-
     const finalHeight = this.commonService.dataSplitPop(height);
     const finalWidth = this.commonService.dataSplitPop(width);
     const finalLength = this.commonService.dataSplitPop(length);
     const finalRadius = this.commonService.dataSplitPop(radius);
-
 
     this.componentmasterForm.controls.size.setValue(e.COMPSIZE_CODE);
     this.componentmasterForm.controls.height.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS, finalHeight));
@@ -728,7 +697,6 @@ export class ComponentMasterComponent implements OnInit {
   //   result.pop();
 
   //   let heightValue = result.join("");
-  //   console.log(heightValue);
   //   return heightValue;
 
   // }
@@ -736,26 +704,22 @@ export class ComponentMasterComponent implements OnInit {
 
   shapeCodeSelected(e: any) {
     if (this.checkCode()) return
-    console.log(e);
     this.componentmasterForm.controls.shape.setValue(e.CODE);
   }
 
   settingTypeCodeSelected(e: any) {
     if (this.checkCode()) return
-    console.log(e);
     this.componentmasterForm.controls.settingType.setValue(e.CODE);
   }
 
   processSeqCodeSelected(e: any) {
     if (this.checkCode()) return
-    console.log(e);
     this.componentmasterForm.controls.processSeq.setValue(e.SEQ_CODE);
   }
 
 
   costCenterCodeSelected(e: any) {
     if (this.checkCode()) return
-    console.log(e);
     this.componentmasterForm.controls.costCenter.setValue(e.COST_CODE);
   }
 
@@ -861,89 +825,18 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   onSelectionChanged(event: any) {
-    // const values: number[] = event.selectedRowKeys;
-    // const indexes: number[] = [];
-
-    // values.forEach((selectedValue: number) => {
-    //   const index = this.tableData.findIndex(item => parseFloat(item.SRNO) === selectedValue);
-
-    //   // Check if the value is not already in the selectedIndexes array
-    //   if (index !== -1 && !this.selectedIndexes.includes(index)) {
-    //     indexes.push(index);
-    //   }
-    // });
-
-    // this.selectedIndexes = indexes;
-    // console.log(this.selectedIndexes);
-
-
     const values = event.selectedRowKeys;
-    console.log(values);
     let indexes: Number[] = [];
     this.tableData.reduce((acc, value, index) => {
       if (values.includes(parseFloat(value.SRNO))) {
         acc.push(index);
-        console.log(acc);
       }
       return acc;
     }, indexes);
     this.selectedIndexes = indexes;
-    console.log(this.selectedIndexes);
   }
 
-  // deleteTableData() {
-  //   console.log('Selected indexes:', this.selectedIndexes);
-  //   if (this.selectedIndexes.length > 0) {
-  //     this.selectedIndexes.sort((a: number, b: number) => b - a);
-
-  //     console.log('Before deletion - tableData:', this.tableData);
-
-  //     this.selectedIndexes.forEach((indexToRemove: number) => {
-  //       console.log('Deleting index:', indexToRemove);
-  //       this.tableData.splice(indexToRemove, 2);
-  //     });
-
-  //     console.log('After deletion - tableData:', this.tableData);
-
-  //     this.selectedIndexes = [];
-  //   } else {
-  //     this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
-  //   }
-  // }
-
-  // deleteTableData() {
-  //   console.log('Selected indexes:', this.selectedIndexes);
-  //   if (this.selectedIndexes.length > 0) {
-
-  //     // Show the confirmation dialog before deleting
-  //     this.showConfirmationDialog().then((result) => {
-  //       if (result.isConfirmed) {
-  //         // Proceed with deletion if the user confirms
-  //         this.selectedIndexes.sort((a: number, b: number) => b - a);
-
-  //         console.log('Before deletion - tableData:', this.tableData);
-
-  //         this.selectedIndexes.forEach((indexToRemove: number) => {
-  //           console.log('Deleting index:', indexToRemove);
-  //           this.tableData.splice(indexToRemove, 2);
-  //         });
-
-  //         console.log('After deletion - tableData:', this.tableData);
-
-  //         this.selectedIndexes = [];
-  //         this.snackBar.open('Records deleted successfully', 'OK', { duration: 2000 });
-  //       }
-  //     });
-
-  //   } else {
-  //     this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
-  //   }
-  // }
-
-
   deleteTableData() {
-    console.log("After Selecting " + this.selectedIndexes);
-
     if (this.selectedIndexes !== undefined && this.selectedIndexes.length > 0) {
       // Display confirmation dialog before deleting
       Swal.fire({
@@ -958,23 +851,17 @@ export class ComponentMasterComponent implements OnInit {
         if (result.isConfirmed) {
           if (this.tableData.length > 0) {
             // Log the selected indexes before filtering
-            // console.log('Selected indexes to delete:', this.selectedIndexes);
 
             if (this.selectedIndexes && this.selectedIndexes.length > 0) {
-              // console.log('Before deletion, tableData length:', this.tableData.length);
 
               // Filter out items whose index is included in the selectedIndexes
               this.tableData = this.tableData.filter((data, index) => {
                 const shouldDelete = !this.selectedIndexes.includes(index);
-                // console.log(`Index ${index} - Should Delete: ${!shouldDelete}`);
                 return shouldDelete;
               });
 
-              // console.log('After deletion, tableData length:', this.tableData.length);
-              // console.log('Table data:', this.tableData);
               // Reset selectedIndexes after deletion
               this.selectedIndexes = [];
-              // console.log('Selected indexes after reset:', this.selectedIndexes);
 
               // Show success message after deletion
               this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
@@ -1630,12 +1517,10 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   update() {
-
     if (this.submitValidations(this.componentmasterForm.value)) return;
 
     let API = 'DesignMaster/UpdateDesignMaster/' + this.content.DESIGN_CODE
     let postData = this.setPostData()
-
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -1678,7 +1563,6 @@ export class ComponentMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           this.maindetails = result.dynamicData[0] || []
-          console.log(this.maindetails);
 
           // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
@@ -1801,7 +1685,6 @@ export class ComponentMasterComponent implements OnInit {
         }
 
         if (FORMNAME === 'code') {
-          // console.log("dsffds")
           this.prefixCodeValidate();
         }
 
@@ -1900,10 +1783,6 @@ export class ComponentMasterComponent implements OnInit {
   extColor(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].EXT_Color = data.target.value;
   }
-  // extColor(data: any, value: any) {
-  //   this.tableData[value.data.SRNO - 1].EXT_Color = data.target.value;
-  // }
-
   stockCodeValidate(event: any) {
     let postData = {
       "SPID": "082",
@@ -1948,7 +1827,6 @@ export class ComponentMasterComponent implements OnInit {
 
   onFileChanged(event: any) {
     this.url = event.target.files[0].name
-    console.log(this.url)
     let reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
       let file = event.target.files[0];
@@ -1958,13 +1836,6 @@ export class ComponentMasterComponent implements OnInit {
       };
     }
   }
-
-
-  // lookupKeyPress(event: KeyboardEvent) {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //   }
-  // }
 
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {
@@ -2013,38 +1884,6 @@ export class ComponentMasterComponent implements OnInit {
     }
   }
 
-
-
-  // showOverleyPanel(event: any, formControlName: string) {
-
-  //   if (formControlName == 'codedes') {
-  //     this.overlaycodedescSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'sizeSet') {
-  //     this.overlaysizeSetSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'type') {
-  //     this.overlaytypeSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'size') {
-  //     this.overlaysizeSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'category') {
-  //     this.overlaycategorySearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'shape') {
-  //     this.overlayshapeSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'settingType') {
-  //     this.overlaysettingTypeSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'processSeq') {
-  //     this.overlayprocessSeqSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'costCenter') {
-  //     this.overlaycostCenterSearch.showOverlayPanel(event)
-  //   }
-  // }
 }
 
 
