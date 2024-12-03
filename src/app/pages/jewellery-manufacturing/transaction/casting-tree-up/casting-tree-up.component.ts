@@ -73,14 +73,18 @@ export class CastingTreeUpComponent implements OnInit {
   processCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
+    LOOKUPID: 277,
     SEARCH_FIELD: 'process_code',
     SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "PROCESS_CODE<> ''",
+    WHERECONDITION: `@strProcessCode='',@strWorkerCode =''`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+  }
+  setProcessCodeWhereCondition() {
+    let form = this.castingTreeUpFrom.value;
+    this.processCodeData.WHERECONDITION =` @strProcessCode='${form.processCode}',@strWorkerCode='${form.worker}'`
   }
 
 
@@ -465,7 +469,7 @@ export class CastingTreeUpComponent implements OnInit {
     console.log(e);
     this.castingTreeUpFrom.controls.processCode.setValue(e.Process_Code);
     this.castingTreeUpFrom.controls.toProcess.setValue(e.Process_Code)
-    this.processCodeValidate()
+    this.setProcessCodeWhereCondition()
   }
 
   WorkerCodeSelected(e: any) {
@@ -724,9 +728,10 @@ export class CastingTreeUpComponent implements OnInit {
     };
     let form = this.castingTreeUpFrom.value;
     let postData = {
-      "SPID": "205",
+      "SPID": "206",
       "parameter": {
-        '@PROCESSCODE': this.commonService.nullToString(form.processCode),
+        strProcessCode : this.commonService.nullToString(form.processCode),
+        strWorkerCode : this.commonService.nullToString(form.worker)
      
       }
     }
@@ -923,12 +928,13 @@ calculateTreeMode() {
 }
 
 calcualteBaseMode(event: any) {
-  console.log("output changed1: ", event.target.value);
-  var base = event.target.value;
-  var tree = this.castingTreeUpFrom.value.tree;
-  this.castingTreeUpFrom.controls.waxWt.setValue(tree - base);
-  this.validateBaseWeight(event)
+  const base = parseFloat((event.target.value || '').replace(/,/g, '')) || 0;
+  const tree = parseFloat((this.castingTreeUpFrom.value.tree || '').replace(/,/g, '')) || 0;
+  const waxWt = tree - base;
+  this.castingTreeUpFrom.controls.waxWt.setValue(waxWt);
+  this.validateBaseWeight(event);
 }
+
 validateBaseWeight(event: any) {
   const treeValue: number = parseFloat(this.castingTreeUpFrom.value.tree);
   const baseValue: number = parseFloat(this.castingTreeUpFrom.value.base);
