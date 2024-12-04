@@ -26,7 +26,7 @@
                                         Model Code :</label>
                                     <div class="col-sm-3">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input [readonly]="viewMode" type="text" #codeInput matInput formControlName="model_code"
+                                            <input [readonly]="viewMode" [maxlength]="6" type="text" #codeInput matInput formControlName="model_code"
                                                 UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>
                                     </div>

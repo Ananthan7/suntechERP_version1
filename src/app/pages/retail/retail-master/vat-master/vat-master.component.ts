@@ -1063,7 +1063,6 @@ export class VatMasterComponent implements OnInit {
       },
       (err) => {
         console.error("Error fetching data:", err);
-        this.commonService.toastErrorByMsgId("MSG1531");
       }
     );
   }
