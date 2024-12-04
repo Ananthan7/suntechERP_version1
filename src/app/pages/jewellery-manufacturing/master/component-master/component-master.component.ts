@@ -447,6 +447,7 @@ export class ComponentMasterComponent implements OnInit {
     return true
   }
   Attachedfile: any[] = [];
+  AttachedfileGrid: any[] = [];
   savedAttachments: any[] = [];
 
   attachmentClicked() {
@@ -1490,10 +1491,10 @@ export class ComponentMasterComponent implements OnInit {
       this.formdata.append(`Model.Type`, this.commonService.nullToString(form.VOCTYPE));
       this.formdata.append(`Model.Code`, this.commonService.nullToString(form.code));
       if (this.Attachedfile.length > 0) {
-        for (let i: number = 0; i < this.Attachedfile.length; i++) {
-          this.formdata.append(`Model.imageData[0].Picture_name`, 'test');
-          this.formdata.append(`Model.imageData[0].DefaultPicture`, 'true');
-          this.formdata.append(`Model.imageData[0].Picture_Type`, 'jgp');
+        for (let i: number = 0; i < this.AttachedfileGrid.length; i++) {
+          this.formdata.append('Model.imageData[' + i + '].Picture_name', 'test');
+          this.formdata.append('Model.imageData[' + i + '].DefaultPicture', 'true');
+          this.formdata.append('Model.imageData[' + i + '].Picture_Type', 'jgp');
         }
         for (let i: number = 0; i < this.Attachedfile.length; i++) {
           this.formdata.append("Model.Images[" + i + "].Image.File", this.Attachedfile[i]);
@@ -1707,6 +1708,13 @@ export class ComponentMasterComponent implements OnInit {
       const file: File = input.target.files[0];
       for (let x = 0; x < input.target.files.length; x++) {
         this.Attachedfile.push(file);
+        this.AttachedfileGrid.push({ 
+          SRNO: x + 1, 
+          FILE: file,
+          DEFAULT: false,
+          DEFAULTFLAG: false, 
+          PICTURE_TYPE: '' 
+        });
       }
       this.onFileChangedBase64(input)
     }
@@ -1757,12 +1765,19 @@ export class ComponentMasterComponent implements OnInit {
       backdrop: false,
     });
   }
- 
+
   defaultCheckboxChange(data: any, value: any) {
-    if(value.rowIndex){
+    if (value.rowIndex) {
       this.Attachedfile
     }
-    this.tableData[value.data.SRNO - 1].STOCK_FCCOST = data.target.value;
+    // this.AttachedfileGrid[value.data.SRNO - 1].DEFAULT = data.target.value;
+    this.AttachedfileGrid.forEach((item:any,index:number)=>{
+      if(value.rowIndex == index+1){
+        item.DEFAULT = true
+      }else{
+        item.DEFAULT = false
+      }
+    })
   }
   stoneType(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].STOCK_FCCOST = data.target.value;

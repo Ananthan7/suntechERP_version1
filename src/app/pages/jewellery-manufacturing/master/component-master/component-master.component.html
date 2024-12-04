@@ -846,26 +846,49 @@
             </div>
             <div class="row">
                 <dx-data-grid id="gridContainer"
-                    [dataSource]="Attachedfile"
+                    [dataSource]="AttachedfileGrid"
                     [showRowLines]="true"
-                    height="150" [columnAutoWidth]="true"
+                    height="300" [columnAutoWidth]="true"
                     [showBorders]="true"
                     [allowColumnResizing]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-selection mode="single"></dxo-selection>
-                    <dxi-column dataField="name"
-                        caption="Name"
-                        alignment="left">
-                    </dxi-column>
-                    <dxi-column dataField="Default"
-                        cellTemplate="defualtAttach" caption="Default"
-                        [allowEditing]="true"
+                    <!-- <dxo-selection mode="single"></dxo-selection> -->
+                    <dxi-column dataField="FILE"
+                        caption="Attachment" cellTemplate="FILEtemplate"
                         alignment="center">
+                        <div *dxTemplate="let data of 'FILEtemplate'">
+                            <div 
+                                *ngFor="let img of images; let i = index"
+                                [class.active]="i === 0">
+                                <div class="upload-btn-wrapper">
+                                        <img [src]="img"
+                                            style="width:126px;height:124px">
+                                </div>
+                            </div>
+                        </div>
                     </dxi-column>
-                    <div *dxTemplate="let data of 'defualtAttach'">
-                        <mat-checkbox (change)="defaultCheckboxChange($event,data)">
-                        </mat-checkbox>
-                    </div>
+                    <dxi-column dataField="DEFAULT"
+                        cellTemplate="DEFAULTtemplate" caption="Default"
+                        [allowEditing]="false"
+                        alignment="center">
+                        <div *dxTemplate="let data of 'DEFAULTtemplate'">
+                            <mat-checkbox [disabled]="data.data.DEFAULTFLAG"
+                                (change)="defaultCheckboxChange($event,data)">
+                            </mat-checkbox>
+                        </div>
+                    </dxi-column>
+                    <dxi-column dataField="PICTURE_TYPE"
+                        cellTemplate="PICTURE_TYPEtemplate" caption="Type"
+                        [allowEditing]="false"
+                        alignment="center">
+                        <div *dxTemplate="let data of 'PICTURE_TYPEtemplate'">
+                            <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                                <mat-select >
+                                  <mat-option value=0></mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </dxi-column>
                 </dx-data-grid>
             </div>
         </div>

@@ -281,19 +281,17 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.remarks.setValue(this.content.D_REMARKS)
     this.stoneIssueDetailsFrom.controls.amount.setValue(this.content.AMOUNTLC)
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(this.content.DIVCODE)
-    this.stoneIssueDetailsFrom.controls.carat.setValue(this.content.GROSS_WT)
     this.stoneIssueDetailsFrom.controls.otheratt.setValue(this.content.OTHER_ATTR)
     this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(this.content.PART_CODE)
     this.stoneIssueDetailsFrom.controls.batchid.setValue(this.content.SUB_STOCK_CODE)
     this.stoneIssueDetailsFrom.controls.consignment.setValue(this.content.CONSIGNMENT)
+    this.setValueWithDecimal('carat', this.content.GROSS_WT, 'STONE')
     this.setValueWithDecimal('unitrate', 0, 'AMOUNT')
     this.setValueWithDecimal('amount', 0, 'AMOUNT')
-    this.setValueWithDecimal('pointerwt', 0, 'FOUR')
     this.setValueWithDecimal('stockbal', 0, 'THREE')
-    this.setValueWithDecimal('carat', 0, 'METAL')
     this.getImageData()
-    this.CollectPointerWtValidation()
     this.CollectRate()
+    this.CollectPointerWtValidation()
   }
 
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
@@ -369,7 +367,7 @@ export class StoneIssueDetailComponent implements OnInit {
   divCodeSelected(e: any) {
     if (this.checkCode()) return
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Division_Code);
-    this.divisionCodeValidate(event)
+    this.divisionCodeValidate()
 
   }
   subJobNoCodeSelected(e: any) {
@@ -819,7 +817,8 @@ export class StoneIssueDetailComponent implements OnInit {
           if (result.status === "Success" && result.dynamicData && result.dynamicData.length > 0) {
             let data = result.dynamicData[0]
             let pointerWeight = data[0].POINTERWEIGHT;
-            this.stoneIssueDetailsFrom.controls.pointerwt.setValue(pointerWeight);
+            this.setValueWithDecimal('pointerwt', pointerWeight, 'FOUR')
+
             // let pcs = data[0].PCS;
             // this.stoneIssueDetailsFrom.controls.pieces.setValue(pcs)
 
@@ -836,16 +835,17 @@ export class StoneIssueDetailComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-  divisionCodeValidate(event: any) {
+  divisionCodeValidate(event?: any) {
     const divisionCode = event.target.value?.trim();
     this.clearStockDetails();
-    if (!divisionCode) return;
+    let form = this.stoneIssueDetailsFrom.value;
+    if (!form.DIVCODE) return;
     const postData = {
       SPID: "135",
       parameter: {
-        SubJobNumber: this.stoneIssueDetailsFrom.value.subjobnumber || '',
-        DivisionCode: divisionCode,
-        DesignType: this.stoneIssueDetailsFrom.value.DESIGN_TYPE || '',
+        SubJobNumber: this.comService.nullToString(form.subjobnumber),
+        DivisionCode: this.comService.nullToString(form.DIVCODE),
+        DesignType: this.comService.nullToString(form.DESIGN_TYPE),
       },
     };
     this.comService.showSnackBarMsg('MSG81447');
