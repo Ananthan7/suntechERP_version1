@@ -111,7 +111,7 @@ export class MeltingIssueComponent implements OnInit {
     WHERECONDITION: "ISNULL(PROCESS_TYPE, '') = '3'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    
+
   }
 
   MeltingCodeData: MasterSearchModel = {
@@ -437,6 +437,13 @@ export class MeltingIssueComponent implements OnInit {
         }
       });
   }
+  formatMainGrid() {
+    this.meltingISsueDetailsData.forEach((item: any, index: any) => {
+      item.GROSS_WT = this.comService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
+      item.NET_WT = this.comService.setCommaSerperatedNumber(item.NET_WT, 'METAL')
+      item.PURITY = this.comService.setCommaSerperatedNumber(item.PURITY, 'PURITY')
+    })
+  }
 
   /**USE: to set currency from company parameter */
   // setCompanyCurrency() {
@@ -520,13 +527,13 @@ export class MeltingIssueComponent implements OnInit {
     this.meltingIssueFrom.controls.workerdes.setValue(e.DESCRIPTION);
     this.WorkerCodeValidate()
   }
-  workerWhereCondtion(){
+  workerWhereCondtion() {
     let form = this.meltingIssueFrom.value
     console.log(form, 'form')
     this.workerCodeData.WHERECONDITION = `@strProcess='${form.processcode}'`
   }
 
-  
+
   WorkerCodeValidate(event?: any) {
     if (event && event.target.value == '') {
       return
@@ -657,6 +664,7 @@ export class MeltingIssueComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1358'); // Custom message ID for job number empty error
       return; // Stop further execution
     }
+    this.formatMainGrid()
     if (dataToChild) {
       dataToChild.FLAG = this.content?.FLAG || 'EDIT'
       dataToChild.HEADERDETAILS = this.meltingIssueFrom.value;
@@ -745,7 +753,7 @@ export class MeltingIssueComponent implements OnInit {
     if (this.meltingISsueDetailsData.length > 0) {
       this.isFieldsReadonly = true; // Use this flag in the template
     }
-  
+
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
       this.commonService.showSnackBarMsg('MSG81512')

@@ -121,7 +121,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.meltingIssuedetailsFrom.controls.tostock.setValue(e.DESCRIPTION);
     this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.DESCRIPTION);
     this.meltingIssuedetailsFrom.controls.mainstock.setValue(e.STOCK_CODE);
-    this.setLookup201WhereCondition()
+    this.stockCodeValidate(event)
 
   }
 
@@ -566,7 +566,10 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   stockCodeValidate(event: any) {
     if (this.viewMode) return;
-    if (event.target.value == '') return
+    if (event && event.target.value == '') {
+      this.showOverleyPanel(event, 'stockcode');
+      return
+    };
     this.setLookup201WhereCondition()
     let postData = {
       "SPID": "112",
@@ -584,30 +587,31 @@ export class MeltingIssueDetailsComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg();
-        if (result.status === "Success" && result.dynamicData[0]) {
-          let data = result.dynamicData[0];
-          if (data) {
-            console.log(data, 'data');
-            if (data[0].VALID_STOCK === 0) {
-              this.overlaystockcodeSearch.closeOverlayPanel();
-              this.meltingIssuedetailsFrom.controls.stockcode.setValue('');
-              this.comService.toastErrorByMsgId('MSG1531');
-              this.showOverleyPanel(event, 'stockCode');
-            } else {
-              let stockDetails = data[0];
-              this.meltingIssuedetailsFrom.controls.stockdes.setValue(stockDetails.Description); 
-            }
-          } else {
-            this.comService.toastErrorByMsgId('MSG1531');
-            this.meltingIssuedetailsFrom.controls.stockcode.setValue('');
+        if (result.status === "Success" && result.dynamicData) {
+          const stockDetails = result.dynamicData[2][0];
+          if (stockDetails.length === 0) {
+            this.overlaystockcodeSearch.closeOverlayPanel();
+            this.meltingIssuedetailsFrom.controls.stockcode.setValue('');  
+            this.comService.toastErrorByMsgId('MSG1531');  
             this.showOverleyPanel(event, 'stockcode');
+
+          } else {
+            let data = stockDetails;
+            this.meltingIssuedetailsFrom.controls.stockdes.setValue(data.DESCRIPTION);
+            this.meltingIssuedetailsFrom.controls.mainstock.setValue(data.MAIN_STOCK_CODE.toUpperCase());
+            this.meltingIssuedetailsFrom.controls.purity.setValue(data.PURITY);
           }
-        } 
+
+        } else {
+          this.overlaystockcodeSearch.closeOverlayPanel();
+          this.comService.toastErrorByMsgId('MSG1747');  
+          this.meltingIssuedetailsFrom.controls.stockCode.setValue('');  
+        }
       }, err => {
         this.comService.closeSnackBarMsg();
-        this.comService.toastErrorByMsgId('MSG1531');
-        this.meltingIssuedetailsFrom.controls.stockcode.setValue('');
-        this.showOverleyPanel(event, 'stockcode');
+        this.comService.toastErrorByMsgId('MSG1531'); 
+        this.meltingIssuedetailsFrom.controls.stockCode.setValue(''); 
+        this.showOverleyPanel(event, 'stockCode'); 
       });
 
     this.subscriptions.push(Sub);

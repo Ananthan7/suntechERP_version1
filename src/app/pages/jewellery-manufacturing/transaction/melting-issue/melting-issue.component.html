@@ -68,551 +68,553 @@
                                         #vocdate>
                                     </mat-datepicker>
                                 </mat-form-field>
-                                </div>
-                                <!-- <div class="col-md-4">
+                            </div>
+                            <!-- <div class="col-md-4">
                                  <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="time" matInput formControlName="voctime" />
                                 </mat-form-field>
 
                             </div> -->
-                            </div>
-                            <div class="row">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label">Melting
-                                    Type:</label>
-                                <div class="col-md-8">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="meltingtype"
-                                            UpperCaseDirective
-                                            [readonly]="isFieldsReadonly"  #codeInput1
-                                            (keydown)="lookupKeyPress($event,'meltingtype')"
-                                            (focusout)="meltingTypeValidate($event)" />
-                                        <master-search class="masterSearch"
-                                            [MasterSearchData]="MeltingCodeData"
-                                            #overlayMeltingType
-                                            *ngIf="!viewMode"
-                                            (newRowClick)="MeltingCodeSelected($event)"></master-search>
-                                    </mat-form-field>
-
-                                </div>
-                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="row">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label">Job Number
-                                    :</label>
-                                <div class="col-md-4">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="jobno"
-                                            maxlength="12"
-                                            [readonly]="isFieldsReadonly" class="left"
-                                            (keydown)="lookupKeyPress($event,'jobno')"
-                                            (focusout)="jobNumberValidate($event)" />
-                                        <master-search class="masterSearch"
-                                            [MasterSearchData]="jobnoCodeData"
-                                            *ngIf="isJobNumberSearchVisible && !viewMode"
-                                            #overlayjobNoSearch
-                                            (newRowClick)="jobnoCodeSelected($event)"></master-search>
-                                    </mat-form-field>
-
-                                </div>
-                                <div class="col-md-4">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="jobdes"
-                                            maxlength="20" readonly />
-                                    </mat-form-field>
-                                </div>
-
-                            </div>
-                            <div class="row">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label">Process
-                                    :</label>
-                                <div class="col-md-4">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="processcode"
-                                            UpperCaseDirective
-                                            [readonly]="viewMode" maxlength="6"
-                                            (keydown)="lookupKeyPress($event,'processcode')"
-                                            (focusout)="ProcesscodeValidate($event)" />
-                                        <master-search class="masterSearch"
-                                            [MasterSearchData]="ProcessCodeData"
-                                            #overlayprocesscode
-                                            *ngIf="!viewMode"
-                                            (newRowClick)="ProcessCodeSelected($event)"></master-search>
-                                    </mat-form-field>
-
-                                </div>
-                                <div class="col-md-4">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="processdes"
-                                            maxlength="20" readonly />
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label">Worker
-                                    :</label>
-                                <div class="col-md-4">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="worker"
-                                            maxlength="6"
-                                            [readonly]="viewMode"
-                                            UpperCaseDirective
-                                            (keydown)="lookupKeyPress($event,'worker')"
-                                            (focusout)="WorkerCodeValidate($event)" />
-                                        <master-search class="masterSearch"
-                                            [MasterSearchData]="workerCodeData"
-                                            #overlayworkercode *ngIf="!viewMode"
-                                            (newRowClick)="WorkerCodeSelected($event)"></master-search>
-                                    </mat-form-field>
-
-                                </div>
-                                <div class="col-md-4">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="workerdes"
-                                            maxlength="20" readonly />
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="row">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label">Sub Job No *
-                                    :</label>
-                                <div class="col-md-4">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="subjobno"
-                                            maxlength="20"
-                                            class="text-left" NumberOnly
-                                            readonly />
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-md-4">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="subjobnodes"
-                                            maxlength="20" readonly />
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label">Color
-                                    :</label>
-                                <div class="col-md-2">
-                                    <mat-form-field appearance="outline"
-                                        style="width:112%;">
-                                        <input type="text" matInput
-                                            formControlName="color" readonly />
-                                    </mat-form-field>
-                                </div>
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label">Job Purity
-                                    :</label>
-                                <div class="col-md-2"
-                                    style="margin-top: 12px; margin-left: -62px;">
+                        <div class="row">
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Melting
+                                Type:</label>
+                            <div class="col-md-8">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="jobpurity"
-                                        PurityDecimal readonly />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <label for="inputPassword"
-                                    class="col-sm-4 col-form-label">Time
-                                    :</label>
-                                <div class="col-md-4">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 70%;">
-                                        <input type="text" matInput
-                                            formControlName="time" readonly />
-                                    </mat-form-field>
-                                </div>
+                                        formControlName="meltingtype"
+                                        UpperCaseDirective
+                                        [readonly]="isFieldsReadonly"
+                                        #codeInput1
+                                        (keydown)="lookupKeyPress($event,'meltingtype')"
+                                        (focusout)="meltingTypeValidate($event)" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="MeltingCodeData"
+                                        #overlayMeltingType
+                                        *ngIf="!viewMode"
+                                        (newRowClick)="MeltingCodeSelected($event)"></master-search>
+                                </mat-form-field>
+
                             </div>
                         </div>
                     </div>
-                    <div class="row py-2 border-top justify-content-between">
-                        <div class="col-md-3 d-flex">
-                            <menu-buttons *ngIf="!viewMode" [viewAddBtn]="true"
-                                [viewDeleteBtn]="true"
-                                [viewImportBtn]="false"
-                                (addClick)="openaddMeltingIssueDetails()"
-                                (deleteClick)="deleteTableData()">
-                            </menu-buttons>
+                    <div class="col-md-4">
+                        <div class="row">
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Job Number
+                                :</label>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="jobno"
+                                        maxlength="12"
+                                        [readonly]="isFieldsReadonly"
+                                        class="left"
+                                        (keydown)="lookupKeyPress($event,'jobno')"
+                                        (focusout)="jobNumberValidate($event)" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="jobnoCodeData"
+                                        *ngIf="isJobNumberSearchVisible && !viewMode"
+                                        #overlayjobNoSearch
+                                        (newRowClick)="jobnoCodeSelected($event)"></master-search>
+                                </mat-form-field>
+
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="jobdes"
+                                        maxlength="20" readonly />
+                                </mat-form-field>
+                            </div>
+
                         </div>
+                        <div class="row">
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Process
+                                :</label>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="processcode"
+                                        UpperCaseDirective
+                                        [readonly]="viewMode" maxlength="6"
+                                        (keydown)="lookupKeyPress($event,'processcode')"
+                                        (focusout)="ProcesscodeValidate($event)" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="ProcessCodeData"
+                                        #overlayprocesscode
+                                        *ngIf="!viewMode"
+                                        (newRowClick)="ProcessCodeSelected($event)"></master-search>
+                                </mat-form-field>
 
-                        <div class="col-md-3 text-end">
-                            <button
-                                class="btn btn-primary add-btn">Allocate</button>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="processdes"
+                                        maxlength="20" readonly />
+                                </mat-form-field>
+                            </div>
                         </div>
+                        <div class="row">
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Worker
+                                :</label>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="worker"
+                                        maxlength="6"
+                                        [readonly]="viewMode"
+                                        UpperCaseDirective
+                                        (keydown)="lookupKeyPress($event,'worker')"
+                                        (focusout)="WorkerCodeValidate($event)" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="workerCodeData"
+                                        #overlayworkercode *ngIf="!viewMode"
+                                        (newRowClick)="WorkerCodeSelected($event)"></master-search>
+                                </mat-form-field>
 
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <dx-data-grid #dataGrid id="gridContainer"
-                                        [showBorders]="true"
-                                        [showRowLines]="true"
-                                        (onRowClick)="onRowClickHandler($event)"
-                                        (onRowDblClick)="onRowDoubleClickHandler($event)"
-                                        [allowColumnReordering]="true"
-                                        [allowColumnResizing]="true"
-                                        height="200"
-                                        [dataSource]="meltingISsueDetailsData">
-                                        <dxo-paging
-                                            [enabled]="false"></dxo-paging>
-                                        <!-- <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing> -->
-                                        <dxo-selection
-                                            mode="single"></dxo-selection>
-                                        <dxo-scrolling
-                                            mode="virtual"></dxo-scrolling>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="workerdes"
+                                        maxlength="20" readonly />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row">
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Sub Job No *
+                                :</label>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="subjobno"
+                                        maxlength="20"
+                                        class="text-left" NumberOnly
+                                        readonly />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="subjobnodes"
+                                        maxlength="20" readonly />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Color
+                                :</label>
+                            <div class="col-md-2">
+                                <mat-form-field appearance="outline"
+                                    style="width:112%;">
+                                    <input type="text" matInput
+                                        formControlName="color" readonly />
+                                </mat-form-field>
+                            </div>
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Job Purity
+                                :</label>
+                            <div class="col-md-2"
+                                style="margin-top: 12px; margin-left: -62px;">
+                                <input type="text" matInput
+                                    formControlName="jobpurity"
+                                    PurityDecimal readonly />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="inputPassword"
+                                class="col-sm-4 col-form-label">Time
+                                :</label>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline"
+                                    style="width: 70%;">
+                                    <input type="text" matInput
+                                        formControlName="time" readonly />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row py-2 border-top justify-content-between">
+                    <div class="col-md-3 d-flex">
+                        <menu-buttons *ngIf="!viewMode" [viewAddBtn]="true"
+                            [viewDeleteBtn]="true"
+                            [viewImportBtn]="false"
+                            (addClick)="openaddMeltingIssueDetails()"
+                            (deleteClick)="deleteTableData()">
+                        </menu-buttons>
+                    </div>
 
-                                        <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}"
+                    <div class="col-md-3 text-end">
+                        <button
+                            class="btn btn-primary add-btn">Allocate</button>
+                    </div>
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <dx-data-grid #dataGrid id="gridContainer"
+                                    [showBorders]="true"
+                                    [showRowLines]="true"
+                                    (onRowClick)="onRowClickHandler($event)"
+                                    (onRowDblClick)="onRowDoubleClickHandler($event)"
+                                    [allowColumnReordering]="true"
+                                    [allowColumnResizing]="true"
+                                    height="200"
+                                    [dataSource]="meltingISsueDetailsData">
+                                    <dxo-paging
+                                        [enabled]="false"></dxo-paging>
+                                    <!-- <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing> -->
+                                    <dxo-selection
+                                        mode="single"></dxo-selection>
+                                    <dxo-scrolling
+                                        mode="virtual"></dxo-scrolling>
+
+                                    <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}"
                                         caption="{{ data }}" [allowEditing]="true" alignment="left" [width]="100"
                                         backgroundcolor="#000">
                                     </dxi-column> -->
-                                        <dxi-column [width]="100"
-                                            dataField="SRNO" caption="SRNO"
-                                            alignment="left"></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="DIVCODE" caption="DIV"
-                                            alignment="left"></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="JOB_NUMBER"
-                                            caption="Job No"
-                                            alignment="left"></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="STOCK_DESCRIPTION"
-                                            caption="Stock Code"
-                                            alignment="left"></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="TOSTOCKCODE"
-                                            caption="Stock Description"
-                                            alignment="left"></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="Main Stock"
-                                            caption="Main Stock"
-                                            alignment="left"></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="PROCESS_CODE"
-                                            caption="Process"
-                                            alignment="left"></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="WORKER_CODE"
-                                            caption="Worker"
-                                            alignment="left"></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="PCS" caption="Pcs"
-                                            alignment="right"></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="GROSS_WT"
-                                            caption="Gross Weight"
-                                            alignment="right"
-                                            MetalDecimalInput></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="PURITY" caption="Purity"
-                                            alignment="right"
-                                            PurityDecimal></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="PUREWT"
-                                            caption="Pure Weight"
-                                            alignment="right"
-                                            MetalDecimalInput></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="Rate" caption="Rate"
-                                            alignment="right"
-                                            AmountDecimalInput></dxi-column>
-                                        <dxi-column [width]="100"
-                                            dataField="Amount" caption="Amount"
-                                            alignment="right"
-                                            AmountDecimalInput></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="SRNO" caption="SRNO"
+                                        alignment="left"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="DIVCODE" caption="DIV"
+                                        alignment="left"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="JOB_NUMBER"
+                                        caption="Job No"
+                                        alignment="left"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="STOCK_DESCRIPTION"
+                                        caption="Stock Code"
+                                        alignment="left"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="TOSTOCKCODE"
+                                        caption="Stock Description"
+                                        alignment="left"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="Main Stock"
+                                        caption="Main Stock"
+                                        alignment="left"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="PROCESS_CODE"
+                                        caption="Process"
+                                        alignment="left"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="WORKER_CODE"
+                                        caption="Worker"
+                                        alignment="left"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="PCS" caption="Pcs"
+                                        alignment="right"></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="GROSS_WT"
+                                        caption="Gross Weight"
+                                        alignment="right"
+                                        MetalDecimalInput></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="PURITY" caption="Purity"
+                                        alignment="right"
+                                        PurityDecimal></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="PUREWT"
+                                        caption="Pure Weight"
+                                        alignment="right"
+                                        MetalDecimalInput></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="Rate" caption="Rate"
+                                        alignment="right"
+                                        AmountDecimalInput></dxi-column>
+                                    <dxi-column [width]="100"
+                                        dataField="Amount" caption="Amount"
+                                        alignment="right"
+                                        AmountDecimalInput></dxi-column>
 
-                                        <dxo-summary>
-                                            <dxi-total-item column="Pcs"
-                                                summaryType="sum"
-                                                displayFormat="{0}">
-                                            </dxi-total-item>
-                                            <dxi-total-item column="GROSS_WT"
-                                                summaryType="sum"
-                                                [valueFormat]="gridMetalDecimalFormat"
-                                                displayFormat="{0}">
-                                            </dxi-total-item>
-                                            <dxi-total-item column="PUREWT"
-                                                summaryType="sum"
-                                                [valueFormat]="gridMetalDecimalFormat"
-                                                displayFormat="{0}">
-                                            </dxi-total-item>
-                                            <dxi-total-item column="Amount"
-                                                summaryType="sum"
-                                                [valueFormat]="gridAmountDecimalFormat"
-                                                displayFormat="{0}">
-                                            </dxi-total-item>
-                                        </dxo-summary>
-                                    </dx-data-grid>
-                                </div>
+                                    <dxo-summary>
+                                        <dxi-total-item column="Pcs"
+                                            summaryType="sum"
+                                            displayFormat="{0}">
+                                        </dxi-total-item>
+                                        <dxi-total-item column="GROSS_WT"
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
+                                        </dxi-total-item>
+                                        <dxi-total-item column="PUREWT"
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
+                                        </dxi-total-item>
+                                        <dxi-total-item column="Amount"
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
+                                        </dxi-total-item>
+                                    </dxo-summary>
+                                </dx-data-grid>
+                            </div>
 
-                                <div class="col-md-4">
-                                    <label for="inputPassword"
-                                        class="col-sm-12  col-form-label text-center border border-light bg-light text-dark">Pure
-                                        / Alloy Ratio</label>
-                                    <dx-data-grid #dataGrid id="gridContainer"
-                                        [showBorders]="true"
-                                        [allowColumnReordering]="true"
-                                        [allowColumnResizing]="true"
-                                        [dataSource]="meltingISsueDetailsData"
-                                        [columnAutoWidth]="true">
-                                        <dxo-paging
-                                            [enabled]="false"></dxo-paging>
-                                        <dxo-editing mode="cell"
-                                            [allowUpdating]="true"></dxo-editing>
-                                        <dxo-selection
-                                            mode="multiple"></dxo-selection>
-                                        <dxo-scrolling
-                                            mode="virtual"></dxo-scrolling>
-                                        <dxi-column
-                                            *ngFor="let data of columnhead1"
-                                            [dataField]="data.field"
-                                            [caption]="data.title"
-                                            [allowEditing]="true"
-                                            alignment="left"
-                                            [format]="data.format"
-                                            backgroundcolor="#000">
+                            <div class="col-md-4">
+                                <label for="inputPassword"
+                                    class="col-sm-12  col-form-label text-center border border-light bg-light text-dark">Pure
+                                    / Alloy Ratio</label>
+                                <dx-data-grid #dataGrid id="gridContainer"
+                                    [showBorders]="true"
+                                    [allowColumnReordering]="true"
+                                    [allowColumnResizing]="true"
+                                    [dataSource]="meltingISsueDetailsData"
+                                    [columnAutoWidth]="true">
+                                    <dxo-paging
+                                        [enabled]="false"></dxo-paging>
+                                    <dxo-editing mode="cell"
+                                        [allowUpdating]="true"></dxo-editing>
+                                    <dxo-selection
+                                        mode="multiple"></dxo-selection>
+                                    <dxo-scrolling
+                                        mode="virtual"></dxo-scrolling>
+                                    <dxi-column
+                                        *ngFor="let data of columnhead1"
+                                        [dataField]="data.field"
+                                        [caption]="data.title"
+                                        [allowEditing]="true"
+                                        alignment="left"
+                                        [format]="data.format"
+                                        backgroundcolor="#000">
 
-                                        </dxi-column>
-                                    </dx-data-grid>
-                                    <button class="btn btn-primary add-btn"
-                                        *ngIf="!viewMode"
-                                        (click)="open(mymodal)">Add
-                                        Alloy
-                                    </button>
-                                    <div class="col-md-6">
-                                        <ng-template #mymodal let-modal>
-                                            <div style="padding: 10px 20px">
-                                                <div class="modal-header">
-                                                    <h5
-                                                        class="meltingissueheading"
-                                                        id="modal-dia-metal"
-                                                        style="text-align:left;">
-                                                        Alloy Allocation
-                                                    </h5>
-                                                    <button style="border: none"
-                                                        type="button"
-                                                        class="close"
-                                                        aria-label="Close"
-                                                        (click)="modal.dismiss('close1')">
-                                                        <span
-                                                            aria-hidden="true">x</span>
-                                                    </button>
-                                                </div>
-                                                <br>
+                                    </dxi-column>
+                                </dx-data-grid>
+                                <button class="btn btn-primary add-btn"
+                                    *ngIf="!viewMode"
+                                    (click)="open(mymodal)">Add
+                                    Alloy
+                                </button>
+                                <div class="col-md-6">
+                                    <ng-template #mymodal let-modal>
+                                        <div style="padding: 10px 20px">
+                                            <div class="modal-header">
+                                                <h5
+                                                    class="meltingissueheading"
+                                                    id="modal-dia-metal"
+                                                    style="text-align:left;">
+                                                    Alloy Allocation
+                                                </h5>
+                                                <button style="border: none"
+                                                    type="button"
+                                                    class="close"
+                                                    aria-label="Close"
+                                                    (click)="modal.dismiss('close1')">
+                                                    <span
+                                                        aria-hidden="true">x</span>
+                                                </button>
+                                            </div>
+                                            <br>
 
-                                                <dx-data-grid #dataGrid
-                                                    id="gridContainer"
-                                                    keyExpr="ID"
-                                                    [dataSource]="meltingISsueDetailsData"
-                                                    [showBorders]="true"
-                                                    [allowColumnReordering]="true"
-                                                    [allowColumnResizing]="true"
-                                                    [columnAutoWidth]="true">
-                                                    <dxo-paging
-                                                        [enabled]="false"></dxo-paging>
-                                                    <dxo-editing mode="cell"
-                                                        [allowUpdating]="true"></dxo-editing>
-                                                    <dxo-selection
-                                                        mode="multiple"></dxo-selection>
-                                                    <dxo-scrolling
-                                                        mode="virtual"></dxo-scrolling>
+                                            <dx-data-grid #dataGrid
+                                                id="gridContainer"
+                                                keyExpr="ID"
+                                                [dataSource]="meltingISsueDetailsData"
+                                                [showBorders]="true"
+                                                [allowColumnReordering]="true"
+                                                [allowColumnResizing]="true"
+                                                [columnAutoWidth]="true">
+                                                <dxo-paging
+                                                    [enabled]="false"></dxo-paging>
+                                                <dxo-editing mode="cell"
+                                                    [allowUpdating]="true"></dxo-editing>
+                                                <dxo-selection
+                                                    mode="multiple"></dxo-selection>
+                                                <dxo-scrolling
+                                                    mode="virtual"></dxo-scrolling>
 
-                                                    <dxi-column
-                                                        *ngFor="let data of db1"
-                                                        [dataField]="data.field"
-                                                        [caption]="data.title"
-                                                        [format]="data.format"
-                                                        [allowEditing]="true"
-                                                        [alignment]="data.alignment">
-                                                    </dxi-column>
+                                                <dxi-column
+                                                    *ngFor="let data of db1"
+                                                    [dataField]="data.field"
+                                                    [caption]="data.title"
+                                                    [format]="data.format"
+                                                    [allowEditing]="true"
+                                                    [alignment]="data.alignment">
+                                                </dxi-column>
 
-                                                    <dxo-summary>
+                                                <dxo-summary>
 
-                                                        <dxi-total-item
-                                                            column="ALLOY"
-                                                            summaryType="sum"
-                                                            [valueFormat]="gridAmountDecimalFormat"
-                                                            displayFormat="{0}">
-                                                        </dxi-total-item>
-                                                        <dxi-total-item
-                                                            column="ALLOYQTY"
-                                                            summaryType="sum"
-                                                            [valueFormat]="gridAmountDecimalFormat"
-                                                            displayFormat="{0}">
-                                                        </dxi-total-item>
+                                                    <dxi-total-item
+                                                        column="ALLOY"
+                                                        summaryType="sum"
+                                                        [valueFormat]="gridAmountDecimalFormat"
+                                                        displayFormat="{0}">
+                                                    </dxi-total-item>
+                                                    <dxi-total-item
+                                                        column="ALLOYQTY"
+                                                        summaryType="sum"
+                                                        [valueFormat]="gridAmountDecimalFormat"
+                                                        displayFormat="{0}">
+                                                    </dxi-total-item>
 
-                                                    </dxo-summary>
-                                                </dx-data-grid>
+                                                </dxo-summary>
+                                            </dx-data-grid>
 
-                                                <div class="row my-2">
-                                                    <label for="inputPassword"
-                                                        class="col-sm-3 col-form-label">Required
-                                                        Alloy Qty:</label>
-                                                    <div class="col-md-6">
-                                                        <mat-form-field
-                                                            appearance="outline"
-                                                            appearance="outline"
-                                                            style="width: 70%; margin-left: -225px;">
-                                                            <input type="text"
-                                                                class="text-right"
-                                                                matInput
-                                                                [max]="10"
-                                                                formControlName="alloyQty"
-                                                                MetalDecimalInput
-                                                                [readonly]="viewMode" />
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button"
-                                                        class="btn btn-primary">Apply</button>
-                                                    <button type="button"
-                                                        class="btn btn-primary"
-                                                        (click)="closeModal(modal)">Cancel</button>
+                                            <div class="row my-2">
+                                                <label for="inputPassword"
+                                                    class="col-sm-3 col-form-label">Required
+                                                    Alloy Qty:</label>
+                                                <div class="col-md-6">
+                                                    <mat-form-field
+                                                        appearance="outline"
+                                                        appearance="outline"
+                                                        style="width: 70%; margin-left: -225px;">
+                                                        <input type="text"
+                                                            class="text-right"
+                                                            matInput
+                                                            [max]="10"
+                                                            formControlName="alloyQty"
+                                                            MetalDecimalInput
+                                                            [readonly]="viewMode" />
+                                                    </mat-form-field>
                                                 </div>
                                             </div>
-                                        </ng-template>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row py-2 border-top">
-                        <div class="col-md-12">
-                            <dx-data-grid #dataGrid id="gridContainer"
-                                keyExpr="ID" [showBorders]="true"
-                                [allowColumnReordering]="true"
-                                [allowColumnResizing]="true"
-                                [columnAutoWidth]="true">
-                                <dxo-paging [enabled]="false"></dxo-paging>
-                                <dxo-editing mode="cell" [allowUpdating]="true">
-                                </dxo-editing>
-                                <dxo-selection mode="multiple"></dxo-selection>
-                                <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                                <dxi-column *ngFor="let data of columnheader"
-                                    dataField="{{ data }}" caption="{{ data }}"
-                                    [allowEditing]="true" alignment="center"
-                                    backgroundcolor="#000">
-                                </dxi-column>
-
-                            </dx-data-grid>
-                        </div>
-                        <div class="col-md-12 mt-2">
-                            <div class="row align-items-baseline">
-                                <label for="inputPassword"
-                                    class="col-sm-1 col-form-label">Total>></label>
-                                <label for="inputPassword"
-                                    class="col-sm-1 col-form-label">Issued
-                                    :</label>
-                                <div class="col-md-1">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="issued"
-                                            class="text-right"
-                                            maxlength="20" MetalDecimalInput
-                                            [readonly]="viewMode" />
-                                    </mat-form-field>
-                                </div>
-
-                                <label for="inputPassword"
-                                    class="col-sm-1 col-form-label">Required
-                                    :</label>
-                                <div class="col-md-1">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="required"
-                                            class="text-right"
-                                            maxlength="20" MetalDecimalInput
-                                            [readonly]="viewMode" />
-                                    </mat-form-field>
-                                </div>
-
-                                <label for="inputPassword"
-                                    class="col-sm-1 col-form-label">Allocated
-                                    :</label>
-                                <div class="col-md-1">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="allocated"
-                                            class="text-right"
-                                            maxlength="20" MetalDecimalInput
-                                            [readonly]="viewMode" />
-                                    </mat-form-field>
-                                </div>
-                                <label for="inputPassword"
-                                    class="col-sm-1 col-form-label">Balance
-                                    :</label>
-                                <div class="col-md-1">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="balance"
-                                            class="text-right"
-                                            maxlength="20" MetalDecimalInput
-                                            [readonly]="viewMode" />
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="pt-3">
-                                        <button
-                                            class="btn btn-primary add-btn">Reset</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="row my-2">
-                                <label for="inputPassword"
-                                    class="col-sm-3 col-form-label">Remarks
-                                    :</label>
-                                <div class="col-md-9">
-                                    <mat-form-field appearance="outline"
-                                        style="width: 100%;">
-                                        <input type="text" matInput
-                                            formControlName="remarks"
-                                            maxlength="40"
-                                            [readonly]="viewMode" />
-                                    </mat-form-field>
+                                            <div class="modal-footer">
+                                                <button type="button"
+                                                    class="btn btn-primary">Apply</button>
+                                                <button type="button"
+                                                    class="btn btn-primary"
+                                                    (click)="closeModal(modal)">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </ng-template>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
+
+                <div class="row py-2 border-top">
+                    <div class="col-md-12">
+                        <dx-data-grid #dataGrid id="gridContainer"
+                            keyExpr="ID" [showBorders]="true"
+                            [allowColumnReordering]="true"
+                            [allowColumnResizing]="true"
+                            [columnAutoWidth]="true">
+                            <dxo-paging [enabled]="false"></dxo-paging>
+                            <dxo-editing mode="cell" [allowUpdating]="true">
+                            </dxo-editing>
+                            <dxo-selection mode="multiple"></dxo-selection>
+                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                            <dxi-column *ngFor="let data of columnheader"
+                                dataField="{{ data }}" caption="{{ data }}"
+                                [allowEditing]="true" alignment="center"
+                                backgroundcolor="#000">
+                            </dxi-column>
+
+                        </dx-data-grid>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <div class="row align-items-baseline">
+                            <label for="inputPassword"
+                                class="col-sm-1 col-form-label">Total>></label>
+                            <label for="inputPassword"
+                                class="col-sm-1 col-form-label">Issued
+                                :</label>
+                            <div class="col-md-1">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="issued"
+                                        class="text-right"
+                                        maxlength="20" MetalDecimalInput
+                                        [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+
+                            <label for="inputPassword"
+                                class="col-sm-1 col-form-label">Required
+                                :</label>
+                            <div class="col-md-1">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="required"
+                                        class="text-right"
+                                        maxlength="20" MetalDecimalInput
+                                        [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+
+                            <label for="inputPassword"
+                                class="col-sm-1 col-form-label">Allocated
+                                :</label>
+                            <div class="col-md-1">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="allocated"
+                                        class="text-right"
+                                        maxlength="20" MetalDecimalInput
+                                        [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+                            <label for="inputPassword"
+                                class="col-sm-1 col-form-label">Balance
+                                :</label>
+                            <div class="col-md-1">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="balance"
+                                        class="text-right"
+                                        maxlength="20" MetalDecimalInput
+                                        [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="pt-3">
+                                    <button
+                                        class="btn btn-primary add-btn">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row my-2">
+                            <label for="inputPassword"
+                                class="col-sm-3 col-form-label">Remarks
+                                :</label>
+                            <div class="col-md-9">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="remarks"
+                                        maxlength="40"
+                                        [readonly]="viewMode" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
-    <ng-template #meltingissueDetailScreen>
-        <app-melting-issue-details [content]="dataToDetailScreen"
-            (saveDetail)="setValuesToHeaderGrid($event)"
-            (closeDetail)="closeDetailScreen()"></app-melting-issue-details>
-    </ng-template>
+</div>
+<ng-template #meltingissueDetailScreen>
+    <app-melting-issue-details [content]="dataToDetailScreen"
+        (saveDetail)="setValuesToHeaderGrid($event)"
+        (closeDetail)="closeDetailScreen()"></app-melting-issue-details>
+</ng-template>
