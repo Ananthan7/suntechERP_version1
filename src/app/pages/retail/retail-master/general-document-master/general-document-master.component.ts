@@ -14,17 +14,17 @@ import Swal from 'sweetalert2';
 })
 export class GeneralDocumentMasterComponent implements OnInit {
 
-  BranchData:any=[];
+  BranchData: any = [];
   @Input() content!: any;
   unq_id: any;
   flag: any;
   dyndatas: any;
   private subscriptions: Subscription[] = [];
   viewOnly: boolean = false;
-  disable_code:boolean = false;
-  editMode:boolean = false;
-  viewMode:boolean = false;
-  codeedit:boolean = false;
+  disable_code: boolean = false;
+  editMode: boolean = false;
+  viewMode: boolean = false;
+  codeedit: boolean = false;
 
 
   constructor(
@@ -322,35 +322,35 @@ export class GeneralDocumentMasterComponent implements OnInit {
     this.generaldocumentform.controls.user_defined_15.setValue(e.CODE);
   }
 
- 
-  
+
+
   generaldocumentform: FormGroup = this.formBuilder.group({
-    code:['',[Validators.required]],
-    description:['',[Validators.required]],
-    reminderdays:[''],
-    cust_applicable:[''],
-    cust_mandatory:[''],
-    branch_applicable:[''],
-    branch_mandatory:[''],
-    supplier_applicable:[''],
-    supplier_mandatory:[''],
-    employee_applicable:[''],
-    employee_mandatory:[''],
-    user_defined_1:[''],
-    user_defined_2:[''],
-    user_defined_3:[''],
-    user_defined_4:[''],
-    user_defined_5:[''],
-    user_defined_6:[''],
-    user_defined_7:[''],
-    user_defined_8:[''],
-    user_defined_9:[''],
-    user_defined_10:[''],
-    user_defined_11:[''],
-    user_defined_12:[''],
-    user_defined_13:[''],
-    user_defined_14:[''],
-    user_defined_15:[''],
+    code: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    reminderdays: [''],
+    cust_applicable: [''],
+    cust_mandatory: [''],
+    branch_applicable: [''],
+    branch_mandatory: [''],
+    supplier_applicable: [''],
+    supplier_mandatory: [''],
+    employee_applicable: [''],
+    employee_mandatory: [''],
+    user_defined_1: [''],
+    user_defined_2: [''],
+    user_defined_3: [''],
+    user_defined_4: [''],
+    user_defined_5: [''],
+    user_defined_6: [''],
+    user_defined_7: [''],
+    user_defined_8: [''],
+    user_defined_9: [''],
+    user_defined_10: [''],
+    user_defined_11: [''],
+    user_defined_12: [''],
+    user_defined_13: [''],
+    user_defined_14: [''],
+    user_defined_15: [''],
   })
 
   ngOnInit(): void {
@@ -358,13 +358,13 @@ export class GeneralDocumentMasterComponent implements OnInit {
     this.unq_id = this.content?.GENMST_CODE;
     console.log(this.unq_id);
     this.flag = this.content?.FLAG;
-    if(this.flag == 'EDIT'){
-      this.codeedit=true;
+    if (this.flag == 'EDIT') {
+      this.codeedit = true;
       this.disable_code = true;
       this.editMode = true;
-    }else if(this.flag == 'VIEW'){
+    } else if (this.flag == 'VIEW') {
       this.viewMode = true;
-      this.codeedit=true;
+      this.codeedit = true;
 
     }
     this.initialController(this.flag, this.content);
@@ -436,7 +436,7 @@ export class GeneralDocumentMasterComponent implements OnInit {
     console.log(this.dyndatas?.PREFIX_CODE);
   }
   detailsapi(fm_id: any) {
-    if(this.flag == 'VIEW'){
+    if (this.flag == 'VIEW') {
       this.viewOnly = true;
     }
 
@@ -519,11 +519,33 @@ export class GeneralDocumentMasterComponent implements OnInit {
   }
 
   close(data?: any) {
-    this.activeModal.close(data);
+    if (data) {
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW') {
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
+  formSubmit() {
 
-  formSubmit(){
-    
     // console.log( this.generaldocumentform.controls.cust_applicable.value)
     // console.log( this.generaldocumentform.controls.cust_mandatory.value)
     // return;
@@ -542,7 +564,7 @@ export class GeneralDocumentMasterComponent implements OnInit {
       "GENMST_SUPPLIER_MANDATORY": this.generaldocumentform.controls.supplier_mandatory.value ? 1 : 0,
       "GENMST_EMP_APPLICABLE": this.generaldocumentform.controls.employee_applicable.value ? 1 : 0,
       "GENMST_EMP_MANDATORY": this.generaldocumentform.controls.employee_mandatory.value ? 1 : 0,
-      "UDF1":  this.generaldocumentform.controls.user_defined_1.value,
+      "UDF1": this.generaldocumentform.controls.user_defined_1.value,
       "UDF2": this.generaldocumentform.controls.user_defined_2.value,
       "UDF3": this.generaldocumentform.controls.user_defined_3.value,
       "UDF4": this.generaldocumentform.controls.user_defined_4.value,
@@ -552,11 +574,11 @@ export class GeneralDocumentMasterComponent implements OnInit {
       "UDF8": this.generaldocumentform.controls.user_defined_8.value,
       "UDF9": this.generaldocumentform.controls.user_defined_9.value,
       "UDF10": this.generaldocumentform.controls.user_defined_10.value,
-      "UDF11":this.generaldocumentform.controls.user_defined_11.value,
-      "UDF12":this.generaldocumentform.controls.user_defined_12.value,
-      "UDF13":this.generaldocumentform.controls.user_defined_13.value,
-      "UDF14":this.generaldocumentform.controls.user_defined_14.value,
-      "UDF15":this.generaldocumentform.controls.user_defined_15.value
+      "UDF11": this.generaldocumentform.controls.user_defined_11.value,
+      "UDF12": this.generaldocumentform.controls.user_defined_12.value,
+      "UDF13": this.generaldocumentform.controls.user_defined_13.value,
+      "UDF14": this.generaldocumentform.controls.user_defined_14.value,
+      "UDF15": this.generaldocumentform.controls.user_defined_15.value
     }
 
     if (this.flag === "EDIT") {
@@ -612,7 +634,7 @@ export class GeneralDocumentMasterComponent implements OnInit {
     }
   }
 
-  BranchDataSelected(e:any){
+  BranchDataSelected(e: any) {
 
   }
 

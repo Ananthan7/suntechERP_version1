@@ -222,6 +222,37 @@ export class GstMasterComponent implements OnInit {
     FRONTENDFILTER: true,
   };
 
+  expenseCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 7,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      " BRANCH_CODE = 'strbranchcode' AND AC_OnHold = 0 and  VIEW_ACCMST_BRANCHWISE.ACCODE in (select ACCODE from ACCOUNT_MAIN where ( (  account_mode in ('L','G')) ) and ISNULL(accode,'') <> '')",
+    SEARCH_FIELD: "STOCK_CODE",
+    SEARCH_HEADING: "EXPENSE CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  hsnCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 7,
+    LOOKUPID: 3,
+    ORDER_TYPE: 0,
+    WHERECONDITION: "TYPES='HSN MASTER'",
+    SEARCH_FIELD: "STOCK_CODE",
+    SEARCH_HEADING: "HSN CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
   expenseHsnOrSacAllocationColumnHeadings: any[] = [
     { field: "Sr", caption: "Sr" },
     { field: "Exp. A/c", caption: "Exp. A/c" },
@@ -512,6 +543,8 @@ export class GstMasterComponent implements OnInit {
   }
 
   gstMasterMainFormSubmit() {
+    console.log(this.dateWiseGstDetailsData);
+
     Object.keys(this.gstMasterMainForm.controls).forEach((controlName) => {
       const control = this.gstMasterMainForm.controls[controlName];
       if (control.validator && control.validator({} as AbstractControl)) {
@@ -684,7 +717,7 @@ export class GstMasterComponent implements OnInit {
           BRANCH_CODE: this.branchCode,
           UNIQUEID: 0,
           SRNO: Number(item.SrNo) || 0,
-          GST_CODE: item.VAT_Code || 0,
+          GST_CODE: item.GST_CODE || "",
           GST_PER: Number(item.VAT_Per) || 0,
           CGST_PER: 0,
           SGST_PER: 0,
@@ -1226,6 +1259,21 @@ export class GstMasterComponent implements OnInit {
 
     console.log(this.expenseHsnOrSacAllocationData);
   }
+
+  hsnSelect(event: any, data: any) {
+    let currentIndex = data.data.SRNO - 1;
+
+    this.expenseHsnOrSacAllocationData[currentIndex].HSN_SAC_CODE =
+      event.CODE;
+    this.expenseHsnOrSacAllocationData[currentIndex].HSN_SAC_DESC =
+      event.DESCRIPTION;
+
+    console.log(this.expenseHsnOrSacAllocationData);
+  }
+
+
+
+
   codeAlert(event: any, controller: any) {
     if (controller === "gstPercent") {
       let message = `A percentage value cannot be greater than 100.`;
