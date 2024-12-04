@@ -282,6 +282,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.amount.setValue(this.content.AMOUNTLC)
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(this.content.DIVCODE)
     this.stoneIssueDetailsFrom.controls.carat.setValue(this.content.GROSS_WT)
+    this.stoneIssueDetailsFrom.controls.otheratt.setValue(this.content.OTHER_ATTR)
     this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(this.content.PART_CODE)
     this.stoneIssueDetailsFrom.controls.batchid.setValue(this.content.SUB_STOCK_CODE)
     this.stoneIssueDetailsFrom.controls.consignment.setValue(this.content.CONSIGNMENT)
@@ -637,7 +638,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "D_REMARKS": this.comService.nullToString(form.remarks),
       "SIEVE_DESC": this.comService.nullToString(form.SIEVE_DESC),
       "EXCLUDE_TRANSFER_WT": true,
-      "OTHER_ATTR": "",
+      "OTHER_ATTR": this.comService.nullToString(form.otheratt),
     }
   }
   /**use: to save data to grid*/
@@ -787,14 +788,15 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.carat.setValue(calculatedCarat.toFixed(3));
     this.CollectRate()
     this.checkPcsRequired()
+    this.CalculateCaratAndUnitrate()
   }
 
   CalculateCaratAndUnitrate() {
-    const carat = this.stoneIssueDetailsFrom.controls.carat.value || 0;
-    const unitrate = this.stoneIssueDetailsFrom.controls.unitrate.value || 0;
+    // Ensure the values are numbers and handle null or undefined cases
+    const carat = parseFloat(this.stoneIssueDetailsFrom.controls.carat.value) || 0;
+    const unitrate = parseFloat(this.stoneIssueDetailsFrom.controls.unitrate.value) || 0;
     const calculateamount = carat * unitrate;
-    this.stoneIssueDetailsFrom.controls.amount.setValue(calculateamount.toFixed(2))
-    this.checkCaratRequired()
+    this.stoneIssueDetailsFrom.controls.amount.setValue(calculateamount);
   }
 
   CollectPointerWtValidation() {

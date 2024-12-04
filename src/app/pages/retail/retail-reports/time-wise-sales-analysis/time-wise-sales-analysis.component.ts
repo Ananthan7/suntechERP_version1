@@ -2,6 +2,9 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-time-wise-sales-analysis',
@@ -38,10 +41,14 @@ export class TimeWiseSalesAnalysisComponent implements OnInit {
   templateNameHasValue: boolean= false;
 
 
-  constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private datePipe: DatePipe) { }
+  constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private datePipe: DatePipe,
+    private dataService: SuntechAPIService, private commonService: CommonServiceService,  private toastr: ToastrService,
+
+  ) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
+    this.apiCallFunction();
   }
 
   close(data?: any) {
@@ -58,6 +65,7 @@ export class TimeWiseSalesAnalysisComponent implements OnInit {
       this.timeWiseSalesAnalysisForm.controls.todate.setValue(event.ToDate);
       this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
+    this.apiCallFunction();
   }
 
   popupClosed(){
@@ -123,6 +131,47 @@ export class TimeWiseSalesAnalysisComponent implements OnInit {
     this.timeWiseSalesAnalysisForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
+  apiCallFunction(){
+    this.isLoading = true;
+    let APIurl = "TimeWiseSalesAnalysis";
+    let postData = {
+      "parameter": {
+        "noOfInvoice": this.timeWiseSalesAnalysisForm.controls.invoiceChkbox.value,
+        "showAmount": this.timeWiseSalesAnalysisForm.controls.salesAmtChkbox.value,
+        "isMetal": this.timeWiseSalesAnalysisForm.controls.metalChkbox.value,
+        "isStone": this.timeWiseSalesAnalysisForm.controls.stoneChkbox.value,
+        "type": "Time",
+        "fromDate": this.dateToPass.fromDate,
+        "toDate": this.dateToPass.toDate,
+        "time1": 9,
+        "time2": 12,
+        "time3": 12,
+        "time4": 14,
+        "time5":14,
+        "time6": 16,
+        "time7": 16,
+        "time8": 18,
+        "time9": 18,
+        "time10": 30,
+        "time11": 20,
+        "time12": 22
+      }
+    }
+
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI(APIurl, postData)
+    .subscribe((response: any) => {
+      if(response.status == 'Failed'){
+        this.toastr.error(response.message);
+        this.isLoading = false;
+        return
+      }
+      else{
+        this.isLoading = false;
+      }
+    })
+  }
+  
   saveTemplate(){
     this.popupVisible = true;
     console.log(this.timeWiseSalesAnalysisForm.controls.templateName.value)

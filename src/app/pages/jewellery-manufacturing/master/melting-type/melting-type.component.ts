@@ -69,7 +69,7 @@ export class MeltingTypeComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 17,
-    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_FIELD: 'KARAT',
     SEARCH_HEADING: 'Karat Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "KARAT_CODE<> ''",
@@ -126,7 +126,7 @@ export class MeltingTypeComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log(this.content.KARAT_CODE);
-    
+
     this.viewModeField = true;
     if (this.content?.FLAG) {
       this.setFormValues();
@@ -138,6 +138,7 @@ export class MeltingTypeComponent implements OnInit {
         this.viewMode = false;
         this.codeEnable = false;
         this.editMode = true;
+        this.karatCodeEmty();
         this.stockCodeData.WHERECONDITION = `KARAT_CODE ='${this.content.KARAT_CODE}' AND PURITY = '${this.content.PURITY}' AND SUBCODE = 0`;
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
@@ -278,45 +279,45 @@ export class MeltingTypeComponent implements OnInit {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
 
     if (event.target.value === '' || this.viewMode === true || this.editMode === true) {
-        return;
+      return;
     }
 
     let param = {
-        LOOKUPID: LOOKUPDATA.LOOKUPID,
-        WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     };
 
     this.commonService.toastInfoByMsgId('MSG81447');
 
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch';
     let Sub: Subscription = this.dataService.postDynamicAPI(API, param).subscribe((result) => {
-        this.isDisableSaveBtn = false;
-        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
+      this.isDisableSaveBtn = false;
+      let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
 
-        if (data.length === 0) {
-            this.handleLookupError(FORMNAME, LOOKUPDATA); // Call handleLookupError if no data is found
-            return;
-        }
+      if (data.length === 0) {
+        this.handleLookupError(FORMNAME, LOOKUPDATA); // Call handleLookupError if no data is found
+        return;
+      }
 
-        const matchedItem = data.find((item: any) => item.KARAT_CODE.toUpperCase() === event.target.value.toUpperCase());
+      const matchedItem = data.find((item: any) => item.KARAT_CODE.toUpperCase() === event.target.value.toUpperCase());
 
-        if (matchedItem) {
-            // Set the form control value with the matched item code
-            this.meltingTypeForm.controls[FORMNAME].setValue(matchedItem.KARAT_CODE);
+      if (matchedItem) {
+        // Set the form control value with the matched item code
+        this.meltingTypeForm.controls[FORMNAME].setValue(matchedItem.KARAT_CODE);
 
-            // Call the karatcodeSelected function with the matched item
-            this.karatcodeSelected(matchedItem);
-        } else {
-            // If no match found, reset the form control and SEARCH_VALUE
-            this.handleLookupError(FORMNAME, LOOKUPDATA); // Call handleLookupError if no match is found
-        }
+        // Call the karatcodeSelected function with the matched item
+        this.karatcodeSelected(matchedItem);
+      } else {
+        // If no match found, reset the form control and SEARCH_VALUE
+        this.handleLookupError(FORMNAME, LOOKUPDATA); // Call handleLookupError if no match is found
+      }
 
     }, err => {
-        this.commonService.toastErrorByMsgId('MSG2272');
+      this.commonService.toastErrorByMsgId('MSG2272');
     });
 
     this.subscriptions.push(Sub);
-}
+  }
 
   codeEnabled() {
     if (this.meltingTypeForm.value.code == '') {
@@ -381,7 +382,7 @@ export class MeltingTypeComponent implements OnInit {
     //   this.toastr.error('color is required');
     //   return true;
     // }
-  
+
 
     return false;
   }
@@ -449,7 +450,7 @@ export class MeltingTypeComponent implements OnInit {
       return true;
     }
 
-    if(totalAlloyPer < 100){
+    if (totalAlloyPer < 100) {
       console.log('This Working If Condition');
       this.commonService.toastErrorByMsgId('MSG7954')
       return true
@@ -460,7 +461,7 @@ export class MeltingTypeComponent implements OnInit {
   formSubmit() {
     if (this.submitValidations()) return;
     if (this.submitValidation(this.meltingTypeForm.value)) return;
-    
+
 
     let API = 'MeltingType/InsertMeltingType';
     let postData = this.setPostData(this.meltingTypeForm.value)
@@ -507,19 +508,19 @@ export class MeltingTypeComponent implements OnInit {
     // Update the input value
     (event.target as HTMLInputElement).value = limitedValue;
   }
-  
+
   // close(data?: any) {
   //   //TODO reset forms and data before closing
   //   this.activeModal.close(data);
   // }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -564,6 +565,7 @@ export class MeltingTypeComponent implements OnInit {
     this.meltingTypeForm.controls.alloy.setValue(this.commonService.decimalQuantityFormat(alloyPercentage, 'AMOUNT'));
     this.meltingTypeForm.controls.stockCode.setValue('');
     this.stockCodeData.WHERECONDITION = `KARAT_CODE ='${this.meltingTypeForm.value.karat}' AND PURITY = '${this.meltingTypeForm.value.purity}' AND SUBCODE = 0`;
+    this.karatCodeEmty()
   }
 
   StockCodeSelected(e: any) {
@@ -571,7 +573,13 @@ export class MeltingTypeComponent implements OnInit {
     this.meltingTypeForm.controls.stockCode.setValue(e.STOCK_CODE);
   }
 
-
+  karatCodeEmty() {
+    if (this.meltingTypeForm.value.karat == '') {
+      this.meltingTypeForm.controls.purity.setValue('');
+      this.meltingTypeForm.controls.metal.setValue('');
+      this.meltingTypeForm.controls.alloy.setValue('');
+    }
+  }
 
   setFormValues() {
     if (!this.content) return
@@ -607,7 +615,7 @@ export class MeltingTypeComponent implements OnInit {
   updateMeltingType() {
     // if (this.submitValidations()) return;
     if (this.submitValidation(this.meltingTypeForm.value)) return;
-    
+
     let API = 'MeltingType/UpdateMeltingType/' + this.meltingTypeForm.value.code;
     let postData = this.setPostData(this.meltingTypeForm.value)
 
@@ -750,7 +758,7 @@ export class MeltingTypeComponent implements OnInit {
 
 
 
-  defaultAlloySelected(data: any, value: any, controlName: string) {
+  defaultAlloySelected(data: any, value: any) {
     let stockData = [];
     stockData = this.tableData.filter((item: any) => item.DEF_ALLOY_STOCK == data.STOCK_CODE)
     if (stockData.length > 0) {
@@ -764,27 +772,20 @@ export class MeltingTypeComponent implements OnInit {
     }
   }
 
-  // division(data: any, value: any) {
 
-  //   this.tableData[value.data.SRNO - 1].MELTYPE_CODE = data.target.value;
-  // }
+  alloyPer(event: any, value: any) {
+    const enteredValue = parseFloat(event.target.value); // Parse the input as a number
+    const formattedValue = this.commonService.decimalQuantityFormat(enteredValue, 'AMOUNT'); // Format the value
+    this.tableData[value.data.SRNO - 1].ALLOY_PER = formattedValue;
 
-  alloyPer(data: any, value: any) {
-    this.tableData[value.data.SRNO - 1].ALLOY_PER = this.commonService.decimalQuantityFormat(data.target.value, 'AMOUNT');
-   if( this.tableData[value.data.SRNO - 1].ALLOY_PER >= 100){
-    this.commonService.toastErrorByMsgId('Only Enter Values Less Than 100%');
-   }
+    // Validate: Show an error if the value is 100 or more
+    if (formattedValue >= 101) {
+      this.commonService.toastErrorByMsgId('Only Enter Values Less Than 100%');
+    }
   }
 
-  karatCodSearch(data: any) {
 
-  }
 
-  // lookupKeyPress(event: KeyboardEvent) {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //   }
-  // }
 
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {
@@ -812,17 +813,4 @@ export class MeltingTypeComponent implements OnInit {
     }
   }
 
-
-  // showOverleyPanel(event: any, formControlName: string) {
-
-  //   if (formControlName == 'color') {
-  //     this.overlaycolorSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'karat') {
-  //     this.overlaykaratSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'stockCode') {
-  //     this.overlaystockCodeSearch.showOverlayPanel(event)
-  //   }
-  // }
 }

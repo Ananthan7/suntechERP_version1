@@ -21,7 +21,8 @@
                                 class="col-sm-2 col-form-label">Job Number *
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 70%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="jobno"
                                         class="text-left" maxlength="12"
@@ -36,7 +37,8 @@
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="jobdes"
                                         readonly />
@@ -46,7 +48,8 @@
                                 class="col-sm-2 col-form-label">Job
                                 Purity:</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="jobpurity"
                                         class="text-right" PurityDecimal
@@ -59,7 +62,8 @@
                                 class="col-sm-2 col-form-label">Process *
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 70%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="process"
                                         readonly UpperCaseDirective
@@ -73,7 +77,8 @@
                                     (newRowClick)="ProcessCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="processdes"
                                         readonly />
@@ -83,7 +88,8 @@
                                 class="col-sm-2 col-form-label">Diff
                                 GrWt:</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="diffgrwt"
                                         maxlength="10"
@@ -100,7 +106,8 @@
                                 <!-- <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="worker" />
                                 </mat-form-field> -->
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 70%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="worker"
                                         readonly UpperCaseDirective
@@ -114,7 +121,8 @@
                                     (newRowClick)="WorkerCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="workerdes"
                                         readonly />
@@ -126,7 +134,8 @@
                                 class="col-sm-2 col-form-label">Tree Number
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="treeno"
                                         class="text-right" MetalDecimalInput
@@ -134,10 +143,11 @@
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
-                                class="col-sm-2 col-form-label">Wax Weight 
+                                class="col-sm-2 col-form-label">Wax Weight
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="waxweight" [max]="10"
                                         class="text-right" MetalDecimalInput
@@ -148,7 +158,8 @@
                                 class="col-sm-2 col-form-label">Location
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 70%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="location"
                                         [readonly]="viewMode" UpperCaseDirective
@@ -168,46 +179,43 @@
                                 class="col-sm-2 col-form-label">Stock Code *
                                 :</label>
                             <div class="col-md-2">
-                                <!-- <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="stockcode" />
-                                </mat-form-field> -->
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: 70%;"
+                                    appearance="outline">
                                     <input type="text" matInput
-                                        formControlName="stockcode"
+                                        formControlName="DivCode"
                                         UpperCaseDirective
-                                        [readonly]="viewMode"
-                                        (keydown)="lookupKeyPress($event,'stockcode')"
-                                        (focusout)="stockCodeValidate($event)"/>
-                                </mat-form-field>
-                                <!-- <master-search
-                                    [MasterSearchData]="stockCodeData"
-                                    #overlaystockcodeSearch
-                                    *ngIf="!viewMode"
-                                    (newRowClick)="StockCodeSelected($event)"></master-search> -->
-                            </div>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 100%; margin-left: -37px;">
-                                    <input type="text" matInput
-                                        formControlName="stockdes"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
-                                  <master-search
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field
+                                    style="width: 100%; margin-left: -37px;"
+                                    appearance="outline">
+                                    <input type="text" matInput
+                                        formControlName="stockcode"
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'stockcode')"
+                                        (focusout)="stockCodeValidate($event)" />
+                                </mat-form-field>
+                                <master-search
                                     [MasterSearchData]="stockCodeData"
                                     #overlaystockcodeSearch
                                     *ngIf="!viewMode"
                                     (newRowClick)="StockCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
-                                        formControlName="tostock"
+                                        formControlName="stockdes"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
                                 class="col-sm-2 col-form-label">PCS :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="number" matInput
                                         formControlName="pcs"
                                         style="text-align: right;"
@@ -221,7 +229,8 @@
                                 class="col-sm-2 col-form-label">Main Stock
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="mainstock"
                                         maxlength="20"
@@ -232,7 +241,8 @@
                                 class="col-sm-2 col-form-label">Stone Weight
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <!-- write new focusout for this -->
                                     <input type="text" matInput
                                         formControlName="stoneweight"
@@ -245,7 +255,8 @@
                                 :</label>
                             <div class="col-md-2">
                                 <!-- write new focusout for this -->
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="netweight" [max]="10"
                                         class="text-right" MetalDecimalInput
@@ -258,7 +269,8 @@
                                 class="col-sm-2 col-form-label">Gross Weight *
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="grossweight" [max]="10"
                                         class="text-right" MetalDecimalInput
@@ -270,7 +282,8 @@
                                 class="col-sm-2 col-form-label">Purity % *
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <!-- write new focusout for this -->
                                     <input type="text" matInput
                                         formControlName="topurity" [max]="10"
@@ -282,7 +295,8 @@
                                 class="col-sm-2 col-form-label">Pure Weight *
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="pureweight" [max]="13"
                                         class="text-right" MetalDecimalInput
@@ -295,7 +309,8 @@
                                 class="col-sm-2 col-form-label">Purity *
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="purity"
                                         class="text-right" PurityDecimal
@@ -317,10 +332,11 @@
                         </div>
                         <div class="row align-items-center">
                             <label for="inputPassword"
-                                class="col-sm-2 col-form-label">Loss Weight 
+                                class="col-sm-2 col-form-label">Loss Weight
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="lossweight" [max]="10"
                                         class="text-right" MetalDecimalInput
@@ -331,7 +347,8 @@
                                 class="col-sm-2 offset-sm-2 col-form-label">Ticket
                                 No :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="ticketno"
                                         class="text-left" maxlength="10"
@@ -342,7 +359,8 @@
                                 <div class="form-check">
                                     <input class="form-check-input"
                                         type="checkbox" value
-                                        id="flexCheckDefault" [disabled]="viewMode">
+                                        id="flexCheckDefault"
+                                        [disabled]="viewMode">
                                     <label class="form-check-label"
                                         for="flexCheckDefault">
                                         Avoid Alloy
@@ -355,7 +373,8 @@
                                 class="col-sm-2 col-form-label">Lot
                                 No :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="lotno" maxlength="10"
                                         class="text-left"
@@ -366,7 +385,8 @@
                                 class="col-sm-2  col-form-label">Bar No
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="barno" maxlength="10"
                                         class="text-left"
@@ -378,17 +398,19 @@
                             <label for="inputPassword"
                                 class="col-sm-2 col-form-label">T Gold :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="tgold" maxlength="10"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
-                                class="col-sm-2  col-form-label">Silver 
+                                class="col-sm-2  col-form-label">Silver
                                 :</label>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%;"
+                                    appearance="outline">
                                     <input type="text" matInput
                                         formControlName="silver" maxlength="20"
                                         [readonly]="viewMode" />
@@ -402,31 +424,44 @@
     </div>
 </div>
 <!-- Stock List Modal -->
-<div *ngIf="isViewStock" class="modal fade show d-block" tabindex="-1" role="dialog">
+<div *ngIf="isViewStock" class="modal fade show d-block" tabindex="-1"
+    role="dialog">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Stock List</h5>
-          <button type="button" class="close" aria-label="Close" (click)="closeStockPopup()">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Stock List</h5>
+                <button type="button" class="close" aria-label="Close"
+                    (click)="closeStockPopup()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <dx-data-grid id="gridContainer"
+                    [dataSource]="tableDatastocklist" [showBorders]="true"
+                    [columnAutoWidth]="true"
+                    [showRowLines]="true" [showColumnLines]="true"
+                    [allowColumnReordering]="true" class="mt-3">
+                    <ng-container>
+                        <dxi-column dataField="SRNO" caption="SRNO"
+                            alignment="left"> </dxi-column>
+                        <dxi-column dataField="STOCK_CODE" caption="STOCK CODE"
+                            alignment="left"> </dxi-column>
+                        <dxi-column dataField="PURITY" caption="PURITY"
+                            alignment="left"> </dxi-column>
+                        <dxi-column dataField="GROSS_WT" caption="Gross Weight"
+                            alignment="left"> </dxi-column>
+                        <dxi-column dataField="PURE_WT" caption="Pure Weight"
+                            alignment="left"> </dxi-column>
+                        <dxi-column dataField="RCVD_Gross_Weight"
+                            caption="Rcvd. Gross Wt." alignment="left">
+                        </dxi-column>
+                    </ng-container>
+                </dx-data-grid>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                    (click)="closeStockPopup()">Apply</button>
+            </div>
         </div>
-        <div class="modal-body">
-          <dx-data-grid id="gridContainer" [dataSource]="tableDatastocklist" [showBorders]="true" [columnAutoWidth]="true"
-                        [showRowLines]="true" [showColumnLines]="true" [allowColumnReordering]="true" class="mt-3">
-            <ng-container>
-              <dxi-column dataField="SRNO" caption="SRNO" alignment="left"> </dxi-column>
-              <dxi-column dataField="STOCK_CODE" caption="STOCK CODE" alignment="left"> </dxi-column>
-              <dxi-column dataField="PURITY" caption="PURITY" alignment="left"> </dxi-column>
-              <dxi-column dataField="GROSS_WT" caption="Gross Weight" alignment="left"> </dxi-column>
-              <dxi-column dataField="PURE_WT" caption="Pure Weight" alignment="left"> </dxi-column>
-              <dxi-column dataField="RCVD_Gross_Weight" caption="Rcvd. Gross Wt." alignment="left"> </dxi-column>
-            </ng-container>
-          </dx-data-grid>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeStockPopup()">Apply</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>

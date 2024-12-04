@@ -6,13 +6,17 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" [isViewAuditTrail]="true" [isViewPost]="true" [isloading]="isloading"
-  [isViewDelete]="editMode" (deleteClick)="deleteClicked()" [isViewSave]="!viewMode"
-  [disableAuditTrail]="editMode || viewMode" (cancelClick)="close()"   [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
-
+<modal-header (saveClick)="formSubmit()" [isViewAuditTrail]="true"
+  [isViewPost]="true" [isloading]="isloading"
+  [isViewDelete]="editMode" (deleteClick)="deleteClicked()"
+  [isViewSave]="!viewMode"
+  [disableAuditTrail]="editMode || viewMode" (cancelClick)="close()"
+  [isViewAttachment]="!viewMode"
+  (attachmentClick)="attachmentClicked()"></modal-header>
 
 <!-- component to upload attachment -->
-<attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
+<attachment-upload (uploadSubmit)="uploadSubmited($event)"
+  [savedAttachment]="savedAttachments"></attachment-upload>
 <div class="p-3">
   <form [formGroup]="productionFrom">
     <div class="row">
@@ -33,7 +37,8 @@
               <label class="col-sm-4 col-form-label">
                 Voucher Type<b>*</b></label>
               <mat-form-field appearance="outline" style="width: 50%;">
-                <input type="text" matInput formControlName="VOCTYPE" readonly />
+                <input type="text" matInput formControlName="VOCTYPE"
+                  readonly />
               </mat-form-field>
             </div>
           </div>
@@ -47,10 +52,14 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <!-- <input type="date" matInput formControlName="vocdate" />
                         </mat-form-field> -->
-                  <input matInput [matDatepicker]="vocDate" name="vocDate" [max]="vocMaxDate" formControlName="VOCDATE"
-                    placeholder="DD/MM/YYYY" DateValidation [readonly]="viewMode" />
-                  <mat-datepicker-toggle matSuffix [for]="vocDate" [disabled]="viewMode"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+                  <input matInput [matDatepicker]="vocDate" name="vocDate"
+                    [max]="vocMaxDate" formControlName="VOCDATE"
+                    placeholder="DD/MM/YYYY" DateValidation
+                    [readonly]="viewMode" />
+                  <mat-datepicker-toggle matSuffix [for]="vocDate"
+                    [disabled]="viewMode"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate"
+                    #vocDate></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -62,7 +71,8 @@
               <label class="col-sm-4 col-form-label">Voucher Number * </label>
               <div class="col-md-6">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="VOCNO" readonly class="text-right" />
+                  <input type="text" matInput formControlName="VOCNO" readonly
+                    class="text-right" />
                 </mat-form-field>
               </div>
             </div>
@@ -75,10 +85,12 @@
                 By</label>
               <div class="col-md-6">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="SMAN" UpperCaseDirective [readonly]="viewMode"
+                  <input type="text" matInput formControlName="SMAN"
+                    UpperCaseDirective [readonly]="viewMode"
                     (keydown)="lookupKeyPress($event,'SMAN')"
                     (focusout)="validateLookupField($event,enteredByCodeData,'SMAN')" />
-                  <master-search class="masterSearch" #overlayuserName [MasterSearchData]="enteredByCodeData"
+                  <master-search class="masterSearch" #overlayuserName
+                    [MasterSearchData]="enteredByCodeData"
                     *ngIf="!viewMode" (newRowClick)="userDataSelected($event)">
                   </master-search>
                 </mat-form-field>
@@ -93,17 +105,22 @@
                 *</label>
               <div class="col-sm-3">
                 <mat-form-field appearance="outline" style="width: 80%;">
-                  <input type="text" matInput UpperCaseDirective (change)="currencyDataSelected($event)"
+                  <input type="text" matInput UpperCaseDirective
+                    (change)="currencyDataSelected($event)"
                     [readonly]="viewMode" formControlName="CURRENCY_CODE" />
                 </mat-form-field>
               </div>
               <div class="col-sm-3">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput RateDecimalInput class="text-right" readonly
-                    formControlName="CURRENCY_RATE" (keydown)="lookupKeyPress($event,'CURRENCY_RATE')"
+                  <input type="text" matInput RateDecimalInput
+                    class="text-right" readonly
+                    formControlName="CURRENCY_RATE"
+                    (keydown)="lookupKeyPress($event,'CURRENCY_RATE')"
                     (focusout)="validateLookupField($event,currencyMasterData,'CURRENCY_RATE')" />
-                  <master-search class="masterSearch" #OverlayCurrencyRate *ngIf="!viewMode"
-                    [MasterSearchData]="currencyMasterData" (newRowClick)="currencyDataSelected($event)">
+                  <master-search class="masterSearch" #OverlayCurrencyRate
+                    *ngIf="!viewMode"
+                    [MasterSearchData]="currencyMasterData"
+                    (newRowClick)="currencyDataSelected($event)">
                   </master-search>
                 </mat-form-field>
               </div>
@@ -126,9 +143,11 @@
       <div class="col-md-5">
         <div class="row">
           <div class="col-md-5 pt-3">
-            <mat-checkbox formControlName="UnfixTransaction" [disabled]="viewMode"><b>Unfix
+            <mat-checkbox formControlName="UnfixTransaction"
+              [disabled]="viewMode"><b>Unfix
                 Transaction</b></mat-checkbox><br>
-            <mat-checkbox formControlName="STONE_INCLUDE" [disabled]="viewMode"><b>Include Stone
+            <mat-checkbox formControlName="STONE_INCLUDE"
+              [disabled]="viewMode"><b>Include Stone
                 Weight</b></mat-checkbox>
           </div>
           <div class="col-md-7">
@@ -139,14 +158,17 @@
                     Metal Rate</label>
                   <div class="col-sm-10">
                     <mat-form-field appearance="outline" style="width: 40%">
-                      <input type="text" matInput UpperCaseDirective formControlName="METAL_RATE_TYPE"
+                      <input type="text" matInput UpperCaseDirective
+                        formControlName="METAL_RATE_TYPE"
                         [readonly]="viewMode"
                         (focusout)="validateLookupField($event,rateTypeMasterData,'METAL_RATE')" />
                     </mat-form-field>
                     <mat-form-field appearance="outline" style="width: 50%;">
-                      <input type="text" matInput SixDecimalInput readonly class="text-right"
+                      <input type="text" matInput SixDecimalInput readonly
+                        class="text-right"
                         formControlName="METAL_RATE" />
-                      <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="rateTypeMasterData"
+                      <master-search class="masterSearch" *ngIf="!viewMode"
+                        [MasterSearchData]="rateTypeMasterData"
                         (newRowClick)="rateTypeSelected($event)">
                       </master-search>
                     </mat-form-field>
@@ -165,9 +187,11 @@
                     Branch To</label>
                   <div class="col-md-5">
                     <mat-form-field appearance="outline" style="width: 100%;">
-                      <input type="text" matInput [readonly]="viewMode" formControlName="BRANCH_CODE" UpperCaseDirective
+                      <input type="text" matInput [readonly]="viewMode"
+                        formControlName="BRANCH_CODE" UpperCaseDirective
                         (focusout)="validateLookupField($event,branchCodeData,'BRANCH_CODE')" />
-                      <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="branchCodeData"
+                      <master-search class="masterSearch" *ngIf="!viewMode"
+                        [MasterSearchData]="branchCodeData"
                         (newRowClick)="branchSelected($event)"></master-search>
                     </mat-form-field>
                   </div>
@@ -211,8 +235,10 @@
 
       <div class="row pt-3">
         <div class="col-md-12 d-flex">
-          <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false" *ngIf="!viewMode"
-            (addClick)="openProductionEntryDetails()" (deleteClick)="deleteTableData()">
+          <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+            [viewImportBtn]="false" *ngIf="!viewMode"
+            (addClick)="openProductionEntryDetails()"
+            (deleteClick)="deleteTableData()">
           </menu-buttons>
           <!-- <div class="col-sm-2" *ngIf="!viewMode">
             <mat-form-field appearance="outline" style="width: 80%;">
@@ -228,61 +254,89 @@
             <mat-tab label="Job Details">
               <div class="row mt-2">
                 <div class="col-md-12">
-                  <dx-data-grid id="gridContainer" [columnAutoWidth]="true" [allowColumnResizing]="true"
-                    [showBorders]="true" [showRowLines]="true" (onRowClick)="onRowClickHandler($event)"
-                    (onRowDblClick)="onRowDblClickHandler($event)" [allowColumnReordering]="true" height="200"
+                  <dx-data-grid id="gridContainer" [columnAutoWidth]="true"
+                    [allowColumnResizing]="true"
+                    [showBorders]="true" [showRowLines]="true"
+                    (onRowClick)="onRowClickHandler($event)"
+                    (onRowDblClick)="onRowDblClickHandler($event)"
+                    [allowColumnReordering]="true" height="200"
                     [dataSource]="JOB_PRODUCTION_DETAIL_DJ">
                     <dxo-selection mode="single"></dxo-selection>
-                    <dxi-column dataField="SRNO" width="auto" caption="No" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="JOB_NUMBER" width="auto" caption="Job #" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="UNQ_JOB_ID" width="auto" caption="Sub Job" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="DESIGN_CODE" width="auto" caption="Design" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="JOB_PCS" width="auto" caption="Pcs" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="METAL_WT" width="auto" caption="Metal" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="STONE_WT" width="auto" caption="Stone" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="GROSS_WT" width="auto" caption="Gross Wt" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="STONE_PCS" width="auto" caption="St Pcs" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="PROCESS_CODE" width="auto" caption="Process" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="WORKER_CODE" width="auto" caption="Worker" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="JOB_SO_NUMBER" width="auto" caption="So number" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="WIP_ACCODE" width="auto" caption="WIP A/C" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="LOCTYPE_CODE" width="auto" caption="Location" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="COST_CODE" width="auto" caption="Cost_code" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="SUPPLIER_REF" width="auto" caption="Supplier Ref" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="CUSTOMER_CODE" width="auto" caption="Customer" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="PREFIX" width="auto" caption="Prefix" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="KARAT_CODE" width="auto" caption="Karat" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="JOB_DESCRIPTION" width="auto" caption="Job Description" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="SET_REF" width="auto" caption="set Ref" alignment="center">
-                    </dxi-column>
-                    <dxi-column dataField="STOCK_DESCRIPTION" width="auto" caption="Stock Description"
+                    <dxi-column dataField="SRNO" width="auto" caption="No"
                       alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="PROCESS_NAME" width="auto" caption="Process Name" alignment="center">
+                    <dxi-column dataField="JOB_NUMBER" width="auto"
+                      caption="Job #" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="WORKER_NAME" width="auto" caption="Worker Name" alignment="center">
+                    <dxi-column dataField="UNQ_JOB_ID" width="auto"
+                      caption="Sub Job" alignment="center">
                     </dxi-column>
-                    <dxi-column dataField="LOSS_WT" width="auto" caption="Loss Wt" alignment="center">
+                    <dxi-column dataField="DESIGN_CODE" width="auto"
+                      caption="Design" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="JOB_PCS" width="auto" caption="Pcs"
+                      alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="METAL_WT" width="auto"
+                      caption="Metal" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="STONE_WT" width="auto"
+                      caption="Stone" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="GROSS_WT" width="auto"
+                      caption="Gross Wt" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="STONE_PCS" width="auto"
+                      caption="St Pcs" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="PROCESS_CODE" width="auto"
+                      caption="Process" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="WORKER_CODE" width="auto"
+                      caption="Worker" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="JOB_SO_NUMBER" width="auto"
+                      caption="So number" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="WIP_ACCODE" width="auto"
+                      caption="WIP A/C" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="LOCTYPE_CODE" width="auto"
+                      caption="Location" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="COST_CODE" width="auto"
+                      caption="Cost_code" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="SUPPLIER_REF" width="auto"
+                      caption="Supplier Ref" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="CUSTOMER_CODE" width="auto"
+                      caption="Customer" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="PREFIX" width="auto" caption="Prefix"
+                      alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="KARAT_CODE" width="auto"
+                      caption="Karat" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="JOB_DESCRIPTION" width="auto"
+                      caption="Job Description" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="SET_REF" width="auto"
+                      caption="set Ref" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="STOCK_DESCRIPTION" width="auto"
+                      caption="Stock Description"
+                      alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="PROCESS_NAME" width="auto"
+                      caption="Process Name" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="WORKER_NAME" width="auto"
+                      caption="Worker Name" alignment="center">
+                    </dxi-column>
+                    <dxi-column dataField="LOSS_WT" width="auto"
+                      caption="Loss Wt" alignment="center">
                     </dxi-column>
                   </dx-data-grid>
                 </div>
@@ -291,12 +345,15 @@
             <mat-tab label="Stock Details">
               <div class="row mt-2">
                 <div class="col-md-12">
-                  <dx-data-grid #dataGrid id="gridContainer" [columnAutoWidth]="true"
-                    [dataSource]="JOB_PRODUCTION_SUB_DJ" [allowColumnResizing]="true" [showRowLines]="true"
+                  <dx-data-grid #dataGrid id="gridContainer"
+                    [columnAutoWidth]="true"
+                    [dataSource]="JOB_PRODUCTION_SUB_DJ"
+                    [allowColumnResizing]="true" [showRowLines]="true"
                     [showBorders]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-selection mode="single"></dxo-selection>
-                    <dxi-column *ngFor="let data of columnheads" dataField="{{ data }}" width="130" caption="{{ data }}"
+                    <dxi-column *ngFor="let data of columnheads"
+                      dataField="{{ data }}" width="130" caption="{{ data }}"
                       alignment="center">
                     </dxi-column>
                   </dx-data-grid>
@@ -310,7 +367,8 @@
         <div class="col-md-12">
           <div class="col-md-12 mt-2">
             <div class="row">
-              <label for="inputPassword" class="col-sm-1 col-form-label">Narration</label>
+              <label for="inputPassword"
+                class="col-sm-1 col-form-label">Narration</label>
               <div class="col-md-3">
                 <mat-form-field appearance="outline" style="width: 70%;">
                   <input type="text" matInput formControlName="REMARKS" />
@@ -326,6 +384,7 @@
   </form>
 </div>
 <ng-template #productionDetailScreen>
-  <app-production-entry-details [content]="dataToDetailScreen" (saveDetail)="setValuesToHeaderGrid($event)"
+  <app-production-entry-details [content]="dataToDetailScreen"
+    (saveDetail)="setValuesToHeaderGrid($event)"
     (closeDetail)="closeDetailScreen()"></app-production-entry-details>
 </ng-template>

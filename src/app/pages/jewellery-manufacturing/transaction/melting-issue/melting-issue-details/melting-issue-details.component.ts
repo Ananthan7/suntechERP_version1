@@ -99,6 +99,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
     WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
 
   setLookup201WhereCondition() {
@@ -109,15 +111,15 @@ export class MeltingIssueDetailsComponent implements OnInit {
     where += `MetalStone='${form.METAL_STONE}',Process_Code='${form.process}',`
     where += `Worker_Code='${form.worker}',Stock_Code='${form.stockcode}',LocCode='${form.location}'`
     this.stockCodeData.WHERECONDITION = where
-    //  this.ProcessCodeData.WHERECONDITION = where
-    //   this.WorkerCodeData.WHERECONDITION = where
+    this.ProcessCodeData.WHERECONDITION = where
+    this.WorkerCodeData.WHERECONDITION = where
   }
 
   StockCodeSelected(e: any) {
     console.log(e);
     this.meltingIssuedetailsFrom.controls.stockcode.setValue(e.STOCK_CODE);
-    this.meltingIssuedetailsFrom.controls.tostock.setValue(e.STOCK_DESCRIPTION);
-    this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.DIVISION_CODE);
+    this.meltingIssuedetailsFrom.controls.tostock.setValue(e.DESCRIPTION);
+    this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.DESCRIPTION);
     this.meltingIssuedetailsFrom.controls.mainstock.setValue(e.STOCK_CODE);
     this.setLookup201WhereCondition()
 
@@ -169,7 +171,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       }
     }
     this.dataTochild()
-    this.setLookup201WhereCondition()
+    // this.setLookup201WhereCondition()
   }
   setViewMode(viewOnly: boolean) {
     this.viewMode = viewOnly;
@@ -297,6 +299,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     METAL_STONE: [''],
     UNQ_JOB_ID: [''],
     BRANCH_CODE: [''],
+    DivCode: ['']
   });
   submitValidations(form: any) {
     if (this.comService.nullToString(form.jobno) == '') {
@@ -560,9 +563,11 @@ export class MeltingIssueDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
   stockCodeValidate(event: any) {
-    this.showOverleyPanel(event, 'stockcode')
+    if (this.viewMode) return;
     if (event.target.value == '') return
+    this.setLookup201WhereCondition()
     let postData = {
       "SPID": "112",
       "parameter": {
@@ -583,26 +588,21 @@ export class MeltingIssueDetailsComponent implements OnInit {
           let data = result.dynamicData[0];
           if (data) {
             console.log(data, 'data');
-            if (data[0]
-              .VALID_STOCK) {
-              // Handle the valid stock case
-              // You can set other form values or perform other actions here if needed
+            if (data[0].VALID_STOCK === 0) {
               this.overlaystockcodeSearch.closeOverlayPanel();
-            } else {
-              this.comService.toastErrorByMsgId('MSG1531');
               this.meltingIssuedetailsFrom.controls.stockcode.setValue('');
-              this.showOverleyPanel(event, 'stockcode');
+              this.comService.toastErrorByMsgId('MSG1531');
+              this.showOverleyPanel(event, 'stockCode');
+            } else {
+              let stockDetails = data[0];
+              this.meltingIssuedetailsFrom.controls.stockdes.setValue(stockDetails.Description); 
             }
           } else {
             this.comService.toastErrorByMsgId('MSG1531');
             this.meltingIssuedetailsFrom.controls.stockcode.setValue('');
             this.showOverleyPanel(event, 'stockcode');
           }
-        } else {
-          this.comService.toastErrorByMsgId('MSG1747');
-          this.meltingIssuedetailsFrom.controls.stockcode.setValue('');
-          this.overlaystockcodeSearch.closeOverlayPanel();
-        }
+        } 
       }, err => {
         this.comService.closeSnackBarMsg();
         this.comService.toastErrorByMsgId('MSG1531');
@@ -737,6 +737,6 @@ export class MeltingIssueDetailsComponent implements OnInit {
   closeStockPopup() {
     this.isViewStock = false;
   }
-  
+
 }
 

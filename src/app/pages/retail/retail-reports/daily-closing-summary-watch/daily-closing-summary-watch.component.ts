@@ -3,6 +3,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { settings } from 'cluster';
+import { ToastrService } from 'ngx-toastr';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-daily-closing-summary-watch',
@@ -16,7 +18,7 @@ export class DailyClosingSummaryWatchComponent implements OnInit {
     todate: [''],
     templateName: [''],
 
-    
+    groupBySelection: ['']
   
 
   });
@@ -35,10 +37,12 @@ export class DailyClosingSummaryWatchComponent implements OnInit {
 
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private datePipe: DatePipe,
+    private dataService: SuntechAPIService,  private toastr: ToastrService,
   ) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
+    this.apiGridDataFetch();
   }
 
   close(data?: any) {
@@ -62,6 +66,7 @@ export class DailyClosingSummaryWatchComponent implements OnInit {
       this.dailyClosingSummary_WatchForm.controls.todate.setValue(event.ToDate);
       this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
+    this.apiGridDataFetch();
   }
 
   popupClosed(){
@@ -125,6 +130,30 @@ export class DailyClosingSummaryWatchComponent implements OnInit {
 
     this.formattedBranchDivisionData = branchDivisionData
     this.dailyClosingSummary_WatchForm.controls.branch.setValue(this.formattedBranchDivisionData);
+  }
+
+  apiGridDataFetch(){
+    this.isLoading = true;
+    const apiUrl = 'POSDailyClosingSummaryWatch'
+    let postData = {
+      "frmDate":  this.dateToPass.fromDate,
+      "toDate": this.dateToPass.toDate,
+      "strBranch": this.dailyClosingSummary_WatchForm.controls.branch.value,
+      "GrpBy": this.dailyClosingSummary_WatchForm.controls.groupBySelection.value,
+      "transaction": 0,
+      "companyCode": "BD0001"
+    }
+    this.dataService.postDynamicAPI(apiUrl, postData).subscribe((resp: any) => {
+      if (resp.status == 'Success') {
+        console.log( resp )
+        this.isLoading = false;
+        this.toastr.success(resp.status);
+      }
+      else{
+        this.isLoading = false;
+        this.toastr.error(resp.message);
+      }
+    });    
   }
 
   saveTemplate(){

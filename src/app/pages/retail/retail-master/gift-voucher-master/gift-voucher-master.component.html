@@ -74,10 +74,10 @@
 
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" formControlName="costCentre"  [readonly]="viewMode" />
+                            <input matInput type="text" formControlName="costCentre"  [readonly]="viewMode"  (focusout)="validateLookupField($event,costCenterData,'costCentre')"  (keydown)="lookupKeyPress($event,'costCentre')"/>
 
                             <master-search [MasterSearchData]="costCenterData" class="masterSearch"  *ngIf=" viewMode == false"
-                            (newRowClick)="costCenterSelected($event)">
+                            (newRowClick)="costCenterSelected($event)" #costCentrecodeSearch>
                         </master-search>
                         </mat-form-field>
                     </div>
@@ -139,9 +139,9 @@
                     <label for="code" class="col-sm-2 col-form-label" id="ID029">Prefix:</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" formControlName="prefix"  [readonly]="viewMode" />
+                            <input matInput type="text" formControlName="prefix"  [readonly]="viewMode"  (focusout)="validateLookupField($event,prefixCodeData,'prefix')"  (keydown)="lookupKeyPress($event,'prefix')"/>
                             <master-search [MasterSearchData]="prefixCodeData" class="masterSearch"  *ngIf=" viewMode == false"
-                            (newRowClick)="prefixCodeSelected($event)">
+                            (newRowClick)="prefixCodeSelected($event)"  #prefixcodeSearch >
                         </master-search>
                         </mat-form-field>
                     </div>
@@ -151,11 +151,11 @@
                         <mat-checkbox class="example-margin" formControlName="active"  [disabled]="viewMode" >Active</mat-checkbox>
                     </div>
                 </div>
-                <!-- <div class="row mb-1">
+                <div class="row mb-1">
                 <div class="col-sm-6">
                     <button type="button" class="btn btn-outline-primary metal-issue-del-btn" (click)="openaddGiftVoucherDetail()">Details</button>
                 </div>
-                </div> -->
+                </div>
 
                 
                 <!-- <div class="row mb-1">

@@ -42,7 +42,7 @@ export class SequenceMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 14,
-    SEARCH_FIELD: 'PREFIX_CODE',
+    SEARCH_FIELD: 'PREFIX',
     SEARCH_HEADING: 'Prefix master',
     SEARCH_VALUE: '',
     WHERECONDITION: "PREFIX_CODE <> ''",
@@ -761,10 +761,17 @@ export class SequenceMasterComponent implements OnInit {
   checkLossCondition(data: any) {
     let max: number = parseFloat(data['MAX_LOSS'])
     let std: number = parseFloat(data['STD_LOSS'])
-    if (max < std) {
-      this.commonService.toastErrorByMsgId('MSG1808')//Max Loss cannot be less than Std Loss
+    if (std < max) {
+      this.commonService.toastErrorByMsgId('Std connot be less than max')//Max Loss cannot be less than Std Loss
       this.dataSource[data.SRNO].MAX_LOSS = 0
-      return false;
+      //  this.sequenceMasterForm.controls.max.disable();
+      Swal.fire({
+        title: '',
+        text: 'Std connot be less than max',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      })
     }
     return true;
   }
@@ -822,12 +829,12 @@ export class SequenceMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }

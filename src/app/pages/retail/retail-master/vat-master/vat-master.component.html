@@ -47,6 +47,7 @@
               <div class="col-md-9">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    (input)="codeAlert($event, 'vatDesc')"
                     UpperCaseDirective
                     [readonly]="flag === 'VIEW'"
                     matInput
@@ -65,7 +66,7 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    (input)="charAndDigitLimitChecker($event, 'vatPercent')"
+                    (input)="codeAlert($event, 'vatPercent')"
                     class="text-right"
                     ThreeDecimalInput
                     [readonly]="flag === 'VIEW'"
@@ -236,9 +237,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['regVatAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'regVatAccCredit')"
@@ -247,13 +248,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayRegVatAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['regVatAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -273,9 +274,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['regVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'regVatAccDebit')"
@@ -284,13 +285,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayRegVatAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['regVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -318,9 +319,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    RCMACCodeData,
                                     ['regRcmAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'regRcmAccCredit')"
@@ -329,13 +330,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayRegRcmAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="RCMACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['regRcmAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -355,9 +356,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    RCMACCodeData,
                                     ['regRcmAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'regRcmAccDebit')"
@@ -366,13 +367,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayRegRcmAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="RCMACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['regRcmAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -400,9 +401,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATCTRLACCodeData,
                                     ['regVatCtrlAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -413,13 +414,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayRegVatCtrlAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATCTRLACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['regVatCtrlAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -439,9 +440,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATCTRLACCodeData,
                                     ['regVatCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -452,13 +453,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayRegVatCtrlAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATCTRLACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['regVatCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -509,9 +510,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['unregVatAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'unregVatAccCredit')"
@@ -520,13 +521,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayUnregVatAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['unregVatAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -546,9 +547,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['unregVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'unregVatAccDebit')"
@@ -557,13 +558,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayUnregVatAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['unregVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -591,9 +592,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    RCMACCodeData,
                                     ['unregRcmAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'unregRcmAccCredit')"
@@ -602,13 +603,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayUnregRcmAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="RCMACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['unregRcmAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -628,9 +629,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    RCMACCodeData,
                                     ['unregRcmAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'unregRcmAccDebit')"
@@ -639,13 +640,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayUnregRcmAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="RCMACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['unregRcmAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -673,9 +674,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATCTRLACCodeData,
                                     ['unregVatCtrlAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -686,13 +687,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayUnregVatCtrlAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATCTRLACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['unregVatCtrlAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -712,9 +713,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATCTRLACCodeData,
                                     ['unregVatCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -725,13 +726,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayUnregVatCtrlAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATCTRLACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['unregVatCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -782,9 +783,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['impVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'impVatAccDebit')"
@@ -793,13 +794,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayImpVatAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['impVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -829,9 +830,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    RCMACCodeData,
                                     ['impRcmAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'impRcmAccCredit')"
@@ -840,13 +841,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayImpRcmAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="RCMACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['impRcmAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -878,9 +879,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATCTRLACCodeData,
                                     ['impVatCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -891,13 +892,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayImpVatCtrlAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATCTRLACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['impVatCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -927,9 +928,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    RCMCTRLACCodeData,
                                     ['impRcmCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -940,13 +941,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayImpRcmCtrlAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="RCMCTRLACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['impRcmCtrlAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -999,9 +1000,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['expVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'expVatAccDebit')"
@@ -1010,13 +1011,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayExpVatAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['expVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -1044,9 +1045,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    VATACCodeData,
                                     ['expVatAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'expVatAccCredit')"
@@ -1055,13 +1056,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayExpVatAccCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="VATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['expVatAccCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -1116,9 +1117,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    POSVATACCodeData,
                                     ['posVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="openTab($event, 'posVatAccDebit')"
@@ -1127,13 +1128,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayPosVatAccDebit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="POSVATACCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['posVatAccDebit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -1161,9 +1162,9 @@
                                 (focusout)="
                                   SPvalidateLookupFieldModified(
                                     $event,
-                                    groupCodeData,
+                                    POSVATREFUNDCodeData,
                                     ['posVatRefundCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                                 (keydown)="
@@ -1174,13 +1175,13 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayPosVatRefundCredit
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="POSVATREFUNDCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   lookupSelect(
                                     $event,
                                     ['posVatRefundCredit'],
-                                    ['CODE']
+                                    ['ACCODE']
                                   )
                                 "
                               ></master-search>
@@ -1200,7 +1201,7 @@
                       [showColumnLines]="true"
                       [showRowLines]="true"
                       class="mt-3"
-                      [paging]="{ pageSize: 5 }"
+                      [paging]="{ pageSize: 20 }"
                     >
                       <dxo-paging [enabled]="true"></dxo-paging>
                       <dxo-pager [showInfo]="true"></dxo-pager>
@@ -1230,8 +1231,10 @@
                         [viewAddBtn]="true"
                         [viewDeleteBtn]="true"
                         [viewImportBtn]="false"
-                        (addClick)="addRowFunc()"
-                        (deleteClick)="deleteRowFunc()"
+                        (addClick)="addRowFunc('Expense HSN/SAC Allocation')"
+                        (deleteClick)="
+                          deleteRowFunc('Expense HSN/SAC Allocation')
+                        "
                       >
                       </menu-buttons>
                     </div>
@@ -1249,47 +1252,60 @@
                           [showColumnLines]="true"
                           [showRowLines]="true"
                           keyExpr="SRNO"
-                          (onSelectionChanged)="onSelectionChanged($event)"
+                          (onSelectionChanged)="
+                            onSelectionChanged(
+                              $event,
+                              'Expense HSN/SAC Allocation'
+                            )
+                          "
                         >
                           <dxo-selection mode="single"></dxo-selection>
                           <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                           <!-- Columns -->
                           <dxi-column
+                            alignment="center"
                             dataField="SRNO"
                             caption="SRNO"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="EXPENSE_ACCODE"
                             caption="EXPENSE_ACCODE"
                             cellTemplate="expenseAccodeTemp"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="EXPENSE_ACCODE_DESC"
                             caption="EXPENSE_ACCODE_DESC"
                             cellTemplate="expenseAccodeDescTemp"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="HSN_SAC_CODE"
                             caption="HSN_SAC_CODE"
                             cellTemplate="hsnSacCodeTemp"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="HSN_SAC_DESC"
                             caption="HSN_SAC_DESC"
                             cellTemplate="hsnSacDescTemp"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="TAX_REG"
                             caption="TAX_REG"
                             cellTemplate="taxRegTemp"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="REVERSECHARGE_UNREG"
                             caption="REVERSECHARGE_UNREG"
                             cellTemplate="reverseChargeUnregTemp"
                           ></dxi-column>
                           <dxi-column
+                            alignment="center"
                             dataField="ELIGIBLE_INPUTCREDIT"
                             caption="ELIGIBLE_INPUTCREDIT"
                             cellTemplate="eligibleInputCrediTTemp"
@@ -1297,61 +1313,96 @@
 
                           <!-- ExpAcc Column -->
                           <div *dxTemplate="let data of 'expenseAccodeTemp'">
-                            <input
-                              [readonly]="flag === 'VIEW'"
-                              type="text"
-                              maxlength="6"
-                              (change)="
-                                updateField($event, data, 'EXPENSE_ACCODE')
-                              "
-                              [value]="data.value"
+                            <mat-form-field
                               style="width: 100%"
-                              required
-                            />
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="flag === 'VIEW'"
+                                type="text"
+                                maxlength="6"
+                                [readonly]="true"
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+
+                              <master-search
+                                *ngIf="flag != 'VIEW'"
+                                #overlayGroupOne
+                                [MasterSearchData]="groupCodeData"
+                                class="masterSearch"
+                                (newRowClick)="expenseSelect($event, data)"
+                              ></master-search>
+                            </mat-form-field>
                           </div>
 
                           <!-- Exp Account Description Column -->
                           <div
                             *dxTemplate="let data of 'expenseAccodeDescTemp'"
                           >
-                            <input
-                              [readonly]="flag === 'VIEW'"
-                              type="text"
-                              (change)="
-                                updateField($event, data, 'EXPENSE_ACCODE_DESC')
-                              "
-                              [value]="data.value"
+                            <mat-form-field
                               style="width: 100%"
-                              required
-                            />
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="flag === 'VIEW'"
+                                type="text"
+                                [readonly]="true"
+                                (change)="
+                                  updateField(
+                                    $event,
+                                    data,
+                                    'EXPENSE_ACCODE_DESC'
+                                  )
+                                "
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+                            </mat-form-field>
                           </div>
 
                           <!-- HSN Code Column -->
                           <div *dxTemplate="let data of 'hsnSacCodeTemp'">
-                            <input
-                              [readonly]="flag === 'VIEW'"
-                              type="text"
-                              (change)="
-                                updateField($event, data, 'HSN_SAC_CODE')
-                              "
-                              [value]="data.value"
+                            <mat-form-field
                               style="width: 100%"
-                              required
-                            />
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="flag === 'VIEW'"
+                                type="text"
+                                (change)="
+                                  updateField($event, data, 'HSN_SAC_CODE')
+                                "
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+                            </mat-form-field>
                           </div>
 
                           <!-- HSN Description Column -->
                           <div *dxTemplate="let data of 'hsnSacDescTemp'">
-                            <input
-                              [readonly]="flag === 'VIEW'"
-                              type="text"
-                              (change)="
-                                updateField($event, data, 'HSN_SAC_DESC')
-                              "
-                              [value]="data.value"
+                            <mat-form-field
                               style="width: 100%"
-                              required
-                            />
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="flag === 'VIEW'"
+                                type="text"
+                                (change)="
+                                  updateField($event, data, 'HSN_SAC_DESC')
+                                "
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+                            </mat-form-field>
                           </div>
 
                           <!-- Tax Reg Column -->
@@ -1421,8 +1472,8 @@
                           [viewAddBtn]="true"
                           [viewDeleteBtn]="true"
                           [viewImportBtn]="false"
-                          (addClick)="openDetails()"
-                          (deleteClick)="removeData()"
+                          (addClick)="addRowFunc('Cost Center Account')"
+                          (deleteClick)="deleteRowFunc('Cost Center Account')"
                         >
                         </menu-buttons>
                       </div>
@@ -1430,27 +1481,232 @@
                     <div class="row pt-2">
                       <div class="col-md-12">
                         <dx-data-grid
+                          #dataGrid
                           id="gridContainer"
-                          [showBorders]="true"
                           [dataSource]="costCenterAccountData"
+                          [showBorders]="true"
+                          [allowColumnReordering]="true"
+                          [allowColumnResizing]="true"
+                          class="mt-3"
+                          [columnAutoWidth]="true"
                           [showColumnLines]="true"
                           [showRowLines]="true"
-                          class="mt-3"
-                          [paging]="{ pageSize: 5 }"
+                          keyExpr="SRNO"
+                          (onSelectionChanged)="
+                            onSelectionChanged($event, 'Cost Center Account')
+                          "
                         >
-                          <dxo-paging [enabled]="true"></dxo-paging>
-                          <dxo-pager [showInfo]="true"></dxo-pager>
                           <dxo-selection mode="single"></dxo-selection>
+                          <dxo-scrolling mode="virtual"></dxo-scrolling>
 
+                          <!-- Columns -->
                           <dxi-column
-                            *ngFor="let data of costCenterAccountColumnHeadings"
-                            [dataField]="data.field"
-                            [caption]="data.caption"
-                            [allowEditing]="true"
                             alignment="center"
-                            backgroundcolor="#000"
+                            dataField="SRNO"
+                            caption="SRNO"
+                          ></dxi-column>
+                          <dxi-column
+                            alignment="center"
+                            dataField="COSTCENTER"
+                            caption="COSTCENTER"
+                            cellTemplate="costCenterTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            alignment="center"
+                            dataField="GPC_ACCODE"
+                            caption="GPC_ACCODE"
+                            cellTemplate="gpcAccodeTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            alignment="center"
+                            dataField="GPC_ACCODE_DESC"
+                            caption="GPC_ACCODE_DESC"
+                            cellTemplate="gpcAccodeDescTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            alignment="center"
+                            dataField="HSN_SAC_CODE"
+                            caption="HSN_SAC_CODE"
+                            cellTemplate="hsnSacTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            alignment="center"
+                            dataField="HSN_SAC_DESC"
+                            caption="HSN_SAC_DESC"
+                            cellTemplate="hsnSacDescTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            alignment="center"
+                            dataField="TAX_REG"
+                            caption="TAX_REG"
+                            cellTemplate="taxRegTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            alignment="center"
+                            dataField="REVERSECHARGE_UNREG"
+                            caption="REVERSECHARGE_UNREG"
+                            cellTemplate="reverseChargeUnregTemp"
+                          ></dxi-column>
+                          <dxi-column
+                            alignment="center"
+                            dataField="ELIGIBLE_INPUTCREDIT"
+                            caption="ELIGIBLE_INPUTCREDIT"
+                            cellTemplate="eligibleInputCreditTemp"
+                          ></dxi-column>
+
+                          <!-- ExpAcc Column -->
+                          <div *dxTemplate="let data of 'costCenterTemp'">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="flag === 'VIEW'"
+                                type="text"
+                                (change)="
+                                  updateField($event, data, 'COSTCENTER')
+                                "
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+                            </mat-form-field>
+                          </div>
+
+                          <!-- Exp Account Description Column -->
+                          <div *dxTemplate="let data of 'gpcAccodeTemp'"> 
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="flag === 'VIEW'"
+                                type="text"
+                                maxlength="6"
+                                [readonly]="true"
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+
+                              <master-search
+                                *ngIf="flag != 'VIEW'"
+                                #overlayGroupOne
+                                [MasterSearchData]="groupCodeData"
+                                class="masterSearch"
+                                (newRowClick)="GPCSelect($event, data)"
+                              ></master-search>
+                            </mat-form-field>
+                          </div>
+
+                          <!-- HSN Code Column -->
+                          <div *dxTemplate="let data of 'gpcAccodeDescTemp'">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="flag === 'VIEW'"
+                                type="text"
+                                (change)="
+                                  updateField($event, data, 'GPC_ACCODE_DESC')
+                                "
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+                            </mat-form-field>
+                          </div>
+
+                          <!-- HSN Description Column -->
+                          <div *dxTemplate="let data of 'hsnSacTemp'">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="flag === 'VIEW'"
+                                type="text"
+                                maxlength="6"
+                                [readonly]="true"
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+
+                              <master-search
+                                *ngIf="flag != 'VIEW'"
+                                #overlayGroupOne
+                                [MasterSearchData]="groupCodeData"
+                                class="masterSearch"
+                                (newRowClick)="HSNSelect($event, data)"
+                              ></master-search>
+                            </mat-form-field>
+                          </div>
+
+                          <div *dxTemplate="let data of 'hsnSacDescTemp'">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [readonly]="true"
+                                type="text"
+                                [value]="data.value"
+                                style="width: 100%"
+                                required
+                              />
+                            </mat-form-field>
+                          </div>
+
+                          <!-- Tax Reg Column -->
+                          <div *dxTemplate="let data of 'taxRegTemp'">
+                            <dx-check-box
+                              [value]="data.value"
+                              [disabled]="flag === 'VIEW'"
+                              (valueChange)="
+                                updateField($event, data, 'TAX_REG')
+                              "
+                            >
+                            </dx-check-box>
+                          </div>
+
+                          <!-- Rev Un Column -->
+                          <div
+                            *dxTemplate="let data of 'reverseChargeUnregTemp'"
                           >
-                          </dxi-column>
+                            <dx-check-box
+                              [value]="data.value"
+                              [disabled]="flag === 'VIEW'"
+                              (valueChange)="
+                                updateField($event, data, 'REVERSECHARGE_UNREG')
+                              "
+                            >
+                            </dx-check-box>
+                          </div>
+
+                          <!-- I/p Cre Column -->
+                          <div
+                            *dxTemplate="let data of 'eligibleInputCreditTemp'"
+                          >
+                            <dx-check-box
+                              [value]="data.value"
+                              [disabled]="flag === 'VIEW'"
+                              (valueChange)="
+                                updateField(
+                                  $event,
+                                  data,
+                                  'ELIGIBLE_INPUTCREDIT'
+                                )
+                              "
+                            >
+                            </dx-check-box>
+                          </div>
                         </dx-data-grid>
                       </div>
                     </div>

@@ -66,6 +66,7 @@ export class MeltingIssueComponent implements OnInit {
   editMode: boolean = false;
   isloading: boolean = false;
   codeEnable: boolean = true;
+  isFieldsReadonly = false
   gridAmountDecimalFormat: any;
   isJobNumberSearchVisible: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
@@ -93,7 +94,7 @@ export class MeltingIssueComponent implements OnInit {
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "@strProcess='',@blnActive=1",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -110,6 +111,7 @@ export class MeltingIssueComponent implements OnInit {
     WHERECONDITION: "ISNULL(PROCESS_TYPE, '') = '3'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    
   }
 
   MeltingCodeData: MasterSearchModel = {
@@ -133,11 +135,7 @@ export class MeltingIssueComponent implements OnInit {
     SEARCH_FIELD: 'job_number',
     SEARCH_HEADING: 'Job Number',
     SEARCH_VALUE: '',
-    WHERECONDITION: `"@StrJob_Number='',
-    @StrMeltingTypeKarat='',
-    @StrColor ='', 
-    @LookupFlag ='1',
-    @StrBranch=${this.commonService.branchCode}`,
+    WHERECONDITION: `@StrJob_Number='',@StrMeltingTypeKarat='',@StrColor ='',@StrBranch=${this.commonService.branchCode}`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -218,10 +216,12 @@ export class MeltingIssueComponent implements OnInit {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.LOCKVOUCHERNO = true;
+        this.isFieldsReadonly = true;
       }
       if (this.content.FLAG == 'EDIT') {
         this.editMode = true;
         this.LOCKVOUCHERNO = true;
+        this.isFieldsReadonly = true;
       }
       this.isSaved = true;
       if (this.content.FLAG == 'DELETE') {
@@ -315,7 +315,7 @@ export class MeltingIssueComponent implements OnInit {
 
   uploadSubmited(file: any) {
     this.Attachedfile = file
-    console.log(this.Attachedfile);    
+    console.log(this.Attachedfile);
   }
 
   setAllInitialValues() {
@@ -465,12 +465,12 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -518,21 +518,30 @@ export class MeltingIssueComponent implements OnInit {
     console.log(e);
     this.meltingIssueFrom.controls.worker.setValue(e.WORKER_CODE);
     this.meltingIssueFrom.controls.workerdes.setValue(e.DESCRIPTION);
+    this.WorkerCodeValidate()
   }
+  workerWhereCondtion(){
+    let form = this.meltingIssueFrom.value
+    console.log(form, 'form')
+    this.workerCodeData.WHERECONDITION = `@strProcess='${form.processcode}'`
+  }
+
+  
   WorkerCodeValidate(event?: any) {
     if (event && event.target.value == '') {
       return
     }
+    this.workerWhereCondtion()
     let form = this.meltingIssueFrom.value;
     let postData = {
       "SPID": "103",
       "parameter": {
         strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
-        strJob_Number: '',
-        strUnq_Job_Id: '',
+        strJob_Number: this.commonService.nullToString(form.jobno),
+        strUnq_Job_Id: this.commonService.nullToString(form.subjobno),
         strMetalStone: '',
-        strProcess_Code: this.comService.nullToString(form.PROCESS_CODE),
-        strWorker_Code: this.comService.nullToString(form.WORKER_CODE),
+        strProcess_Code: this.comService.nullToString(form.processcode),
+        strWorker_Code: this.comService.nullToString(form.worker),
         strStock_Code: '',
         strUserName: '',
       }
@@ -733,6 +742,10 @@ export class MeltingIssueComponent implements OnInit {
       this.meltingISsueDetailsData.push(detailDataToParent);
       this.recalculateSRNO()
     }
+    if (this.meltingISsueDetailsData.length > 0) {
+      this.isFieldsReadonly = true; // Use this flag in the template
+    }
+  
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
       this.commonService.showSnackBarMsg('MSG81512')
@@ -1054,8 +1067,7 @@ export class MeltingIssueComponent implements OnInit {
     this.jobnoCodeData.WHERECONDITION = `@StrJob_Number='${this.commonService.nullToString(form.jobno)}',`
     this.jobnoCodeData.WHERECONDITION += `@StrMeltingTypeKarat='${this.commonService.nullToString(form.Karat)}',`
     this.jobnoCodeData.WHERECONDITION += `@StrBranch='${this.commonService.nullToString(this.comService.branchCode)}',`
-    this.jobnoCodeData.WHERECONDITION += `@StrColor='${this.commonService.nullToString(form.color)}',`
-    this.jobnoCodeData.WHERECONDITION += `@LookupFlag='1'`
+    this.jobnoCodeData.WHERECONDITION += `@StrColor='${this.commonService.nullToString(form.color)}'`
   }
 
   subJobNumberValidate(event?: any) {
@@ -1114,11 +1126,7 @@ export class MeltingIssueComponent implements OnInit {
 
   jobNumberValidate(event: any) {
     if (event.target.value == '') return;
-
-    // Capture the form values
     let form = this.meltingIssueFrom.value;
-
-    // Prepare the data for the API call
     let postData = {
       "SPID": "108",
       "parameter": {
@@ -1126,58 +1134,53 @@ export class MeltingIssueComponent implements OnInit {
         'StrMeltingTypeKarat': this.commonService.nullToString(form.Karat),
         'StrBranch': this.comService.branchCode,
         'StrColor': this.commonService.nullToString(form.color),
-        'LookupFlag':'0'
+
       }
     };
-// Show a message indicating that validation is in progress
-this.commonService.showSnackBarMsg('Validating Job Number...');
 
-// Make the API call for job number validation
-let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-  .subscribe((result) => {
-    // Close the progress message
-    this.commonService.closeSnackBarMsg();
+    this.commonService.showSnackBarMsg('Validating Job Number...');
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg();
+        if (result.status === "Success" && result.dynamicData && result.dynamicData[0] && result.dynamicData[0][0]) {
+          let data = result.dynamicData[0][0];
+          console.log(data, 'data')
+          // Check if the unique job ID is valid
+          if (data.UNQ_JOB_ID && data.UNQ_JOB_ID !== '') {
+            // Set valid job details in the form controls
+            this.jobNumberDetailData = data;
+            console.log(data, 'data')
+            this.meltingIssueFrom.controls.subjobno.setValue(data.UNQ_JOB_ID);
+            this.meltingIssueFrom.controls.subJobDescription.setValue(data.JOB_DESCRIPTION);
+            this.overlayjobNoSearch.closeOverlayPanel();
+            this.subJobNumberValidate(); // Trigger sub-job number validation
+          } else {
+            // If job number is not valid, show 'Not Found' message and clear job number field
+            this.handleInvalidJobNumber(event, 'MSG1531');
+          }
+        } else {
+          // Show error if the API status is not success or if no data is returned
+          this.handleInvalidJobNumber(event, 'MSG2039');
+        }
+      }, err => {
+        // Handle error from the API
+        this.commonService.closeSnackBarMsg();
+        this.handleInvalidJobNumber(event, 'MSG2039');
+      });
 
-    // If the API call is successful and data is valid
-    if (result.status === "Success" && result.dynamicData && result.dynamicData[0] && result.dynamicData[0][0]) {
-      let data = result.dynamicData[0][0];
-console.log(data,'data')
-      // Check if the unique job ID is valid
-      if (data.UNQ_JOB_ID && data.UNQ_JOB_ID !== '') {
-        // Set valid job details in the form controls
-        this.jobNumberDetailData = data;
-        console.log(data,'data')
-        this.meltingIssueFrom.controls.subjobno.setValue(data.UNQ_JOB_ID);
-        this.meltingIssueFrom.controls.subJobDescription.setValue(data.JOB_DESCRIPTION);
-        this.overlayjobNoSearch.closeOverlayPanel();
-        this.subJobNumberValidate(); // Trigger sub-job number validation
-      } else {
-        // If job number is not valid, show 'Not Found' message and clear job number field
-        this.handleInvalidJobNumber(event, 'MSG1531');
-      }
-    } else {
-      // Show error if the API status is not success or if no data is returned
-      this.handleInvalidJobNumber(event, 'MSG2039');
-    }
-  }, err => {
-    // Handle error from the API
-    this.commonService.closeSnackBarMsg();
-    this.handleInvalidJobNumber(event, 'MSG2039');
-  });
+    // Add the subscription to track and clean up later
+    this.subscriptions.push(Sub);
+  }
 
-// Add the subscription to track and clean up later
-this.subscriptions.push(Sub);
-}
+  // Method to handle invalid job number cases
+  handleInvalidJobNumber(event: any, message: string) {
+    // Show an error message using a toast or snackbar
+    this.comService.toastErrorByMsgId(message);
 
-// Method to handle invalid job number cases
-handleInvalidJobNumber(event: any, message: string) {
-  // Show an error message using a toast or snackbar
-  this.comService.toastErrorByMsgId(message);
-
-  // Clear the job number control and open the overlay for re-entry
-  this.meltingIssueFrom.controls.jobno.setValue('');
-  this.showOverleyPanel(event, 'jobno');
-}
+    // Clear the job number control and open the overlay for re-entry
+    this.meltingIssueFrom.controls.jobno.setValue('');
+    this.showOverleyPanel(event, 'jobno');
+  }
 
 
   meltingTypeValidate(event?: any) {

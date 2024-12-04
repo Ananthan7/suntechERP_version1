@@ -1,6 +1,11 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { catchError } from 'rxjs/operators';
+import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-pos-sales-stock-comparison',
@@ -14,9 +19,9 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     todate: [''],
     templateName: [''],
 
-    transaction: [''],
+    transaction: [0],
     groupByMetal: [''],
-
+    groupByDiamond: ['']
   
 
   });
@@ -34,10 +39,13 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
 
-  constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder) { }
+  constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private datePipe: DatePipe,
+    private dataService: SuntechAPIService, private commonService: CommonServiceService,  private toastr: ToastrService,
+  ) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
+   
   }
 
   close(data?: any) {
@@ -76,10 +84,13 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
   setDateValue(event: any){
     if(event.FromDate){
       this.POS_Sales_Stock_ComparisonForm.controls.fromdate.setValue(event.FromDate);
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
       this.POS_Sales_Stock_ComparisonForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
+    this.gridAPI();
   }
 
   selectedData(data: any) {
@@ -135,6 +146,39 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
 
   onTabChange(event: any){
 
+  }
+
+  gridAPI(){
+    this.isLoading = true;
+    let APIurl = "PosSalesAndStockComparison";
+    let postData = {
+      "parameter": {
+        "frmDate": this.dateToPass.fromDate,
+        "toDate": this.dateToPass.toDate,
+        "strBranch": this.POS_Sales_Stock_ComparisonForm.controls.branch.value,
+        "mtlType": this.POS_Sales_Stock_ComparisonForm.controls.groupByMetal.value,
+        "diaType": this.POS_Sales_Stock_ComparisonForm.controls.groupByDiamond.value,
+        "transaction": Math.floor(this.POS_Sales_Stock_ComparisonForm.controls.transaction.value || 0)
+      }
+    }
+
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI(APIurl, postData).pipe( 
+     catchError((error) => {
+      this.toastr.error('An error occurred while processing the request');
+      this.isLoading = false;
+      return [];
+    }),)
+    .subscribe((response: any) => {
+      if(response.status == 'Failed'){
+        this.toastr.error(response.message);
+        this.isLoading = false;
+        return
+      }
+      else{
+        this.isLoading = false;
+      }
+    })
   }
 
  saveTemplate(){

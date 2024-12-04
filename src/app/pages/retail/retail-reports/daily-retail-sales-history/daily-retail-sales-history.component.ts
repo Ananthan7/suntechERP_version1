@@ -1,7 +1,11 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { catchError } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-daily-retail-sales-history',
@@ -26,9 +30,11 @@ export class DailyRetailSalesHistoryComponent implements OnInit {
   fetchedBranchDataParam: any= [];
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
+  isLoading: boolean = false;
 
   
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private commonService: CommonServiceService,
+    private datePipe: DatePipe,  private dataService: SuntechAPIService, private toastr: ToastrService,
 
   ) { }
 
@@ -94,10 +100,11 @@ export class DailyRetailSalesHistoryComponent implements OnInit {
   setDateValue(event: any){
     if(event.FromDate){
       this.dailySaleHistoryReportForm.controls.fromdate.setValue(event.FromDate);
-      console.log(event.FromDate)
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
       this.dailySaleHistoryReportForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
   }
 
@@ -114,6 +121,32 @@ export class DailyRetailSalesHistoryComponent implements OnInit {
     }
   }
 
+  excelDataFetch(){
+    this.isLoading = true;
+    const apiUrl = 'DailyRetailSalesHistory'
+    let postData = {
+      "frmDate": this.dateToPass.fromDate,
+      "toDate": this.dateToPass.toDate,
+      "brList": this.dailySaleHistoryReportForm.controls.branch.value
+    }
+    this.dataService.postDynamicAPI(apiUrl, postData).pipe( 
+      catchError((error) => {
+       this.toastr.error('An error occurred while processing the request');
+       this.isLoading = false;
+       return [];
+     }),
+    ).subscribe((resp: any) => {
+      if (resp.status == 'Success') {
+        console.log( resp )
+        this.isLoading = false;
+        this.toastr.success(resp.status);
+      }
+      else{
+        this.isLoading = false;
+        this.toastr.error(resp.message);
+      }
+    });    
+  }
 
   saveTemplate(){
     this.popupVisible = true;

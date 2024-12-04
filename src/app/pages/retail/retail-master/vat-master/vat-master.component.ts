@@ -70,10 +70,12 @@ export class VatMasterComponent implements OnInit {
   expenseHsnOrSacAllocationData: any[] = [];
   costCenterAccountData: any[] = [];
   accountDateWiseGstDetailsData: any[] = [];
-  selectedRowIndex: any;
+  costCenterSelectedRowIndex: any;
+  expenseSelectedRowIndex: any;
   flag: any;
   code: any;
   dialogBox: any;
+  branchCode: any = this.commonService.branchCode;
 
   groupCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -90,34 +92,134 @@ export class VatMasterComponent implements OnInit {
     FRONTENDFILTER: true,
   };
 
-  expenseHsnOrSacAllocationColumnHeadings: any[] = [
-    { field: "PARTYCODE", caption: "Sr. No" },
-    { field: "BRANCH_CODE", caption: "Exp. A/c" },
-    { field: "VOCTYPE", caption: "Exp. A/c Desc" },
-    { field: "DIVISION", caption: "HSN Code" },
-    { field: "QTY", caption: "HSN Desc" },
-    { field: "amount", caption: "Tax Reg" },
-    { field: "PROFIT", caption: "Rev. UnReg" },
-    { field: "PROFIT", caption: "I/p Credit" },
-  ];
+  VATACCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "account_mode not in ('P','R') and isnull(accode,'')<>'' and BRANCH_CODE='" +
+      this.branchCode +
+      "'  ",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "VAT A/C CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  RCMACCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "account_mode not in ('P','R') and isnull(accode,'')<>'' and BRANCH_CODE='" +
+      this.branchCode +
+      "'  ",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "RCM A/C CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  VATCTRLACCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "account_mode not in ('P','R') and isnull(accode,'')<>'' and BRANCH_CODE='" +
+      this.branchCode +
+      "'  ",
+
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "VAT CTRL A/C CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  RCMCTRLACCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "account_mode not in ('P','R') and isnull(accode,'')<>'' and BRANCH_CODE='" +
+      this.branchCode +
+      "'  ",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "RCM CTRL A/C CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  POSVATACCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "account_mode not in ('P','R') and isnull(accode,'')<>'' and BRANCH_CODE='" +
+      this.branchCode +
+      "'  ",
+
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "POS VAT CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  POSVATREFUNDCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "account_mode not in ('P','R') and isnull(accode,'')<>'' and BRANCH_CODE='" +
+      this.branchCode +
+      "'  ",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "POS VAT REFUND",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
 
   costCenterAccountColumnHeadings: any[] = [
-    { field: "PARTYCODE", caption: "Sr. No" },
-    { field: "BRANCH_CODE", caption: "Exp. A/c" },
-    { field: "VOCTYPE", caption: "Exp. A/c Desc" },
-    { field: "DIVISION", caption: "HSN Code" },
-    { field: "QTY", caption: "HSN Desc" },
-    { field: "amount", caption: "Tax Reg" },
-    { field: "PROFIT", caption: "Rev. UnReg" },
-    { field: "PROFIT", caption: "I/p Credit" },
+    { field: "SRNO", caption: "SRNO" },
+    { field: "COSTCENTER", caption: "COSTCENTER" },
+    { field: "GPC_ACCODE", caption: "GPC_ACCODE" },
+    { field: "GPC_ACCODE_DESC", caption: "GPC_ACCODE_DESC" },
+    { field: "HSN_SAC_CODE", caption: "HSN_SAC_CODE" },
+    { field: "HSN_SAC_DESC", caption: "HSN_SAC_DESC" },
+    { field: "TAX_REG", caption: "TAX_REG" },
+    { field: "REVERSECHARGE_UNREG", caption: "REVERSECHARGE_UNREG" },
+    { field: "ELIGIBLE_INPUTCREDIT", caption: "ELIGIBLE_INPUTCREDIT" },
   ];
 
   accountDateWiseGstDetailsColumnHeadings: any[] = [
-    { field: "PARTYCODE", caption: "S. No" },
-    { field: "BRANCH_CODE", caption: "GST Code" },
-    { field: "VOCTYPE", caption: "Date" },
-    { field: "DIVISION", caption: "GST%" },
-    { field: "QTY", caption: "YearMonth" },
+    { field: "SRNO", caption: "Sr No" },
+    { field: "GST_CODE", caption: "GST Code" },
+    { field: "GST_DATE", caption: "Date" },
+    { field: "IGST_PER", caption: "GST %" },
+    { field: "YEARCODE", caption: "Year Month" },
   ];
 
   constructor(
@@ -160,9 +262,6 @@ export class VatMasterComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log(this.content);
-
-    // this.branchCode = this.commonService.branchCode;
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
@@ -186,6 +285,84 @@ export class VatMasterComponent implements OnInit {
 
   ViewController(DATA: any) {
     this.code = DATA.GST_CODE;
+
+    this.vatMasterMainForm.controls["vatCode"].setValue(DATA.GST_CODE);
+    this.vatMasterMainForm.controls["vatDesc"].setValue(DATA.GST_DESCRIPTION);
+    this.vatMasterMainForm.controls["vatPercent"].setValue(
+      this.commonService.decimalQuantityFormat(
+        this.commonService.emptyToZero(DATA.GST_PER),
+        "THREE"
+      )
+    );
+    this.vatMasterMainForm.controls["group1"].setValue(DATA.GROUP_CODE1);
+    this.vatMasterMainForm.controls["group2"].setValue(DATA.GROUP_CODE2);
+    this.vatMasterMainForm.controls["group3"].setValue(DATA.GROUP_CODE3);
+    this.vatMasterMainForm.controls["regRcmAccCredit"].setValue(
+      DATA.REG_IGST_CREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["regRcmAccDebit"].setValue(
+      DATA.REG_IGST_DEBIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["regRcmAccDebit"].setValue(
+      DATA.REG_IGST_DEBIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["unregVatAccCredit"].setValue(
+      DATA.UNREG_IGST_CREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["unregVatAccDebit"].setValue(
+      DATA.UNREG_IGST_DEBIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["unregVatCtrlAccCredit"].setValue(
+      DATA.UNREG_IGST_CTRLCREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["unregVatCtrlAccDebit"].setValue(
+      DATA.UNREG_IGST_CTRLDEBIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["impVatAccDebit"].setValue(
+      DATA.IMPORT_IGST_DEBIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["impVatCtrlAccDebit"].setValue(
+      DATA.IMPORT_IGST_CTRLCREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["expVatAccCredit"].setValue(
+      DATA.EXPORT_IGST_CREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["expVatAccDebit"].setValue(
+      DATA.EXPORT_IGST_CTRLDEBIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["posVatRefundCredit"].setValue(
+      DATA.POSVAT_CREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["regVatCtrlAccCredit"].setValue(
+      DATA.REG_IGST_CTRLCREDIT_ACCODE
+    );
+    this.vatMasterMainForm.controls["regVatCtrlAccDebit"].setValue(
+      DATA.REG_IGST_CTRLDEBIT_ACCODE
+    );
+
+    this.vatMasterMainForm.controls["regVatCtrlAccDebit"].setValue(
+      DATA.UNREG_RCM_DEBIT
+    );
+    this.vatMasterMainForm.controls["unregRcmAccDebit"].setValue(
+      DATA.UNREG_RCM_CREDIT
+    );
+    this.vatMasterMainForm.controls["regRcmAccDebit"].setValue(
+      DATA.REG_RCM_DEBIT
+    );
+    this.vatMasterMainForm.controls["regRcmAccCredit"].setValue(
+      DATA.REG_RCM_CREDIT
+    );
+    this.vatMasterMainForm.controls["impRcmAccCredit"].setValue(
+      DATA.IMP_RCM_DEBIT
+    );
+    this.vatMasterMainForm.controls["impRcmCtrlAccDebit"].setValue(
+      DATA.IMP_RCM_CTRL_CREDIT
+    );
+    this.vatMasterMainForm.controls["posVatAccDebit"].setValue(
+      DATA.POSVATREFUND_DEBIT_ACCODE
+    );
+
+    this.getGridDataObjects(this.code);
   }
 
   editController(DATA: any) {
@@ -205,7 +382,7 @@ export class VatMasterComponent implements OnInit {
       confirmButtonText: "Yes, delete!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const API = `/GstMaster/DeleteGstMaster/${this.code}`;
+        const API = `/VatMaster/DeleteVatMaster/${this.code}`;
         const Sub: Subscription = this.apiService
           .deleteDynamicAPI(API)
           .subscribe({
@@ -281,7 +458,79 @@ export class VatMasterComponent implements OnInit {
     });
 
     if (!requiredFieldsInvalid) {
-      const postData = {};
+      const postData = {
+        MID: 0,
+        GST_CODE: this.vatMasterMainForm.value.vatCode || "",
+        GST_DESCRIPTION: this.vatMasterMainForm.value.vatDesc || "",
+        GST_PER: Number(this.vatMasterMainForm.value.vatPercent) || 0,
+        GROUP_CODE1: this.vatMasterMainForm.value.group1 || "",
+        GROUP_CODE2: this.vatMasterMainForm.value.group2 || "",
+        GROUP_CODE3: this.vatMasterMainForm.value.group3 || "",
+        REG_IGST_CREDIT_ACCODE:
+          this.vatMasterMainForm.value.regRcmAccCredit || "",
+        REG_IGST_DEBIT_ACCODE:
+          this.vatMasterMainForm.value.regRcmAccDebit || "",
+        UNREG_IGST_CREDIT_ACCODE:
+          this.vatMasterMainForm.value.unregVatAccCredit || "",
+        UNREG_IGST_DEBIT_ACCODE:
+          this.vatMasterMainForm.value.unregVatAccDebit || "",
+        UNREG_IGST_CTRLCREDIT_ACCODE:
+          this.vatMasterMainForm.value.unregVatCtrlAccCredit || "",
+        UNREG_IGST_CTRLDEBIT_ACCODE:
+          this.vatMasterMainForm.value.unregVatCtrlAccDebit || "",
+        IMPORT_IGST_DEBIT_ACCODE:
+          this.vatMasterMainForm.value.impVatAccDebit || "",
+        IMPORT_IGST_CTRLCREDIT_ACCODE:
+          this.vatMasterMainForm.value.impVatCtrlAccDebit || "",
+        EXPORT_IGST_CREDIT_ACCODE:
+          this.vatMasterMainForm.value.expVatAccCredit || "",
+        EXPORT_IGST_CTRLDEBIT_ACCODE:
+          this.vatMasterMainForm.value.expVatAccDebit || "",
+        GST_ROUNDOFF: 0,
+        ROUNDOFF_ACCODE: "string",
+        POSVAT_CREDIT_ACCODE:
+          this.vatMasterMainForm.value.posVatRefundCredit || "",
+        REG_IGST_CTRLCREDIT_ACCODE:
+          this.vatMasterMainForm.value.regVatCtrlAccCredit || "",
+        REG_IGST_CTRLDEBIT_ACCODE:
+          this.vatMasterMainForm.value.regVatCtrlAccDebit || "",
+        UNREG_RCM_DEBIT: this.vatMasterMainForm.value.unregRcmAccCredit || "",
+        UNREG_RCM_CREDIT: this.vatMasterMainForm.value.unregRcmAccDebit || "",
+        REG_RCM_DEBIT: this.vatMasterMainForm.value.regRcmAccDebit || "",
+        REG_RCM_CREDIT: this.vatMasterMainForm.value.regRcmAccCredit || "",
+        IMP_RCM_DEBIT: this.vatMasterMainForm.value.impRcmAccCredit || "",
+        IMP_RCM_CTRL_CREDIT:
+          this.vatMasterMainForm.value.impRcmCtrlAccDebit || "",
+        POSVATREFUND_DEBIT_ACCODE:
+          this.vatMasterMainForm.value.posVatAccDebit || "",
+        vatMasterGst: this.expenseHsnOrSacAllocationData.map((item) => ({
+          UNIQUEID: 0,
+          SN: item.SRNO || 0,
+          GST_CODE: this.vatMasterMainForm.value.vatCode || "",
+          GST_DESCRIPTION: this.vatMasterMainForm.value.vatDesc || "",
+          GST_PER: 0,
+          EXPENSE_ACCODE: item.EXPENSE_ACCODE || "",
+          EXPENSE_ACCODE_DESC: item.EXPENSE_ACCODE_DESC || "",
+          HSN_SAC_CODE: item.HSN_SAC_CODE || "",
+          HSN_SAC_DESC: item.HSN_SAC_DESC || "",
+          TAX_REG: item.TAX_REG || "",
+          REVERSECHARGE_UNREG: item.REVERSECHARGE_UNREG || "",
+          ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT || "",
+          EXPENSE_ACCTYPE: "str",
+          COST_CODE: "string",
+        })),
+        VatMasterDetails: [
+          {
+            BRANCH_CODE: this.branchCode,
+            UNIQUEID: 0,
+            SRNO: 0,
+            VAT_CODE: "string",
+            VAT_PER: 0,
+            YEARCODE: "string",
+            VAT_DATE: "2024-12-02T10:11:31.735Z",
+          },
+        ],
+      };
 
       if (this.flag === "EDIT") {
         let API = `/GstMaster/InsertGstMaster/${this.code}`;
@@ -564,23 +813,46 @@ export class VatMasterComponent implements OnInit {
     }
   }
 
-  onSelectionChanged(event: any) {
-    const values = event.selectedRowKeys;
+  onSelectionChanged(event: any, TAB: any) {
+    let values = event.selectedRowKeys;
     console.log("Selected Row Keys:", values);
 
-    let indexes: number[] = [];
+    switch (TAB) {
+      case "Expense HSN/SAC Allocation":
+        let indexesE: number[] = [];
 
-    // Find the indexes of the selected rows
-    this.expenseHsnOrSacAllocationData.forEach(
-      (value: { SRNO: string }, index: number) => {
-        if (values.includes(parseFloat(value.SRNO))) {
-          indexes.push(index);
-        }
-      }
-    );
+        // Find the indexes of the selected rows
+        this.expenseHsnOrSacAllocationData.forEach(
+          (value: { SRNO: string }, index: number) => {
+            if (values.includes(parseFloat(value.SRNO))) {
+              indexesE.push(index);
+            }
+          }
+        );
 
-    this.selectedRowIndex = indexes;
-    console.log("Selected Row Indexes:", this.selectedRowIndex);
+        this.expenseSelectedRowIndex = indexesE;
+        console.log("Selected Row Indexes:", this.expenseSelectedRowIndex);
+        break;
+
+      case "Cost Center Account":
+        let indexesC: number[] = [];
+
+        // Find the indexes of the selected rows
+        this.costCenterAccountData.forEach(
+          (value: { SRNO: string }, index: number) => {
+            if (values.includes(parseFloat(value.SRNO))) {
+              indexesC.push(index);
+            }
+          }
+        );
+
+        this.costCenterSelectedRowIndex = indexesC;
+        console.log("Selected Row Indexes:", this.costCenterSelectedRowIndex);
+        break;
+
+      default:
+        break;
+    }
   }
 
   updateField(data: any, value: any, field: string): void {
@@ -606,70 +878,81 @@ export class VatMasterComponent implements OnInit {
     });
   }
 
-  addRowFunc(): void {
-    const message = `Expense Account Code cannot be empty`;
+  addRowFunc(TAB: any) {
+    console.log(TAB);
+    let message =
+      TAB === "Cost Center Account"
+        ? `GPC Code cannot be empty`
+        : `Expense Account Code cannot be empty`;
 
-    if (
-      this.expenseHsnOrSacAllocationData.length > 0 &&
-      !this.expenseHsnOrSacAllocationData[
-        this.expenseHsnOrSacAllocationData.length - 1
-      ].EXPENSE_ACCODE
-    ) {
-      this.openDialog("Warning", message, true);
-      return;
-    }
+    switch (TAB) {
+      case "Cost Center Account":
+        if (
+          this.costCenterAccountData.length > 0 &&
+          !this.costCenterAccountData[this.costCenterAccountData.length - 1]
+            .EXPENSE_ACCODE
+        ) {
+          this.openDialog("Warning", message, true);
+          return;
+        }
 
-    const newRow = {
-      SRNO:
-        this.expenseHsnOrSacAllocationData.length > 0
-          ? this.expenseHsnOrSacAllocationData[
-              this.expenseHsnOrSacAllocationData.length - 1
-            ].SRNO + 1
-          : 1,
-      EXPENSE_ACCODE: "",
-      EXPENSE_ACCODE_DESC: "",
-      HSN_SAC_CODE: "",
-      HSN_SAC_DESC: "",
-      TAX_REG: false,
-      REVERSECHARGE_UNREG: false,
-      ELIGIBLE_INPUTCREDIT: false,
-    };
+        const newRowC = {
+          SRNO:
+            this.costCenterAccountData.length > 0
+              ? this.costCenterAccountData[
+                  this.costCenterAccountData.length - 1
+                ].SRNO + 1
+              : 1,
+          COSTCENTER: "",
+          GPC_ACCODE: "",
+          GPC_ACCODE_DESC: "",
+          HSN_SAC_CODE: "",
+          HSN_SAC_DESC: "",
+          TAX_REG: false,
+          REVERSECHARGE_UNREG: false,
+          ELIGIBLE_INPUTCREDIT: false,
+        };
 
-    this.expenseHsnOrSacAllocationData = [
-      ...this.expenseHsnOrSacAllocationData,
-      newRow,
-    ];
+        this.costCenterAccountData = [...this.costCenterAccountData, newRowC];
 
-    console.log(this.expenseHsnOrSacAllocationData);
-  }
+        console.log(this.expenseHsnOrSacAllocationData);
 
-  deleteRowFunc() {
-    if (this.selectedRowIndex && this.selectedRowIndex.length > 0) {
-      // Delete rows using selected indexes
-      this.expenseHsnOrSacAllocationData =
-        this.expenseHsnOrSacAllocationData.filter(
-          (_: any, index: any) => !this.selectedRowIndex.includes(index)
-        );
+        break;
 
-      console.log("Rows deleted successfully");
-      this.selectedRowIndex = []; // Reset the selected row index array
-    } else {
-      console.log("No row selected to delete");
-    }
-  }
+      case "Expense HSN/SAC Allocation":
+        if (
+          this.expenseHsnOrSacAllocationData.length > 0 &&
+          !this.expenseHsnOrSacAllocationData[
+            this.expenseHsnOrSacAllocationData.length - 1
+          ].EXPENSE_ACCODE
+        ) {
+          this.openDialog("Warning", message, true);
+          return;
+        }
 
-  
-  charAndDigitLimitChecker(event: any, controller: any) {
-    const value = parseFloat(event.target.value);
+        const newRowE = {
+          SRNO:
+            this.expenseHsnOrSacAllocationData.length > 0
+              ? this.expenseHsnOrSacAllocationData[
+                  this.expenseHsnOrSacAllocationData.length - 1
+                ].SRNO + 1
+              : 1,
+          EXPENSE_ACCODE: "",
+          EXPENSE_ACCODE_DESC: "",
+          HSN_SAC_CODE: "",
+          HSN_SAC_DESC: "",
+          TAX_REG: false,
+          REVERSECHARGE_UNREG: false,
+          ELIGIBLE_INPUTCREDIT: false,
+        };
 
-    switch (controller) {
-      case "vatPercent":
-        let message = `A percentage value cannot be greater than 100.`;
-        value > 100
-          ? this.openDialog("Warning", message, true)
-          : this.vatMasterMainForm.controls[controller].setValue(
-              event.target.value
-            );
+        this.expenseHsnOrSacAllocationData = [
+          ...this.expenseHsnOrSacAllocationData,
+          newRowE,
+        ];
+
+        console.log(this.expenseHsnOrSacAllocationData);
+
         break;
 
       default:
@@ -677,6 +960,164 @@ export class VatMasterComponent implements OnInit {
     }
   }
 
-  openDetails() {}
-  removeData() {}
+  deleteRowFunc(TAB: any) {
+    switch (TAB) {
+      case "Cost Center Account":
+        if (
+          this.costCenterSelectedRowIndex &&
+          this.costCenterSelectedRowIndex.length > 0
+        ) {
+          // Delete rows using selected indexes
+          this.costCenterAccountData = this.costCenterAccountData.filter(
+            (_: any, index: any) =>
+              !this.costCenterSelectedRowIndex.includes(index)
+          );
+
+          console.log("Rows deleted successfully");
+          this.costCenterSelectedRowIndex = []; // Reset the selected row index array
+        } else {
+          console.log("No row selected to delete");
+        }
+
+        break;
+
+      case "Expense HSN/SAC Allocation":
+        if (
+          this.expenseSelectedRowIndex &&
+          this.expenseSelectedRowIndex.length > 0
+        ) {
+          // Delete rows using selected indexes
+          this.expenseHsnOrSacAllocationData =
+            this.expenseHsnOrSacAllocationData.filter(
+              (_: any, index: any) =>
+                !this.expenseSelectedRowIndex.includes(index)
+            );
+
+          console.log("Rows deleted successfully");
+          this.expenseSelectedRowIndex = []; // Reset the selected row index array
+        } else {
+          console.log("No row selected to delete");
+        }
+
+        break;
+
+      default:
+        break;
+    }
+
+    console.log(TAB);
+  }
+
+  expenseSelect(event: any, data: any) {
+    let currentIndex = data.data.SRNO - 1;
+
+    this.expenseHsnOrSacAllocationData[currentIndex].EXPENSE_ACCODE =
+      event.CODE;
+    this.expenseHsnOrSacAllocationData[currentIndex].EXPENSE_ACCODE_DESC =
+      event.DESCRIPTION;
+
+    console.log(this.expenseHsnOrSacAllocationData);
+  }
+
+  GPCSelect(event: any, data: any) {
+    let currentIndex = data.data.SRNO - 1;
+
+    this.costCenterAccountData[currentIndex].GPC_ACCODE = event.CODE;
+    this.costCenterAccountData[currentIndex].GPC_ACCODE_DESC =
+      event.DESCRIPTION;
+
+    console.log(this.costCenterAccountData);
+  }
+
+  HSNSelect(event: any, data: any) {
+    let currentIndex = data.data.SRNO - 1;
+
+    this.costCenterAccountData[currentIndex].HSN_SAC_CODE = event.CODE;
+    this.costCenterAccountData[currentIndex].HSN_SAC_DESC = event.DESCRIPTION;
+
+    console.log(this.costCenterAccountData);
+  }
+
+  getDatewiseListData() {
+    const payload = {
+      strDate: new Date(),
+      strPer: this.vatMasterMainForm.value.vatPercent,
+      strVATCode: this.vatMasterMainForm.value.vatCode,
+    };
+    const API = `GstMaster/GetUspGetFinancialDates`;
+
+    this.apiService.postDynamicAPI(API, payload).subscribe(
+      (result) => {
+        if (result.status.trim() === "Success") {
+          this.accountDateWiseGstDetailsData = result.dynamicData[0].map(
+            (item: any) => ({
+              SRNO: item.SRNO || item.SrNo,
+              GST_CODE: item.GST_CODE || item.VAT_Code,
+              GST_DATE: item.GST_DATE || item.VAT_Per,
+              IGST_PER: item.IGST_PER || item.VAT_Per,
+              YEARCODE: item.YEARCODE || item.YearMonth,
+            })
+          );
+          console.log(this.accountDateWiseGstDetailsData);
+        }
+      },
+      (err) => {
+        console.error("Error fetching data:", err);
+        this.commonService.toastErrorByMsgId("MSG1531");
+      }
+    );
+  }
+
+  codeAlert(event: any, controller: any) {
+    if (controller === "vatPercent") {
+      let message = `A percentage value cannot be greater than 100.`;
+
+      if (event.target.value > 100) {
+        this.vatMasterMainForm.controls[controller].setValue("");
+        this.openDialog("Warning", message, true);
+      } else {
+        this.vatMasterMainForm.controls[controller].setValue(
+          event.target.value
+        );
+      }
+    }
+
+    const message = "Please enter code first!";
+    const GSTCODE = this.vatMasterMainForm.value.vatCode;
+    const GSTPERCENT = this.vatMasterMainForm.value.vatPercent;
+
+    console.log("Value:", GSTCODE);
+
+    if (GSTCODE === "" || !GSTCODE) {
+      this.openDialog("Warning", message, true);
+      this.vatMasterMainForm.controls[controller].setValue(" ");
+    }
+
+    if (GSTCODE && GSTPERCENT) {
+      this.getDatewiseListData();
+    }
+  }
+
+  getGridDataObjects(CODE: any) {
+    let API = `VatMaster/GetVatMasterDetail/${CODE}`;
+    let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result.status.trim() === "Success") {
+          console.log(result.response);
+          this.expenseHsnOrSacAllocationData = result.response.gstMasterGst.map(
+            (item: any) => ({
+              SRNO: item.SRNO || item.SN,
+              ...item,
+            })
+          );
+
+          console.log(this.expenseHsnOrSacAllocationData);
+        }
+      },
+      (err) => {
+        console.error("Error fetching data:", err);
+        this.commonService.toastErrorByMsgId("MSG1531");
+      }
+    );
+  }
 }

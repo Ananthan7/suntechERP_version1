@@ -26,6 +26,11 @@ export class GiftVoucherMasterComponent implements OnInit {
   tableData: any[] = [];
   viewMode: boolean = false;
   editMode:boolean = false;
+
+  @ViewChild('costCentrecodeSearch') costCentrecodeSearch!: MasterSearchComponent;
+  @ViewChild('prefixcodeSearch') prefixcodeSearch!: MasterSearchComponent;
+
+  
   
   constructor(
     private activeModal: NgbActiveModal,
@@ -112,8 +117,30 @@ export class GiftVoucherMasterComponent implements OnInit {
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
 
   getmetal_divisionvalues() {
@@ -339,13 +366,72 @@ setFormValues() {
     });
   }
 
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
 
-  dobValueSetting(event: any) {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.giftVoucherMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
   }
 
-  PLACCodeCodeSelected(e:any){
-    console.log(e);
-   
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'costCentre':
+        this.costCentrecodeSearch.showOverlayPanel(event);
+        break;
+        case 'prefix':
+          this.prefixcodeSearch.showOverlayPanel(event);
+          break;
+
+      default:
+    }
+  }
+
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'costCentre':
+        this.costCentrecodeSearch.showOverlayPanel(event);
+        break;
+        case 'prefix':
+          this.prefixcodeSearch.showOverlayPanel(event);
+          break;
+
+
+      default:
+        console.warn(`Unknown FORMNAME: ${FORMNAME}`);
+        break;
+    }
   }
 
 }
