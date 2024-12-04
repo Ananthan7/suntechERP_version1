@@ -1,7 +1,11 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { debug, error } from 'console';
 import { ToastrService } from 'ngx-toastr';
+import { catchError } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import Swal from 'sweetalert2';
@@ -12,9 +16,6 @@ import Swal from 'sweetalert2';
   styleUrls: ['./retail-sales-karat-wise-profit.component.scss']
 })
 export class RetailSalesKaratWiseProfitComponent implements OnInit {
-
-  columnhead:any[]=['Branch Code','Voc Type','Voc no','Karat Code','Pos Rate','Board Rate','Sales Gold Qty','Sales Gold Amount','Sales Gold Profit' ];
-
   RetailKaratWiseSaleForm: FormGroup = this.formBuilder.group({
     branch: [''],
     fromdate: [''],
@@ -35,14 +36,13 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
   isLoading: boolean = false;
 
   fetchedBranchDataParam: any= [];
+  SalesKaratWprofitArr: any = [];
+  htmlPreview: any;
 
   constructor(
-    private toastr: ToastrService,
-    private commonService: CommonServiceService,
-    private dataService: SuntechAPIService,
-    private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
-    private formBuilder: FormBuilder,
+    private toastr: ToastrService, private commonService: CommonServiceService, private dataService: SuntechAPIService,
+    private activeModal: NgbActiveModal, private modalService: NgbModal, private formBuilder: FormBuilder,
+    private datePipe: DatePipe,  private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -59,8 +59,104 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
       "VOCDATE": "",
       "YEARMONTH" : this.commonService.yearSelected
     }
+    this.prefillScreenValues();
+    this.gridDataFetch();
+  }
 
-    this.prefillScreenValues()
+  headerCellFormatting(e: any) {
+    // to make grid header center aligned
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
+chkboxBoolean: boolean = false;
+  checkboxEvent(event: any, controlName: any){
+    if (controlName === 'BranchWise') {
+      this.RetailKaratWiseSaleForm.controls.BranchWise.setValue(event.checked);
+    } else if (controlName === 'InvoiceWise') {
+      this.RetailKaratWiseSaleForm.controls.InvoiceWise.setValue(event.checked);
+    }
+
+    if (this.RetailKaratWiseSaleForm.controls.BranchWise.value && this.RetailKaratWiseSaleForm.controls.InvoiceWise.value) {
+      this.chkboxBoolean = true;
+      this.gridDataFetch();
+    } else if (!this.RetailKaratWiseSaleForm.controls.BranchWise.value && !this.RetailKaratWiseSaleForm.controls.InvoiceWise.value) {
+      this.chkboxBoolean = false;
+      this.gridDataFetch();
+    }
+  }
+
+  gridDataFetch(){
+    this.isLoading = true;
+    let APIurl = 'RetailSalesKaratWiseProfit'
+    let PostData = {
+      "frmDate": this.dateToPass.fromDate,
+      "toDate": this.dateToPass.toDate,
+      "isBranchWise": this.RetailKaratWiseSaleForm.controls.BranchWise.value,
+      "isInvoiceWise": this.RetailKaratWiseSaleForm.controls.InvoiceWise.value
+    }
+
+    this.dataService.postDynamicAPI(APIurl, PostData).pipe(
+      catchError(error =>{
+        this.toastr.error('An error occurred while processing the request');
+        this.isLoading = false;
+        return [];
+      }),
+    ).subscribe((response: any) => {
+      console.log(response)
+      if(response.status == 'Success'){
+        if(response.dynamicData[0].length == 0){
+          this.isLoading = false;
+          this.toastr.warning('No data available !')
+        }
+        else{
+          //this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT')
+          this.SalesKaratWprofitArr = response.dynamicData[0];
+          this.SalesKaratWprofitArr.forEach((item: any)=>{
+            item.SALESGOLDAMOUNT = this.commonService.setCommaSerperatedNumber(item.SALESGOLDAMOUNT, 'AMOUNT')
+
+            item.POS_RATE = this.commonService.setCommaSerperatedNumber(item.POS_RATE, 'AMOUNT')
+            item.BOARD_RATE = this.commonService.setCommaSerperatedNumber(item.BOARD_RATE, 'AMOUNT')
+            item.SALESGOLDQTY = this.commonService.setCommaSerperatedNumber(item.SALESGOLDQTY, 'AMOUNT')
+            item.SALESGOLDAMOUNT = this.commonService.setCommaSerperatedNumber(item.SALESGOLDAMOUNT, 'AMOUNT')
+            item.WSCOSTGOLDAMOUNT = this.commonService.setCommaSerperatedNumber(item.WSCOSTGOLDAMOUNT, 'AMOUNT')
+            item.WSGPGOLDAMOUNT = this.commonService.setCommaSerperatedNumber(item.WSGPGOLDAMOUNT, 'AMOUNT')
+          })
+          this.isLoading = false;
+          this.toastr.success(response.status || 'success')
+        }
+      }
+      else{
+        this.SalesKaratWprofitArr = [];
+        this.isLoading = false;
+        this.toastr.error(response.status)
+      }
+    })
+  }
+
+  setDateValue(event: any){
+    if(event.FromDate){
+      this.RetailKaratWiseSaleForm.controls.fromdate.setValue(event.FromDate);
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
+    }
+    else if(event.ToDate){
+      this.RetailKaratWiseSaleForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
+    }
+    this.gridDataFetch();
+  }
+
+  popupClosed(){
+    if (this.content && Object.keys(this.content).length > 0) {
+      console.log(this.content)
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
+      this.RetailKaratWiseSaleForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+      this.popupVisible = false;
+    }
+    else{
+      this.popupVisible = false;
+      this.RetailKaratWiseSaleForm.controls.templateName.setValue(null)
+    }
   }
 
   formSubmit(){
@@ -126,36 +222,6 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
     this.RetailKaratWiseSaleForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
-  setDateValue(event: any){
-    if(event.FromDate){
-      this.RetailKaratWiseSaleForm.controls.fromdate.setValue(event.FromDate);
-      console.log(event.FromDate)
-    }
-    else if(event.ToDate){
-      this.RetailKaratWiseSaleForm.controls.todate.setValue(event.ToDate);
-    }
-  }
-
-  popupClosed(){
-    if (this.content && Object.keys(this.content).length > 0) {
-      console.log(this.content)
-      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
-      this.RetailKaratWiseSaleForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
-      this.popupVisible = false;
-    }
-    else{
-      this.popupVisible = false;
-      this.RetailKaratWiseSaleForm.controls.templateName.setValue(null)
-    }
-  }
-
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
 
   saveTemplate(){
     this.popupVisible = true;
@@ -175,8 +241,8 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-              "STRFROMDATE": this.formatDateToYYYYMMDD(this.RetailKaratWiseSaleForm.value.fromdate),             
-              "STRTODATE": this.formatDateToYYYYMMDD(this.RetailKaratWiseSaleForm.value.todate),                  
+              "STRFROMDATE": this.datePipe.transform(this.RetailKaratWiseSaleForm.value.fromdate, 'yyyy-MM-dd'),             
+              "STRTODATE": this.datePipe.transform(this.RetailKaratWiseSaleForm.value.todate, 'yyyy-MM-dd'),                  
               "BRANCHWISE": JSON.stringify(this.RetailKaratWiseSaleForm.value.BranchWise ?0 : 1) ,    
               "INVOICEWISE": JSON.stringify(this.RetailKaratWiseSaleForm.value.InvoiceWise ?0 : 1),  
               "LOGDATA": JSON.stringify(this.logDataParam) 
@@ -207,64 +273,115 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
       }
     });   
   }
-
-  previewClick() {
+  previewClick(){
+    this.isLoading = true;
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
     let postData = {
       "SPID": "153",
       "parameter": {
-        "STRFROMDATE": this.formatDateToYYYYMMDD(this.RetailKaratWiseSaleForm.value.fromdate),             
-	      "STRTODATE": this.formatDateToYYYYMMDD(this.RetailKaratWiseSaleForm.value.todate),                  
+        "STRFROMDATE": this.datePipe.transform(this.RetailKaratWiseSaleForm.value.fromdate, 'yyyy-MM-dd'),             
+	      "STRTODATE": this.datePipe.transform(this.RetailKaratWiseSaleForm.value.todate, 'yyyy-MM-dd'),                  
 	      "BRANCHWISE": JSON.stringify(this.RetailKaratWiseSaleForm.value.BranchWise ?0 : 1) ,    
 	      "INVOICEWISE": JSON.stringify(this.RetailKaratWiseSaleForm.value.InvoiceWise ?0 : 1),  
 	      "LOGDATA": JSON.stringify(this.logDataParam) 
       }
     }
-    console.log(postData)  
+ 
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
       console.log(result);
-      let data = result.dynamicData;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      var WindowPrt = window.open(' ', ' ', windowFeatures);
-      if (WindowPrt === null) {
-        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-        return;
+      if(result.status != "Failed"){
+        let data = result.dynamicData;
+        let printContent = data[0][0].Column1;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+        this.commonService.closeSnackBarMsg();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        this.isLoading = false;
       }
-      let printContent = data[0][0].Column1;
-      WindowPrt.document.write(printContent);
-      WindowPrt.document.close();
-      WindowPrt.focus();  
-      WindowPrt.onload = function () {
-        if (WindowPrt && WindowPrt.document.head) {
-          let styleElement = WindowPrt.document.createElement('style');
-          styleElement.textContent = `
-                      @page {
-                          size: A5 landscape;
-                      }
-                      body {
-                          margin: 0mm;
-                      }
-                  `;
-          WindowPrt.document.head.appendChild(styleElement);
-
-          setTimeout(() => {
-            if (WindowPrt) {
-              WindowPrt.print();
-            } else {
-              console.error('Print window was closed before printing could occur.');
-            }
-          }, 800);
-        }
-      };
-      this.commonService.closeSnackBarMsg()
+      else{
+        this.toastr.error(result.message);
+        this.isLoading = false;
+        return
+      }
     });      
   }
 
   printBtnClick(){
+    this.isLoading = true;
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
+    let postData = {
+      "SPID": "153",
+      "parameter": {
+        "STRFROMDATE": this.datePipe.transform(this.RetailKaratWiseSaleForm.value.fromdate, 'yyyy-MM-dd'),             
+	      "STRTODATE": this.datePipe.transform(this.RetailKaratWiseSaleForm.value.todate, 'yyyy-MM-dd'),                  
+	      "BRANCHWISE": JSON.stringify(this.RetailKaratWiseSaleForm.value.BranchWise ?0 : 1) ,    
+	      "INVOICEWISE": JSON.stringify(this.RetailKaratWiseSaleForm.value.InvoiceWise ?0 : 1),  
+	      "LOGDATA": JSON.stringify(this.logDataParam) 
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      let data = result.dynamicData;
+      let printContent = data[0][0].Column1;
+      this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
 
+      if (result.dynamicData) {
+        this.commonService.closeSnackBarMsg();
+      }
+    });  
+   
+    
+    setTimeout(() => {
+      const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+      
+      let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
+      userBranchDesc = JSON.parse(userBranchDesc)
+
+      if (content && Object.keys(content).length !== 0) {
+        const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
+
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow?.document.write(modifiedContent);
+        printWindow?.document.close();
+        printWindow?.focus();
+        printWindow?.print();
+        this.isLoading = false;
+       
+      } else {
+        Swal.fire('No Data!', 'There is no data to print!', 'info');
+        this.commonService.closeSnackBarMsg();
+        this.isLoading = false;
+        return
+      }
+    }, 3000); 
   }
 
   prefillScreenValues(){
@@ -294,11 +411,17 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
-      this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+      this.dateToPass = { 
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
     }
   }
 
+
+  
 }
+function subscribe(arg0: (response: any) => void): import("rxjs").OperatorFunction<any, unknown> {
+  throw new Error('Function not implemented.');
+}
+
