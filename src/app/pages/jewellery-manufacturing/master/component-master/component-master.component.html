@@ -310,8 +310,8 @@
                                 <div class="box-wrap">
                                     <div class="carousel-inner">
                                         <div class="carousel-item"
-                                            *ngFor="let img of images; let i = index"
-                                            [class.active]="i === 0">
+                                            *ngFor="let img of fileUrls; let i = index"
+                                            [class.active]="i === activeIndex">
                                             <div class="upload-btn-wrapper">
                                                 <button
                                                     class="btn btnnew border-dark"
@@ -327,7 +327,8 @@
                                     type="button" id="ID015"
                                     data-bs-target="#carouselExampleControls"
                                     data-bs-slide="prev"
-                                    [disabled]="viewMode">
+                                    [disabled]="viewMode"
+                                    (click)="previous()">
                                     <span class="carousel-control-prev-icon"
                                         aria-hidden="true"></span>
                                     <span
@@ -337,16 +338,17 @@
                                     type="button" id="ID016"
                                     data-bs-target="#carouselExampleControls"
                                     data-bs-slide="next"
-                                    [disabled]="viewMode">
+                                    [disabled]="viewMode"
+                                    (click)="next()">
                                     <span class="carousel-control-next-icon"
                                         aria-hidden="true"></span>
                                     <span class="visually-hidden">Next</span>
                                 </button>
                             </div>
-                            <input type="file" class="uploadproduct"
+                            <!-- <input type="file" class="uploadproduct"
                                 accept=".png, .jpg, .jpeg" #fileInput
                                 (change)="onFileChangedimage($event)" multiple
-                                [disabled]="viewMode">
+                                [disabled]="viewMode"> -->
                         </div>
                     </div>
 
@@ -837,7 +839,8 @@
                     <div class="d-flex align-items-center">
                         <div class="p-2">
                             <input class="fileAttach pt-2"
-                                type="file"
+                                type="file" accept=".png, .jpg, .jpeg"
+                                multiple 
                                 (change)="onFileChangedimage($event)"
                                 [disabled]="viewMode" />
                         </div>
@@ -848,38 +851,31 @@
                 <dx-data-grid id="gridContainer"
                     [dataSource]="AttachedfileGrid"
                     [showRowLines]="true"
-                    height="300" [columnAutoWidth]="true"
+                    height="350" [columnAutoWidth]="true"
                     [showBorders]="true"
                     [allowColumnResizing]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <!-- <dxo-selection mode="single"></dxo-selection> -->
                     <dxi-column dataField="FILE"
                         caption="Attachment" cellTemplate="FILEtemplate"
-                        alignment="center">
-                        <div *dxTemplate="let data of 'FILEtemplate'">
-                            <div 
-                                *ngFor="let img of images; let i = index"
-                                [class.active]="i === 0">
-                                <div class="upload-btn-wrapper">
-                                        <img [src]="img"
-                                            style="width:126px;height:124px">
-                                </div>
-                            </div>
+                        alignment="left">
+                        <div *dxTemplate="let item of 'FILEtemplate'">
+                            {{item.data.NAME}}
                         </div>
                     </dxi-column>
                     <dxi-column dataField="DEFAULT"
                         cellTemplate="DEFAULTtemplate" caption="Default"
-                        [allowEditing]="false"
+                        [allowEditing]="true"
                         alignment="center">
                         <div *dxTemplate="let data of 'DEFAULTtemplate'">
-                            <mat-checkbox [disabled]="data.data.DEFAULTFLAG"
+                            <mat-checkbox [checked]="data.data.DEFAULT" 
                                 (change)="defaultCheckboxChange($event,data)">
                             </mat-checkbox>
                         </div>
                     </dxi-column>
                     <dxi-column dataField="PICTURE_TYPE"
                         cellTemplate="PICTURE_TYPEtemplate" caption="Type"
-                        [allowEditing]="false"
+                        [allowEditing]="true"
                         alignment="center">
                         <div *dxTemplate="let data of 'PICTURE_TYPEtemplate'">
                             <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">

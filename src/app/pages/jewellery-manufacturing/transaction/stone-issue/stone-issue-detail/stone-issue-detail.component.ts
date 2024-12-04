@@ -113,7 +113,7 @@ export class StoneIssueDetailComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 271,
+    LOOKUPID: 132,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Search',
     SEARCH_VALUE: '',
@@ -1126,8 +1126,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.subJobNoCodeData.WHERECONDITION = `
     Job_Number = '${this.stoneIssueDetailsFrom.controls.jobNumber.value}'
     and Branch_code = '${this.comService.branchCode}'
-    AND isnull(WAX_STATUS, '') <> 'I'
-  `;
+    AND isnull(WAX_STATUS, '') <> 'I'`;
     let postData = {
       "SPID": "028",
       "parameter": {
@@ -1145,7 +1144,6 @@ export class StoneIssueDetailComponent implements OnInit {
           let data = result.dynamicData[0]
           if (data[0] && data[0]?.UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
-            console.log(JSON.stringify(data), 'pick')
             this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION?.toUpperCase())
             this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
             this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION?.toUpperCase())
@@ -1153,7 +1151,8 @@ export class StoneIssueDetailComponent implements OnInit {
             this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
             // this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].CUSTOMER_CODE)
             this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
-            this.stoneIssueDetailsFrom.controls.DESIGN_TYPE.setValue(this.designType)
+            this.designType = this.comService.nullToString(data[0].DESIGN_TYPE)
+            this.stoneIssueDetailsFrom.controls.DESIGN_TYPE.setValue(data[0].DESIGN_TYPE)
             // if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
             //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
             // } else {
@@ -1163,6 +1162,7 @@ export class StoneIssueDetailComponent implements OnInit {
             this.setSubJobCondition()
             this.subJobNumberValidate()
             this.setStockCodeWhereCondition()
+            this.setDivCodeWhereCondition()
             this.codeEnabled()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
@@ -1180,6 +1180,10 @@ export class StoneIssueDetailComponent implements OnInit {
         this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+  setDivCodeWhereCondition(){
+    let form = this.stoneIssueDetailsFrom.value;
+    this.divCodeData.WHERECONDITION = `@SubJobNumber='',  @DivisionCode='', @DesignType='${form.DESIGN_TYPE}'`
   }
   codeEnabled() {
     if (this.stoneIssueDetailsFrom.value.jobNumber == '') {
