@@ -6,8 +6,8 @@
         </button>
     </div>
     <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="DeleteController()"
-[isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-    ></modal-header>
+        [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+        [isViewMore]="!viewMode"></modal-header>
     <div class="p-4 ">
         <form [formGroup]="generaldocumentform">
 
@@ -20,11 +20,12 @@
                                     Code :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput id="code" formControlName="code" UpperCaseDirective [readonly]="viewOnly || codeedit"
-                                            autocomplete="off" (focusout)="checkcode()"/>
-                                            <mat-error *ngIf="generaldocumentform.controls['code'].hasError('required')">
-                                                Code is required.
-                                            </mat-error>
+                                        <input type="text" #codeInput matInput id="code" formControlName="code"
+                                            UpperCaseDirective [readonly]="viewOnly || codeedit" autocomplete="off"
+                                            (focusout)="checkcode()" />
+                                        <mat-error *ngIf="generaldocumentform.controls['code'].hasError('required')">
+                                            Code is required.
+                                        </mat-error>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -33,11 +34,13 @@
                                     Description :</label>
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput id="description" matInput formControlName="description"  [readonly]="viewOnly"
-                                            autocomplete="off" (focusout)="checkdesc()"/>
-                                            <mat-error *ngIf="generaldocumentform.controls['description'].hasError('required')">
-                                                description is required.
-                                            </mat-error>
+                                        <input type="text" #codeInput id="description" matInput
+                                            formControlName="description" [readonly]="viewOnly" autocomplete="off"
+                                            (focusout)="checkdesc()" />
+                                        <mat-error
+                                            *ngIf="generaldocumentform.controls['description'].hasError('required')">
+                                            description is required.
+                                        </mat-error>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -46,8 +49,8 @@
                                     (+/-) : </label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="reminderdays" 
-                                        [readonly]="viewOnly" maxlength="4"/>
+                                        <input type="text" matInput formControlName="reminderdays" [readonly]="viewOnly"
+                                            maxlength="4" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -64,12 +67,12 @@
                                         <tr class="mt-3">
                                             <td>Customer</td>
                                             <td>
-                                                <mat-checkbox formControlName="cust_applicable"  [disabled]="viewOnly"
+                                                <mat-checkbox formControlName="cust_applicable" [disabled]="viewOnly"
                                                     class="example-margin">
                                                 </mat-checkbox>
                                             </td>
                                             <td>
-                                                <mat-checkbox  formControlName="cust_mandatory" [disabled]="viewOnly"
+                                                <mat-checkbox formControlName="cust_mandatory" [disabled]="viewOnly"
                                                     class="example-margin">
                                                 </mat-checkbox>
                                             </td>
@@ -92,8 +95,8 @@
                                         <tr class="mt-0">
                                             <td>Supplier</td>
                                             <td>
-                                                <mat-checkbox  formControlName="supplier_applicable" [disabled]="viewOnly"
-                                                    class="example-margin">
+                                                <mat-checkbox formControlName="supplier_applicable"
+                                                    [disabled]="viewOnly" class="example-margin">
                                                 </mat-checkbox>
                                             </td>
                                             <td>
@@ -106,8 +109,8 @@
                                         <tr class="mt-0">
                                             <td>Employee</td>
                                             <td>
-                                                <mat-checkbox  formControlName="employee_applicable" [disabled]="viewOnly"
-                                                    class="example-margin">
+                                                <mat-checkbox formControlName="employee_applicable"
+                                                    [disabled]="viewOnly" class="example-margin">
                                                 </mat-checkbox>
                                             </td>
                                             <td>
@@ -135,8 +138,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_1" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_1" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                             SPvalidateLookupFieldModified(
                                               $event,
                                               UDF1Data,
@@ -145,7 +148,7 @@
                                               ['CODE'],
                                               false
                                             )
-                                          "/>
+                                          " />
                                         <master-search class="masterSearch" [MasterSearchData]="UDF1Data"
                                             (newRowClick)="UDF1CodeSelected($event)">
                                         </master-search>
@@ -157,8 +160,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_2" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_2" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                             SPvalidateLookupFieldModified(
                                               $event,
                                               UDF2Data,
@@ -167,9 +170,9 @@
                                               ['CODE'],
                                               false
                                             )
-                                          "  />
+                                          " />
                                         <master-search class="masterSearch" [MasterSearchData]="UDF2Data"
-                                        (newRowClick)="UDF2CodeSelected($event)">
+                                            (newRowClick)="UDF2CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -179,8 +182,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_3" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_3" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF3Data,
@@ -189,10 +192,10 @@
                                           ['CODE'],
                                           false
                                         )
-                                      "  />
+                                      " />
                                         <master-search class="masterSearch" [MasterSearchData]="UDF3Data"
-                                        (newRowClick)="UDF3CodeSelected($event)">
-                                    </master-search>
+                                            (newRowClick)="UDF3CodeSelected($event)">
+                                        </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -201,8 +204,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_4" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_4" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF3Data,
@@ -213,8 +216,8 @@
                                         )
                                       " />
                                         <master-search class="masterSearch" [MasterSearchData]="UDF4Data"
-                                        (newRowClick)="UDF4CodeSelected($event)">
-                                    </master-search>
+                                            (newRowClick)="UDF4CodeSelected($event)">
+                                        </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -223,8 +226,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_5" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_5" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF5Data,
@@ -235,8 +238,8 @@
                                         )
                                       " />
                                         <master-search class="masterSearch" [MasterSearchData]="UDF5Data"
-                                        (newRowClick)="UDF5CodeSelected($event)">
-                                    </master-search>
+                                            (newRowClick)="UDF5CodeSelected($event)">
+                                        </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -247,8 +250,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_6" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_6" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF6Data,
@@ -257,7 +260,7 @@
                                           ['CODE'],
                                           false
                                         )
-                                      "/>
+                                      " />
                                         <master-search class="masterSearch" [MasterSearchData]="UDF6Data"
                                             (newRowClick)="UDF6CodeSelected($event)">
                                         </master-search>
@@ -269,8 +272,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_7" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_7" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF7Data,
@@ -279,7 +282,7 @@
                                           ['CODE'],
                                           false
                                         )
-                                      "/>
+                                      " />
                                         <master-search class="masterSearch" [MasterSearchData]="UDF7Data"
                                             (newRowClick)="UDF7CodeSelected($event)">
                                         </master-search>
@@ -291,8 +294,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_8" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_8" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF8Data,
@@ -313,8 +316,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_9" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_9" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF9Data,
@@ -335,8 +338,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_10" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_10" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF10Data,
@@ -359,8 +362,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_11" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_11" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF11Data,
@@ -369,7 +372,7 @@
                                           ['CODE'],
                                           false
                                         )
-                                      "  />
+                                      " />
                                         <master-search class="masterSearch" [MasterSearchData]="UDF11Data"
                                             (newRowClick)="UDF11CodeSelected($event)">
                                         </master-search>
@@ -381,8 +384,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_12" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_12" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF125Data,
@@ -391,7 +394,7 @@
                                           ['CODE'],
                                           false
                                         )
-                                      "  />
+                                      " />
                                         <master-search class="masterSearch" [MasterSearchData]="UDF125Data"
                                             (newRowClick)="UDF12CodeSelected($event)">
                                         </master-search>
@@ -403,8 +406,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_13" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_13" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF13Data,
@@ -425,8 +428,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_14" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_14" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF14Data,
@@ -447,8 +450,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_15" UpperCaseDirective 
-                                        [readonly]="viewOnly" (focusout)="
+                                        <input type="text" matInput formControlName="user_defined_15" UpperCaseDirective
+                                            [readonly]="viewOnly" (focusout)="
                                         SPvalidateLookupFieldModified(
                                           $event,
                                           UDF15Data,
@@ -457,7 +460,7 @@
                                           ['CODE'],
                                           false
                                         )
-                                      "  />
+                                      " />
                                         <master-search class="masterSearch" [MasterSearchData]="UDF15Data"
                                             (newRowClick)="UDF15CodeSelected($event)">
                                         </master-search>

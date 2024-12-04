@@ -107,6 +107,10 @@ export class SubledgerPrefixMasterComponent implements OnInit {
     this.unq_id = this.content?.PREFIX_CODE;
     console.log(this.unq_id);
     this.flag = this.content?.FLAG;
+    console.log(this.flag)
+    if(this.flag == undefined){
+      this.renderer.selectRootElement('#prefixcodeInput')?.focus();
+    }
     if(this.flag == 'EDIT'){
       this.disable_code = true;
       this.editMode = true;

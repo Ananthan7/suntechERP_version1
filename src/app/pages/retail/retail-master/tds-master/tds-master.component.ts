@@ -499,7 +499,6 @@ export class TdsMasterComponent implements OnInit {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.isConfirmed) {
-
         let curr_index = data.data.SRNO - 1; 
         for (let i = curr_index; i < this.maindetails.length; i++) {
           this.maindetails[i].INDIVIDUAL_PER = this.commonService.decimalQuantityFormat(
