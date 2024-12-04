@@ -115,7 +115,7 @@ export class ReorderLevelSetupComponent implements OnInit {
 
   setPostData(){
     return {
-      "REORDER_CODE": this.reorderLevelSetupMainForm.value.code,
+      "REORDER_CODE": this.reorderLevelSetupMainForm.value.code.toUpperCase(),
       "REORDER_DESCRIPTION": "string",
       "METAL_DIAMOND": this.reorderLevelSetupMainForm.value.Metalsoption == 'metal' ? true : false,
       "GROUP1_TYPE": this.reorderLevelSetupMainForm.value.group1,
