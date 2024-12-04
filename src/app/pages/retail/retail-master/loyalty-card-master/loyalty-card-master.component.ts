@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatError } from '@angular/material/form-field';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -12,7 +13,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./loyalty-card-master.component.scss']
 })
 export class LoyaltyCardMasterComponent implements OnInit {
-  maindetails:any=[];
+  maindetails: any = [];
   @Input() content!: any;
   unq_id: any;
   flag: any;
@@ -20,10 +21,11 @@ export class LoyaltyCardMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   viewOnly: boolean = false;
   codeedit: boolean = false;
-  curr_branch : any = localStorage.getItem('userbranch');
-  disable_code:boolean = false;
-  editMode:boolean = false;
-  viewMode:boolean = false;
+  curr_branch: any = localStorage.getItem('userbranch');
+  disable_code: boolean = false;
+  editMode: boolean = false;
+  viewMode: boolean = false;
+  last_points_to :any;
 
 
 
@@ -37,16 +39,16 @@ export class LoyaltyCardMasterComponent implements OnInit {
   ) { }
 
   loyaltycardform: FormGroup = this.formBuilder.group({
-    code:[''],
-    codedesc:[''],
-    pointsfrom:[''],
-    pointsto:[''],
-    metaldiscount:[''],
-    diamonddiscount:[''],
-    pointexpdays:[''],
-    sendmessage:[''],
-    sendemail:[''],
-    pointmulfact:[''],
+    code: ['',[Validators.required]],
+    codedesc: ['',[Validators.required]],
+    pointsfrom: ['',[Validators.required]],
+    pointsto: ['',[Validators.required]],
+    metaldiscount: [''],
+    diamonddiscount: [''],
+    pointexpdays: [''],
+    sendmessage: [''],
+    sendemail: [''],
+    pointmulfact: [''],
   })
 
   ngOnInit(): void {
@@ -54,11 +56,15 @@ export class LoyaltyCardMasterComponent implements OnInit {
     this.unq_id = this.content?.CODE;
     console.log(this.unq_id);
     this.flag = this.content?.FLAG;
-    if(this.flag == 'EDIT'){
+    if(this.flag == undefined){
+      this.renderer.selectRootElement('#code').focus();
+      this.togetlastpointsto();
+    }
+    if (this.flag == 'EDIT') {
       this.disable_code = true;
       this.codeedit = true;
       this.editMode = true;
-    }else if(this.flag == 'VIEW'){
+    } else if (this.flag == 'VIEW') {
       this.viewMode = true;
       this.codeedit = true;
     }
@@ -100,14 +106,14 @@ export class LoyaltyCardMasterComponent implements OnInit {
     this.loyaltycardform.controls.sendemail.setValue(this.content?.SEND_EMAIL);
 
     this.loyaltycardform.controls.diamonddiscount.setValue(this.commonService.decimalQuantityFormat(
-      this.commonService.emptyToZero(this.content?.DIA_DISCOUNT_PER),"AMOUNT"));
+      this.commonService.emptyToZero(this.content?.DIA_DISCOUNT_PER), "AMOUNT"));
     this.loyaltycardform.controls.metaldiscount.setValue(this.commonService.decimalQuantityFormat(
-      this.commonService.emptyToZero(this.content?.MTL_DISCOUNT_PER),"AMOUNT"));
+      this.commonService.emptyToZero(this.content?.MTL_DISCOUNT_PER), "AMOUNT"));
 
   }
 
   detailsapi(fm_id: any) {
-    if(this.flag == 'VIEW'){
+    if (this.flag == 'VIEW') {
       this.viewOnly = true;
     }
 
@@ -121,6 +127,68 @@ export class LoyaltyCardMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub);
   }
+
+  togetlastpointsto(){
+    let data :any;
+    let API = `LoyaltyCardMaster/`;
+    let Sub: Subscription = this.apiService.getDynamicAPI(API)
+      .subscribe((result: any) => {
+        data = result.response;
+        data.forEach((e:any) => {
+          this.last_points_to = e.POINTS_TO
+        });
+        console.log(this.last_points_to);
+      }, (err: any) => {
+
+      })
+    this.subscriptions.push(Sub);
+  }
+
+
+  checkcode() {
+    const CodeControl = this.loyaltycardform.controls.code;
+    if (!CodeControl.value || CodeControl.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1124');
+      this.renderer.selectRootElement('#code')?.focus();
+    }
+  }
+
+  
+  checkdesc() {
+    const descControl = this.loyaltycardform.controls.codedesc;
+    if (!descControl.value || descControl.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1193');
+      this.renderer.selectRootElement('#codedesc')?.focus();
+    }
+  }
+
+  checkvalue() {
+    let points_from = this.loyaltycardform.controls.pointsfrom.value;
+    let points_to = this.loyaltycardform.controls.pointsto.value;
+    if (points_from >= points_to) {
+        this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
+        this.renderer.selectRootElement('#pointsto')?.focus();
+    } else {
+        this.loyaltycardform.controls.pointsto.setErrors(null);
+    }
+  }
+
+    check_greater(){
+      let points_from = this.loyaltycardform.controls.pointsfrom.value;
+      let points_to = this.loyaltycardform.controls.pointsto.value;
+      
+      if (this.last_points_to >= points_from) {
+        this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromlower: true });
+        this.renderer.selectRootElement('#pointsfrom')?.focus();
+      }else  if (points_from >= points_to) {
+        this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
+        this.renderer.selectRootElement('#pointsto')?.focus();
+      } else {
+        this.loyaltycardform.controls.pointsfrom.setErrors(null);
+      }
+
+    }
+
 
 
 
@@ -168,7 +236,8 @@ export class LoyaltyCardMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        // this.flag = "VIEW";
+        this.activeModal.close("");
       }
     });
   }
@@ -176,12 +245,12 @@ export class LoyaltyCardMasterComponent implements OnInit {
 
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -198,8 +267,8 @@ export class LoyaltyCardMasterComponent implements OnInit {
       if (result.isConfirmed) {
         this.activeModal.close(data);
       }
-  }
-  )
+    }
+    )
   }
 
   formSubmit() {
@@ -208,17 +277,17 @@ export class LoyaltyCardMasterComponent implements OnInit {
       "MID": 0,
       "CODE": this.loyaltycardform.controls.code.value,
       "DESCRIPTION": this.loyaltycardform.controls.codedesc.value,
-      "POINTS_FROM":  this.loyaltycardform.controls.pointsfrom.value,
-      "POINTS_TO":  this.loyaltycardform.controls.pointsto.value,
-      "MTL_DISCOUNT_PER": this.loyaltycardform.controls.metaldiscount.value,
-      "DIA_DISCOUNT_PER": this.loyaltycardform.controls.diamonddiscount.value,
+      "POINTS_FROM": this.loyaltycardform.controls.pointsfrom.value,
+      "POINTS_TO": this.loyaltycardform.controls.pointsto.value,
+      "MTL_DISCOUNT_PER": this.loyaltycardform.controls.metaldiscount.value || 0,
+      "DIA_DISCOUNT_PER": this.loyaltycardform.controls.diamonddiscount.value || 0,
       "SEND_MSG": this.loyaltycardform.controls.sendmessage.value ? true : false,
       "SEND_EMAIL": this.loyaltycardform.controls.sendemail.value ? true : false,
-      "POINT_EXP_DAYS": this.loyaltycardform.controls.pointexpdays.value,
-      "POINT_CONV_PER": this.loyaltycardform.controls.pointmulfact.value,
+      "POINT_EXP_DAYS": this.loyaltycardform.controls.pointexpdays.value || 0,
+      "POINT_CONV_PER": this.loyaltycardform.controls.pointmulfact.value || 0,
       "PICTURE_NAME": "string"
     }
-   
+
     // console.log(postData);return;
 
     if (this.flag === "EDIT") {
@@ -274,7 +343,7 @@ export class LoyaltyCardMasterComponent implements OnInit {
     }
   }
 
-  BranchDataSelected(e:any){
+  BranchDataSelected(e: any) {
 
   }
 
