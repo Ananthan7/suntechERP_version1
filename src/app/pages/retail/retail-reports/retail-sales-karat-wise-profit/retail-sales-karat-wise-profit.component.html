@@ -31,12 +31,12 @@
 
                 <div class="col-md-1 checkboxAlign">
                   <div class="row">
-                      <mat-checkbox formControlName="BranchWise" class="example-margin"
-                      [checked]="RetailKaratWiseSaleForm.controls.BranchWise.value">Branch Wise</mat-checkbox>
+                      <mat-checkbox formControlName="BranchWise" class="example-margin" (change)="checkboxEvent($event, 'BranchWise')"
+                      >Branch Wise</mat-checkbox>
                   </div>
                   <div class="row">
-                      <mat-checkbox formControlName="InvoiceWise" class="example-margin"
-                      [checked]="RetailKaratWiseSaleForm.controls.InvoiceWise.value">Invoice Wise</mat-checkbox>
+                      <mat-checkbox formControlName="InvoiceWise" class="example-margin" (change)="checkboxEvent($event, 'InvoiceWise')"
+                      >Invoice Wise</mat-checkbox>
                   </div>
                 </div>
               </div>
@@ -44,18 +44,36 @@
         </div>
 
         <div class="row  mt-1 pt-3 mb-3">
-          <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-            [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
-            <dxo-paging [enabled]="false"></dxo-paging>
-            <dxo-editing mode="cell" [allowUpdating]="true">
-            </dxo-editing>
-            <dxo-selection mode="multiple"></dxo-selection>
-            <dxo-scrolling mode="virtual"></dxo-scrolling>
+          <app-loader [isLoading]="isLoading"></app-loader>
+          <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="SalesKaratWprofitArr"
+            [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" (onCellPrepared)="headerCellFormatting($event)" 
+            *ngIf="!isLoading && chkboxBoolean">
+            <dxo-paging [pageSize]="12"></dxo-paging>
+            <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+            <dxo-scrolling mode="standard"></dxo-scrolling>
 
-            <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-              [allowEditing]="true" alignment="center" backgroundcolor="#000">
-            </dxi-column>       
-            </dx-data-grid>
+            <dxi-column dataField="BRANCHCODE" caption="Branch Code" alignment="left"></dxi-column>
+            <dxi-column dataField="VOCTYPE" caption="Voucher Type" alignment="left"></dxi-column>
+            <dxi-column dataField="VOCNO" caption="Voucher No." alignment="right"></dxi-column>
+            <dxi-column dataField="KARATCODE" caption="Karat Code" alignment="right"></dxi-column>
+            <dxi-column dataField="POS_RATE" caption="POS Rate" alignment="right"></dxi-column>
+            <dxi-column dataField="BOARD_RATE" caption="Board Rate" alignment="right"></dxi-column>
+            <dxi-column dataField="SALESGOLDQTY" caption="Sales Gold Quantity" alignment="right"></dxi-column>
+            <dxi-column dataField="SALESGOLDAMOUNT" caption="Sales Gold Amount" alignment="right"></dxi-column>
+            <dxi-column dataField="WSCOSTGOLDAMOUNT" caption="WSCOSTGOLDAMOUNT" alignment="right"></dxi-column>
+            <dxi-column dataField="WSGPGOLDAMOUNT" caption="WSGPGOLDAMOUNT" alignment="right"></dxi-column>
+          </dx-data-grid>
+
+
+          <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="SalesKaratWprofitArr"
+          [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" (onCellPrepared)="headerCellFormatting($event)"
+          *ngIf="!isLoading && !chkboxBoolean">
+            <dxi-column dataField="KARATCODE" caption="Karat Code" alignment="right"></dxi-column>
+            <dxi-column dataField="SALESGOLDQTY" caption="Sales Gold Quantity" alignment="right"></dxi-column>
+            <dxi-column dataField="SALESGOLDAMOUNT" caption="Sales Gold Amount" alignment="right"></dxi-column>
+            <dxi-column dataField="WSCOSTGOLDAMOUNT" caption="WSCOSTGOLDAMOUNT" alignment="right"></dxi-column>
+            <dxi-column dataField="WSGPGOLDAMOUNT" caption="WSCOSTGOLDAMOUNT" alignment="right"></dxi-column>
+          </dx-data-grid>
         </div>  
 
 
@@ -83,7 +101,7 @@
             </div>
         </dx-popup>
 
-        <div class="row mt-2 justify-content-end mx-2">
+        <div class="row mt-2 justify-content-end mx-2" [ngClass]="{'loading-class': isLoading }">
             <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
             (printClicked)="printBtnClick()"></app-report-screen-buttons>
          </div>
