@@ -113,13 +113,14 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <mat-select formControlName="group1" (selectionChange)="onGroupChange()" [disabled]="viewMode">
                     <mat-option value="None">None</mat-option>
-                    <mat-option value="Category">Category</mat-option>
+                    <mat-option *ngFor="let option of groupOptions" [value]="option">{{ option }}</mat-option>
+                    <!-- <mat-option value="Category">Category</mat-option>
                     <mat-option value="Sub Category">Sub Category</mat-option>
                     <mat-option value="Brand Code">Brand Code</mat-option>
                     <mat-option value="Karat">Karat</mat-option>
                     <mat-option value="Type">Type</mat-option>
                     <mat-option value="Country">Country</mat-option>
-                    <mat-option value="Cost Code">Cost Code</mat-option>
+                    <mat-option value="Cost Code">Cost Code</mat-option> -->
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -128,13 +129,7 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <mat-select formControlName="group2" (selectionChange)="onGroupChange()" [disabled]="viewMode">
                     <mat-option value="None">None</mat-option>
-                    <mat-option value="Category">Category</mat-option>
-                    <mat-option value="Sub Category">Sub Category</mat-option>
-                    <mat-option value="Brand Code">Brand Code</mat-option>
-                    <mat-option value="Karat">Karat</mat-option>
-                    <mat-option value="Type">Type</mat-option>
-                    <mat-option value="Country">Country</mat-option>
-                    <mat-option value="Cost Code">Cost Code</mat-option>
+                    <mat-option *ngFor="let option of groupOptions" [value]="option">{{ option }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -143,13 +138,7 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <mat-select formControlName="group3" (selectionChange)="onGroupChange()" [disabled]="viewMode">
                     <mat-option value="None">None</mat-option>
-                    <mat-option value="Category">Category</mat-option>
-                    <mat-option value="Sub Category">Sub Category</mat-option>
-                    <mat-option value="Brand Code">Brand Code</mat-option>
-                    <mat-option value="Karat">Karat</mat-option>
-                    <mat-option value="Type">Type</mat-option>
-                    <mat-option value="Country">Country</mat-option>
-                    <mat-option value="Cost Code">Cost Code</mat-option>
+                    <mat-option *ngFor="let option of groupOptions" [value]="option">{{ option }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
