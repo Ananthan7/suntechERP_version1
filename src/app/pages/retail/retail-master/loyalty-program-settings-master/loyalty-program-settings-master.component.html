@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-md-4 p-0">
                             <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" id="codedesc" matInput formControlName="codedesc" class="p-0"
+                                <input type="text" id="codedesc" matInput formControlName="codedesc" class="p-0"  [readonly]="viewOnly"
                                     UpperCaseDirective />
                             </mat-form-field>
                         </div>
@@ -45,9 +45,9 @@
                                     <div class="row">
                                         <label for="prefixcode" class="col-sm-4 col-form-label">Division :</label>
                                         <div class="col-md-7">
-                                            <mat-form-field style="width: 100%;" appearance="outline">
-                                                <mat-select formControlName="division"
-                                                    (selectionChange)="change_curr_div()">
+                                            <mat-form-field style="width: 100%;" appearance="outline" >
+                                                <mat-select formControlName="division" 
+                                                    (selectionChange)="change_curr_div()"  [disabled]="viewOnly">
                                                     <mat-option *ngFor="let division of division_values"
                                                         [value]="division.ENGLISH">
                                                         {{ division.ENGLISH }}
@@ -63,7 +63,7 @@
                                             Divisions : </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="divisions"
+                                                <input type="text" #codeInput matInput formControlName="divisions" [readonly]="viewOnly"
                                                     autocomplete="off" />
                                                 <master-search class="masterSearch" [MasterSearchData]="divisiondata"
                                                     (newRowClick)="divisiondataselected($event)">
@@ -71,7 +71,7 @@
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-2">
-                                            <button mat-raised-button color="primary"
+                                            <button mat-raised-button color="primary" [disabled]="viewOnly"
                                                 (click)="clear('divisions')">Clear</button>
                                         </div>
                                     </div>
@@ -85,7 +85,7 @@
                                         <div class="col-md-7">
                                             <mat-form-field style="width: 100%;" appearance="outline">
                                                 <mat-select formControlName="group1"
-                                                    (selectionChange)="setmastergroup1()">
+                                                    (selectionChange)="setmastergroup1()" [disabled]="viewOnly || dis_group">
                                                     <mat-option *ngFor="let group of dropdownvalues"
                                                         [value]="group.DispName">
                                                         {{ group.DispName }}
@@ -101,13 +101,13 @@
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="group1search"
                                                     autocomplete="off" />
-                                                <master-search class="masterSearch" [MasterSearchData]="group1data"
+                                                <master-search *ngIf="this.flag != 'VIEW'"  class="masterSearch" [MasterSearchData]="group1data"
                                                     (newRowClick)="groupselected($event,'group1search')">
                                                 </master-search>
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-2">
-                                            <button mat-raised-button color="primary"
+                                            <button mat-raised-button color="primary" [disabled]="viewOnly"
                                                 (click)="clear('group1search')">Clear</button>
                                         </div>
                                     </div>
@@ -121,7 +121,7 @@
                                         <div class="col-md-7">
                                             <mat-form-field style="width: 100%;" appearance="outline">
                                                 <mat-select formControlName="group2"
-                                                    (selectionChange)="setmastergroup2()">
+                                                    (selectionChange)="setmastergroup2()"  [disabled]="viewOnly || dis_group">
                                                     <mat-option *ngFor="let group of dropdownvalues"
                                                         [value]="group.DispName">
                                                         {{ group.DispName }}
@@ -136,14 +136,14 @@
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="group2search"
-                                                    autocomplete="off" />
-                                                <master-search class="masterSearch" [MasterSearchData]="group2data"
+                                                    autocomplete="off" [readonly]="viewOnly" />
+                                                <master-search *ngIf="this.flag != 'VIEW'"  class="masterSearch" [MasterSearchData]="group2data"
                                                     (newRowClick)="groupselected($event,'group2search')">
                                                 </master-search>
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-2">
-                                            <button mat-raised-button color="primary"
+                                            <button mat-raised-button color="primary" [disabled]="viewOnly"
                                                 (click)="clear('group2search')">Clear</button>
                                         </div>
                                     </div>
@@ -157,7 +157,7 @@
                                         <div class="col-md-7">
                                             <mat-form-field style="width: 100%;" appearance="outline">
                                                 <mat-select formControlName="group3"
-                                                    (selectionChange)="setmastergroup3()">
+                                                    (selectionChange)="setmastergroup3()" [disabled]="viewOnly || dis_group">
                                                     <mat-option *ngFor="let group of dropdownvalues"
                                                         [value]="group.DispName">
                                                         {{ group.DispName }}
@@ -173,13 +173,13 @@
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="group3search"
                                                     autocomplete="off" />
-                                                <master-search class="masterSearch" [MasterSearchData]="group3data"
+                                                <master-search *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="group3data"
                                                     (newRowClick)="groupselected($event,'group3search')">
                                                 </master-search>
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-2">
-                                            <button mat-raised-button color="primary"
+                                            <button mat-raised-button color="primary" [disabled]="viewOnly"
                                                 (click)="clear('group3search')">Clear</button>
                                         </div>
                                     </div>
@@ -199,7 +199,7 @@
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="standardamt1"
-                                                    autocomplete="off" />
+                                                    autocomplete="off" [readonly]="viewOnly" />
                                             </mat-form-field>
                                         </div>
                                         <!-- <div class="col-md-2">
@@ -238,12 +238,12 @@
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="redeem"
-                                                    autocomplete="off" MetalDecimalInput />
+                                                    autocomplete="off" MetalDecimalInput  [readonly]="viewOnly"/>
                                             </mat-form-field>
                                         </div>
 
                                         <div class="col-md-2">
-                                            <mat-checkbox formControlName="no_redeem_points" class="example-margin"
+                                            <mat-checkbox formControlName="no_redeem_points" class="example-margin" [disabled]="viewOnly"
                                                 (change)="changeredeem()">
                                                 No Redeem Points Slab</mat-checkbox>
                                         </div>
@@ -254,11 +254,11 @@
 
                             <div class="row mt-1">
                                 <div class="col-md-1">
-                                    <button class="btn btn-outline-primary" (click)="adddetails_data()">Apply</button>
+                                    <button class="btn btn-outline-primary" (click)="adddetails_data()" [disabled]="viewOnly">Apply</button>
                                 </div>
 
                                 <div class="col-md-3">
-                                    <mat-checkbox formControlName="calculate_points" class="example-margin">
+                                    <mat-checkbox formControlName="calculate_points" class="example-margin" [disabled]="viewOnly">
                                         Don't Calculate Standard Points</mat-checkbox>
                                 </div>
 
@@ -269,7 +269,7 @@
                                         <div class="col-md-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="number" #codeInput matInput formControlName="reference1"
-                                                    autocomplete="off" MetalDecimalInput />
+                                                    autocomplete="off" MetalDecimalInput [readonly]="viewOnly"/>
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -282,7 +282,7 @@
                                         <div class="col-md-4">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="number" #codeInput matInput formControlName="subreference"
-                                                    autocomplete="off" MetalDecimalInput />
+                                                    autocomplete="off" MetalDecimalInput [readonly]="viewOnly"/>
                                             </mat-form-field>
                                         </div>
                                     </div>

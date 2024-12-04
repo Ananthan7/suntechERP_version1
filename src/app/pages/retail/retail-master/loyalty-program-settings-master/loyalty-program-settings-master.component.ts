@@ -27,6 +27,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
   dyndatas: any;
   private subscriptions: Subscription[] = [];
   viewOnly: boolean = false;
+  dis_group: boolean = false;
   codeedit: boolean = false;
   curr_branch: any = localStorage.getItem('userbranch');
   curr_user: any = localStorage.getItem('username');
@@ -39,9 +40,9 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
   group2_val: any;
   group3_val: any;
   @ViewChild('grid') grid!: DxDataGridComponent;
-  filter_1:any;
-  filter_2:any;
-  filter_3:any;
+  filter_1: any;
+  filter_2: any;
+  filter_3: any;
 
 
 
@@ -142,7 +143,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
 
   setmastergroup1() {
     this.filter_1 = this.loyaltysettingform.controls.group1.value;
-    if(this.filter_1 == this.filter_2 || this.filter_1 == this.filter_3){
+    if (this.filter_1 == this.filter_2 || this.filter_1 == this.filter_3) {
       this.loyaltysettingform.controls['group1'].reset();
       Swal.fire({
         title: 'Code Already Entered',
@@ -152,7 +153,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
         confirmButtonText: 'ok',
       })
       return;
-    }    
+    }
     let group = this.loyaltysettingform.controls.group1.value;
     this.loyaltysettingform.controls['group1search'].reset();
     this.group1data.WHERECONDITION = "   @strSelectedField='" + group + "' ";
@@ -160,13 +161,13 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
 
   groupselected(e: any, field: string) {
     console.log(e);
-    this.loyaltysettingform.controls[field].setValue(e.Code);    
+    this.loyaltysettingform.controls[field].setValue(e.Code);
   }
 
 
   setmastergroup2() {
     this.filter_2 = this.loyaltysettingform.controls.group2.value;
-    if(this.filter_2 == this.filter_1 || this.filter_2 == this.filter_3){
+    if (this.filter_2 == this.filter_1 || this.filter_2 == this.filter_3) {
       this.loyaltysettingform.controls['group2'].reset();
       return;
     }
@@ -182,7 +183,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
 
   setmastergroup3() {
     this.filter_3 = this.loyaltysettingform.controls.group3.value;
-    if(this.filter_3 == this.filter_1 || this.filter_3 == this.filter_2){
+    if (this.filter_3 == this.filter_1 || this.filter_3 == this.filter_2) {
       this.loyaltysettingform.controls['group3'].reset();
       return;
     }
@@ -207,7 +208,6 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     this.unq_id = this.content?.CODE;
     console.log(this.unq_id);
     this.flag = this.content?.FLAG;
-
     this.division_values = this.getUniqueValues(
       this.commonService.getComboFilterByID("division"),
       "ENGLISH"
@@ -216,18 +216,42 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     this.getdropdownvalues();
 
     if (this.flag == 'EDIT') {
+      this.dis_group = true;
+      this.detailsapi(this.unq_id);
       this.disable_code = true;
       this.codeedit = true;
       this.editMode = true;
     } else if (this.flag == 'VIEW') {
+      this.dis_group = true;
+
+      this.detailsapi(this.unq_id);
+
       this.viewMode = true;
       this.codeedit = true;
     }
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
-      this.detailsapi(this.unq_id);
+      // this.detailsapi(this.unq_id);
+      console.log("data")
     }
   }
+
+
+
+  ngAfterViewInit() {
+    if(this.content?.FLAG != undefined){
+      if (this.grid && this.grid.instance) {
+        this.grid.instance.columnOption('INVFILT1_VALUES', 'caption', this.content?.FILTER1);
+        this.grid.instance.columnOption('INVFILT2_VALUES', 'caption', this.content?.FILTER2);
+        this.grid.instance.columnOption('INVFILT3_VALUES', 'caption', this.content?.FILTER3);
+      } else {
+        console.error('Grid instance is not available.');
+      }
+    }    
+  }
+  
+
+
   getUniqueValues(List: any[], field: string) {
     return List.filter(
       (item, index, self) =>
@@ -260,9 +284,17 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     this.loyaltysettingform.controls.code.setValue(this.content?.CODE);
 
     // this.salespersontargetform.controls.dateto.setValue(this.content?.TO_DATE);
+
     this.loyaltysettingform.controls.codedesc.setValue(this.content?.DESCRIPTION);
-    this.loyaltysettingform.controls.calculate_points.setValue(this.content?.DONT_CAL_POINTS);
+    this.loyaltysettingform.controls.division.setValue(this.content?.ALL_DIVISION);
+    this.loyaltysettingform.controls.group1.setValue(this.content?.FILTER1);
+    this.loyaltysettingform.controls.group2.setValue(this.content?.FILTER2);
+    this.loyaltysettingform.controls.group3.setValue(this.content?.FILTER3);
+    this.loyaltysettingform.controls.redeem.setValue(this.content?.STD_AMT_REDEEMPOINT);
     this.loyaltysettingform.controls.no_redeem_points.setValue(this.content?.STD_AMT_REDEEMPOINT);
+    this.loyaltysettingform.controls.calculate_points.setValue(this.content?.DONT_CAL_POINTS);
+    this.loyaltysettingform.controls.reference1.setValue(this.content?.FIRST_REF_PER);
+    this.loyaltysettingform.controls.subreference.setValue(this.content?.STD_REF_PER);
 
     this.loyaltysettingform.controls.reference1.setValue(this.commonService.decimalQuantityFormat(
       this.commonService.emptyToZero(this.content?.FIRST_REF_PER), "METAL"));
@@ -270,6 +302,9 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
       this.commonService.emptyToZero(this.content?.STD_REF_PER), "METAL"));
     this.loyaltysettingform.controls.standardamt1.setValue(this.commonService.decimalQuantityFormat(
       this.commonService.emptyToZero(this.content?.STD_AMT_PERPOINT), "METAL"));
+      this.grid.instance.columnOption('INVFILT1_VALUES', 'caption', this.content?.FILTER1);
+      this.grid.instance.columnOption('INVFILT2_VALUES', 'caption', this.content?.FILTER2);
+      this.grid.instance.columnOption('INVFILT3_VALUES', 'caption', this.content?.FILTER3);
 
   }
 
@@ -279,11 +314,22 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
       this.viewOnly = true;
     }
 
-    let API = `LoyaltyCardMaster/GetLoyaltyCardMasterDetailWithCode/${this.unq_id}`;
+    let API = `LoyaltySettingMaster/GetLoyaltySettingMasterDetailWithCode/${this.unq_id}`;
     let Sub: Subscription = this.apiService.getDynamicAPI(API)
       .subscribe((result: any) => {
         this.dyndatas = result.response;
         console.log(this.dyndatas);
+        this.loyaltysettingform.controls.codedesc.setValue(this.dyndatas.DESCRIPTION);
+        this.loyaltysettingform.controls.division.setValue(this.dyndatas.ALL_DIVISION);
+        this.loyaltysettingform.controls.group1.setValue(this.dyndatas.FILTER1);
+        this.loyaltysettingform.controls.group2.setValue(this.dyndatas.FILTER2);
+        this.loyaltysettingform.controls.group3.setValue(this.dyndatas.FILTER3);
+        this.loyaltysettingform.controls.redeem.setValue(this.dyndatas.STD_AMT_REDEEMPOINT);
+        this.loyaltysettingform.controls.no_redeem_points.setValue(this.dyndatas.STD_AMT_REDEEMPOINT);
+        this.loyaltysettingform.controls.calculate_points.setValue(this.dyndatas.DONT_CAL_POINTS);
+        this.loyaltysettingform.controls.reference1.setValue(this.dyndatas.FIRST_REF_PER);
+        this.loyaltysettingform.controls.subreference.setValue(this.dyndatas.STD_REF_PER);
+        this.maindetails.push(...this.dyndatas.Detail);
       }, (err: any) => {
 
       })
@@ -413,16 +459,16 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     let allgroup_2 = '';
     let allgroup_3 = '';
 
-    if(Array.isArray(datas)){
+    if (Array.isArray(datas)) {
       datas.forEach((e: any) => {
-        allgroup_1 += e.INVFILT1_VALUES + ',';  
-        allgroup_2 += e.INVFILT2_VALUES + ',';  
-        allgroup_3 += e.INVFILT3_VALUES + ','; 
+        allgroup_1 += e.INVFILT1_VALUES + ',';
+        allgroup_2 += e.INVFILT2_VALUES + ',';
+        allgroup_3 += e.INVFILT3_VALUES + ',';
       });
     }
-    allgroup_1 = allgroup_1.slice(0, -1); 
-    allgroup_2 = allgroup_2.slice(0, -1); 
-    allgroup_3 = allgroup_3.slice(0, -1); 
+    allgroup_1 = allgroup_1.slice(0, -1);
+    allgroup_2 = allgroup_2.slice(0, -1);
+    allgroup_3 = allgroup_3.slice(0, -1);
 
     const postData = {
       "MID": 0,
@@ -449,7 +495,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
       "Detail": this.maindetails
     }
 
-    console.log(postData); return;
+    // console.log(postData); return;
 
     if (this.flag === "EDIT") {
       let API = `LoyaltySettingMaster/UpdateLoyaltySettingMaster/${this.unq_id}`;
@@ -559,12 +605,12 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     this.loyaltysettingform.controls['group1'].disable();
     this.loyaltysettingform.controls['group2'].disable();
     this.loyaltysettingform.controls['group3'].disable();
-
-
+   
     if (this.grid) {
-      this.grid.instance.columnOption('INVFILTER1', 'caption', group_1);
-      this.grid.instance.columnOption('INVFILTER2', 'caption', group_2);
-      this.grid.instance.columnOption('INVFILTER3', 'caption', group_3);
+        this.grid.instance.columnOption('INVFILT1_VALUES', 'caption', group_1);
+        this.grid.instance.columnOption('INVFILT2_VALUES', 'caption', group_2);
+        this.grid.instance.columnOption('INVFILT3_VALUES', 'caption', group_3);
+
     } else {
       console.log("grid not found");
     }
@@ -602,7 +648,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
       "SLNO": grid_len + 1,
       "REFMID": 0,
       "CODE": this.loyaltysettingform.controls.code.value,
-      "DIA_OR_MTL": this.loyaltysettingform.controls.division.value,
+      "DIA_OR_MTL": curr_division,
       "DIVISIONS": divisions,
       "INVFILT1_VALUES": g1_val,
       "INVFILT2_VALUES": g2_val,
