@@ -352,16 +352,30 @@ export class SequenceMasterComponent implements OnInit {
 
     this.commonService.toastInfoByMsgId
 
-    this.dataSource.forEach((item: any) => {
-      if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
-        this.checkCondtion = true;
-        this.commonService.toastErrorByMsgId('MSG1808')//Max Loss cannot be less than Std Loss
-      }
-      if (item.isChecked == true && item.STD_LOSS < item.MAX_LOSS) {
-        this.checkCondtion = false
+    // this.dataSource.forEach((item: any) => {
+    //   if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
+    //     this.checkCondtion = true;
+    //     this.commonService.toastErrorByMsgId('MSG1808')//Max Loss cannot be less than Std Loss
+    //   }
+    //   if (item.isChecked == true && item.STD_LOSS < item.MAX_LOSS) {
+    //     this.checkCondtion = false
+    //   }
+     
 
+    // })
+    for (const item of this.dataSource) {
+      if (item.isChecked === true && item.STD_LOSS > item.MAX_LOSS) {
+        this.checkCondtion = true;
+        this.commonService.toastErrorByMsgId('MSG1808'); // Standard loss cannot be greater than maximun loss
+        return true; // Exit the entire function to stop saving
       }
-    })
+      
+      // if (item.isChecked === true && item.STD_LOSS <= item.MAX_LOSS) {
+      //   this.checkCondtion = false;
+      // }
+    } 
+    
+    
     // if (this.checkCondtion == true) {
     //   return true;
     // }
@@ -376,6 +390,7 @@ export class SequenceMasterComponent implements OnInit {
       if (item.isChecked == true && item.STD_TIME < item.MAX_TIME) {
         this.checkTimeCondtion = false
       }
+      return true;
     })
     if (this.checkTimeCondtion == true) {
       return true;
@@ -761,19 +776,19 @@ export class SequenceMasterComponent implements OnInit {
   checkLossCondition(data: any) {
     let max: number = parseFloat(data['MAX_LOSS'])
     let std: number = parseFloat(data['STD_LOSS'])
-    if (std < max) {
-      this.commonService.toastErrorByMsgId('Std connot be less than max')//Max Loss cannot be less than Std Loss
-      this.dataSource[data.SRNO].MAX_LOSS = 0
-      //  this.sequenceMasterForm.controls.max.disable();
-      Swal.fire({
-        title: '',
-        text: 'Std connot be less than max',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      })
-    }
-    return true;
+    // if (std < max) {
+    //   this.commonService.toastErrorByMsgId('Std connot be less than max')//Max Loss cannot be less than Std Loss
+    //   this.dataSource[data.SRNO].MAX_LOSS = 0
+    //   //  this.sequenceMasterForm.controls.max.disable();
+    //   Swal.fire({
+    //     title: '',
+    //     text: 'Std cannot be less than max',
+    //     icon: 'error',
+    //     confirmButtonColor: '#336699',
+    //     confirmButtonText: 'Ok'
+    //   })
+    // }
+    // return true;
   }
 
   // stdLoss Change

@@ -69,7 +69,8 @@
                                     (input)="inputValidate($event)"
                                     UpperCaseDirective
                                     (focusout)="validateLookupField($event,karatcodeData,'karat')"
-                                    appNoEmptySpace (change)="karatCodeEmty()"
+                                    appNoEmptySpace
+                                    (change)="karatCodeEmty()"
                                     (keydown)="lookupKeyPress($event,'karat')" />
                                 <master-search
                                     [MasterSearchData]="karatcodeData"
@@ -244,9 +245,12 @@
                                 appearance="outline">
                                 <input type="text" matInput [value]="data.value"
                                     [readonly]="viewMode"
-                                    UpperCaseDirective autocomplete="off" />
+                                    UpperCaseDirective autocomplete="off"
+                                    (focusout)="validateLookupFieldGrid($event,defaultAlloy,'DEF_ALLOY_STOCK',data)"
+                                    (keydown)="lookupKeyPress($event,'DEF_ALLOY_STOCK')" />
                                 <master-search [MasterSearchData]="defaultAlloy"
                                     class="masterSearch" *ngIf="!viewMode"
+                                    #overlayAlloySearch
                                     (newRowClick)="defaultAlloySelected($event,data)">
                                 </master-search>
                             </mat-form-field>
@@ -264,7 +268,7 @@
                                     [disabled]="data.value == ''"
                                     [readonly]="viewMode || codeEnable"
                                     AmountDecimalInput
-                                    autocomplete="off"
+                                    autocomplete="off" [max]="3"
                                     (change)="alloyPer($event, data)" /><span>%</span>
                             </mat-form-field>
                         </div>
