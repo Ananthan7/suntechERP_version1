@@ -86,7 +86,7 @@
                                         <input type="text" matInput
                                             formControlName="meltingtype"
                                             UpperCaseDirective
-                                            [readonly]="viewMode" #codeInput1
+                                            [readonly]="isFieldsReadonly"  #codeInput1
                                             (keydown)="lookupKeyPress($event,'meltingtype')"
                                             (focusout)="meltingTypeValidate($event)" />
                                         <master-search class="masterSearch"
@@ -110,7 +110,7 @@
                                         <input type="text" matInput
                                             formControlName="jobno"
                                             maxlength="12"
-                                            [readonly]="viewMode" class="left"
+                                            [readonly]="isFieldsReadonly" class="left"
                                             (keydown)="lookupKeyPress($event,'jobno')"
                                             (focusout)="jobNumberValidate($event)" />
                                         <master-search class="masterSearch"
