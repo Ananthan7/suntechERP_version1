@@ -24,6 +24,7 @@ export class MeltingTypeComponent implements OnInit {
   @ViewChild('overlaycolorSearch') overlaycolorSearch!: MasterSearchComponent;
   @ViewChild('overlaykaratSearch') overlaykaratSearch!: MasterSearchComponent;
   @ViewChild('overlaystockCodeSearch') overlaystockCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayAlloySearch') overlayAlloySearch!: MasterSearchComponent;
   @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
 
@@ -70,7 +71,7 @@ export class MeltingTypeComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 17,
     SEARCH_FIELD: 'KARAT',
-    SEARCH_HEADING: 'Karat Code',
+    SEARCH_HEADING: 'Karat',
     SEARCH_VALUE: '',
     WHERECONDITION: "KARAT_CODE<> ''",
     VIEW_INPUT: true,
@@ -81,7 +82,7 @@ export class MeltingTypeComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 41,
     SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Default Alloy Code',
+    SEARCH_HEADING: 'Default Alloy',
     SEARCH_VALUE: '',
     WHERECONDITION: "item = 'y' ",
     VIEW_INPUT: true,
@@ -259,13 +260,14 @@ export class MeltingTypeComponent implements OnInit {
   //         return
   //       }
   //     }, err => {
-  //       this.commonService.toastErrorByMsgId('network issue found')
+  //       this.commonService.toastErrorByMsgId('MSG2272')
   //     })
   //   this.subscriptions.push(Sub)
   // }
   handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
     this.commonService.toastErrorByMsgId('MSG1531');
-    this.meltingTypeForm.controls[FORMNAME].setValue('');
+    this.openOverlay(FORMNAME, event);
+    // this.meltingTypeForm.controls[FORMNAME].setValue('');
     LOOKUPDATA.SEARCH_VALUE = '';
     if (FORMNAME === 'karat') {
       this.meltingTypeForm.controls.purity.setValue('');
@@ -294,29 +296,79 @@ export class MeltingTypeComponent implements OnInit {
       this.isDisableSaveBtn = false;
       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
 
-      if (data.length === 0) {
-        this.handleLookupError(FORMNAME, LOOKUPDATA); // Call handleLookupError if no data is found
+      if (data.length == 0) {
+        // this.handleLookupError(FORMNAME, LOOKUPDATA);
+        this.commonService.toastErrorByMsgId('MSG1531')
+        this.meltingTypeForm.controls[FORMNAME].setValue('')
+        // this.renderer.selectRootElement(FORMNAME).focus();
+        LOOKUPDATA.SEARCH_VALUE = ''
+        this.openOverlay(FORMNAME, event);
+        // Call handleLookupError if no data is found
         return;
       }
 
-      const matchedItem = data.find((item: any) => item.KARAT_CODE.toUpperCase() === event.target.value.toUpperCase());
+      // const matchedItem = data.find((item: any) => item.KARAT_CODE.toUpperCase() === event.target.value.toUpperCase());
 
-      if (matchedItem) {
-        // Set the form control value with the matched item code
-        this.meltingTypeForm.controls[FORMNAME].setValue(matchedItem.KARAT_CODE);
-
-        // Call the karatcodeSelected function with the matched item
-        this.karatcodeSelected(matchedItem);
-      } else {
-        // If no match found, reset the form control and SEARCH_VALUE
-        this.handleLookupError(FORMNAME, LOOKUPDATA); // Call handleLookupError if no match is found
-      }
-
+      // if (matchedItem) {        
+      //   this.meltingTypeForm.controls[FORMNAME].setValue(matchedItem.KARAT_CODE);
+      //   this.karatcodeSelected(matchedItem);
+      // } else {
+      //   this.handleLookupError(FORMNAME, LOOKUPDATA);
+      // }
     }, err => {
       this.commonService.toastErrorByMsgId('MSG2272');
     });
 
     this.subscriptions.push(Sub);
+
+
+  }
+
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'color':
+        this.overlaycolorSearch.showOverlayPanel(event);
+        break;
+      case 'karat':
+        this.overlaykaratSearch.showOverlayPanel(event);
+        break;
+      case 'stockCode':
+        this.overlaystockCodeSearch.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
+  validateLookupFieldGrid(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string, griddata: any) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          if (FORMNAME == 'DEF_ALLOY_STOCK') {
+            this.tableData[griddata.data.SRNO - 1].DEF_ALLOY_STOCK = '';
+            this.tableData[griddata.data.SRNO - 1].DEF_ALLOY_DESCRIPTION = '';
+          }
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
+        }
+        if (FORMNAME == 'DEF_ALLOY_STOCK') {
+          this.tableData[griddata.data.SRNO - 1].DEF_ALLOY_STOCK = data[0].STOCK_CODE;
+          this.tableData[griddata.data.SRNO - 1].DEF_ALLOY_DESCRIPTION = data[0].STOCK_DESCRIPTION;
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')
+      })
+    this.subscriptions.push(Sub)
   }
 
   codeEnabled() {
@@ -563,7 +615,7 @@ export class MeltingTypeComponent implements OnInit {
     // Set the calculated values in the form controls
     this.meltingTypeForm.controls.metal.setValue(this.commonService.decimalQuantityFormat(metalPercentage, 'AMOUNT'));
     this.meltingTypeForm.controls.alloy.setValue(this.commonService.decimalQuantityFormat(alloyPercentage, 'AMOUNT'));
-    this.meltingTypeForm.controls.stockCode.setValue('');
+    // this.meltingTypeForm.controls.stockCode.setValue('');
     this.stockCodeData.WHERECONDITION = `KARAT_CODE ='${this.meltingTypeForm.value.karat}' AND PURITY = '${this.meltingTypeForm.value.purity}' AND SUBCODE = 0`;
     this.karatCodeEmty()
   }
@@ -775,7 +827,7 @@ export class MeltingTypeComponent implements OnInit {
 
   alloyPer(event: any, value: any) {
     const enteredValue = parseFloat(event.target.value); // Parse the input as a number
-    const formattedValue = this.commonService.decimalQuantityFormat(enteredValue, 'AMOUNT'); // Format the value
+    const formattedValue = this.commonService.decimalQuantityFormat(0, 'AMOUNT'); // Format the value
     this.tableData[value.data.SRNO - 1].ALLOY_PER = formattedValue;
 
     // Validate: Show an error if the value is 100 or more
