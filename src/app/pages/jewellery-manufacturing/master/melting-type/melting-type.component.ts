@@ -69,7 +69,7 @@ export class MeltingTypeComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 17,
-    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_FIELD: 'KARAT',
     SEARCH_HEADING: 'Karat Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "KARAT_CODE<> ''",
