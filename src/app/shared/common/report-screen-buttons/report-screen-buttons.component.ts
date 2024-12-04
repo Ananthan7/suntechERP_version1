@@ -15,7 +15,8 @@ export class ReportScreenButtonsComponent implements OnInit {
   pdfBtnBoolean: boolean = false;
   maiBtnBoolean: boolean = false;
   whatsappBtnBoolean: boolean = false;
-
+  @Output() excelClicked = new EventEmitter();
+  
   constructor(private CommonService: CommonServiceService) { }
 
   ngOnInit(): void {
@@ -32,6 +33,10 @@ export class ReportScreenButtonsComponent implements OnInit {
 
   printClick(){
     this.printClicked.emit();
+  }
+
+  excelExport(){
+    this.excelClicked.emit();
   }
 
   screenButtonEnabler(){

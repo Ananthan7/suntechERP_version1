@@ -32,8 +32,8 @@
             <div class="col-md-2">
                 <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                     <mat-select formControlName="showValue">
-                        <mat-option *ngFor="let option of showValuesArr" [value]="option">
-                            {{ option }}
+                        <mat-option *ngFor="let option of showValuesArr" [value]="option.value">
+                            {{ option.label }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>

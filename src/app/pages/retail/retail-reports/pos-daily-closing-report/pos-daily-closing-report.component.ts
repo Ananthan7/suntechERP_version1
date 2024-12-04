@@ -2,6 +2,11 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { forkJoin, of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
+import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-pos-daily-closing-report',
@@ -12,6 +17,8 @@ export class PosDailyClosingReportComponent implements OnInit {
   private cssFilePath = '/assets/scss/scheme_register_pdf.scss';
   dailyClosingReportForm: FormGroup = this.formBuilder.group({
     branch : [''],
+    fromdate: [new Date()],
+    todate: [new Date()],
     asOnDate : [new Date()],
     salesMan: [''],
     systemStockGold: [''],
@@ -92,10 +99,13 @@ export class PosDailyClosingReportComponent implements OnInit {
   isLoading: boolean = false;
 
 
-  constructor( private activeModal: NgbActiveModal,  private formBuilder: FormBuilder,  private datePipe: DatePipe) { }
+  constructor( private activeModal: NgbActiveModal,  private formBuilder: FormBuilder,  private datePipe: DatePipe,
+    private dataService: SuntechAPIService, private commonService: CommonServiceService, private toastr: ToastrService,
+  ) { }
 
   ngOnInit(): void {
-    this.prefillScreenValues()
+    this.prefillScreenValues();
+    this.performMultiplePostRequests();
   }
 
  headerCellFormatting(e: any) {
@@ -104,6 +114,17 @@ export class PosDailyClosingReportComponent implements OnInit {
       e.cellElement.style.textAlign = 'center';
     }
   } 
+
+  setDateValue(event: any){
+    if(event.FromDate){
+      this.dailyClosingReportForm.controls.fromdate.setValue(event.FromDate);
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
+    }
+    else if(event.ToDate){
+      this.dailyClosingReportForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
+    }
+  }
 
   selectedData(data: any) {
     console.log(data)
@@ -225,18 +246,80 @@ export class PosDailyClosingReportComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  setDateValue(event: any){
-    if(event.FromDate){
-      // this.dailyClosingReportForm.controls.fromDate.setValue(event.FromDate);
-      this.dateToPass.fromDate = event.FromDate
-    }
-    else if(event.ToDate){
-      // this.dailyClosingReportForm.controls.toDate.setValue(event.ToDate);
-      this.dateToPass.toDate = event.ToDate
-    }
+
+
+
+  performMultiplePostRequests() {
+    // Example API URLs and data for POST requests
+    const apiUrl1 = 'RptPosSummaryStockBalanceNet'
+    const apiUrl2 = 'RptPOSSummaryShowPOSAccountsNet';
+    const apiUrl3 = 'RptPOSSummaryShowPOSPurchaseNet';
+    const apiUrl4 = 'RptPOSSummaryShowPosNetCollectionNet';
+
+
+    const postData1 = { 
+      "Asondate": this.datePipe.transform(new Date(), 'yyyy-MM-dd'),
+      "branches": this.dailyClosingReportForm.controls.branch.value,
+      "Vouchers": "",
+      "FixingStcode": "" 
+    };
+    const postData2 = { "branches": this.dailyClosingReportForm.controls.branch.value  };
+    const postData3 = {  
+      "Branches": this.dailyClosingReportForm.controls.branch.value, 
+      "FromDate": this.dateToPass.fromDate, 
+      "ToDate": this.dateToPass.toDate, 
+      "Vouchers": "" 
+    };
+    const postData4= {
+      "Branches": this.dailyClosingReportForm.controls.branch.value, 
+      "FromDate": this.dateToPass.fromDate, 
+      "ToDate": this.dateToPass.toDate, 
+      "Vouchers": "", 
+      "ShopCtrlAc": "" 
+    };
+
+    // Perform POST requests in parallel using forkJoin
+    forkJoin({
+      request1: this.dataService.postDynamicAPI(apiUrl1, postData1),
+      request2: this.dataService.postDynamicAPI(apiUrl2, postData2),
+      request3: this.dataService.postDynamicAPI(apiUrl3, postData3),
+      request4: this.dataService.postDynamicAPI(apiUrl4, postData4)
+    }).pipe(
+      // Handling errors globally using catchError
+      catchError(error => {
+        this.toastr.error('An error occurred while making requests');
+        this.isLoading = false;
+        return of({ request1: null, request2: null, request3: null });
+      }),
+
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
+      next: (responses: any) => {
+        if (responses.request1) {
+          console.log('Response from request1:', responses.request1);
+        } else {
+          console.log('Request 1 failed');
+        }
+
+        if (responses.request2) {
+          console.log('Response from request2:', responses.request2);
+        } else {
+          console.log('Request 2 failed');
+        }
+
+        if (responses.request3) {
+          console.log('Response from request3:', responses.request3);
+        } else {
+          console.log('Request 3 failed');
+        }
+      },
+      error: (err: any) => {
+        console.error('Error in any of the requests:', err);
+      }
+    });
   }
-
-
 
   prefillScreenValues(){ 
     if ( Object.keys(this.content).length > 0) {

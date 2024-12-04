@@ -1,8 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
@@ -20,7 +22,7 @@ export class SalesOrderRegisterComponent implements OnInit {
     branch : [''],
     fromDate : [new Date()],
     toDate : [new Date()],
-    showValue: [''],
+    showValue: [0],
     typeValue: [''],
     posChkBox: [false],
     showDtlChkBox: [false],
@@ -100,7 +102,8 @@ export class SalesOrderRegisterComponent implements OnInit {
   jobMaterialBOQ: any = [];
   jobsalesorderdetailDJ: any = [];
 
-  showValuesArr:any =['All', 'Pending', 'Finished', 'Cancelled'];
+  showValuesArr:any =[{label:'All', value: 0}, {label:'Pending', value: 1}, {label:'Finished', value: 2}, 
+    {label:'Cancelled', value: 3}];
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
   templateNameHasValue: boolean= false;
   isLoading: boolean = false;
@@ -108,12 +111,26 @@ export class SalesOrderRegisterComponent implements OnInit {
   popupVisible: boolean =false;
 
 
-  constructor( private activeModal: NgbActiveModal,  private formBuilder: FormBuilder,
+  constructor( private activeModal: NgbActiveModal,  private formBuilder: FormBuilder, private datePipe: DatePipe,
     private dataService: SuntechAPIService, private toastr: ToastrService, private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
-    this.prefillScreenValues()
+    this.prefillScreenValues();
+    this.apiGridDataFetch();
+  }
+
+  setDateValue(event: any){
+    if(event.FromDate){
+      this.salesOrderRegisterForm.controls.fromDate.setValue(event.FromDate);
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
+    }
+    else if(event.ToDate){
+      this.salesOrderRegisterForm.controls.toDate.setValue(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
+    }
+    console.log('ssss')
+    this.apiGridDataFetch();
   }
 
   selectedData(data: any) {
@@ -173,36 +190,6 @@ export class SalesOrderRegisterComponent implements OnInit {
     console.log(value, data)
   }
 
-  prefillScreenValues(){
-    if ( Object.keys(this.content).length > 0) {
-      this.isLoading = true;
-
-      this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
-      this.salesOrderRegisterForm.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
-
-      var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
-      console.log('parsed data', paresedItem)
-      this.dateToPass = {
-        fromDate:  paresedItem?.CONTROL_DETAIL.STRFROMDATE,
-        toDate: paresedItem?.CONTROL_DETAIL.STRTODATE
-      };
-    }
-    else{
-      const userBranch = localStorage.getItem('userbranch');
-      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
-      this.salesOrderRegisterForm.controls.branch.setValue(formattedUserBranch);
-      this.fetchedBranchDataParam = formattedUserBranch;
-      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
-   
-      var date = new Date();
-      var firstDayofCurMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-      this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(firstDayofCurMonth),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
-      };
-    }
-  }
-
   saveTemplate(){
     this.popupVisible = true;
     console.log(this.salesOrderRegisterForm.controls.templateName.value)
@@ -257,6 +244,38 @@ export class SalesOrderRegisterComponent implements OnInit {
       }
     }); 
   }
+
+  apiGridDataFetch(){
+    this.isLoading = true;
+    const apiUrl = 'SalesOrderRegister'
+    let postData = {
+      "brList": this.salesOrderRegisterForm.controls.branch.value, 
+      "show": this.salesOrderRegisterForm.controls.showValue.value,
+      "type": this.salesOrderRegisterForm.controls.typeValue.value,
+      "isShowDetails": this.salesOrderRegisterForm.controls.showDtlChkBox.value,
+      "isPosDetails": this.salesOrderRegisterForm.controls.posChkBox.value,
+      "frmDate":  this.dateToPass.fromDate,
+      "toDate": this.dateToPass.toDate,
+    }
+    this.dataService.postDynamicAPI(apiUrl, postData).pipe( 
+      catchError((error) => {
+       this.toastr.error('An error occurred while processing the request');
+       this.isLoading = false;
+       return [];
+     }),
+    ).subscribe((resp: any) => {
+      if (resp.status == 'Success') {
+        console.log( resp )
+        this.isLoading = false;
+        this.toastr.success(resp.status);
+      }
+      else{
+        this.isLoading = false;
+        this.toastr.error(resp.message);
+      }
+    });    
+  }
+
 
 
 
@@ -328,15 +347,6 @@ export class SalesOrderRegisterComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
-  }
-
-  setDateValue(event: any){
-    if(event.FromDate){
-      this.salesOrderRegisterForm.controls.fromdate.setValue(event.FromDate);
-    }
-    else if(event.ToDate){
-      this.salesOrderRegisterForm.controls.todate.setValue(event.ToDate);
-    }
   }
 
   salesmanCodeSelected(e: any) {
@@ -744,14 +754,6 @@ export class SalesOrderRegisterComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
   popupClosed(){
     if (this.content && Object.keys(this.content).length > 0) {
       console.log(this.content)
@@ -762,6 +764,34 @@ export class SalesOrderRegisterComponent implements OnInit {
     else{
       this.popupVisible = false;
       this.salesOrderRegisterForm.controls.templateName.setValue(null)
+    }
+  }
+
+  prefillScreenValues(){
+    if ( Object.keys(this.content).length > 0) {
+      this.isLoading = true;
+
+      this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      this.salesOrderRegisterForm.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
+
+      var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
+      console.log('parsed data', paresedItem)
+      this.dateToPass = {
+        fromDate:  paresedItem?.CONTROL_DETAIL.STRFROMDATE,
+        toDate: paresedItem?.CONTROL_DETAIL.STRTODATE
+      };
+    }
+    else{
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.salesOrderRegisterForm.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+   
+      this.dateToPass = { 
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+      };
     }
   }
 

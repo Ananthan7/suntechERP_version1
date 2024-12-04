@@ -468,7 +468,13 @@ export class PosTargetDashboardComponent implements OnInit {
     forkJoin({
       YTDstatusData: this.dataService.postDynamicAPI(API1, postData1),
       MTDstatusData: this.dataService.postDynamicAPI(API2, postData2),
-    }).subscribe({
+    }).pipe( 
+      catchError((error) => {
+       this.toastr.error('An error occurred while processing the request');
+       this.isLoading = false;
+       return [];
+     }),
+    ).subscribe({
         next: (result) => {
           this.ytdStatusArr.push(result.YTDstatusData.dynamicData[0][0])
           this.mtdStatusArr.push(result.MTDstatusData.dynamicData[0][0])
