@@ -1,11 +1,13 @@
 <div>
     <div class="card-content border-bottom d-flex justify-content-between p-2">
-        <h5 class="pos-modaltitle" id="modal-dia-metal">Reference Master</h5>
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Transaction Reference Master</h5>
         <button type="button" class="btn btn-close close-btn" (click)="close()">
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
-    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="DeleteController()"
+    [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    ></modal-header>
     <div class="p-4 ">
         <form [formGroup]="transactionform">
             <div class="row">
@@ -15,8 +17,11 @@
                             Ref Code :</label>
                         <div class="col-md-4 p-0">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="ref_code" UpperCaseDirective
-                                    autocomplete="off" />
+                                <input type="text" #codeInput matInput #ref_code id="ref_code" formControlName="ref_code" UpperCaseDirective
+                                    autocomplete="off" (focusout)="checkcode()" />
+                                <mat-error *ngIf="transactionform.controls['ref_code'].hasError('required')">
+                                    Code is required.
+                                </mat-error>
                             </mat-form-field>
                         </div>
                     </div>
@@ -28,8 +33,8 @@
                             <mat-form-field style="width: 100%" appearance="outline">
                                 <input type="text" #codeInput matInput formControlName="client_name" UpperCaseDirective
                                     autocomplete="off" />
-                                <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                    (newRowClick)="BranchDataSelected($event)">
+                                <master-search class="masterSearch" [MasterSearchData]="clientnamedata"
+                                    (newRowClick)="clientcodeselect($event)">
                                 </master-search>
                             </mat-form-field>
                         </div>
@@ -48,8 +53,8 @@
                             <div class="col-md-4 ">
                                 <mat-form-field style="width: 100%" appearance="outline">
                                     <input matInput [matDatepicker]="ref_date" name="ref_date" placeholder="DD/MM/YYYY"
-                                        formControlName="ref_date" readonly="true" />
-                                    <mat-datepicker-toggle matSuffix [for]="ref_date"></mat-datepicker-toggle>
+                                        formControlName="ref_date" readonly="true" [readonly]="true"/>
+                                    <mat-datepicker-toggle matSuffix [for]="ref_date" [disabled]="true"></mat-datepicker-toggle>
                                 </mat-form-field>
 
                                 <mat-datepicker #ref_date></mat-datepicker>

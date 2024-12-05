@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -26,6 +26,8 @@ export class SubledgerPrefixMasterComponent implements OnInit {
   editMode:boolean = false;
   viewMode:boolean = false;
 
+  prefixcode = new FormControl('');
+  @ViewChild('prefixcodeInput') prefixcodeInput!: ElementRef;
 
 
 
@@ -102,15 +104,9 @@ export class SubledgerPrefixMasterComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log(this.content);
     // this.unq_id = this.content?.MID;
     this.unq_id = this.content?.PREFIX_CODE;
-    console.log(this.unq_id);
     this.flag = this.content?.FLAG;
-    console.log(this.flag)
-    if(this.flag == undefined){
-      this.renderer.selectRootElement('#prefixcodeInput')?.focus();
-    }
     if(this.flag == 'EDIT'){
       this.disable_code = true;
       this.editMode = true;
@@ -120,6 +116,13 @@ export class SubledgerPrefixMasterComponent implements OnInit {
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.unq_id);
+    }
+  }
+
+  ngAfterViewInit() {
+
+    if (this.prefixcodeInput && this.flag == undefined) {
+      this.prefixcodeInput.nativeElement.focus();
     }
   }
 
@@ -210,12 +213,28 @@ export class SubledgerPrefixMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        // this.flag = "VIEW";
+        this.activeModal.close("");
       }
     });
   }
 
   formSubmit() {
+
+    Object.keys(this.prefixmasterform.controls).forEach((controlName) => {
+      const control = this.prefixmasterform.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
+
+    const requiredFieldsInvalid = Object.keys(
+      this.prefixmasterform.controls
+    ).some((controlName) => {
+      const control = this.prefixmasterform.controls[controlName];
+      return control.hasError("required") && control.touched;
+    });
+
 
     const postData = {
       "PREFIX_CODE": this.prefixmasterform.controls.prefixcode.value,
