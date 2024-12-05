@@ -115,7 +115,7 @@ export class ReorderLevelSetupComponent implements OnInit {
 
   setPostData(){
     return {
-      "REORDER_CODE": this.reorderLevelSetupMainForm.value.code,
+      "REORDER_CODE": this.reorderLevelSetupMainForm.value.code.toUpperCase(),
       "REORDER_DESCRIPTION": "string",
       "METAL_DIAMOND": this.reorderLevelSetupMainForm.value.Metalsoption == 'metal' ? true : false,
       "GROUP1_TYPE": this.reorderLevelSetupMainForm.value.group1,
@@ -261,45 +261,102 @@ export class ReorderLevelSetupComponent implements OnInit {
     });
   }
 
+  // onGroupChange() {
+  //   const group1Value = this.reorderLevelSetupMainForm.get('group1')?.value;
+  //   const group2Value = this.reorderLevelSetupMainForm.get('group2')?.value;
+  //   const group3Value = this.reorderLevelSetupMainForm.get('group3')?.value;
+
+  //   if (group1Value && group2Value && group1Value === group2Value) {
+  //     Swal.fire({
+  //       icon: 'error',
+  //       title: 'Invalid Selection',
+  //       text: 'Filter Already Exsist.',
+  //     }).then(() => {
+  //       this.reorderLevelSetupMainForm.get('group2')?.reset();
+  //     });
+      
+  //     return;
+  //   }
+
+  //   if (group1Value && group3Value && group1Value === group3Value) {
+  //     Swal.fire({
+  //       icon: 'error',
+  //       title: 'Invalid Selection',
+  //       text: 'Filter Already Exsist.',
+  //     }).then(() => {
+  //       this.reorderLevelSetupMainForm.get('group3')?.reset();
+  //     });
+  //     return;
+  //   }
+
+  //   if (group2Value && group3Value && group2Value === group3Value) {
+  //     Swal.fire({
+  //       icon: 'error',
+  //       title: 'Invalid Selection',
+  //       text: 'Filter Already Exsist.',
+  //     }).then(() => {
+  //       this.reorderLevelSetupMainForm.get('group3')?.reset();
+  //     });
+  //     return;
+  //   }
+  // }
+
   onGroupChange() {
     const group1Value = this.reorderLevelSetupMainForm.get('group1')?.value;
     const group2Value = this.reorderLevelSetupMainForm.get('group2')?.value;
     const group3Value = this.reorderLevelSetupMainForm.get('group3')?.value;
-
-    if (group1Value && group2Value && group1Value === group2Value) {
+  
+    const isNone = (value: any) => value === 'None';
+  
+    if (
+      group1Value &&
+      group2Value &&
+      group1Value === group2Value &&
+      !isNone(group1Value)
+    ) {
       Swal.fire({
         icon: 'error',
         title: 'Invalid Selection',
-        text: 'Filter Already Exsist.',
+        text: 'Filter Already Exists.',
       }).then(() => {
         this.reorderLevelSetupMainForm.get('group2')?.reset();
       });
-      
       return;
     }
-
-    if (group1Value && group3Value && group1Value === group3Value) {
+  
+    if (
+      group1Value &&
+      group3Value &&
+      group1Value === group3Value &&
+      !isNone(group1Value)
+    ) {
       Swal.fire({
         icon: 'error',
         title: 'Invalid Selection',
-        text: 'Filter Already Exsist.',
+        text: 'Filter Already Exists.',
       }).then(() => {
         this.reorderLevelSetupMainForm.get('group3')?.reset();
       });
       return;
     }
-
-    if (group2Value && group3Value && group2Value === group3Value) {
+  
+    if (
+      group2Value &&
+      group3Value &&
+      group2Value === group3Value &&
+      !isNone(group2Value)
+    ) {
       Swal.fire({
         icon: 'error',
         title: 'Invalid Selection',
-        text: 'Filter Already Exsist.',
+        text: 'Filter Already Exists.',
       }).then(() => {
         this.reorderLevelSetupMainForm.get('group3')?.reset();
       });
       return;
     }
   }
+  
 
   getGroup() {
     this.dataService.getDynamicAPI('WhlSmanTargetHeader/GetInventoryCombofilters/')

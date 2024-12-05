@@ -1978,7 +1978,7 @@ export class AlloyMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postdata)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Updated Successfully')
         } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
