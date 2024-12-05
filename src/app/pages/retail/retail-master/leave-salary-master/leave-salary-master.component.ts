@@ -403,7 +403,7 @@ export class LeaveSalaryMasterComponent implements OnInit {
       this.content.BASED_ON
     );
     this.LeaveSalaryMasterForm.controls.amount.setValue(
-      this.content.FIXAMOUNT
+      this.commonService.decimalQuantityFormat(this.content.FIXAMOUNT,'AMOUNT')
     );
     this.LeaveSalaryMasterForm.controls.noOfTime.setValue(
       this.content.MONTH_INTERVEL

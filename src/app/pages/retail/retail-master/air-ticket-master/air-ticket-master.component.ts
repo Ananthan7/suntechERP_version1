@@ -404,7 +404,7 @@ export class AirTicketMasterComponent implements OnInit {
       this.content.BASED_ON
     );
     this.AirTicketMasterForm.controls.amount.setValue(
-      this.content.FIXAMOUNT
+      this.commonService.decimalQuantityFormat(this.content.FIXAMOUNT,'AMOUNT')
     );
     this.AirTicketMasterForm.controls.noOfTime.setValue(
       this.content.MONTH_INTERVEL
