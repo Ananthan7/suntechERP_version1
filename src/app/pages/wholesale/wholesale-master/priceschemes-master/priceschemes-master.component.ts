@@ -90,6 +90,12 @@ export class PriceschemesMasterComponent implements OnInit {
         this.priceSchemaMasterForm.get('price5')?.enable();
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
+        this.codeEnable = false;
+        this.priceSchemaMasterForm.get('price1')?.enable();
+        this.priceSchemaMasterForm.get('price2')?.enable();
+        this.priceSchemaMasterForm.get('price3')?.enable();
+        this.priceSchemaMasterForm.get('price4')?.enable();
+        this.priceSchemaMasterForm.get('price5')?.enable();
         this.deleteRecord()
       }
     }
@@ -323,7 +329,7 @@ export class PriceschemesMasterComponent implements OnInit {
     try {
       this.dataService.putDynamicAPI(API, postData)
         .subscribe(
-          result => this.handleApiResponse(result),
+          result => this.handleApiUpdateResponse(result),
           err => {
             console.error('Error in update:', err);
             this.toastr.error('Error while updating the form');
@@ -362,7 +368,6 @@ export class PriceschemesMasterComponent implements OnInit {
         .subscribe((result) => {
           if (result.response) {
             let data = result.response
-
             this.priceSchemaMasterForm.controls.priceCode.setValue(data.PRICE_CODE?.toUpperCase())
             this.priceSchemaMasterForm.controls.priceDescription.setValue((data.PRICE_DESCRIPTION).toUpperCase())
             this.priceSchemaMasterForm.controls.price1.setValue(data.PRICE1?.toUpperCase())
@@ -385,7 +390,14 @@ export class PriceschemesMasterComponent implements OnInit {
     }
   }
   priceCodeValidate(event: any) {
-    if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') return
+    // if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') return
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
     try {
       let API = `PriceSchemeMaster/GetPriceSchemeMasterList/${event.target.value}`
       let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -422,6 +434,27 @@ export class PriceschemesMasterComponent implements OnInit {
       if (result.status == "Success") {
         Swal.fire({
           title: this.commonService.getMsgByID('MSG2443') || 'Success',
+          text: '',
+          icon: 'success',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        }).then((result: any) => {
+          if (result.value) {
+            this.priceSchemaMasterForm.reset();
+            this.close('reloadMainGrid');
+          }
+        });
+      }
+    } else {
+      this.toastr.error('Not saved');
+    }
+  }
+
+  handleApiUpdateResponse(result: any) {
+    if (result.response) {
+      if (result.status == "Success") {
+        Swal.fire({
+          title: this.commonService.getMsgByID('MSG3641') || 'Success',
           text: '',
           icon: 'success',
           confirmButtonColor: '#336699',
