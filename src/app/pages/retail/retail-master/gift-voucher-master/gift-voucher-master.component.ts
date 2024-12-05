@@ -175,9 +175,12 @@ setFormValues() {
   this.giftVoucherMasterForm.controls.code.setValue(this.content.BRANCH_CODE)
   this.giftVoucherMasterForm.controls.giftOn.setValue(this.content.GIFT_CODE)
   this.giftVoucherMasterForm.controls.description.setValue(this.content.GIFT_NAME)
-  this.giftVoucherMasterForm.controls.amount.setValue(this.content.GIFT_AMOUNT)
-  this.giftVoucherMasterForm.controls.actualAmt.setValue(this.content.ACTUAL_AMOUNT)
-  this.giftVoucherMasterForm.controls.minInvoiceAmt.setValue(this.content.MIN_INVOICE_AMOUNT)
+  this.giftVoucherMasterForm.controls.amount.setValue(this.commonService.transformDecimalVB(
+    this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.GIFT_AMOUNT))
+  this.giftVoucherMasterForm.controls.actualAmt.setValue(this.commonService.transformDecimalVB(
+    this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.ACTUAL_AMOUNT))
+  this.giftVoucherMasterForm.controls.minInvoiceAmt.setValue(this.commonService.transformDecimalVB(
+    this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.MIN_INVOICE_AMOUNT))
   this.giftVoucherMasterForm.controls.validity.setValue(this.content.GIFT_VALID_DAYS)
   this.giftVoucherMasterForm.controls.skip.setValue(this.content.SKIP_VALID_DAYS === 'Y' ? true : false)
   const divisionValue = this.content.DIVISION; 
@@ -186,14 +189,15 @@ setFormValues() {
   this.giftVoucherMasterForm.controls.issueType.setValue(this.content.ISSUE_TYPE === 'Y' ? 'D' : 'M')
   this.giftVoucherMasterForm.controls.active.setValue(this.content.STATUS === 'Y' ? true : false)
   this.giftVoucherMasterForm.controls.costCentre.setValue(this.content.COST_CODE)
-  this.giftVoucherMasterForm.controls.baseCurrency.setValue(this.content.START_SKU_NO)
+  this.giftVoucherMasterForm.controls.baseCurrency.setValue(this.commonService.transformDecimalVB(
+    this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.START_SKU_NO))
 }
 
 
   setPostData(){
     return {
       "MID": 0,
-      "BRANCH_CODE": this.commonService.nullToString(this.giftVoucherMasterForm.value.code),
+      "BRANCH_CODE": this.commonService.nullToString(this.giftVoucherMasterForm.value.code.toUpperCase()),
       "GIFT_CODE": this.commonService.nullToString(this.giftVoucherMasterForm.value.giftOn),
       "GIFT_NAME": this.commonService.nullToString(this.giftVoucherMasterForm.value.description),
       "GIFT_TYPE_ON": "string",
