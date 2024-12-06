@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import themes from 'devextreme/ui/themes';
 import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-approval-master',
@@ -19,6 +20,8 @@ import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-uplo
 export class ApprovalMasterComponent implements OnInit {
 
   @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+  @ViewChild('overlayUsercode') overlayUsercode!: MasterSearchComponent;
+  
   @Input() content!: any;
   tableData: any[] = [];
   selectedIndexes: any = [];
@@ -275,15 +278,15 @@ moveCharacter(value: string, index: number, direction: number): string {
     )
   }
 
-  userDataSelected(data: any, value: any, controlName: string) {
-    let userData = [];
+  userDataSelected(data: any, value: any) {
+    let userData = [];    
     userData = this.tableData.filter((item: any) => item.USER_CODE == data.UsersName)
     if (userData.length > 0) {
       this.commonService.toastErrorByMsgId('MSG1932')
     }
     else {
-      // console.log(value);
-      // console.log(data);
+      console.log(value);
+      console.log(data);
       this.tableData[value.data.SRNO - 1].USER_CODE = data.UsersName;
       this.userId = data.UsersName;
     }
@@ -294,9 +297,8 @@ moveCharacter(value: string, index: number, direction: number): string {
   }
 
   Mandatorycheckevent(data: any, value: any) {
-    // console.log(value);
-    // console.log(data.target.checked);
-    this.tableData[value.data.SRNO - 1].APPRREQUIRED = data.target.checked;
+   
+    this.tableData[value.data.SRNO - 1].APPRREQUIRED = data.target.value;
   }
 
   attachcheckevent(data: any, value: any) {
@@ -371,10 +373,10 @@ moveCharacter(value: string, index: number, direction: number): string {
 
       let srno = length + 1;
       let data = {
-        "UNIQUEID": 12345,
-        "APPR_CODE": "test",
+        "UNIQUEID": 0,
+        "APPR_CODE": this.approvalMasterForm.value.code,
         "SRNO": srno,
-        "USER_CODE": userCodeValue,
+        "USER_CODE": "",
         "APPR_TYPE": 0,
         "APPRREQUIRED": false,
         "ATTACH_REQ": false,
@@ -449,7 +451,7 @@ moveCharacter(value: string, index: number, direction: number): string {
       this.snackBar.open('Please select record', 'OK', { duration: 2000 });
     }
   }
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string,griddata:any) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
@@ -471,6 +473,26 @@ moveCharacter(value: string, index: number, direction: number): string {
         this.commonService.toastErrorByMsgId('MSG2272')
       })
     this.subscriptions.push(Sub)
+  }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'COMPSIZE_CODE':
+        this.overlayUsercode.showOverlayPanel(event)
+        break;
+        default:
+        break
+    }
   }
 
   checkFinalApproval() {
@@ -586,8 +608,8 @@ moveCharacter(value: string, index: number, direction: number): string {
 
       // Omit mobilenum and emailId from postData when mobileCheck or emailCheck is true
       const postData: any = {
-        "APPR_CODE": this.approvalMasterForm.value.code || "",
-        "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
+        "APPR_CODE": this.approvalMasterForm.value.code.toUpperCase() || "",
+        "APPR_DESCRIPTION": this.approvalMasterForm.value.description.toUpperCase() || "",
         "approvalDetails": this.tableData,
       };
 
@@ -599,7 +621,7 @@ moveCharacter(value: string, index: number, direction: number): string {
         .subscribe((result) => {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -757,8 +779,8 @@ moveCharacter(value: string, index: number, direction: number): string {
 
       const API = 'ApprovalMaster/UpdateApprovalMaster/' + this.content.APPR_CODE;
       const postData = {
-        "APPR_CODE": this.approvalMasterForm.value.code || "",
-        "APPR_DESCRIPTION": this.approvalMasterForm.value.description || "",
+        "APPR_CODE": this.approvalMasterForm.value.code.toUpperCase() || "",
+        "APPR_DESCRIPTION": this.approvalMasterForm.value.description.toUpperCase() || "",
         "MID": this.content.MID,
         "approvalDetails": this.tableData,
       };
@@ -768,7 +790,7 @@ moveCharacter(value: string, index: number, direction: number): string {
           if (result.response) {
             if (result.status == "Success") {
               Swal.fire({
-                title: result.message || 'Success',
+                title: this.commonService.getMsgByID('MSG3641') || 'Success',
                 text: '',
                 icon: 'success',
                 confirmButtonColor: '#336699',
