@@ -9,7 +9,8 @@
 <modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
     [isViewMore]="!viewMode" (cancelClick)="close()"
     (saveClick)="formSubmit()" (deleteClick)="deleteAlloyMaster()"
-    [isViewDelete]="!viewMode && editMode" [isViewAttachment]="!viewMode"
+    [isViewDelete]="!viewMode && editMode"
+    [isViewAttachment]="!viewMode"
     (attachmentClick)="attachmentClicked()"></modal-header>
 <!-- component to upload attachment -->
 <attachment-upload (uploadSubmit)="uploadSubmited($event)"
@@ -274,8 +275,8 @@
                                         <mat-datepicker-toggle matSuffix
                                             [for]="createdOn"></mat-datepicker-toggle>
                                         <mat-datepicker [disabled]="true"
-                                            [startAt]="currentDate"
-                                            #createdOn></mat-datepicker>
+                                            [startAt]="currentDate" #createdOn>
+                                        </mat-datepicker>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -307,10 +308,11 @@
                                             DateValidation
                                             readonly />
                                         <mat-datepicker-toggle matSuffix
-                                            [for]="fristtransaction"></mat-datepicker-toggle>
+                                            [for]="fristtransaction">
+                                        </mat-datepicker-toggle>
                                         <mat-datepicker [startAt]="currentDate"
-                                            #fristtransaction
-                                            [disabled]="true"></mat-datepicker>
+                                            #fristtransaction [disabled]="true">
+                                        </mat-datepicker>
                                         <!-- <input type="text" matInput
                                             formControlName="fristtransaction" [readonly]="true"/> -->
                                     </mat-form-field>
@@ -331,10 +333,11 @@
                                             DateValidation
                                             readonly />
                                         <mat-datepicker-toggle matSuffix
-                                            [for]="lasttransaction"></mat-datepicker-toggle>
+                                            [for]="lasttransaction">
+                                        </mat-datepicker-toggle>
                                         <mat-datepicker [startAt]="currentDate"
-                                            #lasttransaction
-                                            [disabled]="true"></mat-datepicker>
+                                            #lasttransaction [disabled]="true">
+                                        </mat-datepicker>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -347,10 +350,11 @@
                                     :</label>
                                 <div class="col-sm-4 flexbox">
                                     <mat-form-field style="width: 100%"
-                                        appearance="outline" class="stretch">
+                                        appearance="outline">
                                         <input type="text" matInput readonly
                                             formControlName="currency"
                                             [readonly]="viewMode"
+                                            UpperCaseDirective
                                             (focusout)="validateLookupField($event,currencyCodeData,'currency')"
                                             (keydown)="lookupKeyPress($event,'currency')" />
                                         <master-search *ngIf="!viewMode"
@@ -416,11 +420,14 @@
                                             <input type="text" matInput
                                                 [readonly]="viewMode"
                                                 formControlName="priceScheme"
-                                                (focusout)="resetAllPriceDetails()" />
+                                                UpperCaseDirective
+                                                (focusout)="validateLookupField($event,priceSchemeData,'priceScheme')"
+                                                (keydown)="lookupKeyPress($event,'priceScheme')" />
                                             <master-search
                                                 *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                                 [MasterSearchData]="priceSchemeData"
                                                 class="masterSearch"
+                                                #overlayPriceScheme
                                                 (newRowClick)="priceSchemeValidate($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -468,7 +475,8 @@
                                             [MasterSearchData]="priceCodeData"
                                             #overlayprice1codeSearch
                                             class="masterSearch"
-                                            (newRowClick)="priceOneCodeSelected($event)"></master-search>
+                                            (newRowClick)="priceOneCodeSelected($event)">
+                                        </master-search>
                                     </mat-form-field>
 
                                 </div>
@@ -523,7 +531,8 @@
                                             [MasterSearchData]="priceCodeData"
                                             #overlayprice2codeSearch
                                             class="masterSearch"
-                                            (newRowClick)="priceTwoCodeSelected($event)"></master-search>
+                                            (newRowClick)="priceTwoCodeSelected($event)">
+                                        </master-search>
                                     </mat-form-field>
 
                                 </div>
@@ -578,7 +587,8 @@
                                             [MasterSearchData]="priceCodeData"
                                             #overlayprice3codeSearch
                                             class="masterSearch"
-                                            (newRowClick)="priceThreeCodeSelected($event)"></master-search>
+                                            (newRowClick)="priceThreeCodeSelected($event)">
+                                        </master-search>
                                     </mat-form-field>
 
                                 </div>
@@ -633,7 +643,8 @@
                                             [MasterSearchData]="priceCodeData"
                                             #overlayprice4codeSearch
                                             class="masterSearch"
-                                            (newRowClick)="priceFourCodeSelected($event)"></master-search>
+                                            (newRowClick)="priceFourCodeSelected($event)">
+                                        </master-search>
                                     </mat-form-field>
 
                                 </div>
@@ -688,7 +699,8 @@
                                             [MasterSearchData]="priceCodeData"
                                             #overlayprice5codeSearch
                                             class="masterSearch"
-                                            (newRowClick)="priceFiveCodeSelected($event)"></master-search>
+                                            (newRowClick)="priceFiveCodeSelected($event)">
+                                        </master-search>
                                     </mat-form-field>
 
                                 </div>

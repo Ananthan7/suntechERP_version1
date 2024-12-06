@@ -92,6 +92,37 @@ export class VatMasterComponent implements OnInit {
     FRONTENDFILTER: true,
   };
 
+  expenseCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 7,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      " BRANCH_CODE = 'strbranchcode' AND AC_OnHold = 0 and  VIEW_ACCMST_BRANCHWISE.ACCODE in (select ACCODE from ACCOUNT_MAIN where ( (  account_mode in ('L','G')) ) and ISNULL(accode,'') <> '')",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "EXPENSE CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  hsnCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 7,
+    LOOKUPID: 3,
+    ORDER_TYPE: 0,
+    WHERECONDITION: "TYPES='HSN MASTER'",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "HSN CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
   VATACCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -204,7 +235,7 @@ export class VatMasterComponent implements OnInit {
 
   costCenterAccountColumnHeadings: any[] = [
     { field: "SRNO", caption: "SRNO" },
-    { field: "COSTCENTER", caption: "COSTCENTER" },
+    { field: "COST_CODE", caption: "COSTCENTER" },
     { field: "GPC_ACCODE", caption: "GPC_ACCODE" },
     { field: "GPC_ACCODE_DESC", caption: "GPC_ACCODE_DESC" },
     { field: "HSN_SAC_CODE", caption: "HSN_SAC_CODE" },
@@ -215,11 +246,11 @@ export class VatMasterComponent implements OnInit {
   ];
 
   accountDateWiseGstDetailsColumnHeadings: any[] = [
-    { field: "SRNO", caption: "Sr No" },
+    { field: "SRNO", caption: "SRNo" },
     { field: "GST_CODE", caption: "GST Code" },
-    { field: "GST_DATE", caption: "Date" },
-    { field: "IGST_PER", caption: "GST %" },
-    { field: "YEARCODE", caption: "Year Month" },
+    { field: "GST_DATE", caption: "DATE" },
+    { field: "GST_PER", caption: "GST PER" },
+    { field: "YEARCODE", caption: "YEAR MONTH" },
   ];
 
   constructor(
@@ -259,9 +290,12 @@ export class VatMasterComponent implements OnInit {
     expVatAccCredit: [""],
     posVatAccDebit: [""],
     posVatRefundCredit: [""],
+    searchValue:[""],
   });
 
   ngOnInit(): void {
+    console.log(this.content);
+    
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
@@ -503,7 +537,7 @@ export class VatMasterComponent implements OnInit {
           this.vatMasterMainForm.value.impRcmCtrlAccDebit || "",
         POSVATREFUND_DEBIT_ACCODE:
           this.vatMasterMainForm.value.posVatAccDebit || "",
-        vatMasterGst: this.expenseHsnOrSacAllocationData.map((item) => ({
+        vatMasterGst: this.costCenterAccountData.map((item) => ({
           UNIQUEID: 0,
           SN: item.SRNO || 0,
           GST_CODE: this.vatMasterMainForm.value.vatCode || "",
@@ -519,21 +553,19 @@ export class VatMasterComponent implements OnInit {
           EXPENSE_ACCTYPE: "str",
           COST_CODE: "string",
         })),
-        VatMasterDetails: [
-          {
-            BRANCH_CODE: this.branchCode,
-            UNIQUEID: 0,
-            SRNO: 0,
-            VAT_CODE: "string",
-            VAT_PER: 0,
-            YEARCODE: "string",
-            VAT_DATE: "2024-12-02T10:11:31.735Z",
-          },
-        ],
+        VatMasterDetails: this.expenseHsnOrSacAllocationData.map((item) => ({
+          BRANCH_CODE: this.branchCode,
+          UNIQUEID: 0,
+          SRNO: Number(item.SRNO) || 0,
+          VAT_CODE: item.GST_CODE || "",
+          VAT_PER: Number(item.GST_PER),
+          YEARCODE: item.YEARCODE,
+          VAT_DATE: "2024-12-02T10:11:31.735Z",
+        })),
       };
 
       if (this.flag === "EDIT") {
-        let API = `/GstMaster/InsertGstMaster/${this.code}`;
+        let API = `/VatMaster/UpdateVatMaster/${this.code}`;
         let sub: Subscription = this.apiService
           .putDynamicAPI(API, postData)
           .subscribe((result) => {
@@ -558,7 +590,7 @@ export class VatMasterComponent implements OnInit {
             }
           });
       } else {
-        let API = `/GstMaster/InsertGstMaster`;
+        let API = `/VatMaster/InsertVatMaster`;
         let sub: Subscription = this.apiService
           .postDynamicAPI(API, postData)
           .subscribe((result) => {
@@ -903,7 +935,7 @@ export class VatMasterComponent implements OnInit {
                   this.costCenterAccountData.length - 1
                 ].SRNO + 1
               : 1,
-          COSTCENTER: "",
+          COST_CODE: "",
           GPC_ACCODE: "",
           GPC_ACCODE_DESC: "",
           HSN_SAC_CODE: "",
@@ -1019,6 +1051,16 @@ export class VatMasterComponent implements OnInit {
     console.log(this.expenseHsnOrSacAllocationData);
   }
 
+  hsnSelect(event: any, data: any) {
+    let currentIndex = data.data.SRNO - 1;
+
+    this.expenseHsnOrSacAllocationData[currentIndex].HSN_SAC_CODE = event.CODE;
+    this.expenseHsnOrSacAllocationData[currentIndex].HSN_SAC_DESC =
+      event.DESCRIPTION;
+
+    console.log(this.expenseHsnOrSacAllocationData);
+  }
+
   GPCSelect(event: any, data: any) {
     let currentIndex = data.data.SRNO - 1;
 
@@ -1053,8 +1095,8 @@ export class VatMasterComponent implements OnInit {
             (item: any) => ({
               SRNO: item.SRNO || item.SrNo,
               GST_CODE: item.GST_CODE || item.VAT_Code,
-              GST_DATE: item.GST_DATE || item.VAT_Per,
-              IGST_PER: item.IGST_PER || item.VAT_Per,
+              GST_DATE: item.GST_DATE || item.Date,
+              GST_PER: item.GST_PER || item.VAT_Per.toFixed(3),
               YEARCODE: item.YEARCODE || item.YearMonth,
             })
           );
@@ -1063,7 +1105,6 @@ export class VatMasterComponent implements OnInit {
       },
       (err) => {
         console.error("Error fetching data:", err);
-        this.commonService.toastErrorByMsgId("MSG1531");
       }
     );
   }
@@ -1120,4 +1161,62 @@ export class VatMasterComponent implements OnInit {
       }
     );
   }
+
+  getGPCAccountData() {
+    let API = `VatMaster/GetFillGPCAccounts`;
+    let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result.status.trim() === "Success") {
+          console.log(result.response);
+          this.costCenterAccountData = result.dynamicData[0].map(
+            (item: any) => ({
+              ...item,
+
+              SRNO: item.SRNO || item.SN,
+              TAX_REG: item.TAX_REG == 1,
+              REVERSECHARGE_UNREG: item.REVERSECHARGE_UNREG == 1,
+              ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT == 1,
+              HSN_SAC_CODE: "",
+              HSN_SAC_DESC: "",
+            })
+          );
+
+          console.log(this.costCenterAccountData);
+        }
+      },
+      (err) => {
+        console.error("Error fetching data:", err);
+        this.commonService.toastErrorByMsgId("MSG1531");
+      }
+    );
+  }
+
+  getSerachValue() {
+    let SEARCHVALUE = this.vatMasterMainForm.value.searchValue;
+    let PARAMS = { strAcCode: SEARCHVALUE };
+    let API = `VatMaster/GetFillGPCAccounts/${this.branchCode}`;
+    
+    let sub: Subscription = this.apiService
+      .getDynamicAPIwithParamsCustom(API, PARAMS)
+      .subscribe(
+        (result) => {
+          if (result.status.trim() === "Success") {
+            this.expenseHsnOrSacAllocationData = result.response.filter(
+              (item: any) => item.GST_CODE === SEARCHVALUE
+            );
+            
+            if (this.expenseHsnOrSacAllocationData.length > 0) {
+              console.log("Matching records:", this.expenseHsnOrSacAllocationData);
+            } else {
+              console.log("No matching records found.");
+            }
+          }
+        },
+        (err) => {
+          console.error("Error fetching data:", err);
+          this.commonService.toastErrorByMsgId("MSG1531");
+        }
+      );
+  }
+  
 }

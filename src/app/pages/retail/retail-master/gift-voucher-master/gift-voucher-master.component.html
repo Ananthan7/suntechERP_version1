@@ -17,7 +17,7 @@
                     <label for="code" class="col-sm-2 col-form-label" id="ID029">Code:</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" formControlName="code"  [readonly]="viewMode" />
+                            <input matInput type="text" formControlName="code"  [readonly]="viewMode || editMode" #code (input)="code.value = code.value.toUpperCase()"/>
                         </mat-form-field>
                     </div>
                     <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Branches</label>

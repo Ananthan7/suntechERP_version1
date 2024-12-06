@@ -36,6 +36,7 @@
                       [readonly]="viewMode"
                       #codeInput
                       matInput
+                      maxlength="6"
                       formControlName="code"
                       UpperCaseDirective
                       autocomplete="off"
@@ -93,19 +94,19 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          debitCode,
+                          debitcode,
                           ['debit'],
                           false,
-                          ['CODE']
+                          ['ACCODE']
                         )
                       "
-                      (keydown)="onKeyDown($event, ['debit'], debitCode)"
+                      (keydown)="onKeyDown($event, ['debit'], debitcode)"
                     />
                     <master-search
                       *ngIf="!viewMode"
                       #overlayDebit
                       class="masterSearch"
-                      [MasterSearchData]="debitCode"
+                      [MasterSearchData]="debitcode"
                       (newRowClick)="BranchDataSelected($event)"
                     >
                     </master-search>
@@ -125,8 +126,8 @@
                   >
                     <mat-select formControlName="basedOn">
                       <mat-option
-                      *ngFor="let option of basedOne"
-                      [value]="option.ENGLISH"
+                      *ngFor="let option of basedOnDropdown"
+                      [value]="option.SRNO"
                     >
                       {{ option.ENGLISH }}
                     </mat-option>
@@ -205,6 +206,7 @@
                       [readonly]="viewMode"
                       type="text"
                       matInput
+                      maxlength="3"
                       formControlName="noOfTime"
                       UpperCaseDirective
                     />
@@ -222,6 +224,7 @@
                       [readonly]="viewMode"
                       type="text"
                       matInput
+                      maxlength="3"
                       formControlName="in"
                       UpperCaseDirective
                     />

@@ -1360,16 +1360,16 @@ export class DepartmentMasterComponent implements OnInit {
       this.content.PDEPTMST_LEAVESALARY_ACCODE
     );
     this.departmentMasterForm.controls.PDEPTMST_WEEKOFF1.setValue(
-      this.content.PDEPTMST_WEEKOFF1
+      this.content.PDEPTMST_WEEKOFF1.toString()
     );
     this.departmentMasterForm.controls.PDEPTMST_HALFDAY1.setValue(
-      this.content.PDEPTMST_HALFDAY1
+      this.content.PDEPTMST_HALFDAY1.toString()
     );
     this.departmentMasterForm.controls.PDEPTMST_WEEKOFF2.setValue(
-      this.content.PDEPTMST_WEEKOFF2
+      this.content.PDEPTMST_WEEKOFF2.toString()
     );
     this.departmentMasterForm.controls.PDEPTMST_HALFDAY2.setValue(
-      this.content.PDEPTMST_HALFDAY2
+      this.content.PDEPTMST_HALFDAY2.toString()
     );
     this.departmentMasterForm.controls.Shift2.setValue(
       this.content.PDEPTMST_SHIFT2

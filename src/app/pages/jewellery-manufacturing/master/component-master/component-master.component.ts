@@ -54,7 +54,7 @@ export class ComponentMasterComponent implements OnInit {
   strBranchcode: any = localStorage.getItem("userbranch");
   // /images: any[] = [];
   private subscriptions: Subscription[] = [];
-  images: string[] = [];
+  // images: string[] = [];
   imageNames: string[] = [];
 
   stockCodeData: MasterSearchModel = {
@@ -115,7 +115,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Category type',
+    SEARCH_HEADING: 'Category',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'CATEGORY MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
@@ -137,7 +137,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 14,
     SEARCH_FIELD: 'PREFIX_CODE',
-    SEARCH_HEADING: 'Prefix master',
+    SEARCH_HEADING: 'Code',
     WHERECONDITION: "COMP_PREFIX='1' ORDER BY PREFIX_CODE",
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -147,7 +147,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Type Code',
+    SEARCH_HEADING: 'Type',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES ='TYPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
@@ -158,7 +158,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 90,
     SEARCH_FIELD: 'COMPSET_CODE',
-    SEARCH_HEADING: 'Size set',
+    SEARCH_HEADING: 'Size Set',
     SEARCH_VALUE: '',
     WHERECONDITION: "COMPSET_CODE <> '' ORDER BY COMPSET_CODE",
     VIEW_INPUT: true,
@@ -191,7 +191,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 93,
     SEARCH_FIELD: 'SEQ_CODE',
-    SEARCH_HEADING: 'Sequence ',
+    SEARCH_HEADING: 'Process Sequence',
     SEARCH_VALUE: '',
     WHERECONDITION: "SEQ_CODE<> '' ORDER BY SEQ_CODE",
     VIEW_INPUT: true,
@@ -202,7 +202,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 15,
     SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Cost Code',
+    SEARCH_HEADING: 'Cost Center',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPE = 'PRECIOUS STONES' ORDER BY COST_CODE",
     VIEW_INPUT: true,
@@ -388,6 +388,7 @@ export class ComponentMasterComponent implements OnInit {
     costCenter: ["", [Validators.required]],
     currencyCode: [""],
     currencyRate: [""],
+    selectMasterOnly: [true],
   });
 
   constructor(
@@ -447,6 +448,7 @@ export class ComponentMasterComponent implements OnInit {
     return true
   }
   Attachedfile: any[] = [];
+  AttachedfileGrid: any[] = [];
   savedAttachments: any[] = [];
 
   attachmentClicked() {
@@ -628,7 +630,7 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.code.setValue(prefixCode);
     this.componentmasterForm.controls.codedes.setValue(des);
     this.prefixCodeValidate();
-    this.getDesignDetails();
+   // this.getDesignDetails();
   }
   typeCodeSelected(e: any) {
     if (this.checkCode()) return
@@ -929,7 +931,7 @@ export class ComponentMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.RADIUS));
 
-    this.images = this.content.PICTURE_NAME
+    // this.images = this.content.PICTURE_NAME
     // this.tableData = this.content.DESIGN_STNMTL_DETAIL
 
     this.dataService.getDynamicAPI('DesignMaster/GetDesignMasterDetails/' + this.content.DESIGN_CODE)
@@ -1490,10 +1492,10 @@ export class ComponentMasterComponent implements OnInit {
       this.formdata.append(`Model.Type`, this.commonService.nullToString(form.VOCTYPE));
       this.formdata.append(`Model.Code`, this.commonService.nullToString(form.code));
       if (this.Attachedfile.length > 0) {
-        for (let i: number = 0; i < this.Attachedfile.length; i++) {
-          this.formdata.append(`Model.imageData[0].Picture_name`, 'test');
-          this.formdata.append(`Model.imageData[0].DefaultPicture`, 'true');
-          this.formdata.append(`Model.imageData[0].Picture_Type`, 'jgp');
+        for (let i: number = 0; i < this.AttachedfileGrid.length; i++) {
+          this.formdata.append('Model.imageData[' + i + '].Picture_name', 'test');
+          this.formdata.append('Model.imageData[' + i + '].DefaultPicture', this.AttachedfileGrid[i].DEFAULT);
+          this.formdata.append('Model.imageData[' + i + '].Picture_Type', 'jgp');
         }
         for (let i: number = 0; i < this.Attachedfile.length; i++) {
           this.formdata.append("Model.Images[" + i + "].Image.File", this.Attachedfile[i]);
@@ -1657,6 +1659,21 @@ export class ComponentMasterComponent implements OnInit {
     }
   }
 
+  selectMasterOnlyChange(event: any) {
+    this.codeCodeData.VIEW_ICON = this.componentmasterForm.value.selectMasterOnly;
+  }
+  componentCodeValidate(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    if (this.componentmasterForm.value.selectMasterOnly) {
+      this.validateLookupField(event, LOOKUPDATA, FORMNAME)
+    } else {
+      this.checkCodeExists()
+    }
+  }
+
+  checkCodeExists(){
+
+  }
+
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
@@ -1702,45 +1719,80 @@ export class ComponentMasterComponent implements OnInit {
       this.prefixCodeValidate()
     }
   }
+  imageCount: number = 0
   onFileChangedimage(input: any) {
+    this.onFileSelect(input)
     if (input.target.files.length > 0) {
       const file: File = input.target.files[0];
+      this.imageCount += 1
       for (let x = 0; x < input.target.files.length; x++) {
         this.Attachedfile.push(file);
+        this.AttachedfileGrid.push({
+          SRNO: this.imageCount,
+          NAME: file.name,
+          FILE: file,
+          DEFAULT: false,
+          DEFAULTFLAG: false,
+          PICTURE_TYPE: ''
+        });
       }
-      this.onFileChangedBase64(input)
     }
   }
-  onFileChangedBase64(event: any): void {
-    // Clear the previous images and names
-    this.images = [];
-    this.imageNames = [];
-    this.PICTURE_NAME = "";
+  // onFileChangedBase64(event: any): void {
+  //   // Clear the previous images and names
+  //   this.images = [];
+  //   this.imageNames = [];
+  //   this.PICTURE_NAME = "";
 
-    if (event.target.files && event.target.files.length > 0) {
-      const files = event.target.files;
-      const totalFiles = files.length;
-      let loadedFiles = 0;
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     const files = event.target.files;
+  //     const totalFiles = files.length;
+  //     let loadedFiles = 0;
 
-      for (let i = 0; i < totalFiles; i++) {
+  //     for (let i = 0; i < totalFiles; i++) {
+  //       const reader = new FileReader();
+  //       const file = files[i];
+
+  //       // Save file names or other metadata
+  //       this.imageNames.push(file.name);
+
+  //       reader.onload = ((event: ProgressEvent<FileReader>) => {
+  //         this.images.push(event.target?.result as string);
+  //         loadedFiles++;
+
+  //         // Update PICTURE_NAME after all files are loaded
+  //         if (loadedFiles === totalFiles) {
+  //           this.PICTURE_NAME = this.imageNames.join(',') || "";
+  //         }
+  //       });
+
+  //       reader.readAsDataURL(file);
+  //     }
+  //   }
+  // }
+  fileUrls: any[] = []
+  activeIndex = 0; 
+  // convert selected image to base64
+  onFileSelect(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input?.files) {
+      // this.fileUrls = []; // Clear previous selections
+      for (const file of Array.from(input.files)) {
         const reader = new FileReader();
-        const file = files[i];
-
-        // Save file names or other metadata
-        this.imageNames.push(file.name);
-
-        reader.onload = ((event: ProgressEvent<FileReader>) => {
-          this.images.push(event.target?.result as string);
-          loadedFiles++;
-
-          // Update PICTURE_NAME after all files are loaded
-          if (loadedFiles === totalFiles) {
-            this.PICTURE_NAME = this.imageNames.join(',') || "";
-          }
-        });
-
-        reader.readAsDataURL(file);
+        reader.onload = () => this.fileUrls.push(reader.result as string);
+        reader.readAsDataURL(file); // Read file as Data URL
       }
+    }
+  }
+  previous(): void {
+    if (this.fileUrls.length > 0) {
+      this.activeIndex = (this.activeIndex - 1 + this.fileUrls.length) % this.fileUrls.length;
+    }
+  }
+
+  next(): void {
+    if (this.fileUrls.length > 0) {
+      this.activeIndex = (this.activeIndex + 1) % this.fileUrls.length;
     }
   }
   openAttachment(e: any) {
@@ -1754,15 +1806,15 @@ export class ComponentMasterComponent implements OnInit {
     this.modalReference = this.modalService.open(this.imageUpload, {
       size: 'lg',
       ariaLabelledBy: 'modal-basic-title',
-      backdrop: false,
+      backdrop: true,
     });
   }
- 
+
   defaultCheckboxChange(data: any, value: any) {
-    if(value.rowIndex){
-      this.Attachedfile
-    }
-    this.tableData[value.data.SRNO - 1].STOCK_FCCOST = data.target.value;
+    this.AttachedfileGrid.forEach((item: any, index: number) => {
+      item.DEFAULT = false
+    })
+    this.AttachedfileGrid[value.data.SRNO - 1].DEFAULT = true;
   }
   stoneType(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].STOCK_FCCOST = data.target.value;

@@ -193,7 +193,7 @@
                                     appearance="outline">
                                     <input type="text" matInput
                                         formControlName="stockcode"
-                                        [readonly]="viewMode"
+                                        [readonly]="viewMode" UpperCaseDirective
                                         (keydown)="lookupKeyPress($event,'stockcode')"
                                         (focusout)="stockCodeValidate($event)" />
                                 </mat-form-field>
@@ -208,6 +208,7 @@
                                     appearance="outline">
                                     <input type="text" matInput
                                         formControlName="stockdes"
+                                        UpperCaseDirective
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>

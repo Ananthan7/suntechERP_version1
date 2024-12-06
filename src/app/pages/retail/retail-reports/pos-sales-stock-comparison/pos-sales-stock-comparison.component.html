@@ -32,11 +32,11 @@
             <div class="row mb-4">
                 <label for="transaction"  class="col-sm-1 col-form-label"  id="ID002"> Transaction</label>
                 <div class="col-md-2">
-                    <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
-                        <mat-select  formControlName="transaction">
-                          <mat-option value=0>Sales</mat-option>
-                          <mat-option value=1>Sales Returns</mat-option>
-                          <mat-option value=2>Net Sales</mat-option>
+                    <mat-form-field>
+                        <mat-select formControlName="transaction">
+                          <mat-option *ngFor="let option of options" [value]="option.value">
+                            {{ option.label }}
+                          </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -50,13 +50,9 @@
                             <div class="col-md-9">
                                 <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
                                     <mat-select  formControlName="groupByMetal">
-                                        <mat-option value="Type" class="text-uppercase">Type</mat-option>
-                                        <mat-option value="Karat" class="text-uppercase">Karat</mat-option>
-                                        <mat-option value="Karat" class="text-uppercase">Brand</mat-option>
-                                        <mat-option value="Karat" class="text-uppercase">Country</mat-option>
-                                        <mat-option value="Stock Code" class="text-uppercase">Stock Code</mat-option>
-                                        <mat-option value="Category" class="text-uppercase">Category</mat-option>
-                                        <mat-option value="Cost Code" class="text-uppercase">Cost Code</mat-option>
+                                        <mat-option *ngFor="let item of groupByMetalArr" [value]="item.value">
+                                            {{item.label}}
+                                        </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -67,14 +63,9 @@
                             <div class="col-md-9">
                                 <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
                                     <mat-select  formControlName="groupByDiamond">
-                                        <mat-option value="Type" class="text-uppercase">Type</mat-option>
-                                        <mat-option value="Category" class="text-uppercase">Category</mat-option>
-                                        <mat-option value="Sub Category" class="text-uppercase">Sub Category</mat-option>
-                                        <mat-option value="Brand" class="text-uppercase">Brand</mat-option>
-                                        <mat-option value="Country" class="text-uppercase">Country</mat-option>
-                                        <mat-option value="Design" class="text-uppercase">Design</mat-option>
-                                        <mat-option value="Stock Code" class="text-uppercase">Stock Code</mat-option>
-                                        <mat-option value="Cost Code" class="text-uppercase">Cost Code</mat-option>
+                                        <mat-option *ngFor="let item of groupByDiamondArr" [value]="item.value">
+                                            {{ item.label }}
+                                        </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>

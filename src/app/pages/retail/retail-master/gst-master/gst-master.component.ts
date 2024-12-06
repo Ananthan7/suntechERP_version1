@@ -222,6 +222,37 @@ export class GstMasterComponent implements OnInit {
     FRONTENDFILTER: true,
   };
 
+  expenseCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 7,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      " BRANCH_CODE = 'strbranchcode' AND AC_OnHold = 0 and  VIEW_ACCMST_BRANCHWISE.ACCODE in (select ACCODE from ACCOUNT_MAIN where ( (  account_mode in ('L','G')) ) and ISNULL(accode,'') <> '')",
+    SEARCH_FIELD: "STOCK_CODE",
+    SEARCH_HEADING: "EXPENSE CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  hsnCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 7,
+    LOOKUPID: 3,
+    ORDER_TYPE: 0,
+    WHERECONDITION: "TYPES='HSN MASTER'",
+    SEARCH_FIELD: "STOCK_CODE",
+    SEARCH_HEADING: "HSN CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
   expenseHsnOrSacAllocationColumnHeadings: any[] = [
     { field: "Sr", caption: "Sr" },
     { field: "Exp. A/c", caption: "Exp. A/c" },
@@ -512,6 +543,8 @@ export class GstMasterComponent implements OnInit {
   }
 
   gstMasterMainFormSubmit() {
+    console.log(this.dateWiseGstDetailsData);
+
     Object.keys(this.gstMasterMainForm.controls).forEach((controlName) => {
       const control = this.gstMasterMainForm.controls[controlName];
       if (control.validator && control.validator({} as AbstractControl)) {
@@ -591,107 +624,109 @@ export class GstMasterComponent implements OnInit {
         ROUNDOFF_ACCODE: this.gstMasterMainForm.value.roundOffAc || "",
         CESS_ACCODE: "string",
         CESS_PER: Number(this.gstMasterMainForm.value.cessPercent) || 0,
-        // gstMasterGst:
-        //   this.expenseHsnOrSacAllocationData.length > 0
-        //     ? [
-        //         {
-        //           UNIQUEID: 0,
-        //           SN: this.expenseHsnOrSacAllocationData[0].SRNO,
-        //           GST_CODE: this.gstMasterMainForm.value.gstCode,
-        //           GST_DESCRIPTION: this.gstMasterMainForm.value.gstDesc,
-        //           GST_PER: 0,
-        //           EXPENSE_ACCODE:
-        //             this.expenseHsnOrSacAllocationData[0].EXPENSE_ACCODE,
-        //           EXPENSE_ACCODE_DESC:
-        //             this.expenseHsnOrSacAllocationData[0].EXPENSE_ACCODE_DESC,
-        //           HSN_SAC_CODE:
-        //             this.expenseHsnOrSacAllocationData[0].HSN_SAC_CODE,
-        //           HSN_SAC_DESC:
-        //             this.expenseHsnOrSacAllocationData[0].HSN_SAC_DESC,
-        //           TAX_REG: this.expenseHsnOrSacAllocationData[0].TAX_REG,
-        //           REVERSECHARGE_UNREG:
-        //             this.expenseHsnOrSacAllocationData[0].REVERSECHARGE_UNREG,
-        //           ELIGIBLE_INPUTCREDIT:
-        //             this.expenseHsnOrSacAllocationData[0].ELIGIBLE_INPUTCREDIT,
-        //           EXPENSE_ACCTYPE: "str",
-        //           COST_CODE: "string",
-        //         },
-        //       ]
-        //     : [],
+        gstMasterGst:
+          this.expenseHsnOrSacAllocationData.length > 0
+            ? [
+                {
+                  UNIQUEID: 0,
+                  SN: this.expenseHsnOrSacAllocationData[0].SRNO,
+                  GST_CODE: this.gstMasterMainForm.value.gstCode,
+                  GST_DESCRIPTION: this.gstMasterMainForm.value.gstDesc,
+                  GST_PER: 0,
+                  EXPENSE_ACCODE:
+                    this.expenseHsnOrSacAllocationData[0].EXPENSE_ACCODE,
+                  EXPENSE_ACCODE_DESC:
+                    this.expenseHsnOrSacAllocationData[0].EXPENSE_ACCODE_DESC,
+                  HSN_SAC_CODE:
+                    this.expenseHsnOrSacAllocationData[0].HSN_SAC_CODE,
+                  HSN_SAC_DESC:
+                    this.expenseHsnOrSacAllocationData[0].HSN_SAC_DESC,
+                  TAX_REG: this.expenseHsnOrSacAllocationData[0].TAX_REG,
+                  REVERSECHARGE_UNREG:
+                    this.expenseHsnOrSacAllocationData[0].REVERSECHARGE_UNREG,
+                  ELIGIBLE_INPUTCREDIT:
+                    this.expenseHsnOrSacAllocationData[0].ELIGIBLE_INPUTCREDIT,
+                  EXPENSE_ACCTYPE: "str",
+                  COST_CODE: "string",
+                },
+              ]
+            : [],
 
-        gstMasterGst: this.expenseHsnOrSacAllocationData.map((item) => ({
-          UNIQUEID: 0,
-          SN: item.SRNO || 0,
-          GST_CODE: this.gstMasterMainForm.value.gstCode || "",
-          GST_DESCRIPTION: this.gstMasterMainForm.value.gstDesc || "",
-          GST_PER: 0,
-          EXPENSE_ACCODE: item.EXPENSE_ACCODE || "",
-          EXPENSE_ACCODE_DESC: item.EXPENSE_ACCODE_DESC || "",
-          HSN_SAC_CODE: item.HSN_SAC_CODE || "",
-          HSN_SAC_DESC: item.HSN_SAC_DESC || "",
-          TAX_REG: item.TAX_REG || "",
-          REVERSECHARGE_UNREG: item.REVERSECHARGE_UNREG || "",
-          ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT || "",
-          EXPENSE_ACCTYPE: "str",
-          COST_CODE: "string",
-        })),
+        // gstMasterGst: this.expenseHsnOrSacAllocationData.map((item) => ({
+        //   UNIQUEID: 0,
+        //   SN: item.SRNO || 0,
+        //   GST_CODE: this.gstMasterMainForm.value.gstCode || "",
+        //   GST_DESCRIPTION: this.gstMasterMainForm.value.gstDesc || "",
+        //   GST_PER: 0,
+        //   EXPENSE_ACCODE: item.EXPENSE_ACCODE || "",
+        //   EXPENSE_ACCODE_DESC: item.EXPENSE_ACCODE_DESC || "",
+        //   HSN_SAC_CODE: item.HSN_SAC_CODE || "",
+        //   HSN_SAC_DESC: item.HSN_SAC_DESC || "",
+        //   TAX_REG: item.TAX_REG || "",
+        //   REVERSECHARGE_UNREG: item.REVERSECHARGE_UNREG || "",
+        //   ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT || "",
+        //   EXPENSE_ACCTYPE: "str",
+        //   COST_CODE: "string",
+        // })),
 
-        // gstMasterDetails:
-        //   this.stateWiseGstDetailsData.length > 0
-        //     ? [
-        //         {
-        //           GST_CODE: this.gstMasterMainForm.value.gstCode,
-        //           STATE_CODE: this.stateWiseGstDetailsData[0].STATE_CODE,
-        //           STATE_DESCRIPTION:
-        //             this.stateWiseGstDetailsData[0].STATE_DESCRIPTION,
-        //           CGST_PER: 0,
-        //           SGST_PER: 0,
-        //           IGST_PER: 0,
-        //           UNIQUEID: 0,
-        //         },
-        //       ]
-        //     : [],
+        gstMasterDetails:
+          this.stateWiseGstDetailsData.length > 0
+            ? [
+                {
+                  GST_CODE: this.gstMasterMainForm.value.gstCode,
+                  STATE_CODE: this.stateWiseGstDetailsData[0].STATE_CODE,
+                  STATE_DESCRIPTION:
+                    this.stateWiseGstDetailsData[0].STATE_DESCRIPTION,
+                  CGST_PER: 0,
+                  SGST_PER: 0,
+                  IGST_PER: 0,
+                  UNIQUEID: 0,
+                },
+              ]
+            : [],
 
-        gstMasterDetails: this.stateWiseGstDetailsData.map((item) => ({
-          GST_CODE: this.gstMasterMainForm.value.gstCode,
-          STATE_CODE: item.STATE_CODE || "",
-          STATE_DESCRIPTION: item.STATE_DESCRIPTION || "",
-          CGST_PER: 0,
-          SGST_PER: 0,
-          IGST_PER: 0,
-          UNIQUEID: 0,
-        })),
+        // gstMasterDetails: this.stateWiseGstDetailsData.map((item) => ({
+        //   GST_CODE: this.gstMasterMainForm.value.gstCode,
+        //   STATE_CODE: item.STATE_CODE || "",
+        //   STATE_DESCRIPTION: item.STATE_DESCRIPTION || "",
+        //   CGST_PER: 0,
+        //   SGST_PER: 0,
+        //   IGST_PER: 0,
+        //   UNIQUEID: 0,
+        // })),
 
-        // gstMasterFyGst:
-        //   this.dateWiseGstDetailsData.length > 0
-        //     ? [
-        //         {
-        //           BRANCH_CODE: this.branchCode,
-        //           UNIQUEID: 0,
-        //           SRNO: Number(this.dateWiseGstDetailsData[0].SrNo),
-        //           GST_CODE: this.dateWiseGstDetailsData[0].VAT_Code,
-        //           GST_PER: Number(this.dateWiseGstDetailsData[0].VAT_Per),
-        //           CGST_PER: 0,
-        //           SGST_PER: 0,
-        //           IGST_PER: 0,
-        //           YEARCODE: this.dateWiseGstDetailsData[0].YearMonth,
-        //           GST_DATE: "2024-11-29T04:03:07.279Z",
-        //         },
-        //       ]
-        //     : [],
+        gstMasterFyGst:
+          this.dateWiseGstDetailsData.length > 0
+            ? [
+                {
+                  BRANCH_CODE: this.branchCode,
+                  UNIQUEID: 0,
+                  SRNO: Number(this.dateWiseGstDetailsData[0].SRNO) || 0,
+                  GST_CODE: this.dateWiseGstDetailsData[0].GST_CODE || "",
+                  GST_PER: Number(this.dateWiseGstDetailsData[0].GST_PER) || 0,
+                  CGST_PER: 0,
+                  SGST_PER: 0,
+                  IGST_PER: 0,
+                  YEARCODE: this.dateWiseGstDetailsData[0].YEARCODE || "",
+                  GST_DATE:
+                    this.formatDate(this.dateWiseGstDetailsData[0].GST_DATE) ||
+                    new Date(),
+                },
+              ]
+            : [],
 
-        gstMasterFyGst: this.dateWiseGstDetailsData.map((item) => ({
-          BRANCH_CODE: this.branchCode,
-          UNIQUEID: 0,
-          SRNO: Number(item.SrNo) || 0,
-          GST_CODE: item.VAT_Code || 0,
-          GST_PER: Number(item.VAT_Per) || 0,
-          CGST_PER: 0,
-          SGST_PER: 0,
-          IGST_PER: 0,
-          YEARCODE: item.YearMonth,
-          GST_DATE: new Date(),
-        })),
+        // gstMasterFyGst: this.dateWiseGstDetailsData.map((item) => ({
+        //   BRANCH_CODE: this.branchCode,
+        //   UNIQUEID: 0,
+        //   SRNO: Number(item.SRO) || 0,
+        //   GST_CODE: item.GST_CODE || "",
+        //   GST_PER: Number(item.GST_PER) || 0,
+        //   CGST_PER: 0,
+        //   SGST_PER: 0,
+        //   IGST_PER: 0,
+        //   YEARCODE: item.YEARCODE,
+        //   GST_DATE: this.formatDate(item.GST_DATE),
+        // })),
       };
 
       if (this.flag === "EDIT") {
@@ -779,11 +814,7 @@ export class GstMasterComponent implements OnInit {
   }
 
   checkPercentage(event: any) {
-    let message = `Percentage must be more than zero`;
-    if (this.gstMasterMainForm.value.gstPercent === "") {
-      this.gstMasterMainForm.controls["roundOff"].setValue("");
-      this.openDialog("Warning", message, true);
-    }
+   
   }
 
   openTab(event: KeyboardEvent, formControlName: string) {
@@ -1071,12 +1102,14 @@ export class GstMasterComponent implements OnInit {
     this.apiService.postDynamicAPI(API, payload).subscribe(
       (result) => {
         if (result.status.trim() === "Success") {
+          console.log(result);
+
           this.dateWiseGstDetailsData = result.dynamicData[0].map(
             (item: any) => ({
               SRNO: item.SRNO || item.SrNo,
               GST_CODE: item.GST_CODE || item.VAT_Code,
-              GST_DATE: item.GST_DATE || item.VAT_Per,
-              IGST_PER: item.IGST_PER || item.VAT_Per,
+              GST_DATE: item.GST_DATE || item.Date,
+              GST_PER: item.GST_PER || item.VAT_Per,
               YEARCODE: item.YEARCODE || item.YearMonth,
             })
           );
@@ -1226,33 +1259,65 @@ export class GstMasterComponent implements OnInit {
 
     console.log(this.expenseHsnOrSacAllocationData);
   }
-  codeAlert(event: any, controller: any) {
-    if (controller === "gstPercent") {
-      let message = `A percentage value cannot be greater than 100.`;
 
-      if (event.target.value > 100) {
-        this.gstMasterMainForm.controls[controller].setValue("");
-        this.openDialog("Warning", message, true);
-      } else {
-        this.gstMasterMainForm.controls[controller].setValue(
-          event.target.value
-        );
-      }
-    }
+  hsnSelect(event: any, data: any) {
+    let currentIndex = data.data.SRNO - 1;
 
-    const message = "Please enter code first!";
+    this.expenseHsnOrSacAllocationData[currentIndex].HSN_SAC_CODE = event.CODE;
+    this.expenseHsnOrSacAllocationData[currentIndex].HSN_SAC_DESC =
+      event.DESCRIPTION;
+
+    console.log(this.expenseHsnOrSacAllocationData);
+  }
+
+  codeAlert(event: any, controller: string): void {
     const GSTCODE = this.gstMasterMainForm.value.gstCode;
     const GSTPERCENT = this.gstMasterMainForm.value.gstPercent;
-
-    console.log("Value:", GSTCODE);
-
-    if (GSTCODE === "" || !GSTCODE) {
-      this.openDialog("Warning", message, true);
-      this.gstMasterMainForm.controls[controller].setValue(" ");
+    const inputValue = event.target.value;
+  
+    if (!GSTCODE) {
+      this.openDialog("Warning", "Please enter code first!", true);
+      this.gstMasterMainForm.controls[controller].setValue("");
+      return;
     }
-
+  
+    if (controller === "gstPercent") {
+      if (inputValue > 100) {
+        this.openDialog("Warning", "A percentage value cannot be greater than 100.", true);
+        this.gstMasterMainForm.controls[controller].setValue("");
+      } else {
+        this.gstMasterMainForm.controls[controller].setValue(inputValue);
+      }
+    }
+  
+    if (controller === "roundOff") {
+      if (!GSTPERCENT) {
+        this.openDialog("Warning", "Percentage must be more than zero.", true);
+        this.gstMasterMainForm.controls[controller].setValue("");
+        return;
+      }
+  
+      if (inputValue > 99) {
+        this.openDialog("Warning", "Round Off value cannot be greater than 99.", true);
+        this.gstMasterMainForm.controls[controller].setValue("");
+      } else {
+        this.gstMasterMainForm.controls[controller].setValue(inputValue);
+      }
+    }
+  
+    // Fetch data if both GST Code and Percent are valid
     if (GSTCODE && GSTPERCENT) {
       this.getDatewiseListData();
     }
+  }
+  
+
+  formatDate(inputDate: string): string {
+    const parts = inputDate.split("/");
+    return new Date(
+      +parts[2], // Year
+      +parts[1] - 1, // Month (0-based index)
+      +parts[0] // Day
+    ).toISOString();
   }
 }

@@ -113,7 +113,7 @@ export class StoneIssueDetailComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 271,
+    LOOKUPID: 132,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Search',
     SEARCH_VALUE: '',
@@ -281,19 +281,17 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.remarks.setValue(this.content.D_REMARKS)
     this.stoneIssueDetailsFrom.controls.amount.setValue(this.content.AMOUNTLC)
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(this.content.DIVCODE)
-    this.stoneIssueDetailsFrom.controls.carat.setValue(this.content.GROSS_WT)
     this.stoneIssueDetailsFrom.controls.otheratt.setValue(this.content.OTHER_ATTR)
     this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(this.content.PART_CODE)
     this.stoneIssueDetailsFrom.controls.batchid.setValue(this.content.SUB_STOCK_CODE)
     this.stoneIssueDetailsFrom.controls.consignment.setValue(this.content.CONSIGNMENT)
+    this.setValueWithDecimal('carat', this.content.GROSS_WT, 'STONE')
     this.setValueWithDecimal('unitrate', 0, 'AMOUNT')
     this.setValueWithDecimal('amount', 0, 'AMOUNT')
-    this.setValueWithDecimal('pointerwt', 0, 'FOUR')
     this.setValueWithDecimal('stockbal', 0, 'THREE')
-    this.setValueWithDecimal('carat', 0, 'METAL')
     this.getImageData()
-    this.CollectPointerWtValidation()
     this.CollectRate()
+    this.CollectPointerWtValidation()
   }
 
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
@@ -369,7 +367,7 @@ export class StoneIssueDetailComponent implements OnInit {
   divCodeSelected(e: any) {
     if (this.checkCode()) return
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Division_Code);
-    this.divisionCodeValidate(event)
+    this.divisionCodeValidate()
 
   }
   subJobNoCodeSelected(e: any) {
@@ -819,7 +817,8 @@ export class StoneIssueDetailComponent implements OnInit {
           if (result.status === "Success" && result.dynamicData && result.dynamicData.length > 0) {
             let data = result.dynamicData[0]
             let pointerWeight = data[0].POINTERWEIGHT;
-            this.stoneIssueDetailsFrom.controls.pointerwt.setValue(pointerWeight);
+            this.setValueWithDecimal('pointerwt', pointerWeight, 'FOUR')
+
             // let pcs = data[0].PCS;
             // this.stoneIssueDetailsFrom.controls.pieces.setValue(pcs)
 
@@ -836,16 +835,17 @@ export class StoneIssueDetailComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-  divisionCodeValidate(event: any) {
+  divisionCodeValidate(event?: any) {
     const divisionCode = event.target.value?.trim();
     this.clearStockDetails();
-    if (!divisionCode) return;
+    let form = this.stoneIssueDetailsFrom.value;
+    if (!form.DIVCODE) return;
     const postData = {
       SPID: "135",
       parameter: {
-        SubJobNumber: this.stoneIssueDetailsFrom.value.subjobnumber || '',
-        DivisionCode: divisionCode,
-        DesignType: this.stoneIssueDetailsFrom.value.DESIGN_TYPE || '',
+        SubJobNumber: this.comService.nullToString(form.subjobnumber),
+        DivisionCode: this.comService.nullToString(form.DIVCODE),
+        DesignType: this.comService.nullToString(form.DESIGN_TYPE),
       },
     };
     this.comService.showSnackBarMsg('MSG81447');
@@ -1126,8 +1126,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.subJobNoCodeData.WHERECONDITION = `
     Job_Number = '${this.stoneIssueDetailsFrom.controls.jobNumber.value}'
     and Branch_code = '${this.comService.branchCode}'
-    AND isnull(WAX_STATUS, '') <> 'I'
-  `;
+    AND isnull(WAX_STATUS, '') <> 'I'`;
     let postData = {
       "SPID": "028",
       "parameter": {
@@ -1145,7 +1144,6 @@ export class StoneIssueDetailComponent implements OnInit {
           let data = result.dynamicData[0]
           if (data[0] && data[0]?.UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
-            console.log(JSON.stringify(data), 'pick')
             this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION?.toUpperCase())
             this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
             this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION?.toUpperCase())
@@ -1153,7 +1151,8 @@ export class StoneIssueDetailComponent implements OnInit {
             this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
             // this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].CUSTOMER_CODE)
             this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
-            this.stoneIssueDetailsFrom.controls.DESIGN_TYPE.setValue(this.designType)
+            this.designType = this.comService.nullToString(data[0].DESIGN_TYPE)
+            this.stoneIssueDetailsFrom.controls.DESIGN_TYPE.setValue(data[0].DESIGN_TYPE)
             // if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
             //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
             // } else {
@@ -1163,6 +1162,7 @@ export class StoneIssueDetailComponent implements OnInit {
             this.setSubJobCondition()
             this.subJobNumberValidate()
             this.setStockCodeWhereCondition()
+            this.setDivCodeWhereCondition()
             this.codeEnabled()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
@@ -1180,6 +1180,10 @@ export class StoneIssueDetailComponent implements OnInit {
         this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+  setDivCodeWhereCondition(){
+    let form = this.stoneIssueDetailsFrom.value;
+    this.divCodeData.WHERECONDITION = `@SubJobNumber='',  @DivisionCode='', @DesignType='${form.DESIGN_TYPE}'`
   }
   codeEnabled() {
     if (this.stoneIssueDetailsFrom.value.jobNumber == '') {

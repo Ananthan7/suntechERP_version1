@@ -19,7 +19,7 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     todate: [''],
     templateName: [''],
 
-    transaction: [0],
+    transaction: [''],
     groupByMetal: [''],
     groupByDiamond: ['']
   
@@ -39,13 +39,38 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
 
+  options = [
+    { value: 0, label: 'Sales' },
+    { value: 1, label: 'Sales Returns' },
+    { value: 2, label: 'Net Sales' },
+  ];
+  groupByMetalArr = [
+    { value: 'Type', label: 'Type' },
+    { value: 'Karat', label: 'Karat' },
+    { value: 'Brand', label: 'Brand' },
+    { value: 'Country', label: 'Country' },
+    { value: 'Stock Code', label: 'Stock Code' },
+    { value: 'Category', label: 'Category' },
+    { value: 'Cost Code', label: 'Cost Code' },
+  ]
+  groupByDiamondArr = [
+    { value: 'Type', label: 'Type' },
+    { value: 'Category', label: 'Category' },
+    { value: 'Sub Category', label: 'Sub Category' },
+    { value: 'Brand', label: 'Brand' },
+    { value: 'Country', label: 'Country' },
+    { value: 'Design', label: 'Design' },
+    { value: 'Stock Code', label: 'Stock Code' },
+    { value: 'Cost Code', label: 'Cost Code' },
+  ]
+
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private datePipe: DatePipe,
     private dataService: SuntechAPIService, private commonService: CommonServiceService,  private toastr: ToastrService,
   ) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
-   
+    this.gridAPI();
   }
 
   close(data?: any) {
@@ -235,6 +260,10 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
         fromDate:  this.formatDateToYYYYMMDD(new Date()),
         toDate: this.formatDateToYYYYMMDD(new Date()),
       };
+
+      this.POS_Sales_Stock_ComparisonForm.controls.transaction.setValue(this.options[0].value);
+      this.POS_Sales_Stock_ComparisonForm.controls.groupByMetal.setValue(this.groupByMetalArr[0].value);
+      this.POS_Sales_Stock_ComparisonForm.controls.groupByDiamond.setValue(this.groupByDiamondArr[0].value);
     }
   }
 

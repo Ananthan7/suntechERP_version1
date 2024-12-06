@@ -13,6 +13,13 @@
   word-break: break-all;
   line-height: 1.5;
 }
+//dropdown Visibility handler
+::ng-deep {
+  .cdk-overlay-container {
+      position: fixed;
+      z-index: 1070 !important;
+  }
+}
 
 .checkboxAlign {
   margin-left: -5rem;
@@ -68,4 +75,10 @@
 .cancelBTN {
   background-color: #b9c3d3;
   width: 100px;
+}
+
+//Report screen disabling while report generation
+.loading-class {
+  pointer-events: none;
+  filter: grayscale(20%) blur(2px)
 }

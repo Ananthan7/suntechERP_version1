@@ -239,7 +239,7 @@
                     class="text-right"
                     ThreeDecimalInput
                     [readonly]="flag === 'VIEW'"
-                    (input)="checkPercentage($event)"
+                    (input)="codeAlert($event, 'roundOff')"
                     [readonly]="flag === 'VIEW'"
                     matInput
                     type="text"
@@ -1406,7 +1406,7 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayGroupOne
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="expenseCodeData"
                                 class="masterSearch"
                                 (newRowClick)="expenseSelect($event, data)"
                               ></master-search>
@@ -1450,13 +1450,18 @@
                                 matInput
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
-                                (change)="
-                                  updateField($event, data, 'HSN_SAC_CODE')
-                                "
                                 [value]="data.value"
                                 style="width: 100%"
                                 required
                               />
+
+                              <master-search
+                              *ngIf="flag != 'VIEW'"
+                              #overlayGroupOne
+                              [MasterSearchData]="hsnCodeData"
+                              class="masterSearch"
+                              (newRowClick)="hsnSelect($event, data)"
+                            ></master-search>
                             </mat-form-field>
                           </div>
 

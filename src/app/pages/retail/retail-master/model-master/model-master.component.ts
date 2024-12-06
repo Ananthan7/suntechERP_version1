@@ -383,7 +383,7 @@ export class ModelMasterComponent implements OnInit {
     max_stone_rate: [0],
     cal_stone_on: [''], 
     calc_on_wt: [''] ,
-    making_std_rate:[''],
+    making_std_rate:[0],
     std_wt:['']
   });
   
@@ -505,13 +505,13 @@ export class ModelMasterComponent implements OnInit {
     this.modelMasterForm.controls.wastageprice1per.setValue(this.content.WASTAGEPRICE1PER.toString())
     this.modelMasterForm.controls.wastageprice2per.setValue(this.content.WASTAGEPRICE2PER.toString())
     this.modelMasterForm.controls.fixed_rate.setValue(this.content.FIXED_RATE)
-    this.modelMasterForm.controls.markup_per.setValue(this.content.MARKUP_PER)
-    this.modelMasterForm.controls.markup_min_per.setValue(this.content.MARKUP_MIN_PER)
-    this.modelMasterForm.controls.markup_max_per.setValue(this.content.MARKUP_MAX_PER)
+    this.modelMasterForm.controls.markup_per.setValue(this.commonService.decimalQuantityFormat(this.content.MARKUP_PER,'AMOUNT'))
+    this.modelMasterForm.controls.markup_min_per.setValue(this.commonService.decimalQuantityFormat(this.content.MARKUP_MIN_PER, 'AMOUNT'))
+    this.modelMasterForm.controls.markup_max_per.setValue(this.commonService.decimalQuantityFormat(this.content.MARKUP_MAX_PER, 'AMOUNT'))
     this.modelMasterForm.controls.making_rate_type.setValue( this.content.MAKING_RATE_TYPE),
-    this.modelMasterForm.controls.std_stone_rate.setValue(this.content.STD_STONE_RATE)
-    this.modelMasterForm.controls.min_stone_rate.setValue(this.content.MIN_STONE_RATE)
-    this.modelMasterForm.controls.max_stone_rate.setValue(this.content.MAX_STONE_RATE)
+    this.modelMasterForm.controls.making_std_rate.setValue(this.commonService.decimalQuantityFormat(this.content.STD_STONE_RATE, 'AMOUNT'))
+    this.modelMasterForm.controls.min_stone_rate.setValue(this.commonService.decimalQuantityFormat(this.content.MIN_STONE_RATE, 'AMOUNT'))
+    this.modelMasterForm.controls.max_stone_rate.setValue(this.commonService.decimalQuantityFormat(this.content.MAX_STONE_RATE, 'AMOUNT'))
     this.modelMasterForm.controls.cal_stone_on.setValue(this.content.CAL_STONE_ON)
     this.modelMasterForm.controls.calc_on_wt.setValue(this.content.CALC_ON_WT)
 
@@ -564,7 +564,7 @@ export class ModelMasterComponent implements OnInit {
       MARKUP_MIN_PER: this.commonService.emptyToZero (form.markup_min_per) || 0,
       MARKUP_MAX_PER:this.commonService.emptyToZero (form.markup_max_per) || 0,
       MAKING_RATE_TYPE: true,
-      STD_STONE_RATE: this.commonService.emptyToZero( form.std_stone_rate) || 0,
+      STD_STONE_RATE: this.commonService.emptyToZero( form.making_std_rate) || 0,
       MIN_STONE_RATE: this.commonService.emptyToZero(form.min_stone_rate) || 0,
       MAX_STONE_RATE: this.commonService.emptyToZero (form.max_stone_rate) || 0,
       CAL_STONE_ON:  form.cal_stone_on = true? true:false,

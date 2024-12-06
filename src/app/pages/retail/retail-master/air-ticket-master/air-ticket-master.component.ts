@@ -36,19 +36,19 @@ export class AirTicketMasterComponent implements OnInit {
   tableData:any = [];
   BranchData: MasterSearchModel = {}
   DepartmentData: MasterSearchModel = {}
-  debitCode: MasterSearchModel = {
+  debitcode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
-    SEARCH_FIELD: "ACCODE",
+    SEARCH_FIELD: "",
     SEARCH_HEADING: "Debit Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "AC_OnHold = 0 and ACCOUNT_MODE in('G','L')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
-    FRONTENDFILTER: true,
-  };
+    FRONTENDFILTER: true,
+  };
   UserDefinedData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -307,6 +307,7 @@ export class AirTicketMasterComponent implements OnInit {
     userDefined15: [""],
   })
   data: any;
+  basedOnDropdown!: any[];
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -317,9 +318,23 @@ export class AirTicketMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+
+    console.log(this.content);
+    
+    this.basedOnDropdown = this.getUniqueValues(
+      this.commonService.getComboFilterByID("GRATUITY BASED ON"),
+      "ENGLISH"
+    );
+    console.log(this.basedOnDropdown);
+    
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content?.FLAG == "VIEW") {
+        this.AirTicketMasterForm.controls.basedOn.setValue(
+          this.content.BASED_ON.toString()
+        );
+        this.AirTicketMasterForm.controls.basedOn.disable();
         this.isDisabled = true;
         this.viewMode = true;
       } else if (this.content?.FLAG == "EDIT") {
@@ -332,6 +347,14 @@ export class AirTicketMasterComponent implements OnInit {
         this.deleteRecord();
       }
     }
+  }
+
+  getUniqueValues(List: any[], field: string) {
+    return List.filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex((t) => t[field] === item[field] && t[field] !== "")
+    );
   }
 
   close(data?: any) {
@@ -383,10 +406,10 @@ export class AirTicketMasterComponent implements OnInit {
       this.content.DEBITACCODE
     );
     this.AirTicketMasterForm.controls.basedOn.setValue(
-      this.content.BASED_ON
+      this.content.BASED_ON.toString()
     );
     this.AirTicketMasterForm.controls.amount.setValue(
-      this.content.FIXAMOUNT
+      this.commonService.decimalQuantityFormat(this.content.FIXAMOUNT,'AMOUNT')
     );
     this.AirTicketMasterForm.controls.noOfTime.setValue(
       this.content.MONTH_INTERVEL
@@ -450,7 +473,7 @@ export class AirTicketMasterComponent implements OnInit {
         form.description.toUpperCase()
       ),
       DEBITACCODE: this.commonService.nullToString(form.debit.toUpperCase()),
-      BASED_ON: this.commonService.emptyToZero(form.basedOn),
+      BASED_ON: Number(form.basedOn),
       YEARDAYS: this.commonService.emptyToZero(form.noOfYr),
       FIXAMOUNT: this.commonService.emptyToZero(form.amount),
       MONTH_INTERVEL: this.commonService.emptyToZero(form.noOfTime),
@@ -628,7 +651,7 @@ export class AirTicketMasterComponent implements OnInit {
   }
   BranchDataSelected(e: any) {
     console.log(e);
-    this.AirTicketMasterForm.controls.debit.setValue(e.CODE);
+    this.AirTicketMasterForm.controls.debit.setValue(e.ACCODE);
   }
 
   UserDefined1DataSelected(e: any) {

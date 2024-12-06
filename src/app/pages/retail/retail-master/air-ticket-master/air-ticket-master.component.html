@@ -1,797 +1,790 @@
 <div>
-    <!-- header section starts -->
-    <div class="card-content border-bottom d-flex justify-content-between p-2">
-        <h5 class="pos-modaltitle" id="modal-dia-metal">Air Ticket Master</h5>
-        <button type="button" class="btn btn-close close-btn" (click)="close()">
-            <i class="feather icon-x close-icon"></i>
-        </button>
-    </div>
-    <!-- modal header component -->
-    <modal-header
+  <!-- header section starts -->
+  <div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Air Ticket Master</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <modal-header
     *ngIf="content?.FLAG !== 'VIEW'"
     (saveClick)="formSubmit()"
     (cancelClick)="close()"
     [isViewDelete]="deleteMode"
     (deleteClick)="deleteRecord()"
   ></modal-header>
-    <!-- content section -->
-    <div class="p-4 ">
-        <form [formGroup]="AirTicketMasterForm">
-            <mat-tab-group>
-                <mat-tab label="General">
-                  <div class="row py-2">
-                    <div class="col-md-10">
-                      <div class="row mb-1">
-                        <label
-                          for="inputPassword"
-                          id="ID001"
-                          class="col-sm-2 col-form-label"
-                        >
-                          Code :</label
-                        >
-                        <div class="col-sm-2">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              type="text"
-                              [readonly]="viewMode"
-                              #codeInput
-                              matInput
-                              formControlName="code"
-                              UpperCaseDirective
-                              autocomplete="off"
-                            />
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row mb-1">
-                        <label
-                          for="inputPassword"
-                          id="ID001"
-                          class="col-sm-2 col-form-label"
-                        >
-                          Description :</label
-                        >
-                        <div class="col-sm-6">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              #codeInput
-                              matInput
-                              formControlName="description"
-                              UpperCaseDirective
-                              autocomplete="off"
-                            />
-                          </mat-form-field>
-                        </div>
-                    
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-2 col-form-label"
-                          >Debit A/C :
-                        </label>
-                        <div class="col-sm-2">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="debit"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  debitCode,
-                                  ['debit'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="onKeyDown($event, ['debit'], debitCode)"
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              #overlayDebit
-                              class="masterSearch"
-                              [MasterSearchData]="debitCode"
-                              (newRowClick)="BranchDataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      
-                        </div>
-                        <div class="row">
-                            <label
-                            for="inputPassword"
-                            id="ID002"
-                            class="col-sm-2 col-form-label"
-                            >Based On :
-                          </label>
-                          <div class="col-sm-2">
-                            <mat-form-field
-                              style="width: 100%"
-                              appearance="outline"
-                              
-                            >
-                              <mat-select formControlName="basedOn">
-                                <!-- <mat-option
-                                *ngFor="let option of basedOne"
-                                [value]="option.ENGLISH"
-                              >
-                                {{ option.ENGLISH }}
-                              </mat-option> -->
-                              </mat-select>
-                            </mat-form-field>
-                            </div>
-                            <label
-                              for="inputPassword"
-                              id="ID002"
-                              class="col-sm-2 col-form-label"
-                              >Amount :
-                            </label>
-                            <div class="col-sm-2">
-                              <mat-form-field style="width: 100%" appearance="outline">
-                                <input
-                                  [readonly]="viewMode"
-                                  type="text"
-                                  matInput
-                                  AmountDecimalInput
-                                  class="text-right"
-                                  formControlName="amount"
-                                  UpperCaseDirective
-                                />
-                              </mat-form-field>
-                            </div>
-                          
-                          </div>
-                          <div class="row">
-                            <label
-                              for="inputPassword"
-                              id="ID002"
-                              class="col-sm-2 col-form-label"
-                              >No. of Times :
-                            </label>
-                            <div class="col-sm-2">
-                              <mat-form-field style="width: 100%" appearance="outline">
-                                <input
-                                  [readonly]="viewMode"
-                                  type="text"
-                                  matInput
-                                  formControlName="noOfTime"
-                                  UpperCaseDirective
-                                />
-                              </mat-form-field>
-                            </div>
-                            <label
-                              for="inputPassword"
-                              id="ID002"
-                              class="col-sm-1 col-form-label"
-                              >In :
-                            </label>
-                            <div class="col-sm-2">
-                              <mat-form-field style="width: 100%" appearance="outline">
-                                <input
-                                  [readonly]="viewMode"
-                                  type="text"
-                                  matInput
-                                  formControlName="in"
-                                  UpperCaseDirective
-                                />
-                              </mat-form-field>
-                            </div>
-                            <label
-                              for="inputPassword"
-                              id="ID002"
-                              class="col-sm-2 col-form-label"
-                              >Month
-                            </label>
-                        
-                          </div>
-                      </div>
-                  
-                    </div>
-              
-                </mat-tab>
-                <mat-tab label="User Defined">
-                  <div class="row py-2">
-                    <div class="col-md-4">
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 1
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined1"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefinedData,
-                                  ['userDefined1'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined1'], UserDefinedData)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              #userDefined1
-                              class="masterSearch"
-                              [MasterSearchData]="UserDefinedData"
-                              (newRowClick)="UserDefined1DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 2
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined2"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined2Data,
-                                  ['userDefined2'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined2'], UserDefined2Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              #userDefined2
-                              class="masterSearch"
-                              [MasterSearchData]="UserDefined2Data"
-                              (newRowClick)="UserDefined2DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 3
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined3"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined3Data,
-                                  ['userDefined3'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined3'], UserDefined3Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              #userDefined3
-                              class="masterSearch"
-                              [MasterSearchData]="UserDefined3Data"
-                              (newRowClick)="UserDefined3DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 4
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined4"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined4Data,
-                                  ['userDefined4'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined4'], UserDefined4Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              #userDefined4
-                              class="masterSearch"
-                              [MasterSearchData]="UserDefined4Data"
-                              (newRowClick)="UserDefined4DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 5
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined5"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined5Data,
-                                  ['userDefined5'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined5'], UserDefined5Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              #userDefined5
-                              class="masterSearch"
-                              [MasterSearchData]="UserDefined5Data"
-                              (newRowClick)="UserDefined5DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 6
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined6"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined6Data,
-                                  ['userDefined6'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined6'], UserDefined6Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              #userDefined6
-                              class="masterSearch"
-                              [MasterSearchData]="UserDefined6Data"
-                              (newRowClick)="UserDefined6DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 7
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined7"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined7Data,
-                                  ['userDefined7'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined7'], UserDefined7Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              #userDefined7
-                              class="masterSearch"
-                              [MasterSearchData]="UserDefined7Data"
-                              (newRowClick)="UserDefined7DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 8
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined8"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined8Data,
-                                  ['userDefined8'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined8'], UserDefined8Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              #userDefined8
-                              class="masterSearch"
-                              [MasterSearchData]="UserDefined8Data"
-                              (newRowClick)="UserDefined8DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 9
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined9"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined9Data,
-                                  ['userDefined9'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined9'], UserDefined9Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              #userDefined9
-                              class="masterSearch"
-                              [MasterSearchData]="UserDefined9Data"
-                              (newRowClick)="UserDefined9DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 10
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined10"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined10Data,
-                                  ['userDefined10'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined10'], UserDefined10Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              class="masterSearch"
-                              #userDefined10
-                              [MasterSearchData]="UserDefined10Data"
-                              (newRowClick)="UserDefined10DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 11
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined11"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined11Data,
-                                  ['userDefined11'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined11'], UserDefined11Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              class="masterSearch"
-                              #userDefined11
-                              [MasterSearchData]="UserDefined11Data"
-                              (newRowClick)="UserDefined11DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 12
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined12"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined12Data,
-                                  ['userDefined12'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined12'], UserDefined12Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              class="masterSearch"
-                              #userDefined12
-                              [MasterSearchData]="UserDefined12Data"
-                              (newRowClick)="UserDefined12DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 13
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined13"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined13Data,
-                                  ['userDefined13'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined13'], UserDefined13Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              class="masterSearch"
-                              #userDefined13
-                              [MasterSearchData]="UserDefined13Data"
-                              (newRowClick)="UserDefined13DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 14
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined14"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined14Data,
-                                  ['userDefined14'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined14'], UserDefined14Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              #userDefined14
-                              class="masterSearch"
-                              [MasterSearchData]="UserDefined14Data"
-                              (newRowClick)="UserDefined14DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <label
-                          for="inputPassword"
-                          id="ID002"
-                          class="col-sm-4 col-form-label"
-                          >User Defined 15
-                        </label>
-                        <div class="col-sm-8">
-                          <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              [readonly]="viewMode"
-                              type="text"
-                              matInput
-                              formControlName="userDefined15"
-                              UpperCaseDirective
-                              (focusout)="
-                                SPvalidateLookupFieldModified(
-                                  $event,
-                                  UserDefined15Data,
-                                  ['userDefined15'],
-                                  false,
-                                  ['CODE']
-                                )
-                              "
-                              (keydown)="
-                                onKeyDown($event, ['userDefined15'], UserDefined15Data)
-                              "
-                            />
-                            <master-search
-                              *ngIf="!viewMode"
-                              #userDefined15
-                              class="masterSearch"
-                              [MasterSearchData]="UserDefined15Data"
-                              (newRowClick)="UserDefined15DataSelected($event)"
-                            >
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </mat-tab>
-              </mat-tab-group>
-        </form>
-    </div>
+  <!-- content section -->
+  <div class="p-4">
+    <form [formGroup]="AirTicketMasterForm">
+      <mat-tab-group>
+        <mat-tab label="General">
+          <div class="row py-2">
+            <div class="col-md-10">
+              <div class="row mb-1">
+                <label
+                  for="inputPassword"
+                  id="ID001"
+                  class="col-sm-2 col-form-label"
+                >
+                  Code :</label
+                >
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      type="text"
+                      [readonly]="viewMode"
+                      #codeInput
+                      matInput
+                      [maxlength]="6"
+                      formControlName="code"
+                      UpperCaseDirective
+                      autocomplete="off"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-1">
+                <label
+                  for="inputPassword"
+                  id="ID001"
+                  class="col-sm-2 col-form-label"
+                >
+                  Description :</label
+                >
+                <div class="col-sm-6">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      #codeInput
+                      matInput
+                      formControlName="description"
+                      UpperCaseDirective
+                      autocomplete="off"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-2 col-form-label"
+                  >Debit A/C :
+                </label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="debit"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          debitcode,
+                          ['debit'],
+                          false,
+                          ['ACCODE']
+                        )
+                      "
+                      (keydown)="onKeyDown($event, ['debit'], debitcode)"
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      #overlayDebit
+                      class="masterSearch"
+                      [MasterSearchData]="debitcode"
+                      (newRowClick)="BranchDataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-2 col-form-label"
+                  >Based On :
+                </label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <mat-select formControlName="basedOn">
+                      <mat-option
+                        *ngFor="let option of basedOnDropdown"
+                        [value]="option.SRNO"
+                      >
+                        {{ option.ENGLISH }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-2 col-form-label"
+                  >Amount :
+                </label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      AmountDecimalInput
+                      class="text-right"
+                      formControlName="amount"
+                      UpperCaseDirective
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-2 col-form-label"
+                  >No. of Times :
+                </label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      maxlength="3"
+                      formControlName="noOfTime"
+                      UpperCaseDirective
+                    />
+                  </mat-form-field>
+                </div>
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-1 col-form-label"
+                  >In :
+                </label>
+                <div class="col-sm-2">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      maxlength="3"
+                      formControlName="in"
+                      UpperCaseDirective
+                    />
+                  </mat-form-field>
+                </div>
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-2 col-form-label"
+                  >Month
+                </label>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="User Defined">
+          <div class="row py-2">
+            <div class="col-md-4">
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 1
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined1"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefinedData,
+                          ['userDefined1'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined1'], UserDefinedData)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      #userDefined1
+                      class="masterSearch"
+                      [MasterSearchData]="UserDefinedData"
+                      (newRowClick)="UserDefined1DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 2
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined2"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined2Data,
+                          ['userDefined2'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined2'], UserDefined2Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      #userDefined2
+                      class="masterSearch"
+                      [MasterSearchData]="UserDefined2Data"
+                      (newRowClick)="UserDefined2DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 3
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined3"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined3Data,
+                          ['userDefined3'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined3'], UserDefined3Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      #userDefined3
+                      class="masterSearch"
+                      [MasterSearchData]="UserDefined3Data"
+                      (newRowClick)="UserDefined3DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 4
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined4"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined4Data,
+                          ['userDefined4'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined4'], UserDefined4Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      #userDefined4
+                      class="masterSearch"
+                      [MasterSearchData]="UserDefined4Data"
+                      (newRowClick)="UserDefined4DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 5
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined5"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined5Data,
+                          ['userDefined5'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined5'], UserDefined5Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      #userDefined5
+                      class="masterSearch"
+                      [MasterSearchData]="UserDefined5Data"
+                      (newRowClick)="UserDefined5DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 6
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined6"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined6Data,
+                          ['userDefined6'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined6'], UserDefined6Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      #userDefined6
+                      class="masterSearch"
+                      [MasterSearchData]="UserDefined6Data"
+                      (newRowClick)="UserDefined6DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 7
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined7"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined7Data,
+                          ['userDefined7'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined7'], UserDefined7Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      #userDefined7
+                      class="masterSearch"
+                      [MasterSearchData]="UserDefined7Data"
+                      (newRowClick)="UserDefined7DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 8
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined8"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined8Data,
+                          ['userDefined8'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined8'], UserDefined8Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      #userDefined8
+                      class="masterSearch"
+                      [MasterSearchData]="UserDefined8Data"
+                      (newRowClick)="UserDefined8DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 9
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined9"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined9Data,
+                          ['userDefined9'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined9'], UserDefined9Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      #userDefined9
+                      class="masterSearch"
+                      [MasterSearchData]="UserDefined9Data"
+                      (newRowClick)="UserDefined9DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 10
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined10"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined10Data,
+                          ['userDefined10'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined10'], UserDefined10Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      class="masterSearch"
+                      #userDefined10
+                      [MasterSearchData]="UserDefined10Data"
+                      (newRowClick)="UserDefined10DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 11
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined11"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined11Data,
+                          ['userDefined11'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined11'], UserDefined11Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      class="masterSearch"
+                      #userDefined11
+                      [MasterSearchData]="UserDefined11Data"
+                      (newRowClick)="UserDefined11DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 12
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined12"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined12Data,
+                          ['userDefined12'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined12'], UserDefined12Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      class="masterSearch"
+                      #userDefined12
+                      [MasterSearchData]="UserDefined12Data"
+                      (newRowClick)="UserDefined12DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 13
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined13"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined13Data,
+                          ['userDefined13'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined13'], UserDefined13Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      class="masterSearch"
+                      #userDefined13
+                      [MasterSearchData]="UserDefined13Data"
+                      (newRowClick)="UserDefined13DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 14
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined14"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined14Data,
+                          ['userDefined14'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined14'], UserDefined14Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      #userDefined14
+                      class="masterSearch"
+                      [MasterSearchData]="UserDefined14Data"
+                      (newRowClick)="UserDefined14DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <label
+                  for="inputPassword"
+                  id="ID002"
+                  class="col-sm-4 col-form-label"
+                  >User Defined 15
+                </label>
+                <div class="col-sm-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="viewMode"
+                      type="text"
+                      matInput
+                      formControlName="userDefined15"
+                      UpperCaseDirective
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          UserDefined15Data,
+                          ['userDefined15'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                      (keydown)="
+                        onKeyDown($event, ['userDefined15'], UserDefined15Data)
+                      "
+                    />
+                    <master-search
+                      *ngIf="!viewMode"
+                      #userDefined15
+                      class="masterSearch"
+                      [MasterSearchData]="UserDefined15Data"
+                      (newRowClick)="UserDefined15DataSelected($event)"
+                    >
+                    </master-search>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </form>
+  </div>
 </div>

@@ -1,208 +1,203 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Action</h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
-        <i class="feather icon-x close-icon"></i>
-    </button>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">POS Action</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewDelete]="editMode" [isViewSave]="!viewMode"></modal-header>
 <div class="container-fluid pt-3">
-    <form [formGroup]="posActionForm">
-<div class="col-md-12">
-    <div class="row mb-3">
-        <div class="col-md-2"><h4>Ref.</h4></div>
-        <div class="col"><h4>Complaint Ref.No </h4></div>        
-    </div>
-    <div class="row mb-2">
+  <form [formGroup]="posActionForm">
+    <div class="col-md-12">
+      <div class="row mb-3">
+        <div class="col-md-2">
+          <h4>Ref.</h4>
+        </div>
+        <div class="col">
+          <h4>Complaint Ref.No </h4>
+        </div>
+      </div>
+      <div class="row mb-2">
         <Label class="col-md-2">Customer Code:</Label>
-        <div class="col">Name </div>        
-    </div>
-    <div class="row mb-2">
+        <!-- <div class="col">Name </div> -->
+      </div>
+      <div class="row mb-2">
         <label class="col-md-2">Mobile:</label>
-        <div class="col" ></div>        
-    </div>
-    <div class="row mb-2">
+        <div class="col"></div>
+      </div>
+      <div class="row mb-2">
         <label class="col-md-2">Email:</label>
-        <div class="col" ></div>        
-    </div>
+        <div class="col"></div>
+      </div>
 
-</div>
-<div class="container mt-3">
-    <!-- <div class="row align-items-center border">
+    </div>
+    <div class="container mt-3">
+      <!-- <div class="row align-items-center border">
         <h5 class="offset-5 pt-1">Option</h5>
     </div> -->
 
-    <div class="row justify-content-center mb-3 border">
-        <div class="row">
+      <div class="row  mb-3 border">
+        <div class="col-md-8">
+          <div class="row mb-1">
             <label for="inputPassword" class="col-sm-3 col-form-label">Completion Date :</label>
-            <div class="col-sm-5">
-              <div class="position-relative d-flex">
-                <mat-form-field style="width: 100%">
-                  <input matInput [matDatepicker]="completion_date" name="completion_date" formControlName="completion_date" placeholder="DD/MM/YYYY" DateValidation />
+            <div class="col-sm-3">
+                <!-- <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput [matDatepicker]="completion_date" name="completion_date"
+                    formControlName="completion_date" placeholder="DD/MM/YYYY" DateValidation />
                   <mat-datepicker-toggle matSuffix [for]="completion_date"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate" #completion_date></mat-datepicker>
-                </mat-form-field>
-              </div>
+                </mat-form-field> -->
+                <mat-form-field style="width: 100%;"  appearance="outline">
+                  <input  matInput [matDatepicker]="completion_date" [max]="completion_date" formControlName="completion_date"
+                     placeholder="DD/MM/YYYY" DateValidation [readonly]="viewMode"/>
+                   <mat-datepicker-toggle matSuffix [for]="completion_date"></mat-datepicker-toggle>
+                   <mat-datepicker [startAt]="currentDate" #completion_date></mat-datepicker>
+                 </mat-form-field>
             </div>
           </div>
-          <div class="row">
+          <div class="row mb-1">
             <label for="inputPassword" class="col-sm-3 col-form-label">Assigned To :</label>
-            <div class="col-sm-5">
-              <div class="position-relative d-flex">
-                <mat-form-field style="width: 100%">
-                  <input type="text" matInput  formControlName="assigned_to"/>
+            <div class="col-sm-3">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input type="text" matInput formControlName="assigned_to" [readonly]="viewMode"/>
+                  <master-search [MasterSearchData]="assignedtoCodeData" class="masterSearch"
+                    (newRowClick)="assignedtoCodeSelected($event)"></master-search>
                 </mat-form-field>
-                <master-search [MasterSearchData]="assignedtoCodeData"
-                (newRowClick)="assignedtoCodeSelected($event)"></master-search>
-              </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row mb-1">
             <label for="inputPassword" class="col-sm-3 col-form-label">Assigned By :</label>
-            <div class="col-sm-5">
-              <div class="position-relative d-flex">
-                <mat-form-field style="width: 100%">
-                  <input type="text" matInput formControlName="assigned_by"/>
+            <div class="col-sm-3">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input type="text" matInput formControlName="assigned_by" [readonly]="viewMode"/>
+                  <master-search [MasterSearchData]="assignedbyCodeData" class="masterSearch"
+                    (newRowClick)="assignedbyCodeSelected($event)"></master-search>
                 </mat-form-field>
-                <master-search [MasterSearchData]="assignedbyCodeData"
-                (newRowClick)="assignedbyCodeSelected($event)"></master-search>
-              </div>
             </div>
           </div>
-          <div class="row">
-            <label for="inputPassword" class="col-sm-2 col-form-label">
+          <div class="row mb-1">
+            <label for="inputPassword" class="col-sm-3 col-form-label">
               Call * :</label>
-            <div class="col-sm-8">
-              <div class="position-relative d-flex">
-                <mat-form-field style="width: 100%">
-                  <input type="text" matInput formControlName="phone_call" />
-                </mat-form-field>&nbsp;
-               
-                <mat-form-field style="width: 100%">
-                  <input type="text" matInput formControlName="mobile" />
-                </mat-form-field>
-              </div>
+            <div class="col-sm-3">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input type="text" matInput formControlName="phone_call" [readonly]="viewMode"/>
+              </mat-form-field>
             </div>
+            <div class="col-sm-6">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input type="text" matInput formControlName="mobile" [readonly]="viewMode"/>
+              </mat-form-field>
+            </div>
+
           </div>
-          <div class="row">
-            <label for="inputPassword" class="col-sm-2 col-form-label">
+          <div class="row mb-1">
+            <label for="inputPassword" class="col-sm-3 col-form-label">
               SMS :</label>
-            <div class="col-sm-8">
-              <div class="position-relative d-flex">
-                <mat-form-field style="width: 100%">
-                  <input type="text" matInput  formControlName="sms"/>
-                </mat-form-field>&nbsp;
-               
-                <mat-form-field style="width: 100%">
-                  <input type="text" matInput  formControlName="sms_mobile"/>
-                </mat-form-field>
-              </div>
+            <div class="col-sm-3">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input type="text" matInput formControlName="sms" [readonly]="viewMode"/>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input type="text" matInput formControlName="sms_mobile" [readonly]="viewMode"/>
+              </mat-form-field>
             </div>
           </div>
-          <div class="row">
-            <label for="inputPassword" class="col-sm-2 col-form-label">
+
+          <div class="row mb-1">
+            <label for="inputPassword" class="col-sm-3 col-form-label">
               Email :</label>
-            <div class="col-sm-8">
-              <div class="position-relative d-flex">
-                <mat-form-field style="width: 100%">
-                  <input type="text" matInput  formControlName="email"/>
-                </mat-form-field>&nbsp;
-                
-                <mat-form-field style="width: 100%">
-                  <input type="text" matInput  formControlName="email_id"/>
-                </mat-form-field>&nbsp;
-                <button class="btn btn-primary" style="width: 10px;height: 40px;text-align: center;"><i class="fa fa-envelope"></i></button>
-              </div>
+            <div class="col-sm-3">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input type="text" matInput formControlName="email" [readonly]="viewMode"/>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-5">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input type="text" matInput formControlName="email_id" [readonly]="viewMode"/>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-1">
+            <button class="btn btn-primary"><i class="fa fa-envelope"></i></button>
             </div>
           </div>
-          <div class="row">
+          <div class="row mb-1">
             <div class="col-md-6">
-                <div class="row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">
-                      Visit :</label>
-                    <div class="col-sm-8">
-                      <div class="position-relative d-flex">
-                        <mat-form-field style="width: 100%">
-                          <input type="text" matInput  formControlName="visit"/>
-                        </mat-form-field>&nbsp;
-                        
-                        
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">
-                      Completed By :</label>
-                    <div class="col-sm-8">
-                      <div class="position-relative d-flex">
-                        <mat-form-field style="width: 100%">
-                          <input type="text" matInput formControlName="completed_by" />
-                        </mat-form-field>
-                        <master-search></master-search>
-                        &nbsp;
-                        
-                        
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">
-                      Completed Date :</label>
-                    <div class="col-sm-8">
-                      <div class="position-relative d-flex">
-                        <mat-form-field style="width: 100%">
-                          <input matInput [matDatepicker]="completed_date" name="completed_date" formControlName="completed_date" placeholder="DD/MM/YYYY" DateValidation />
-                          <mat-datepicker-toggle matSuffix [for]="completed_date"></mat-datepicker-toggle>
-                          <mat-datepicker [startAt]="currentDate" #completed_date></mat-datepicker>
-                        </mat-form-field>
-                        
-                        &nbsp;
-                        
-                        
-                      </div>
-                    </div>
-                  </div>
-               
-                    
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-6 col-form-label">
+                  Visit :</label>
+                <div class="col-sm-6">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input type="text" matInput formControlName="visit" [readonly]="viewMode"/>
+                    </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-6 col-form-label">
+                  Completed By :</label>
+                <div class="col-sm-6">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input type="text" matInput formControlName="completed_by" [readonly]="viewMode"/>
+                      <master-search class="masterSearch" [MasterSearchData]="completedbyCodeData" class="masterSearch"
+                      (newRowClick)="completedbyCodeSelected($event)"></master-search>
+                    </mat-form-field>
+                </div>
+              </div>
+              
+              <div class="row mb-1">
+                <label for="inputPassword" class="col-sm-6 col-form-label">
+                  Completed Date :</label>
+                <div class="col-sm-6">
+                  <mat-form-field style="width: 100%;"  appearance="outline">
+                    <input  matInput [matDatepicker]="completed_date" [max]="completed_date" formControlName="completed_date"
+                       placeholder="DD/MM/YYYY" DateValidation [readonly]="viewMode"/>
+                     <mat-datepicker-toggle matSuffix [for]="completed_date"></mat-datepicker-toggle>
+                     <mat-datepicker [startAt]="currentDate" #completed_date></mat-datepicker>
+                   </mat-form-field>
+                </div>
+              </div>
+
             </div>
-            <div class="col-md-4">
-                <mat-form-field style="width: 100%">
-                    <textarea type="text" matInput  rows="8" formControlName="completed_details"></textarea>
-                  </mat-form-field>
+
+            <div class="col-md-6">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <div class="text-area">
+                  <textarea class="border" rows="6" matInput formControlName="details" [readonly]="viewMode"></textarea>
+              </div>
+              </mat-form-field>
             </div>
-            
-           
           </div>
-          <div class="row">
-            <label for="inputPassword" class="col-sm-2 col-form-label">
+
+
+
+
+          <div class="row mb-3">
+            <label for="inputPassword" class="col-sm-3 col-form-label">
               Complaint Details :</label>
-            <div class="col-sm-8">
-              <div class="position-relative d-flex">
-                <mat-form-field style="width: 100%">
-                  <textarea type="text" matInput formControlName="complaint_details"></textarea>
-                </mat-form-field>&nbsp;
-                
-               
-              </div>
+            <div class="col-sm-9">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <textarea type="text" class="border" matInput rows="2" formControlName="complaint_details" [readonly]="viewMode"></textarea>
+                </mat-form-field>
             </div>
           </div>
-          <div class="row">
-            <label for="inputPassword" class="col-sm-2 col-form-label">
+          <div class="row mb-3">
+            <label for="inputPassword" class="col-sm-3 col-form-label">
               Remarks :</label>
-            <div class="col-sm-8">
-              <div class="position-relative d-flex">
-                <mat-form-field style="width: 100%">
-                  <textarea type="text" matInput formControlName="remarks"></textarea>
-                </mat-form-field>&nbsp;
-                
-               
-              </div>
+            <div class="col-sm-9">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <textarea type="text" class="border"  matInput rows="2" formControlName="remarks" [readonly]="viewMode"></textarea>
+                </mat-form-field>
             </div>
           </div>
-          
+
+        </div>
+      </div>
+
+
 
     </div>
-</div>
-</form>
+  </form>
 </div>

@@ -169,7 +169,6 @@ export class StoneIssueComponent implements OnInit {
 
   uploadSubmited(file: any) {
     this.Attachedfile = file
-    console.log(this.Attachedfile);    
   }
 
   setvalues() {
@@ -186,12 +185,10 @@ export class StoneIssueComponent implements OnInit {
 
   onSaveGridData(gridData: any[]) {
     this.parentGridData = gridData;
-    console.log("Grid data saved to parent:", this.parentGridData);
     // Here you can also make an API call to save the data if needed
   }
 
   setInitialValues() {
-    console.log(this.content)
     if (!this.content) return
     let API = `JobStoneIssueMasterDJ/GetJobStoneIssueMasterDJWithMID/${this.content.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -298,12 +295,12 @@ export class StoneIssueComponent implements OnInit {
       });
   }
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -323,57 +320,38 @@ export class StoneIssueComponent implements OnInit {
     }
     )
   }
-
-
-
   userDataSelected(value: any) {
     this.stoneissueFrom.controls.SALESPERSON_CODE.setValue(value.SALESPERSON_CODE);
   }
 
-  // CurrencyCodeSelected(e: any) {
-  //   console.log(e);
-  //   // this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE);
-  //   // this.stoneissueFrom.controls.currencyrate.setValue(e.CONV_RATE);
-  //   if (e.CURRENCY_CODE) {
-  //     this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE)
-  //     this.stoneissueFrom.controls.currencyrate.setValue(e.CONV_RATE)
-  //   }
-  //   if (e.Currency) {
-  //     this.stoneissueFrom.controls.currency.setValue(e.Currency)
-  //     this.stoneissueFrom.controls.currencyrate.setValue(
-  //       this.comService.decimalQuantityFormat(e['Conv Rate'], 'RATE')
-  //     )
-  //   }
-  // }
-    /**USE: to set currency on selected change*/
-    currencyDataSelected(event: any) {
-      if (event.target?.value) {
-        this.stoneissueFrom.controls.currency.setValue((event.target.value).toUpperCase())
-      } else {
-        this.stoneissueFrom.controls.currency.setValue(event.CURRENCY_CODE)
-      }
-      this.setCurrencyRate()
+  /**USE: to set currency on selected change*/
+  currencyDataSelected(event: any) {
+    if (event.target?.value) {
+      this.stoneissueFrom.controls.currency.setValue((event.target.value).toUpperCase())
+    } else {
+      this.stoneissueFrom.controls.currency.setValue(event.CURRENCY_CODE)
     }
-    /**USE: to set currency from company parameter */
-    setCompanyCurrency() {
-      let CURRENCY_CODE = this.comService.getCurrencyCode()
-      this.stoneissueFrom.controls.currency.setValue(CURRENCY_CODE);
-      this.setCurrencyRate()
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from company parameter */
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.comService.getCurrencyCode()
+    this.stoneissueFrom.controls.currency.setValue(CURRENCY_CODE);
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from branch currency master */
+  setCurrencyRate() {
+    let CURRENCY_RATE: any = this.comService.getCurrencyRate(this.stoneissueFrom.value.currency);
+    if (CURRENCY_RATE.length > 0) {
+      this.stoneissueFrom.controls.currencyrate.setValue(CURRENCY_RATE);
+    } else {
+      this.stoneissueFrom.controls.currency.setValue('')
+      this.stoneissueFrom.controls.currencyrate.setValue('')
+      this.comService.toastErrorByMsgId('MSG1531')
     }
-    /**USE: to set currency from branch currency master */
-    setCurrencyRate() {
-      let CURRENCY_RATE: any = this.comService.getCurrencyRate(this.stoneissueFrom.value.currency);
-      if (CURRENCY_RATE.length > 0) {
-        this.stoneissueFrom.controls.currencyrate.setValue(CURRENCY_RATE);
-      } else {
-        this.stoneissueFrom.controls.currency.setValue('')
-        this.stoneissueFrom.controls.currencyrate.setValue('')
-        this.comService.toastErrorByMsgId('MSG1531')
-      }
-    }
+  }
 
   WorkerCodeSelected(e: any) {
-    console.log(e);
     this.stoneissueFrom.controls.worker.setValue(e.WORKER_CODE);
     this.stoneissueFrom.controls.workername.setValue(e.DESCRIPTION.toUpperCase());
   }
@@ -391,7 +369,7 @@ export class StoneIssueComponent implements OnInit {
       });
       return;
     }
-  
+
     // Show confirmation dialog
     Swal.fire({
       title: 'Are you sure?',
@@ -413,10 +391,10 @@ export class StoneIssueComponent implements OnInit {
             this.stoneIssueData.splice(index, 1);
           }
         });
-  
+
         // Recalculate SRNO after deletion
         this.reCalculateSRNO();
-  
+
         // Show success message
         Swal.fire({
           title: 'Deleted!',
@@ -425,7 +403,7 @@ export class StoneIssueComponent implements OnInit {
           confirmButtonColor: '#336699',
           confirmButtonText: 'OK'
         });
-  
+
         // Clear the selected keys after deletion
         this.selectedKey = [];
       } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -440,10 +418,9 @@ export class StoneIssueComponent implements OnInit {
       }
     });
   }
-  
+
   onSelectionChanged(event: any) {
     this.selectedKey = event.selectedRowKeys;
-    console.log(this.selectedKey, 'srno')
     let indexes: Number[] = [];
     this.stoneIssueData.reduce((acc, value, index) => {
       if (this.selectedKey.includes(parseFloat(value.SRNO))) {
@@ -460,26 +437,7 @@ export class StoneIssueComponent implements OnInit {
       item.GROSS_WT = this.comService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
     })
   }
-  // setCompanyCurrency() {
-  //   let CURRENCY_CODE = this.comService.getCompanyParamValue('COMPANYCURRENCY')
-  //   this.stoneissueFrom.controls.currency.setValue(CURRENCY_CODE);
-  //   this.setCurrencyRate()
-  // }
-  /**USE: to set currency from branch currency master */
-  // setCurrencyRate() {
-  //   const CURRENCY_RATE: any[] = this.comService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.stoneissueFrom.value.currency);
-  //   if (CURRENCY_RATE.length > 0) {
-  //     this.stoneissueFrom.controls.currencyrate.setValue(
-  //       this.comService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-  //     );
-  //   } else {
-  //     this.stoneissueFrom.controls.currency.setValue('')
-  //     this.stoneissueFrom.controls.currencyrate.setValue('')
-  //     this.comService.toastErrorByMsgId('MSG1531')
-  //   }
-  // }
   openaddstoneissuedetail(data?: any) {
-    // console.log(data,'data to child')
     if (data) {
       data.FLAG = this.content?.FLAG || 'EDIT'
       data.HEADERDETAILS = this.stoneissueFrom.value;
@@ -496,7 +454,6 @@ export class StoneIssueComponent implements OnInit {
     // modalRef.componentInstance.content = data
     // modalRef.result.then((postData) => {
     //   if (postData) {
-    //     console.log('Data from child:', postData);
     //     this.stoneIssueData.push(postData);
     //     this.setValuesToHeaderGrid(postData);
     //   }
@@ -514,7 +471,6 @@ export class StoneIssueComponent implements OnInit {
   }
 
   setValuesToHeaderGrid(DATA: any) {
-    console.log(DATA, 'detailDataToParent');
     let detailDataToParent = DATA.POSTDATA
     if (detailDataToParent.SRNO != 0) {
       this.stoneIssueData[detailDataToParent.SRNO - 1] = detailDataToParent
@@ -537,8 +493,6 @@ export class StoneIssueComponent implements OnInit {
     this.tableData.pop();
   }
   lookupKeyPress(event: any, form?: any) {
-    console.log(event);
-
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
     }
@@ -547,7 +501,7 @@ export class StoneIssueComponent implements OnInit {
       event.preventDefault();
     }
   }
-  
+
   setPostData(form: any) {
     return {
       "MID": 0,
@@ -615,7 +569,6 @@ export class StoneIssueComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
-    console.log(this.content);
     this.stoneissueFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE)
     this.stoneissueFrom.controls.VOCNO.setValue(this.content.VOCNO)
     this.stoneissueFrom.controls.VOCDATE.setValue(this.content.VOCDATE)
@@ -768,7 +721,7 @@ export class StoneIssueComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           if (FORMNAME === 'worker' || FORMNAME === 'SALESPERSON_CODE' || FORMNAME === 'currency') {
             this.showOverleyPanel(event, FORMNAME);
-          } 
+          }
           return
         }
         this.showOverleyPanel(event, FORMNAME);
@@ -792,7 +745,7 @@ export class StoneIssueComponent implements OnInit {
     if (this.viewMode || this.editMode) return;
     const inputValue = event.target.value.toUpperCase();
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
-  
+
     // Return early if the input is empty or in viewMode
     if (event.target.value === '') {
       if (FORMNAME === 'worker') {
@@ -800,21 +753,21 @@ export class StoneIssueComponent implements OnInit {
       }
       return;
     }
-  
+
     // Prepare parameters for API call
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     };
-  
+
     this.comService.toastInfoByMsgId('MSG81447');
-  
+
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch';
     let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
         this.isDisableSaveBtn = false;
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0]);
-  
+
         // Handle no data found
         if (data.length === 0) {
           this.comService.toastErrorByMsgId('MSG1531');
@@ -823,7 +776,7 @@ export class StoneIssueComponent implements OnInit {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
           return;
         }
-  
+
         // Find the matched item by worker code
         const matchedItem = data.find((item: any) => item.WORKER_CODE.toUpperCase() === inputValue);
         if (matchedItem) {
@@ -834,11 +787,11 @@ export class StoneIssueComponent implements OnInit {
         } else {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
         }
-  
+
       }, err => {
         this.comService.toastErrorByMsgId('MSG2272'); // Error occurred, please try again
       });
-  
+
     this.subscriptions.push(Sub);
   }
   handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
@@ -849,7 +802,7 @@ export class StoneIssueComponent implements OnInit {
       this.stoneissueFrom.controls.workername.setValue('');
     }
   }
-  
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
