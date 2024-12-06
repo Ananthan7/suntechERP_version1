@@ -24,7 +24,7 @@
                                         Branch Code :</label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="branchcode" id="branch_code" UpperCaseDirective
+                                            <input type="text" matInput formControlName="branchcode" #branch_code id="branch_code" UpperCaseDirective
                                                 autocomplete="off" (focusout)="
                                                 SPvalidateLookupFieldModified(
                                                   $event,

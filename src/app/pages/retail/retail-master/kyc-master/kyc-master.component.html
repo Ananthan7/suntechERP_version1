@@ -23,7 +23,7 @@
                         <label for="prefixcode" class="col-sm-2 col-form-label me-4">Kyc Code:</label>
                         <div class="col-md-2 p-0 ms-2">
                             <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" id="kyccode" matInput class="p-0" formControlName="kyccode"  [readonly]="viewOnly || disable_code" maxlength="20" (focusout)="checkcode()" />
+                                <input type="text" #kyccode id="kyccode" matInput class="p-0" formControlName="kyccode"  [readonly]="viewOnly || disable_code" maxlength="20" (focusout)="checkcode()" />
                                 <mat-error *ngIf="kycform.controls['kyccode'].hasError('required')">
                                     Code is required.
                                 </mat-error>
