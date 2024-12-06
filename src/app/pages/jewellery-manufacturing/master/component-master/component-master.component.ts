@@ -1458,7 +1458,7 @@ export class ComponentMasterComponent implements OnInit {
       this.detailArray.push(postdata)
       this.submitImageFormData()
     }
-    return
+    // return
     this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postdata)
       .subscribe((result) => {
@@ -1530,7 +1530,7 @@ export class ComponentMasterComponent implements OnInit {
 
         if (result.status == "Success") {
           Swal.fire({
-            title: result.message || 'Success',
+            title: this.commonService.getMsgByID('MSG3641') || 'Success',
             text: '',
             icon: 'success',
             confirmButtonColor: '#336699',

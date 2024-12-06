@@ -609,7 +609,7 @@ export class CustomerPriceMasterComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG2443') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -641,7 +641,7 @@ export class CustomerPriceMasterComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title: result.message || 'Success',
+              title:  this.commonService.getMsgByID('MSG3641') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
