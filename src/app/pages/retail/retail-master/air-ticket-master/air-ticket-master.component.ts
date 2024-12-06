@@ -43,7 +43,7 @@ export class AirTicketMasterComponent implements OnInit {
     SEARCH_FIELD: "",
     SEARCH_HEADING: "Debit Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "AC_OnHold = 0 and ACCOUNT_MODE in('G','L')",
+    WHERECONDITION: "ACCODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -323,7 +323,7 @@ export class AirTicketMasterComponent implements OnInit {
     console.log(this.content);
     
     this.basedOnDropdown = this.getUniqueValues(
-      this.commonService.getComboFilterByID("GRATUITY BASED ON"),
+      this.commonService.getComboFilterByID("Air Ticket Based On"),
       "ENGLISH"
     );
     console.log(this.basedOnDropdown);
