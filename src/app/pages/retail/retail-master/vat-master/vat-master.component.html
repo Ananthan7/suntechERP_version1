@@ -66,7 +66,7 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    (input)="codeAlert($event, 'vatPercent')"
+                    (focusout)="codeAlert($event, 'vatPercent')"
                     class="text-right"
                     ThreeDecimalInput
                     [readonly]="flag === 'VIEW'"
@@ -1216,6 +1216,11 @@
                         [allowEditing]="true"
                         alignment="center"
                         backgroundcolor="#000"
+                        [format]="
+                          data.field === 'GST_PER'
+                            ? { type: 'fixedPoint', precision: 3 }
+                            : null
+                        "
                       >
                       </dxi-column>
                     </dx-data-grid>
@@ -1226,17 +1231,39 @@
                 <div class="row mb-1">
                   <div class="col-md-12 mt-2">
                     <div class="row mb-1">
-                      <menu-buttons
-                        *ngIf="flag !== 'VIEW'"
-                        [viewAddBtn]="true"
-                        [viewDeleteBtn]="true"
-                        [viewImportBtn]="false"
-                        (addClick)="addRowFunc('Expense HSN/SAC Allocation')"
-                        (deleteClick)="
-                          deleteRowFunc('Expense HSN/SAC Allocation')
-                        "
-                      >
-                      </menu-buttons>
+                      <div class="col-md-4">
+                        <menu-buttons
+                          *ngIf="flag !== 'VIEW'"
+                          [viewAddBtn]="true"
+                          [viewDeleteBtn]="true"
+                          [viewImportBtn]="false"
+                          (addClick)="addRowFunc('Expense HSN/SAC Allocation')"
+                          (deleteClick)="
+                            deleteRowFunc('Expense HSN/SAC Allocation')
+                          "
+                        >
+                        </menu-buttons>
+                      </div>
+                      <div class="col-md-8">
+                        <mat-form-field
+                          style="width: 70%"
+                          appearance="outline"
+                        >
+                          <input
+                            [readonly]="flag === 'VIEW'"
+                            matInput
+                            type="text"
+                            formControlName="searchValue"
+                          />
+                        </mat-form-field>
+                        <button
+                          type="button"
+                          class=" ms-2 btn btn-primary text-center"
+                          (click)="getSerachValue()"
+                        >
+                          SEARCH
+                        </button>
+                      </div>
                     </div>
                     <div class="row pt-2">
                       <div class="col-md-12">
@@ -1331,7 +1358,7 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayGroupOne
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="expenseCodeData"
                                 class="masterSearch"
                                 (newRowClick)="expenseSelect($event, data)"
                               ></master-search>
@@ -1351,13 +1378,6 @@
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
                                 [readonly]="true"
-                                (change)="
-                                  updateField(
-                                    $event,
-                                    data,
-                                    'EXPENSE_ACCODE_DESC'
-                                  )
-                                "
                                 [value]="data.value"
                                 style="width: 100%"
                                 required
@@ -1373,15 +1393,19 @@
                             >
                               <input
                                 matInput
-                                [readonly]="flag === 'VIEW'"
+                                [readonly]="true"
                                 type="text"
-                                (change)="
-                                  updateField($event, data, 'HSN_SAC_CODE')
-                                "
                                 [value]="data.value"
                                 style="width: 100%"
                                 required
                               />
+                              <master-search
+                                *ngIf="flag != 'VIEW'"
+                                #overlayGroupOne
+                                [MasterSearchData]="hsnCodeData"
+                                class="masterSearch"
+                                (newRowClick)="hsnSelect($event, data)"
+                              ></master-search>
                             </mat-form-field>
                           </div>
 
@@ -1393,11 +1417,8 @@
                             >
                               <input
                                 matInput
-                                [readonly]="flag === 'VIEW'"
+                                [readonly]="true"
                                 type="text"
-                                (change)="
-                                  updateField($event, data, 'HSN_SAC_DESC')
-                                "
                                 [value]="data.value"
                                 style="width: 100%"
                                 required
@@ -1462,6 +1483,7 @@
                         <button
                           type="button"
                           class="btn btn-primary text-center"
+                          (click)="getGPCAccountData()"
                         >
                           Fill GPC Account
                         </button>
@@ -1507,8 +1529,8 @@
                           ></dxi-column>
                           <dxi-column
                             alignment="center"
-                            dataField="COSTCENTER"
-                            caption="COSTCENTER"
+                            dataField="COST_CODE"
+                            caption="COST_CODE"
                             cellTemplate="costCenterTemp"
                           ></dxi-column>
                           <dxi-column
@@ -1519,7 +1541,7 @@
                           ></dxi-column>
                           <dxi-column
                             alignment="center"
-                            dataField="GPC_ACCODE_DESC"
+                            dataField="Account_Head"
                             caption="GPC_ACCODE_DESC"
                             cellTemplate="gpcAccodeDescTemp"
                           ></dxi-column>
@@ -1575,7 +1597,7 @@
                           </div>
 
                           <!-- Exp Account Description Column -->
-                          <div *dxTemplate="let data of 'gpcAccodeTemp'"> 
+                          <div *dxTemplate="let data of 'gpcAccodeTemp'">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -1641,7 +1663,7 @@
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayGroupOne
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="hsnCodeData"
                                 class="masterSearch"
                                 (newRowClick)="HSNSelect($event, data)"
                               ></master-search>

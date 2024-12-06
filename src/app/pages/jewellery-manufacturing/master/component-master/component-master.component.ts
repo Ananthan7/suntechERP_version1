@@ -115,7 +115,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Category type',
+    SEARCH_HEADING: 'Category',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'CATEGORY MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
@@ -137,7 +137,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 14,
     SEARCH_FIELD: 'PREFIX_CODE',
-    SEARCH_HEADING: 'Prefix master',
+    SEARCH_HEADING: 'Code',
     WHERECONDITION: "COMP_PREFIX='1' ORDER BY PREFIX_CODE",
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -147,7 +147,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Type Code',
+    SEARCH_HEADING: 'Type',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES ='TYPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
@@ -158,7 +158,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 90,
     SEARCH_FIELD: 'COMPSET_CODE',
-    SEARCH_HEADING: 'Size set',
+    SEARCH_HEADING: 'Size Set',
     SEARCH_VALUE: '',
     WHERECONDITION: "COMPSET_CODE <> '' ORDER BY COMPSET_CODE",
     VIEW_INPUT: true,
@@ -191,7 +191,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 93,
     SEARCH_FIELD: 'SEQ_CODE',
-    SEARCH_HEADING: 'Sequence ',
+    SEARCH_HEADING: 'Process Sequence',
     SEARCH_VALUE: '',
     WHERECONDITION: "SEQ_CODE<> '' ORDER BY SEQ_CODE",
     VIEW_INPUT: true,
@@ -202,7 +202,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 15,
     SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Cost Code',
+    SEARCH_HEADING: 'Cost Center',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPE = 'PRECIOUS STONES' ORDER BY COST_CODE",
     VIEW_INPUT: true,
@@ -388,6 +388,7 @@ export class ComponentMasterComponent implements OnInit {
     costCenter: ["", [Validators.required]],
     currencyCode: [""],
     currencyRate: [""],
+    selectMasterOnly: [true],
   });
 
   constructor(
@@ -629,7 +630,7 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.code.setValue(prefixCode);
     this.componentmasterForm.controls.codedes.setValue(des);
     this.prefixCodeValidate();
-    this.getDesignDetails();
+   // this.getDesignDetails();
   }
   typeCodeSelected(e: any) {
     if (this.checkCode()) return
@@ -1656,6 +1657,21 @@ export class ComponentMasterComponent implements OnInit {
       this.tableData = []
       this.close('reloadMainGrid')
     }
+  }
+
+  selectMasterOnlyChange(event: any) {
+    this.codeCodeData.VIEW_ICON = this.componentmasterForm.value.selectMasterOnly;
+  }
+  componentCodeValidate(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    if (this.componentmasterForm.value.selectMasterOnly) {
+      this.validateLookupField(event, LOOKUPDATA, FORMNAME)
+    } else {
+      this.checkCodeExists()
+    }
+  }
+
+  checkCodeExists(){
+
   }
 
   /**use: validate all lookups to check data exists in db */

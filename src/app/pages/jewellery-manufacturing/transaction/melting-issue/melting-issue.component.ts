@@ -73,7 +73,7 @@ export class MeltingIssueComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   gridMetalDecimalFormat: any;
-
+  detailsAdded: boolean = false;
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -94,7 +94,7 @@ export class MeltingIssueComponent implements OnInit {
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "",
+    WHERECONDITION: "WORKER_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -202,7 +202,7 @@ export class MeltingIssueComponent implements OnInit {
     private commonService: CommonServiceService,) { }
 
   ngOnInit(): void {
-    this.gridMetalDecimalFormat = {
+    this.gridAmountDecimalFormat = {
       type: 'fixedPoint',
       precision: this.comService.allbranchMaster?.BAMTDECIMALS,
       currency: this.comService.compCurrency
@@ -344,7 +344,7 @@ export class MeltingIssueComponent implements OnInit {
 
           this.meltingISsueDetailsData = data.Details
           console.log(this.meltingISsueDetailsData, 'data')
-          this.recalculateSRNO() //set to main grid
+          this.formatMainGrid() //set to main grid
           this.meltingISsueDetailsData.forEach((element: any) => {
             this.tableData.push({
               jobno: element.JOB_NUMBER,
@@ -437,14 +437,7 @@ export class MeltingIssueComponent implements OnInit {
         }
       });
   }
-  formatMainGrid() {
-    this.meltingISsueDetailsData.forEach((item: any, index: any) => {
-      item.GROSS_WT = this.comService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
-      item.NET_WT = this.comService.setCommaSerperatedNumber(item.NET_WT, 'METAL')
-      item.PURITY = this.comService.setCommaSerperatedNumber(item.PURITY, 'PURITY')
-    })
-  }
-
+ 
   /**USE: to set currency from company parameter */
   // setCompanyCurrency() {
   //   let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
@@ -680,6 +673,12 @@ export class MeltingIssueComponent implements OnInit {
       windowClass: 'modal-full-width',
     });
   }
+  customizeText(data: any) {
+    if (data.value > 0 && data.value <= 100) {
+      return Math.trunc(data.value) + '%'
+    }
+    return Math.trunc(data.value).toLocaleString('en-US', { style: 'decimal' })
+  }
 
   // onRowClickHandler(event: any) {
 
@@ -748,7 +747,7 @@ export class MeltingIssueComponent implements OnInit {
       this.meltingISsueDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
     } else {
       this.meltingISsueDetailsData.push(detailDataToParent);
-      this.recalculateSRNO()
+      this.formatMainGrid()
     }
     if (this.meltingISsueDetailsData.length > 0) {
       this.isFieldsReadonly = true; // Use this flag in the template
@@ -797,7 +796,7 @@ export class MeltingIssueComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.meltingISsueDetailsData = this.meltingISsueDetailsData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
-        this.recalculateSRNO()
+        this.formatMainGrid()
       }
     }
     )
@@ -805,7 +804,17 @@ export class MeltingIssueComponent implements OnInit {
   recalculateSRNO(): void {
     this.meltingISsueDetailsData.forEach((element: any, index: any) => {
       element.SRNO = index + 1
-      element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+      element.GROSS_WT = this.commonService.decimalQuantityFormat(element.GROSS_WT, 'METAL')
+    })
+  }
+  formatMainGrid() {
+    this.meltingISsueDetailsData.forEach((item: any, index: any) => {
+      item.SRNO = index + 1
+      item.GROSS_WT = this.comService.decimalQuantityFormat(item.GROSS_WT, 'METAL')
+      item.NET_WT = this.comService.setCommaSerperatedNumber(item.NET_WT, 'METAL')
+      item.PURITY = this.comService.setCommaSerperatedNumber(item.PURITY, 'PURITY')
+      item.PUREWT = this.comService.setCommaSerperatedNumber(item.PUREWT, 'METAL')
+   
     })
   }
 

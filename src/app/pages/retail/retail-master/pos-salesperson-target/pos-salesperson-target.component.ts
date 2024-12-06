@@ -429,6 +429,7 @@ export class PosSalespersonTargetComponent implements OnInit {
         this.subscriptions.push(Sub);
       } else {
         this.flag = "VIEW";
+        this.activeModal.close("");
       }
     });
   }
