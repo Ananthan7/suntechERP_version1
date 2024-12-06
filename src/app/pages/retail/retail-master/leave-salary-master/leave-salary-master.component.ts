@@ -39,7 +39,7 @@ export class LeaveSalaryMasterComponent implements OnInit {
     SEARCH_FIELD: "",
     SEARCH_HEADING: "Debit Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "AC_OnHold = 0 and ACCOUNT_MODE in('G','L')",
+    WHERECONDITION: "ACCODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,

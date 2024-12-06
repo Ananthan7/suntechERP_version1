@@ -49,7 +49,10 @@ export class SalesInvoiceComponent implements OnInit {
     { dataField: "STOCK_CODE", caption: "Sales Man" },
   ];
   data: any;
-
+  attrGroup:any;
+  compGroup: any;
+  baseGroup: any;
+  divisionCode:any;
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -123,6 +126,33 @@ export class SalesInvoiceComponent implements OnInit {
         this.deleteMaster();
       }
     }
+    this.attrGroup = this.getUniqueValues(
+      this.commonService.getComboFilterByID("POSDISCOUNTSETTGROUP"),
+      "ENGLISH"
+    );
+    this.compGroup = this.getUniqueValues(
+      this.commonService.getComboFilterByID("POSDISCOUNTSETTCOMP"),
+      "ENGLISH"
+    );
+    this.baseGroup = this.getUniqueValues(
+      this.commonService.getComboFilterByID("DIAMOND PRICE CODE"),
+      "ENGLISH"
+    );
+    let API = `RetailDiscountSetting/RetailDiscountSettingDivisonDropdown/`;
+    let sub: Subscription = this.dataService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        console.log(res);
+        this.divisionCode =  res.dynamicData[0];
+      });
+  }
+
+  getUniqueValues(List: any[], field: string) {
+    return List.filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex((t) => t[field] === item[field] && t[field] !== "")
+    );
   }
 
   openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {

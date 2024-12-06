@@ -64,8 +64,12 @@
             <mat-form-field style="width: 100%" appearance="outline">
               <!-- <input matInput="text" formControlName="division" /> -->
               <mat-select formControlName="division">
-                <mat-option value="1">Yes</mat-option>
-                <mat-option value="0">No</mat-option>
+                <mat-option
+                *ngFor="let option of divisionCode"
+                [value]="option.DIVISION_CODE"
+              >
+                {{ option.DIVISION_CODE }}
+              </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -123,8 +127,12 @@
             <mat-form-field style="width: 100%" appearance="outline">
               <!-- <input matInput="text" formControlName="attr_grp" /> -->
               <mat-select formControlName="attr_grp">
-                <mat-option value="1">Yes</mat-option>
-                <mat-option value="0">No</mat-option>
+                <mat-option
+                *ngFor="let option of attrGroup"
+                [value]="option.SRNO"
+              >
+                {{ option.ENGLISH }}
+              </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -138,8 +146,12 @@
             <mat-form-field style="width: 100%" appearance="outline">
               <!-- <input matInput="text" formControlName="comp_grp" /> -->
               <mat-select formControlName="comp_grp">
-                <mat-option value="1">Yes</mat-option>
-                <mat-option value="0">No</mat-option>
+                <mat-option
+                *ngFor="let option of compGroup"
+                [value]="option.SRNO"
+              >
+                {{ option.ENGLISH }}
+              </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -153,8 +165,12 @@
             <mat-form-field style="width: 100%" appearance="outline">
               <!-- <input matInput="text" formControlName="base_price" /> -->
               <mat-select formControlName="base_price">
-                <mat-option value="1">Yes</mat-option>
-                <mat-option value="0">No</mat-option>
+                <mat-option
+                *ngFor="let option of baseGroup"
+                [value]="option.SRNO"
+              >
+                {{ option.ENGLISH }}
+              </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
