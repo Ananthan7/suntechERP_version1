@@ -32,9 +32,9 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
   isLoading: boolean = false;
-  salesGridArr: any = [];
-  stockGridArr: any = [];
-  diamonSalesGridArr: any = [];
+  metalSalesGridArr: any = [];
+  metalStockGridArr: any = [];
+  diamondSalesGridArr: any = [];
   physicalStockGridArr: any = [];
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
@@ -176,15 +176,17 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
   gridAPI(){
     this.isLoading = true;
     let APIurl = "PosSalesAndStockComparison";
+
+    // const branchSelectionlastElement = this.POS_Sales_Stock_ComparisonForm.controls.branch.value.split('#').pop()!.replace('#', '');
+    // const formatterBranches = this.POS_Sales_Stock_ComparisonForm.controls.branch.value.slice(0, -1) + branchSelectionlastElement;
+
     let postData = {
-      "parameter": {
         "frmDate": this.dateToPass.fromDate,
         "toDate": this.dateToPass.toDate,
         "strBranch": this.POS_Sales_Stock_ComparisonForm.controls.branch.value,
         "mtlType": this.POS_Sales_Stock_ComparisonForm.controls.groupByMetal.value,
         "diaType": this.POS_Sales_Stock_ComparisonForm.controls.groupByDiamond.value,
         "transaction": Math.floor(this.POS_Sales_Stock_ComparisonForm.controls.transaction.value || 0)
-      }
     }
 
     this.commonService.showSnackBarMsg('MSG81447');
@@ -201,6 +203,19 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
         return
       }
       else{
+        this.metalSalesGridArr = response.dtMtlSales;
+
+
+        this.metalStockGridArr = response.dtMtlStock;
+
+
+        this.diamondSalesGridArr = response.dtDiaSales;
+
+
+        this.physicalStockGridArr = response.dtDiaStock;
+
+
+        console.log(this.metalSalesGridArr , this.metalStockGridArr,    this.diamondSalesGridArr,   this.physicalStockGridArr)
         this.isLoading = false;
       }
     })
