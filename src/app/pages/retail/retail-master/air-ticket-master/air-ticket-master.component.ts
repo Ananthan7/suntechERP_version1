@@ -36,19 +36,19 @@ export class AirTicketMasterComponent implements OnInit {
   tableData:any = [];
   BranchData: MasterSearchModel = {}
   DepartmentData: MasterSearchModel = {}
-  debitCode: MasterSearchModel = {
+  debitcode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
-    SEARCH_FIELD: "ACCODE",
+    SEARCH_FIELD: "",
     SEARCH_HEADING: "Debit Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "AC_OnHold = 0 and ACCOUNT_MODE in('G','L')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
-    FRONTENDFILTER: true,
-  };
+    FRONTENDFILTER: true,
+  };
   UserDefinedData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -320,7 +320,8 @@ export class AirTicketMasterComponent implements OnInit {
   ngOnInit(): void {
 
 
-
+    console.log(this.content);
+    
     this.basedOnDropdown = this.getUniqueValues(
       this.commonService.getComboFilterByID("GRATUITY BASED ON"),
       "ENGLISH"
@@ -330,6 +331,10 @@ export class AirTicketMasterComponent implements OnInit {
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content?.FLAG == "VIEW") {
+        this.AirTicketMasterForm.controls.basedOn.setValue(
+          this.content.BASED_ON.toString()
+        );
+        this.AirTicketMasterForm.controls.basedOn.disable();
         this.isDisabled = true;
         this.viewMode = true;
       } else if (this.content?.FLAG == "EDIT") {
@@ -401,10 +406,10 @@ export class AirTicketMasterComponent implements OnInit {
       this.content.DEBITACCODE
     );
     this.AirTicketMasterForm.controls.basedOn.setValue(
-      this.content.BASED_ON
+      this.content.BASED_ON.toString()
     );
     this.AirTicketMasterForm.controls.amount.setValue(
-      this.content.FIXAMOUNT
+      this.commonService.decimalQuantityFormat(this.content.FIXAMOUNT,'AMOUNT')
     );
     this.AirTicketMasterForm.controls.noOfTime.setValue(
       this.content.MONTH_INTERVEL

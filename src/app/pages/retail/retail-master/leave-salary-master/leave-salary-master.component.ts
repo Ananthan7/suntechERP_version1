@@ -32,19 +32,19 @@ export class LeaveSalaryMasterComponent implements OnInit {
   @ViewChild("userDefined13") userDefined13!: MasterSearchComponent;
   @ViewChild("userDefined14") userDefined14!: MasterSearchComponent;
   @ViewChild("userDefined15") userDefined15!: MasterSearchComponent;
-  debitCode: MasterSearchModel = {
+  debitcode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
-    SEARCH_FIELD: "ACCODE",
+    SEARCH_FIELD: "",
     SEARCH_HEADING: "Debit Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "AC_OnHold = 0 and ACCOUNT_MODE in('G','L')",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
-    FRONTENDFILTER: true,
-  };
+    FRONTENDFILTER: true,
+  };
   UserDefinedData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -282,6 +282,7 @@ export class LeaveSalaryMasterComponent implements OnInit {
   codeEnable: boolean = false;
   deleteMode: boolean = false;
   private subscriptions: Subscription[] = [];
+  basedOnDropdown!: any[];
 
   LeaveSalaryMasterForm: FormGroup = this.formBuilder.group({
     code: [""],
@@ -325,10 +326,18 @@ export class LeaveSalaryMasterComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.content);
-    
+    this.basedOnDropdown = this.getUniqueValues(
+      this.commonService.getComboFilterByID("GRATUITY BASED ON"),
+      "ENGLISH"
+    );
+
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content?.FLAG == "VIEW") {
+        this.LeaveSalaryMasterForm.controls.basedOn.setValue(
+          this.content.BASED_ON.toString()
+        );
+        this.LeaveSalaryMasterForm.controls.basedOn.disable();
         this.isDisabled = true;
         this.viewMode = true;
       } else if (this.content?.FLAG == "EDIT") {
@@ -351,6 +360,13 @@ export class LeaveSalaryMasterComponent implements OnInit {
     console.log(this.basedOne);
   }
   
+  getUniqueValues(List: any[], field: string) {
+    return List.filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex((t) => t[field] === item[field] && t[field] !== "")
+    );
+  }
 
   close(data?: any) {
     if (data) {
@@ -400,10 +416,10 @@ export class LeaveSalaryMasterComponent implements OnInit {
       this.content.DEBITACCODE
     );
     this.LeaveSalaryMasterForm.controls.basedOn.setValue(
-      this.content.BASED_ON
+      this.content.BASED_ON.toString()
     );
     this.LeaveSalaryMasterForm.controls.amount.setValue(
-      this.content.FIXAMOUNT
+      this.commonService.decimalQuantityFormat(this.content.FIXAMOUNT,'AMOUNT')
     );
     this.LeaveSalaryMasterForm.controls.noOfTime.setValue(
       this.content.MONTH_INTERVEL
@@ -667,7 +683,7 @@ export class LeaveSalaryMasterComponent implements OnInit {
   }
   BranchDataSelected(e: any) {
     console.log(e);
-    this.LeaveSalaryMasterForm.controls.debit.setValue(e.CODE);
+    this.LeaveSalaryMasterForm.controls.debit.setValue(e.	ACCODE);
   }
 
   UserDefined1DataSelected(e: any) {
