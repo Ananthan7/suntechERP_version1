@@ -7,11 +7,8 @@
 </div>
 
 <!-- modal header component -->
-<modal-header
-  (saveClick)="formSave()"
-  (cancelClick)="close()"
-  (deleteClick)="deleteMaster()"
-></modal-header>
+<modal-header (saveClick)="formSave()" (cancelClick)="close()" (deleteClick)="deleteMaster()" [isViewDelete]="editMode"
+  [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 
 <!-- content section -->
 <div class="container-fluid pt-3">
@@ -24,97 +21,65 @@
               <div class="row mt-4">
                 <div class="col-md-6">
                   <div class="row mb-1">
-                    <label for="code" class="col-sm-2 col-form-label" id="ID029"
-                      >Code</label
-                    >
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Code</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%" appearance="outline">
-                        <input matInput="text" formControlName="mode" />
+                        <input matInput="text" formControlName="code" [readonly]="viewMode || editMode" />
+                        <master-search class="masterSearch" [MasterSearchData]="codeCodeData"
+                          (newRowClick)="codeSelected($event)" *ngIf=" viewMode == false" #countrycodeSearch>
+                        </master-search>
                       </mat-form-field>
                     </div>
                   </div>
 
                   <div class="row mb-1">
-                    <label
-                      for="description"
-                      class="col-sm-2 col-form-label"
-                      id="ID029"
-                      >Description</label
-                    >
+                    <label for="description" class="col-sm-2 col-form-label" id="ID029">Description</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%" appearance="outline">
-                        <input matInput="text" formControlName="mode" />
+                        <input matInput="text" formControlName="description" readonly />
                       </mat-form-field>
                     </div>
                   </div>
 
                   <div class="row p-2">
                     <div class="row mb-1">
-                      <label
-                        for="description"
-                        class="col-sm-2 col-form-label"
-                        id="ID029"
-                        >Country Code</label
-                      >
-                      <div class="col-md-3">
-                        <mat-form-field
-                          style="width: 100%"
-                          appearance="outline"
-                        >
-                          <input matInput="text" formControlName="mode" />
-                        </mat-form-field>
-                      </div>
-
-                      <div class="col-md-3">
-                        <mat-form-field
-                          style="width: 100%"
-                          appearance="outline"
-                        >
-                          <input matInput="text" formControlName="mode" />
-                        </mat-form-field>
-                      </div>
-                    </div>
-
-                    <div class="row mb-1">
-                      <label
-                        for="description"
-                        class="col-sm-2 col-form-label"
-                        id="ID029"
-                        >Holiday</label
-                      >
+                      <label for="description" class="col-sm-2 col-form-label" id="ID029">Country Code</label>
                       <div class="col-md-3">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input
-                              matInput
-                              [matDatepicker]="dob"
-                              name="dob"
-                              placeholder="DD/MM/YYYY"
-                              DateValidation
-                              formControlName="dob"
-                              readonly="true"
-                            />
-                            <mat-datepicker-toggle
-                              matSuffix
-                              [for]="dob"
-                            ></mat-datepicker-toggle>
-                            <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
-                          </mat-form-field>
+                          <input matInput="text" formControlName="countrycode" [readonly]="viewMode"
+                            (focusout)="validateLookupField($event,countryCodeData,'countrycode')"
+                            (keydown)="lookupKeyPress($event,'countrycode')" />
+                          <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                            (newRowClick)="countrySelected($event)" *ngIf=" viewMode == false" #countrycodeSearch>
+                          </master-search>
+                        </mat-form-field>
+                      </div>
+
+                      <!-- <div class="col-md-3">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                          <input matInput="text" formControlName="countrycodeDesc" [readonly]="viewMode"/>
+                        </mat-form-field>
+                      </div> -->
+                    </div>
+
+                    <div class="row mb-1">
+                      <label for="description" class="col-sm-2 col-form-label" id="ID029">Holiday</label>
+                      <div class="col-md-3">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                          <input matInput [matDatepicker]="holidaydate" name="holidaydate" placeholder="DD/MM/YYYY"
+                            DateValidation formControlName="holidaydate" readonly="true" [readonly]="viewMode" />
+                          <mat-datepicker-toggle matSuffix [for]="holidaydate"
+                            [disabled]="viewMode"></mat-datepicker-toggle>
+                          <mat-datepicker [startAt]="currentDate" #holidaydate></mat-datepicker>
+                        </mat-form-field>
                       </div>
                     </div>
 
                     <div class="row mb-1">
-                      <label
-                        for="description"
-                        class="col-sm-2 col-form-label"
-                        id="ID029"
-                        >Remarks</label
-                      >
+                      <label for="description" class="col-sm-2 col-form-label" id="ID029">Remarks</label>
                       <div class="col-md-6">
-                        <mat-form-field
-                          style="width: 100%"
-                          appearance="outline"
-                        >
-                          <input matInput="text" formControlName="mode" />
+                        <mat-form-field style="width: 100%" appearance="outline">
+                          <input matInput="text" formControlName="remarks" [readonly]="viewMode" />
                         </mat-form-field>
                       </div>
                     </div>
@@ -122,10 +87,7 @@
                     <div class="row mb-1">
                       <div class="col-md-10"></div>
                       <div class="col-md-2">
-                        <button
-                          type="button"
-                          class="btn btn-primary text-center m-2"
-                        >
+                        <button type="button" class="btn btn-primary text-center m-2" (click)="saveRow()">
                           Save
                         </button>
                       </div>
@@ -134,108 +96,230 @@
                 </div>
                 <div class="col-md-6">
                   <div class="row">
-                    <dx-data-grid
-                      [dataSource]="tableData"
-                      #dataGrid
-                      id="gridContainer"
-                      keyExpr="MID"
-                      [showBorders]="true"
-                      (onSelectionChanged)="onSelectionChanged($event)"
-                    >
-                      <!-- Paging disabled -->
+                    <dx-data-grid [dataSource]="tableData" #dataGrid id="gridContainer" keyExpr="SRNO"
+                      [showBorders]="true">
                       <dxo-paging [enabled]="false"></dxo-paging>
-
-                      <!-- Cell Editing Enabled -->
-                      <dxo-editing
-                        mode="cell"
-                        [allowUpdating]="true"
-                      ></dxo-editing>
-
-                      <!-- Multiple Selection Mode -->
+                      <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>>
                       <dxo-selection mode="multiple"></dxo-selection>
-
-                      <!-- Virtual Scrolling -->
                       <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                      <!-- Columns Definition -->
-                      <dxi-column
-                        *ngFor="let column of columns"
-                        [dataField]="column.dataField"
-                        [caption]="column.caption"
-                        [allowEditing]="true"
-                        alignment="center"
-                      ></dxi-column>
+                      <dxi-column dataField="SRNO" caption="Sr No"> </dxi-column>
+                      <dxi-column dataField="COUNTRYCODE" caption="Country Code">
+                      </dxi-column>
+                      <dxi-column dataField="HOLIDAY_DATE" caption="Date">
+                      </dxi-column>
+                      <dxi-column dataField="REMARKS" caption="Remarks">
+                      </dxi-column>
+                      <dxi-column caption="Remove" [width]="100">
+                        <ng-template dxTemplate="cellTemplate" let-cellData="data" let-rowIndex="rowIndex">
+                          <button class="btn btn-danger btn-sm" (click)="removeRow(rowIndex)">Remove</button>
+                        </ng-template>
+                      </dxi-column>
+                     
                     </dx-data-grid>
+                    
                   </div>
                 </div>
               </div>
             </mat-tab>
             <mat-tab label="User Defined">
-              <div class="row mt-4">
-                <!-- First Column: Shows first 5 fields -->
+              <div class="row  py-2">
                 <div class="col-md-4">
-                  <div
-                    class="row mb-1"
-                    *ngFor="let field of fields | slice : 0 : 5"
-                  >
-                    <label
-                      for="inputPassword"
-                      class="col-sm-5 col-form-label"
-                      [attr.id]="field.label"
-                      >{{ field.label }}</label
-                    >
-                    <div class="col-md-7">
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 1
+                    </label>
+                    <div class="col-sm-8">
                       <mat-form-field style="width: 100%" appearance="outline">
-                        <input
-                          matInput
-                          [formControlName]="field.formControlName"
-                        />
+                        <input type="text" matInput formControlName="userdefined1" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF1Data"
+                          (newRowClick)="UDF1CodeSelected($event)">
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 2
+                    </label>
+                    <div class="col-sm-8">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" matInput formControlName="userdefined2" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF2Data"
+                          (newRowClick)="UDF2CodeSelected($event)">
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 3
+                    </label>
+                    <div class="col-sm-8">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" matInput formControlName="userdefined3" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF3Data"
+                          (newRowClick)="UDF3CodeSelected($event)">
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 4
+                    </label>
+                    <div class="col-sm-8">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" matInput formControlName="userdefined4" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF4Data"
+                          (newRowClick)="UDF4CodeSelected($event)">
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 5
+                    </label>
+                    <div class="col-sm-8">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" matInput formControlName="userdefined5" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF5Data"
+                          (newRowClick)="UDF5CodeSelected($event)">
+                        </master-search>
                       </mat-form-field>
                     </div>
                   </div>
                 </div>
-
-                <!-- Second Column: Shows next 5 fields (index 5 to 9) -->
                 <div class="col-md-4">
-                  <div
-                    class="row mb-1"
-                    *ngFor="let field of fields | slice : 5 : 10"
-                  >
-                    <label
-                      for="inputPassword"
-                      class="col-sm-5 col-form-label"
-                      [attr.id]="field.label"
-                      >{{ field.label }}</label
-                    >
-                    <div class="col-md-7">
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 6
+                    </label>
+                    <div class="col-sm-8">
                       <mat-form-field style="width: 100%" appearance="outline">
-                        <input
-                          matInput
-                          [formControlName]="field.formControlName"
-                        />
+                        <input type="text" matInput formControlName="userdefined6" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF6Data"
+                          (newRowClick)="UDF6CodeSelected($event)">
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 7
+                    </label>
+                    <div class="col-sm-8">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" matInput formControlName="userdefined7" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF7Data"
+                          (newRowClick)="UDF7CodeSelected($event)">
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 8
+                    </label>
+                    <div class="col-sm-8">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" matInput formControlName="userdefined8" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF8Data"
+                          (newRowClick)="UDF8CodeSelected($event)">
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 9
+                    </label>
+                    <div class="col-sm-8">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" matInput formControlName="userdefined9" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF9Data"
+                          (newRowClick)="UDF9CodeSelected($event)">
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 10
+                    </label>
+                    <div class="col-sm-8">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" matInput formControlName="userdefined10" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF10Data"
+                          (newRowClick)="UDF10CodeSelected($event)">
+                        </master-search>
                       </mat-form-field>
                     </div>
                   </div>
                 </div>
-
-                <!-- Third Column: Shows last 5 fields (index 10 to 14) -->
                 <div class="col-md-4">
-                  <div
-                    class="row mb-1"
-                    *ngFor="let field of fields | slice : 10 : 15"
-                  >
-                    <label
-                      for="inputPassword"
-                      class="col-sm-5 col-form-label"
-                      [attr.id]="field.label"
-                      >{{ field.label }}</label
-                    >
-                    <div class="col-md-7">
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 11
+                    </label>
+                    <div class="col-sm-8">
                       <mat-form-field style="width: 100%" appearance="outline">
-                        <input
-                          matInput
-                          [formControlName]="field.formControlName"
-                        />
+                        <input type="text" matInput formControlName="userdefined11" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF11Data"
+                          (newRowClick)="UDF11CodeSelected($event)">
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 12
+                    </label>
+                    <div class="col-sm-8">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" matInput formControlName="userdefined12" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF12Data"
+                          (newRowClick)="UDF13CodeSelected($event)">
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 13
+                    </label>
+                    <div class="col-sm-8">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" matInput formControlName="userdefined13" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF13Data"
+                          (newRowClick)="UDF13CodeSelected($event)">
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 14
+                    </label>
+                    <div class="col-sm-8">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" matInput formControlName="userdefined14" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF14Data"
+                          (newRowClick)="UDF14CodeSelected($event)">
+                        </master-search>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined 15
+                    </label>
+                    <div class="col-sm-8">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" matInput formControlName="userdefined15" UpperCaseDirective
+                          [readonly]="viewMode" />
+                        <master-search class="masterSearch" *ngIf="viewMode == false" [MasterSearchData]="UDF15Data"
+                          (newRowClick)="UDF15CodeSelected($event)">
+                        </master-search>
                       </mat-form-field>
                     </div>
                   </div>
