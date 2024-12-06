@@ -21,8 +21,8 @@
                             <mat-form-field style="width: 100%" appearance="outline">
                                 <input type="text" #codeInput matInput formControlName="partycode" UpperCaseDirective
                                     autocomplete="off" />
-                                <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                    (newRowClick)="BranchDataSelected($event)">
+                                <master-search class="masterSearch" [MasterSearchData]="PartyCodeData"
+                                    (newRowClick)="PartyCodeSelected($event)">
                                 </master-search>
                             </mat-form-field>
                         </div>
@@ -34,13 +34,15 @@
                         <label for="inputPassword" id="ID001" class="col-md-4 col-form-label">
                             Metal Division :</label>
                         <div class="col-md-6">
-
-                            <mat-form-field style="width: 100%;" appearance="outline" formControlName="metal_division">
-                                <mat-select>
-                                    <mat-option></mat-option>
-                                    <mat-option></mat-option>
+                            <mat-form-field style="width: 100%;" appearance="outline">
+                                <mat-select formControlName="metal_division" multiple  [disabled]="viewOnly">
+                                    <mat-option
+                                        *ngFor="let option of metal_drop"
+                                        [value]="option.DIVISION_CODE">
+                                        {{ option.DIVISION_CODE }}
+                                    </mat-option>
                                 </mat-select>
-                            </mat-form-field>
+                              </mat-form-field>
                         </div>
                     </div>
                 </div>
@@ -48,7 +50,7 @@
                 <div class="col-md-4">
                     <div class="row mb-1">
                         <div class="col-md-12">
-                            <mat-radio-group aria-label="Select period type" formControlName="periodType">
+                            <mat-radio-group aria-label="Select period type" formControlName="periodType" (change)="duration_type()">
                                 <mat-radio-button class="mx-2" value="monthWise">Month Wise</mat-radio-button>
                                 <mat-radio-button class="mx-2" value="weekWise">Week Wise</mat-radio-button>
                               </mat-radio-group>
@@ -65,8 +67,8 @@
                                 <mat-form-field style="width: 100%" appearance="outline">
                                     <input type="text" #codeInput matInput formControlName="fin_year" UpperCaseDirective
                                         autocomplete="off" />
-                                    <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                        (newRowClick)="BranchDataSelected($event)">
+                                    <master-search class="masterSearch" [MasterSearchData]="finyearcodedata"
+                                        (newRowClick)="selectedfinyear($event)">
                                     </master-search>
                                 </mat-form-field>
                             </div>
@@ -86,20 +88,23 @@
                     <dxi-column dataField="MONTH" caption="MONTH" format="dd/MM/yyyy">
                     </dxi-column>
 
-                    <dxi-column dataField="WEEK" caption="WEEK">
+
+
+                    <dxi-column *ngIf="dur_type == 'weekWise'" dataField="WEEK" caption="WEEK">
                     </dxi-column>
 
-                    <dxi-column dataField="QTY_GOLD" caption="QTY GOLD">
+                    <dxi-column dataField="QTY_G" caption="QTY G" cellTemplate="qty_g">
                     </dxi-column>
 
-                    <dxi-column dataField="QTY_SILVER" caption="QTY SILVER">
-                    </dxi-column>
+                    <div *dxTemplate="let data of 'qty_g'">
+                        <input type="text" class="text-right" [disabled]="viewMode"  (change)="change_type_g(data,$event)" [value]="data.value.toFixed(3)" style="width: 100%;" />
+                    </div>
 
-                    <dxi-column dataField="QTY_PLATINUM" caption="QTY PLATINUM">
+                    <dxi-column dataField="QTY_S" caption="QTY S" cellTemplate="qty_s">
                     </dxi-column>
-
-                    <dxi-column dataField="QTY_PALLADIUM" caption="QTY PALLADIUM">
-                    </dxi-column>
+                    <div *dxTemplate="let data of 'qty_s'">
+                        <input type="text" class="text-right" [disabled]="viewMode"  (change)="change_type_s(data,$event)" [value]="data.value.toFixed(3)" style="width: 100%;" />
+                    </div>
 
                 </dx-data-grid>
             </div>

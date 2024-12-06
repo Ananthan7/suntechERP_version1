@@ -27,6 +27,7 @@ export class TransactionReferenceMasterComponent implements OnInit {
   viewMode:boolean = false;
   prefixcode = new FormControl('');
   @ViewChild('ref_code') ref_codeInput!: ElementRef;
+  statusList:any[]=[];
 
 
 
@@ -50,16 +51,17 @@ export class TransactionReferenceMasterComponent implements OnInit {
   });
 
   clientnamedata: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
+    PAGENO: 3,
+    RECORDS: 35,
     LOOKUPID: 95,
-    SEARCH_FIELD: "ACCODE",
-    SEARCH_HEADING: "Account Master",
+    ORDER_TYPE: 0,
+    WHERECONDITION: "",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "Client",
     SEARCH_VALUE: "",
-    WHERECONDITION: "ACCODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  };
+  } 
 
 
   clientcodeselect(e:any){
@@ -70,6 +72,7 @@ export class TransactionReferenceMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.commonService.comboFilter);
     this.unq_id = this.content?.REF_CODE;
     this.flag = this.content?.FLAG;
     console.log(this.content)
@@ -83,6 +86,21 @@ export class TransactionReferenceMasterComponent implements OnInit {
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.unq_id);
     }
+    this.statusList = this.getUniqueValues(
+      this.commonService.getComboFilterByID("Reference Master Status"),
+      "ENGLISH"
+    );
+
+    console.log(this.statusList);
+    
+  }
+
+  getUniqueValues(List: any[], field: string) {
+    return List.filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex((t) => t[field] === item[field] && t[field] !== "")
+    );
   }
 
   initialController(FLAG: any, DATA: any) {
@@ -108,7 +126,7 @@ export class TransactionReferenceMasterComponent implements OnInit {
   
   checkcode() {
     const CodeControl = this.transactionform.controls.ref_code;
-    console.log(CodeControl.value);
+    // console.log(CodeControl.value);
     if (!CodeControl.value || CodeControl.value.trim() === "") {
       this.commonService.toastErrorByMsgId('MSG1124');
       this.renderer.selectRootElement('#ref_code')?.focus();
@@ -137,6 +155,47 @@ export class TransactionReferenceMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
     console.log(this.dyndatas?.PREFIX_CODE);
   }
+
+  // checkcode() {
+  //   let API = `ReferenceNumberMaster/GetReferenceNumberMasterDetailList/${this.unq_id}`;
+  //   let Sub: Subscription = this.apiService.getDynamicAPI(API)
+  //     .subscribe((result: any) => {
+  //       this.dyndatas = result.response;
+  //       console.log(this.dyndatas);
+  //       this.transactionform.controls.prefixcode.setValue(this.dyndatas?.REF_CODE);
+  //       // this.flag = "EDIT";
+  //     }, (err: any) => {
+
+  //     })
+  //   this.subscriptions.push(Sub);
+  //   console.log(this.dyndatas?.PREFIX_CODE);
+  // }
+
+
+  
+  isexistingcode(){
+    if(this.flag == 'VIEW' || this.flag == 'EDIT'){
+      return;
+    }
+    let code = this.transactionform.controls.ref_code.value;
+    if(code != ""){
+      let API = `ReferenceNumberMaster/CheckIfRefCodePresent/${code}`;
+      let Sub: Subscription = this.apiService.getDynamicAPI(API)
+        .subscribe((result: any) => {
+         let code_exists = result.checkifExists;
+        //  console.log(code_exists);;
+         if(code_exists == true){
+           this.commonService.toastErrorByMsgId('MSG1121');
+          this.transactionform.controls.ref_code.reset();
+          this.renderer.selectRootElement('#ref_code')?.focus();
+        }  
+        }, (err: any) => {
+  
+        })
+      this.subscriptions.push(Sub);
+    }
+  }
+
 
   DeleteController(DATA?: any) {
     this.ViewController(DATA);
