@@ -730,7 +730,7 @@ export class GstMasterComponent implements OnInit {
       };
 
       if (this.flag === "EDIT") {
-        let API = `/GstMaster/InsertGstMaster/${this.code}`;
+        let API = `/GstMaster/UpdateGstMaster/${this.code}`;
         let sub: Subscription = this.apiService
           .putDynamicAPI(API, postData)
           .subscribe((result) => {
