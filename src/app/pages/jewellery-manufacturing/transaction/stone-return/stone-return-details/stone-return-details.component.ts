@@ -529,6 +529,18 @@ export class StoneReturnDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  showConfirmationDialog(message: string): Promise<any> {
+    return Swal.fire({
+      title: 'Confirmation',
+      text: message,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, continue',
+      cancelButtonText: 'No, cancel'
+    });
+  }
   jobNumberValidate(event: any) {
     this.showOverleyPanel(event, 'jobNumber')
     if (event.target.value == '') return
@@ -561,6 +573,10 @@ export class StoneReturnDetailsComponent implements OnInit {
             this.stonereturndetailsFrom.controls.subjobDesc.setValue(data[0].JOB_DESCRIPTION)
             this.stonereturndetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
             this.stonereturndetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
+            if (!data[0]?.METAL_STOCK_CODE) { 
+              this.showConfirmationDialog("No process in API for the provided job number."); 
+              return;
+            }
             this.setSubJobCondition()
             this.subJobNumberValidate()
           } else {

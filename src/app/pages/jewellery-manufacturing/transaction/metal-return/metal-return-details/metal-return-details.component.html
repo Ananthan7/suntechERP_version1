@@ -243,9 +243,9 @@
                                         formControlName="ReturnToStockCode"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'ReturnToStockCode')"
-                                        (focusout)="toreturnstockcodevalidate($event)" />
+                                        (focusout)="validateLookupField($event,returnToCodeData,'ReturnToStockCode')" />
                                     <master-search class="masterSearch"
-                                        [MasterSearchData]="stockCodeData"
+                                        [MasterSearchData]="returnToCodeData"
                                         #overlayReturnToStockCodeSearch
                                         (newRowClick)="ReturnTostockCodeSelected($event)"
                                         *ngIf="!viewMode"></master-search>
@@ -255,7 +255,7 @@
                             <div class="col-sm-6">
                                 <mat-form-field appearance="outline"
                                     style="width: 100%;">
-                                    <input type="text" matInput
+                                    <input type="text" matInput UpperCaseDirective
                                         formControlName="ReturnToStockCodeDesc"
                                         readonly />
                                 </mat-form-field>
