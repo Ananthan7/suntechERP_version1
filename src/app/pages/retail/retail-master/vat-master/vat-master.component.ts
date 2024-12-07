@@ -2,7 +2,11 @@ import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTabGroup } from "@angular/material/tabs";
-import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import {
+  NgbActiveModal,
+  NgbModal,
+  NgbModalRef,
+} from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
@@ -11,6 +15,7 @@ import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.co
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
+import { GpcGridComponentComponent } from "./gpc-grid-component/gpc-grid-component.component";
 
 @Component({
   selector: "app-vat-master",
@@ -290,12 +295,12 @@ export class VatMasterComponent implements OnInit {
     expVatAccCredit: [""],
     posVatAccDebit: [""],
     posVatRefundCredit: [""],
-    searchValue:[""],
+    searchValue: [""],
   });
 
   ngOnInit(): void {
     console.log(this.content);
-    
+
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
@@ -547,19 +552,19 @@ export class VatMasterComponent implements OnInit {
           EXPENSE_ACCODE_DESC: item.EXPENSE_ACCODE_DESC || "",
           HSN_SAC_CODE: item.HSN_SAC_CODE || "",
           HSN_SAC_DESC: item.HSN_SAC_DESC || "",
-          TAX_REG: item.TAX_REG ,
-          REVERSECHARGE_UNREG: item.REVERSECHARGE_UNREG ,
-          ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT ,
+          TAX_REG: item.TAX_REG,
+          REVERSECHARGE_UNREG: item.REVERSECHARGE_UNREG,
+          ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT,
           EXPENSE_ACCTYPE: "str",
-          COST_CODE: "string",
+          COST_CODE: item.COST_CODE,
         })),
         VatMasterDetails: this.expenseHsnOrSacAllocationData.map((item) => ({
           BRANCH_CODE: this.branchCode,
           UNIQUEID: 0,
           SRNO: Number(item.SRNO) || 0,
-          VAT_CODE: this.vatMasterMainForm.value.vatCode|| "",
+          VAT_CODE: this.vatMasterMainForm.value.vatCode || "",
           VAT_PER: Number(this.vatMasterMainForm.value.vatPercent),
-          YEARCODE: item.YEARCODE|| "" ,
+          YEARCODE: item.YEARCODE || "",
           VAT_DATE: new Date(),
         })),
       };
@@ -1072,6 +1077,8 @@ export class VatMasterComponent implements OnInit {
   }
 
   HSNSelect(event: any, data: any) {
+    console.log(data);
+    
     let currentIndex = data.data.SRNO - 1;
 
     this.costCenterAccountData[currentIndex].HSN_SAC_CODE = event.CODE;
@@ -1178,6 +1185,7 @@ export class VatMasterComponent implements OnInit {
               ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT == 1,
               HSN_SAC_CODE: "",
               HSN_SAC_DESC: "",
+              GPC_ACCODE_DESC: item.Account_Head,
             })
           );
 
@@ -1191,32 +1199,36 @@ export class VatMasterComponent implements OnInit {
     );
   }
 
-  getSerachValue() {
-    let SEARCHVALUE = this.vatMasterMainForm.value.searchValue;
-    let PARAMS = { strAcCode: SEARCHVALUE };
-    let API = `VatMaster/GetFillGPCAccounts/${this.branchCode}`;
-    
-    let sub: Subscription = this.apiService
-      .getDynamicAPIwithParamsCustom(API, PARAMS)
-      .subscribe(
-        (result) => {
-          if (result.status.trim() === "Success") {
-            this.expenseHsnOrSacAllocationData = result.response.filter(
-              (item: any) => item.GST_CODE === SEARCHVALUE
-            );
-            
-            if (this.expenseHsnOrSacAllocationData.length > 0) {
-              console.log("Matching records:", this.expenseHsnOrSacAllocationData);
-            } else {
-              console.log("No matching records found.");
-            }
-          }
-        },
-        (err) => {
-          console.error("Error fetching data:", err);
-          this.commonService.toastErrorByMsgId("MSG1531");
+  getSerachValue() {}
+
+  openGPCGrid(data: any, index?:any) {
+    const modalRef: NgbModalRef = this.modalService.open(
+      GpcGridComponentComponent,
+      {
+        size: "md",
+        backdrop: true,
+        keyboard: false,
+        centered: true,
+      }
+    );
+    modalRef.componentInstance.receiptData = { ...data };
+
+    modalRef.result.then(
+      (row) => {
+        if (row) {
+          console.log("Data from modal:", row);
+          let currentIndex = index.data.SRNO - 1;
+
+          this.costCenterAccountData[currentIndex].GPC_ACCODE = row[0].GPC_ACCODE;
+          this.costCenterAccountData[currentIndex].GPC_ACCODE_DESC =
+            row[0].Account_Head;
+      
+          console.log(this.costCenterAccountData);
         }
-      );
+      },
+      (dismissReason) => {
+        console.log("Modal dismissed:", dismissReason);
+      }
+    );
   }
-  
 }

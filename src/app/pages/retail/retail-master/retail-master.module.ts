@@ -75,6 +75,7 @@ import { DocumentPrintSetupComponent } from './document-print-setup/document-pri
 import { EmailTemplateComponent } from './email-template/email-template.component';
 import { FixedAssetsComponent } from './fixed-assets/fixed-assets.component';
 import { GiftVoucherDetailMasterComponent } from './gift-voucher-master/gift-voucher-detail-master/gift-voucher-detail-master.component';
+import { GpcGridComponentComponent } from './vat-master/gpc-grid-component/gpc-grid-component.component';
 
 
 @NgModule({
@@ -155,7 +156,8 @@ import { GiftVoucherDetailMasterComponent } from './gift-voucher-master/gift-vou
     DocumentPrintSetupComponent,
     EmailTemplateComponent,
     FixedAssetsComponent,
-    GiftVoucherDetailMasterComponent
+    GiftVoucherDetailMasterComponent,
+    GpcGridComponentComponent
     
   ],
   imports: [

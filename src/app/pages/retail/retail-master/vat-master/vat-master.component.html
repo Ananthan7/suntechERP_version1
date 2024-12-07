@@ -1245,10 +1245,7 @@
                         </menu-buttons>
                       </div>
                       <div class="col-md-8">
-                        <mat-form-field
-                          style="width: 70%"
-                          appearance="outline"
-                        >
+                        <mat-form-field style="width: 70%" appearance="outline">
                           <input
                             [readonly]="flag === 'VIEW'"
                             matInput
@@ -1258,7 +1255,7 @@
                         </mat-form-field>
                         <button
                           type="button"
-                          class=" ms-2 btn btn-primary text-center"
+                          class="ms-2 btn btn-primary text-center"
                           (click)="getSerachValue()"
                         >
                           SEARCH
@@ -1352,7 +1349,6 @@
                                 [readonly]="true"
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
 
                               <master-search
@@ -1380,7 +1376,6 @@
                                 [readonly]="true"
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
                             </mat-form-field>
                           </div>
@@ -1397,7 +1392,6 @@
                                 type="text"
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
                               <master-search
                                 *ngIf="flag != 'VIEW'"
@@ -1421,7 +1415,6 @@
                                 type="text"
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
                             </mat-form-field>
                           </div>
@@ -1517,9 +1510,22 @@
                           (onSelectionChanged)="
                             onSelectionChanged($event, 'Cost Center Account')
                           "
+                          [paging]="{ pageSize: 10 }"
                         >
                           <dxo-selection mode="single"></dxo-selection>
-                          <dxo-scrolling mode="virtual"></dxo-scrolling>
+                          <dxo-scrolling mode="standard"></dxo-scrolling>
+                          <dxo-pager
+                            *ngIf="costCenterAccountData.length"
+                            [showInfo]="true"
+                            [visible]="true"
+                            [showPageSizeSelector]="true"
+                            [allowedPageSizes]="
+                              costCenterAccountData &&
+                              costCenterAccountData.length > 100
+                                ? [10, 20, 50]
+                                : []
+                            "
+                          ></dxo-pager>
 
                           <!-- Columns -->
                           <dxi-column
@@ -1541,7 +1547,7 @@
                           ></dxi-column>
                           <dxi-column
                             alignment="center"
-                            dataField="Account_Head"
+                            dataField="GPC_ACCODE_DESC"
                             caption="GPC_ACCODE_DESC"
                             cellTemplate="gpcAccodeDescTemp"
                           ></dxi-column>
@@ -1591,7 +1597,6 @@
                                 "
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
                             </mat-form-field>
                           </div>
@@ -1599,7 +1604,11 @@
                           <!-- Exp Account Description Column -->
                           <div *dxTemplate="let data of 'gpcAccodeTemp'">
                             <mat-form-field
-                              style="width: 100%"
+                              style="
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                              "
                               appearance="outline"
                             >
                               <input
@@ -1607,21 +1616,25 @@
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
                                 maxlength="6"
-                                [readonly]="true"
                                 [value]="data.value"
-                                style="width: 100%"
-                                required
+                                style="flex: 1"
                               />
 
-                              <master-search
+                              <i
+                                class="pi pi-search"
+                                style="font-size: 12px; font-weight: bold; cursor: pointer;"
+                                (click)="openGPCGrid(null, data)"
+                              ></i>
+                            </mat-form-field>
+                          </div>
+
+                          <!-- <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayGroupOne
                                 [MasterSearchData]="groupCodeData"
                                 class="masterSearch"
                                 (newRowClick)="GPCSelect($event, data)"
-                              ></master-search>
-                            </mat-form-field>
-                          </div>
+                              ></master-search> -->
 
                           <!-- HSN Code Column -->
                           <div *dxTemplate="let data of 'gpcAccodeDescTemp'">
@@ -1638,7 +1651,6 @@
                                 "
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
                             </mat-form-field>
                           </div>
@@ -1657,7 +1669,6 @@
                                 [readonly]="true"
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
 
                               <master-search
@@ -1681,7 +1692,6 @@
                                 type="text"
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
                             </mat-form-field>
                           </div>
