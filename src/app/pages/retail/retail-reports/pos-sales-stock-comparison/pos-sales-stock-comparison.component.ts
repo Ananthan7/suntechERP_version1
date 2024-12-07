@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -66,6 +66,7 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private datePipe: DatePipe,
     private dataService: SuntechAPIService, private commonService: CommonServiceService,  private toastr: ToastrService,
+    private decimalPipe: DecimalPipe
   ) { }
 
   ngOnInit(): void {
@@ -83,7 +84,25 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     if (e.rowType === 'header') {
       e.cellElement.style.textAlign = 'center';
     }
-  } 
+
+    if (e.rowType === 'data') {
+      const column = e.column.dataField;
+      if (['mkgvalue', 'QTY', 'metalvalue', 'amount'].includes(column)) {
+        e.cellElement.innerText = this.commonService.setCommaSerperatedNumber(e.value, 'AMOUNT');
+      }
+    }
+
+    // if (e.rowType === 'totalFooter') {
+    //   const value = e.totalItem.summaryCells;
+    //   value.forEach((item: any)=>{
+    //     console.log(item.column)
+    //     if (['mkgvalue', 'QTY', 'metalvalue', 'amount'].includes(item.column)) {
+    //       console.log(item)
+    //     }
+    //   })
+    // } 
+  }
+ 
 
   popupClosed(){
     if (this.content && Object.keys(this.content).length > 0) {
@@ -98,14 +117,6 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     }
   }
 
-
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
   setDateValue(event: any){
     if(event.FromDate){
       this.POS_Sales_Stock_ComparisonForm.controls.fromdate.setValue(event.FromDate);
@@ -204,24 +215,33 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
       }
       else{
         this.metalSalesGridArr = response.dtMtlSales;
-
+        this.metalSalesGridArr?.forEach((item: any)=>{
+          if (Object.keys(item.type).length === 0 && item.type.constructor === Object) {
+            item.type = null;
+          }
+          item.mkgvalue = this.commonService.setCommaSerperatedNumber(item.mkgvalue, 'AMOUNT');
+          item.QTY = this.commonService.setCommaSerperatedNumber(item.QTY, 'AMOUNT');
+          item.metalvalue = this.commonService.setCommaSerperatedNumber(item.metalvalue, 'AMOUNT');
+          item.amount = this.commonService.setCommaSerperatedNumber(item.amount, 'AMOUNT');
+        })
 
         this.metalStockGridArr = response.dtMtlStock;
-
+        this.metalStockGridArr.forEach((item: any)=>{
+          if (Object.keys(item.type).length === 0 && item.type.constructor === Object) {
+            item.type = null;
+          }
+        })
 
         this.diamondSalesGridArr = response.dtDiaSales;
 
 
         this.physicalStockGridArr = response.dtDiaStock;
-
-
-        console.log(this.metalSalesGridArr , this.metalStockGridArr,    this.diamondSalesGridArr,   this.physicalStockGridArr)
         this.isLoading = false;
       }
     })
   }
 
- saveTemplate(){
+  saveTemplate(){
     this.popupVisible = true;
     console.log(this.POS_Sales_Stock_ComparisonForm.controls.templateName.value)
   }
@@ -272,8 +292,8 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
 
       this.POS_Sales_Stock_ComparisonForm.controls.transaction.setValue(this.options[0].value);

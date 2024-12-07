@@ -37,8 +37,15 @@
                         maxlength="5"
                         UpperCaseDirective
                         autocomplete="off"
-                        [readonly]="viewMode"
+                        [readonly]="viewMode || editMode"
                       />
+                      <mat-error
+                      *ngIf="
+                       departmentMasterForm .controls['code'].hasError('required')
+                      "
+                    >
+                     Code is required.
+                    </mat-error>
                     </mat-form-field>
                   </div>
                 </div>

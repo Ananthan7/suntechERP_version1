@@ -82,21 +82,21 @@
                                 <div class="grid-label text-center mt-1 text-warning" id="ID006">Sales</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="metalSalesGridArr" [showBorders]="true"
-                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
+                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
+                                [columnAutoWidth]="true">
                                     <dxo-paging [pageSize]="12"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                                    
-                                    <dxi-column alignment="center" caption="Division"  dataField=""></dxi-column>
-                                    <dxi-column alignment="center" caption="Branch" dataField=""></dxi-column>
-                                    <dxi-column alignment="center" caption="Type"  dataField=""></dxi-column>
-                                    <dxi-column alignment="center" caption="Pcs" dataField=""></dxi-column>
-                                    <dxi-column alignment="center" caption="Gms" dataField=""></dxi-column>
-                                    <dxi-column alignment="center" caption="Mkg. Value" dataField=""></dxi-column>
-                                    <dxi-column alignment="center" caption="Metal Value" dataField=""></dxi-column>
-                                    <dxi-column alignment="center" caption="Total Value" dataField=""></dxi-column>
-
+                                    <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                                    <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
+                                
+                                    <dxi-column alignment="left" caption="Division" dataField="DIVDESC"></dxi-column>
+                                    <dxi-column alignment="left" caption="Branch" dataField="BRANCH_CODE"></dxi-column>
+                                    <dxi-column alignment="center" caption="Type" dataField="type"></dxi-column>
+                                    <dxi-column alignment="right" caption="Pcs" dataField="TPCS"></dxi-column>
+                                    <dxi-column alignment="right" caption="Gms" dataField="QTY"></dxi-column>
+                                    <dxi-column alignment="right" caption="Mkg. Value" dataField="mkgvalue"></dxi-column>
+                                    <dxi-column alignment="right" caption="Metal Value" dataField="metalvalue"></dxi-column>
+                                    <dxi-column alignment="right" caption="Total Value" dataField="amount"></dxi-column>
+                                
                                     <dxo-summary>
                                         <dxi-total-item column="Pcs" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                                         <dxi-total-item column="Gms" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
@@ -104,21 +104,22 @@
                                         <dxi-total-item column="Metal Value" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                                         <dxi-total-item column="Total Value" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                                     </dxo-summary>
-                                </dx-data-grid>  
+                                </dx-data-grid>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="grid-label text-center mt-1 text-warning" id="ID007">Stock</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="metalStockGridArr" [showBorders]="true"
-                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
+                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
+                                [columnAutoWidth]="true">
                                     <dxo-paging [pageSize]="12"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                                    <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
 
                                     
-                                    <dxi-column alignment="center" caption="Division" dataField="DIVDESC"></dxi-column>
-                                    <dxi-column alignment="center" caption="Branch" dataField="BRANCH_CODE"></dxi-column>
+                                    <dxi-column alignment="left" caption="Division" dataField="DIVDESC"></dxi-column>
+                                    <dxi-column alignment="left" caption="Branch" dataField="BRANCH_CODE"></dxi-column>
                                     <dxi-column alignment="center" caption="Type" dataField="type"></dxi-column>
                                     <dxi-column alignment="right" caption="Pcs" dataField="TPCS"></dxi-column>
                                     <dxi-column alignment="right" caption="Gms" dataField="QTY"></dxi-column>
@@ -140,17 +141,18 @@
                                 <div class="grid-label text-center mt-1 text-warning" id="ID006">Sales</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="diamondSalesGridArr" [showBorders]="true"
-                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
+                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
+                                [columnAutoWidth]="true">
                                     <dxo-paging [pageSize]="12"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                                    <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
 
                                     
-                                    <dxi-column alignment="center" caption="Branch"></dxi-column>
-                                    <dxi-column alignment="center" caption="Type"></dxi-column>
-                                    <dxi-column alignment="center" caption="Pcs"></dxi-column>
-                                    <dxi-column alignment="center" caption="Weight"></dxi-column>
-                                    <dxi-column alignment="center" caption="Amount"></dxi-column>
+                                    <dxi-column alignment="left" caption="Branch" dataField="BRANCH_CODE"></dxi-column>
+                                    <dxi-column alignment="left" caption="Type" dataField="type"></dxi-column>
+                                    <dxi-column alignment="right" caption="Pcs" dataField="TPCS"></dxi-column>
+                                    <dxi-column alignment="right" caption="Weight" dataField="QTY"></dxi-column>
+                                    <dxi-column alignment="center" caption="Amount" dataField="amount"></dxi-column>
 
                                     <dxo-summary>
                                         <dxi-total-item column="Pcs" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
@@ -164,10 +166,11 @@
                                 <div class="grid-label text-center mt-1 text-warning" id="ID008">Physical Stock</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="physicalStockGridArr" [showBorders]="true"
-                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
+                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
+                                [columnAutoWidth]="true">
                                     <dxo-paging [pageSize]="12"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                                    <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
 
                                     
                                     <dxi-column alignment="center" caption="Branch" dataField="BRANCH_CODE"></dxi-column>

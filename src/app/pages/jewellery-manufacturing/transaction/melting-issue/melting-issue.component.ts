@@ -522,7 +522,6 @@ export class MeltingIssueComponent implements OnInit {
   }
   workerWhereCondtion() {
     let form = this.meltingIssueFrom.value
-    console.log(form, 'form')
     this.workerCodeData.WHERECONDITION = `@strProcess='${form.processcode}'`
   }
 
