@@ -321,29 +321,27 @@ export class MetalReturnDetailsComponent implements OnInit {
 
   }
 
-  setLookupStockCodeWhereCondition() {
-    let form = this.metalReturnDetailsForm.value;
-
-    // Construct the WHERE condition without '@' symbols
-    let where = `@strBranch_Code='${form.BRANCH_CODE}', `;
-    where += `@strJob_Number='${form.jobNumber}',`;
-    where += `@strUnq_Job_Id='${form.subJobNo}',`;
-    where += `@strMetalStone='${form.METAL_STONE}', `;
-    where += `@strStock_Code='${form.stockCode}', `;
-    where += `@strUserName='${this.comService.userName}'`;
-
-    // Assign to the stock code data
-    this.stockCodeData.WHERECONDITION = where;
-  }
   // setLookupStockCodeWhereCondition() {
   //   let form = this.metalReturnDetailsForm.value;
-  //   this.stockCodeData.WHERECONDITION = `@strBranch_Code='${this.comService.nullToString(form.BRANCH_CODE)}',`
-  //   this.stockCodeData.WHERECONDITION += `@strJob_Number='${this.comService.nullToString(form.jobNumber)}',`
-  //   this.stockCodeData.WHERECONDITION += `@strUnq_Job_Id='${this.comService.nullToString(form.subJobNo)}',`
-  //   this.stockCodeData.WHERECONDITION += `@strMetalStone='${this.comService.nullToString(form.METAL_STONE)}',`
-  //   this.stockCodeData.WHERECONDITION += `@strStock_Code='${this.comService.nullToString(form.stockCode)}'`
-  //   this.stockCodeData.WHERECONDITION += `@strUserName='${this.comService.nullToString(this.comService.userName)}'`
+
+  //   // Construct the WHERE condition without '@' symbols
+  //   let where = `@strBranch_Code='${form.BRANCH_CODE}', `;
+  //   where += `@strJob_Number='${form.jobNumber}',`;
+  //   where += `@strUnq_Job_Id='${form.subJobNo}',`;
+  //   where += `@strMetalStone='${form.METAL_STONE}', `;
+  //   where += `@strStock_Code='${form.stockCode}', `;
+  //   where += `@strUserName='${this.comService.userName}'`;
+
+  //   // Assign to the stock code data
+  //   this.stockCodeData.WHERECONDITION = where;
   // }
+  setLookupStockCodeWhereCondition() {
+    let form = this.metalReturnDetailsForm.value;
+    this.stockCodeData.WHERECONDITION = `@strBranchCode='${this.comService.nullToString(form.BRANCH_CODE)}',`
+    this.stockCodeData.WHERECONDITION += `@strSubJobNumber='${this.comService.nullToString(form.subJobNo)}',`
+    this.stockCodeData.WHERECONDITION += `@strWorkerCode='${this.comService.nullToString(form.workerCode)}',`
+    this.stockCodeData.WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
+  }
 
   stoneValidate() {
     if (this.calculateNetWt()) {

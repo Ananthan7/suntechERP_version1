@@ -93,7 +93,7 @@
                                     <master-search class="masterSearch"
                                         [MasterSearchData]="MeltingCodeData"
                                         #overlayMeltingType
-                                        *ngIf="!viewMode"
+                                        *ngIf="!isFieldsReadonly"
                                         (newRowClick)="MeltingCodeSelected($event)"></master-search>
                                 </mat-form-field>
 
@@ -117,7 +117,7 @@
                                         (focusout)="jobNumberValidate($event)" />
                                     <master-search class="masterSearch"
                                         [MasterSearchData]="jobnoCodeData"
-                                        *ngIf="isJobNumberSearchVisible && !viewMode"
+                                        *ngIf="isJobNumberSearchVisible && !isFieldsReadonly"
                                         #overlayjobNoSearch
                                         (newRowClick)="jobnoCodeSelected($event)"></master-search>
                                 </mat-form-field>
