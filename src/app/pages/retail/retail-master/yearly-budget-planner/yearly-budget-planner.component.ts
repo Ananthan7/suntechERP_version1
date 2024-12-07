@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
@@ -33,6 +33,8 @@ export class YearlyBudgetPlannerComponent implements OnInit {
   editMode: boolean = false;
   branch_code:any;
   lastsr = 0;
+  prefixcode = new FormControl('');
+  @ViewChild('branch_code') codeInput!: ElementRef;
 
 
   constructor(
@@ -48,12 +50,12 @@ export class YearlyBudgetPlannerComponent implements OnInit {
   ) { }
 
   yearlybudgetform: FormGroup = this.formBuilder.group({
-    branchcode: [""],
-    date_from: [''],
-    finyear: [''],
-    dateto: [''],
+    branchcode: ["",[Validators.required]],
+    date_from: ['',[Validators.required]],
+    finyear: ['',[Validators.required]],
+    dateto: ['',[Validators.required]],
     narration: [''],
-    datefrom: [''],
+    datefrom: ['',[Validators.required]],
     description: [{value: '', disabled: true}],
     increase: [''],
   })
@@ -71,6 +73,13 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     }
     if(this.flag == 'EDIT' || this.flag == "DELETE"){
       this.editMode = true;
+    }
+  }
+
+
+  ngAfterViewInit() {
+    if (this.codeInput && this.flag == undefined) {
+      this.codeInput.nativeElement.focus();
     }
   }
 

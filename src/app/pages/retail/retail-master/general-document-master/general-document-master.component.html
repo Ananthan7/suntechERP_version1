@@ -20,7 +20,7 @@
                                     Code :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput id="code" formControlName="code"
+                                        <input type="text" #codeInput id="codeInput" matInput id="code" formControlName="code"
                                             UpperCaseDirective [readonly]="viewOnly || codeedit" autocomplete="off"
                                             (focusout)="checkcode()" />
                                         <mat-error *ngIf="generaldocumentform.controls['code'].hasError('required')">
@@ -34,7 +34,7 @@
                                     Description :</label>
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput id="description" matInput
+                                        <input type="text" #codedesc id="description" matInput
                                             formControlName="description" [readonly]="viewOnly" autocomplete="off"
                                             (focusout)="checkdesc()" />
                                         <mat-error

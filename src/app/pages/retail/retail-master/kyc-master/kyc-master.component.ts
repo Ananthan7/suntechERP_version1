@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { log } from 'console';
 import { Subscription } from 'rxjs';
@@ -25,6 +25,10 @@ export class KycMasterComponent implements OnInit {
   dyndatas:any;
   disable_code:boolean = false;
   editMode:boolean = false;
+  prefixcode = new FormControl('');
+  @ViewChild('kyccode') kyccodeInput!: ElementRef;
+  doc_codes :any[]=[];
+
 
 
   constructor(
@@ -59,14 +63,17 @@ export class KycMasterComponent implements OnInit {
   }
   
   selectedcodetype(e: any,data:any) {
-    console.log(data);
-    console.log(e);
     const updatedSRNO = data.data.KYC_SRNO - 1; 
-    console.log(updatedSRNO)
-    this.maindetails[updatedSRNO].KYC_DOCTYPE = e.GENMST_CODE;
-    this.maindetails[updatedSRNO].KYC_DOCDESC = e.GENMST_DESC;
-    console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].GENMST_CODE);
-    console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].GENMST_DESC);
+    if (this.doc_codes.includes(e.GENMST_CODE)) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Duplicate Code',
+      });
+    } else {
+      this.doc_codes.push(e.GENMST_CODE);
+      this.maindetails[updatedSRNO].KYC_DOCTYPE = e.GENMST_CODE;
+      this.maindetails[updatedSRNO].KYC_DOCDESC = e.GENMST_DESC;
+    }   
   }
 
   ngOnInit(): void {
@@ -88,6 +95,13 @@ export class KycMasterComponent implements OnInit {
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.kyc_id);
+    }
+  }
+
+  ngAfterViewInit() {
+
+    if (this.kyccodeInput && this.flag == undefined) {
+      this.kyccodeInput.nativeElement.focus();
     }
   }
 
