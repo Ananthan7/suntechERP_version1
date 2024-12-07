@@ -588,6 +588,8 @@ export class EmployeeMasterComponent implements OnInit {
       "EmployeeMaster/GetEmployeeMasterDetail/" + this.content.EMPMST_CODE;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
+        console.log(result.response);
+        
         this.commonService.closeSnackBarMsg();
         this.employeeMasterForm.controls.DOB.setValue(
           result.response.EMPMST_DOB
@@ -627,7 +629,7 @@ export class EmployeeMasterComponent implements OnInit {
       this.content.EMPMST_NATIONALITY_CODE
     );
     this.employeeMasterForm.controls.Religion.setValue(
-      this.content.EMPMST_NATIONALITY_CODE
+      this.content.EMPMST_RELIGION_CODE
     );
     this.employeeMasterForm.controls.DOB.setValue(this.content.EMPMST_DOB);
     console.log(this.content.EMPMST_BLOOD_GROUP.toString());
@@ -693,6 +695,9 @@ export class EmployeeMasterComponent implements OnInit {
     this.employeeMasterForm.controls.PRLand.setValue(
       this.content.EMPMST_TEL_LAND_PR
     );
+    this.employeeMasterForm.controls.BranchDes.setValue(
+      this.content.EMPMST_BRANCH_DESC
+    );
   }
 
   setPostData() {
@@ -708,6 +713,7 @@ export class EmployeeMasterComponent implements OnInit {
       EMPMST_DEPT_CODE: this.commonService.nullToString(form.Department),
       EMPMST_DESG_CODE: this.commonService.nullToString(form.Designation),
       EMPMST_DEDACCCODE: this.commonService.nullToString(form.GroupCode),
+      EMPMST_BRANCH_DESC :this.commonService.nullToString(form.BranchDes), 
       EMPMST_EMPSUBLEDGERAC: "str",
       EMPMST_PICPATH: "str",
       EMPMST_SIGNPATH: "str",
