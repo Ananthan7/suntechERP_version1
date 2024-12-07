@@ -18,7 +18,7 @@
                         <div class="col-md-4 p-0">
                             <mat-form-field style="width: 100%" appearance="outline">
                                 <input type="text" #codeInput matInput #ref_code id="ref_code" formControlName="ref_code" UpperCaseDirective
-                                    autocomplete="off" (focusout)="checkcode()" />
+                                    autocomplete="off" (focusout)="checkcode()" (change)="isexistingcode()" />
                                 <mat-error *ngIf="transactionform.controls['ref_code'].hasError('required')">
                                     Code is required.
                                 </mat-error>

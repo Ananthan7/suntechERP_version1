@@ -99,6 +99,17 @@ export class MetalReturnDetailsComponent implements OnInit {
     FRONTENDFILTER: true
 
   }
+  returnToCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   // stockCodeData: MasterSearchModel = {
   //   PAGENO: 1,
   //   RECORDS: 10,
@@ -188,6 +199,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     BRANCH_CODE: [''],
     YEARMONTH: [''],
     KARAT_CODE: [''],
+    DIVISION_CODE: [''],
     DIVCODE: [''],
     METAL_STONE: [''],
     UNQ_JOB_ID: [''],
@@ -417,7 +429,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   }
   ReturnTostockCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(e.STOCK_CODE);
-    this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(e.STOCKDESC);
+    this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(e.DESCRIPTION.toUpperCase());
     this.setLookup201WhereCondition()
     // this.setLookupStockCodeWhereCondition();
   }
@@ -819,6 +831,7 @@ export class MetalReturnDetailsComponent implements OnInit {
             this.metalReturnDetailsForm.controls.PURE_WT.setValue(data.PUREWT);
             this.metalReturnDetailsForm.controls.PURITY.setValue(data.PURITY);
             this.metalReturnDetailsForm.controls.GROSS_WT.setValue(data.METAL);
+            this.metalReturnDetailsForm.controls.DIVISION_CODE.setValue(data.DIVCODE);
             this.metalReturnDetailsForm.controls.NET_WT.setValue(data.NETWT);
             this.metalReturnDetailsForm.controls.pcs.setValue(data.PCS);
             this.setValueWithDecimal('PURE_WT', data.PUREWT, 'THREE')
@@ -842,40 +855,49 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-
   toreturnstockcodevalidate(event?: any) {
-    this.showOverleyPanel(event, 'ReturnToStockCode'); // Show overlay panel initially
-
+    this.showOverleyPanel(event, 'ReturnToStockCode'); // Show the lookup panel initially
+  
     const postData = {
       SPID: "180",
       parameter: {
         StockCode: this.metalReturnDetailsForm.value.stockCode,
         KaratCode: this.metalReturnDetailsForm.value.KARAT_CODE,
-        Division: this.metalReturnDetailsForm.value.DIVCODE,
+        Division: this.metalReturnDetailsForm.value.DIVISION_CODE,
       }
     };
-
+  
     const Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-      .subscribe((result) => {
-        this.comService.closeSnackBarMsg();
-
-        if (result.dynamicData && result.dynamicData[0].length > 0) {
-          console.log("Validation successful:", result.dynamicData[0]);
-
-          this.overlayReturnToStockCodeSearch.closeOverlayPanel();
-        } else {
-          this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue('');
-          this.overlayReturnToStockCodeSearch.closeOverlayPanel(); // Close overlay for correction
-          this.comService.toastErrorByMsgId('Invalid Stock Code');
+      .subscribe(
+        (result) => {
+          this.comService.closeSnackBarMsg();
+  
+          if (result.dynamicData && result.dynamicData[0].length > 0) {
+            let data = result.dynamicData[0];
+            console.log(data, 'data');
+  
+            if (data && data[0]) {
+              this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(data[0].STOCK_CODE);
+              this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(data[0].DESCRIPTION.toUpperCase());
+            }
+          } else {
+            // Invalid data handling
+            this.overlayReturnToStockCodeSearch.closeOverlayPanel(); // Ensure it's closed first
+            this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue('');
+            this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue('');
+            this.comService.toastErrorByMsgId('Invalid Stock Code');
+            
+          }
+        },
+        (err) => {
+          this.comService.closeSnackBarMsg();
+          this.comService.toastErrorByMsgId('Error validating Stock Code'); // Error toast
         }
-      }, err => {
-        this.comService.closeSnackBarMsg();
-        this.comService.toastErrorByMsgId('Error validating Stock Code'); // Show error if request fails
-      });
-
+      );
+  
     this.subscriptions.push(Sub);
   }
-
+  
 
   subJobNumberValidate(event?: any) {
     let postData = {
@@ -1034,7 +1056,7 @@ export class MetalReturnDetailsComponent implements OnInit {
               // Handle the valid stock case
               // You can set other form values or perform other actions here if needed
               // this.overlaystockCodeSearch.closeOverlayPanel();
-              this.toreturnstockcodevalidate()
+              // this.toreturnstockcodevalidate()
             } else {
               this.comService.toastErrorByMsgId('MSG1531');
               this.metalReturnDetailsForm.controls.stockCode.setValue('');
@@ -1080,6 +1102,9 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.metalReturnDetailsForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
           if (FORMNAME === 'location') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          if (FORMNAME === 'ReturnToStockCode') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return

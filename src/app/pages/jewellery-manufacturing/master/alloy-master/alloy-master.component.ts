@@ -28,6 +28,7 @@ export class AlloyMasterComponent implements OnInit {
   @ViewChild('overlaycurrencySearch') overlaycurrencySearch!: MasterSearchComponent;
   @ViewChild('overlayhsncodeSearch') overlayhsncodeSearch!: MasterSearchComponent;
   @ViewChild('overlayvendorSearch') overlayvendorSearch!: MasterSearchComponent;
+  @ViewChild('overlayPriceScheme') overlayPriceScheme!: MasterSearchComponent;
 
   @ViewChild('overlayprice1codeSearch') overlayprice1codeSearch!: MasterSearchComponent;
   @ViewChild('overlayprice2codeSearch') overlayprice2codeSearch!: MasterSearchComponent;
@@ -689,9 +690,36 @@ export class AlloyMasterComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.alloyMastereForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          this.showOverleyPanel(event, FORMNAME)
           return
         }
         this.alloyMasterFormChecks(FORMNAME)// for validations
+        if(FORMNAME == 'priceScheme'){
+
+          let postData = {
+            "SPID": "066",
+            "parameter": {
+              "PRICE_SCHEME_CODE": this.alloyMastereForm.value.priceScheme,
+            }
+          }
+          // if(this.alloyMastereForm.value.price5code.length > 0) return
+          let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+            .subscribe((result) => {
+              if (result.status == "Success") {
+                this.priceSchemeDetails = result.dynamicData[0] || []
+                if (this.priceSchemeDetails?.length > 0) {
+                  this.resetAllPriceDetails();
+                  this.fillPriceSchemeDetails();
+                } else {
+                  this.commonService.toastErrorByMsgId('MSG1531')
+                }
+
+              }
+            }, err => {
+              this.commonService.toastErrorByMsgId('MSG1531')
+            })
+          this.subscriptions.push(Sub)
+        }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG1531')
       })

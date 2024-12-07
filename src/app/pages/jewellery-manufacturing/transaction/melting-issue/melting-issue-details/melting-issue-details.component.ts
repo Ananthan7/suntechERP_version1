@@ -600,6 +600,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
             this.meltingIssuedetailsFrom.controls.stockdes.setValue(data.DESCRIPTION);
             this.meltingIssuedetailsFrom.controls.mainstock.setValue(data.MAIN_STOCK_CODE.toUpperCase());
             this.meltingIssuedetailsFrom.controls.purity.setValue(data.PURITY);
+            this.setValueWithDecimal('purity', data.PURITY, 'PURITY')
           }
 
         } else {

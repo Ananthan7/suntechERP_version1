@@ -19,7 +19,7 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     todate: [''],
     templateName: [''],
 
-    transaction: [0],
+    transaction: [''],
     groupByMetal: [''],
     groupByDiamond: ['']
   
@@ -32,12 +32,37 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
   isLoading: boolean = false;
-  salesGridArr: any = [];
-  stockGridArr: any = [];
-  diamonSalesGridArr: any = [];
+  metalSalesGridArr: any = [];
+  metalStockGridArr: any = [];
+  diamondSalesGridArr: any = [];
   physicalStockGridArr: any = [];
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
+
+  options = [
+    { value: 0, label: 'Sales' },
+    { value: 1, label: 'Sales Returns' },
+    { value: 2, label: 'Net Sales' },
+  ];
+  groupByMetalArr = [
+    { value: 'Type', label: 'Type' },
+    { value: 'Karat', label: 'Karat' },
+    { value: 'Brand', label: 'Brand' },
+    { value: 'Country', label: 'Country' },
+    { value: 'Stock Code', label: 'Stock Code' },
+    { value: 'Category', label: 'Category' },
+    { value: 'Cost Code', label: 'Cost Code' },
+  ]
+  groupByDiamondArr = [
+    { value: 'Type', label: 'Type' },
+    { value: 'Category', label: 'Category' },
+    { value: 'Sub Category', label: 'Sub Category' },
+    { value: 'Brand', label: 'Brand' },
+    { value: 'Country', label: 'Country' },
+    { value: 'Design', label: 'Design' },
+    { value: 'Stock Code', label: 'Stock Code' },
+    { value: 'Cost Code', label: 'Cost Code' },
+  ]
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private datePipe: DatePipe,
     private dataService: SuntechAPIService, private commonService: CommonServiceService,  private toastr: ToastrService,
@@ -45,7 +70,7 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
 
   ngOnInit(): void {
     this.prefillScreenValues();
-   
+    this.gridAPI();
   }
 
   close(data?: any) {
@@ -151,15 +176,17 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
   gridAPI(){
     this.isLoading = true;
     let APIurl = "PosSalesAndStockComparison";
+
+    // const branchSelectionlastElement = this.POS_Sales_Stock_ComparisonForm.controls.branch.value.split('#').pop()!.replace('#', '');
+    // const formatterBranches = this.POS_Sales_Stock_ComparisonForm.controls.branch.value.slice(0, -1) + branchSelectionlastElement;
+
     let postData = {
-      "parameter": {
         "frmDate": this.dateToPass.fromDate,
         "toDate": this.dateToPass.toDate,
         "strBranch": this.POS_Sales_Stock_ComparisonForm.controls.branch.value,
         "mtlType": this.POS_Sales_Stock_ComparisonForm.controls.groupByMetal.value,
         "diaType": this.POS_Sales_Stock_ComparisonForm.controls.groupByDiamond.value,
         "transaction": Math.floor(this.POS_Sales_Stock_ComparisonForm.controls.transaction.value || 0)
-      }
     }
 
     this.commonService.showSnackBarMsg('MSG81447');
@@ -176,6 +203,19 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
         return
       }
       else{
+        this.metalSalesGridArr = response.dtMtlSales;
+
+
+        this.metalStockGridArr = response.dtMtlStock;
+
+
+        this.diamondSalesGridArr = response.dtDiaSales;
+
+
+        this.physicalStockGridArr = response.dtDiaStock;
+
+
+        console.log(this.metalSalesGridArr , this.metalStockGridArr,    this.diamondSalesGridArr,   this.physicalStockGridArr)
         this.isLoading = false;
       }
     })
@@ -235,6 +275,10 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
         fromDate:  this.formatDateToYYYYMMDD(new Date()),
         toDate: this.formatDateToYYYYMMDD(new Date()),
       };
+
+      this.POS_Sales_Stock_ComparisonForm.controls.transaction.setValue(this.options[0].value);
+      this.POS_Sales_Stock_ComparisonForm.controls.groupByMetal.setValue(this.groupByMetalArr[0].value);
+      this.POS_Sales_Stock_ComparisonForm.controls.groupByDiamond.setValue(this.groupByDiamondArr[0].value);
     }
   }
 
