@@ -33,7 +33,7 @@
                       <mat-form-field style="width: 100%" appearance="outline">
                         <input
                           [maxlength]="6"
-                          [readonly]="flag === 'VIEW'"
+                          [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                           matInput
                           type="text"
                           formControlName="code"

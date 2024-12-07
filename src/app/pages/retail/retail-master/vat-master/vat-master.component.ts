@@ -72,11 +72,64 @@ export class VatMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
 
-  expenseHsnOrSacAllocationData: any[] = [];
+  // expenseHsnSacAllocationData: any[] = [];
+  expenseHsnSacAllocationData: any[] = [
+    {
+      SN: 1,
+      EXPENSE_ACCODE: "A001",
+      EXPENSE_ACCODE_DESC: "Office Supplies",
+      HSN_SAC_CODE: "1234",
+      HSN_SAC_DESC: "Stationery",
+      TAX_REG: true,
+      REVERSECHARGE_UNREG: false,
+      ELIGIBLE_INPUTCREDIT: true,
+    },
+    {
+      SN: 2,
+      EXPENSE_ACCODE: "B002",
+      EXPENSE_ACCODE_DESC: "Travel Expenses",
+      HSN_SAC_CODE: "5678",
+      HSN_SAC_DESC: "Airfare",
+      TAX_REG: false,
+      REVERSECHARGE_UNREG: true,
+      ELIGIBLE_INPUTCREDIT: false,
+    },
+    {
+      SN: 3,
+      EXPENSE_ACCODE: "C003",
+      EXPENSE_ACCODE_DESC: "Consultancy Fees",
+      HSN_SAC_CODE: "9101",
+      HSN_SAC_DESC: "Legal Services",
+      TAX_REG: true,
+      REVERSECHARGE_UNREG: false,
+      ELIGIBLE_INPUTCREDIT: true,
+    },
+    {
+      SN: 4,
+      EXPENSE_ACCODE: "D004",
+      EXPENSE_ACCODE_DESC: "Miscellaneous Expenses",
+      HSN_SAC_CODE: "1122",
+      HSN_SAC_DESC: "Miscellaneous",
+      TAX_REG: false,
+      REVERSECHARGE_UNREG: true,
+      ELIGIBLE_INPUTCREDIT: false,
+    },
+    {
+      SN: 5,
+      EXPENSE_ACCODE: "E005",
+      EXPENSE_ACCODE_DESC: "Training and Development",
+      HSN_SAC_CODE: "3344",
+      HSN_SAC_DESC: "Workshops",
+      TAX_REG: true,
+      REVERSECHARGE_UNREG: false,
+      ELIGIBLE_INPUTCREDIT: true,
+    },
+  ];
+
   costCenterAccountData: any[] = [];
-  accountDateWiseGstDetailsData: any[] = [];
-  costCenterSelectedRowIndex: any;
-  expenseSelectedRowIndex: any;
+  accountSettingDateWiseVatDetailsData: any[] = [];
+  selectedRowFromCostCenterAccount: any;
+  selectedRowFromExpenseHasSacAllocation: any;
   flag: any;
   code: any;
   dialogBox: any;
@@ -238,25 +291,15 @@ export class VatMasterComponent implements OnInit {
     FRONTENDFILTER: true,
   };
 
-  costCenterAccountColumnHeadings: any[] = [
+  accountSettingDateWiseVatDetailsColumnHeadings: any[] = [
     { field: "SRNO", caption: "SRNO" },
-    { field: "COST_CODE", caption: "COSTCENTER" },
-    { field: "GPC_ACCODE", caption: "GPC_ACCODE" },
-    { field: "GPC_ACCODE_DESC", caption: "GPC_ACCODE_DESC" },
-    { field: "HSN_SAC_CODE", caption: "HSN_SAC_CODE" },
-    { field: "HSN_SAC_DESC", caption: "HSN_SAC_DESC" },
-    { field: "TAX_REG", caption: "TAX_REG" },
-    { field: "REVERSECHARGE_UNREG", caption: "REVERSECHARGE_UNREG" },
-    { field: "ELIGIBLE_INPUTCREDIT", caption: "ELIGIBLE_INPUTCREDIT" },
-  ];
-
-  accountDateWiseGstDetailsColumnHeadings: any[] = [
-    { field: "SRNO", caption: "SRNo" },
-    { field: "GST_CODE", caption: "GST Code" },
-    { field: "GST_DATE", caption: "DATE" },
-    { field: "GST_PER", caption: "GST PER" },
+    { field: "VAT_CODE", caption: "VAT Code" },
+    { field: "VAT_PER", caption: "VAT PER" },
+    { field: "VAT_DATE", caption: "DATE" },
     { field: "YEARCODE", caption: "YEAR MONTH" },
   ];
+
+  expenseHsnSearchData: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -478,9 +521,9 @@ export class VatMasterComponent implements OnInit {
   }
 
   vatMasterMainFormSubmit() {
-    console.log(this.accountDateWiseGstDetailsData);
+    console.log(this.accountSettingDateWiseVatDetailsData);
     console.log(this.costCenterAccountData);
-    console.log(this.expenseHsnOrSacAllocationData);
+    console.log(this.expenseHsnSacAllocationData);
 
     Object.keys(this.vatMasterMainForm.controls).forEach((controlName) => {
       const control = this.vatMasterMainForm.controls[controlName];
@@ -542,31 +585,35 @@ export class VatMasterComponent implements OnInit {
           this.vatMasterMainForm.value.impRcmCtrlAccDebit || "",
         POSVATREFUND_DEBIT_ACCODE:
           this.vatMasterMainForm.value.posVatAccDebit || "",
-        vatMasterGst: this.costCenterAccountData.map((item) => ({
-          UNIQUEID: 0,
-          SN: item.SRNO || 0,
-          GST_CODE: this.vatMasterMainForm.value.vatCode || "",
-          GST_DESCRIPTION: this.vatMasterMainForm.value.vatDesc || "",
-          GST_PER: 0,
-          EXPENSE_ACCODE: item.EXPENSE_ACCODE || "",
-          EXPENSE_ACCODE_DESC: item.EXPENSE_ACCODE_DESC || "",
-          HSN_SAC_CODE: item.HSN_SAC_CODE || "",
-          HSN_SAC_DESC: item.HSN_SAC_DESC || "",
-          TAX_REG: item.TAX_REG,
-          REVERSECHARGE_UNREG: item.REVERSECHARGE_UNREG,
-          ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT,
-          EXPENSE_ACCTYPE: "str",
-          COST_CODE: item.COST_CODE,
-        })),
-        VatMasterDetails: this.expenseHsnOrSacAllocationData.map((item) => ({
-          BRANCH_CODE: this.branchCode,
-          UNIQUEID: 0,
-          SRNO: Number(item.SRNO) || 0,
-          VAT_CODE: this.vatMasterMainForm.value.vatCode || "",
-          VAT_PER: Number(this.vatMasterMainForm.value.vatPercent),
-          YEARCODE: item.YEARCODE || "",
-          VAT_DATE: new Date(),
-        })),
+        vatMasterGst:
+          this.costCenterAccountData &&
+          this.expenseHsnSacAllocationData.map((item) => ({
+            UNIQUEID: 0,
+            SN: item.SN || 0,
+            GST_CODE: this.vatMasterMainForm.value.vatCode,
+            GST_DESCRIPTION: this.vatMasterMainForm.value.vatDesc,
+            GST_PER: Number(item.VAT_PER) || 0,
+            EXPENSE_ACCODE: item.EXPENSE_ACCODE || "",
+            EXPENSE_ACCODE_DESC: item.EXPENSE_ACCODE_DESC || "",
+            HSN_SAC_CODE: item.HSN_SAC_CODE || "",
+            HSN_SAC_DESC: item.HSN_SAC_DESC || "",
+            TAX_REG: item.TAX_REG,
+            REVERSECHARGE_UNREG: item.REVERSECHARGE_UNREG,
+            ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT,
+            EXPENSE_ACCTYPE: this.costCenterAccountData ? "GPC" : "",
+            COST_CODE: this.costCenterAccountData ? item.COST_CODE : "",
+          })),
+        VatMasterDetails: this.accountSettingDateWiseVatDetailsData.map(
+          (item) => ({
+            BRANCH_CODE: this.branchCode,
+            UNIQUEID: 0,
+            SRNO: Number(item.SRNO) || 0,
+            VAT_CODE: item.VAT_CODE || "",
+            VAT_PER: Number(item.VAT_PER),
+            YEARCODE: item.YEARCODE || "",
+            VAT_DATE: this.formatDate(item.VAT_DATE) || new Date(),
+          })
+        ),
       };
 
       if (this.flag === "EDIT") {
@@ -614,7 +661,9 @@ export class VatMasterComponent implements OnInit {
             } else {
               Swal.fire({
                 title: "Failed",
-                text: "Not Inserted Successfully",
+                text: result.message
+                  ? result.message
+                  : "Not Inserted Successfully",
                 icon: "error",
                 confirmButtonColor: "#336699",
                 confirmButtonText: "Ok",
@@ -850,57 +899,58 @@ export class VatMasterComponent implements OnInit {
     }
   }
 
+  selectingRowFromExpenseHsnSacAllocationData(values: any) {
+    let indexes: number[] = [];
+
+    // Find the indexes of the selected rows
+    this.expenseHsnSacAllocationData.forEach(
+      (value: { SN: string }, index: number) => {
+        if (values.includes(parseFloat(value.SN))) {
+          indexes.push(index);
+        }
+      }
+    );
+
+    this.selectedRowFromExpenseHasSacAllocation = indexes;
+    console.log(
+      "Selected Row Indexes:",
+      this.selectedRowFromExpenseHasSacAllocation
+    );
+  }
+
+  selectingRowFromcostCenterAccountData(values: any) {
+    let indexes: number[] = [];
+
+    // Find the indexes of the selected rows
+    this.costCenterAccountData.forEach(
+      (value: { SN: string }, index: number) => {
+        if (values.includes(parseFloat(value.SN))) {
+          indexes.push(index);
+        }
+      }
+    );
+
+    this.selectedRowFromCostCenterAccount = indexes;
+    console.log("Selected Row Indexes:", this.selectedRowFromCostCenterAccount);
+  }
+
   onSelectionChanged(event: any, TAB: any) {
     let values = event.selectedRowKeys;
     console.log("Selected Row Keys:", values);
-
-    switch (TAB) {
-      case "Expense HSN/SAC Allocation":
-        let indexesE: number[] = [];
-
-        // Find the indexes of the selected rows
-        this.expenseHsnOrSacAllocationData.forEach(
-          (value: { SRNO: string }, index: number) => {
-            if (values.includes(parseFloat(value.SRNO))) {
-              indexesE.push(index);
-            }
-          }
-        );
-
-        this.expenseSelectedRowIndex = indexesE;
-        console.log("Selected Row Indexes:", this.expenseSelectedRowIndex);
-        break;
-
-      case "Cost Center Account":
-        let indexesC: number[] = [];
-
-        // Find the indexes of the selected rows
-        this.costCenterAccountData.forEach(
-          (value: { SRNO: string }, index: number) => {
-            if (values.includes(parseFloat(value.SRNO))) {
-              indexesC.push(index);
-            }
-          }
-        );
-
-        this.costCenterSelectedRowIndex = indexesC;
-        console.log("Selected Row Indexes:", this.costCenterSelectedRowIndex);
-        break;
-
-      default:
-        break;
-    }
+    return TAB === 1
+      ? this.selectingRowFromExpenseHsnSacAllocationData(values)
+      : this.selectingRowFromcostCenterAccountData(values);
   }
 
   updateField(data: any, value: any, field: string): void {
-    const rowIndex = value?.data?.SRNO - 1;
-    if (rowIndex >= 0 && this.expenseHsnOrSacAllocationData[rowIndex]) {
+    const rowIndex = value?.data?.SN - 1;
+    if (rowIndex >= 0 && this.expenseHsnSacAllocationData[rowIndex]) {
       if (typeof data === "object" && data.target) {
         console.log("Input value:", data.target.value);
-        this.expenseHsnOrSacAllocationData[rowIndex][field] = data.target.value;
+        this.expenseHsnSacAllocationData[rowIndex][field] = data.target.value;
       } else {
         console.log("Data:", data);
-        this.expenseHsnOrSacAllocationData[rowIndex][field] = data;
+        this.expenseHsnSacAllocationData[rowIndex][field] = data;
       }
     } else {
       console.warn("Invalid row index or data row missing:", rowIndex);
@@ -915,179 +965,126 @@ export class VatMasterComponent implements OnInit {
     });
   }
 
+  addingRowInCostCenterAccount() {
+    if (
+      this.costCenterAccountData.length > 0 &&
+      !this.costCenterAccountData[this.costCenterAccountData.length - 1]
+        .GPC_ACCODE
+    ) {
+      const message = `GPC Accode Cannot Be Empty!`;
+      this.openDialog("Warning", message, true);
+      return;
+    }
+
+    const newRow = {
+      SN:
+        this.costCenterAccountData.length > 0
+          ? this.costCenterAccountData[this.costCenterAccountData.length - 1]
+              .SN + 1
+          : 1,
+      COST_CODE: "",
+      GPC_ACCODE: "",
+      GPC_ACCODE_DESC: "",
+      HSN_SAC_CODE: "",
+      HSN_SAC_DESC: "",
+      TAX_REG: false,
+      REVERSECHARGE_UNREG: false,
+      ELIGIBLE_INPUTCREDIT: false,
+    };
+
+    this.costCenterAccountData = [...this.costCenterAccountData, newRow];
+  }
+  addingRowInExpenseHsnSacAllocation() {
+    if (
+      this.expenseHsnSacAllocationData.length > 0 &&
+      !this.expenseHsnSacAllocationData[
+        this.expenseHsnSacAllocationData.length - 1
+      ].EXPENSE_ACCODE
+    ) {
+      const message = `Expense Accode Cannot Be Empty!`;
+      this.openDialog("Warning", message, true);
+      return;
+    }
+
+    const newRow = {
+      SN:
+        this.expenseHsnSacAllocationData.length > 0
+          ? this.expenseHsnSacAllocationData[
+              this.expenseHsnSacAllocationData.length - 1
+            ].SN + 1
+          : 1,
+      EXPENSE_ACCODE: "",
+      EXPENSE_ACCODE_DESC: "",
+      HSN_SAC_CODE: "",
+      HSN_SAC_DESC: "",
+      TAX_REG: false,
+      REVERSECHARGE_UNREG: false,
+      ELIGIBLE_INPUTCREDIT: false,
+    };
+
+    this.expenseHsnSacAllocationData = [
+      ...this.expenseHsnSacAllocationData,
+      newRow,
+    ];
+  }
+
   addRowFunc(TAB: any) {
-    console.log(TAB);
-    let message =
-      TAB === "Cost Center Account"
-        ? `GPC Code cannot be empty`
-        : `Expense Account Code cannot be empty`;
+    return TAB === 1
+      ? this.addingRowInExpenseHsnSacAllocation()
+      : this.addingRowInCostCenterAccount();
+  }
 
-    switch (TAB) {
-      case "Cost Center Account":
-        if (
-          this.costCenterAccountData.length > 0 &&
-          !this.costCenterAccountData[this.costCenterAccountData.length - 1]
-            .EXPENSE_ACCODE
-        ) {
-          this.openDialog("Warning", message, true);
-          return;
-        }
+  deletingRowFromExpenseHsnSacAllocation() {
+    if (
+      this.selectedRowFromExpenseHasSacAllocation &&
+      this.selectedRowFromExpenseHasSacAllocation.length > 0
+    ) {
+      // Delete rows using selected indexes
+      this.expenseHsnSacAllocationData =
+        this.expenseHsnSacAllocationData.filter(
+          (_: any, index: any) =>
+            !this.selectedRowFromExpenseHasSacAllocation.includes(index)
+        );
 
-        const newRowC = {
-          SRNO:
-            this.costCenterAccountData.length > 0
-              ? this.costCenterAccountData[
-                  this.costCenterAccountData.length - 1
-                ].SRNO + 1
-              : 1,
-          COST_CODE: "",
-          GPC_ACCODE: "",
-          GPC_ACCODE_DESC: "",
-          HSN_SAC_CODE: "",
-          HSN_SAC_DESC: "",
-          TAX_REG: false,
-          REVERSECHARGE_UNREG: false,
-          ELIGIBLE_INPUTCREDIT: false,
-        };
+      console.log("Rows deleted successfully");
+      this.selectedRowFromExpenseHasSacAllocation = []; // Reset the selected row index array
+    } else {
+      console.log("No row selected to delete");
+    }
+  }
+  deletingRowFromCostCenterAccount() {
+    if (
+      this.selectedRowFromCostCenterAccount &&
+      this.selectedRowFromCostCenterAccount.length > 0
+    ) {
+      // Delete rows using selected indexes
+      this.costCenterAccountData = this.costCenterAccountData.filter(
+        (_: any, index: any) =>
+          !this.selectedRowFromCostCenterAccount.includes(index)
+      );
 
-        this.costCenterAccountData = [...this.costCenterAccountData, newRowC];
-
-        console.log(this.expenseHsnOrSacAllocationData);
-
-        break;
-
-      case "Expense HSN/SAC Allocation":
-        if (
-          this.expenseHsnOrSacAllocationData.length > 0 &&
-          !this.expenseHsnOrSacAllocationData[
-            this.expenseHsnOrSacAllocationData.length - 1
-          ].EXPENSE_ACCODE
-        ) {
-          this.openDialog("Warning", message, true);
-          return;
-        }
-
-        const newRowE = {
-          SRNO:
-            this.expenseHsnOrSacAllocationData.length > 0
-              ? this.expenseHsnOrSacAllocationData[
-                  this.expenseHsnOrSacAllocationData.length - 1
-                ].SRNO + 1
-              : 1,
-          EXPENSE_ACCODE: "",
-          EXPENSE_ACCODE_DESC: "",
-          HSN_SAC_CODE: "",
-          HSN_SAC_DESC: "",
-          TAX_REG: false,
-          REVERSECHARGE_UNREG: false,
-          ELIGIBLE_INPUTCREDIT: false,
-        };
-
-        this.expenseHsnOrSacAllocationData = [
-          ...this.expenseHsnOrSacAllocationData,
-          newRowE,
-        ];
-
-        console.log(this.expenseHsnOrSacAllocationData);
-
-        break;
-
-      default:
-        break;
+      console.log("Rows deleted successfully");
+      this.selectedRowFromCostCenterAccount = []; // Reset the selected row index array
+    } else {
+      console.log("No row selected to delete");
     }
   }
 
   deleteRowFunc(TAB: any) {
-    switch (TAB) {
-      case "Cost Center Account":
-        if (
-          this.costCenterSelectedRowIndex &&
-          this.costCenterSelectedRowIndex.length > 0
-        ) {
-          // Delete rows using selected indexes
-          this.costCenterAccountData = this.costCenterAccountData.filter(
-            (_: any, index: any) =>
-              !this.costCenterSelectedRowIndex.includes(index)
-          );
-
-          console.log("Rows deleted successfully");
-          this.costCenterSelectedRowIndex = []; // Reset the selected row index array
-        } else {
-          console.log("No row selected to delete");
-        }
-
-        break;
-
-      case "Expense HSN/SAC Allocation":
-        if (
-          this.expenseSelectedRowIndex &&
-          this.expenseSelectedRowIndex.length > 0
-        ) {
-          // Delete rows using selected indexes
-          this.expenseHsnOrSacAllocationData =
-            this.expenseHsnOrSacAllocationData.filter(
-              (_: any, index: any) =>
-                !this.expenseSelectedRowIndex.includes(index)
-            );
-
-          console.log("Rows deleted successfully");
-          this.expenseSelectedRowIndex = []; // Reset the selected row index array
-        } else {
-          console.log("No row selected to delete");
-        }
-
-        break;
-
-      default:
-        break;
-    }
-
-    console.log(TAB);
+    return TAB === 1
+      ? this.deletingRowFromExpenseHsnSacAllocation()
+      : this.deletingRowFromCostCenterAccount();
   }
 
-  expenseSelect(event: any, data: any) {
-    let currentIndex = data.data.SRNO - 1;
-
-    this.expenseHsnOrSacAllocationData[currentIndex].EXPENSE_ACCODE =
-      event.CODE;
-    this.expenseHsnOrSacAllocationData[currentIndex].EXPENSE_ACCODE_DESC =
+  gridDataBinding(event: any, data: any, GridFiled: string[]) {
+    let currentIndex = data.data.SN - 1;
+    this.expenseHsnSacAllocationData[currentIndex][GridFiled[0]] = event.CODE;
+    this.expenseHsnSacAllocationData[currentIndex][GridFiled[1]] =
       event.DESCRIPTION;
-
-    console.log(this.expenseHsnOrSacAllocationData);
   }
 
-  hsnSelect(event: any, data: any) {
-    let currentIndex = data.data.SRNO - 1;
-
-    this.expenseHsnOrSacAllocationData[currentIndex].HSN_SAC_CODE = event.CODE;
-    this.expenseHsnOrSacAllocationData[currentIndex].HSN_SAC_DESC =
-      event.DESCRIPTION;
-
-    console.log(this.expenseHsnOrSacAllocationData);
-  }
-
-  GPCSelect(event: any, data: any) {
-    let currentIndex = data.data.SRNO - 1;
-
-    this.costCenterAccountData[currentIndex].GPC_ACCODE = event.CODE;
-    this.costCenterAccountData[currentIndex].GPC_ACCODE_DESC =
-      event.DESCRIPTION;
-
-    console.log(this.costCenterAccountData);
-  }
-
-  HSNSelect(event: any, data: any) {
-    console.log(data);
-    
-    let currentIndex = data.data.SRNO - 1;
-
-    this.costCenterAccountData[currentIndex].HSN_SAC_CODE = event.CODE;
-    this.costCenterAccountData[currentIndex].HSN_SAC_DESC = event.DESCRIPTION;
-
-    console.log(this.costCenterAccountData);
-  }
-
-  getDatewiseListData() {
+  //First Tab
+  getAccountSettingDatewiseListData() {
     const payload = {
       strDate: new Date(),
       strPer: this.vatMasterMainForm.value.vatPercent,
@@ -1098,16 +1095,18 @@ export class VatMasterComponent implements OnInit {
     this.apiService.postDynamicAPI(API, payload).subscribe(
       (result) => {
         if (result.status.trim() === "Success") {
-          this.accountDateWiseGstDetailsData = result.dynamicData[0].map(
+          console.log(result.dynamicData[0]);
+
+          this.accountSettingDateWiseVatDetailsData = result.dynamicData[0].map(
             (item: any) => ({
-              SRNO: item.SRNO || item.SrNo,
-              GST_CODE: item.GST_CODE || item.VAT_Code,
-              GST_DATE: item.GST_DATE || item.Date,
-              GST_PER: item.GST_PER || item.VAT_Per.toFixed(3),
-              YEARCODE: item.YEARCODE || item.YearMonth,
+              SRNO: item.SrNo,
+              VAT_CODE: item.VAT_Code,
+              VAT_DATE: item.Date,
+              VAT_PER: item.VAT_Per.toFixed(3),
+              YEARCODE: item.YearMonth,
             })
           );
-          console.log(this.accountDateWiseGstDetailsData);
+          console.log(this.accountSettingDateWiseVatDetailsData);
         }
       },
       (err) => {
@@ -1130,7 +1129,7 @@ export class VatMasterComponent implements OnInit {
       }
     }
 
-    const message = "Please enter code first!";
+    const message = "Code must be enter!";
     const GSTCODE = this.vatMasterMainForm.value.vatCode;
     const GSTPERCENT = this.vatMasterMainForm.value.vatPercent;
 
@@ -1142,7 +1141,7 @@ export class VatMasterComponent implements OnInit {
     }
 
     if (GSTCODE && GSTPERCENT) {
-      this.getDatewiseListData();
+      this.getAccountSettingDatewiseListData();
     }
   }
 
@@ -1152,14 +1151,14 @@ export class VatMasterComponent implements OnInit {
       (result) => {
         if (result.status.trim() === "Success") {
           console.log(result.response);
-          this.expenseHsnOrSacAllocationData = result.response.gstMasterGst.map(
+          this.expenseHsnSacAllocationData = result.response.gstMasterGst.map(
             (item: any) => ({
-              SRNO: item.SRNO || item.SN,
+              SN: item.SN || item.SN,
               ...item,
             })
           );
 
-          console.log(this.expenseHsnOrSacAllocationData);
+          console.log(this.expenseHsnSacAllocationData);
         }
       },
       (err) => {
@@ -1178,14 +1177,15 @@ export class VatMasterComponent implements OnInit {
           this.costCenterAccountData = result.dynamicData[0].map(
             (item: any) => ({
               ...item,
-
-              SRNO: item.SRNO || item.SN,
+              SN: item.SRNO,
+              COST_CODE: item.COST_CODE,
+              GPC_ACCODE: item.GPC_ACCODE,
+              GPC_ACCODE_DESC: item.Account_Head,
               TAX_REG: item.TAX_REG == 1,
               REVERSECHARGE_UNREG: item.REVERSECHARGE_UNREG == 1,
               ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT == 1,
               HSN_SAC_CODE: "",
               HSN_SAC_DESC: "",
-              GPC_ACCODE_DESC: item.Account_Head,
             })
           );
 
@@ -1199,9 +1199,27 @@ export class VatMasterComponent implements OnInit {
     );
   }
 
-  getSerachValue() {}
+  getSerachValue(event: any) {
+    let SEARCHVALUE = event.target.value.trim();
 
-  openGPCGrid(data: any, index?:any) {
+    if (!SEARCHVALUE) {
+      return this.getExpenseData();
+    }
+    this.expenseHsnSearchData = this.expenseHsnSacAllocationData.filter(
+      (item: any) =>
+        item.GPC_ACCODE.toLowerCase().startsWith(SEARCHVALUE.toLowerCase())
+    );
+
+    if (this.expenseHsnSearchData.length > 0) {
+      console.log("Matching records:", this.expenseHsnSearchData);
+    } else {
+      console.log("No matching records found.");
+    }
+  }
+
+  getExpenseData() {}
+
+  openGPCGrid(data: any, index?: any) {
     const modalRef: NgbModalRef = this.modalService.open(
       GpcGridComponentComponent,
       {
@@ -1217,12 +1235,13 @@ export class VatMasterComponent implements OnInit {
       (row) => {
         if (row) {
           console.log("Data from modal:", row);
-          let currentIndex = index.data.SRNO - 1;
+          let currentIndex = index.data.SN - 1;
 
-          this.costCenterAccountData[currentIndex].GPC_ACCODE = row[0].GPC_ACCODE;
+          this.costCenterAccountData[currentIndex].GPC_ACCODE =
+            row[0].GPC_ACCODE;
           this.costCenterAccountData[currentIndex].GPC_ACCODE_DESC =
             row[0].Account_Head;
-      
+
           console.log(this.costCenterAccountData);
         }
       },
@@ -1230,5 +1249,14 @@ export class VatMasterComponent implements OnInit {
         console.log("Modal dismissed:", dismissReason);
       }
     );
+  }
+
+  formatDate(inputDate: string): string {
+    const parts = inputDate.split("/");
+    return new Date(
+      +parts[2], // Year
+      +parts[1] - 1, // Month (0-based index)
+      +parts[0] // Day
+    ).toISOString();
   }
 }

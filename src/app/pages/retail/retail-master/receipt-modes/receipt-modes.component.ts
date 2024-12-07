@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -6,6 +6,8 @@ import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
 
 @Component({
@@ -14,14 +16,102 @@ import Swal from "sweetalert2";
   styleUrls: ["./receipt-modes.component.scss"],
 })
 export class ReceiptModesComponent implements OnInit {
+  @ViewChild("overlayAccodeData") overlayAccodeData!: MasterSearchComponent;
+  @ViewChild("overlayCommissionAccount")
+  overlayCommissionAccount!: MasterSearchComponent;
+  @ViewChild("overlayBankCode") overlayBankCode!: MasterSearchComponent;
+  @ViewChild("overlayInputVat") overlayInputVat!: MasterSearchComponent;
+  @ViewChild("overlayOutputVat") overlayOutputVat!: MasterSearchComponent;
+
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
+
+  AccodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      " ACCOUNT_MODE in ('G','B','L') AND AC_OnHold = 0 AND BRANCH_CODE='STRBRANCHCODE'",
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "ACCODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  bankCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      " ACCOUNT_MODE in ('G','B','L') AND AC_OnHold = 0 AND BRANCH_CODE='STRBRANCHCODE'",
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "BANK CODE",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  commisionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      " ACCOUNT_MODE in ('L') AND AC_OnHold = 0 AND BRANCH_CODE='STRBRANCHCODE '",
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "COMMISION",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  inputVatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "  ACCOUNT_MODE in ('L','G')  and BRANCH_CODE = 'STRBRANCHCODE ' AND AC_OnHold = 0 ",
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "INPUT VAT",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  outputVatCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    WHERECONDITION:
+      "  ACCOUNT_MODE in ('L','G')  and BRANCH_CODE = 'STRBRANCHCODE ' AND AC_OnHold = 0 ",
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "OUTPUT VAT",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
 
   flag: any;
   code: any;
   RcmCreditCard!: boolean;
   excludeTax!: boolean;
   LoyaltyItem!: boolean;
+  modeDorpdown!: any[];
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -53,7 +143,10 @@ export class ReceiptModesComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log(this.content);
+    this.modeDorpdown = this.getUniqueValues(
+      this.commonService.getComboFilterByID("Receipt Mode"),
+      "ENGLISH"
+    );
 
     this.flag = this.content
       ? this.content.FLAG
@@ -326,5 +419,165 @@ export class ReceiptModesComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  getUniqueValues(List: any[], field: string) {
+    return List.filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex((t) => t[field] === item[field] && t[field] !== "")
+    );
+  }
+
+  openTab(event: KeyboardEvent, formControlName: string) {
+    const control = this.receiptModesMainForm.get(formControlName);
+    if (
+      (event.key === "Tab" || event.key === "Enter") &&
+      control?.value === "" &&
+      control?.valid
+    ) {
+      this.openPanel(event, formControlName);
+    }
+  }
+
+  openPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case "accode":
+        this.overlayAccodeData.showOverlayPanel(event);
+        break;
+
+      case "commisionAccount":
+        this.overlayCommissionAccount.showOverlayPanel(event);
+        break;
+      case "bank":
+        this.overlayBankCode.showOverlayPanel(event);
+        break;
+      case "inputVat":
+        this.overlayInputVat.showOverlayPanel(event);
+        break;
+
+      case "outputVat":
+        this.overlayOutputVat.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unknown form control name: ${formControlName}`);
+    }
+  }
+
+  lookupSelect(e: any, controller?: any, modelfield?: any) {
+    if (Array.isArray(controller) && Array.isArray(modelfield)) {
+      if (controller.length === modelfield.length) {
+        controller.forEach((ctrl, index) => {
+          const field = modelfield[index];
+          const value = e[field];
+          if (value !== undefined) {
+            this.receiptModesMainForm.controls[ctrl].setValue(value);
+          } else {
+            console.warn(`Model field '${field}' not found in event object.`);
+          }
+        });
+      } else {
+        console.warn(
+          "Controller and modelfield arrays must be of equal length."
+        );
+      }
+    } else if (controller && modelfield) {
+      const value = e[modelfield];
+      if (value !== undefined) {
+        this.receiptModesMainForm.controls[controller].setValue(value);
+      } else {
+        console.warn(`Model field '${modelfield}' not found in event object.`);
+      }
+    } else {
+      console.warn("Controller or modelfield is missing.");
+    }
+  }
+
+  SPvalidateLookupFieldModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAMES: string[],
+    lookupFields?: string[]
+  ) {
+    const searchValue = event.target.value?.trim();
+
+    if (!searchValue || this.flag == "VIEW") return;
+
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.apiService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            console.log("In");
+
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Up");
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+                    this.receiptModesMainForm.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        },
+      });
+
+    this.subscriptions.push(sub);
+  }
+
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FORMNAMES.forEach((formName) => {
+      this.receiptModesMainForm.controls[formName].setValue("");
+    });
   }
 }

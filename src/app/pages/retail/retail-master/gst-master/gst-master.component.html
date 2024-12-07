@@ -31,7 +31,7 @@
                   <input
                     (change)="onInput($event, 'gstCode', true)"
                     UpperCaseDirective
-                    [readonly]="flag === 'VIEW'"
+                    [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                     matInput
                     type="text"
                     formControlName="gstCode"
