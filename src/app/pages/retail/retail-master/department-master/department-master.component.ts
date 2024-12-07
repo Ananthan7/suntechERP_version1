@@ -1,10 +1,12 @@
 import { DatePipe } from "@angular/common";
 import { Component, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
@@ -77,6 +79,8 @@ export class DepartmentMasterComponent implements OnInit {
   @ViewChild("overlayuserDefined15Search")
   overlayuserDefined15Search!: MasterSearchComponent;
 
+  dialogBox: any;
+
   selectedTabIndex = 0;
   tableData: any = [];
   editMode: boolean = false;
@@ -131,15 +135,15 @@ export class DepartmentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 126,
-    SEARCH_FIELD: "CODE",
+    SEARCH_FIELD: "",
     SEARCH_HEADING: "Air Ticket Code",
     SEARCH_VALUE: "",
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
-    FRONTENDFILTER: true,
-  };
+    FRONTENDFILTER: true,
+  };
   GratuityCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -507,7 +511,7 @@ export class DepartmentMasterComponent implements OnInit {
   ];
 
   departmentMasterForm: FormGroup = this.formBuilder.group({
-    code: [""],
+    code: ["",Validators.required],
     Description: [""],
     CountryCode: [""],
     CountryCodeDes: [""],
@@ -584,7 +588,9 @@ export class DepartmentMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private commonService: CommonServiceService,
     private dataService: SuntechAPIService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    public dialog: MatDialog
+
   ) {}
 
   ngOnInit(): void {
@@ -1600,7 +1606,17 @@ export class DepartmentMasterComponent implements OnInit {
       ),
     };
     return postData;
+    
   }
+
+  openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
+    this.dialogBox = this.dialog.open(DialogboxComponent, {
+      width: "40%",
+      disableClose: true,
+      data: { title, msg, okBtn, swapColor },
+    });
+  }
+  
 
   formSubmit() {
     if (this.content?.FLAG == "VIEW") return;
@@ -1608,40 +1624,48 @@ export class DepartmentMasterComponent implements OnInit {
       this.updateDepartmentMaster();
       return;
     }
-    let API = "PayDepartmentMaster/InsertPayDepartmentMaster";
-    let postData = this.setPostData();
 
-    this.commonService.showSnackBarMsg("MSG81447");
-    let Sub: Subscription = this.dataService
-      .postDynamicAPI(API, postData)
-      .subscribe(
-        (result) => {
-          console.log("result", result);
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: "Saved Successfully",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.departmentMasterForm.reset();
-                  this.tableData = [];
-                  this.close("reloadMainGrid");
+      if(this.departmentMasterForm.controls['code'].value == ""){
+        let message = `Code is mandatory ! `;
+        return this.openDialog("Warning", message, true);
+      }
+      else{
+        let API = "PayDepartmentMaster/InsertPayDepartmentMaster";
+        let postData = this.setPostData();
+    
+        this.commonService.showSnackBarMsg("MSG81447");
+        let Sub: Subscription = this.dataService
+          .postDynamicAPI(API, postData)
+          .subscribe(
+            (result) => {
+              console.log("result", result);
+              if (result.response) {
+                if (result.status == "Success") {
+                  Swal.fire({
+                    title: "Saved Successfully",
+                    text: "",
+                    icon: "success",
+                    confirmButtonColor: "#336699",
+                    confirmButtonText: "Ok",
+                  }).then((result: any) => {
+                    if (result.value) {
+                      this.departmentMasterForm.reset();
+                      this.tableData = [];
+                      this.close("reloadMainGrid");
+                    }
+                  });
                 }
-              });
+              } else {
+                this.commonService.toastErrorByMsgId("MSG3577");
+              }
+            },
+            (err) => {
+              this.commonService.toastErrorByMsgId("MSG3577");
             }
-          } else {
-            this.commonService.toastErrorByMsgId("MSG3577");
-          }
-        },
-        (err) => {
-          this.commonService.toastErrorByMsgId("MSG3577");
-        }
-      );
-    this.subscriptions.push(Sub);
+          );
+        this.subscriptions.push(Sub);
+      }
+    
   }
 
   updateDepartmentMaster() {

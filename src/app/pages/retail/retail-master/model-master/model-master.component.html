@@ -26,7 +26,7 @@
                                         Model Code :</label>
                                     <div class="col-sm-3">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input [readonly]="viewMode" [maxlength]="6" type="text" #codeInput matInput formControlName="model_code"
+                                            <input [readonly]="viewMode || editMode" [maxlength]="6" type="text" #codeInput matInput formControlName="model_code"
                                                 UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>
                                     </div>
@@ -52,7 +52,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="TypeCode" #overlayTypeCode
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="TypeCode" #overlayTypeCode
                                                 (newRowClick)="TypeCodeDataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -71,7 +71,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="SubCategoryMaster" #overlaysubcategoryCode
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="SubCategoryMaster" #overlaysubcategoryCode
                                                 (newRowClick)="SubCategoryDataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -92,7 +92,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="CategoryMaster" #overlayCategoryCode
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="CategoryMaster" #overlayCategoryCode
                                                 (newRowClick)="CategoryDataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -111,7 +111,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="Brand" #overlaybrand
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="Brand" #overlaybrand
                                                 (newRowClick)="BranchCodeDataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -259,7 +259,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefinedData" #overlayuserDefined1Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefinedData" #overlayuserDefined1Search
                                                 (newRowClick)="UserDefined1DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -280,7 +280,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined2Data" #overlayuserDefined2Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined2Data" #overlayuserDefined2Search
                                                 (newRowClick)="UserDefined2DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -301,7 +301,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined3Data" #overlayuserDefined3Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined3Data" #overlayuserDefined3Search
                                                 (newRowClick)="UserDefined3DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -322,7 +322,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined4Data" #overlayuserDefined4Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined4Data" #overlayuserDefined4Search
                                                 (newRowClick)="UserDefined4DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -343,7 +343,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined5Data" #overlayuserDefined5Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined5Data" #overlayuserDefined5Search
                                                 (newRowClick)="UserDefined5DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -364,7 +364,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined6Data" #overlayuserDefined6Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined6Data" #overlayuserDefined6Search
                                                 (newRowClick)="UserDefined6DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -385,7 +385,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined7Data" #overlayuserDefined7Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined7Data" #overlayuserDefined7Search
                                                 (newRowClick)="UserDefined7DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -406,7 +406,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined8Data" #overlayuserDefined8Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined8Data" #overlayuserDefined8Search
                                                 (newRowClick)="UserDefined8DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -429,7 +429,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined9Data" #overlayuserDefined9Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined9Data" #overlayuserDefined9Search
                                                 (newRowClick)="UserDefined9DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -450,7 +450,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined10Data" #overlayuserDefined10Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined10Data" #overlayuserDefined10Search
                                                 (newRowClick)="UserDefined10DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -471,7 +471,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined11Data" #overlayuserDefined11Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined11Data" #overlayuserDefined11Search
                                                 (newRowClick)="UserDefined11DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -492,7 +492,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined12Data" #overlayuserDefined12Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined12Data" #overlayuserDefined12Search
                                                 (newRowClick)="UserDefined12DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -513,7 +513,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined13Data" #overlayuserDefined13Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined13Data" #overlayuserDefined13Search
                                                 (newRowClick)="UserDefined13DataSelected($event)"> 
                                             </master-search>
                                         </mat-form-field>
@@ -534,7 +534,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined14Data" #overlayuserDefined14Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined14Data" #overlayuserDefined14Search
                                                 (newRowClick)="UserDefined14DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -555,7 +555,7 @@
                                                 ['CODE']
                                               )
                                             "/>
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined15Data" #overlayuserDefined15Search
+                                            <master-search class="masterSearch" *ngIf="!viewMode" [MasterSearchData]="UserDefined15Data" #overlayuserDefined15Search
                                                 (newRowClick)="UserDefined15DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>

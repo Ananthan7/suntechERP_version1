@@ -33,7 +33,7 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       type="text"
-                      [readonly]="viewMode"
+                      [readonly]="viewMode || editMode"
                       #codeInput
                       matInput
                       [maxlength]="6"
@@ -155,7 +155,7 @@
                       [readonly]="viewMode"
                       type="text"
                       matInput
-                      maxlength="3"
+                      maxlength="3" NumericFilter
                       formControlName="noOfTime"
                       UpperCaseDirective
                     />
@@ -173,7 +173,7 @@
                       [readonly]="viewMode"
                       type="text"
                       matInput
-                      maxlength="3"
+                      maxlength="3" NumericFilter
                       formControlName="in"
                       UpperCaseDirective
                     />

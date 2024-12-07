@@ -36,6 +36,7 @@ export class AllowanceMasterComponent implements OnInit {
   viewMode: boolean = false;
   editMode: boolean = false;
   isDisableSaveBtn: boolean = false;
+  deleteMode: boolean = false;
   DBBranch: any = localStorage.getItem('userbranch')
   data:any;
   allowanceMasterForm: FormGroup = this.formBuilder.group({
@@ -95,7 +96,7 @@ export class AllowanceMasterComponent implements OnInit {
         this.editMode = true;
        
       } else if (this.content?.FLAG == 'DELETE') {
-
+        this.deleteMode = true;
         this.deleteallowance()
       }
     }
@@ -213,7 +214,7 @@ export class AllowanceMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(api).subscribe((result:any)=>{
       this.data = result.response;
       console.log(this.data);
-      
+    this.allowanceMasterForm.controls.consider_for_overtime.setValue(this.data?.ALLMST_OVT)
     })
     this.allowanceMasterForm.controls.code.setValue(this.content.ALLMST_CODE)
     this.allowanceMasterForm.controls.description.setValue(this.content.ALLMST_DESC)
@@ -221,7 +222,7 @@ export class AllowanceMasterComponent implements OnInit {
     this.allowanceMasterForm.controls.value.setValue(this.content.ALLMST_AMOUNT)
     // this.allowanceMasterForm.controls.calc_method.setValue(this.content.ALLMST_PERCENFIXED);
     this.allowanceMasterForm.controls.calc_method.setValue(
-      this.content.ALLMST_PERCENFIXED == 1 ? 1 : 0
+      this.content.ALLMST_PERCENFIXED.toString()
     );
     this.allowanceMasterForm.controls.avoid_fraction.setValue(this.content.ALLMST_AVOIDFRACTION)
     this.allowanceMasterForm.controls.calc_basis.setValue(
@@ -248,7 +249,6 @@ export class AllowanceMasterComponent implements OnInit {
     this.allowanceMasterForm.controls.userdefined13.setValue(this.content.UDF13)
     this.allowanceMasterForm.controls.userdefined14.setValue(this.content.UDF14)
     this.allowanceMasterForm.controls.userdefined15.setValue(this.content.UDF15)
-    this.allowanceMasterForm.controls.consider_for_overtime.setValue(this.data.ALLMST_OVT)
   }
 
 
@@ -261,7 +261,7 @@ export class AllowanceMasterComponent implements OnInit {
       "ALLMST_AMOUNT":  this.allowanceMasterForm.value.value,
       "ALLMST_PERCENFIXED": this.allowanceMasterForm.value.calc_method,
       "ALLMST_AVOIDFRACTION": this.avoid_fraction == true ? 1 : 0,
-      "ALLMST_BASIS":  this.allowanceMasterForm.value.calc_basis,
+      "ALLMST_BASIS":  this.allowanceMasterForm.value.calc_basis || 0,
       // "ALLMST_REPORTHEADINGTO": this.allowanceMasterForm.value.report_heading,
       "ALLMST_REPORTHEADINGTO":0,
       "ALLMST_YEARMONTHLY": this.allowanceMasterForm.value.period,

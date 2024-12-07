@@ -18,6 +18,7 @@ import {
 } from "@ng-bootstrap/ng-bootstrap";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: "app-customer-price-setting",
@@ -114,7 +115,7 @@ export class CustomerPriceSettingComponent implements OnInit {
     division: ["", [Validators.required]],
     currency: ["", [Validators.required]],
     approvedby: [""],
-    enteredBy: ["", [Validators.required]],
+    enteredby: ["", [Validators.required]],
     stockCode: [false],
     designCode: [false],
     group1: ["None", [Validators.required]],
@@ -167,14 +168,27 @@ export class CustomerPriceSettingComponent implements OnInit {
     // }
   }
 
+  parseDate(dateString: string): string | null {
+    if (!dateString) return null;
+
+    // Assuming the input date format is `dd-MM-yyyy`
+    const parts = dateString.split("-");
+    if (parts.length === 3) {
+      const [day, month, year] = parts.map((part) => parseInt(part, 10));
+      return formatDate(new Date(year, month - 1, day), "yyyy-MM-dd", "en-US");
+    }
+    return null;
+  }
+
   setFormValues() {
     console.log(this.content);
     if (!this.content) return;
+    const startFromDate = this.parseDate(this.content.CREATED_DATE);
     this.customerpricesettingForm.controls.pricecode.setValue(
       this.content.PRICE_CODE
     );
     this.customerpricesettingForm.controls.date.setValue(
-      this.content.CREATED_DATE
+      startFromDate
     );
     this.customerpricesettingForm.controls.description.setValue(
       this.content.DESCRIPTION
@@ -188,14 +202,14 @@ export class CustomerPriceSettingComponent implements OnInit {
     this.customerpricesettingForm.controls.approvedby.setValue(
       this.content.APPROVED_BY
     );
-    this.customerpricesettingForm.controls.enteredBy.setValue(
+    this.customerpricesettingForm.controls.enteredby.setValue(
       this.content.ENTERED_BY
     );
     this.customerpricesettingForm.controls.stockCode.setValue(
-      this.content.IS_STOCK_CODE
+      this.content.IS_STOCK_CODE == "Y"?true:false
     );
     this.customerpricesettingForm.controls.designCode.setValue(
-      this.content.IS_DESIGN_CODE
+      this.content.IS_DESIGN_CODE == "Y"? true:false
     );
     this.customerpricesettingForm.controls.group1.setValue(this.content.GROUP1);
     this.customerpricesettingForm.controls.group2.setValue(this.content.GROUP2);
@@ -276,7 +290,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   userDataSelected(value: any) {
     console.log(value);
     if (this.checkPriceCode()) return;
-    this.customerpricesettingForm.controls.enteredBy.setValue(value.UsersName);
+    this.customerpricesettingForm.controls.enteredby.setValue(value.UsersName);
   }
 
   divisionCodeData: MasterSearchModel = {
@@ -331,8 +345,30 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
 
   designCodeChange() {
@@ -410,7 +446,7 @@ export class CustomerPriceSettingComponent implements OnInit {
   }
 
   formSubmit() {
-    if (this.customerpricesettingForm.value.enteredBy == "") {
+    if (this.customerpricesettingForm.value.enteredby == "") {
       this.toastr.error("Entered By Cannot be empty ");
     }
 
@@ -980,7 +1016,7 @@ export class CustomerPriceSettingComponent implements OnInit {
       case "currency":
         this.overlayCurrencyCode.showOverlayPanel(event);
         break;
-      case "enteredBy":
+      case "enteredby":
         this.overlayEnteredByCode.showOverlayPanel(event);
         break;;
       default:
