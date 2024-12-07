@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -23,6 +23,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
   viewMode: boolean = false;
   userbranch = localStorage.getItem('userbranch');
   editMode:boolean = false;
+  codeEnable: boolean = false;
 
 
 
@@ -58,12 +59,15 @@ export class DiamondPrefixMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) { }
 
  
   ngOnInit(): void {
     // this.setCompanyCurrency()
     this.setFormValues()
+    this.codeEnable = true;
+
     // this.setCompanyCurrency()
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true
@@ -71,6 +75,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
     } else if (this.content.FLAG == 'EDIT') {
       this.editableMode = true;
       this.editMode = true
+      this.codeEnable = false;
+
     }
     else if (this.content.FLAG == 'DELETE') {
       this.viewMode = true;
@@ -80,11 +86,11 @@ export class DiamondPrefixMasterComponent implements OnInit {
   
   diamondprefixForm: FormGroup = this.formBuilder.group({
     prefixcode: ['',[Validators.required]],
-    prefixcodedes: ['',[Validators.required]],
-    currencyRate: ['',[Validators.required]],
+    prefixcodedes: [''],
+    currencyRate: [''],
     currency: [''],
     lastno: ['000000', ''],
-    costcode: ['',[Validators.required]],
+    costcode: [''],
     brand: [''],
     branch: [''],
     Category:[''],
@@ -116,7 +122,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
     this.diamondprefixForm.controls.prefixcodedes.setValue(this.content.DESCRIPTION)
     this.diamondprefixForm.controls.lastno.setValue(this.content.LAST_NO)
     this.diamondprefixForm.controls.currency.setValue(this.content.CURRENCY_CODE)
-    this.diamondprefixForm.controls.currencyRate.setValue(this.content.CONV_RATE)
+    this.diamondprefixForm.controls.currencyRate.setValue(this.commonService.transformDecimalVB(
+      this.commonService.allCompanyParameters?.MRATEDECIMALS, this.content.CONV_RATE))
     this.diamondprefixForm.controls.refinervprefix.setValue(this.viewchangeYorN(this.content.REFINE_PREFIX))
     this.diamondprefixForm.controls.setrefprefix.setValue(this.viewchangeYorN(this.content.SETREF_PREFIX))
     this.diamondprefixForm.controls.jobcardprefix.setValue(this.viewchangeYorN(this.content.JOB_PREFIX))
@@ -129,7 +136,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     this.diamondprefixForm.controls.Type.setValue(this.content.TYPE_CODE)
     this.diamondprefixForm.controls.Category.setValue(this.content.CATEGORY_CODE)
     this.diamondprefixForm.controls.brand.setValue(this.content.BRAND_CODE)
-    this.diamondprefixForm.controls.costcode.setValue(this.content.COUNTRY_CODE)
+    this.diamondprefixForm.controls.costcode.setValue(this.content.COST_CODE)
     this.diamondprefixForm.controls.hsn.setValue(this.content.HSN_CODE)
     this.diamondprefixForm.controls.boilProcessPrefix.setValue(this.viewchangeYorN(this.content.BOIL_PREFIX))
     this.diamondprefixForm.controls.collection.setValue(this.content.UDF1)
@@ -163,6 +170,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   branchCodeSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.branch.setValue(e.BRANCH_CODE);
   }
 
@@ -179,6 +188,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   HSNCenterSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.hsn.setValue(e.CODE);
   }
   currencyCodeData: MasterSearchModel = {
@@ -195,6 +206,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   currencyCodeSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.currency.setValue(e.CURRENCY_CODE);
     this.diamondprefixForm.controls.currencyRate.setValue(e.CONV_RATE);
   }
@@ -211,6 +224,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   costCodeSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.costcode.setValue(e.COST_CODE);
   }
   categoryCodeData: MasterSearchModel = {
@@ -226,6 +241,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   categoryCodeSelected(e: any) {
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.Category.setValue(e.CODE);
   }
   subcategoryCodeData: MasterSearchModel = {
@@ -241,6 +258,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   subcategoryCodeSelected(e: any) {
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.subCategory.setValue(e.CODE);
   }
   typeCodeData: MasterSearchModel = {
@@ -256,6 +275,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   typeCodeSelected(e: any) {
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.Type.setValue(e.CODE);
   }
   BrandCodeData: MasterSearchModel = {
@@ -271,6 +292,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   brandCodeSelected(e: any) {
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.brand.setValue(e.CODE);
   }
   countryCodeData: MasterSearchModel = {
@@ -286,6 +309,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   countryCodeSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.Country.setValue(e.CODE);
   }
 
@@ -305,6 +330,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
 
   itemcodeSelected(value: any) {
     console.log(value);
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.itemcode.setValue(value.PREFIX_CODE);
     this.diamondprefixForm.controls.itemcodedetail.setValue(value.DESCRIPTION)
   }
@@ -324,6 +351,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
 
   stoneTypeCodeSelected(value: any) {
     console.log(value);
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.stone_type.setValue(value.CODE);
   }
 
@@ -340,8 +369,9 @@ export class DiamondPrefixMasterComponent implements OnInit {
     //LOAD_ONCLICK:true,
   }
   settingTypeCodeSelected(e: any) {
-
     console.log(e);
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.setting.setValue(e.CODE);
   }
 
@@ -357,8 +387,9 @@ export class DiamondPrefixMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   shapeCodeSelected(e: any) {
-
     console.log(e);
+    if (this.checkCode()) return
+
     this.diamondprefixForm.controls.setting.setValue(e.CODE);
   }
 
@@ -412,6 +443,63 @@ export class DiamondPrefixMasterComponent implements OnInit {
     }
     )
   }
+
+  checkCode(): boolean {
+    if (this.diamondprefixForm.value.prefixcode == '') {
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
+      return true
+    }
+    return false
+  }
+
+  checkCodeExists(event: any) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
+    // console.log('this w');
+    
+    const API = 'PrefixMaster/CheckIfPrefixCodePresent/' + event.target.value;
+    const sub = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: 'Code Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then(() => {
+            // Clear the input value
+            this.diamondprefixForm.controls.prefixcode.setValue('');
+            this.renderer.selectRootElement('#code').focus();
+
+          });
+          this.commonService.toastErrorByMsgId('MSG1121')//Code Already Exists
+        }else{
+          this.codeEnable = false;
+        }
+      }, err => {
+        this.diamondprefixForm.reset();
+
+      });
+
+    this.subscriptions.push(sub);
+
+  }
+
+  codeEnabledMetal() {
+    if (this.diamondprefixForm.value.prefixcode == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
+  }
+
   
   setPostData(){
     return{
@@ -432,7 +520,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     "PM_BRANCHCODE": "",
     "JOB_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.jobcardprefix),
     "SETREF_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.setrefprefix),
-    "BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
+    "BRANCH_CODE": this.commonService.nullToString(this.diamondprefixForm.value.branch),
     "BOIL_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.boilProcessPrefix),
     "SCHEME_PREFIX": true,
     "UDF1": this.commonService.nullToString(this.diamondprefixForm.value.collection),
@@ -466,10 +554,10 @@ export class DiamondPrefixMasterComponent implements OnInit {
       this.update()
       return
     }
-    // if (this.diamondprefixForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
+    if (this.diamondprefixForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
 
     let API = 'PrefixMaster/InsertPrefixMaster'
     let postData = this.setPostData()
