@@ -158,8 +158,14 @@ export class SupplierQuotaAllocationComponent implements OnInit {
     this.supplierquotaform.controls.partycode.setValue(this.content?.PARTYCODE);
     this.supplierquotaform.controls.fin_year.setValue(this.content?.FYEARCODE);
     // this.supplierquotaform.controls.metal_division.setValue(this.content?.DIVISIONS);
-    this.supplierquotaform.controls.periodType.setValue(this.content?.MONTHWISE);
-    this.supplierquotaform.controls.periodType.setValue(this.content?.WEEKWISE); 
+    // this.supplierquotaform.controls.periodType.setValue(this.content?.MONTHWISE);
+    // this.supplierquotaform.controls.periodType.setValue(this.content?.WEEKWISE); 
+    // Set the value dynamically based on the content
+    if (this.content?.MONTHWISE === 'Y') {
+      this.supplierquotaform.controls.periodType.setValue('monthWise');
+    } else if (this.content?.WEEKWISE === 'Y') {
+      this.supplierquotaform.controls.periodType.setValue('weekWise');
+    }
 
     let selectedDivisions = this.content?.DIVISIONS.split(',');
 
@@ -189,7 +195,7 @@ export class SupplierQuotaAllocationComponent implements OnInit {
           "QTY_T": 0,
           "QTY_P": 0,
           "MONTH": month,
-          "WEEK": "string"
+          "WEEK": ""
   }));
   console.log(data);
   this.maindetails.push(...data);
