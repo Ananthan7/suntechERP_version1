@@ -33,9 +33,8 @@
                 <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID002"> Transaction</label>
                 <div class="col-md-2">
                     <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
-                        <mat-select  formControlName="groupBySelection">
-                          <mat-option value="Salesman">Salesman</mat-option>
-                          <mat-option value="Invoice">Invoice</mat-option>
+                        <mat-select  formControlName="transactionValue">
+                          <mat-option *ngFor="let item of TransactionValueArr" [value]="item.key">{{item.value}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -49,8 +48,7 @@
                         <div class="col-md-9">
                             <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
                                 <mat-select  formControlName="groupBySelection">
-                                  <mat-option value="Salesman">Salesman</mat-option>
-                                  <mat-option value="Invoice">Invoice</mat-option>
+                                    <mat-option *ngFor="let item of groupByArr" [value]="item.value">{{item.value}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -66,7 +64,7 @@
                     <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'" *ngIf="!isLoading"
                     [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr" (onCellPrepared)="headerCellFormatting($event)">
                         <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                        <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                         <!-- <dxo-selection mode="multiple"></dxo-selection> -->
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
 

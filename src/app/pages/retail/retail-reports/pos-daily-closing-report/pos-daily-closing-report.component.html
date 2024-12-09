@@ -104,14 +104,18 @@
                 </div>   
               </div>
 
-              <div class="row bg-secondary mt-2">
-                <h5 class="text-white pt-2 px-3" id="ID009">Old Gold Purchase</h5>
+              <div class="row border border-3 mt-2">
+                <h5 class="p-2 bg-secondary px-3" id="ID009">Old Gold Purchase</h5>
                 <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
-                <dx-data-grid [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                <dx-data-grid [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" [dataSource]="goldPurchase"
                 #dataGrid id="gridContainer" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
-                  <dxi-column dataField="ItemCode" caption="Item Code" alignment="center" [width]="150"></dxi-column>
-                  <dxi-column dataField="GrossWt" caption="Gross Wt" alignment="right" [width]="100"></dxi-column>
-                  <dxi-column dataField="Amount" caption="Amount" alignment="right" [width]="100"></dxi-column>
+                  <dxo-paging [enabled]="false"></dxo-paging>
+                  <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                  <dxi-column dataField="branch_code" caption="Item Code" alignment="center"></dxi-column>
+                  <dxi-column dataField="GrossWt" caption="Gross Wt" alignment="right"></dxi-column>
+                  <dxi-column dataField="Amount" caption="Amount" alignment="right"></dxi-column>
                 </dx-data-grid>
 
                 <div class="row mx-1  bg-row border border-3">

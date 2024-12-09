@@ -47,3 +47,10 @@
     pointer-events: none;
     filter: grayscale(20%) blur(2px)
 }
+//dropdown View
+::ng-deep {
+    .cdk-overlay-container {
+        position: fixed;
+        z-index: 1070 !important;
+    }
+}
