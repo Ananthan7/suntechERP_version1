@@ -97,26 +97,25 @@
                 <div class="col-md-6">
                   <div class="row">
                     <dx-data-grid [dataSource]="tableData" #dataGrid id="gridContainer" keyExpr="SRNO"
-                      [showBorders]="true">
-                      <dxo-paging [enabled]="false"></dxo-paging>
+                      [showBorders]="true"  (onRowClick)="onRowSelection($event.data)">
+                      <!-- <dxo-paging [enabled]="false"></dxo-paging>
                       <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>>
-                      <dxo-selection mode="multiple"></dxo-selection>
-                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxo-selection mode="single"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling> -->
                       <dxi-column dataField="SRNO" caption="Sr No"> </dxi-column>
                       <dxi-column dataField="COUNTRYCODE" caption="Country Code">
                       </dxi-column>
                       <dxi-column dataField="HOLIDAY_DATE" caption="Date">
                       </dxi-column>
-                      <dxi-column dataField="REMARKS" caption="Remarks">
-                      </dxi-column>
-                      <dxi-column caption="Remove" [width]="100">
-                        <ng-template dxTemplate="cellTemplate" let-cellData="data" let-rowIndex="rowIndex">
-                          <button class="btn btn-danger btn-sm" (click)="removeRow(rowIndex)">Remove</button>
-                        </ng-template>
-                      </dxi-column>
+
+                      <dxi-column caption="Remove" [width]="100" cellTemplate="removeTemplate"></dxi-column>
+
+                      <div *dxTemplate="let data of 'removeTemplate' let rowIndex = rowIndex">
+                        <button class="btn btn-danger btn-sm" (click)="removeRow(data)">Remove</button>
+                      </div>
+
                      
                     </dx-data-grid>
-                    
                   </div>
                 </div>
               </div>
