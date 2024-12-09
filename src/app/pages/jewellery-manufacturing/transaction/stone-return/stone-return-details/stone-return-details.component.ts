@@ -235,6 +235,7 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.stonereturndetailsFrom.controls.stockCodeDes.setValue(this.content.STOCK_DESCRIPTION)
     this.stonereturndetailsFrom.controls.sieveset.setValue(this.content.SIEVE_SET)
     this.stonereturndetailsFrom.controls.broken.setValue(this.content.STOCK_CODE)
+    this.stonereturndetailsFrom.controls.batchid.setValue(this.content.STOCK_CODE)
     this.stonereturndetailsFrom.controls.brokenDescription.setValue(this.content.STOCK_DESCRIPTION)
     this.stonereturndetailsFrom.controls.pieces.setValue(this.content.PCS)
     this.stonereturndetailsFrom.controls.size.setValue(this.content.SIZE)
@@ -358,9 +359,9 @@ export class StoneReturnDetailsComponent implements OnInit {
       "SRNO": this.comService.emptyToZero(this.content?.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
-      "VOCDATE": this.comService.formatDate(new Date(form.VOCDATE)),
+      "VOCDATE": this.comService.formatMMDDYY(new Date(form.VOCDATE)),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
-      "JOB_DATE": this.comService.formatDate(new Date(form.JOB_DATE)),
+      "JOB_DATE": this.comService.formatMMDDYY(new Date(form.JOB_DATE)),
       "JOB_SO_NUMBER": this.comService.emptyToZero(form.JOB_SO_NUMBER),
       "UNQ_JOB_ID": this.comService.nullToString(form.jobNumber),
       "JOB_DESCRIPTION": form.jobDesc,
