@@ -609,7 +609,7 @@ export class DepartmentMasterComponent implements OnInit {
         this.codeEnable = false;
       } else if (this.content?.FLAG == "DELETE") {
         this.viewMode = true;
-        this.deleteMode = true;
+        this.deleteMode = false;
         this.deleteDepartmentMaster();
       }
     }
@@ -1774,6 +1774,9 @@ export class DepartmentMasterComponent implements OnInit {
             (err) => alert(err)
           );
         this.subscriptions.push(Sub);
+      }
+      else {
+        this.close("reloadMainGrid");
       }
     });
   }
