@@ -249,35 +249,15 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
       
   }
 
-  previewClick(){
-    this.isLoading = true
 
-    let postData = {
-      "SPID": "",
-      "parameter": {
-        
-      }
-    }
-    console.log(postData) 
-    setTimeout(()=>{
-      this.isLoading = false;
-    }, 300)     
+  excelExport(){
+    console.log('Metal Division- Salex', this.metalSalesGridArr)
+    console.log('Metal Division- Stock', this.metalStockGridArr)
+    this.commonService.exportExcel(this.metalStockGridArr, "Metal Division- Stock Details");
+    console.log('Diamond Division- Sales', this.diamondSalesGridArr)
+    console.log('Diamond Division- Physical stock', this.physicalStockGridArr)
   }
-
-  printBtnClick(){
-    this.isLoading = true
-
-    let postData = {
-      "SPID": "",
-      "parameter": {
-        
-      }
-    }
-    console.log(postData) 
-    setTimeout(()=>{
-      this.isLoading = false;
-    }, 300)     
-  }
+ 
 
 
   prefillScreenValues(){
