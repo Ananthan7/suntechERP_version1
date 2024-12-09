@@ -64,6 +64,10 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     { value: 'Cost Code', label: 'Cost Code' },
   ]
 
+  selectedMetalSalesData: any = [];
+  selectedMetalStockData: any = [];
+
+
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private datePipe: DatePipe,
     private dataService: SuntechAPIService, private commonService: CommonServiceService,  private toastr: ToastrService,
     private decimalPipe: DecimalPipe
@@ -179,11 +183,6 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     this.POS_Sales_Stock_ComparisonForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
-
-  onTabChange(event: any){
-
-  }
-
   gridAPI(){
     this.isLoading = true;
     let APIurl = "PosSalesAndStockComparison";
@@ -250,12 +249,26 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
   }
 
 
+  onSelectionChanged(event: any, name: any) {
+    if(name == 'MD-Sales'){
+      this.selectedMetalStockData.length = 0;
+      this.selectedMetalSalesData = event.selectedRowsData;
+    }
+    else if(name == 'MD-Stock'){
+      this.selectedMetalSalesData.length = 0;
+      this.selectedMetalStockData = event.selectedRowsData;
+    }
+ 
+  }
+
   excelExport(){
-    console.log('Metal Division- Salex', this.metalSalesGridArr)
-    console.log('Metal Division- Stock', this.metalStockGridArr)
-    this.commonService.exportExcel(this.metalStockGridArr, "Metal Division- Stock Details");
-    console.log('Diamond Division- Sales', this.diamondSalesGridArr)
-    console.log('Diamond Division- Physical stock', this.physicalStockGridArr)
+    if(this.selectedMetalSalesData.length > 0){
+      console.log('MD-Sales', this.selectedMetalSalesData)
+    }
+    else if(this.selectedMetalStockData.length > 0){
+      console.log('MD-Sales', this.selectedMetalStockData)
+    }
+    // this.commonService.exportExcel(this.selectedMetalSalesData, "Diamond Division- Physical Stock details");
   }
  
 
