@@ -96,7 +96,9 @@ export class AllowanceMasterComponent implements OnInit {
         this.editMode = true;
        
       } else if (this.content?.FLAG == 'DELETE') {
-        this.deleteMode = true;
+        this.deleteMode = false;
+        this.viewMode = true;
+
         this.deleteallowance()
       }
     }
@@ -430,6 +432,8 @@ export class AllowanceMasterComponent implements OnInit {
             this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           });
         this.subscriptions.push(Sub);
+      } else {
+        this.close("reloadMainGrid");
       }
     });
   }

@@ -7,13 +7,18 @@
     </button>
   </div>
   <!-- modal header component -->
-  <modal-header
-  *ngIf="content?.FLAG !== 'VIEW'"
+  <!-- <modal-header
+  
     (cancelClick)="close()"
     (saveClick)="formSubmit()"
     [isViewDelete]="deleteMode"
     (deleteClick)="deleteallowance()"
-  ></modal-header>
+  ></modal-header> -->
+
+  <modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+    [isViewMore]="!viewMode" (cancelClick)="close()"
+    (saveClick)="formSubmit()" (deleteClick)="deleteallowance()"
+    [isViewDelete]="false"></modal-header>
   <!-- content section -->
   <div class="p-4">
     <form [formGroup]="allowanceMasterForm">
@@ -68,6 +73,7 @@
                 </div>
                 <div class="col-sm-4">
                   <mat-checkbox
+                    [disabled]="viewMode"
                     (change)="checkBoxValue($event, 'leave_salary')"
                     formControlName="leave_salary"
                     class="example-margin"
@@ -119,6 +125,7 @@
                 </div>
                 <div class="col-sm-4">
                   <mat-checkbox
+                  [disabled]="viewMode"
                     (change)="checkBoxValue($event, 'credit_to_employeeAC')"
                     formControlName="credit_to_employeeAC"
                     class="example-margin"
@@ -173,6 +180,7 @@
                 </div>
                 <div class="col-sm-4">
                   <mat-checkbox
+                  [disabled]="viewMode"
                     (change)="checkBoxValue($event, 'consider_for_overtime')"
                     formControlName="consider_for_overtime"
                     class="example-margin"
@@ -190,6 +198,7 @@
                 <div class="row">
                   <div class="col-md-6">
                     <mat-radio-group
+                    [disabled]="viewMode"
                       aria-label="Select an option"
                       formControlName="calc_method"
                       class="d-flex flex-column"
@@ -230,6 +239,7 @@
                     </div>
                     <div>
                       <mat-checkbox
+                      [disabled]="viewMode"
                         (change)="checkBoxValue($event, 'avoid_fraction')"
                         formControlName="avoid_fraction"
                         class="example-margin"
@@ -259,7 +269,7 @@
                 >
                 <div class="col-md-9">
                   <mat-form-field style="width: 100%" appearance="outline">
-                    <mat-select formControlName="calc_basis">
+                    <mat-select formControlName="calc_basis"   [disabled]="viewMode">
                       <mat-option value="0">Basic Salary</mat-option>
                       <mat-option value="1">Earned Basic Salary</mat-option>
                     </mat-select>
@@ -271,6 +281,7 @@
                   <fieldset class="custom-fieldset">
                     <legend class="custom-legend">Period</legend>
                     <mat-radio-group
+                    [disabled]="viewMode"
                       aria-label="Select an option"
                       formControlName="period"
                     >

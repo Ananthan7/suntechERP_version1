@@ -7,10 +7,12 @@
 </div>
 <!-- modal header component -->
 <modal-header
-  *ngIf="content?.FLAG !== 'VIEW'"
+  [isViewSave]="!viewMode"
+  [isViewCancel]="!viewMode"
+  [isViewMore]="!viewMode"
   (saveClick)="formSave()"
   (cancelClick)="close()"
-  [isViewDelete]="deleteMode"
+  [isViewDelete]="false"
   (deleteClick)="deleteMaster()"
 ></modal-header>
 <!-- content section -->
@@ -65,11 +67,11 @@
               <!-- <input matInput="text" formControlName="division" /> -->
               <mat-select formControlName="division">
                 <mat-option
-                *ngFor="let option of divisionCode"
-                [value]="option.DIVISION_CODE"
-              >
-                {{ option.DIVISION_CODE }}
-              </mat-option>
+                  *ngFor="let option of divisionCode"
+                  [value]="option.DIVISION_CODE"
+                >
+                  {{ option.DIVISION_CODE }}
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -128,11 +130,11 @@
               <!-- <input matInput="text" formControlName="attr_grp" /> -->
               <mat-select formControlName="attr_grp">
                 <mat-option
-                *ngFor="let option of attrGroup"
-                [value]="option.SRNO"
-              >
-                {{ option.ENGLISH }}
-              </mat-option>
+                  *ngFor="let option of attrGroup"
+                  [value]="option.SRNO"
+                >
+                  {{ option.ENGLISH }}
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -147,11 +149,11 @@
               <!-- <input matInput="text" formControlName="comp_grp" /> -->
               <mat-select formControlName="comp_grp">
                 <mat-option
-                *ngFor="let option of compGroup"
-                [value]="option.SRNO"
-              >
-                {{ option.ENGLISH }}
-              </mat-option>
+                  *ngFor="let option of compGroup"
+                  [value]="option.SRNO"
+                >
+                  {{ option.ENGLISH }}
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -166,11 +168,11 @@
               <!-- <input matInput="text" formControlName="base_price" /> -->
               <mat-select formControlName="base_price">
                 <mat-option
-                *ngFor="let option of baseGroup"
-                [value]="option.SRNO"
-              >
-                {{ option.ENGLISH }}
-              </mat-option>
+                  *ngFor="let option of baseGroup"
+                  [value]="option.SRNO"
+                >
+                  {{ option.ENGLISH }}
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </div>

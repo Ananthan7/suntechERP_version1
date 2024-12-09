@@ -6,11 +6,13 @@
 </div>
 <!-- modal header component -->
 <modal-header
-  *ngIf="flag !== 'VIEW'"
+  [isViewSave]="!viewMode"
+  [isViewCancel]="!viewMode"
+  [isViewMore]="!viewMode"
   (saveClick)="OTPMasterFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
-  [isViewDelete]="flag == 'VIEW'"
+  [isViewDelete]="false"
 ></modal-header>
 <!-- Content component -->
 

@@ -1,10 +1,12 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
@@ -26,6 +28,7 @@ export class SetRefMasterComponent implements OnInit {
   tableData1: any = [];
   selectedIndexes: any = [];
   divisionCOde: string = "";
+  dialogBox: any;
   setRefCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -107,7 +110,8 @@ export class SetRefMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private commonService: CommonServiceService,
     private dataService: SuntechAPIService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -126,7 +130,7 @@ export class SetRefMasterComponent implements OnInit {
         this.codeEnable = false;
       } else if (this.content?.FLAG == "DELETE") {
         this.viewMode = true;
-        this.deleteMode = true;
+        this.deleteMode = false;
         this.deleteRecord();
       }
     }
@@ -364,20 +368,6 @@ export class SetRefMasterComponent implements OnInit {
                       this.close("reloadMainGrid");
                     }
                   });
-                } else {
-                  Swal.fire({
-                    title: result.message || "Error please try again",
-                    text: "",
-                    icon: "error",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.SetRefMasterForm.reset();
-                      this.tableData = [];
-                      this.close();
-                    }
-                  });
                 }
               } else {
                 this.commonService.toastErrorByMsgId("MSG1880"); // Not Deleted
@@ -386,6 +376,9 @@ export class SetRefMasterComponent implements OnInit {
             (err) => alert(err)
           );
         this.subscriptions.push(Sub);
+      }
+      else {
+        this.close("reloadMainGrid");
       }
     });
   }
@@ -396,6 +389,8 @@ export class SetRefMasterComponent implements OnInit {
     this.SetRefMasterForm.controls["year_type"].setValue(e.CODE);
   }
   TableDataSelected(e: any) {
+    console.log(e);
+    
     this.SetRefMasterForm.controls["table_search"].setValue(e.Stock_Code);
 
     this.selectedData = {
@@ -410,6 +405,15 @@ export class SetRefMasterComponent implements OnInit {
     this.SetRefMasterForm.controls["code"].setValue(e.CODE);
     this.SetRefMasterForm.controls["decription"].setValue(e.DESCRIPTION);
   }
+
+  openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
+    this.dialogBox = this.dialog.open(DialogboxComponent, {
+      width: "40%",
+      disableClose: true,
+      data: { title, msg, okBtn, swapColor },
+    });
+  }
+
   changedCheckbox(data: any) {
     console.log("Moving row:", data.data);
     this.dataGrid = {
@@ -426,20 +430,47 @@ export class SetRefMasterComponent implements OnInit {
     );
   }
 
+  // changedCheckbox1(data: any) {
+  //   console.log("Moving row:", data.data);
+  //   this.dataGrid = {
+  //     REFMID: 0,
+  //     SRNO: data.data.SRNO,
+  //     STOCKCODE: data.data.STOCKCODE,
+  //     STOCKDESC: data.data.STOCKDESC,
+  //   };
+  //   this.tableData.push(this.dataGrid);
+  //   console.log(this.tableData);
+
+  //   this.tableData1 = this.tableData1.filter(
+  //     (row: any) => row.SRNO !== data.data.SRNO
+  //   );
+  // }
+
   changedCheckbox1(data: any) {
+    if (!data || !data.data) {
+      console.error("Invalid data provided:", data);
+      return;
+    }
+
     console.log("Moving row:", data.data);
-    this.dataGrid = {
+
+    const newData = {
       REFMID: 0,
       SRNO: data.data.SRNO,
       STOCKCODE: data.data.STOCKCODE,
       STOCKDESC: data.data.STOCKDESC,
     };
-    this.tableData.push(this.dataGrid);
-    console.log(this.tableData);
 
+    if (!this.tableData.some((row: any) => row.SRNO === newData.SRNO)) {
+      this.tableData.push(newData);
+      console.log("Updated tableData:", this.tableData);
+    } else {
+      console.log("Duplicate entry detected, not adding:", newData);
+    }
     this.tableData1 = this.tableData1.filter(
       (row: any) => row.SRNO !== data.data.SRNO
     );
+    console.log("Updated tableData1:", this.tableData1);
   }
 
   SPvalidateLookupFieldModified(
@@ -653,9 +684,21 @@ export class SetRefMasterComponent implements OnInit {
   }
 
   addTableData() {
-    this.tableData.push(this.selectedData);
-    this.selectedData = null;
-    this.SetRefMasterForm.controls["table_search"].setValue("");
+    console.log(this.tableData);
+    console.log(this.selectedData);
+    if (
+      this.tableData.some(
+        (element: any) => element.STOCKCODE === this.selectedData.STOCKCODE
+      )
+    ) {
+      let message = `STOCKCODE is already added!`;
+      return this.openDialog("Warning", message, true);
+    } else {
+      this.tableData.push(this.selectedData);
+      this.selectedData = null;
+      this.SetRefMasterForm.controls["table_search"].setValue("");
+    }
+
     // this.tableData = this.dataGrid;
     // let len = this.tableData.length;
     // const data = {
