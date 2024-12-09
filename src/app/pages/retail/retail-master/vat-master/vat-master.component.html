@@ -1197,7 +1197,7 @@
                     <dx-data-grid
                       id="gridContainer"
                       [showBorders]="true"
-                      [dataSource]="accountDateWiseGstDetailsData"
+                      [dataSource]="accountSettingDateWiseVatDetailsData"
                       [showColumnLines]="true"
                       [showRowLines]="true"
                       class="mt-3"
@@ -1209,7 +1209,7 @@
 
                       <dxi-column
                         *ngFor="
-                          let data of accountDateWiseGstDetailsColumnHeadings
+                          let data of accountSettingDateWiseVatDetailsColumnHeadings
                         "
                         [dataField]="data.field"
                         [caption]="data.caption"
@@ -1217,7 +1217,7 @@
                         alignment="center"
                         backgroundcolor="#000"
                         [format]="
-                          data.field === 'GST_PER'
+                          data.field === 'VAT_PER'
                             ? { type: 'fixedPoint', precision: 3 }
                             : null
                         "
@@ -1237,10 +1237,8 @@
                           [viewAddBtn]="true"
                           [viewDeleteBtn]="true"
                           [viewImportBtn]="false"
-                          (addClick)="addRowFunc('Expense HSN/SAC Allocation')"
-                          (deleteClick)="
-                            deleteRowFunc('Expense HSN/SAC Allocation')
-                          "
+                          (addClick)="addRowFunc(1)"
+                          (deleteClick)="deleteRowFunc(1)"
                         >
                         </menu-buttons>
                       </div>
@@ -1256,7 +1254,7 @@
                         <button
                           type="button"
                           class="ms-2 btn btn-primary text-center"
-                          (click)="getSerachValue()"
+                          (click)="getSerachValue($event)"
                         >
                           SEARCH
                         </button>
@@ -1267,7 +1265,7 @@
                         <dx-data-grid
                           #dataGrid
                           id="gridContainer"
-                          [dataSource]="expenseHsnOrSacAllocationData"
+                          [dataSource]="expenseHsnSacAllocationData"
                           [showBorders]="true"
                           [allowColumnReordering]="true"
                           [allowColumnResizing]="true"
@@ -1275,13 +1273,8 @@
                           [columnAutoWidth]="true"
                           [showColumnLines]="true"
                           [showRowLines]="true"
-                          keyExpr="SRNO"
-                          (onSelectionChanged)="
-                            onSelectionChanged(
-                              $event,
-                              'Expense HSN/SAC Allocation'
-                            )
-                          "
+                          keyExpr="SN"
+                          (onSelectionChanged)="onSelectionChanged($event, 1)"
                         >
                           <dxo-selection mode="single"></dxo-selection>
                           <dxo-scrolling mode="virtual"></dxo-scrolling>
@@ -1289,8 +1282,8 @@
                           <!-- Columns -->
                           <dxi-column
                             alignment="center"
-                            dataField="SRNO"
-                            caption="SRNO"
+                            dataField="SN"
+                            caption="SN"
                           ></dxi-column>
                           <dxi-column
                             alignment="center"
@@ -1356,7 +1349,12 @@
                                 #overlayGroupOne
                                 [MasterSearchData]="expenseCodeData"
                                 class="masterSearch"
-                                (newRowClick)="expenseSelect($event, data)"
+                                (newRowClick)="
+                                  gridDataBinding($event, data, [
+                                    'EXPENSE_ACCODE',
+                                    'EXPENSE_ACCODE_DESC'
+                                  ])
+                                "
                               ></master-search>
                             </mat-form-field>
                           </div>
@@ -1398,7 +1396,12 @@
                                 #overlayGroupOne
                                 [MasterSearchData]="hsnCodeData"
                                 class="masterSearch"
-                                (newRowClick)="hsnSelect($event, data)"
+                                (newRowClick)="
+                                  gridDataBinding($event, data, [
+                                    'HSN_SAC_CODE',
+                                    'HSN_SAC_DESC'
+                                  ])
+                                "
                               ></master-search>
                             </mat-form-field>
                           </div>
@@ -1487,8 +1490,8 @@
                           [viewAddBtn]="true"
                           [viewDeleteBtn]="true"
                           [viewImportBtn]="false"
-                          (addClick)="addRowFunc('Cost Center Account')"
-                          (deleteClick)="deleteRowFunc('Cost Center Account')"
+                          (addClick)="addRowFunc(0)"
+                          (deleteClick)="deleteRowFunc(0)"
                         >
                         </menu-buttons>
                       </div>
@@ -1506,10 +1509,8 @@
                           [columnAutoWidth]="true"
                           [showColumnLines]="true"
                           [showRowLines]="true"
-                          keyExpr="SRNO"
-                          (onSelectionChanged)="
-                            onSelectionChanged($event, 'Cost Center Account')
-                          "
+                          keyExpr="SN"
+                          (onSelectionChanged)="onSelectionChanged($event, 0)"
                           [paging]="{ pageSize: 10 }"
                         >
                           <dxo-selection mode="single"></dxo-selection>
@@ -1530,8 +1531,8 @@
                           <!-- Columns -->
                           <dxi-column
                             alignment="center"
-                            dataField="SRNO"
-                            caption="SRNO"
+                            dataField="SN"
+                            caption="SN"
                           ></dxi-column>
                           <dxi-column
                             alignment="center"
@@ -1622,21 +1623,15 @@
 
                               <i
                                 class="pi pi-search"
-                                style="font-size: 12px; font-weight: bold; cursor: pointer;"
+                                style="
+                                  font-size: 12px;
+                                  font-weight: bold;
+                                  cursor: pointer;
+                                "
                                 (click)="openGPCGrid(null, data)"
                               ></i>
                             </mat-form-field>
                           </div>
-
-                          <!-- <master-search
-                                *ngIf="flag != 'VIEW'"
-                                #overlayGroupOne
-                                [MasterSearchData]="groupCodeData"
-                                class="masterSearch"
-                                (newRowClick)="GPCSelect($event, data)"
-                              ></master-search> -->
-
-                          <!-- HSN Code Column -->
                           <div *dxTemplate="let data of 'gpcAccodeDescTemp'">
                             <mat-form-field
                               style="width: 100%"
@@ -1676,7 +1671,12 @@
                                 #overlayGroupOne
                                 [MasterSearchData]="hsnCodeData"
                                 class="masterSearch"
-                                (newRowClick)="HSNSelect($event, data)"
+                                (newRowClick)="
+                                  gridDataBinding($event, data, [
+                                    'HSN_SAC_CODE',
+                                    'HSN_SAC_DESC'
+                                  ])
+                                "
                               ></master-search>
                             </mat-form-field>
                           </div>

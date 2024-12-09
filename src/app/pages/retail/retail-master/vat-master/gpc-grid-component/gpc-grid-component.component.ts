@@ -7,6 +7,7 @@ import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
 
 @Component({
   selector: "app-gpc-grid-component",
@@ -14,7 +15,8 @@ import { SuntechAPIService } from "src/app/services/suntech-api.service";
   styleUrls: ["./gpc-grid-component.component.scss"],
 })
 export class GpcGridComponentComponent implements OnInit {
-  @ViewChild('gridContainer', { static: false }) gridContainer!: DxDataGridComponent;
+  @ViewChild("gridContainer", { static: false })
+  gridContainer!: DxDataGridComponent;
   GPCData: any[] = [];
   selectedRow: any = [];
   branchCode: any = this.commonService.branchCode;
@@ -26,6 +28,7 @@ export class GpcGridComponentComponent implements OnInit {
     { field: "Account_Head", caption: "ACCOUNT HEAD" },
     { field: "TAX_REG", caption: "TAX REG" },
   ];
+  dialogBox: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -65,10 +68,12 @@ export class GpcGridComponentComponent implements OnInit {
   getSelectedData() {
     if (!this.selectedRow.length) {
       console.log("Please select a row before proceeding.");
+      let message = "Please Select Any GPC Accode";
+      this.openDialog("Warning", message, true);
       return;
     }
     console.log(this.selectedRow);
-    this.close(this.selectedRow)
+    this.close(this.selectedRow);
   }
 
   removeSelectedData() {
@@ -92,7 +97,6 @@ export class GpcGridComponentComponent implements OnInit {
     if (!SEARCHVALUE) {
       return this.getGpcData();
     }
-
     // let sub: Subscription = this.apiService
     //   .getDynamicAPIwithParamsCustom(API, PARAMS)
     //   .subscribe(
@@ -115,4 +119,12 @@ export class GpcGridComponentComponent implements OnInit {
   // }
   // );
   // }
+
+  openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
+    this.dialogBox = this.dialog.open(DialogboxComponent, {
+      width: "40%",
+      disableClose: true,
+      data: { title, msg, okBtn, swapColor },
+    });
+  }
 }
