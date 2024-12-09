@@ -73,14 +73,13 @@
                                         appearance="outline">
                                         <input matInput DateValidation
                                             (dateChange)="formatDate($event)"
-                                            [matDatepicker]="jobdate"
                                             formControlName="jobdate"
                                             placeholder="DD/MM/YYYY"
                                             [disabled]="viewMode"
                                             class="text-right" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="jobdate"></mat-datepicker-toggle>
-                                        <mat-datepicker [startAt]="currentDate"
+                                        <mat-datepicker [disabled]="isSaved" 
                                             #jobdate></mat-datepicker>
                                     </mat-form-field>
                                 </div>
@@ -95,7 +94,7 @@
                                     appearance="outline">
                                     <input type="text" matInput
                                         formControlName="designcode"
-                                        maxlength="20" 
+                                        maxlength="20"
                                         oninput="this.value = this.value.toUpperCase()"
                                         [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,designCodeData,'designcode')"
@@ -114,7 +113,8 @@
                                     appearance="outline">
                                     <input type="text" matInput
                                         formControlName="designtype"
-                                        maxlength="20"  oninput="this.value = this.value.toUpperCase()"
+                                        maxlength="20"
+                                        oninput="this.value = this.value.toUpperCase()"
                                         readonly />
                                 </mat-form-field>
                             </div>
@@ -529,15 +529,13 @@
                                         appearance="outline">
                                         <input matInput DateValidation
                                             (dateChange)="formatDate($event)"
-                                            [matDatepicker]="deldate"
                                             formControlName="deldate"
-                                            [disabled]="viewMode"
+                                            [readonly]="viewMode"
                                             placeholder="DD/MM/YYYY"
-                                            [min]="jobCardFrom.value.jobdate"
                                             class="text-right" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="deldate"></mat-datepicker-toggle>
-                                        <mat-datepicker [startAt]="currentDate"
+                                        <mat-datepicker [disabled]="isSaved"
                                             #deldate></mat-datepicker>
                                     </mat-form-field>
                                 </div>
