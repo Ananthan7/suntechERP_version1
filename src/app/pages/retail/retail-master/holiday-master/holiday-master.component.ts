@@ -165,12 +165,64 @@ export class HolidayMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  
-// Function to remove a row by SRNO
-removeRow(rowIndex: number) {
-  this.tableData.splice(rowIndex, 1); // Remove the specific row
-  this.tableData = [...this.tableData]; // Trigger change detection
+
+
+// removeRow(rowIndex: number): void {
+//   Swal.fire({
+//     title: 'Are you sure?',
+//     text: "You won't be able to revert this!",
+//     icon: 'warning',
+//     showCancelButton: true,
+//     confirmButtonColor: '#3085d6',
+//     cancelButtonColor: '#d33',
+//     confirmButtonText: 'Yes, delete!',
+//     cancelButtonText: 'No, cancel!'
+//   }).then((result) => {
+//     if (result.isConfirmed) {
+//       this.tableData.splice(rowIndex, 1);
+//       this.tableData = [...this.tableData]; 
+//       Swal.fire('Deleted!', 'The row has been removed.', 'success');
+//     }
+//   });
+// }
+
+removeRow(rowData: any): void {
+
+  if(this.content?.FLAG == 'VIEW')return;
+ 
+  const row = rowData.data;
+
+  console.log('Row data received:', row);
+  console.log('Table data:', this.tableData);
+
+  if (!row || !row.SRNO) {
+    console.error("Row data is invalid or SRNO is missing.");
+    return;
+  }
+
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete!',
+    cancelButtonText: 'No, cancel!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const index = this.tableData.findIndex(item => item.SRNO === row.SRNO);
+      if (index !== -1) {
+        this.tableData.splice(index, 1); 
+        this.tableData = [...this.tableData];
+        Swal.fire('Deleted!', 'The row has been removed.', 'success');
+      }
+    }
+  });
 }
+
+
+
 
   setPostData() {
     return {
@@ -197,6 +249,7 @@ removeRow(rowIndex: number) {
   }
 
   saveRow() {
+    if(this.content?.FLAG == 'VIEW')return;
     const { countrycode, holidaydate, remarks } = this.holidaymasterMainForm.value;
 
     if (!countrycode || !holidaydate || !remarks) {
@@ -213,17 +266,9 @@ removeRow(rowIndex: number) {
       Remove: 'Remove' 
     };
 
-    // "UNIQUEID": 0,
-    // "SRNO": 0,
-    // "YEAR": "string",
-    // "HOLIDAY_DATE": "2024-12-06T07:36:16.070Z",
-    // "REMARKS": "string",
-    // "COUNTRYCODE": "string"
-
     this.tableData.push(newRow); 
     this.tableData = [...this.tableData]; 
-    // this.holidaymasterMainForm.reset(); 
-     // Reset only specific fields
+
      this.holidaymasterMainForm.patchValue({
       countrycode: '',
       holidaydate: '',
@@ -231,6 +276,20 @@ removeRow(rowIndex: number) {
     });
   }
 
+
+
+  onRowSelection(selectedRow: any): void {
+    console.log('Selected Row:', selectedRow);
+    this.populateForm(selectedRow);
+  }
+
+  populateForm(rowData: any): void {
+    this.holidaymasterMainForm.patchValue({
+      countrycode: rowData.COUNTRYCODE,
+      holidaydate: rowData.HOLIDAY_DATE,
+      remarks: rowData.REMARKS
+    });
+  }
   formSave() {
 
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -299,11 +358,11 @@ removeRow(rowIndex: number) {
   }
 
   deleteMaster() { 
-    Swal.fire({
+   Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
-      showCancelButton: true,
+      showCancelButton:  true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete!'
