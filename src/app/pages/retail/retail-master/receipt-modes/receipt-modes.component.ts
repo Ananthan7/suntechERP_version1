@@ -172,6 +172,8 @@ export class ReceiptModesComponent implements OnInit {
 
   ViewController(DATA: any) {
     this.code = DATA.CREDIT_CODE;
+    console.log(DATA);
+    
     this.receiptModesMainForm.controls["mode"].setValue(DATA.MODE.toString());
     this.receiptModesMainForm.controls["code"].setValue(DATA.CREDIT_CODE);
     this.receiptModesMainForm.controls["desc"].setValue(DATA.DESCRIPTION);
