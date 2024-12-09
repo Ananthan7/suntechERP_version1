@@ -35,8 +35,8 @@
                                             formControlName="code"
                                             [readonly]="viewMode || editMode"
                                             [disabled]="viewMode"
-                                            UpperCaseDirective
                                             autocomplete="off"
+                                            UpperCaseDirective
                                             (keydown)="lookupKeyPress($event,'code')" />
                                         <master-search class="masterSearch"
                                             *ngIf="!editMode && !viewMode"
