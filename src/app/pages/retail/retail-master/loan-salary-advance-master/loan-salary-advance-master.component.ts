@@ -362,25 +362,11 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
     udf13: [""],
     udf14: [""],
     udf15: [""],
-    // details: this.formBuilder.group({
-    loandet_emp_code: [""],
-    loandet_scheduled_date: [""],
-    loandet_scheduled_amount: [0],
-    loandet_effective_date: [""],
-    loandet_effective_amount: [0],
-    loandet_deducted_date: [""],
-    loandet_created_by: [""],
-    loandet_created_ts: [""],
-    uniqueid: [0],
-    dt_branch_code: [""],
-    dt_voc_type: [""],
-    dt_vocno: [0],
-    dt_yearmonth: [""],
-    loandet_amount: [""],
-    loandet_repaid_amount: [""],
-    loandet_balance_amount: [""],
-    loandet_closing_date: [""],
-    // })
+    loandet_closing_date:[''],
+    loandet_balance_amount:[''],
+    loandet_repaid_amount:[''],
+    loandet_amount:['']
+  
   });
   branchCode: any;
   flag: any;
@@ -402,18 +388,22 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
 
     this.flag === "ADD" && this.generateVocNo();
     if (this.content?.FLAG) {
+    
       // this.setFormValues();
       if (this.content?.FLAG == "VIEW") {
         this.isDisabled = true;
         this.viewMode = true;
+        this.setView(this.content);
       } else if (this.content?.FLAG == "EDIT") {
         this.viewMode = false;
         this.editMode = true;
         this.codeEnable = false;
+        this.setView(this.content);
       } else if (this.content?.FLAG == "DELETE") {
         this.viewMode = true;
         this.deleteMode = true;
         this.deleteRecord();
+        this.setView(this.content);
       }
     }
 
@@ -425,7 +415,7 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
       this.commonService.currentDate
     );
 
-    this.setView(this.content);
+    
   }
   generateVocNo() {
     const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.commonService.getqueryParamVocType()}/${
@@ -442,8 +432,20 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
     });
   }
 
+  parseDate(dateStr: string): Date | null {
+    if (!dateStr) {
+      return null;
+    }
+    const [day, month, year] = dateStr.split("-").map(Number);
+    return new Date(year, month - 1, day);
+  }
+
   setView(DATA: any) {
     console.log(DATA);
+
+    const issueDate = this.parseDate(DATA.LOAN_ISSUE_DATE);
+    const deductionFromDate = this.parseDate(DATA.LOAN_DEDUCTION_FM_DATE);
+    const deductionToDate = this.parseDate(DATA.LOAN_DEDUCTION_TO_DATE);
 
     this.LoanSalaryAdvanceMasterForm.controls["voc_type"].setValue(
       DATA.VOCTYPE
@@ -464,10 +466,13 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
       DATA.LOAN_MODIFIED_BY
     );
     this.LoanSalaryAdvanceMasterForm.controls["loan_amount"].setValue(
-      DATA.LOAN_AMOUNT
+      this.commonService.decimalQuantityFormat(DATA.LOAN_AMOUNT, "AMOUNT")
     );
+
+    console.log(this.commonService.decimalQuantityFormat(DATA.LOAN_AMOUNT, "AMOUNT"));
+    
     this.LoanSalaryAdvanceMasterForm.controls["loan_issue_date"].setValue(
-      DATA.LOAN_ISSUE_DATE
+      issueDate
     );
     this.LoanSalaryAdvanceMasterForm.controls["loan_ref1"].setValue(
       DATA.LOAN_REF1
@@ -480,13 +485,13 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
     );
     this.LoanSalaryAdvanceMasterForm.controls[
       "loan_deduction_fm_date"
-    ].setValue(DATA.LOAN_DEDUCTION_FM_DATE);
+    ].setValue(deductionFromDate);
     this.LoanSalaryAdvanceMasterForm.controls["loan_intervals"].setValue(
       DATA.LOAN_INTERVALS
     );
     this.LoanSalaryAdvanceMasterForm.controls[
       "loan_deduction_to_date"
-    ].setValue(DATA.LOAN_DEDUCTION_TO_DATE);
+    ].setValue(deductionToDate);
     this.LoanSalaryAdvanceMasterForm.controls["loan_pay_doc_details"].setValue(
       DATA.LOAN_PAY_DOC_DETAILS
     );
@@ -613,36 +618,33 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
       UDF13: this.commonService.nullToString(form.udf13),
       UDF14: this.commonService.nullToString(form.udf14),
       UDF15: this.commonService.nullToString(form.udf15),
-      // Details: form.details.map((detail: any) => ({
-      //   SRNO: detail.srno || 0,
-      //   VOCTYPE: this.commonService.nullToString(detail.voctype),
-      //   VOCNO: detail.vocno || 0,
-      //   VOCDATE: detail.vocdate ? new Date(detail.vocdate).toISOString() : new Date().toISOString(),
-      //   YEARMONTH: this.commonService.nullToString(detail.yearmonth),
-      //   BRANCH_CODE: this.commonService.nullToString(detail.branch_code),
-      //   LOANDET_EMP_CODE: this.commonService.nullToString(detail.loandet_emp_code),
-      //   LOANDET_SCHEDULED_DATE: detail.loandet_scheduled_date
-      //     ? new Date(detail.loandet_scheduled_date).toISOString()
-      //     : new Date().toISOString(),
-      //   LOANDET_SCHEDULED_AMOUNT: detail.loandet_scheduled_amount || 0,
-      //   LOANDET_EFFECTIVE_DATE: detail.loandet_effective_date
-      //     ? new Date(detail.loandet_effective_date).toISOString()
-      //     : new Date().toISOString(),
-      //   LOANDET_EFFECTIVE_AMOUNT: detail.loandet_effective_amount || 0,
-      //   LOANDET_DEDUCTED_DATE: detail.loandet_deducted_date
-      //     ? new Date(detail.loandet_deducted_date).toISOString()
-      //     : new Date().toISOString(),
-      //   LOANDET_CREATED_BY: this.commonService.nullToString(detail.loandet_created_by),
-      //   LOANDET_CREATED_TS: detail.loandet_created_ts
-      //     ? new Date(detail.loandet_created_ts).toISOString()
-      //     : new Date().toISOString(),
-      //   UNIQUEID: detail.uniqueid || 0,
-      //   DT_BRANCH_CODE: this.commonService.nullToString(detail.dt_branch_code),
-      //   DT_VOCTYPE: this.commonService.nullToString(detail.dt_voctype),
-      //   DT_VOCNO: detail.dt_vocno || 0,
-      //   DT_YEARMONTH: this.commonService.nullToString(detail.dt_yearmonth),
-      // })),
-    };
+    "Details": [
+    {
+      "SRNO": 0,
+      "VOCTYPE": this.commonService.nullToString(form.voc_type),
+      "VOCNO":this.commonService.emptyToZero(form.vocno),
+      "VOCDATE":form.voc_date
+      ? new Date(form.voc_date).toISOString()
+      : new Date().toISOString(),
+      "YEARMONTH": "str",
+      "BRANCH_CODE": "str",
+      "LOANDET_EMP_CODE": "str",
+      "LOANDET_SCHEDULED_DATE": this.currentDate,
+      "LOANDET_SCHEDULED_AMOUNT": 0,
+      "LOANDET_EFFECTIVE_DATE":  this.currentDate,
+      "LOANDET_EFFECTIVE_AMOUNT": 0,
+      "LOANDET_DEDUCTED_DATE":  this.currentDate,
+      "LOANDET_CREATED_BY": "str",
+      "LOANDET_CREATED_TS": this.currentDate,
+      "UNIQUEID": 0,
+      "DT_BRANCH_CODE": "str",
+      "DT_VOCTYPE": "str",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": "str"
+    }
+  ]
+  };
+
   }
 
   formSubmit() {
@@ -662,7 +664,7 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
       .subscribe(
         (result) => {
           if (result.response) {
-            if (result.status == "Success") {
+            if (result.status == " Success ") {
               Swal.fire({
                 title: result.message || "Success",
                 text: "",

@@ -15,10 +15,15 @@
     (deleteClick)="deleteallowance()"
   ></modal-header> -->
 
-  <modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
-    [isViewMore]="!viewMode" (cancelClick)="close()"
-    (saveClick)="formSubmit()" (deleteClick)="deleteallowance()"
-    [isViewDelete]="false"></modal-header>
+  <modal-header
+    [isViewSave]="!viewMode"
+    [isViewCancel]="!viewMode"
+    [isViewMore]="!viewMode"
+    (cancelClick)="close()"
+    (saveClick)="formSubmit()"
+    (deleteClick)="deleteallowance()"
+    [isViewDelete]="false"
+  ></modal-header>
   <!-- content section -->
   <div class="p-4">
     <form [formGroup]="allowanceMasterForm">
@@ -32,7 +37,7 @@
                   id="ID001"
                   class="col-sm-2 col-form-label"
                 >
-                  Code :</label
+                  Code <span>* :</span> </label
                 >
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
@@ -40,6 +45,7 @@
                       type="text"
                       #codeInput
                       matInput
+                      maxlength="6"
                       formControlName="code"
                       UpperCaseDirective
                       autocomplete="off"
@@ -55,7 +61,7 @@
                   id="ID001"
                   class="col-sm-2 col-form-label"
                 >
-                  Description :</label
+                  Description <span>* :</span> </label
                 >
                 <div class="col-sm-6">
                   <mat-form-field style="width: 100%" appearance="outline">
@@ -63,6 +69,7 @@
                       type="text"
                       #codeInput
                       matInput
+                      maxlength="50"
                       formControlName="description"
                       UpperCaseDirective
                       autocomplete="off"
@@ -87,7 +94,7 @@
                   for="inputPassword"
                   id="ID002"
                   class="col-sm-2 col-form-label"
-                  >GL Code :
+                  >GL Code <span>* :</span> 
                 </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
@@ -125,7 +132,7 @@
                 </div>
                 <div class="col-sm-4">
                   <mat-checkbox
-                  [disabled]="viewMode"
+                    [disabled]="viewMode"
                     (change)="checkBoxValue($event, 'credit_to_employeeAC')"
                     formControlName="credit_to_employeeAC"
                     class="example-margin"
@@ -139,7 +146,7 @@
                   for="inputPassword"
                   id="ID002"
                   class="col-sm-2 col-form-label"
-                  >Country Code :
+                  >Country Code <span>* :</span> 
                 </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
@@ -180,7 +187,7 @@
                 </div>
                 <div class="col-sm-4">
                   <mat-checkbox
-                  [disabled]="viewMode"
+                    [disabled]="viewMode"
                     (change)="checkBoxValue($event, 'consider_for_overtime')"
                     formControlName="consider_for_overtime"
                     class="example-margin"
@@ -198,7 +205,7 @@
                 <div class="row">
                   <div class="col-md-6">
                     <mat-radio-group
-                    [disabled]="viewMode"
+                      [disabled]="viewMode"
                       aria-label="Select an option"
                       formControlName="calc_method"
                       class="d-flex flex-column"
@@ -218,7 +225,7 @@
                         id="ID001"
                         class="col-sm-4 col-form-label"
                       >
-                        Value</label
+                        Value <span>* :</span>  </label
                       >
                       <div class="col-sm-8">
                         <mat-form-field
@@ -229,17 +236,20 @@
                             type="number"
                             #codeInput
                             matInput
+                            class="text-right"
                             formControlName="value"
-                            UpperCaseDirective
                             [readonly]="viewMode"
                             autocomplete="off"
+                            maxlength="13"
+                            (input)="onInputChange($event)"
+                            (blur)="onInputBlur($event)"
                           />
                         </mat-form-field>
                       </div>
                     </div>
                     <div>
                       <mat-checkbox
-                      [disabled]="viewMode"
+                        [disabled]="viewMode"
                         (change)="checkBoxValue($event, 'avoid_fraction')"
                         formControlName="avoid_fraction"
                         class="example-margin"
@@ -269,9 +279,13 @@
                 >
                 <div class="col-md-9">
                   <mat-form-field style="width: 100%" appearance="outline">
-                    <mat-select formControlName="calc_basis"   [disabled]="viewMode">
-                      <mat-option value="0">Basic Salary</mat-option>
-                      <mat-option value="1">Earned Basic Salary</mat-option>
+                    <mat-select
+                      formControlName="calc_basis"
+                      [disabled]="viewMode"
+                    >
+                    <mat-option *ngFor="let option of calcBasisOptions" [value]="option.value">
+                      {{ option.label }}
+                    </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -281,11 +295,11 @@
                   <fieldset class="custom-fieldset">
                     <legend class="custom-legend">Period</legend>
                     <mat-radio-group
-                    [disabled]="viewMode"
+                      [disabled]="viewMode"
                       aria-label="Select an option"
                       formControlName="period"
                     >
-                      <mat-radio-button value="M" class="mx-2"
+                      <mat-radio-button value="M" class="mx-2" 
                         ><b>Monthly</b></mat-radio-button
                       >
                       <mat-radio-button value="Y" class="mx-2"

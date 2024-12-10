@@ -8,10 +8,12 @@
 
 <!-- modal header component -->
 <modal-header
-  *ngIf="flag !== 'VIEW'"
+  [isViewSave]="!viewMode"
+  [isViewCancel]="!viewMode"
+  [isViewMore]="!viewMode"
+  [isViewDelete]="false"
   (saveClick)="formSave()"
   (cancelClick)="close()"
-  [isViewDelete]="flag == 'VIEW'"
   (deleteClick)="deleteMaster()"
 ></modal-header>
 
@@ -29,7 +31,7 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    [readonly]="viewMode"
+                    [readonly]="viewMode || editMode"
                     matInput="text"
                     formControlName="code"
                     maxlength="5"
@@ -50,6 +52,7 @@
                   <input
                     [readonly]="viewMode"
                     matInput="text"
+                    maxlength="50"
                     formControlName="description"
                   />
                 </mat-form-field>
@@ -128,6 +131,8 @@
                     [readonly]="viewMode"
                     matInput="text"
                     formControlName="calculated_code"
+                    class="text-right"
+                    FourDecimalInput
                   />
                 </mat-form-field>
               </div>
@@ -182,12 +187,8 @@
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <mat-select formControlName="transaction_code">
-                    <mat-option
-                      *ngFor="let data of typeList"
-                      [value]="data.ENGLISH"
-                    >
-                      {{ data.ENGLISH }}
-                    </mat-option>
+                    <mat-option value="p"> + </mat-option>
+                    <mat-option value="m"> - </mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -253,7 +254,7 @@
                   <input
                     [readonly]="viewMode"
                     matInput="text"
-                    formControlName="description"
+                    formControlName="debit_description"
                   />
                 </mat-form-field>
               </div>
@@ -311,7 +312,7 @@
                   <input
                     [readonly]="viewMode"
                     matInput="text"
-                    formControlName="description"
+                    formControlName="credit_description"
                   />
                 </mat-form-field>
               </div>

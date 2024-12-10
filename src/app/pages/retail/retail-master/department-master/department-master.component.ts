@@ -85,7 +85,7 @@ export class DepartmentMasterComponent implements OnInit {
   selectedTabIndex = 0;
   tableData: any = [];
   editMode: boolean = false;
-  codeEnable: boolean = false;
+  codeEnable: boolean = true;
   private subscriptions: Subscription[] = [];
   isloading: boolean = false;
   viewMode: boolean = false;
@@ -614,6 +614,7 @@ export class DepartmentMasterComponent implements OnInit {
       }
     }
 
+
     this.weekOff = this.commonService
       .getComboFilterByID("Days of Week")
       .filter(
@@ -631,6 +632,7 @@ export class DepartmentMasterComponent implements OnInit {
     console.log(this.weekOffType);
     console.log(this.commonService.getComboFilterByID("Weekly Off Type"));
   }
+
 
   close(data?: any) {
     if (data) {
@@ -658,48 +660,74 @@ export class DepartmentMasterComponent implements OnInit {
     });
   }
 
+  codeEnabled() {
+    if (this.departmentMasterForm.value.code == '') {
+      this.codeEnable = true;
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
+    }
+    else {
+      this.codeEnable = false;
+    }
+  }
+
+checkCode(): boolean {
+  if (this.departmentMasterForm.value.code == '') {
+    this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
+    return true
+  }
+  return false
+  }
   CountryCodeDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.CountryCode.setValue(e.CODE);
     this.departmentMasterForm.controls.CountryCodeDes.setValue(e.DESCRIPTION);
   }
 
   oneTimeCodeDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.oneTimeCode.setValue(e.CODE);
   }
 
   leaveSalaryCodeDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.leaveSalaryCode.setValue(e.CODE);
   }
 
   airTicketCodeDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.airTicketCode.setValue(e.CODE);
   }
 
   GratuityCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.GratuityCode.setValue(e.CODE);
   }
 
   AIDebitExpCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.AIDebitExpCode.setValue(e.ACCODE);
   }
 
   AICreditCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.AICreditCode.setValue(e.ACCODE);
   }
 
   DebitExpensesLeaveSalDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.DebitExpensesLeaveSal.setValue(e.ACCODE);
   }
 
   DebitExpensesAirTicketSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.DebitExpensesAirTicket.setValue(
       e.ACCODE
@@ -707,11 +735,13 @@ export class DepartmentMasterComponent implements OnInit {
   }
 
   DebitExpensesGratuityDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.DebitExpensesGratuity.setValue(e.ACCODE);
   }
 
   CreditExpensesLeaveSalDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.CreditExpensesLeaveSal.setValue(
       e.ACCODE
@@ -720,12 +750,14 @@ export class DepartmentMasterComponent implements OnInit {
 
   CreditExpensesAirTicketSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
     this.departmentMasterForm.controls.CreditExpensesAirTicket.setValue(
       e.ACCODE
     );
   }
 
   CreditExpensesGratuityDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.CreditExpensesGratuity.setValue(
       e.ACCODE
@@ -733,67 +765,83 @@ export class DepartmentMasterComponent implements OnInit {
   }
 
   OtherAmountValueSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.OtherAmountValue.setValue(e.ACCODE);
   }
 
   UserDefined1DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined1.setValue(e.CODE);
   }
   UserDefined2DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined2.setValue(e.CODE);
   }
   UserDefined3DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined3.setValue(e.CODE);
   }
   UserDefined4DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined4.setValue(e.CODE);
   }
   UserDefined5DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined5.setValue(e.CODE);
   }
   UserDefined6DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined6.setValue(e.CODE);
   }
   UserDefined7DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined7.setValue(e.CODE);
   }
   UserDefined8DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined8.setValue(e.CODE);
   }
   UserDefined9DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined9.setValue(e.CODE);
   }
   UserDefined10DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined10.setValue(e.CODE);
   }
   UserDefined11DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined11.setValue(e.CODE);
   }
   UserDefined12DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined12.setValue(e.CODE);
   }
   UserDefined13DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined13.setValue(e.CODE);
   }
   UserDefined14DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined14.setValue(e.CODE);
   }
   UserDefined15DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined15.setValue(e.CODE);
   }
