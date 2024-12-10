@@ -20,7 +20,7 @@
                                     <div class="col-md-9">
                                         <div class="row align-items-center mb-1">
                                             <label for="inputPassword" class="col-sm-2 col-form-label">Prefix
-                                                Code :</label>
+                                                Code * :</label>
                                             <div class="col-md-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput formControlName="prefixcode" #prefixcode
@@ -43,8 +43,8 @@
                                                 No :</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <input type="text" matInput formControlName="lastno" NumberOnlyWithoutComma
-                                                       maxlength="10" [readonly]="viewMode || codeEnable" class="text-right"/>
+                                                    <input type="text" matInput formControlName="lastno" maxlength="10"
+                                                     [readonly]="viewMode || codeEnable" class="text-right"     (input)="allowNumbersOnly($event)" />                         
                                                 </mat-form-field>
                                             </div>
                                             <label for="currency" class="col-sm-2 col-form-label">Currency

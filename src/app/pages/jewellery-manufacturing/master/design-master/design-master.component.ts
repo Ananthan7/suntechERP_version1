@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -86,6 +86,7 @@ export class DesignMasterComponent implements OnInit {
   viewMode: boolean = false;
   fieldDisable : boolean = false;
   FieldEnable : boolean = false;
+  editableMode: boolean = false;
 
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
@@ -145,6 +146,7 @@ export class DesignMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     private modalService: NgbModal,
+    private renderer: Renderer2,
   ) { }
 
   // close(data?: any) {
@@ -185,6 +187,7 @@ export class DesignMasterComponent implements OnInit {
 
    // this.setAllInitialValues()
     //this.setFormValues()
+    this.renderer.selectRootElement('#code')?.focus();
 
     if (this.content?.FLAG) {
       console.log(this.content)
@@ -195,6 +198,8 @@ export class DesignMasterComponent implements OnInit {
       } else if (this.content.FLAG == 'EDIT') {
         this.viewMode = false;
         this.editMode = true;
+        this.editableMode = true;
+
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteRecord()
@@ -1979,7 +1984,15 @@ onFileChangedimage(event: any) {
     this.subscriptions.push(Sub)
   }
   checkCodeExists(event: any) {
-    if (event.target.value == '') return
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
+    // console.log('this w');
+    
     let API = 'DesignMaster/CheckIfDesignCodePresent/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -2057,6 +2070,7 @@ onFileChangedimage(event: any) {
                     this.designmasterForm.reset()
                     this.tableData = []
                     this.close()
+
                   }
                 });
               }
@@ -2065,6 +2079,11 @@ onFileChangedimage(event: any) {
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else
+      {
+        this.close('reloadMainGrid')
+
       }
     });
   }

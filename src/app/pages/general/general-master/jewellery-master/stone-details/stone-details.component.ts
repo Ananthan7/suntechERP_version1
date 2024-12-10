@@ -19,9 +19,11 @@ export class StoneDetailsComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any;
   @Input() tablecount :any;
+  @Input() viewMode :any;
+  @Input() editMode :any;
+
+
   tableData: any[] = [];
-  viewMode: boolean = false;
-  editMode: boolean = false;
 
   @ViewChild('StockcodeDescodeSearch') StockcodeDescodeSearch!: MasterSearchComponent;
   @ViewChild('ShapecodecodeSearch') ShapecodecodeSearch!: MasterSearchComponent;
@@ -57,6 +59,10 @@ export class StoneDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(this.editMode);
+    console.log(this.viewMode);
+
+    
     console.log(this.tableData)
   }
 
