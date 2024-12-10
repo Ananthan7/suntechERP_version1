@@ -353,15 +353,15 @@ export class StoneReturnDetailsComponent implements OnInit {
       this.showOverleyPanel(event, form)
     }
   }
-  
+
   setPostData(form: any) {
     return {
       "SRNO": this.comService.emptyToZero(this.content?.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
-      "VOCDATE": this.comService.formatDDMMYY(new Date(form.VOCDATE)),
+      "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
-      "JOB_DATE": this.comService.formatDDMMYY(new Date(form.JOB_DATE)),
+      "JOB_DATE": this.comService.formatDateTime(new Date(form.JOB_DATE)),
       "JOB_SO_NUMBER": this.comService.emptyToZero(form.JOB_SO_NUMBER),
       "UNQ_JOB_ID": this.comService.nullToString(form.jobNumber),
       "JOB_DESCRIPTION": form.jobDesc,
@@ -465,6 +465,7 @@ export class StoneReturnDetailsComponent implements OnInit {
     }
     // this.close(postData);
     this.saveDetail.emit(dataToparent);
+    console.log(dataToparent, 'dataToparent')
   }
   changeJobClicked() {
     this.formSubmit('CONTINUE')
@@ -583,7 +584,7 @@ export class StoneReturnDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-         
+
           this.stonereturndetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.stonereturndetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
           this.stonereturndetailsFrom.controls.worker.setValue(data[0].WORKER)
@@ -645,14 +646,15 @@ export class StoneReturnDetailsComponent implements OnInit {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
-           
+
             this.stonereturndetailsFrom.controls.jobDesc.setValue(data[0].DESCRIPTION)
             this.stonereturndetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.stonereturndetailsFrom.controls.subjobDesc.setValue(data[0].JOB_DESCRIPTION)
             this.stonereturndetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
             this.stonereturndetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
             if (!data[0]?.METAL_STOCK_CODE) {
-              this.showConfirmationDialog("No process in API for the provided job number.");
+              const message = this.comService.getMsgByID('MSG3779')
+              this.showConfirmationDialog(message);
               return;
             }
             this.setSubJobCondition()
@@ -804,10 +806,10 @@ export class StoneReturnDetailsComponent implements OnInit {
   }
   stockCodeValidate(event: any) {
     if (this.viewMode) return;
-  
+
     const stockCode = event?.target?.value;
     if (!stockCode) return; // Exit if input is empty
-  
+
     this.setStockCodeWhereCondition();
     const postData = {
       SPID: "046",
@@ -821,41 +823,45 @@ export class StoneReturnDetailsComponent implements OnInit {
         strVocDate: this.comService.formatDateTime(this.comService.currentDate),
       },
     };
-  
+
     this.comService.showSnackBarMsg('MSG81447');
-  
+
     const Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe(
         (result) => {
           this.comService.closeSnackBarMsg();
-  
+
           if (result.status === "Success" && result.dynamicData[0]) {
             const data = result.dynamicData[0];
-  
-            if (data && data[0]?.VALID_STOCK) {
+console.log(data,'data')
+            if (data[0]?.VALID_STOCK) {
+              console.log(data[0],'datatata')
+              // Valid stock code scenario
+              const stockDetails = data[1]?.[0];
+              if (stockDetails) {
+                console.log(stockDetails,'sstockdetailss')
+                this.stonereturndetailsFrom.patchValue({
+                  stockCodeDes: stockDetails.STOCK_DESCRIPTION,
+                  sieveset: stockDetails.SIEVE_SET,
+                  size: stockDetails.SIZE,
+                  batchid: stockDetails.STOCK_CODE,
+                  sieve: stockDetails.SIEVE,
+                  pieces: stockDetails.PCS,
+                  shape: stockDetails.SHAPE,
+                  color: stockDetails.COLOR,
+                });
+
+                this.CollectRate();
+                this.CollectPointerWtValidation();
+              }
+            } else {
               // Invalid stock code scenario
               this.overlaywstockCodeSearch.closeOverlayPanel();
               this.comService.toastErrorByMsgId('MSG1531');
               this.showOverleyPanel(event, 'stockCode');
-            } else if (data[0]) {
-              // Valid stock code scenario
-              const stockDetails = data[0];
-              this.stonereturndetailsFrom.patchValue({
-                stockCodeDes: stockDetails.STOCK_DESCRIPTION,
-                sieveset: stockDetails.SIEVE_SET,
-                size: stockDetails.SIZE,
-                batchid: stockDetails.STOCK_CODE,
-                sieve: stockDetails.SIEVE,
-                pieces: stockDetails.PCS,
-                shape: stockDetails.SHAPE,
-                color: stockDetails.COLOR,
-              });
-  
-              this.CollectRate();
-              this.CollectPointerWtValidation();
             }
           } else {
-            // Stock code not found
+            // Stock code not found or no valid data
             this.overlaywstockCodeSearch.closeOverlayPanel();
             this.stonereturndetailsFrom.controls.stockCode.setValue('');
             this.comService.toastErrorByMsgId('MSG1747');
@@ -869,10 +875,11 @@ export class StoneReturnDetailsComponent implements OnInit {
           this.showOverleyPanel(event, 'stockCode');
         }
       );
-  
+
     this.subscriptions.push(Sub);
   }
-  
+
+
   calculateCarat(event: any) {
     const pieces = event.target.value || 0;
     const pointerwt = this.stonereturndetailsFrom.get('pointerwt')?.value || 0;
