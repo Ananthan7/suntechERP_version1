@@ -65,6 +65,8 @@ export class JobcardComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   currentDate: any = this.commonService.currentDate;
+  UpdatetDate = this.formatDateToDDMMYYYY(new Date());
+
 
   urls: string | ArrayBuffer | null | undefined;
   url: any;
@@ -90,6 +92,13 @@ export class JobcardComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  formatDateToDDMMYYYY(date: Date): string {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+  
   lengthCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -416,6 +425,7 @@ export class JobcardComponent implements OnInit {
       switch (this.content.FLAG) {
         case 'VIEW':
           this.viewMode = true;
+          this.setLoadFormValues();
           break;
         case 'EDIT':
           this.editMode = true;
@@ -442,8 +452,8 @@ export class JobcardComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     this.yearMonth = this.commonService.yearSelected;
-    this.jobCardFrom.controls.jobdate.setValue(this.currentDate)
-    this.jobCardFrom.controls.deldate.setValue(this.currentDate)
+    this.jobCardFrom.controls.jobdate.setValue(this.UpdatetDate)
+    this.jobCardFrom.controls.deldate.setValue(this.UpdatetDate)
     this.jobCardFrom.controls.date.setValue(this.currentDate)
     let CURRENCY_CODE = this.commonService.compCurrency;
     this.jobCardFrom.controls.currency.setValue(CURRENCY_CODE);
@@ -582,12 +592,16 @@ export class JobcardComponent implements OnInit {
   formatDate(event: any) {
     const inputValue = event.target.value;
     let date = new Date(inputValue)
-    let yr = date.getFullYear()
-    let dt = date.getDate()
-    let dy = date.getMonth()
+    let deldate = new Date(inputValue)
+    let jobdate = new Date(inputValue)
+    let yr = date.getFullYear() || deldate.getFullYear() || jobdate.getFullYear()
+    let dt = date.getDate()  || deldate.getDate() || jobdate.getDate()
+    let dy = date.getMonth() || deldate.getMonth() || jobdate.getMonth()
     if (yr.toString().length > 4) {
       let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
-      this.jobCardFrom.controls.vocdate.setValue(new Date(date))
+      let deldate = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      let jobdate = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.jobCardFrom.controls.vocdate.setValue(new Date(date || deldate || jobdate))
     }
   }
 
@@ -1023,7 +1037,6 @@ export class JobcardComponent implements OnInit {
 
   setLoadFormValues() {
     if (!this.content) return
-
     this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE  = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
 
 
@@ -1071,6 +1084,7 @@ export class JobcardComponent implements OnInit {
 
     this.urls = this.content.PICTURE_NAME
     this.getDesignimagecode()
+
   }
 
   submitValidations(form: any) {
@@ -1155,7 +1169,7 @@ export class JobcardComponent implements OnInit {
       "BRAND_CODE": this.jobCardFrom.value.brand || "",
       "DESIGN_CODE": this.jobCardFrom.value.designcode || "",
       "SEQ_CODE": this.jobCardFrom.value.seqcode || "",
-      "PICTURE_NAME": this.urls || "",
+      "PICTURE_NAME": this.commonService.nullToString(this.jobCardFrom.value.picture_name),
       "DEPARTMENT_CODE": "",
       "JOB_INSTRUCTION": "",
       "SET_REF": this.jobCardFrom.value.setref || "",
@@ -1394,7 +1408,7 @@ export class JobcardComponent implements OnInit {
       "BRAND_CODE": this.jobCardFrom.value.brand || "",
       "DESIGN_CODE": this.jobCardFrom.value.designcode || "",
       "SEQ_CODE": this.jobCardFrom.value.seqcode || "",
-      "PICTURE_NAME": this.urls || "",
+      "PICTURE_NAME":this.commonService.nullToString(this.jobCardFrom.value.picture_name),
       "DEPARTMENT_CODE": "",
       "JOB_INSTRUCTION": "",
       "SET_REF": this.jobCardFrom.value.setref || "",

@@ -72,8 +72,8 @@ export class VatMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
 
-  // expenseHsnSacAllocationData: any[] = [];
-  expenseHsnSacAllocationData: any[] = [
+  expenseHsnSacAllocationData: any[] = [];
+  esxpenseHsnSacAllocationData: any[] = [
     {
       SN: 1,
       EXPENSE_ACCODE: "A001",
@@ -300,6 +300,7 @@ export class VatMasterComponent implements OnInit {
   ];
 
   expenseHsnSearchData: any;
+  searching!: boolean;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -585,24 +586,42 @@ export class VatMasterComponent implements OnInit {
           this.vatMasterMainForm.value.impRcmCtrlAccDebit || "",
         POSVATREFUND_DEBIT_ACCODE:
           this.vatMasterMainForm.value.posVatAccDebit || "",
-        vatMasterGst:
-          this.costCenterAccountData &&
-          this.expenseHsnSacAllocationData.map((item) => ({
-            UNIQUEID: 0,
-            SN: item.SN || 0,
-            GST_CODE: this.vatMasterMainForm.value.vatCode,
-            GST_DESCRIPTION: this.vatMasterMainForm.value.vatDesc,
-            GST_PER: Number(item.VAT_PER) || 0,
-            EXPENSE_ACCODE: item.EXPENSE_ACCODE || "",
-            EXPENSE_ACCODE_DESC: item.EXPENSE_ACCODE_DESC || "",
-            HSN_SAC_CODE: item.HSN_SAC_CODE || "",
-            HSN_SAC_DESC: item.HSN_SAC_DESC || "",
-            TAX_REG: item.TAX_REG,
-            REVERSECHARGE_UNREG: item.REVERSECHARGE_UNREG,
-            ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT,
-            EXPENSE_ACCTYPE: this.costCenterAccountData ? "GPC" : "",
-            COST_CODE: this.costCenterAccountData ? item.COST_CODE : "",
-          })),
+        vatMasterGst: [
+          ...this.costCenterAccountData,
+          ...this.expenseHsnSacAllocationData,
+        ].map((item) => ({
+          UNIQUEID: 0,
+          SN: item.SN || 0,
+          GST_CODE: this.vatMasterMainForm.value.vatCode || "",
+          GST_DESCRIPTION: this.vatMasterMainForm.value.vatDesc || "",
+          GST_PER: Number(this.vatMasterMainForm.value.vatPercent) || 0,
+          EXPENSE_ACCODE: this.costCenterAccountData.some(
+            (cc) => cc.GPC_ACCODE === item.GPC_ACCODE
+          )
+            ? item.GPC_ACCODE
+            : item.EXPENSE_ACCODE || "",
+          EXPENSE_ACCODE_DESC: this.costCenterAccountData.some(
+            (cc) => cc.GPC_ACCODE_DESC === item.GPC_ACCODE_DESC
+          )
+            ? item.GPC_ACCODE_DESC
+            : item.EXPENSE_ACCODE_DESC || "",
+          HSN_SAC_CODE: item.HSN_SAC_CODE || "",
+          HSN_SAC_DESC: item.HSN_SAC_DESC || "",
+          TAX_REG: item.TAX_REG,
+          REVERSECHARGE_UNREG: item.REVERSECHARGE_UNREG,
+          ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT,
+          EXPENSE_ACCTYPE:
+            this.costCenterAccountData.some((cc) => cc.SN === item.SN) &&
+            this.costCenterAccountData.includes(item)
+              ? "GPC"
+              : "",
+          COST_CODE: this.costCenterAccountData.some(
+            (cc) => cc.COST_CODE === item.COST_CODE
+          )
+            ? item.COST_CODE
+            : "",
+        })),
+
         VatMasterDetails: this.accountSettingDateWiseVatDetailsData.map(
           (item) => ({
             BRANCH_CODE: this.branchCode,
@@ -611,7 +630,9 @@ export class VatMasterComponent implements OnInit {
             VAT_CODE: item.VAT_CODE || "",
             VAT_PER: Number(item.VAT_PER),
             YEARCODE: item.YEARCODE || "",
-            VAT_DATE: this.formatDate(item.VAT_DATE) || new Date(),
+            VAT_DATE: this.isValidDate(item.VAT_DATE)
+              ? this.formatDate(item.VAT_DATE)
+              : item.VAT_DATE || new Date().toISOString(),
           })
         ),
       };
@@ -942,18 +963,35 @@ export class VatMasterComponent implements OnInit {
       : this.selectingRowFromcostCenterAccountData(values);
   }
 
-  updateField(data: any, value: any, field: string): void {
+  updateField(
+    data: any,
+    value: any,
+    field: string,
+    gridType: "costCenter" | "expense"
+  ): void {
     const rowIndex = value?.data?.SN - 1;
-    if (rowIndex >= 0 && this.expenseHsnSacAllocationData[rowIndex]) {
+
+    const gridData =
+      gridType === "costCenter"
+        ? this.costCenterAccountData
+        : this.expenseHsnSacAllocationData;
+
+    if (rowIndex >= 0 && gridData[rowIndex]) {
       if (typeof data === "object" && data.target) {
         console.log("Input value:", data.target.value);
-        this.expenseHsnSacAllocationData[rowIndex][field] = data.target.value;
+        gridData[rowIndex][field] = data.target.value;
       } else {
         console.log("Data:", data);
-        this.expenseHsnSacAllocationData[rowIndex][field] = data;
+        gridData[rowIndex][field] = data;
       }
     } else {
       console.warn("Invalid row index or data row missing:", rowIndex);
+    }
+
+    if (gridType === "costCenter") {
+      this.costCenterAccountData = [...gridData];
+    } else {
+      this.expenseHsnSacAllocationData = [...gridData];
     }
   }
 
@@ -1076,11 +1114,23 @@ export class VatMasterComponent implements OnInit {
       : this.deletingRowFromCostCenterAccount();
   }
 
-  gridDataBinding(event: any, data: any, GridFiled: string[]) {
-    let currentIndex = data.data.SN - 1;
-    this.expenseHsnSacAllocationData[currentIndex][GridFiled[0]] = event.CODE;
-    this.expenseHsnSacAllocationData[currentIndex][GridFiled[1]] =
-      event.DESCRIPTION;
+  gridDataBinding(
+    event: any,
+    data: any,
+    gridField: string[],
+    gridType: "costCenter" | "expense"
+  ) {
+    const currentIndex = data.data.SN - 1;
+
+    if (gridType === "costCenter") {
+      this.costCenterAccountData[currentIndex][gridField[0]] = event.CODE;
+      this.costCenterAccountData[currentIndex][gridField[1]] =
+        event.DESCRIPTION;
+    } else if (gridType === "expense") {
+      this.expenseHsnSacAllocationData[currentIndex][gridField[0]] = event.CODE;
+      this.expenseHsnSacAllocationData[currentIndex][gridField[1]] =
+        event.DESCRIPTION;
+    }
   }
 
   //First Tab
@@ -1150,14 +1200,33 @@ export class VatMasterComponent implements OnInit {
     let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
       (result) => {
         if (result.status.trim() === "Success") {
-          console.log(result.response);
-          this.expenseHsnSacAllocationData = result.response.gstMasterGst.map(
-            (item: any) => ({
-              SN: item.SN || item.SN,
-              ...item,
-            })
-          );
+          this.accountSettingDateWiseVatDetailsData =
+            result.response[0].VatMasterDetails.map(
+              (item: any, index: number) => ({
+                ...item,
+                SRNO: index + 1,
+              })
+            );
 
+          console.log(result.response[0].VatMasterGst);
+
+          this.costCenterAccountData = result.response[0].VatMasterGst.filter(
+            (item: { EXPENSE_ACCTYPE: string }) =>
+              item.EXPENSE_ACCTYPE === "GPC"
+          ).map((item: any) => ({
+            ...item,
+            GPC_ACCODE: item.EXPENSE_ACCODE,
+            GPC_ACCODE_DESC: item.EXPENSE_ACCODE_DESC,
+          }));
+
+          this.expenseHsnSacAllocationData =
+            result.response[0].VatMasterGst.filter(
+              (item: { EXPENSE_ACCTYPE: string }) =>
+                item.EXPENSE_ACCTYPE !== "GPC"
+            );
+
+          console.log(this.accountSettingDateWiseVatDetailsData);
+          console.log(this.costCenterAccountData);
           console.log(this.expenseHsnSacAllocationData);
         }
       },
@@ -1203,21 +1272,23 @@ export class VatMasterComponent implements OnInit {
     let SEARCHVALUE = event.target.value.trim();
 
     if (!SEARCHVALUE) {
-      return this.getExpenseData();
+      this.searching = false;
+      return;
     }
+
     this.expenseHsnSearchData = this.expenseHsnSacAllocationData.filter(
       (item: any) =>
-        item.GPC_ACCODE.toLowerCase().startsWith(SEARCHVALUE.toLowerCase())
+        item.EXPENSE_ACCODE.toLowerCase().startsWith(SEARCHVALUE.toLowerCase())
     );
+    this.searching = true;
 
-    if (this.expenseHsnSearchData.length > 0) {
-      console.log("Matching records:", this.expenseHsnSearchData);
-    } else {
-      console.log("No matching records found.");
-    }
+    console.log(
+      this.expenseHsnSearchData.length > 0
+        ? "Matching records:"
+        : "No matching records found.",
+      this.expenseHsnSearchData
+    );
   }
-
-  getExpenseData() {}
 
   openGPCGrid(data: any, index?: any) {
     const modalRef: NgbModalRef = this.modalService.open(
@@ -1252,11 +1323,56 @@ export class VatMasterComponent implements OnInit {
   }
 
   formatDate(inputDate: string): string {
+    if (!this.isValidDate(inputDate)) {
+      throw new Error(`Invalid date format: ${inputDate}`);
+    }
+
+    if (!isNaN(Date.parse(inputDate))) {
+      return new Date(inputDate).toISOString();
+    }
+
     const parts = inputDate.split("/");
-    return new Date(
-      +parts[2], // Year
-      +parts[1] - 1, // Month (0-based index)
-      +parts[0] // Day
-    ).toISOString();
+    return new Date(+parts[2], +parts[1] - 1, +parts[0]).toISOString();
   }
+
+  isValidDate(date: any): boolean {
+    if (!date) return false;
+
+    if (!isNaN(Date.parse(date))) {
+      return true;
+    }
+
+    const parts = date.split("/");
+    if (parts.length === 3) {
+      const day = +parts[0],
+        month = +parts[1] - 1,
+        year = +parts[2];
+      const testDate = new Date(year, month, day);
+      return (
+        testDate.getFullYear() === year &&
+        testDate.getMonth() === month &&
+        testDate.getDate() === day
+      );
+    }
+
+    return false;
+  }
+  formatDateCell = (row: any): string => {
+    const date = row.VAT_DATE; // Adjust this if VAT_DATE is nested, e.g., row.VAT_DATE.value
+    if (!date) {
+      return ''; // Handle null or undefined values
+    }
+  
+    // Check if the date is already in valid ISO format
+    if (typeof date === 'string' && !isNaN(Date.parse(date))) {
+      const parsedDate = new Date(date);
+      const year = parsedDate.getFullYear();
+      const month = (parsedDate.getMonth() + 1).toString().padStart(2, '0');
+      const day = parsedDate.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+  
+    return date; // Return as-is if the value cannot be parsed
+  };
+  
 }

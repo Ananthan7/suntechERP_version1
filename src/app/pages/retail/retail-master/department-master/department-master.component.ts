@@ -78,6 +78,7 @@ export class DepartmentMasterComponent implements OnInit {
   overlayuserDefined14Search!: MasterSearchComponent;
   @ViewChild("overlayuserDefined15Search")
   overlayuserDefined15Search!: MasterSearchComponent;
+  branchCode: any = this.commonService.branchCode;
 
   dialogBox: any;
 
@@ -88,7 +89,7 @@ export class DepartmentMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   isloading: boolean = false;
   viewMode: boolean = false;
-  deleteMode:boolean = false;
+  deleteMode: boolean = false;
   isDisabled: boolean = false;
   editableMode: boolean = false;
 
@@ -135,15 +136,16 @@ export class DepartmentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 126,
+    ORDER_TYPE: 0,
+    WHERECONDITION: "CODE<> ''",
     SEARCH_FIELD: "",
     SEARCH_HEADING: "Air Ticket Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
-    FRONTENDFILTER: true,
-  };
+    FRONTENDFILTER: true,
+  };
   GratuityCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -161,10 +163,11 @@ export class DepartmentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
+    ORDER_TYPE: 1,
+    WHERECONDITION: `ACCODE<> '' and  ADBRANCH_CODE= '${this.branchCode}'`,
     SEARCH_FIELD: "ACCODE",
     SEARCH_HEADING: "Debit Expenses",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "ACCODE<> ''",
+    SEARCH_VALUE: '',
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -511,7 +514,7 @@ export class DepartmentMasterComponent implements OnInit {
   ];
 
   departmentMasterForm: FormGroup = this.formBuilder.group({
-    code: ["",Validators.required],
+    code: ["", Validators.required],
     Description: [""],
     CountryCode: [""],
     CountryCodeDes: [""],
@@ -590,7 +593,6 @@ export class DepartmentMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private renderer: Renderer2,
     public dialog: MatDialog
-
   ) {}
 
   ngOnInit(): void {
@@ -607,28 +609,27 @@ export class DepartmentMasterComponent implements OnInit {
         this.codeEnable = false;
       } else if (this.content?.FLAG == "DELETE") {
         this.viewMode = true;
-        this.deleteMode = true;
+        this.deleteMode = false;
         this.deleteDepartmentMaster();
       }
     }
 
     this.weekOff = this.commonService
-    .getComboFilterByID("Days of Week")
-    .filter(
-      (value: any, index: any, self: any) =>
-        index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
-    );
+      .getComboFilterByID("Days of Week")
+      .filter(
+        (value: any, index: any, self: any) =>
+          index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
+      );
     console.log(this.weekOff);
-    
+
     this.weekOffType = this.commonService
-    .getComboFilterByID("Weekly Off Type")
-    .filter(
-      (value: any, index: any, self: any) =>
-        index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
-    );
+      .getComboFilterByID("Weekly Off Type")
+      .filter(
+        (value: any, index: any, self: any) =>
+          index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
+      );
     console.log(this.weekOffType);
-    console.log( this.commonService.getComboFilterByID("Weekly Off Type"));
-    
+    console.log(this.commonService.getComboFilterByID("Weekly Off Type"));
   }
 
   close(data?: any) {
@@ -1383,7 +1384,9 @@ export class DepartmentMasterComponent implements OnInit {
     this.departmentMasterForm.controls.Shift3.setValue(
       this.content.PDEPTMST_SHIFT3
     );
-    this.departmentMasterForm.controls.shift.setValue(this.content.PDEPTMST_SHIFT.toString());
+    this.departmentMasterForm.controls.shift.setValue(
+      this.content.PDEPTMST_SHIFT.toString()
+    );
     this.departmentMasterForm.controls.shift.markAsPristine();
     this.departmentMasterForm.controls.shift.markAsTouched();
     this.departmentMasterForm.controls.CountryCode.setValue(
@@ -1606,7 +1609,6 @@ export class DepartmentMasterComponent implements OnInit {
       ),
     };
     return postData;
-    
   }
 
   openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
@@ -1616,7 +1618,6 @@ export class DepartmentMasterComponent implements OnInit {
       data: { title, msg, okBtn, swapColor },
     });
   }
-  
 
   formSubmit() {
     if (this.content?.FLAG == "VIEW") return;
@@ -1625,47 +1626,45 @@ export class DepartmentMasterComponent implements OnInit {
       return;
     }
 
-      if(this.departmentMasterForm.controls['code'].value == ""){
-        let message = `Code is mandatory ! `;
-        return this.openDialog("Warning", message, true);
-      }
-      else{
-        let API = "PayDepartmentMaster/InsertPayDepartmentMaster";
-        let postData = this.setPostData();
-    
-        this.commonService.showSnackBarMsg("MSG81447");
-        let Sub: Subscription = this.dataService
-          .postDynamicAPI(API, postData)
-          .subscribe(
-            (result) => {
-              console.log("result", result);
-              if (result.response) {
-                if (result.status == "Success") {
-                  Swal.fire({
-                    title: "Saved Successfully",
-                    text: "",
-                    icon: "success",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.departmentMasterForm.reset();
-                      this.tableData = [];
-                      this.close("reloadMainGrid");
-                    }
-                  });
-                }
-              } else {
-                this.commonService.toastErrorByMsgId("MSG3577");
+    if (this.departmentMasterForm.controls["code"].value == "") {
+      let message = `Code is mandatory ! `;
+      return this.openDialog("Warning", message, true);
+    } else {
+      let API = "PayDepartmentMaster/InsertPayDepartmentMaster";
+      let postData = this.setPostData();
+
+      this.commonService.showSnackBarMsg("MSG81447");
+      let Sub: Subscription = this.dataService
+        .postDynamicAPI(API, postData)
+        .subscribe(
+          (result) => {
+            console.log("result", result);
+            if (result.response) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: "Saved Successfully",
+                  text: "",
+                  icon: "success",
+                  confirmButtonColor: "#336699",
+                  confirmButtonText: "Ok",
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.departmentMasterForm.reset();
+                    this.tableData = [];
+                    this.close("reloadMainGrid");
+                  }
+                });
               }
-            },
-            (err) => {
+            } else {
               this.commonService.toastErrorByMsgId("MSG3577");
             }
-          );
-        this.subscriptions.push(Sub);
-      }
-    
+          },
+          (err) => {
+            this.commonService.toastErrorByMsgId("MSG3577");
+          }
+        );
+      this.subscriptions.push(Sub);
+    }
   }
 
   updateDepartmentMaster() {
@@ -1775,6 +1774,9 @@ export class DepartmentMasterComponent implements OnInit {
             (err) => alert(err)
           );
         this.subscriptions.push(Sub);
+      }
+      else {
+        this.close("reloadMainGrid");
       }
     });
   }

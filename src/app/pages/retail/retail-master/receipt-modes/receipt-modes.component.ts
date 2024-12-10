@@ -172,11 +172,18 @@ export class ReceiptModesComponent implements OnInit {
 
   ViewController(DATA: any) {
     this.code = DATA.CREDIT_CODE;
-    this.receiptModesMainForm.controls["mode"].setValue(DATA.MODE);
+    console.log(DATA);
+    
+    this.receiptModesMainForm.controls["mode"].setValue(DATA.MODE.toString());
     this.receiptModesMainForm.controls["code"].setValue(DATA.CREDIT_CODE);
     this.receiptModesMainForm.controls["desc"].setValue(DATA.DESCRIPTION);
     this.receiptModesMainForm.controls["accode"].setValue(DATA.ACCODE);
-    this.receiptModesMainForm.controls["commision"].setValue(DATA.COMMISION);
+    this.receiptModesMainForm.controls["commision"].setValue(
+      this.commonService.decimalQuantityFormat(
+        this.commonService.emptyToZero(DATA.COMMISION),
+        "METAL"
+      )
+    );
     this.receiptModesMainForm.controls["currencyCode"].setValue(
       DATA.CURRENCY_CODE
     );
@@ -184,7 +191,12 @@ export class ReceiptModesComponent implements OnInit {
       DATA.COMMISION_CODE
     );
     this.receiptModesMainForm.controls["bank"].setValue(DATA.BANK);
-    this.receiptModesMainForm.controls["maxCommAcc"].setValue(DATA.MAXCOMMAMT);
+    this.receiptModesMainForm.controls["maxCommAcc"].setValue(
+      this.commonService.decimalQuantityFormat(
+        this.commonService.emptyToZero(DATA.MAXCOMMAMT),
+        "METAL"
+      )
+    );
     this.receiptModesMainForm.controls["branches"].setValue(DATA.CC_BRANCHCODE);
     this.receiptModesMainForm.controls["loyalty"].setValue(DATA.LOYALTYITEM);
     this.receiptModesMainForm.controls["rcmCredit"].setValue(
@@ -203,7 +215,12 @@ export class ReceiptModesComponent implements OnInit {
       DATA.VATACCODEINPUT
     );
     this.receiptModesMainForm.controls["outputVat"].setValue(DATA.VATACCODE);
-    this.receiptModesMainForm.controls["vat"].setValue(DATA.VATPER);
+    this.receiptModesMainForm.controls["vat"].setValue(
+      this.commonService.decimalQuantityFormat(
+        this.commonService.emptyToZero(DATA.VATPER),
+        "METAL"
+      )
+    );
   }
 
   editController(DATA: any) {

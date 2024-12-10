@@ -29,6 +29,7 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [maxlength]="6"
                     UpperCaseDirective
                     [readonly]="flag === 'VIEW'"
                     matInput
@@ -47,6 +48,7 @@
               <div class="col-md-9">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [maxlength]="40"
                     (input)="codeAlert($event, 'vatDesc')"
                     UpperCaseDirective
                     [readonly]="flag === 'VIEW'"
@@ -1221,6 +1223,9 @@
                             ? { type: 'fixedPoint', precision: 3 }
                             : null
                         "
+                        [calculateCellValue]="
+                          data.field === 'VAT_DATE' ? formatDateCell : null
+                        "
                       >
                       </dxi-column>
                     </dx-data-grid>
@@ -1231,7 +1236,7 @@
                 <div class="row mb-1">
                   <div class="col-md-12 mt-2">
                     <div class="row mb-1">
-                      <div class="col-md-4">
+                      <div class="col-md-4 pt-4">
                         <menu-buttons
                           *ngIf="flag !== 'VIEW'"
                           [viewAddBtn]="true"
@@ -1243,21 +1248,20 @@
                         </menu-buttons>
                       </div>
                       <div class="col-md-8">
-                        <mat-form-field style="width: 70%" appearance="outline">
+                        <mat-form-field
+                          style="width: 50%"
+                          class="pt-4"
+                          appearance="outline"
+                        >
                           <input
                             [readonly]="flag === 'VIEW'"
                             matInput
                             type="text"
                             formControlName="searchValue"
+                            (input)="getSerachValue($event)"
+                            placeholder="Search Expense HSN/SAC Allocation"
                           />
                         </mat-form-field>
-                        <button
-                          type="button"
-                          class="ms-2 btn btn-primary text-center"
-                          (click)="getSerachValue($event)"
-                        >
-                          SEARCH
-                        </button>
                       </div>
                     </div>
                     <div class="row pt-2">
@@ -1265,7 +1269,11 @@
                         <dx-data-grid
                           #dataGrid
                           id="gridContainer"
-                          [dataSource]="expenseHsnSacAllocationData"
+                          [dataSource]="
+                            searching
+                              ? expenseHsnSearchData
+                              : expenseHsnSacAllocationData
+                          "
                           [showBorders]="true"
                           [allowColumnReordering]="true"
                           [allowColumnResizing]="true"
@@ -1350,10 +1358,12 @@
                                 [MasterSearchData]="expenseCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
-                                  gridDataBinding($event, data, [
-                                    'EXPENSE_ACCODE',
-                                    'EXPENSE_ACCODE_DESC'
-                                  ])
+                                  gridDataBinding(
+                                    $event,
+                                    data,
+                                    ['EXPENSE_ACCODE', 'EXPENSE_ACCODE_DESC'],
+                                    'expense'
+                                  )
                                 "
                               ></master-search>
                             </mat-form-field>
@@ -1397,10 +1407,12 @@
                                 [MasterSearchData]="hsnCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
-                                  gridDataBinding($event, data, [
-                                    'HSN_SAC_CODE',
-                                    'HSN_SAC_DESC'
-                                  ])
+                                  gridDataBinding(
+                                    $event,
+                                    data,
+                                    ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
+                                    'expense'
+                                  )
                                 "
                               ></master-search>
                             </mat-form-field>
@@ -1428,7 +1440,7 @@
                               [value]="data.value"
                               [disabled]="flag === 'VIEW'"
                               (valueChange)="
-                                updateField($event, data, 'TAX_REG')
+                                updateField($event, data, 'TAX_REG', 'expense')
                               "
                             >
                             </dx-check-box>
@@ -1442,7 +1454,12 @@
                               [value]="data.value"
                               [disabled]="flag === 'VIEW'"
                               (valueChange)="
-                                updateField($event, data, 'REVERSECHARGE_UNREG')
+                                updateField(
+                                  $event,
+                                  data,
+                                  'REVERSECHARGE_UNREG',
+                                  'expense'
+                                )
                               "
                             >
                             </dx-check-box>
@@ -1459,7 +1476,8 @@
                                 updateField(
                                   $event,
                                   data,
-                                  'ELIGIBLE_INPUTCREDIT'
+                                  'ELIGIBLE_INPUTCREDIT',
+                                  'expense'
                                 )
                               "
                             >
@@ -1475,7 +1493,7 @@
                 <div class="row mb-1">
                   <div class="col-md-12">
                     <div class="row mb-1 mt-2">
-                      <div class="col-md-2">
+                      <div *ngIf="flag !== 'VIEW'" class="pt-4 col-md-2">
                         <button
                           type="button"
                           class="btn btn-primary text-center"
@@ -1485,8 +1503,9 @@
                         </button>
                       </div>
 
-                      <div class="col-md-3">
+                      <div class="col-md-3 pt-4">
                         <menu-buttons
+                          *ngIf="flag !== 'VIEW'"
                           [viewAddBtn]="true"
                           [viewDeleteBtn]="true"
                           [viewImportBtn]="false"
@@ -1590,11 +1609,17 @@
                               appearance="outline"
                             >
                               <input
+                                maxlength="6"
                                 matInput
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
                                 (change)="
-                                  updateField($event, data, 'COSTCENTER')
+                                  updateField(
+                                    $event,
+                                    data,
+                                    'COST_CODE',
+                                    'costCenter'
+                                  )
                                 "
                                 [value]="data.value"
                                 style="width: 100%"
@@ -1642,7 +1667,12 @@
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
                                 (change)="
-                                  updateField($event, data, 'GPC_ACCODE_DESC')
+                                  updateField(
+                                    $event,
+                                    data,
+                                    'GPC_ACCODE_DESC',
+                                    'costCenter'
+                                  )
                                 "
                                 [value]="data.value"
                                 style="width: 100%"
@@ -1672,10 +1702,12 @@
                                 [MasterSearchData]="hsnCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
-                                  gridDataBinding($event, data, [
-                                    'HSN_SAC_CODE',
-                                    'HSN_SAC_DESC'
-                                  ])
+                                  gridDataBinding(
+                                    $event,
+                                    data,
+                                    ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
+                                    'costCenter'
+                                  )
                                 "
                               ></master-search>
                             </mat-form-field>
@@ -1702,7 +1734,12 @@
                               [value]="data.value"
                               [disabled]="flag === 'VIEW'"
                               (valueChange)="
-                                updateField($event, data, 'TAX_REG')
+                                updateField(
+                                  $event,
+                                  data,
+                                  'TAX_REG',
+                                  'costCenter'
+                                )
                               "
                             >
                             </dx-check-box>
@@ -1716,7 +1753,12 @@
                               [value]="data.value"
                               [disabled]="flag === 'VIEW'"
                               (valueChange)="
-                                updateField($event, data, 'REVERSECHARGE_UNREG')
+                                updateField(
+                                  $event,
+                                  data,
+                                  'REVERSECHARGE_UNREG',
+                                  'costCenter'
+                                )
                               "
                             >
                             </dx-check-box>
@@ -1733,7 +1775,8 @@
                                 updateField(
                                   $event,
                                   data,
-                                  'ELIGIBLE_INPUTCREDIT'
+                                  'ELIGIBLE_INPUTCREDIT',
+                                  'costCenter'
                                 )
                               "
                             >

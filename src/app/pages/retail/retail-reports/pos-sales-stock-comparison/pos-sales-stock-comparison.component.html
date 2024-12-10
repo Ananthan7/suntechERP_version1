@@ -75,7 +75,7 @@
             </div>
 
             <div class="row mb-1">
-                <mat-tab-group (selectedTabChange)="onTabChange($event)">
+                <mat-tab-group>
                     <mat-tab label="Metal Division">
                         <div class="row mt-1">
                             <div class="col-md-6">
@@ -83,10 +83,11 @@
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="metalSalesGridArr" [showBorders]="true"
                                 [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
-                                [columnAutoWidth]="true">
+                                [columnAutoWidth]="true" (onSelectionChanged)="onSelectionChanged($event, 'MD-Sales')">
                                     <dxo-paging [pageSize]="12"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                     <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
+                                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
                                 
                                     <dxi-column alignment="left" caption="Division" dataField="DIVDESC"></dxi-column>
                                     <dxi-column alignment="left" caption="Branch" dataField="BRANCH_CODE"></dxi-column>
@@ -112,11 +113,11 @@
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #dataGrid id="gridContainer" [dataSource]="metalStockGridArr" [showBorders]="true"
                                 [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
-                                [columnAutoWidth]="true">
+                                [columnAutoWidth]="true" (onSelectionChanged)="onSelectionChanged($event, 'MD-Stock')">
                                     <dxo-paging [pageSize]="12"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                     <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
-
+                                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
                                     
                                     <dxi-column alignment="left" caption="Division" dataField="DIVDESC"></dxi-column>
                                     <dxi-column alignment="left" caption="Branch" dataField="BRANCH_CODE"></dxi-column>
@@ -215,8 +216,7 @@
 
             
             <div class="row mt-2 justify-content-end mx-2" [ngClass]="{'loading-class': isLoading }">
-                <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
-                (printClicked)="printBtnClick()"></app-report-screen-buttons>
+                <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (excelClicked)="excelExport()"></app-report-screen-buttons>
             </div>
         </div>
     </form>

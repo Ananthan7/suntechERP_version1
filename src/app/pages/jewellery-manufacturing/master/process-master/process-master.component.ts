@@ -791,13 +791,26 @@ export class ProcessMasterComponent implements OnInit {
     }
     // Confirm adding all users
     this.UsersConfirmation().then((firstResult) => {
-      if (firstResult.isConfirmed) { // If confirmed, proceed with next confirm
-        // Confirm adding all sequences
+      if (firstResult.isConfirmed) { // If confirmed, proceed with the next confirm
         this.sequencesConfirmation().then((secondResult) => {
-          this.saveFinalData()
+          if (secondResult.isConfirmed) {
+            this.saveFinalData();
+          } else if (secondResult.isDenied) {
+            this.saveFinalData();
+          }
         });
+      } else if (firstResult.isDenied) {
+        this.sequencesConfirmation().then((secondResult) => {
+          if (secondResult.isConfirmed) {
+            this.saveFinalData();
+          } else if (secondResult.isDenied) {
+            this.saveFinalData();
+          }
+        });
+      } else if (firstResult.isDismissed) {
+        console.log('User canceled the operation.');
       }
-    });
+    });    
   }
   // API call for INSERT
   saveFinalData() {
@@ -1045,46 +1058,49 @@ export class ProcessMasterComponent implements OnInit {
   private isSameAccountCodeSelected(accountCode: any, formControlName: string): boolean {
     // console.log(this.processMasterForm.value, 'this.processMasterForm.value');
     let flag = false;
+    // alert(this.processMasterForm.value.LOSS_ACCODE.toUpperCase)
+    // alert(accountCode)
     switch (formControlName) {
+      
       case 'WIPaccount':
         flag = (
-          this.processMasterForm.value.LOSS_ACCODE === accountCode ||
-          this.processMasterForm.value.RECOV_ACCODE === accountCode ||
-          this.processMasterForm.value.GAIN_ACCODE === accountCode
+          this.processMasterForm.value.LOSS_ACCODE.toUpperCase() === accountCode.toUpperCase() ||          
+          this.processMasterForm.value.RECOV_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.GAIN_ACCODE.toUpperCase() === accountCode.toUpperCase()
         );
         return flag
       case 'LOSS_ACCODE':
         flag = (
-          this.processMasterForm.value.RECOV_ACCODE === accountCode ||
-          this.processMasterForm.value.GAIN_ACCODE === accountCode ||
-          this.processMasterForm.value.WIPaccount === accountCode
+          this.processMasterForm.value.RECOV_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.GAIN_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.WIPaccount.toUpperCase() === accountCode.toUpperCase()
         );
         return flag
       case 'RECOV_ACCODE':
         flag = (
-          this.processMasterForm.value.LOSS_ACCODE === accountCode ||
-          this.processMasterForm.value.GAIN_ACCODE === accountCode ||
-          this.processMasterForm.value.WIPaccount === accountCode
+          this.processMasterForm.value.LOSS_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.GAIN_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.WIPaccount.toUpperCase() === accountCode.toUpperCase()
         );
         return flag
       case 'GAIN_ACCODE':
         flag = (
-          this.processMasterForm.value.LOSS_ACCODE === accountCode ||
-          this.processMasterForm.value.RECOV_ACCODE === accountCode ||
-          this.processMasterForm.value.WIPaccount === accountCode
+          this.processMasterForm.value.LOSS_ACCODE .toUpperCase()=== accountCode.toUpperCase() ||
+          this.processMasterForm.value.RECOV_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.WIPaccount.toUpperCase() === accountCode.toUpperCase()
         );
         return flag
       case 'WIPaccount':
         flag = (
-          this.processMasterForm.value.WIPaccount === accountCode
+          this.processMasterForm.value.WIPaccount.toUpperCase() === accountCode.toUpperCase()
         );
         return flag
       default:
         flag = (
-          this.processMasterForm.value.LOSS_ACCODE === accountCode ||
-          this.processMasterForm.value.RECOV_ACCODE === accountCode ||
-          this.processMasterForm.value.GAIN_ACCODE === accountCode ||
-          this.processMasterForm.value.WIPaccount === accountCode
+          this.processMasterForm.value.LOSS_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.RECOV_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.GAIN_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.WIPaccount.toUpperCase() === accountCode.toUpperCase()
         );
         return flag;
     }

@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
   templateUrl: './price-list-master.component.html',
   styleUrls: ['./price-list-master.component.scss']
 })
-export class PriceListMasterComponent implements OnInit {
+export class PriceListMasterComponent implements OnInit { 
 
   @Input() content!: any;
   subscriptions: any;

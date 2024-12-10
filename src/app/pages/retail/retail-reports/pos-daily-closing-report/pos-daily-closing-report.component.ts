@@ -98,6 +98,8 @@ export class PosDailyClosingReportComponent implements OnInit {
   VocTypeParam: any = [];
   isLoading: boolean = false;
 
+  goldPurchase: any = [];
+
 
   constructor( private activeModal: NgbActiveModal,  private formBuilder: FormBuilder,  private datePipe: DatePipe,
     private dataService: SuntechAPIService, private commonService: CommonServiceService, private toastr: ToastrService,
@@ -124,6 +126,7 @@ export class PosDailyClosingReportComponent implements OnInit {
       this.dailyClosingReportForm.controls.todate.setValue(event.ToDate);
       this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
+    this.performMultiplePostRequests();
   }
 
   selectedData(data: any) {
@@ -277,6 +280,7 @@ export class PosDailyClosingReportComponent implements OnInit {
       "Vouchers": "", 
       "ShopCtrlAc": "" 
     };
+    this.isLoading = true;
 
     // Perform POST requests in parallel using forkJoin
     forkJoin({
@@ -285,11 +289,10 @@ export class PosDailyClosingReportComponent implements OnInit {
       request3: this.dataService.postDynamicAPI(apiUrl3, postData3),
       request4: this.dataService.postDynamicAPI(apiUrl4, postData4)
     }).pipe(
-      // Handling errors globally using catchError
       catchError(error => {
         this.toastr.error('An error occurred while making requests');
         this.isLoading = false;
-        return of({ request1: null, request2: null, request3: null });
+        return of({ request1: null, request2: null, request3: null, request4: null });
       }),
 
       finalize(() => {
@@ -300,7 +303,7 @@ export class PosDailyClosingReportComponent implements OnInit {
         if (responses.request1) {
           console.log('Response from request1:', responses.request1);
         } else {
-          console.log('Request 1 failed');
+          // this.isLoading = false;
         }
 
         if (responses.request2) {
@@ -310,13 +313,19 @@ export class PosDailyClosingReportComponent implements OnInit {
         }
 
         if (responses.request3) {
-          console.log('Response from request3:', responses.request3);
+          this.goldPurchase = responses.request3.dynamicData[0]
+          this.goldPurchase.forEach((item: any)=>{
+            item.Amount = this.commonService.decimalQuantityFormat(item.Amount, 'AMOUNT')
+          })
+          // this.isLoading = false;
+          console.log('Response from request3:', );
         } else {
-          console.log('Request 3 failed');
+          // this.isLoading = false;
         }
       },
       error: (err: any) => {
-        console.error('Error in any of the requests:', err);
+        this.isLoading = false;
+        console.error('Error in one of the requests:', err);
       }
     });
   }
