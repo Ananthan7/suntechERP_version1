@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -28,6 +28,7 @@ export class BoxMasterComponent implements OnInit {
 
   @ViewChild("overlaylocationCode")
   overlaylocationCode!: MasterSearchComponent;
+  @ViewChild("codeField") codeField!: ElementRef;
   private subscriptions: Subscription[] = [];
   itemDetailsData: any = [];
 
@@ -84,8 +85,14 @@ export class BoxMasterComponent implements OnInit {
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
-            
+
     this.initialController(this.flag, this.content);
+  }
+
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
   }
 
   boxMasterMainForm: FormGroup = this.formBuilder.group({
@@ -129,6 +136,7 @@ export class BoxMasterComponent implements OnInit {
       this.editController(DATA);
     }
     if (FLAG === "DELETE") {
+      FLAG = "VIEW";
       this.DeleteController(DATA);
     }
   }
@@ -178,9 +186,8 @@ export class BoxMasterComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -194,7 +201,7 @@ export class BoxMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        this.close("reloadMainGrid", true);
       }
     });
   }

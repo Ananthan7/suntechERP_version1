@@ -8,11 +8,12 @@
 
 <!-- modal header component -->
 <modal-header
-  *ngIf="flag !== 'VIEW'"
   (saveClick)="certificateMasterMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
-  [isViewDelete]="flag == 'VIEW'"
+  [isViewDelete]="false"
+  [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
 ></modal-header>
 
 <!-- content section -->
@@ -34,6 +35,7 @@
                     matInput
                     maxlength="6"
                     formControlName="code"
+                    #codeField
                   />
                   <mat-error
                     *ngIf="
@@ -56,9 +58,11 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     [readonly]="flag === 'VIEW'"
-                    AmountDecimalInput
-                    type="number"
+                    type="text"
                     matInput
+                    DynamicIntInputDirective
+                    [maxIntegerDigits]="10"
+                    [maxDecimalDigits]="3"
                     formControlName="stdCharges"
                     class="text-right"
                     (keydown)="preventInvalidInput($event)"
@@ -113,6 +117,7 @@
                     type="text"
                     [readonly]="flag === 'VIEW'"
                     matInput
+                    maxlength="50"
                     formControlName="email"
                   />
                   <mat-error
@@ -138,6 +143,7 @@
                     [readonly]="flag === 'VIEW'"
                     matInput
                     formControlName="web"
+                    maxlength="50"
                   />
                 </mat-form-field>
               </div>
@@ -154,6 +160,7 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [maxlength]="50"
                     type="text"
                     [readonly]="flag === 'VIEW'"
                     matInput
@@ -183,6 +190,7 @@
                     [readonly]="flag === 'VIEW'"
                     type="number"
                     matInput
+                    maxlength="13"
                     class="text-right"
                     (keydown)="preventInvalidInput($event)"
                     formControlName="leadDays"

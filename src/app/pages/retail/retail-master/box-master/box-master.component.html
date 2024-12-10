@@ -6,11 +6,12 @@
 </div>
 <!-- modal header component -->
 <modal-header
-  *ngIf="flag !== 'VIEW'"
   (cancelClick)="close()"
   (saveClick)="boxMasterMainFormSubmit()"
   (deleteClick)="DeleteController()"
-  [isViewDelete]="flag == 'VIEW'"
+  [isViewDelete]="false"
+  [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
 ></modal-header>
 
 <div class="row">
@@ -31,7 +32,8 @@
                     type="text"
                     matInput
                     formControlName="boxno"
-                    maxlength="12"
+                    maxlength="6"
+                    #codeField
                   />
 
                   <mat-error
@@ -52,6 +54,7 @@
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    maxlength="20"
                     style="text-align: right"
                     [readonly]="flag === 'VIEW'"
                     type="text"
@@ -79,6 +82,7 @@
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    maxlength="20"
                     style="text-align: right"
                     [readonly]="flag === 'VIEW'"
                     type="text"
@@ -103,6 +107,7 @@
                   <div class="col-md-7">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        maxlength="20"
                         style="text-align: right"
                         [readonly]="flag === 'VIEW'"
                         type="text"
@@ -122,6 +127,7 @@
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    maxlength="20"
                     style="text-align: right"
                     [readonly]="flag === 'VIEW'"
                     type="text"
@@ -139,6 +145,7 @@
                   <div class="col-md-7">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        maxlength="20"
                         [readonly]="flag === 'VIEW'"
                         type="text"
                         matInput
@@ -187,6 +194,7 @@
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    maxlength="20"
                     [readonly]="flag === 'VIEW'"
                     type="text"
                     matInput
@@ -224,6 +232,7 @@
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    maxlength="20"
                     [readonly]="flag === 'VIEW'"
                     type="text"
                     matInput
