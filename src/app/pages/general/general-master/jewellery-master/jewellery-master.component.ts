@@ -793,6 +793,8 @@ export class JewelleryMasterComponent implements OnInit {
         windowClass: "modal-full-width",
       }
     );
+    modalRef.componentInstance.editMode = this.editMode;
+    modalRef.componentInstance.viewMode = this.viewMode;
     modalRef.result.then((postData) => {
       console.log(postData);
       if (postData) {
@@ -817,6 +819,8 @@ export class JewelleryMasterComponent implements OnInit {
         windowClass: "modal-full-width",
       }
     );
+    modalRef.componentInstance.editMode = this.editMode;
+    modalRef.componentInstance.viewMode = this.viewMode;
     modalRef.componentInstance.tablecount = tablecount;
     modalRef.result.then((postData) => {
       console.log(postData);
@@ -1543,6 +1547,9 @@ export class JewelleryMasterComponent implements OnInit {
             (err) => alert(err)
           );
         this.subscriptions.push(Sub);
+      }else
+      {
+        this.close("reloadMainGrid");
       }
     });
   }

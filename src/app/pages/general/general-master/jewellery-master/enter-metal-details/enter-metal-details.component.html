@@ -5,7 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
- <modal-header (cancelClick)="close()" [isViewContinue]="true" (saveClick)="formSubmit()"></modal-header>
+ <modal-header (cancelClick)="close()" [isViewContinue]="false" (saveClick)="formSubmit()"  [isViewDelete]="false" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="enterMetalDetailsForm">
@@ -18,12 +18,12 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Stock Code :</label>
                   <div class="col-md-3">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="stockCodeDes"/>
+                      <input type="text" matInput formControlName="stockCode" [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-5">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="stockCode" />
+                      <input type="text" matInput formControlName="stockCodeDes" [readonly]="viewMode"/>
                       <master-search  class="masterSearch"  [MasterSearchData]="stockCodeData"
                       (newRowClick)="stockCodeSelected($event)"></master-search>
                     </mat-form-field>
@@ -35,7 +35,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Karat :</label>
                   <div class="col-md-3">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="karat"/>
+                      <input type="text" matInput formControlName="karat" [readonly]="viewMode"/>
                       <master-search  class="masterSearch" [MasterSearchData]="karatcodeData"
                       (newRowClick)="karatcodeSelected($event)"> 
                       </master-search>
@@ -45,7 +45,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Metal Wt :</label>
                   <div class="col-md-3">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="metalWt"  [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -55,13 +55,13 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Purity :</label>
                   <div class="col-md-3">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="purity"  [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Pure Weight :</label>
                   <div class="col-md-3">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="pureWeight"  [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -71,7 +71,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Rate Type :</label>
                   <div class="col-md-3">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput formControlName="rateType"/>
+                      <input type="text" matInput formControlName="rateType" [readonly]="viewMode"/>
                       <master-search  class="masterSearch" [MasterSearchData]="rateTypecodeData"
                     (newRowClick)="rateTypecodeSelected($event)">
                     </master-search>
@@ -81,7 +81,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Rate :</label>
                   <div class="col-md-3">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="rate" [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -92,13 +92,13 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Amount FC :</label>
                   <div class="col-md-3">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="amountFC" [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Amount LC :</label>
                   <div class="col-md-3">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="amountLC" [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -108,13 +108,13 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Sale % :</label>
                   <div class="col-md-3">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="sale" [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Sale Amount FC :</label>
                   <div class="col-md-3">
                     <mat-form-field  style="width: 100%;"  appearance="outline">
-                      <input type="text" matInput />
+                      <input type="text" matInput formControlName="saleamountFC" [readonly]="viewMode"/>
                     </mat-form-field>
                   </div>
                 </div>
@@ -129,7 +129,7 @@
                     <label for="inputPassword" class="col-sm-5 col-form-label">Metal Rate/Gms :</label>
                     <div class="col-md-7">
                       <mat-form-field  style="width: 100%;"  appearance="outline">
-                        <input type="text" matInput />
+                        <input type="text" matInput formControlName="metalRateGMS" [readonly]="viewMode"/>
                       </mat-form-field>
 
                     </div>
@@ -142,7 +142,7 @@
                     <label for="inputPassword" class="col-sm-5 col-form-label">Labour Charge :</label>
                     <div class="col-md-7">
                       <mat-form-field  style="width: 100%;"  appearance="outline">
-                        <input type="text" matInput />
+                        <input type="text" matInput formControlName="labourCharge" [readonly]="viewMode"/>
                       </mat-form-field>
 
                     </div>
@@ -155,7 +155,7 @@
                     <label for="inputPassword" class="col-sm-5 col-form-label">Labour Rate :</label>
                     <div class="col-md-7">
                       <mat-form-field  style="width: 100%;"  appearance="outline">
-                        <input type="text" matInput />
+                        <input type="text" matInput formControlName="labourrate" [readonly]="viewMode"/>
                       </mat-form-field>
 
                     </div>
@@ -168,7 +168,7 @@
                     <label for="inputPassword" class="col-sm-5 col-form-label">Labour Amount :</label>
                     <div class="col-md-7">
                       <mat-form-field  style="width: 100%;"  appearance="outline">
-                        <input type="text" matInput />
+                        <input type="text" matInput formControlName="labouramount" [readonly]="viewMode"/>
                       </mat-form-field>
 
                     </div>
@@ -181,7 +181,7 @@
                     <label for="inputPassword" class="col-sm-5 col-form-label">Sale Amount LC :</label>
                     <div class="col-md-7">
                       <mat-form-field style="width: 100%;"  appearance="outline">
-                        <input type="text" matInput />
+                        <input type="text" matInput formControlName="salesamountLC" [readonly]="viewMode"/>
                       </mat-form-field>
 
                     </div>

@@ -5,7 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="false" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="jewellerymasterForm">
@@ -18,7 +18,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">Item Code * :</label>
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%;"  appearance="outline">
-                     <input [readonly]="viewMode" type="text" matInput formControlName="itemcode" maxlength="1" />
+                     <input [readonly]="viewMode || editMode" type="text" matInput formControlName="itemcode" maxlength="1" />
                     </mat-form-field>
                     
                   </div>
@@ -533,8 +533,8 @@
                     <mat-form-field style="width: 100%;"  appearance="outline">
                      <input [readonly]="viewMode" matInput [matDatepicker]="certdate" [max]="certdate" formControlName="certdate"
                         placeholder="DD/MM/YYYY" DateValidation />
-                      <mat-datepicker-toggle matSuffix [for]="certdate"></mat-datepicker-toggle>
-                      <mat-datepicker [startAt]="currentDate" #certdate></mat-datepicker>
+                      <mat-datepicker-toggle matSuffix [for]="certdate" [disabled]="viewMode"></mat-datepicker-toggle>
+                      <mat-datepicker [startAt]="currentDate" #certdate [disabled]="viewMode"></mat-datepicker>
                     </mat-form-field>
                   </div>
                   <!-- <div class="col-md-6">
@@ -698,8 +698,8 @@
                     <mat-form-field style="width: 100%;"  appearance="outline">
                      <input [readonly]="viewMode" matInput [matDatepicker]="createon"  formControlName="createon"
                       placeholder="DD/MM/YYYY" DateValidation />
-                    <mat-datepicker-toggle matSuffix [for]="createon"></mat-datepicker-toggle>
-                    <mat-datepicker [startAt]="currentDate" #createon></mat-datepicker>
+                    <mat-datepicker-toggle matSuffix [for]="createon" [disabled]="viewMode"></mat-datepicker-toggle>
+                    <mat-datepicker [startAt]="currentDate" #createon [disabled]="viewMode"></mat-datepicker>
                     </mat-form-field>
                   </div>
                   </div>
@@ -711,8 +711,8 @@
                       <mat-form-field style="width: 100%;"  appearance="outline">
                        <input [readonly]="viewMode" matInput [matDatepicker]="lastediton"  formControlName="lastediton"
                         placeholder="DD/MM/YYYY" DateValidation />
-                      <mat-datepicker-toggle matSuffix [for]="lastediton"></mat-datepicker-toggle>
-                      <mat-datepicker [startAt]="currentDate" #lastediton></mat-datepicker>
+                      <mat-datepicker-toggle matSuffix [for]="lastediton" [disabled]="viewMode"></mat-datepicker-toggle>
+                      <mat-datepicker [startAt]="currentDate" #lastediton [disabled]="viewMode"></mat-datepicker>
                       </mat-form-field>
                   </div>
                   </div>

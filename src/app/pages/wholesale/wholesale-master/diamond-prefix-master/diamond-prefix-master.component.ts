@@ -22,12 +22,12 @@ export class DiamondPrefixMasterComponent implements OnInit {
   editableMode: boolean = false;
   viewMode: boolean = false;
   userbranch = localStorage.getItem('userbranch');
-  editMode:boolean = false;
+  editMode: boolean = false;
   codeEnable: boolean = false;
 
 
 
-  
+
   @ViewChild('currencycodeSearch') currencycodeSearch!: MasterSearchComponent;
   @ViewChild('costcodeSearch') costcodeSearch!: MasterSearchComponent;
   @ViewChild('brandcodeSearch') brandcodeSearch!: MasterSearchComponent;
@@ -39,11 +39,11 @@ export class DiamondPrefixMasterComponent implements OnInit {
 
 
 
-  
 
-  
-  
-  
+
+
+
+
   @ViewChild('collectioncodeSearch') collectioncodeSearch!: MasterSearchComponent;
   @ViewChild('sub_collectioncodeSearch') sub_collectioncodeSearch!: MasterSearchComponent;
   @ViewChild('stone_typecodeSearch') stone_typecodeSearch!: MasterSearchComponent;
@@ -51,6 +51,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
   @ViewChild('shapecodeSearch') shapecodeSearch!: MasterSearchComponent;
   @ViewChild('inc_catcodeSearch') inc_catcodeSearch!: MasterSearchComponent;
   @ViewChild('order_refcodeSearch') order_refcodeSearch!: MasterSearchComponent;
+  lastValidValue!: string;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -62,7 +63,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     private renderer: Renderer2,
   ) { }
 
- 
+
   ngOnInit(): void {
     // this.setCompanyCurrency()
     this.setFormValues()
@@ -71,7 +72,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     // this.setCompanyCurrency()
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true
-  
+
     } else if (this.content.FLAG == 'EDIT') {
       this.editableMode = true;
       this.editMode = true
@@ -83,23 +84,23 @@ export class DiamondPrefixMasterComponent implements OnInit {
       this.deleteMetalPrefix()
     }
   }
-  
+
   diamondprefixForm: FormGroup = this.formBuilder.group({
-    prefixcode: ['',[Validators.required]],
+    prefixcode: ['', [Validators.required]],
     prefixcodedes: [''],
-    currencyRate: [''],
-    currency: [''],
+    currencyRate: ['', [Validators.required]],
+    currency: ['', [Validators.required]],
     lastno: ['000000', ''],
-    costcode: [''],
+    costcode: ['', [Validators.required]],
     brand: [''],
     branch: [''],
-    Category:[''],
-    subCategory:[''],
-    Country:[''],
-    Type:[''],
+    Category: [''],
+    subCategory: [''],
+    Country: [''],
+    Type: [''],
     suffixcode: [''],
     hsn: [''],
-    jobcardprefix:false,
+    jobcardprefix: false,
     setrefprefix: false,
     Componentprefix: false,
     refinervprefix: false,
@@ -111,7 +112,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     shape: [""],
     inc_cat: [""],
     order_ref: [""],
-    currencydes:[''],
+    currencydes: [''],
     boilProcessPrefix: false,
   })
 
@@ -314,7 +315,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     this.diamondprefixForm.controls.Country.setValue(e.CODE);
   }
 
-  
+
   itemcodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -418,12 +419,12 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -461,7 +462,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
       return; // Exit the function if the input is empty or in view mode
     }
     // console.log('this w');
-    
+
     const API = 'PrefixMaster/CheckIfPrefixCodePresent/' + event.target.value;
     const sub = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -479,7 +480,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
 
           });
           this.commonService.toastErrorByMsgId('MSG1121')//Code Already Exists
-        }else{
+        } else {
           this.codeEnable = false;
         }
       }, err => {
@@ -500,52 +501,52 @@ export class DiamondPrefixMasterComponent implements OnInit {
     }
   }
 
-  
-  setPostData(){
-    return{
-    "PREFIX_CODE": this.commonService.nullToString(this.diamondprefixForm.value.prefixcode?.toUpperCase() ),
-    "DESCRIPTION": this.commonService.nullToString(this.diamondprefixForm.value.prefixcodedes?.toUpperCase()),
-    "LAST_NO": this.commonService.nullToString(this.diamondprefixForm.value.lastno),
-    "CURRENCY_CODE": this.commonService.nullToString(this.diamondprefixForm.value.currency),
-    "CONV_RATE": this.commonService.emptyToZero(this.diamondprefixForm.value.currencyRate),
-    "COST_CODE": this.commonService.nullToString(this.diamondprefixForm.value.costcode),
-    "CATEGORY_CODE":this.commonService.nullToString(this.diamondprefixForm.value.Category),
-    "SUBCATEGORY_CODE":this.commonService.nullToString(this.diamondprefixForm.value.subCategory),
-    "BRAND_CODE":this.commonService.nullToString(this.diamondprefixForm.value.brand),
-    "TYPE_CODE": this.commonService.nullToString(this.diamondprefixForm.value.Type),
-    "COUNTRY_CODE":this.commonService.nullToString(this.diamondprefixForm.value.Country),
-    "MID":this.content?.MID || 0,
-    "DIVISION": "S",
-    "SYSTEM_DATE": "2023-11-28T08:50:38.675Z",
-    "PM_BRANCHCODE": "",
-    "JOB_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.jobcardprefix),
-    "SETREF_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.setrefprefix),
-    "BRANCH_CODE": this.commonService.nullToString(this.diamondprefixForm.value.branch),
-    "BOIL_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.boilProcessPrefix),
-    "SCHEME_PREFIX": true,
-    "UDF1": this.commonService.nullToString(this.diamondprefixForm.value.collection),
-    "UDF2": this.commonService.nullToString(this.diamondprefixForm.value.sub_collection),
-    "UDF3": this.commonService.nullToString(this.diamondprefixForm.value.stone_type),
-    "UDF4": this.commonService.nullToString(this.diamondprefixForm.value.setting),
-    "UDF5": this.commonService.nullToString(this.diamondprefixForm.value.shape),
-    "UDF6": this.commonService.nullToString(this.diamondprefixForm.value.inc_cat),
-    "UDF7": this.commonService.nullToString(this.diamondprefixForm.value.order_ref),
-    "UDF8": "",
-    "UDF9":  "",
-    "UDF10":  "",
-    "UDF11":  "",
-    "UDF12":  "",
-    "UDF13":  "",
-    "UDF14":  "",
-    "UDF15": "",
-    "TAG_WT": 0,
-    "COMP_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.Componentprefix),
-    "DESIGN_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.designprefix),
-    "REFINE_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.refinervprefix),
-    "SUBLEDGER_PREFIX": true,
-    "SUFFIX_CODE":  this.commonService.nullToString(this.diamondprefixForm.value.suffixcode),
-    "HSN_CODE":  this.commonService.nullToString(this.diamondprefixForm.value.hsn),
-  }
+
+  setPostData() {
+    return {
+      "PREFIX_CODE": this.commonService.nullToString(this.diamondprefixForm.value.prefixcode?.toUpperCase()),
+      "DESCRIPTION": this.commonService.nullToString(this.diamondprefixForm.value.prefixcodedes?.toUpperCase()),
+      "LAST_NO": this.commonService.nullToString(this.diamondprefixForm.value.lastno),
+      "CURRENCY_CODE": this.commonService.nullToString(this.diamondprefixForm.value.currency),
+      "CONV_RATE": this.commonService.emptyToZero(this.diamondprefixForm.value.currencyRate),
+      "COST_CODE": this.commonService.nullToString(this.diamondprefixForm.value.costcode),
+      "CATEGORY_CODE": this.commonService.nullToString(this.diamondprefixForm.value.Category),
+      "SUBCATEGORY_CODE": this.commonService.nullToString(this.diamondprefixForm.value.subCategory),
+      "BRAND_CODE": this.commonService.nullToString(this.diamondprefixForm.value.brand),
+      "TYPE_CODE": this.commonService.nullToString(this.diamondprefixForm.value.Type),
+      "COUNTRY_CODE": this.commonService.nullToString(this.diamondprefixForm.value.Country),
+      "MID": this.content?.MID || 0,
+      "DIVISION": "S",
+      "SYSTEM_DATE": "2023-11-28T08:50:38.675Z",
+      "PM_BRANCHCODE": "",
+      "JOB_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.jobcardprefix),
+      "SETREF_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.setrefprefix),
+      "BRANCH_CODE": this.commonService.nullToString(this.diamondprefixForm.value.branch),
+      "BOIL_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.boilProcessPrefix),
+      "SCHEME_PREFIX": true,
+      "UDF1": this.commonService.nullToString(this.diamondprefixForm.value.collection),
+      "UDF2": this.commonService.nullToString(this.diamondprefixForm.value.sub_collection),
+      "UDF3": this.commonService.nullToString(this.diamondprefixForm.value.stone_type),
+      "UDF4": this.commonService.nullToString(this.diamondprefixForm.value.setting),
+      "UDF5": this.commonService.nullToString(this.diamondprefixForm.value.shape),
+      "UDF6": this.commonService.nullToString(this.diamondprefixForm.value.inc_cat),
+      "UDF7": this.commonService.nullToString(this.diamondprefixForm.value.order_ref),
+      "UDF8": "",
+      "UDF9": "",
+      "UDF10": "",
+      "UDF11": "",
+      "UDF12": "",
+      "UDF13": "",
+      "UDF14": "",
+      "UDF15": "",
+      "TAG_WT": 0,
+      "COMP_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.Componentprefix),
+      "DESIGN_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.designprefix),
+      "REFINE_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.refinervprefix),
+      "SUBLEDGER_PREFIX": true,
+      "SUFFIX_CODE": this.commonService.nullToString(this.diamondprefixForm.value.suffixcode),
+      "HSN_CODE": this.commonService.nullToString(this.diamondprefixForm.value.hsn),
+    }
   }
 
   formSubmit() {
@@ -586,7 +587,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
- 
+
   update() {
     if (this.diamondprefixForm.invalid) {
       this.toastr.error('select all required fields')
@@ -595,7 +596,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
 
     let API = 'PrefixMaster/UpdatePrefixMaster/' + this.diamondprefixForm.value.prefixcode
     let postData = this.setPostData()
-  
+
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
@@ -685,7 +686,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     });
   }
 
-  
+
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
@@ -727,31 +728,31 @@ export class DiamondPrefixMasterComponent implements OnInit {
   showOverleyPanel(event: any, formControlName: string) {
     switch (formControlName) {
 
-      
+
       case 'currency':
         this.currencycodeSearch.showOverlayPanel(event);
         break;
-        case 'costcode':
-          this.costcodeSearch.showOverlayPanel(event);
-          break;
-          case 'brand':
-            this.brandcodeSearch.showOverlayPanel(event);
-            break;
-            case 'Category':
-              this.CategorycodeSearch.showOverlayPanel(event);
-              break;
-              case 'Type':
-                this.TypecodeSearch.showOverlayPanel(event);
-                break;
-                case 'subCategory':
-                  this.subCategorycodeSearch.showOverlayPanel(event);
-                  break;
-                  case 'Country':
-                    this.CountrycodeSearch.showOverlayPanel(event);
-                    break;
-                    case 'branch':
-                      this.branchcodeSearch.showOverlayPanel(event);
-                      break;
+      case 'costcode':
+        this.costcodeSearch.showOverlayPanel(event);
+        break;
+      case 'brand':
+        this.brandcodeSearch.showOverlayPanel(event);
+        break;
+      case 'Category':
+        this.CategorycodeSearch.showOverlayPanel(event);
+        break;
+      case 'Type':
+        this.TypecodeSearch.showOverlayPanel(event);
+        break;
+      case 'subCategory':
+        this.subCategorycodeSearch.showOverlayPanel(event);
+        break;
+      case 'Country':
+        this.CountrycodeSearch.showOverlayPanel(event);
+        break;
+      case 'branch':
+        this.branchcodeSearch.showOverlayPanel(event);
+        break;
 
       case 'collection':
         this.collectioncodeSearch.showOverlayPanel(event);
@@ -772,9 +773,9 @@ export class DiamondPrefixMasterComponent implements OnInit {
         this.inc_catcodeSearch.showOverlayPanel(event);
         break;
         break;
-        case 'order_ref':
-          this.order_refcodeSearch.showOverlayPanel(event);
-          break;
+      case 'order_ref':
+        this.order_refcodeSearch.showOverlayPanel(event);
+        break;
 
 
       default:
@@ -788,29 +789,29 @@ export class DiamondPrefixMasterComponent implements OnInit {
       case 'currency':
         this.currencycodeSearch.showOverlayPanel(event);
         break;
-        case 'costcode':
-          this.costcodeSearch.showOverlayPanel(event);
-          break;
-          case 'brand':
-            this.brandcodeSearch.showOverlayPanel(event);
-            break;
-            case 'Category':
-              this.CategorycodeSearch.showOverlayPanel(event);
-              break;
-              case 'Type':
-                this.TypecodeSearch.showOverlayPanel(event);
-                break;
-                case 'subCategory':
-                  this.subCategorycodeSearch.showOverlayPanel(event);
-                  break;
-                  case 'Country':
-                  this.CountrycodeSearch.showOverlayPanel(event);
-                  break;
-                  case 'branch':
-                    this.branchcodeSearch.showOverlayPanel(event);
-                    break;
-                  
-              
+      case 'costcode':
+        this.costcodeSearch.showOverlayPanel(event);
+        break;
+      case 'brand':
+        this.brandcodeSearch.showOverlayPanel(event);
+        break;
+      case 'Category':
+        this.CategorycodeSearch.showOverlayPanel(event);
+        break;
+      case 'Type':
+        this.TypecodeSearch.showOverlayPanel(event);
+        break;
+      case 'subCategory':
+        this.subCategorycodeSearch.showOverlayPanel(event);
+        break;
+      case 'Country':
+        this.CountrycodeSearch.showOverlayPanel(event);
+        break;
+      case 'branch':
+        this.branchcodeSearch.showOverlayPanel(event);
+        break;
+
+
       case 'collection':
         this.collectioncodeSearch.showOverlayPanel(event);
         break;
@@ -829,16 +830,23 @@ export class DiamondPrefixMasterComponent implements OnInit {
       case 'inc_catc':
         this.inc_catcodeSearch.showOverlayPanel(event);
         break;
-        case 'order_ref':
-          this.order_refcodeSearch.showOverlayPanel(event);
-          break;
-        
+      case 'order_ref':
+        this.order_refcodeSearch.showOverlayPanel(event);
+        break;
+
 
       default:
         console.warn(`Unknown FORMNAME: ${FORMNAME}`);
         break;
     }
   }
+
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+
+
 
 
 }
