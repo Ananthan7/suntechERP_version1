@@ -107,13 +107,14 @@ export class CostAndPriceTypesComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    console.log(this.content);
+
     this.branchCode = this.commonService.branchCode;
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
 
-      console.log(this.flag);
-      
+    console.log(this.flag);
 
     this.initialController(this.flag, this.content);
     this.setFlag(this.flag, this.content);
@@ -273,9 +274,15 @@ export class CostAndPriceTypesComponent implements OnInit {
         PARTY: this.costAndPriceTypeMainForm.value.party,
         DEFAULT_WASTAGE: this.costAndPriceTypeMainForm.value.defaultWastage,
         DIVISION_CODE: this.costAndPriceTypeMainForm.value.division,
-        STD_PRICE: this.costAndPriceTypeMainForm.value.standardPrice || "",
-        MIN_PRICE: this.costAndPriceTypeMainForm.value.minimumPrice || "",
-        MAX_PRICE: this.costAndPriceTypeMainForm.value.maximumPrice || "",
+        STD_PRICE:
+          this.costAndPriceTypeMainForm.value.standardPrice ||
+          this.stdMaxAndMinPriceDropdown[0].VALUE,
+        MIN_PRICE:
+          this.costAndPriceTypeMainForm.value.minimumPrice ||
+          this.stdMaxAndMinPriceDropdown[0].VALUE,
+        MAX_PRICE:
+          this.costAndPriceTypeMainForm.value.maximumPrice ||
+          this.stdMaxAndMinPriceDropdown[0].VALUE,
         STD_VARIANCE: this.costAndPriceTypeMainForm.value.standardVariance || 0,
         ISPRICECODE: this.applyPriceValue,
         LASTUPDATED: new Date(),
@@ -513,10 +520,17 @@ export class CostAndPriceTypesComponent implements OnInit {
         break;
 
       case "VIEW":
+        console.log("as View");
+
         this.costAndPriceTypeMainForm.controls["applyPriceValue"].disable();
         this.costAndPriceTypeMainForm.controls["forceMaking"].disable();
         this.costAndPriceTypeMainForm.controls["party"].disable();
-        this.applyPriceValueMethod(DATA.ISPRICECODE);
+        this.costAndPriceTypeMainForm.controls["standardPrice"].disable();
+        this.costAndPriceTypeMainForm.controls["minimumPrice"].disable();
+        this.costAndPriceTypeMainForm.controls["maximumPrice"].disable();
+        console.log(DATA.ISPRICECODE);
+
+        this.applyPriceValueMethod(DATA.ISPRICECODE == "Y");
         break;
 
       default:
@@ -526,6 +540,7 @@ export class CostAndPriceTypesComponent implements OnInit {
 
   applyPriceValueMethod(event: MatCheckboxChange | boolean) {
     this.applyPriceValue = typeof event === "boolean" ? event : event.checked;
+    console.log(this.applyPriceValue);
 
     const action = this.applyPriceValue ? "disable" : "enable";
 

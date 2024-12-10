@@ -31,6 +31,7 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     [readonly]="flag === 'VIEW' || flag === 'EDIT'"
+                    maxlength="6"
                     UpperCaseDirective
                     matInput
                     type="text"
@@ -62,6 +63,7 @@
                     [readonly]="flag === 'VIEW'"
                     UpperCaseDirective
                     matInput
+                    maxlength="30"
                     type="text"
                     formControlName="description"
                   />
