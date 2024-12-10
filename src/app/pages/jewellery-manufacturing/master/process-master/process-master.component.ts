@@ -539,7 +539,7 @@ export class ProcessMasterComponent implements OnInit {
 
     if (this.commonService.emptyToZero(recLoss) < this.commonService.emptyToZero(minRec)) {
       this.recoveryData = true;
-      this.commonService.toastErrorByMsgId('MSG1438');
+      this.commonService.toastErrorByMsgId('Standard Recovery Should be greater than Minimum Recovery');
       // this.toastr.error('Standard % should be Greater than Minimum %');
 
     }
@@ -629,15 +629,15 @@ export class ProcessMasterComponent implements OnInit {
 
     if (form.loss == true) {
       if (this.commonService.emptyToZero(form.loss_standard) == 0) {
-        this.commonService.toastErrorByMsgId('MSG1395');//loss cannot be empty
+        this.commonService.toastErrorByMsgId('MSG1807');//Standard loss cannot be empty
         return true;
       }
-      else if (this.commonService.emptyToZero(form.loss_min) == 0) {
-        this.commonService.toastErrorByMsgId('MSG1395');
-        return true;
-      }
+      // else if (this.commonService.emptyToZero(form.loss_min) == 0) {
+      //   this.commonService.toastErrorByMsgId('MSG1395');
+      //   return true;
+      // }
       else if (this.commonService.emptyToZero(form.loss_max) == 0) {
-        this.commonService.toastErrorByMsgId('MSG1395');
+        this.commonService.toastErrorByMsgId('Max Loss cannot be empty');
         return true;
       }
       else if (form.LOSS_ACCODE == '') {
@@ -648,13 +648,13 @@ export class ProcessMasterComponent implements OnInit {
 
     if (form.recovery == true) {
       if (this.commonService.emptyToZero(form.standard_end) == 0) {
-        this.commonService.toastErrorByMsgId('MSG81365');// Recovery Minimum % Cannot be Zero
+        this.commonService.toastErrorByMsgId('Standard Recovery cannot be empty');// Recovery Minimum % Cannot be Zero
         return true;
       }
-      else if (form.min_end == '') {
-        this.commonService.toastErrorByMsgId('MSG81365');
-        return true;
-      }
+      // else if (form.min_end == '') {
+      //   this.commonService.toastErrorByMsgId('MSG81365');
+      //   return true;
+      // }
       // else if (form.RECOV_ACCODE == '') {
       // this.commonService.toastErrorByMsgId('Recovery Account Code Cannot be Empty');
       //   return true;

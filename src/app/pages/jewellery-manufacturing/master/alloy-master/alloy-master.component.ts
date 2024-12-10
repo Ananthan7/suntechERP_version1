@@ -168,7 +168,7 @@ export class AlloyMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 7,
     SEARCH_FIELD: 'ACCODE',
-    SEARCH_HEADING: 'Account Master',
+    SEARCH_HEADING: 'Vendor',
     SEARCH_VALUE: '',
     WHERECONDITION: "BRANCH_CODE = '" + this.branchCode + "' AND AC_OnHold = 0 ",
     // WHERE BRANCH_CODE = 'DMCC' AND AC_OnHold = 0
@@ -1084,7 +1084,7 @@ export class AlloyMasterComponent implements OnInit {
           this.prefixMasterDetail = result.response;
           this.prefixMasterDetail.PREFIX_CODE = this.prefixMasterDetail.PREFIX_CODE.toUpperCase();
           this.prefixMasterDetail.DESCRIPTION = this.prefixMasterDetail.DESCRIPTION.toUpperCase();
-          this.alloyMastereForm.controls.costCenter.setValue(this.prefixMasterDetail.COST_CODE)//same in software
+          // this.alloyMastereForm.controls.costCenter.setValue(this.prefixMasterDetail.COST_CODE)//same in software
           this.alloyMastereForm.controls.type.setValue(this.prefixMasterDetail.TYPE_CODE)
           this.alloyMastereForm.controls.category.setValue(this.prefixMasterDetail.CATEGORY_CODE)
           this.alloyMastereForm.controls.subCategory.setValue(this.prefixMasterDetail.SUBCATEGORY_CODE)
