@@ -65,10 +65,15 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     { value: 'Cost Code', label: 'Cost Code' },
   ]
 
+  @ViewChild('salesGrid', { static: false }) salesGrid!: DxDataGridComponent;
+  @ViewChild('stockGrid', { static: false }) stockGrid!: DxDataGridComponent;
+  @ViewChild('diamondSalesGrid', { static: false }) diamondSalesGrid!: DxDataGridComponent;
+  @ViewChild('diamondStockGrid', { static: false }) diamondStockGrid!: DxDataGridComponent;
   selectedMetalSalesData: any = [];
   selectedMetalStockData: any = [];
-
-
+  selectedDiamondSales: any = [];
+  selectedDiamondStock: any = [];
+  
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private datePipe: DatePipe,
     private dataService: SuntechAPIService, private commonService: CommonServiceService,  private toastr: ToastrService,
     private decimalPipe: DecimalPipe
@@ -249,10 +254,6 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
       
   }
 
-
-
-  @ViewChild('salesGrid', { static: false }) salesGrid!: DxDataGridComponent;
-  @ViewChild('stockGrid', { static: false }) stockGrid!: DxDataGridComponent;
   metalSalesChanged(event: any) { 
     this.selectedMetalSalesData = event.selectedRowsData;
 
@@ -267,6 +268,18 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     this.salesGrid.instance.clearSelection();
     this.salesGrid.instance.refresh();
   }
+  diamondSalesChanged(event: any){
+    this.selectedDiamondSales = event.selectedRowsData;
+
+    // Clear selection on the diamond-sales grid
+    this.diamondStockGrid.instance.clearSelection();
+  }
+  diamondStockChanged(event: any){
+    this.selectedDiamondStock = event.selectedRowsData;
+
+    // Clear selection on the diamond-sales grid
+    this.diamondSalesGrid.instance.clearSelection();
+  }
   
 
   excelExport(){
@@ -276,6 +289,14 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     }
     else if(this.selectedMetalStockData.length > 0){
       this.commonService.exportExcel(this.selectedMetalStockData, "Metal Division- Stock details");
+      // console.log('MD-Sales', this.selectedMetalStockData)
+    }
+    else if(this.selectedDiamondSales.length > 0){
+      this.commonService.exportExcel(this.selectedDiamondSales, "Diamond Division- Sales details");
+      // console.log('MD-Sales', this.selectedMetalStockData)
+    }
+    else if(this.selectedDiamondStock.length > 0){
+      this.commonService.exportExcel(this.selectedDiamondStock, "Diamond Division- Stock details");
       // console.log('MD-Sales', this.selectedMetalStockData)
     }
   }

@@ -113,7 +113,7 @@
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #stockGrid id="gridContainer" [dataSource]="metalStockGridArr" [showBorders]="true"
                                 [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
-                                [columnAutoWidth]="true" (onSelectionChanged)="metalStockChanged($event)">
+                                [columnAutoWidth]="true" (onSelectionChanged)="metalStockChanged($event)" class="MD-StockGrid-height">
                                     <dxo-paging [pageSize]="12"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                     <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
@@ -141,13 +141,13 @@
                             <div class="col-md-6">
                                 <div class="grid-label text-center mt-1 text-warning" id="ID006">Sales</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
-                                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="diamondSalesGridArr" [showBorders]="true"
+                                <dx-data-grid #diamondSalesGrid id="gridContainer" [dataSource]="diamondSalesGridArr" [showBorders]="true"
                                 [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
-                                [columnAutoWidth]="true">
-                                    <dxo-paging [pageSize]="12"></dxo-paging>
+                                [columnAutoWidth]="true" (onSelectionChanged)="diamondSalesChanged($event)">
+                                    <dxo-paging [pageSize]="10"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                     <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
-
+                                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
                                     
                                     <dxi-column alignment="left" caption="Branch" dataField="BRANCH_CODE"></dxi-column>
                                     <dxi-column alignment="left" caption="Type" dataField="type"></dxi-column>
@@ -166,13 +166,13 @@
                             <div class="col-md-6">
                                 <div class="grid-label text-center mt-1 text-warning" id="ID008">Physical Stock</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
-                                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="physicalStockGridArr" [showBorders]="true"
+                                <dx-data-grid #diamondStockGrid id="gridContainer" [dataSource]="physicalStockGridArr" [showBorders]="true"
                                 [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
-                                [columnAutoWidth]="true">
-                                    <dxo-paging [pageSize]="12"></dxo-paging>
+                                [columnAutoWidth]="true" (onSelectionChanged)="diamondStockChanged($event)">
+                                    <dxo-paging [pageSize]="10"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                     <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
-
+                                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
                                     
                                     <dxi-column alignment="center" caption="Branch" dataField="BRANCH_CODE"></dxi-column>
                                     <dxi-column alignment="center" caption="Type" dataField="type"></dxi-column>
