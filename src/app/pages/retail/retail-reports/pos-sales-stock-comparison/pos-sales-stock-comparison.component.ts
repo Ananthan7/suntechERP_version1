@@ -73,7 +73,7 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
   selectedMetalStockData: any = [];
   selectedDiamondSales: any = [];
   selectedDiamondStock: any = [];
-  
+
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private datePipe: DatePipe,
     private dataService: SuntechAPIService, private commonService: CommonServiceService,  private toastr: ToastrService,
     private decimalPipe: DecimalPipe
@@ -251,7 +251,37 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     console.log(this.POS_Sales_Stock_ComparisonForm.controls.templateName.value)
   }
   saveTemplate_DB(){
-      
+      let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
+    const payload = {
+      "SPID": "0115",
+      "parameter": {
+        "FLAG": 'INSERT',
+        "CONTROLS": JSON.stringify({
+            "CONTROL_HEADER": {
+              "USERNAME": localStorage.getItem('username'),
+              "TEMPLATEID": this.commonService.getModuleName(),
+              "TEMPLATENAME": this.POS_Sales_Stock_ComparisonForm.controls.templateName.value,
+              "FORM_NAME": this.commonService.getModuleName(),
+              "ISDEFAULT": 1
+            },
+            "CONTROL_DETAIL": {
+              
+            }
+         })
+      }
+    };
   }
 
   metalSalesChanged(event: any) { 
