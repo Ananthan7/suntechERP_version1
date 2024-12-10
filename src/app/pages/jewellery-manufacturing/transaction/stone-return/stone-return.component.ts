@@ -29,7 +29,15 @@ export class StoneReturnComponent implements OnInit {
     { title: 'SRNO', field: 'SRNO', format: '', alignment: 'center' },
     { title: 'VOCNO', field: 'VOCNO', format: '', alignment: 'left' },
     { title: 'VOCTYPE', field: 'VOCTYPE', format: '', alignment: 'left' },
-    { title: 'VOCDATE', field: 'VOCDATE', format: 'dd/MM/yyyy',dataType: 'date', alignment: 'left' },
+    {
+      title: 'VOCDATE',
+      field: 'VOCDATE',
+      alignment: 'left',
+      formatter: (cell: { getValue: () => string | number | Date; }) => {
+        const date = new Date(cell.getValue());
+        return date.toLocaleDateString('en-GB'); // Formats to DD/MM/YYYY
+      }
+    },
     { title: 'JOB NUMBER', field: 'JOB_NUMBER', format: '', alignment: 'left' },
     { title: 'JOB DATE', field: 'JOB_DATE', format: 'dd/MM/yyyy', dataType: 'date',alignment: 'left' },
     { title: 'JOB SO', field: 'JOB_SO_NUMBER', format: '', alignment: 'right' },
@@ -230,6 +238,22 @@ export class StoneReturnComponent implements OnInit {
   uploadSubmited(file: any) {
     this.Attachedfile = file
     console.log(this.Attachedfile);    
+  }
+  formatDateToDDMMYYYY(date: string): string {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+  loadDataForGrid() {
+    this.stoneReturnData = this.stoneReturnData.map(item => {
+      return {
+        ...item,
+        VOCDATE: this.formatDateToDDMMYYYY(item.VOCDATE),
+        JOB_DATE: this.formatDateToDDMMYYYY(item.JOB_DATE),
+      };
+    });
   }
 
   setFormValues() {
@@ -462,7 +486,8 @@ export class StoneReturnComponent implements OnInit {
       detailDataToParent.SRNO = this.stoneReturnData.length + 1
       this.stoneReturnData.push(detailDataToParent);
       // this.recalculateSRNO()
-    }
+      this.loadDataForGrid()
+    } 
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
       this.commonService.showSnackBarMsg('MSG81512')
@@ -609,7 +634,7 @@ export class StoneReturnComponent implements OnInit {
 
     let API = 'JobStoneReturnMasterDJ/InsertJobStoneReturnMasterDJ'
     let postData = this.setPostData(this.stonereturnFrom.value);
-
+    console.log(postData,'postdata')
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result && result.status == "Success") {

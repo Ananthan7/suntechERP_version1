@@ -74,12 +74,14 @@
                                         <input matInput DateValidation
                                             (dateChange)="formatDate($event)"
                                             formControlName="jobdate"
+                                            [matDatepicker]="jobdate"
                                             placeholder="DD/MM/YYYY"
-                                            [disabled]="viewMode"
+                                            [readonly]="viewMode"
                                             class="text-right" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="jobdate"></mat-datepicker-toggle>
-                                        <mat-datepicker [disabled]="isSaved" 
+                                        <mat-datepicker [disabled]="isSaved"
+                                            [startAt]="currentDate"
                                             #jobdate></mat-datepicker>
                                     </mat-form-field>
                                 </div>
@@ -529,13 +531,14 @@
                                         appearance="outline">
                                         <input matInput DateValidation
                                             (dateChange)="formatDate($event)"
+                                            [matDatepicker]="deldate"
                                             formControlName="deldate"
                                             [readonly]="viewMode"
                                             placeholder="DD/MM/YYYY"
                                             class="text-right" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="deldate"></mat-datepicker-toggle>
-                                        <mat-datepicker [disabled]="isSaved"
+                                        <mat-datepicker [disabled]="isSaved"  [startAt]="currentDate"
                                             #deldate></mat-datepicker>
                                     </mat-form-field>
                                 </div>
