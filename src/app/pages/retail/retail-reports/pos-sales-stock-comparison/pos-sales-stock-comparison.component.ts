@@ -1,7 +1,8 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { DxDataGridComponent } from 'devextreme-angular';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -249,26 +250,34 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
   }
 
 
-  onSelectionChanged(event: any, name: any) {
-    if(name == 'MD-Sales'){
-      this.selectedMetalStockData.length = 0;
-      this.selectedMetalSalesData = event.selectedRowsData;
-    }
-    else if(name == 'MD-Stock'){
-      this.selectedMetalSalesData.length = 0;
-      this.selectedMetalStockData = event.selectedRowsData;
-    }
- 
+
+  @ViewChild('salesGrid', { static: false }) salesGrid!: DxDataGridComponent;
+  @ViewChild('stockGrid', { static: false }) stockGrid!: DxDataGridComponent;
+  metalSalesChanged(event: any) { 
+    this.selectedMetalSalesData = event.selectedRowsData;
+
+    // Clear selection on the stock grid and refresh
+    this.stockGrid.instance.clearSelection();
+    this.stockGrid.instance.refresh();
   }
+  metalStockChanged(event: any) {
+    this.selectedMetalStockData = event.selectedRowsData;
+
+    // Clear selection on the sales grid and refresh
+    this.salesGrid.instance.clearSelection();
+    this.salesGrid.instance.refresh();
+  }
+  
 
   excelExport(){
     if(this.selectedMetalSalesData.length > 0){
-      console.log('MD-Sales', this.selectedMetalSalesData)
+      this.commonService.exportExcel(this.selectedMetalSalesData, "Metal Division- Sales details");
+      // console.log('MD-Sales', this.selectedMetalSalesData)
     }
     else if(this.selectedMetalStockData.length > 0){
-      console.log('MD-Sales', this.selectedMetalStockData)
+      this.commonService.exportExcel(this.selectedMetalStockData, "Metal Division- Stock details");
+      // console.log('MD-Sales', this.selectedMetalStockData)
     }
-    // this.commonService.exportExcel(this.selectedMetalSalesData, "Diamond Division- Physical Stock details");
   }
  
 
