@@ -7,7 +7,9 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <!-- <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header> -->
+    <modal-header *ngIf="this.flag != 'VIEW'" (cancelClick)="close()" (saveClick)="formSubmit()" [isViewDelete]="editMode"></modal-header>
+
     <!-- content section -->
     <div class="p-4 ">
         <form [formGroup]="supplierquotaform">
@@ -19,9 +21,19 @@
                             Party Code :</label>
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="partycode" UpperCaseDirective
-                                    autocomplete="off" />
-                                <master-search class="masterSearch" [MasterSearchData]="PartyCodeData"
+                                <input type="text" #codeInput matInput formControlName="partycode" UpperCaseDirective [readonly]="viewOnly"
+                                    autocomplete="off" 
+                                    (focusout)="
+                                    SPvalidateLookupFieldModified(
+                                      $event,
+                                      PartyCodeData,
+                                      ['partycode'],
+                                      false,
+                                      ['ACCODE'],
+                                      false
+                                    )
+                                  "  />
+                                <master-search *ngIf="!this.viewOnly"  class="masterSearch" [MasterSearchData]="PartyCodeData"
                                     (newRowClick)="PartyCodeSelected($event)">
                                 </master-search>
                             </mat-form-field>
@@ -50,7 +62,7 @@
                 <div class="col-md-4">
                     <div class="row mb-1">
                         <div class="col-md-12">
-                            <mat-radio-group aria-label="Select period type" formControlName="periodType" (change)="duration_type()">
+                            <mat-radio-group aria-label="Select period type" formControlName="periodType" (change)="duration_type()" [disabled]="viewOnly">
                                 <mat-radio-button class="mx-2" value="monthWise">Month Wise</mat-radio-button>
                                 <mat-radio-button class="mx-2" value="weekWise">Week Wise</mat-radio-button>
                               </mat-radio-group>
@@ -65,9 +77,19 @@
                                 Fin. Year :</label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%" appearance="outline">
-                                    <input type="text" #codeInput matInput formControlName="fin_year" UpperCaseDirective
-                                        autocomplete="off" />
-                                    <master-search class="masterSearch" [MasterSearchData]="finyearcodedata"
+                                    <input type="text" #codeInput matInput formControlName="fin_year" UpperCaseDirective [readonly]="viewOnly"
+                                        autocomplete="off" 
+                                        (focusout)="
+                                    SPvalidateLookupFieldModified(
+                                      $event,
+                                      PartyCodeData,
+                                      ['finyearcodedata'],
+                                      false,
+                                      ['FYEARCODE'],
+                                      false
+                                    )
+                                  "  />
+                                    <master-search *ngIf="!this.viewOnly" class="masterSearch" [MasterSearchData]="finyearcodedata"
                                         (newRowClick)="selectedfinyear($event)">
                                     </master-search>
                                 </mat-form-field>

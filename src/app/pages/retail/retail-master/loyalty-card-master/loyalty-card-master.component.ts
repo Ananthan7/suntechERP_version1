@@ -163,7 +163,8 @@ export class LoyaltyCardMasterComponent implements OnInit {
   }
 
   checkvalue() {
-    let points_from = Number(this.loyaltycardform.controls.pointsfrom.value);
+    if(this.flag == undefined){
+      let points_from = Number(this.loyaltycardform.controls.pointsfrom.value);
     let points_to = Number(this.loyaltycardform.controls.pointsto.value);
     if (points_from >= points_to) {
         this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
@@ -171,25 +172,29 @@ export class LoyaltyCardMasterComponent implements OnInit {
     } else {
         this.loyaltycardform.controls.pointsto.setErrors(null);
     }
+    }
+    
   }
 
     check_greater(){
-      let points_from = Number(this.loyaltycardform.controls.pointsfrom.value);
-      let points_to = Number(this.loyaltycardform.controls.pointsto.value);
-      if(points_from<=0){
-        this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromzero: true });
-        this.renderer.selectRootElement('#pointsfrom')?.focus();
-        // this.renderer.selectRootElement('#pointsfrom')?.reset();
-      }
-      else if (this.last_points_to >= points_from) {
-        this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromlower: true });
-        this.renderer.selectRootElement('#pointsfrom')?.focus();
-      }else  if (points_from >= points_to) {
-        this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
-        this.renderer.selectRootElement('#pointsto')?.focus();
-      } else {
-        this.loyaltycardform.controls.pointsfrom.setErrors(null);
-      }
+      if(this.flag == undefined){
+        let points_from = Number(this.loyaltycardform.controls.pointsfrom.value);
+        let points_to = Number(this.loyaltycardform.controls.pointsto.value);
+        if(points_from<=0){
+          this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromzero: true });
+          this.renderer.selectRootElement('#pointsfrom')?.focus();
+          // this.renderer.selectRootElement('#pointsfrom')?.reset();
+        }
+        else if (this.last_points_to >= points_from) {
+          this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromlower: true });
+          this.renderer.selectRootElement('#pointsfrom')?.focus();
+        }else  if (points_from >= points_to) {
+          this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
+          this.renderer.selectRootElement('#pointsto')?.focus();
+        } else {
+          this.loyaltycardform.controls.pointsfrom.setErrors(null);
+        }
+      }     
 
     }
 

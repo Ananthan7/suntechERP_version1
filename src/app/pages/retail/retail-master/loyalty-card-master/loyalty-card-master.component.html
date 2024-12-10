@@ -31,7 +31,7 @@
                                 <div class="col-md-6 p-0">
                                     <mat-form-field style="width: 100%;" appearance="outline">
                                         <input type="text" id="codedesc" matInput formControlName="codedesc"
-                                            [readonly]="viewOnly" class="p-0" (focusout)="checkdesc()" />
+                                            [readonly]="viewOnly" class="p-0" (focusout)="checkdesc()" UpperCaseDirective />
                                         <mat-error *ngIf="loyaltycardform.controls['codedesc'].hasError('required')">
                                             Description is required.
                                         </mat-error>

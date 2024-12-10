@@ -19,6 +19,8 @@ export class StoneWeightMasterComponent implements OnInit {
   data: any;
   viewMode: boolean = false;
   editMode: boolean = false;
+  showheader: boolean = true;
+  readonly: boolean = true;
   @Input() content!: any;
   mid: any;
   branchCode?: any = localStorage.getItem("userbranch");
@@ -207,13 +209,20 @@ export class StoneWeightMasterComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.content);
     this.flag = this.content?.FLAG;
+    console.log(this.flag);
     if (this.content?.FLAG == "EDIT" || this.content?.FLAG == "VIEW") {
       if (this.content?.FLAG == "VIEW") {
         this.viewOnly = true;
         this.viewMode = true;
+        this.showheader = false;
+      }else if(this.flag == 'DELETE'){
+        this.showheader = true;
+        this.viewMode = true;
+ 
+
       }else {
         this.viewOnly = false;
-        this.editMode = true;
+        this.editMode = false;
 
       }
       this.mid = this.content.MID;
@@ -419,6 +428,7 @@ export class StoneWeightMasterComponent implements OnInit {
   }
 
   deleteTableData() {
+    this.viewMode = true;
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -460,7 +470,8 @@ export class StoneWeightMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+      this.activeModal.close("");
+      this.flag = "VIEW";
       }
     });
   }
@@ -477,11 +488,12 @@ export class StoneWeightMasterComponent implements OnInit {
     FORMNAMES: string[],
     isCurrencyField: boolean,
     lookupFields?: string[],
-    FROMCODE?: boolean
+    FROMCODE?: boolean,
+    dont_check?:boolean
   ) {
     const searchValue = event.target.value?.trim();
 
-    if (!searchValue || this.flag == "VIEW") return;
+    if (!searchValue || this.flag == "VIEW" || dont_check ) return;
 
     LOOKUPDATA.SEARCH_VALUE = searchValue;
 
