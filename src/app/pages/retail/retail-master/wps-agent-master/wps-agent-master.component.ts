@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -22,6 +22,8 @@ import Swal from "sweetalert2";
   styleUrls: ["./wps-agent-master.component.scss"],
 })
 export class WpsAgentMasterComponent implements OnInit {
+  @ViewChild("codeField") codeField!: ElementRef;
+
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
 
@@ -362,6 +364,12 @@ export class WpsAgentMasterComponent implements OnInit {
     this.initialController(this.flag, this.content);
   }
 
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
+
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
       this.ViewController(DATA);
@@ -371,6 +379,7 @@ export class WpsAgentMasterComponent implements OnInit {
     }
 
     if (FLAG === "DELETE") {
+      FLAG = "VIEW";
       this.DeleteController(DATA);
     }
   }
@@ -448,9 +457,8 @@ export class WpsAgentMasterComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -464,7 +472,7 @@ export class WpsAgentMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        this.close("reloadMainGrid", true);
       }
     });
   }

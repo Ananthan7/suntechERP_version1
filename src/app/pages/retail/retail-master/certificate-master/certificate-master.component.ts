@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -24,6 +24,8 @@ export class CertificateMasterComponent implements OnInit {
   @ViewChild("overlayLedger") overlayLedger!: MasterSearchComponent;
   @ViewChild("overlayOffsetAccount")
   overlayOffsetAccount!: MasterSearchComponent;
+  @ViewChild("codeField") codeField!: ElementRef;
+
 
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
@@ -103,6 +105,14 @@ export class CertificateMasterComponent implements OnInit {
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
     this.initialController(this.flag, this.content);
+  }
+
+
+  
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
   }
 
   domainValidator(control: AbstractControl): ValidationErrors | null {
