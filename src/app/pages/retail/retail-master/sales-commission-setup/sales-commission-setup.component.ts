@@ -29,6 +29,7 @@ export class SalesCommissionSetupComponent implements OnInit {
   dis_metal: boolean = false;
   dis_diamond: boolean = false;
   flag: any;
+  combotype:any[]=[];
 
 
 

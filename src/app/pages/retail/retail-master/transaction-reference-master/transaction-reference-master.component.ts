@@ -90,9 +90,7 @@ export class TransactionReferenceMasterComponent implements OnInit {
       this.commonService.getComboFilterByID("Reference Master Status"),
       "ENGLISH"
     );
-
-    console.log(this.statusList);
-    
+    console.log(this.statusList);    
   }
 
   getUniqueValues(List: any[], field: string) {
@@ -127,9 +125,40 @@ export class TransactionReferenceMasterComponent implements OnInit {
   checkcode() {
     const CodeControl = this.transactionform.controls.ref_code;
     // console.log(CodeControl.value);
+      this.renderer.selectRootElement('#ref_code')?.focus();
+
+      
     if (!CodeControl.value || CodeControl.value.trim() === "") {
       this.commonService.toastErrorByMsgId('MSG1124');
       this.renderer.selectRootElement('#ref_code')?.focus();
+    }else{
+      if(this.flag == 'VIEW' || this.flag == 'EDIT'){
+        return;
+      }
+      this.checkReferenceCode();
+    }
+  }
+
+  async checkReferenceCode() {
+    const code = this.transactionform.controls.ref_code.value;
+  
+    if (code !== "") {
+      const API = `ReferenceNumberMaster/CheckIfRefCodePresent/${code}`;
+  
+      try {
+        const result: any = await this.apiService.getDynamicAPI(API).toPromise();
+        const code_exists = result.checkifExists;
+  
+        if (code_exists) {
+          this.commonService.toastErrorByMsgId('MSG1121');
+          this.transactionform.controls.ref_code.reset();
+          this.renderer.selectRootElement('#ref_code')?.focus();
+        } else {
+          this.renderer.selectRootElement('#client_name')?.focus();
+        }
+      } catch (err) {
+        console.error('Error occurred while checking reference code:', err);
+      }
     }
   }
 

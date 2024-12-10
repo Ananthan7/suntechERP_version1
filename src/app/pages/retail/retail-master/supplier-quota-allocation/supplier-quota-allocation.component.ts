@@ -195,7 +195,7 @@ export class SupplierQuotaAllocationComponent implements OnInit {
           "QTY_T": 0,
           "QTY_P": 0,
           "MONTH": month,
-          "WEEK": ""
+          "WEEK": "FIRST"
   }));
   console.log(data);
   this.maindetails.push(...data);
@@ -257,6 +257,9 @@ export class SupplierQuotaAllocationComponent implements OnInit {
             console.log('Updated QTY_G:', this.maindetails[updatedSRNO].QTY_G);
           }
       })
+    }else{
+        this.maindetails[updatedSRNO].QTY_G = this.commonService.decimalQuantityFormat(event.target.value,'METAL');//             event.target.value;
+        console.log('Updated QTY_G:', this.maindetails[updatedSRNO].QTY_G);
     }
   }
 
@@ -282,6 +285,9 @@ export class SupplierQuotaAllocationComponent implements OnInit {
             console.log('Updated QTY_S:', this.maindetails[updatedSRNO].QTY_S);
           }
       })
+    }else{
+      this.maindetails[updatedSRNO].QTY_S = this.commonService.decimalQuantityFormat(event.target.value,'METAL');//             event.target.value;
+      console.log('Updated QTY_G:', this.maindetails[updatedSRNO].QTY_S);
     }
   }
 
@@ -407,6 +413,15 @@ export class SupplierQuotaAllocationComponent implements OnInit {
       .subscribe((result: any) => {
         this.dyndatas = result.response;
         console.log(this.dyndatas);
+
+        if(this.dyndatas.WEEKWISE == true){
+          this.dur_type = 'weekWise';
+        }else{
+          this.dur_type = 'monthWise';
+        }
+
+
+
         // this.supplierquotaform.controls.partycode.setValue(this.dyndatas?.PARTYCODE);
         // this.flag = "EDIT";
 
@@ -499,6 +514,116 @@ export class SupplierQuotaAllocationComponent implements OnInit {
 
   BranchDataSelected(e:any){
 
+  }
+
+  SPvalidateLookupFieldModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAMES: string[],
+    isCurrencyField: boolean,
+    lookupFields?: string[],
+    FROMCODE?: boolean
+  ) {
+    const searchValue = event.target.value?.trim();
+
+    if (!searchValue || this.flag == "VIEW") return;
+
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.apiService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (FROMCODE === true) {
+                searchResult = [
+                  ...searchResult.filter(
+                    (item: any) =>
+                      item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
+                  ),
+                  ...searchResult.filter(
+                    (item: any) =>
+                      item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
+                  ),
+                ];
+              } else if (FROMCODE === false) {
+                searchResult = [
+                  ...searchResult.filter(
+                    (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
+                  ),
+                  ...searchResult.filter(
+                    (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
+                  ),
+                ];
+              }
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+
+                    this.supplierquotaform.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        },
+      });
+
+    this.subscriptions.push(sub);
+  }
+
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FORMNAMES.forEach((formName) => {
+      this.supplierquotaform.controls[formName].setValue("");
+    });
   }
 
 }

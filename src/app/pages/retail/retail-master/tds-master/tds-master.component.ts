@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -37,6 +37,7 @@ export class TdsMasterComponent implements OnInit {
     private modalService: NgbModal,
     private apiService: SuntechAPIService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2
 
 
   ) { }
@@ -44,8 +45,6 @@ export class TdsMasterComponent implements OnInit {
   ngOnInit(): void {
     this.flag = this.content?.FLAG;
     this.unq_id = this.content?.TDS_CODE;
-    console.log(this.unq_id);
-    console.log(this.content);
     const API = `TDSMaster/GetFinancialYearDropdown/`;
     this.apiService.getDynamicAPI(API).subscribe((result) => {
       if (result.status.trim() === 'Success') {
@@ -54,12 +53,13 @@ export class TdsMasterComponent implements OnInit {
         this.finyears = [];
       }
     });
-
     if(this.flag == 'EDIT'){
       this.disable_code = true;
       this.editMode = true;
     }else if(this.flag == 'VIEW'){
       this.viewMode = true;
+    }else if(this.flag == undefined){
+      this.renderer.selectRootElement('#section_code')?.focus();
     }
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
@@ -68,7 +68,7 @@ export class TdsMasterComponent implements OnInit {
   }
 
   tdsform: FormGroup = this.formBuilder.group({
-    section_code:[''],
+    section_code:['',[Validators.required]],
     financial_year:[''],
     description:[''],
     credit_ac:[''],
@@ -125,6 +125,14 @@ export class TdsMasterComponent implements OnInit {
     }
     if (FLAG === "DELETE") {
       this.DeleteController(DATA);
+    }
+  }
+
+  checksection(){
+    let code = this.tdsform.controls.section_code.value;
+    if(code == "" || code.trim() == ""){
+      this.commonService.toastErrorByMsgId('MSG1124');
+      this.renderer.selectRootElement('#section_code')?.focus();
     }
   }
 
@@ -210,6 +218,7 @@ export class TdsMasterComponent implements OnInit {
         this.subscriptions.push(Sub);
       } else {
         this.flag = "VIEW";
+        this.activeModal.close("");
       }
     });
   }

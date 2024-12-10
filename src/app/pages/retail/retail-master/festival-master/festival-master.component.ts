@@ -79,12 +79,10 @@ export class FestivalMasterComponent implements OnInit {
   }
 
   checkdesc() {
-
     const code_data = this.festivalmasterform.controls.description;
-
     if (!code_data.value || code_data.value.trim() === "") {
       this.commonService.toastErrorByMsgId('MSG1193');
-      // this.renderer.selectRootElement('#fes_desc')?.focus();
+      this.renderer.selectRootElement('#fes_desc')?.focus();
     }
   }
 
@@ -96,13 +94,16 @@ export class FestivalMasterComponent implements OnInit {
     this.fm_id = this.content?.CODE;
     console.log(this.fm_id);
     this.flag = this.content?.FLAG;
+    if(this.flag == undefined){
+      this.renderer.selectRootElement('#fes_code')?.focus();
+    }
     this.initialController(this.flag, this.content);
     if (this.flag == 'EDIT') {
       this.disable_code = true;
       this.editMode = true;
-
     }
     if (this?.flag == "EDIT" || this?.flag == 'VIEW' || this.flag == 'DELETE') {
+      this.editMode = false;
       this.detailsapi(this.fm_id);
     }
     this.gridForm = this.formBuilder.group({
@@ -149,6 +150,7 @@ export class FestivalMasterComponent implements OnInit {
 
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
+      this.viewMode = true;
       this.ViewController(DATA);
     }
     if (FLAG === "EDIT") {
@@ -171,6 +173,7 @@ export class FestivalMasterComponent implements OnInit {
   }
 
   DeleteController(DATA?: any) {
+    this.viewOnly = true;
     this.ViewController(DATA);
     Swal.fire({
       title: "Are you sure?",
@@ -214,6 +217,7 @@ export class FestivalMasterComponent implements OnInit {
         this.subscriptions.push(Sub);
       } else {
         this.flag = "VIEW";
+        this.activeModal.close();
       }
     });
   }
@@ -279,7 +283,9 @@ export class FestivalMasterComponent implements OnInit {
       .subscribe((result: any) => {
         this.dyndatas = result.response;
         console.log(this.dyndatas);
+        let count =1;
         this.dyndatas.Details.forEach((ele:any) => {
+          ele.SRNO = count ++;
           ele.TODATE = new Date(ele.TODATE).toISOString().split('T')[0];
           ele.FROMDATE = new Date(ele.FROMDATE).toISOString().split('T')[0];
         });
@@ -505,8 +511,12 @@ export class FestivalMasterComponent implements OnInit {
     this.maindetails[updatedSRNO].TODATE = event.target.value;
   }
 
-  tragetchange(event: any, data: any) {
+  targetchange(event: any, data: any) {
     const updatedSRNO = data.data.SRNO - 1;
-    this.maindetails[updatedSRNO].FEST_TARGET = event.target.value;
+    if(event.target.value.length < 6 ){
+      this.maindetails[updatedSRNO].FEST_TARGET = this.commonService.decimalQuantityFormat(event.target.value,'AMOUNT');
+    }else{
+      this.maindetails[updatedSRNO].FEST_TARGET = this.commonService.decimalQuantityFormat(0,'AMOUNT');
+    }
   }
 }

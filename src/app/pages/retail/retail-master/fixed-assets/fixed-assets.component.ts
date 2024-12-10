@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -15,10 +15,12 @@ import Swal from 'sweetalert2';
 export class FixedAssetsComponent implements OnInit {
   flag: any;
   fa_id: any;
+  @ViewChild('assets_code') assetsCodeInput!: ElementRef;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   username = localStorage.getItem('username');
   viewOnly: boolean = false;
+  codeedit: boolean = false;
   dyndatas: any = [];
   viewMode: boolean = false;
   editMode: boolean = false;
@@ -30,6 +32,8 @@ export class FixedAssetsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private apiService: SuntechAPIService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2
+
 
 
   ) { }
@@ -37,7 +41,7 @@ export class FixedAssetsComponent implements OnInit {
   fixedassetsform: FormGroup = this.formBuilder.group({
     category_code: [''],
     category_code_desc: [''],
-    assets_code: [''],
+    assets_code: ['',[Validators.required]],
     description: [''],
     curr_code: [''],
     curr_rate: [''],
@@ -102,6 +106,9 @@ export class FixedAssetsComponent implements OnInit {
     this.fa_id = this.content?.MID;
     console.log(this.fa_id);
     this.flag = this.content?.FLAG;
+    if(this.flag == undefined){
+      this.renderer.selectRootElement('#assets_code')?.focus();
+    }
     if(this.flag == 'EDIT'){
       this.disable_code = true;
     }else if(this.content?.FLAG == 'VIEW'){
@@ -109,6 +116,18 @@ export class FixedAssetsComponent implements OnInit {
         this.viewMode = true;
     }
     this.initialController(this.flag, this.content);
+  }
+  ngAfterViewInit() {
+    if (this.flag == undefined && this.assetsCodeInput) {
+      this.assetsCodeInput.nativeElement.focus();
+    }
+  }
+  checkcode() {
+    const CodeControl = this.fixedassetsform.controls.assets_code;
+    if (!CodeControl.value || CodeControl.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1124');
+      this.renderer.selectRootElement('#assets_code')?.focus();
+    }
   }
 
   UDF1Data: MasterSearchModel = {
@@ -448,10 +467,10 @@ export class FixedAssetsComponent implements OnInit {
         this.fixedassetsform.controls.description.setValue(this.dyndatas.FA_DESC);
         this.fixedassetsform.controls.method.setValue(this.dyndatas.FA_DEP_METHOD);
         this.fixedassetsform.controls.life_period.setValue(this.dyndatas.FA_DEP_PERCENTAGE);
-        this.fixedassetsform.controls.cost_lc.setValue(this.dyndatas.FA_COST);
-        this.fixedassetsform.controls.land_cost_lc.setValue(this.dyndatas.FA_LANDEDCOST);
-        this.fixedassetsform.controls.open_net_val.setValue(this.dyndatas.FA_OPN_DEP_AMOUNT);
-        this.fixedassetsform.controls.opening_acc_dep.setValue(this.dyndatas.FA_ACC_DEP_AMOUNT);
+        this.fixedassetsform.controls.cost_lc.setValue(this.commonService.decimalQuantityFormat(this.dyndatas.FA_COST,'AMOUNT'));
+        this.fixedassetsform.controls.land_cost_lc.setValue(this.commonService.decimalQuantityFormat(this.dyndatas.FA_LANDEDCOST,'AMOUNT'));
+        this.fixedassetsform.controls.open_net_val.setValue(this.commonService.decimalQuantityFormat(this.dyndatas.FA_OPN_DEP_AMOUNT,'AMOUNT'));
+        this.fixedassetsform.controls.opening_acc_dep.setValue(this.commonService.decimalQuantityFormat(this.dyndatas.FA_ACC_DEP_AMOUNT,'AMOUNT'));
         this.fixedassetsform.controls.start_from.setValue(this.dyndatas.FA_START_DEP_DATE);
         this.fixedassetsform.controls.last_dep_date.setValue(this.dyndatas.FA_LAST_DEP_DATE);
         this.fixedassetsform.controls.purchase_inv.setValue(this.dyndatas.FA_PUR_VOCNO);
@@ -476,8 +495,9 @@ export class FixedAssetsComponent implements OnInit {
         this.fixedassetsform.controls.insurance.setValue(this.dyndatas.FA_INSURANCE);
         this.fixedassetsform.controls.certi_no.setValue(this.dyndatas.FA_CERTIFICATIONNO);
         this.fixedassetsform.controls.install_dt.setValue(this.dyndatas.FA_INSTALLATION_DETAILS);
-        this.fixedassetsform.controls.costfc.setValue(this.dyndatas.FA_COST_FC);
-        this.fixedassetsform.controls.curr_rate.setValue(this.dyndatas.FA_CONV_RATE);
+        this.fixedassetsform.controls.costfc.setValue(this.commonService.decimalQuantityFormat(this.dyndatas.FA_COST_FC,'AMOUNT'));
+        this.fixedassetsform.controls.curr_rate.setValue(this.commonService.decimalQuantityFormat(this.dyndatas.FA_CONV_RATE,'RateDecimalInput'));
+        // this.fixedassetsform.controls.curr_rate.setValue(this.dyndatas.FA_CONV_RATE);
         this.fixedassetsform.controls.curr_code.setValue(this.dyndatas.FA_CURRENCY);
         this.fixedassetsform.controls.months.setValue(this.dyndatas.FA_DEP_PERIOD);
         this.fixedassetsform.controls.userdefined_1.setValue(this.dyndatas.UDF1);
@@ -505,6 +525,7 @@ export class FixedAssetsComponent implements OnInit {
 
   DeleteController(DATA?: any) {
     this.ViewController(DATA);
+    this.viewMode = true;
 
     Swal.fire({
       title: "Are you sure?",
@@ -548,6 +569,7 @@ export class FixedAssetsComponent implements OnInit {
         this.subscriptions.push(Sub);
       } else {
         this.flag = "VIEW";
+        this.activeModal.close();
       }
     });
   }

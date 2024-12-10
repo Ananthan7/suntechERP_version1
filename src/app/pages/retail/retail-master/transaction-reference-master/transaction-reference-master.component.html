@@ -31,7 +31,7 @@
                            Client Name :</label>
                         <div class="col-md-2 p-0">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="client_name" UpperCaseDirective
+                                <input type="text" #codeInput matInput formControlName="client_name" id="client_name" #client_name UpperCaseDirective
                                     autocomplete="off" />
                                 <master-search class="masterSearch" [MasterSearchData]="clientnamedata"
                                     (newRowClick)="clientcodeselect($event)">
@@ -68,9 +68,14 @@
                             Status :</label>
                         <div class="col-md-4 p-0">
 
-                            <mat-form-field style="width: 100%;" appearance="outline" formControlName="status">
-                                <mat-select>
-                                    <mat-option></mat-option>
+                            <mat-form-field style="width: 100%;" appearance="outline">
+                                <mat-select formControlName="status">
+                                    <mat-option
+                                    *ngFor="let data of statusList"
+                                    [value]="data.ENGLISH"
+                                    >
+                                    {{ data.ENGLISH }}
+                                </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>

@@ -72,7 +72,7 @@ export class YearlyBudgetPlannerComponent implements OnInit {
       this.detailsapi(this.unq_id);
     }
     if(this.flag == 'EDIT' || this.flag == "DELETE"){
-      this.editMode = true;
+      this.editMode = false;
     }
   }
 
@@ -201,6 +201,8 @@ export class YearlyBudgetPlannerComponent implements OnInit {
         this.subscriptions.push(Sub);
       } else {
         this.flag = "VIEW";
+        this.activeModal.close("");
+
       }
     });
   }
@@ -253,7 +255,7 @@ export class YearlyBudgetPlannerComponent implements OnInit {
 
   formSubmit() {
 
-    console.log(this.maindetails_data);
+    console.log(this.maindetails);
     let sno =1;
     this.maindetails.forEach((e:any) => {
       e.FYEARCODE = this.yearlybudgetform.controls.finyear.value;
@@ -342,18 +344,24 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     const updatedSRNO = data.data.SLNO - 1; 
     this.lastsr = updatedSRNO;
     const budgetedAmt = parseFloat(event.target.value);
-    this.maindetails[updatedSRNO].BUDGETED_AMT = budgetedAmt.toFixed(2);
+    this.maindetails[updatedSRNO].BUDGETED_AMT = this.commonService.decimalQuantityFormat(event.target.value,'AMOUNT');
+    // this.maindetails[updatedSRNO].BUDGETED_AMT = budgetedAmt.toFixed(2);
     console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].BUDGETED_AMT);
     let amount =  this.maindetails[updatedSRNO].BUDGETED_AMT;
     let accode = data.data.ACCODE;
-    this.calculate_total(amount,accode);
+    // this.calculate_total(amount,accode);
+    if(this.flag == undefined){
+      this.calculate_total(amount,accode);
+    }else{
+      this.calculate_total_edit(amount,accode);
+
+    }
   }
 
   
 
   calculate_total(amount:any,accode:any ) {
     this.maindetails_data =[];
-    // let total = 0;
    
     let ind_amount = amount / 12;
     // let months = [
@@ -382,14 +390,43 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     this.maindetails_data.push(...loc_data);
   }
 
+
+  calculate_total_edit(amount:any,accode:any ) {
+    console.log("in")
+    this.maindetails_data =[];
+   
+    let ind_amount = amount / 12;
+    let months = [
+      'January', 'February', 'March', 'April', 'May', 'June', 
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    let data = months.map((month, index) => ({
+      'SRNO': index,
+      'MONTHNAME': month,
+      'BUDGET_AMOUNT': ind_amount.toFixed(2)
+    }));
+    // let details = this.maindetails;
+    // let loc_data: any[] = [];  
+    // details.forEach((e: any) => {
+    //   if (e.ACCODE == accode) {
+    //     console.log(e.dtlMonth);
+    //     loc_data = e.dtlMonth;  
+    //   }
+    // });
+
+    // loc_data.forEach((s: any) => {
+    //   s.BUDGET_AMOUNT = ind_amount.toFixed(2); 
+    // });
+    
+  
+    this.maindetails_data.push(...data);
+  }
+
+
   settotal(data: any, event: any) {
     const updatedSRNO = data.data.SRNO;
     const budgetedAmt = parseInt(event.target.value, 10);  
-    console.log(updatedSRNO);
-    console.log(budgetedAmt);
-
-    this.maindetails_data[updatedSRNO].BUDGET_AMOUNT = budgetedAmt; 
-
+    this.maindetails_data[updatedSRNO].BUDGET_AMOUNT = this.commonService.decimalQuantityFormat(budgetedAmt,"AMOUNT"); 
     this.cal_totalval(updatedSRNO);
   }
 
