@@ -21,7 +21,7 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">SalesMan</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="salesman"   [readonly]="viewMode"
+                            <input type="text" id="inputPassword" matInput formControlName="salesman"  id="salesman" #salesman  [readonly]="viewMode"
                             (focusout)="
                             SPvalidateLookupFieldModified(
                               $event,
@@ -31,9 +31,10 @@
                               ['SALESPERSON_CODE'],
                               false
                             )
-                          " 
+                          "  (blur)="check_value()"
+
                           />
-                            <master-search [MasterSearchData]="salesmanCodeData" class="masterSearch"
+                            <master-search *ngIf="this.content?.FLAG != 'VIEW' " [MasterSearchData]="salesmanCodeData" class="masterSearch"
                                 (newRowClick)="selectedsalesman($event)"></master-search>
                         </mat-form-field>
                     </div>
@@ -56,7 +57,7 @@
                             )
                           " 
                             />
-                            <master-search [MasterSearchData]="finyearcodedata" class="masterSearch"
+                            <master-search  *ngIf="this.content?.FLAG != 'VIEW' "  [MasterSearchData]="finyearcodedata" class="masterSearch"
                                 (newRowClick)="selectedfinyear($event)"></master-search>
                         </mat-form-field>
                     </div>

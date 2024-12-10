@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -37,6 +37,8 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
     private modalService: NgbModal,
     private apiService: SuntechAPIService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2
+
 
 
   ) { }
@@ -96,6 +98,14 @@ setcodevalues(){
   this.wholesalesmanform.controls.dateto.setValue(e.ENDYEAR);
  }
 
+ check_value(){
+  let sales =  this.wholesalesmanform.controls.salesman.value;
+  if(sales == "" || sales.trim() == ""){
+    this.commonService.toastErrorByMsgId('MSG3652')
+    this.renderer.selectRootElement('#salesman')?.focus();
+  }
+ }
+
   enteredCodeSelected(e: any) {
     console.log(e);
     this.wholesalesmanform.controls.fin_year.setValue(e.FYEARCODE);
@@ -127,14 +137,47 @@ setcodevalues(){
     this.wst_id = this.content?.TARGET_CODE;
     console.log(this.wst_id);
     this.flag = this.content?.FLAG;
+
+    if(this.flag == undefined){
+      this.renderer.selectRootElement('#salesman')?.focus();
+      this.getfinyearvalues();
+
+    }
+
     if(this.flag == 'EDIT'){
+
       this.disable_code = true;
-      this.editMode = true;
+      this.editMode = false;
     }
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.wst_id);
     }
+  }
+
+  getfinyearvalues(){
+
+    let postData = {
+      PAGENO: 1,
+      RECORDS: 10,
+      LOOKUPID: 103,
+      SEARCH_FIELD: '',
+      SEARCH_HEADING: 'FIN YEAR',
+      SEARCH_VALUE: '',
+      WHERECONDITION:"",
+      VIEW_INPUT: true,
+      VIEW_TABLE:true,
+  }    
+    let API = `MasterLookUp`;
+    let Sub: Subscription = this.apiService.postDynamicAPI(API,postData)
+      .subscribe((result: any) => {
+        let last_data = result.dynamicData[0];
+        let index = last_data.length -1;
+        this.wholesalesmanform.controls.fin_year.setValue(last_data[index].FYEARCODE)
+        this.wholesalesmanform.controls.datefrom.setValue(last_data[index].STARTYEAR)
+        this.wholesalesmanform.controls.dateto.setValue(last_data[index].ENDYEAR)       
+      },
+    ) 
   }
 
   detailsapi(wst_id: any) {
@@ -147,7 +190,6 @@ setcodevalues(){
         
         this.maindetails.push(...this.dyndatas?.details)
 
-        this.flag = "EDIT";
       }, (err: any) => {
       })
     this.subscriptions.push(Sub);
@@ -183,23 +225,30 @@ setcodevalues(){
   }
 
   close(data?: any) {
-    // this.activeModal.close(data);
-    if(this.flag == undefined || this.flag == 'EDIT'){
-      Swal.fire({
-        title: "Confirm",
-        text: "Are you sure you want to close this window?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.activeModal.close(data);
-        }
-      });
-    }else{
+    if (data) {
+      this.viewMode = true;
       this.activeModal.close(data);
+      return
     }
+    if (this.content && this.content.FLAG == 'VIEW') {
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
 
   formSubmit() {
@@ -360,7 +409,7 @@ setcodevalues(){
     FORMNAMES: string[],
     isCurrencyField: boolean,
     lookupFields?: string[],
-    FROMCODE?: boolean
+    FROMCODE?: boolean,
   ) {
     const searchValue = event.target.value?.trim();
 

@@ -157,7 +157,7 @@
 
                             
                             <div *dxTemplate="let data of 'bud_amount'">
-                                <input type="number" [disabled]="viewMode"  (change)="setamount(data,$event)" [value]="data.value" style="width: 100%;" AmountDecimalInput />
+                                <input type="number" [disabled]="viewMode" class="text-right"  (change)="setamount(data,$event)" [value]="data.value.toFixed(2)" style="width: 100%;" AmountDecimalInput />
                             </div>
 
 
