@@ -79,6 +79,7 @@ export class AdditionalAmountComponent implements OnInit {
   trasnCode: any;
   CategoryCode: any;
   flag: any;
+  data: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -92,22 +93,24 @@ export class AdditionalAmountComponent implements OnInit {
     code: [""],
     description: [""],
     type_code: [""],
-    calculated_type: [""],
+    calculated_type: ["1"],
     calculated_code: [""],
     include_for_tax: [""],
     add_category: [""],
     include_in_sales_analysis: [""],
-    transaction_type: [""],
+    transaction_type: ["1"],
     transaction_code: [""],
     debit_code: [""],
-    debit_type: [""],
+    debit_type: ["1"],
     credit_code: [""],
-    credit_type: [""],
-    narration: [""],
+    credit_type: ["2"],
+    narration: ["1"],
     vat_type: [""],
     system_date: [""],
     stone_metal: [""],
     percentage: [""],
+    credit_description: [""],
+    debit_description: [""],
   });
 
   ngOnInit(): void {
@@ -120,18 +123,15 @@ export class AdditionalAmountComponent implements OnInit {
     if (this.content?.FLAG) {
       if (this.content?.FLAG == "VIEW") {
         this.setValues();
-
         this.isDisabled = true;
         this.viewMode = true;
       } else if (this.content?.FLAG == "EDIT") {
         this.setValues();
-
         this.viewMode = false;
         this.editMode = true;
         this.codeEnable = false;
       } else if (this.content?.FLAG == "DELETE") {
         this.setValues();
-
         this.viewMode = true;
         this.deleteMaster();
       }
@@ -479,6 +479,22 @@ export class AdditionalAmountComponent implements OnInit {
     console.log(this.content.DEBIT_TYPE);
     let data1 = this.content.DEBIT_TYPE;
     console.log(data1);
+    let api =
+      "AddlAmountMaster/GetAddAmountlMasterDetail/" + this.content.ADDL_CODE ;
+    console.log(api);
+    let Sub: Subscription = this.dataService
+      .getDynamicAPI(api)
+      .subscribe((result: any) => {
+        this.data = result.response;
+        console.log(this.data);
+
+        this.costAndPriceTypeMainForm.controls["credit_description"].setValue(
+          this.data.CREDITACCODE_DESCRIPTION
+        );
+        this.costAndPriceTypeMainForm.controls["debit_description"].setValue(
+          this.data.DEBITACCODE_DESCRIPTION
+        );
+      });
 
     this.debitValue = data1;
     this.costAndPriceTypeMainForm.controls["code"].setValue(
@@ -522,6 +538,10 @@ export class AdditionalAmountComponent implements OnInit {
     this.costAndPriceTypeMainForm.controls["vat_type"].setValue(
       this.content.PERCENTAGE.toString()
     );
+    this.costAndPriceTypeMainForm.controls["transaction_code"].setValue(
+      this.content.PLUS_MINUS.toString()
+    );
+
   }
 
   setPostData() {
@@ -539,7 +559,7 @@ export class AdditionalAmountComponent implements OnInit {
       ),
       AVG_ON: this.commonService.emptyToZero(form.calculated_type),
       TRANS_TYPE: this.commonService.emptyToZero(form.transaction_type),
-      PLUS_MINUS: "s",
+      PLUS_MINUS: form.transaction_code,
       DEBIT_TYPE: this.commonService.nullToString(form.debit_type),
       DEBIT_CODE: this.commonService.nullToString(
         form.debit_code.toUpperCase()
@@ -556,6 +576,8 @@ export class AdditionalAmountComponent implements OnInit {
       PERCENTAGE: this.commonService.emptyToZero(form.vat_type),
       INC_DEFAULT_TAX: form.include_for_tax == "y" ? true : false,
       ADDL_CATEGORY: this.commonService.emptyToZero(form.add_category),
+      DEBITACCODE_DESCRIPTION: form.debit_description,
+      CREDITACCODE_DESCRIPTION: form.credit_description,
     };
 
     return postData;
@@ -707,6 +729,8 @@ export class AdditionalAmountComponent implements OnInit {
             (err) => alert(err)
           );
         this.subscriptions.push(Sub);
+      }else{
+        this.close("reloadMainGrid");
       }
     });
   }

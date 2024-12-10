@@ -26,16 +26,18 @@
               <div class="col-md-6">
                 <div class="row">
                   <label for="inputPassword" class="col-sm-4 col-form-label">
-                    Code :</label
+                    Code <span>* :</span> </label
                   >
                   <div class="col-sm-4">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        id="code" #code
                         type="text"
                         matInput
                         formControlName="code"
                         maxlength="5"
                         UpperCaseDirective
+                        (keyup)="codeEnabled()"
                         autocomplete="off"
                         [readonly]="viewMode || editMode"
                       />
@@ -61,6 +63,7 @@
                         formControlName="Description"
                         UpperCaseDirective
                         autocomplete="off"
+                        maxlength="50"
                         [readonly]="viewMode || codeEnable"
                       />
                     </mat-form-field>
