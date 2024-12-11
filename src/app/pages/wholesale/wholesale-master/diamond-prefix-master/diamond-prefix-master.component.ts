@@ -66,6 +66,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
 
   ngOnInit(): void {
     // this.setCompanyCurrency()
+
     this.setFormValues()
     this.codeEnable = true;
 

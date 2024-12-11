@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -160,7 +160,9 @@ export class JewelleryMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private commonService: CommonServiceService
+    private commonService: CommonServiceService,
+    private renderer: Renderer2,
+
   ) {
     this.allMode = "allPages";
     this.checkBoxesMode = themes.current().startsWith("material")
@@ -169,6 +171,7 @@ export class JewelleryMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
 
     if (this.content?.FLAG) {
       console.log(this.content)

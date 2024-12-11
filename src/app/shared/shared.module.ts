@@ -105,7 +105,6 @@ import { AlphaNumericOnlyDirective } from './directives/appAlphaNumericOnly';
 import { ApplyOnlyNumbersDirective } from './directives/apply-only-numbers.directive';
 import { ReportScreenButtonsComponent } from './common/report-screen-buttons/report-screen-buttons.component';
 import { RestrictNegativeDirective } from './directives/no-negative';
-import { DynamicIntInputDirective } from './directives/DynamicIntInput.directive';
 
 
 
@@ -164,8 +163,8 @@ import { DynamicIntInputDirective } from './directives/DynamicIntInput.directive
     AsOnDateComponent,
     CommonButtonsComponent,
     ReportScreenButtonsComponent,
-    RestrictNegativeDirective,
-    DynamicIntInputDirective
+    RestrictNegativeDirective
+    
   ],
   imports: [
     CommonModule,
@@ -212,7 +211,7 @@ import { DynamicIntInputDirective } from './directives/DynamicIntInput.directive
     MatCheckboxModule, MatProgressSpinnerModule,
     OverlayPanelModule, DragDropModule,
     MatTableModule, NgbCarouselModule,
-    MatRadioModule, MatCardModule, ZXingScannerModule, NgxBarcodeScannerModule,BarcodeScannerLivestreamModule,
+    MatRadioModule, MatCardModule, ZXingScannerModule, NgxBarcodeScannerModule,BarcodeScannerLivestreamModule
   ],
   exports: [
     //component exports
@@ -306,8 +305,7 @@ import { DynamicIntInputDirective } from './directives/DynamicIntInput.directive
     OverlayPanelModule, DragDropModule,
     MatTableModule, CalendarModule,
     BranchDivisionComponent, ReportToControlComponent,DateComponent, AsOnDateComponent, CommonButtonsComponent, ReportScreenButtonsComponent,
-    RestrictNegativeDirective,
-    DynamicIntInputDirective
+    RestrictNegativeDirective
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })
