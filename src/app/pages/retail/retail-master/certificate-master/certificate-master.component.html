@@ -60,10 +60,9 @@
                     [readonly]="flag === 'VIEW'"
                     type="text"
                     matInput
-                    DynamicIntInputDirective
-                    [maxIntegerDigits]="10"
-                    [maxDecimalDigits]="3"
                     formControlName="stdCharges"
+                    AmountDecimalInput
+                    [max]="13"
                     class="text-right"
                     (keydown)="preventInvalidInput($event)"
                   />
