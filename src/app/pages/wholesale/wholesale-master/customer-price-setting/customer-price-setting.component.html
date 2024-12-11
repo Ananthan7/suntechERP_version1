@@ -32,7 +32,7 @@
                     type="text"
                     matInput
                     maxlength="6"
-                    [readonly]="editMode"
+                    [readonly]="editMode || viewMode"
                     formControlName="pricecode"
                     oninput="this.value = this.value.toUpperCase()"
                     (keyup)="codeEnabled()"
@@ -49,7 +49,7 @@
                     [matDatepicker]="date"
                     formControlName="date"
                     placeholder="DD/MM/YYYY"
-                    [readonly]="codeEnable"
+                    [readonly]="codeEnable || viewMode"
                     DateValidation
                   />
                   <mat-datepicker-toggle
@@ -74,7 +74,7 @@
                     type="text"
                     matInput
                     formControlName="description"
-                    [readonly]="codeEnable"
+                    [readonly]="codeEnable || viewMode"
                     oninput="this.value = this.value.toUpperCase()"
                   />
                 </mat-form-field>
@@ -89,7 +89,7 @@
                   <input
                     type="text"
                     matInput
-                    [readonly]="codeEnable"
+                    [readonly]="codeEnable || viewMode"
                     formControlName="division"
                     (focusout)="
                       SPvalidateLookupFieldModified(
@@ -122,7 +122,7 @@
                   <input
                     type="text"
                     matInput
-                    [readonly]="codeEnable"
+                    [readonly]="codeEnable || viewMode"
                     formControlName="currency"
                     (focusout)="
                       SPvalidateLookupFieldModified(
@@ -157,7 +157,7 @@
                   <input
                     type="text"
                     matInput
-                    [readonly]="codeEnable"
+                    [readonly]="codeEnable || viewMode"
                     formControlName="enteredby"
                     (focusout)="
                       SPvalidateLookupFieldModified(
@@ -190,7 +190,7 @@
                   <input
                     type="text"
                     matInput
-                    [readonly]="enableUpdate"
+                    [readonly]="viewMode"
                     formControlName="approvedby"
                   />
                   <master-search
@@ -457,6 +457,7 @@
                   <div *dxTemplate="let datas of 'compCodetemp'">
                     <input
                       type="checkbox"
+                      [disabled]="viewMode"
                       [checked]="datas.value"
                       (change)="compCodetemp($event, datas)"
                       style="width: 100%"
@@ -546,6 +547,7 @@
 
                       <div *dxTemplate="let data of 'DIVISION_CODEtemp'">
                         <input
+                          [readOnly]="viewMode"
                           type="text"
                           [value]="data.value"
                           [disabled]="data.value == ''"
@@ -556,6 +558,7 @@
 
                       <div *dxTemplate="let data of 'SRCH_CRITERIAtemp'">
                         <input
+                          [readOnly]="viewMode"
                           type="text"
                           [value]="data.value"
                           style="width: 100%"
@@ -565,6 +568,7 @@
 
                       <div *dxTemplate="let data of 'SRCH_VALUEtemp'">
                         <input
+                        [disabled]="viewMode"
                           type="checkbox"
                           [checked]="data.value"
                           (change)="SRCH_VALUEtemp($event, data)"
@@ -574,6 +578,7 @@
 
                       <div *dxTemplate="let data of 'STD_MKGRATEtemp'">
                         <input
+                          [readOnly]="viewMode"
                           type="text"
                           [value]="data.value"
                           style="width: 100%"
@@ -583,6 +588,7 @@
 
                       <div *dxTemplate="let data of 'WT_RANGE_FROMtemp'">
                         <input
+                          [readOnly]="viewMode"
                           type="text"
                           [value]="data.value"
                           style="width: 100%"
@@ -592,6 +598,7 @@
 
                       <div *dxTemplate="let data of 'WT_RANGE_TOtemp'">
                         <input
+                          [readOnly]="viewMode"
                           type="text"
                           [value]="data.value"
                           style="width: 100%"
