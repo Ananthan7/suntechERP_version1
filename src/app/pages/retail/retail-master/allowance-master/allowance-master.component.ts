@@ -242,6 +242,12 @@ export class AllowanceMasterComponent implements OnInit {
         this.allowanceMasterForm.controls.consider_for_overtime.setValue(
           this.data?.ALLMST_OVT
         );
+        this.allowanceMasterForm.controls.glcode_desc.setValue(
+          this.data?.ACCDESCRIPTION
+        );
+        this.allowanceMasterForm.controls.countrycodedesc.setValue(
+          this.data?.COUNTRYNAME
+        );
       });
     this.allowanceMasterForm.controls.code.setValue(this.content.ALLMST_CODE);
     this.allowanceMasterForm.controls.description.setValue(
@@ -347,6 +353,8 @@ export class AllowanceMasterComponent implements OnInit {
       ALLMST_CREDIT_EMPAC: this.credit_to_employeeAC,
       ALLMST_LS: this.leave_salary == true ? 1 : 0,
       ALLMSTCOUNTRYCODE: this.allowanceMasterForm.value.countrycode,
+      COUNTRYNAME:  this.allowanceMasterForm.value.countrycodedesc,
+      ACCDESCRIPTION: this.allowanceMasterForm.value.glcode_desc,
       UDF1: this.allowanceMasterForm.value.userdefined1,
       UDF2: this.allowanceMasterForm.value.userdefined2,
       UDF3: this.allowanceMasterForm.value.userdefined3,
