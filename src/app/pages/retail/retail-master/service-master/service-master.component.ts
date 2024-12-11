@@ -268,6 +268,11 @@ export class ServiceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+
+
+
+
   deleteRecord() {
     Swal.fire({
       title: 'Are you sure?',
@@ -313,6 +318,11 @@ export class ServiceMasterComponent implements OnInit {
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else
+      {
+        this.close('reloadMainGrid')
+
       }
     });
   }

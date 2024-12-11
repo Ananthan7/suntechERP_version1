@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -42,6 +42,8 @@ export class ReorderLevelSetupComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
+
   ) { }
 
   reorderLevelSetupMainForm: FormGroup = this.formBuilder.group({
@@ -57,6 +59,8 @@ export class ReorderLevelSetupComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
+
     this.getGroup();
 
     if (this.content?.FLAG) {
@@ -257,6 +261,9 @@ export class ReorderLevelSetupComponent implements OnInit {
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else{
+        this.close('reloadMainGrid')
       }
     });
   }

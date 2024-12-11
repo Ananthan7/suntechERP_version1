@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -16,7 +16,8 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 })
 export class SalesPersonMasterComponent implements OnInit {
   divisionMS: any = 'ID';
-  subscriptions: any;
+  private subscriptions: Subscription[] = [];
+
   @Input() content!: any;
   tableData: any[] = [];
   editableMode: boolean = false;
@@ -37,10 +38,14 @@ export class SalesPersonMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
+
   ) { }
 
  
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
+
     if (this.content?.FLAG) {
       console.log(this.content)
       this.setFormValues();
@@ -265,6 +270,43 @@ export class SalesPersonMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+
+  checkCodeExists(event: any) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; 
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; 
+    }
+
+    
+    const API = 'SalesPersonMaster/CheckIfSalesPersonCodePresent/' + event.target.value;
+    const sub = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: 'Code Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then(() => { 
+            this.salesPersonForm.controls.code.setValue('');
+            this.renderer.selectRootElement('#code').focus();
+          });
+          this.commonService.toastErrorByMsgId('MSG1121')
+        }
+      }, err => {
+        this.salesPersonForm.reset();
+
+      });
+
+    this.subscriptions.push(sub);
+
+  }
+
   deleteRecord() {
     if (this.content && this.content.FLAG == 'VIEW') return
     Swal.fire({
@@ -282,6 +324,8 @@ export class SalesPersonMasterComponent implements OnInit {
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {
+              console.log("stRT");
+
                 Swal.fire({
                   title: result.message || 'Success',
                   text: '',
@@ -307,14 +351,20 @@ export class SalesPersonMasterComponent implements OnInit {
                     this.salesPersonForm.reset()
                     this.tableData = []
                     this.close()
+
                   }
                 });
               }
-            } else {
-              this.toastr.error('Not deleted')
             }
+            else{
+              this.close('reloadMainGrid')
+            }
+            
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else{
+        this.close('reloadMainGrid')
       }
     });
   }
