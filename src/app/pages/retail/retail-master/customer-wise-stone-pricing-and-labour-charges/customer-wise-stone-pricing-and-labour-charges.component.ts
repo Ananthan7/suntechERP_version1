@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -30,7 +30,8 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   @Input() content!: any;
   currentDate: any = this.commonService.currentDate;
   @ViewChild('currencyDetailcodeSearch') currencyDetailcodeSearch!: MasterSearchComponent;
-  
+  @ViewChild("codeField") codeField!: ElementRef;
+
 
   stonePricingHeadings: any[] = [
     { field: "PARTYCODE", caption: "Sr No" },
@@ -83,10 +84,14 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
     private toastr: ToastrService,
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
+
   ) { }
   
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
+
     if (this.content?.FLAG) {
       console.log(this.content)
       this.setFormValues();
@@ -101,6 +106,13 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
      }
    }
   }
+
+  ngAfterViewInit(): void {
+    if (this.content?.FLAG == "ADD") {
+      console.log(this.content?.FLAG)
+      this.codeField.nativeElement.focus();
+}
+}
 
 
   customerWiseStonePriceForm: FormGroup = this.formBuilder.group({
@@ -341,6 +353,10 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else
+      {
+        this.close('reloadMainGrid')
       }
     });
   }

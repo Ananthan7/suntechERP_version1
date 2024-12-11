@@ -5,7 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="false" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 
 
 <div class="row">
@@ -18,7 +18,7 @@
               <label for="inputPassword" class="col-sm-2 col-form-label">Price Code :</label>
               <div class="col-md-2">
                 <mat-form-field style="width: 100%;" appearance="outline">
-                  <input type="text" matInput formControlName="pricecode"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="pricecode" id="code"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || editMode"/>
                 </mat-form-field>
               </div>
 
@@ -69,6 +69,7 @@
             <div class="row pt-2">
               <div class="col-md-12 d-flex justify-content-between align-items-center">
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                   (addClick)="openstonedetails()" (deleteClick)="removeItemDetails()"></menu-buttons>
               </div>
 
@@ -298,25 +299,19 @@
                 </menu-buttons>
                 <div class="d-flex">
 
-                  <div class="p-1 bd-highlight">
+                  <!-- <div class="p-1 bd-highlight">
                     <button type="button" id="ID055" class="btn btn-outline-primary metal-issue-del-btn"
                       (click)="submitStone()">
                       Save
                     </button>
                   </div>
-                  <!-- <button 
-                             
-                              type="button"  class="p-1 bd-highlight"
-                              (click)="submitStone()">
-                              Save
-                            </button> -->
 
                   <div class="p-1 bd-highlight">
                     <button type="button" id="ID055" class="btn btn-outline-primary metal-issue-del-btn"
                       (click)="cancelStone()">
                       Cancel
                     </button>
-                  </div>
+                  </div> -->
                 </div>
 
                 <!-- <button 
