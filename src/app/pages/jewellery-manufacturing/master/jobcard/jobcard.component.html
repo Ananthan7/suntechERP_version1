@@ -178,7 +178,7 @@
                                             (dateChange)="formatDate($event)"
                                             [matDatepicker]="date"
                                             formControlName="date"
-                                            [disabled]="viewMode"
+                                            [readonly]="viewMode"
                                             placeholder="DD/MM/YYYY"
                                             class="text-right" />
                                         <mat-datepicker-toggle matSuffix
@@ -538,7 +538,7 @@
                                             class="text-right" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="deldate"></mat-datepicker-toggle>
-                                        <mat-datepicker [disabled]="isSaved"  [startAt]="currentDate"
+                                        <mat-datepicker [disabled]="isSaved" [startAt]="currentDate"
                                             #deldate></mat-datepicker>
                                     </mat-form-field>
                                 </div>

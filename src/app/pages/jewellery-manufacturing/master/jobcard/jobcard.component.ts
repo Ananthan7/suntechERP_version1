@@ -100,7 +100,7 @@ export class JobcardComponent implements OnInit {
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   }
-  
+
   lengthCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -380,6 +380,7 @@ export class JobcardComponent implements OnInit {
     srewFiled: [''],
     instruction: [''],
     picture_name: [''],
+    FLAG: ['']
 
   });
   mainmetalCodeData: MasterSearchModel = {
@@ -420,13 +421,11 @@ export class JobcardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setInitialValues();
     if (this.content) {
-      this.setLoadFormValues();
-      this.getSavedDetails()
       switch (this.content.FLAG) {
         case 'VIEW':
           this.viewMode = true;
+          this.isSaved = true;
           this.setLoadFormValues();
           break;
         case 'EDIT':
@@ -439,7 +438,9 @@ export class JobcardComponent implements OnInit {
           break;
       }
     } else {
+      this.setInitialValues();
       this.priceSchemeValidate();
+      this.getSavedDetails()
     }
 
   }
@@ -460,21 +461,21 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.date.setValue(this.currentDate)
     let CURRENCY_CODE = this.commonService.compCurrency;
     this.jobCardFrom.controls.currency.setValue(CURRENCY_CODE);
-    console.log('',this.currentDate)
-    console.log('',this.UpdatetDate)
+    console.log('', this.currentDate)
+    console.log('', this.UpdatetDate)
   }
   getSavedDetails() {
-    let API = `JobMasterDj/GetJobMasterDjHeaderDetail/${this.commonService.branchCode}/${this.jobCardFrom.value.jobno}`;
+    let API = `JobMasterDj/GetJobMasterDjHeaderDetail/${this.commonService.branchCode}/${this.content.value.jobno}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          this.jobsalesorderdetailDJ = data.JOB_SALESORDER_DETAIL_DJ|| []
-          if(this.jobsalesorderdetailDJ.length>0){
-            this.jobsalesorderdetailDJ.forEach((item:any) => {
-              item.GROSS_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT,'METAL')
-              item.METAL_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT,'METAL')
-              item.STONE_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT,'STONE')
+          this.jobsalesorderdetailDJ = data.JOB_SALESORDER_DETAIL_DJ || []
+          if (this.jobsalesorderdetailDJ.length > 0) {
+            this.jobsalesorderdetailDJ.forEach((item: any) => {
+              item.GROSS_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
+              item.METAL_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
+              item.STONE_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT, 'STONE')
             });
           }
         }
@@ -597,9 +598,9 @@ export class JobcardComponent implements OnInit {
   formatDate(event: any) {
     const inputValue = event.target.value;
     let date = new Date(inputValue)
-    let yr = date.getFullYear() 
-    let dt = date.getDate() 
-    let dy = date.getMonth() 
+    let yr = date.getFullYear()
+    let dt = date.getDate()
+    let dy = date.getMonth()
     if (yr.toString().length > 4) {
       let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
       this.jobCardFrom.controls.vocdate.setValue(new Date(date))
@@ -612,12 +613,12 @@ export class JobcardComponent implements OnInit {
   // }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -762,7 +763,7 @@ export class JobcardComponent implements OnInit {
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
         // this.tableData[0].Pcs = result.response.PCS;
-        console.log(this.tableData[0],'content')
+        console.log(this.tableData[0], 'content')
         this.tableData[0].metal_color = result.response.COLOR;
         this.tableData[0].metal_wt = result.response.METAL_WT;
         this.tableData[0].stone_wt = result.response.STONE_WT;
@@ -772,7 +773,7 @@ export class JobcardComponent implements OnInit {
         // Get the first object from DESIGN_STNMTL_DETAIL array
 
         const firstDetail = result.response.DESIGN_STNMTL_DETAIL;
-        console.log(result.response.DESIGN_STNMTL_DETAIL,'response')
+        console.log(result.response.DESIGN_STNMTL_DETAIL, 'response')
         if (firstDetail) {
           firstDetail.forEach((element: any) => {
             let obj =
@@ -1038,56 +1039,67 @@ export class JobcardComponent implements OnInit {
 
   setLoadFormValues() {
     if (!this.content) return
-    console.log(this.content,'cont')
-    this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE  = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `JobMasterDj/GetJobMasterDjHeaderDetail/${this.commonService.branchCode}/${this.content.JOB_NUMBER}`;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data, 'data')
+          this.jobCardFrom.controls.jobno.setValue(data.JOB_NUMBER)
+          this.jobCardFrom.controls.jobdate.setValue(data.JOB_DATE)
+          this.jobCardFrom.controls.currency.setValue(data.CURRENCY_CODE)
+          this.jobCardFrom.controls.customer.setValue(data.CUSTOMER_CODE)
+          this.jobCardFrom.controls.costcode.setValue(data.COST_CODE)
+          this.jobCardFrom.controls.type.setValue(data.TYPE_CODE)
+          this.jobCardFrom.controls.category.setValue(data.CATEGORY_CODE)
+          this.jobCardFrom.controls.subcat.setValue(data.SUBCATEGORY_CODE)
+          this.jobCardFrom.controls.brand.setValue(data.BRAND_CODE)
+          this.jobCardFrom.controls.designcode.setValue(data.DESIGN_CODE)
+          this.jobCardFrom.controls.seqcode.setValue(data.SEQ_CODE)
+          this.jobCardFrom.controls.designcode.setValue(data.DESIGN_CODE)
+          this.jobCardFrom.controls.picture_name.setValue(data.PICTURE_NAME)
+          this.jobCardFrom.controls.setref.setValue(data.SET_REF)
+          this.jobCardFrom.controls.totalpcs.setValue(data.TOTAL_PCS)
+          this.jobCardFrom.controls.pending.setValue(data.PENDING_PCS)
+          this.jobCardFrom.controls.color.setValue(data.METAL_COLOR)
+          this.jobCardFrom.controls.karat.setValue(data.KARAT_CODE)
+          this.jobCardFrom.controls.prefix.setValue(data.PREFIX)
+          this.jobCardFrom.controls.time.setValue(data.TIME_CODE)
+          this.jobCardFrom.controls.range.setValue(data.RANGE_CODE)
+          this.jobCardFrom.controls.comments.setValue(data.COMMENTS_CODE)
+          this.jobCardFrom.controls.country.setValue(data.COUNTRY_CODE)
+          this.jobCardFrom.controls.salesman.setValue(data.SALESPERSON_CODE)
+          this.jobCardFrom.controls.size.setValue(data.SIZE)
+          this.jobCardFrom.controls.length.setValue(data.LENGTH)
+          this.jobCardFrom.controls.orderType.setValue(data.ORDER_TYPE)
+          this.jobCardFrom.controls.designtype.setValue(data.DESIGN_DESC)
+          this.jobCardFrom.controls.instruction.setValue(data.JOB_INSTRUCTION)
+          this.jobCardFrom.controls.customername.setValue(data.CUSTOMER_NAME)
+          this.jobCardFrom.controls.lossbooking.setValue(data.METAL_STOCK_CODE)
+          this.jobCardFrom.controls.mainmetal.setValue(data.COST_CENTER_DESC)
+          // this.jobCardFrom.controls.jobdate.setValue(formatDate(data.JOB_DATE,'dd/MM/yyyy', 'en-US'));
+          this.jobCardFrom.controls.jobdate.setValue(data.JOB_DATE)
+          this.jobCardFrom.controls.deldate.setValue(data.DEL_DATE)
+          this.jobCardFrom.controls.date.setValue(data.SO_VOCDATE)
+          this.jobCardFrom.controls.type.setValue(data.TYPE)
+          this.jobCardFrom.controls.jobtype.setValue(data.DESIGN_TYPE)
 
+          this.jobCardFrom.controls.purity.setValue(
+            this.commonService.transformDecimalVB(6, data.JOB_PURITY));
 
+          this.urls = data.PICTURE_NAME
+          this.getDesignimagecode()
 
-    this.jobCardFrom.controls.jobno.setValue(this.content.JOB_NUMBER)
-    this.jobCardFrom.controls.jobdate.setValue(this.content.JOB_DATE)
-    this.jobCardFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
-    this.jobCardFrom.controls.customer.setValue(this.content.CUSTOMER_CODE)
-    this.jobCardFrom.controls.costcode.setValue(this.content.COST_CODE)
-    this.jobCardFrom.controls.type.setValue(this.content.TYPE_CODE)
-    this.jobCardFrom.controls.category.setValue(this.content.CATEGORY_CODE)
-    this.jobCardFrom.controls.subcat.setValue(this.content.SUBCATEGORY_CODE)
-    this.jobCardFrom.controls.brand.setValue(this.content.BRAND_CODE)
-    this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
-    this.jobCardFrom.controls.seqcode.setValue(this.content.SEQ_CODE)
-    this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
-    this.jobCardFrom.controls.picture_name.setValue(this.content.PICTURE_NAME)
-    this.jobCardFrom.controls.setref.setValue(this.content.SET_REF)
-    this.jobCardFrom.controls.totalpcs.setValue(this.content.TOTAL_PCS)
-    this.jobCardFrom.controls.pending.setValue(this.content.PENDING_PCS)
-    this.jobCardFrom.controls.color.setValue(this.content.METAL_COLOR)
-    this.jobCardFrom.controls.karat.setValue(this.content.KARAT_CODE)
-    this.jobCardFrom.controls.prefix.setValue(this.content.PREFIX)
-    this.jobCardFrom.controls.time.setValue(this.content.TIME_CODE)
-    this.jobCardFrom.controls.range.setValue(this.content.RANGE_CODE)
-    this.jobCardFrom.controls.comments.setValue(this.content.COMMENTS_CODE)
-    this.jobCardFrom.controls.country.setValue(this.content.COUNTRY_CODE)
-    this.jobCardFrom.controls.salesman.setValue(this.content.SALESPERSON_CODE)
-    this.jobCardFrom.controls.size.setValue(this.content.SIZE)
-    this.jobCardFrom.controls.length.setValue(this.content.LENGTH)
-    this.jobCardFrom.controls.orderType.setValue(this.content.ORDER_TYPE)
-    this.jobCardFrom.controls.designtype.setValue(this.content.DESIGN_DESC)
-    this.jobCardFrom.controls.instruction.setValue(this.content.JOB_INSTRUCTION)
-    this.jobCardFrom.controls.customername.setValue(this.content.CUSTOMER_NAME)
-    this.jobCardFrom.controls.lossbooking.setValue(this.content.METAL_STOCK_CODE)
-    this.jobCardFrom.controls.mainmetal.setValue(this.content.COST_CENTER_DESC)
-    // this.jobCardFrom.controls.jobdate.setValue(formatDate(this.content.JOB_DATE,'dd/MM/yyyy', 'en-US'));
-    this.jobCardFrom.controls.jobdate.setValue(new Date(formatDate(this.content.JOB_DATE,'dd/MM/yyyy', 'en-US')))
-    this.jobCardFrom.controls.deldate.setValue(new Date(formatDate(this.content.DEL_DATE,'dd/MM/yyyy', 'en-US')))
-    this.jobCardFrom.controls.type.setValue(this.content.TYPE)
-    this.jobCardFrom.controls.jobtype.setValue(this.content.DESIGN_TYPE)
-
-    this.jobCardFrom.controls.purity.setValue(
-      this.commonService.transformDecimalVB(6, this.content.JOB_PURITY));
-
-    this.urls = this.content.PICTURE_NAME
-    this.getDesignimagecode()
-
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
+
 
   submitValidations(form: any) {
     if (this.commonService.nullToString(form.orderType) == '') {
@@ -1208,7 +1220,7 @@ export class JobcardComponent implements OnInit {
       "JOB_PCS_PENDING": 0,
       "OUTSIDEJOB": true,
       "TREE_CODE": "",
-      "DEL_DATE": this.jobCardFrom.value.deldate || "",
+      "DEL_DATE":  "",
       "REP_STOCK_CODE": "",
       "REPAIRJOB": 0,
       "METAL_STOCK_CODE": this.jobCardFrom.value.lossbooking || "",
@@ -1224,7 +1236,7 @@ export class JobcardComponent implements OnInit {
       "ORDER_TYPE": this.jobCardFrom.value.orderType || "",
       "DESIGN_TYPE": this.jobCardFrom.value.jobtype || "",
       "SO_VOCNO": 0,
-      "SO_VOCDATE": "2023-10-26T05:59:21.735Z",
+      "SO_VOCDATE": this.jobCardFrom.value.date,
       "JOB_PURITY": this.jobCardFrom.value.purity || "",
       "DESIGN_DESC": this.jobCardFrom.value.designtype || "",
       "CUSTOMER_NAME": this.jobCardFrom.value.customername || "",
@@ -1245,76 +1257,76 @@ export class JobcardComponent implements OnInit {
       "TIME_DESC": "",
       "RANGE_DESC": "",
       "JOB_MATERIAL_BOQ_DJ": this.jobMaterialBOQ,
-      "JOB_SALESORDER_DETAIL_DJ":  [
-  
-              {
-                "SRNO": 0,
-                "JOB_NUMBER": "",
-                "JOB_DATE": "2023-10-26T05:59:21.735Z",
-                "JOB_SO_NUMBER": 0,
-                "JOB_SO_DATE": "2023-10-26T05:59:21.735Z",
-                "DELIVERY_DATE": "2023-10-26T05:59:21.735Z",
-                "PARTYCODE": "",
-                "PARTYNAME": "",
-                "DESIGN_CODE": "",
-                "KARAT": "",
-                "METAL_COLOR": "",
-                "PCS": 0,
-                "METAL_WT": 0,
-                "STONE_WT": 0,
-                "GROSS_WT": 0,
-                "METAL_WT_PCS": 0,
-                "STONE_PC_PCS": 0,
-                "STONE_WT_PCS": 0,
-                "RATEFC": 0,
-                "RATECC": 0,
-                "VALUEFC": 0,
-                "VALUECC": 0,
-                "SEQ_CODE": "",
-                "STD_TIME": 0,
-                "MAX_TIME": 0,
-                "ACT_TIME": 0,
-                "DESCRIPTION": "",
-                "UNQ_DESIGN_ID": "",
-                "UNQ_JOB_ID": "",
-                "JOB_SO_MID": 0,
-                "UNIQUEID": 0,
-                "PROD_DATE": "2023-10-26T05:59:21.735Z",
-                "PROD_REF": 0,
-                "PROD_STOCK_CODE": "",
-                "PROD_PCS": 0,
-                "LOCTYPE_CODE": "",
-                "PICTURE_PATH": "",
-                "PART_CODE": "",
+      "JOB_SALESORDER_DETAIL_DJ": [
 
-                // "SINO": sn,
-                // "job_reference": this.jobCardFrom.value.jobno + '/' + sn,
-                // "part_code": e.Design_Code,
-                // "Description": e.Design_Description,
-                // "Pcs": "",
-                // "metal_color": "",
-                // "metal_wt": "",
-                // "stone_wt": "",
-                // "gross_wt": "",
+        {
+          "SRNO": 0,
+          "JOB_NUMBER": "",
+          "JOB_DATE": "2023-10-26T05:59:21.735Z",
+          "JOB_SO_NUMBER": 0,
+          "JOB_SO_DATE": "2023-10-26T05:59:21.735Z",
+          "DELIVERY_DATE": "2023-10-26T05:59:21.735Z",
+          "PARTYCODE": "",
+          "PARTYNAME": "",
+          "DESIGN_CODE": "",
+          "KARAT": "",
+          "METAL_COLOR": "",
+          "PCS": 0,
+          "METAL_WT": 0,
+          "STONE_WT": 0,
+          "GROSS_WT": 0,
+          "METAL_WT_PCS": 0,
+          "STONE_PC_PCS": 0,
+          "STONE_WT_PCS": 0,
+          "RATEFC": 0,
+          "RATECC": 0,
+          "VALUEFC": 0,
+          "VALUECC": 0,
+          "SEQ_CODE": "",
+          "STD_TIME": 0,
+          "MAX_TIME": 0,
+          "ACT_TIME": 0,
+          "DESCRIPTION": "",
+          "UNQ_DESIGN_ID": "",
+          "UNQ_JOB_ID": "",
+          "JOB_SO_MID": 0,
+          "UNIQUEID": 0,
+          "PROD_DATE": "2023-10-26T05:59:21.735Z",
+          "PROD_REF": 0,
+          "PROD_STOCK_CODE": "",
+          "PROD_PCS": 0,
+          "LOCTYPE_CODE": "",
+          "PICTURE_PATH": "",
+          "PART_CODE": "",
+
+          // "SINO": sn,
+          // "job_reference": this.jobCardFrom.value.jobno + '/' + sn,
+          // "part_code": e.Design_Code,
+          // "Description": e.Design_Description,
+          // "Pcs": "",
+          // "metal_color": "",
+          // "metal_wt": "",
+          // "stone_wt": "",
+          // "gross_wt": "",
 
 
-                "TREE_NO": "",
-                "VOCTYPE": "",
-                "VOCNO": 0,
-                "YEARMONTH": "",
-                "BRANCH_CODE": "",
-                "KARIGAR_CODE": "",
-                "WAX_STATUS": "",
-                "SIZE": "",
-                "LENGTH": "",
-                "SCREW_FIELD": "",
-                "ORDER_TYPE": "",
-                "DESIGN_TYPE": "",
-                "CLOSE_TYPE": "",
-                "JOB_PURITY": 0,
-                "ADD_STEEL": true
-              }
-            ],
+          "TREE_NO": "",
+          "VOCTYPE": "",
+          "VOCNO": 0,
+          "YEARMONTH": "",
+          "BRANCH_CODE": "",
+          "KARIGAR_CODE": "",
+          "WAX_STATUS": "",
+          "SIZE": "",
+          "LENGTH": "",
+          "SCREW_FIELD": "",
+          "ORDER_TYPE": "",
+          "DESIGN_TYPE": "",
+          "CLOSE_TYPE": "",
+          "JOB_PURITY": 0,
+          "ADD_STEEL": true
+        }
+      ],
       "JOB_SALESORDER_DJ": [
         {
           "SRNO": 0,
@@ -1409,7 +1421,7 @@ export class JobcardComponent implements OnInit {
       "BRAND_CODE": this.jobCardFrom.value.brand || "",
       "DESIGN_CODE": this.jobCardFrom.value.designcode || "",
       "SEQ_CODE": this.jobCardFrom.value.seqcode || "",
-      "PICTURE_NAME":this.commonService.nullToString(this.jobCardFrom.value.picture_name),
+      "PICTURE_NAME": this.commonService.nullToString(this.jobCardFrom.value.picture_name),
       "DEPARTMENT_CODE": "",
       "JOB_INSTRUCTION": "",
       "SET_REF": this.jobCardFrom.value.setref || "",
