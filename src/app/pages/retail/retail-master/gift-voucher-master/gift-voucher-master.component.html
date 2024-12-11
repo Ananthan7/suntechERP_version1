@@ -1,11 +1,11 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Gift Voucher Master</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal"></h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"  [isViewDelete]="editMode" [isViewSave]="!viewMode"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="false" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 
 
 <!-- content section -->
@@ -17,7 +17,7 @@
                     <label for="code" class="col-sm-2 col-form-label" id="ID029">Code:</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" formControlName="code"  [readonly]="viewMode || editMode" #code (input)="code.value = code.value.toUpperCase()"/>
+                            <input matInput type="text" formControlName="code"  [readonly]="viewMode || editMode" #code id="code" (input)="code.value = code.value.toUpperCase()"/>
                         </mat-form-field>
                     </div>
                     <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Branches</label>

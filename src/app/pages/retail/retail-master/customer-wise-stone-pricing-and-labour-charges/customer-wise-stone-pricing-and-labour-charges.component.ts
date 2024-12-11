@@ -349,7 +349,7 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
                 });
               }
             } else {
-              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
+              this.close('reloadMainGrid')
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)

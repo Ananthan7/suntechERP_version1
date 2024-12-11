@@ -7,7 +7,7 @@
 </div>
 
 <!-- modal header component -->
-<modal-header (saveClick)="formSave()" (cancelClick)="close()" (deleteClick)="deleteMaster()" [isViewDelete]="editMode"
+<modal-header (saveClick)="formSave()" (cancelClick)="close()" (deleteClick)="deleteMaster()" [isViewDelete]="false"
   [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 
 <!-- content section -->
@@ -24,7 +24,7 @@
                     <label for="code" class="col-sm-2 col-form-label" id="ID029">Code</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%" appearance="outline">
-                        <input matInput="text" formControlName="code" [readonly]="viewMode || editMode" />
+                        <input matInput="text" formControlName="code" id="code" [readonly]="viewMode || editMode" />
                         <master-search class="masterSearch" [MasterSearchData]="codeCodeData"
                           (newRowClick)="codeSelected($event)" *ngIf=" viewMode == false" #countrycodeSearch>
                         </master-search>
@@ -87,7 +87,7 @@
                     <div class="row mb-1">
                       <div class="col-md-10"></div>
                       <div class="col-md-2">
-                        <button type="button" class="btn btn-primary text-center m-2" (click)="saveRow()">
+                        <button type="button" class="btn btn-primary text-center m-2" [disabled]="viewMode" (click)="saveRow()">
                           Save
                         </button>
                       </div>

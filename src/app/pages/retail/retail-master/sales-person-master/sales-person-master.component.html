@@ -6,7 +6,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"
-    [isViewDelete]="editMode" [isViewSave]="!viewMode"></modal-header>
+[isViewDelete]="false" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="salesPersonForm">
@@ -17,7 +17,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Code :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code"  [readonly]="viewMode || editMode" />
+                                    <input type="text" matInput formControlName="code" id="code" (focusout)="checkCodeExists($event)" [readonly]="viewMode || editMode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3 pl-5">

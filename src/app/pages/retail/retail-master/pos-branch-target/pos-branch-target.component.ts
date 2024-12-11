@@ -407,6 +407,9 @@ export class PosBranchTargetComponent implements OnInit {
           }, err => alert(err))
         this.subscriptions.push(Sub)
       }
+      else{
+        this.close('reloadMainGrid');
+      }
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -41,9 +41,12 @@ export class FixingCommodityMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     private modalService: NgbModal,
+    private renderer: Renderer2,
+
   ) { }
 
   ngOnInit(): void {
+
 
     if (this.content?.FLAG) {
       console.log(this.content)
@@ -484,6 +487,10 @@ this.subscriptions.push(Sub)
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else
+      {
+        this.close('reloadMainGrid')
       }
     });
   }

@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="delete()" [isViewDelete]="editMode"  [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="delete()" [isViewDelete]="false"  [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
 [isViewMore]="!viewMode"></modal-header>
 <!-- content section -->
 
@@ -58,7 +58,7 @@
                                     :</label>
                                 <div class="col-md-4">
                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input type="text" #codeInput maxlength="15" matInput formControlName="itemCode"  [readonly]="viewMode || editMode">
+                                        <input type="text" maxlength="15" matInput formControlName="itemCode" [readonly]="viewMode || editMode">
                                     </mat-form-field>
                                 </div>
                             </div>
