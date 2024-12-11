@@ -373,10 +373,10 @@ export class JobcardComponent implements OnInit {
     time: [''],
     range: [''],
     seqcode: ['', [Validators.required]],
-    totalpcs: ['1', [Validators.required]],
-    pending: ['1', [Validators.required]],
-    pending1: ['1', [Validators.required]],
-    parts: ['1', [Validators.required]],
+    JOB_PCS_TOTAL: ['1', [Validators.required]],
+    JOB_PCS_PENDING: ['1', [Validators.required]],
+    TOTAL_PCS: ['1', [Validators.required]],
+    PENDING_PCS: ['1', [Validators.required]],
     srewFiled: [''],
     instruction: [''],
     picture_name: [''],
@@ -398,15 +398,13 @@ export class JobcardComponent implements OnInit {
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 89,
-    SEARCH_FIELD: 'COMPSIZE_CODE',
-    SEARCH_HEADING: 'Size ',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Size Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "COMPSIZE_CODE<>''",
-    // WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
+    WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
   constructor(
     private activeModal: NgbActiveModal,
@@ -652,7 +650,7 @@ export class JobcardComponent implements OnInit {
 
   sizeCodeSelected(e: any) {
     console.log(e);
-    this.jobCardFrom.controls.size.setValue(e.COMPSIZE_CODE);
+    this.jobCardFrom.controls.size.setValue(e.CODE);
   }
 
 
@@ -1060,8 +1058,10 @@ export class JobcardComponent implements OnInit {
           this.jobCardFrom.controls.designcode.setValue(data.DESIGN_CODE)
           this.jobCardFrom.controls.picture_name.setValue(data.PICTURE_NAME)
           this.jobCardFrom.controls.setref.setValue(data.SET_REF)
-          this.jobCardFrom.controls.totalpcs.setValue(data.TOTAL_PCS)
-          this.jobCardFrom.controls.pending.setValue(data.PENDING_PCS)
+          this.jobCardFrom.controls.JOB_PCS_TOTAL.setValue(data.JOB_PCS_TOTAL)
+          this.jobCardFrom.controls.JOB_PCS_PENDING.setValue(data.JOB_PCS_PENDING)
+          this.jobCardFrom.controls.TOTAL_PCS.setValue(data.TOTAL_PCS)
+          this.jobCardFrom.controls.PENDING_PCS.setValue(data.PENDING_PCS)
           this.jobCardFrom.controls.color.setValue(data.METAL_COLOR)
           this.jobCardFrom.controls.karat.setValue(data.KARAT_CODE)
           this.jobCardFrom.controls.prefix.setValue(data.PREFIX)
@@ -1081,7 +1081,7 @@ export class JobcardComponent implements OnInit {
           // this.jobCardFrom.controls.jobdate.setValue(formatDate(data.JOB_DATE,'dd/MM/yyyy', 'en-US'));
           this.jobCardFrom.controls.jobdate.setValue(data.JOB_DATE)
           this.jobCardFrom.controls.deldate.setValue(data.DEL_DATE)
-          this.jobCardFrom.controls.date.setValue(data.SO_VOCDATE)
+          this.jobCardFrom.controls.date.setValue(data.JOB_DATE)
           this.jobCardFrom.controls.type.setValue(data.TYPE)
           this.jobCardFrom.controls.jobtype.setValue(data.DESIGN_TYPE)
 
@@ -1090,6 +1090,15 @@ export class JobcardComponent implements OnInit {
 
           this.urls = data.PICTURE_NAME
           this.getDesignimagecode()
+          this.jobsalesorderdetailDJ = data.JOB_SALESORDER_DETAIL_DJ || []
+          if (this.jobsalesorderdetailDJ.length > 0) {
+            this.jobsalesorderdetailDJ.forEach((item: any) => {
+              item.GROSS_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
+              item.METAL_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
+              item.STONE_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT, 'STONE')
+            
+            });
+          }
 
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -1134,19 +1143,19 @@ export class JobcardComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG3571')//"seqcode cannot be empty"
       return true
     }
-    else if (this.commonService.nullToString(form.totalpcs) == '') {
+    else if (this.commonService.nullToString(form.TOTAL_PCS) == '') {
       this.commonService.toastErrorByMsgId('MSG1563')//"totalpcs cannot be empty"
       return true
     }
-    else if (this.commonService.nullToString(form.pending) == '') {
+    else if (this.commonService.nullToString(form.PENDING_PCS) == '') {
       this.commonService.toastErrorByMsgId('MSG1572')//"pending cannot be empty"
       return true
     }
-    else if (this.commonService.nullToString(form.pending1) == '') {
+    else if (this.commonService.nullToString(form.JOB_PCS_PENDING) == '') {
       this.commonService.toastErrorByMsgId('MSG1572')//"pending1 cannot be empty"
       return true
     }
-    else if (this.commonService.nullToString(form.parts) == '') {
+    else if (this.commonService.nullToString(form.PENDING_PCS) == '') {
       this.commonService.toastErrorByMsgId('MSG7997')//"parts cannot be empty"
       return true
     }
@@ -1203,8 +1212,8 @@ export class JobcardComponent implements OnInit {
       "LOSS_AMOUNT_CHARGED": 0,
       "LOSS_AMOUNT_BOOKED": 0,
       "LOSS_AMOUNT_TOTAL": 0,
-      "TOTAL_PCS": this.jobCardFrom.value.totalpcs || "",
-      "PENDING_PCS": this.jobCardFrom.value.pending || "",
+      "TOTAL_PCS": this.jobCardFrom.value.TOTAL_PCS || "",
+      "PENDING_PCS": this.jobCardFrom.value.PENDING_PCS || "",
       "FINISHED_PCS": 0,
       "OPENED_ON": "2023-10-26T05:59:21.735Z",
       "OPENED_BY": "",
@@ -1220,7 +1229,7 @@ export class JobcardComponent implements OnInit {
       "JOB_PCS_PENDING": 0,
       "OUTSIDEJOB": true,
       "TREE_CODE": "",
-      "DEL_DATE":  "",
+      "DEL_DATE":  this.jobCardFrom.value.deldate,
       "REP_STOCK_CODE": "",
       "REPAIRJOB": 0,
       "METAL_STOCK_CODE": this.jobCardFrom.value.lossbooking || "",
@@ -1232,11 +1241,11 @@ export class JobcardComponent implements OnInit {
       "SALESPERSON_CODE": this.jobCardFrom.value.salesman || "",
       "SIZE": this.jobCardFrom.value.size || "",
       "LENGTH": this.jobCardFrom.value.length || "",
-      "SCREW_FIELD": "string",
+      "SCREW_FIELD": "",
       "ORDER_TYPE": this.jobCardFrom.value.orderType || "",
       "DESIGN_TYPE": this.jobCardFrom.value.jobtype || "",
       "SO_VOCNO": 0,
-      "SO_VOCDATE": this.jobCardFrom.value.date,
+      "SO_VOCDATE":"2024-12-11T11:41:56.796Z",
       "JOB_PURITY": this.jobCardFrom.value.purity || "",
       "DESIGN_DESC": this.jobCardFrom.value.designtype || "",
       "CUSTOMER_NAME": this.jobCardFrom.value.customername || "",
@@ -1441,8 +1450,8 @@ export class JobcardComponent implements OnInit {
       "LOSS_AMOUNT_CHARGED": 0,
       "LOSS_AMOUNT_BOOKED": 0,
       "LOSS_AMOUNT_TOTAL": 0,
-      "TOTAL_PCS": this.jobCardFrom.value.totalpcs || "",
-      "PENDING_PCS": this.jobCardFrom.value.pending || "",
+      "TOTAL_PCS": this.jobCardFrom.value.TOTAL_PCS || "",
+      "PENDING_PCS": this.jobCardFrom.value.PENDING_PCS || "",
       "FINISHED_PCS": 0,
       "OPENED_ON": "2023-10-26T05:59:21.735Z",
       "OPENED_BY": "",
