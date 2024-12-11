@@ -1,4 +1,4 @@
-import { Code } from 'angular-feather/icons';
+import { Code } from "angular-feather/icons";
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
@@ -7,8 +7,8 @@ import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
-import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-sub-ledger-master",
@@ -17,10 +17,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class SubLedgerMasterComponent implements OnInit {
   @Input() content!: any;
-  
-  @ViewChild('overlayCountrySearch') overlayCountrySearch!: MasterSearchComponent;
-  @ViewChild('overlayStateSearch') overlayStateSearch!: MasterSearchComponent; //
-  @ViewChild('overlayCitySearch') overlayCitySearch!: MasterSearchComponent;
+
+  @ViewChild("overlayCountrySearch")
+  overlayCountrySearch!: MasterSearchComponent;
+  @ViewChild("overlayStateSearch") overlayStateSearch!: MasterSearchComponent; //
+  @ViewChild("overlayCitySearch") overlayCitySearch!: MasterSearchComponent;
   selectedTabIndex = 0;
   tableData: any = [];
   ContacttableData: any = [];
@@ -33,10 +34,9 @@ export class SubLedgerMasterComponent implements OnInit {
   editableMode: boolean = false;
   editMode: boolean = false;
   codeEnable: boolean = false;
-  data: any;
+  data: any = [];
   selectedIndexes: any = [];
   selectedContactndexes: any = [];
-
 
   CityCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -89,13 +89,9 @@ export class SubLedgerMasterComponent implements OnInit {
     email: [""],
     mobile: [""],
     sl_accode: [""],
-    // subLedgerDetail: this.formBuilder.group({
     refMid: [""],
     sNo: [""],
-    // code: [""],
-    // sl_accode: [""],
     sl_accode_des: [""],
-    // }),
   });
 
   constructor(
@@ -103,20 +99,20 @@ export class SubLedgerMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content?.FLAG == "VIEW") {
-        this.addContactTableData();
+        // this.addContactTableData();
         this.SubLedgerMasterForm.controls.active.setValue(this.content.ACTIVE);
         this.SubLedgerMasterForm.controls.active.disable();
         this.isDisabled = true;
         this.viewMode = true;
       } else if (this.content?.FLAG == "EDIT") {
-        this.addContactTableData();
+        // this.addContactTableData();
         this.viewMode = false;
         this.editMode = true;
         this.codeEnable = false;
@@ -128,30 +124,29 @@ export class SubLedgerMasterComponent implements OnInit {
   }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
-      return
+      return;
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == "VIEW") {
       this.activeModal.close(data);
-      return
+      return;
     }
     Swal.fire({
-      title: 'Do you want to exit?',
-      text: '',
-      icon: 'warning',
+      title: "Do you want to exit?",
+      text: "",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes!',
-      cancelButtonText: 'No'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+      cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
         this.activeModal.close(data);
       }
-    }
-    )
+    });
   }
 
   BranchDataSelected(e: any) {}
@@ -176,7 +171,7 @@ export class SubLedgerMasterComponent implements OnInit {
     const data = {
       REFMID: 0,
       SRNO: len + 1,
-      SL_CODE: this.SubLedgerMasterForm.value.Code,
+      SL_CODE: this.SubLedgerMasterForm.controls["code"].value,
       SL_ACCODE: "",
       SL_ACCODE_DESC: "",
     };
@@ -192,36 +187,101 @@ export class SubLedgerMasterComponent implements OnInit {
     // this.tableData.SL_ACCODE = data.target.value;
   }
 
-
   getAccodeDec(data: any, value: any) {
     // this.tableData.SL_ACCODE_DESC = data.target.value;
     this.tableData[value.data.SRNO - 1].SL_ACCODE_DESC = data.target.value;
+  }
 
-  }
-  getEmail(data: any, value: any) {
-    this.ContacttableData.EMAIL = data.target.value;
-  }
-  getMobile(data: any, value: any) {
-    this.ContacttableData.MOBILE_NO = data.target.value;
-  }
   addContactTableData() {
+    console.log(this.SubLedgerMasterForm.controls["code"].value);
+    let len = this.ContacttableData.length;
     const data = {
-      name: this.SubLedgerMasterForm.value.name,
-      designation: this.SubLedgerMasterForm.value.designation,
-      MOBILE_NO: this.SubLedgerMasterForm.value.mobile.toString(),
-      EMAIL: this.SubLedgerMasterForm.value.email,
+      INCOME: len + 1,
+      REFMID: 0,
+      ACCODE: "STR",
+      CUSTOMER_NAME: "",
+      DESIGNATION: "",
+      MOBILE: "",
+      EMAIL: "",
+      DEFAULT_CONTACT: true,
+      ACMID: 0,
+      ACC_DESCRIPTION: "",
+      SL_CODE: this.SubLedgerMasterForm.controls["code"].value,
+      DESCRIPTION: "",
+      COMPANY: "",
+      ADDRESS: "",
+      POBOX_NO: "",
+      STATE: "",
+      CITY: "",
+      ZIPCODE: "",
+      COUNTRY_CODE: "",
+      TEL1: "",
+      TEL2: "",
+      FAX: "",
+      MARITAL_ST: "",
+      SPOUSE_NAME: "",
+      SPOUSE_NO: "",
+      SPOUSE_EMAIL: "",
+      REMARKS: "",
+      DATE_OF_BIRTH: "2024-12-11T05:04:14.279Z",
+      OPENING_ON: "2024-12-11T05:04:14.279Z",
+      GENDER: "",
+      REGION: "",
+      NATIONALITY: "",
+      POSCUSTIDNO: "",
+      RELIGION: "",
+      TYPE: "",
+      CATEGORY: "",
+      CUST_STATUS: "",
+      BRANCH_CODE: "",
+      MOBILE1: "",
+      CUST_LANGUAGE: "",
+      CUST_TYPE: "",
+      FAVORITE_CELEB: "",
+      MOBILECODE1: "",
+      MOBILECODE2: "",
+      IDCATEGORY: "",
+      ADDRESS_OFFICIAL: "",
+      ADDRESS_DELIVARY: "",
+      BLOOD_GROUP: "",
+      NO_OF_CHILDREN: 0,
+      ZODIAC_SIGN: "",
+      OCCUPATION: "",
+      TEL_R_CODE: "str",
+      TEL_O_CODE: "str",
+      SO_ALERT: true,
+      PO_ALERT: true,
     };
     console.log(data);
 
     this.ContacttableData.push(data);
     console.log(this.ContacttableData);
-    
   }
-
+  getEmail(data: any, value: any) {
+    // const index = value.data.INDEX;
+    // console.log(index);
+    this.ContacttableData[value.data.INCOME - 1].EMAIL = data.target.value;
+  }
+  getMobile(data: any, value: any) {
+    // const index = value.data.INDEX;
+    this.ContacttableData[value.data.INCOME - 1].MOBILE = data.target.value;
+  }
+  getName(data: any, value: any) {
+    console.log(data.target.value);
+    console.log(value);
+    // const index = value.data.INDEX;
+    this.ContacttableData[value.data.INCOME - 1].CUSTOMER_NAME =
+      data.target.value;
+  }
+  getDesignation(data: any, value: any) {
+    // const index = value.data.INDEX;
+    this.ContacttableData[value.data.INCOME - 1].DESIGNATION =
+      data.target.value;
+  }
   setFormValues() {
     if (!this.content) return;
     console.log(this.content);
-    
+
     let api =
       "SubLedgerMaster/GetSubLedgerHeaderAndDetails/" + this.content.SL_CODE;
     console.log(api);
@@ -231,11 +291,19 @@ export class SubLedgerMasterComponent implements OnInit {
         this.data = result.response;
         console.log(this.data);
         this.tableData = this.data.subLedgerDetail;
-        // console.log(details);
-
-        // details.forEach((detail: any) => {
-        //   console.log("Detail:", detail);
-        // });
+        this.ContacttableData = this.data.accContactsSubled;
+        console.log(this.ContacttableData);
+        console.log(this.tableData);
+        console.log(
+          this.data.accContactsSubled[0].MOBILE
+        )
+        
+        this.SubLedgerMasterForm.controls.mobile.setValue(
+          this.data?.accContactsSubled.MOBILE
+        );
+        this.SubLedgerMasterForm.controls.email.setValue(
+          this.data?.accContactsSubled.EMAIL
+        );
       });
     console.log(this.content);
 
@@ -243,8 +311,6 @@ export class SubLedgerMasterComponent implements OnInit {
     this.SubLedgerMasterForm.controls.description.setValue(
       this.content.DESCRIPTION
     );
-    this.SubLedgerMasterForm.controls.mobile.setValue(this.content.MOBILE_NO);
-    this.SubLedgerMasterForm.controls.email.setValue(this.content.EMAIL);
     this.SubLedgerMasterForm.controls.address.setValue(this.content.ADDRESS);
     this.SubLedgerMasterForm.controls.active.setValue(this.content.ACTIVE);
     this.SubLedgerMasterForm.controls.allocated_account.setValue(
@@ -268,11 +334,11 @@ export class SubLedgerMasterComponent implements OnInit {
     return {
       SL_CODE: this.commonService.nullToString(form.code),
       DESCRIPTION: this.commonService.nullToString(form.description),
-      // MOBILE_NO: this.SubLedgerMasterForm.value.mobile || "",
-      MOBILE_NO: contactRow.MOBILE_NO || this.content.MOBILE_NO,
+      MOBILE_NO: "",
+      // MOBILE_NO: contactRow.MOBILE_NO || this.content.MOBILE_NO,
       TELEPHONE_NO: "",
-      // EMAIL: this.SubLedgerMasterForm.value.email || "",
-      EMAIL: contactRow.EMAIL || this.content.EMAIL,
+      EMAIL: "",
+      // EMAIL: contactRow.EMAIL || this.content.EMAIL,
       ADDRESS: this.commonService.nullToString(form.address),
       ACTIVE: form.active ? true : false,
       ALLOCATED_ACCOUNT: this.commonService.nullToString(
@@ -288,6 +354,7 @@ export class SubLedgerMasterComponent implements OnInit {
       MID: 0,
       ACC_MODE: "s",
       subLedgerDetail: this.tableData,
+      accContactsSubled: this.ContacttableData,
     };
   }
 
@@ -440,30 +507,34 @@ export class SubLedgerMasterComponent implements OnInit {
   }
 
   lookupKeyPress(event: any, form?: any) {
-    if (event.key == 'Tab' && event.target.value == '') {
-      this.showOverleyPanel(event, form)
+    if (event.key == "Tab" && event.target.value == "") {
+      this.showOverleyPanel(event, form);
     }
-    if (event.key === 'Enter') {
-      if (event.target.value == '') this.showOverleyPanel(event, form)
+    if (event.key === "Enter") {
+      if (event.target.value == "") this.showOverleyPanel(event, form);
       event.preventDefault();
     }
   }
   showOverleyPanel(event: any, formControlName: string) {
     switch (formControlName) {
-      case 'country':
+      case "country":
         this.overlayCountrySearch.showOverlayPanel(event);
         break;
-      case 'state':
+      case "state":
         this.overlayStateSearch.showOverlayPanel(event);
         break;
-      case 'city':
+      case "city":
         this.overlayCitySearch.showOverlayPanel(event);
         break;
 
       default:
     }
   }
-  onKeyDown(event: KeyboardEvent, controllers: string[], LOOKUPDATA:MasterSearchModel) {
+  onKeyDown(
+    event: KeyboardEvent,
+    controllers: string[],
+    LOOKUPDATA: MasterSearchModel
+  ) {
     const inputElement = event.target as HTMLInputElement;
 
     if (event.key === "Backspace" || event.key === "Delete") {
@@ -473,17 +544,16 @@ export class SubLedgerMasterComponent implements OnInit {
           this.clearRelevantFields(controllers, LOOKUPDATA);
         }
       }, 0);
-    } else if(event.key == "Tab"){
+    } else if (event.key == "Tab") {
       console.log("Tab");
       console.log(controllers);
       console.log(event);
-      
-      this.lookupKeyPress(event,controllers[0])
 
+      this.lookupKeyPress(event, controllers[0]);
     }
   }
 
-  clearRelevantFields(controllers: string[], LOOKUPDATA:MasterSearchModel) {
+  clearRelevantFields(controllers: string[], LOOKUPDATA: MasterSearchModel) {
     controllers.forEach((controllerName) => {
       const control = this.SubLedgerMasterForm.controls[controllerName];
       if (control) {
@@ -503,7 +573,6 @@ export class SubLedgerMasterComponent implements OnInit {
     });
   }
 
-  
   SPvalidateLookupFieldModified(
     event: any,
     LOOKUPDATA: MasterSearchModel,
@@ -555,14 +624,12 @@ export class SubLedgerMasterComponent implements OnInit {
                 const matchedItem = searchResult[0];
                 console.log(FORMNAMES);
                 console.log(matchedItem);
-                
-                
 
                 FORMNAMES.forEach((formName, index) => {
                   const field = lookupFields?.[index];
                   if (field && field in matchedItem) {
                     console.log(field);
-                    
+
                     this.SubLedgerMasterForm.controls[formName].setValue(
                       matchedItem[field]
                     );
@@ -597,11 +664,10 @@ export class SubLedgerMasterComponent implements OnInit {
     const values = event.selectedRowKeys;
     // console.log(values);
     let indexes: Number[] = [];
-    this.tableData.reduce((acc:any, value:any, index:any) => {
+    this.tableData.reduce((acc: any, value: any, index: any) => {
       if (values.includes(parseFloat(value.SRNO))) {
         acc.push(index);
         // console.log(acc);
-
       }
       return acc;
     }, indexes);
@@ -613,11 +679,10 @@ export class SubLedgerMasterComponent implements OnInit {
     const values = event.selectedRowKeys;
     // console.log(values);
     let indexes: Number[] = [];
-    this.ContacttableData.reduce((acc:any, value:any, index:any) => {
-      if (values.includes(parseFloat(value.SRNO))) {
+    this.ContacttableData.reduce((acc: any, value: any, index: any) => {
+      if (values.includes(parseFloat(value.INCOME))) {
         acc.push(index);
         // console.log(acc);
-
       }
       return acc;
     }, indexes);
@@ -630,30 +695,33 @@ export class SubLedgerMasterComponent implements OnInit {
 
     if (this.selectedIndexes.length > 0) {
       Swal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete!'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete!",
       }).then((result) => {
         if (result.isConfirmed) {
           // Simulate deletion without using an actual API call
           if (this.tableData.length > 0) {
-            this.tableData = this.tableData.filter((data:any, index:any) => !this.selectedIndexes.includes(index));
-            this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+            this.tableData = this.tableData.filter(
+              (data: any, index: any) => !this.selectedIndexes.includes(index)
+            );
+            this.snackBar.open("Data deleted successfully!", "OK", {
+              duration: 2000,
+            });
             this.tableData.forEach((item: any, i: any) => {
               item.SRNO = i + 1;
             });
-
           } else {
-            this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
+            this.snackBar.open("No data to delete!", "OK", { duration: 2000 });
           }
         }
       });
     } else {
-      this.snackBar.open('Please select record', 'OK', { duration: 2000 });
+      this.snackBar.open("Please select record", "OK", { duration: 2000 });
     }
   }
 
@@ -662,30 +730,34 @@ export class SubLedgerMasterComponent implements OnInit {
 
     if (this.selectedContactndexes.length > 0) {
       Swal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete!'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete!",
       }).then((result) => {
         if (result.isConfirmed) {
           // Simulate deletion without using an actual API call
           if (this.ContacttableData.length > 0) {
-            this.ContacttableData = this.ContacttableData.filter((data:any, index:any) => !this.selectedContactndexes.includes(index));
-            this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
-            this.ContacttableData.forEach((item: any, i: any) => {
-              item.SRNO = i + 1;
+            this.ContacttableData = this.ContacttableData.filter(
+              (data: any, index: any) =>
+                !this.selectedContactndexes.includes(index)
+            );
+            this.snackBar.open("Data deleted successfully!", "OK", {
+              duration: 2000,
             });
-
+            this.ContacttableData.forEach((item: any, i: any) => {
+              item.INCOME = i + 1;
+            });
           } else {
-            this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
+            this.snackBar.open("No data to delete!", "OK", { duration: 2000 });
           }
         }
       });
     } else {
-      this.snackBar.open('Please select record', 'OK', { duration: 2000 });
+      this.snackBar.open("Please select record", "OK", { duration: 2000 });
     }
   }
 }
