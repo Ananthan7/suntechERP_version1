@@ -154,6 +154,27 @@ export class DesignMasterComponent implements OnInit {
   //   this.activeModal.close(data);
   // }
 
+  
+  ngOnInit(): void {
+
+    if (this.content?.FLAG) {
+      console.log(this.content)
+      this.setAllInitialValues()
+     // this.setFormValues();
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.editMode = true;
+        this.editableMode = true;
+
+      } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
+      }
+    }
+  }
+
   close(data?: any) {
     if (data){
       this.viewMode = true;
@@ -181,31 +202,6 @@ export class DesignMasterComponent implements OnInit {
     )
   }
 
-  ngOnInit(): void {
-
-   // this.images = ['assets/images/transparentImg.png'] ;
-
-   // this.setAllInitialValues()
-    //this.setFormValues()
-    this.renderer.selectRootElement('#code')?.focus();
-
-    if (this.content?.FLAG) {
-      console.log(this.content)
-      this.setAllInitialValues()
-     // this.setFormValues();
-      if (this.content.FLAG == 'VIEW') {
-        this.viewMode = true;
-      } else if (this.content.FLAG == 'EDIT') {
-        this.viewMode = false;
-        this.editMode = true;
-        this.editableMode = true;
-
-      } else if (this.content?.FLAG == 'DELETE') {
-        this.viewMode = true;
-        this.deleteRecord()
-      }
-    }
-  }
 
 
   onSelectionChanged(event: any) {
@@ -329,6 +325,8 @@ export class DesignMasterComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.componentInstance.editMode = this.editMode;
+    modalRef.componentInstance.viewMode = this.viewMode;
   }
 
   openaddLabourChargesDetails() {
@@ -338,6 +336,8 @@ export class DesignMasterComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.componentInstance.editMode = this.editMode;
+    modalRef.componentInstance.viewMode = this.viewMode;
   }
 
   openaddDesignTransaction() {
@@ -347,6 +347,8 @@ export class DesignMasterComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.componentInstance.editMode = this.editMode;
+    modalRef.componentInstance.viewMode = this.viewMode;
   }
   // validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
   //   LOOKUPDATA.SEARCH_VALUE = event.target.value

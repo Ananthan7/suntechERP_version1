@@ -20,9 +20,10 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 export class DesignSequenceComponent implements OnInit {
   @ViewChild('overlayprocessSearch') overlayprocessSearch!: MasterSearchComponent;
   tableDataProcess: any[] = [];
-  @Input() content!: any; 
+  @Input() content!: any;  
+  @Input() viewMode: any; 
+  @Input() editMode: any; 
 
-  viewMode: boolean = false;
   columnhead: any[] = ['SRNO', 'PROCESS_CODE', 'POINTS', 'STD_LOSS', 'MAX_LOSS', 'STD_TIME', 'LOSS_ACCODE', 'WIP_ACCODE', 'TIMEON_PROCESS']
   designSequenceForm: FormGroup = this.formBuilder.group({
     processCode: [''],
@@ -39,6 +40,19 @@ export class DesignSequenceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    if (this.content?.FLAG) {
+      console.log(this.content)
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.editMode = true;
+      } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
+      }
+    }
+    
     let secCode = this.designSequenceForm.value.processCode;
 
     this.commonService.toastSuccessByMsgId('MSG81447');
