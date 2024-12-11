@@ -16,23 +16,23 @@ export class TdsMasterComponent implements OnInit {
 
   @Input() content!: any;
   unq_id: any;
-  BranchData:any=[];
-  maindetails:any=[];
+  BranchData: any = [];
+  maindetails: any = [];
   private subscriptions: Subscription[] = [];
   viewOnly: boolean = false;
   viewMode: boolean = false;
   editMode: boolean = false;
   dyndatas: any;
-  tds:any;
+  tds: any;
   flag: any;
-  curr_branch :any = localStorage.getItem('userbranch');
-  disable_code:boolean = false;
+  curr_branch: any = localStorage.getItem('userbranch');
+  disable_code: boolean = false;
   finyears: string[] = [];
-  
+
 
 
   constructor(
-    private activeModal:NgbActiveModal,
+    private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private apiService: SuntechAPIService,
@@ -48,17 +48,17 @@ export class TdsMasterComponent implements OnInit {
     const API = `TDSMaster/GetFinancialYearDropdown/`;
     this.apiService.getDynamicAPI(API).subscribe((result) => {
       if (result.status.trim() === 'Success') {
-        this.finyears = result.dynamicData[0].map((e: any) => e.FYEARCODE); 
+        this.finyears = result.dynamicData[0].map((e: any) => e.FYEARCODE);
       } else {
         this.finyears = [];
       }
     });
-    if(this.flag == 'EDIT'){
+    if (this.flag == 'EDIT') {
       this.disable_code = true;
       this.editMode = true;
-    }else if(this.flag == 'VIEW'){
+    } else if (this.flag == 'VIEW') {
       this.viewMode = true;
-    }else if(this.flag == undefined){
+    } else if (this.flag == undefined) {
       this.renderer.selectRootElement('#section_code')?.focus();
     }
     this.initialController(this.flag, this.content);
@@ -68,17 +68,17 @@ export class TdsMasterComponent implements OnInit {
   }
 
   tdsform: FormGroup = this.formBuilder.group({
-    section_code:['',[Validators.required]],
-    financial_year:[''],
-    description:[''],
-    credit_ac:[''],
-    debit_ac:[''],
-    call:[''],
-    effdate:[''],
-    allbranch:[''],
+    section_code: ['', [Validators.required]],
+    financial_year: [''],
+    description: [''],
+    credit_ac: [''],
+    debit_ac: [''],
+    call: [''],
+    effdate: [''],
+    allbranch: [''],
   })
 
-   creditacdata: MasterSearchModel = {
+  creditacdata: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
@@ -128,9 +128,9 @@ export class TdsMasterComponent implements OnInit {
     }
   }
 
-  checksection(){
+  checksection() {
     let code = this.tdsform.controls.section_code.value;
-    if(code == "" || code.trim() == ""){
+    if (code == "" || code.trim() == "") {
       this.commonService.toastErrorByMsgId('MSG1124');
       this.renderer.selectRootElement('#section_code')?.focus();
     }
@@ -158,12 +158,12 @@ export class TdsMasterComponent implements OnInit {
       .subscribe((result: any) => {
         this.dyndatas = result.response;
         console.log(this.dyndatas);
-        this.dyndatas.tdsDetails.forEach((ele:any) => {
+        this.dyndatas.tdsDetails.forEach((ele: any) => {
           ele.EFFECT_FROM_DATE = new Date(ele.EFFECT_FROM_DATE).toISOString().split('T')[0];
-          ele.INDIVIDUAL_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.INDIVIDUAL_PER),"METAL");
-          ele.COMPANY_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.COMPANY_PER),"METAL");
-          ele.NOPAN_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.NOPAN_PER),"METAL");
-          ele.TDS_LIMIT = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.TDS_LIMIT),"METAL");
+          ele.INDIVIDUAL_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.INDIVIDUAL_PER), "METAL");
+          ele.COMPANY_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.COMPANY_PER), "METAL");
+          ele.NOPAN_PER = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.NOPAN_PER), "METAL");
+          ele.TDS_LIMIT = this.commonService.decimalQuantityFormat(this.commonService.emptyToZero(ele.TDS_LIMIT), "METAL");
         });
         this.maindetails.push(... this.dyndatas.tdsDetails)
 
@@ -226,12 +226,12 @@ export class TdsMasterComponent implements OnInit {
 
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -248,13 +248,13 @@ export class TdsMasterComponent implements OnInit {
       if (result.isConfirmed) {
         this.activeModal.close(data);
       }
-  }
-  )
+    }
+    )
   }
 
   formSubmit() {
 
-    this.maindetails.forEach((e:any) => {
+    this.maindetails.forEach((e: any) => {
       e.BRANCH_CODE = this.curr_branch;
       e.UNIQUE_ID = e.SRNO;
       e.REFMID = 0;
@@ -271,14 +271,14 @@ export class TdsMasterComponent implements OnInit {
       "INDIVIDUAL_PER": 0,
       "COMPANY_PER": 0,
       "NOPAN_PER": 0,
-      "DEBIT_AC_CODE":this.tdsform.controls.debit_ac.value,
+      "DEBIT_AC_CODE": this.tdsform.controls.debit_ac.value,
       "BRANCH_CODE": this.curr_branch,
       "TDS_LIMIT": 0,
       "ON_TAXABLEAMT": this.tdsform.controls.call.value,
       "INCLUDE_GST": true,
-      "tdsDetails": 
-       this.maindetails
-      
+      "tdsDetails":
+        this.maindetails
+
     }
 
     if (this.flag === "EDIT") {
@@ -293,14 +293,14 @@ export class TdsMasterComponent implements OnInit {
         "INDIVIDUAL_PER": 0,
         "COMPANY_PER": 0,
         "NOPAN_PER": 0,
-        "DEBIT_AC_CODE":this.tdsform.controls.debit_ac.value,
+        "DEBIT_AC_CODE": this.tdsform.controls.debit_ac.value,
         "BRANCH_CODE": this.curr_branch,
         "TDS_LIMIT": 0,
-        "ON_TAXABLEAMT": this.tdsform.controls.call.value=='Y' ? true : false,
+        "ON_TAXABLEAMT": this.tdsform.controls.call.value == 'Y' ? true : false,
         "INCLUDE_GST": true,
-        "tdsDetails": 
+        "tdsDetails":
           this.maindetails
-        
+
       }
 
 
@@ -508,7 +508,7 @@ export class TdsMasterComponent implements OnInit {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.isConfirmed) {
-        let curr_index = data.data.SRNO - 1; 
+        let curr_index = data.data.SRNO - 1;
         for (let i = curr_index; i < this.maindetails.length; i++) {
           this.maindetails[i].INDIVIDUAL_PER = this.commonService.decimalQuantityFormat(
             this.commonService.emptyToZero(e.target.value), "METAL"
@@ -532,7 +532,7 @@ export class TdsMasterComponent implements OnInit {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.isConfirmed) {
-        let curr_index = data.data.SRNO - 1; 
+        let curr_index = data.data.SRNO - 1;
         for (let i = curr_index; i < this.maindetails.length; i++) {
           this.maindetails[i].COMPANY_PER = this.commonService.decimalQuantityFormat(
             this.commonService.emptyToZero(e.target.value), "METAL"
@@ -556,7 +556,7 @@ export class TdsMasterComponent implements OnInit {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.isConfirmed) {
-        let curr_index = data.data.SRNO - 1; 
+        let curr_index = data.data.SRNO - 1;
         for (let i = curr_index; i < this.maindetails.length; i++) {
           this.maindetails[i].NOPAN_PER = this.commonService.decimalQuantityFormat(
             this.commonService.emptyToZero(e.target.value), "METAL"
@@ -579,7 +579,7 @@ export class TdsMasterComponent implements OnInit {
       confirmButtonText: 'Yes',
       cancelButtonText: 'No'
     }).then((result) => {
-      let curr_index = data.data.SRNO - 1; 
+      let curr_index = data.data.SRNO - 1;
       if (result.isConfirmed) {
         for (let i = curr_index; i < this.maindetails.length; i++) {
           this.maindetails[i].TDS_LIMIT = this.commonService.decimalQuantityFormat(
@@ -592,17 +592,17 @@ export class TdsMasterComponent implements OnInit {
         );
       }
     });
-    
+
   }
 
 
   // getgriddata(){
   //   let section_code = this.tdsform.controls.section_code.value;
-    
-    
+
+
   // }
 
-  getgridvalues(){
+  getgridvalues() {
     let section_code = this.tdsform.controls.section_code.value;
 
     let postData = {
@@ -614,31 +614,27 @@ export class TdsMasterComponent implements OnInit {
       "strTdsLimit": 0
     }
     let API = `TDSMaster/GetGetTDSFinancialDates/`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-           console.log(result.dynamicData);
-           let dyndatas = result.dynamicData[0];
-           dyndatas.forEach((e:any) => {
-              let date = e.EFFECT_FROM_DATE.split('/');
-              e.EFFECT_FROM_DATE = date[2]+'-'+date[1]+'-'+date[0];
+    let sub: Subscription = this.apiService
+      .postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.status.trim() === "Success") {
+          console.log(result.dynamicData);
+          let dyndatas = result.dynamicData[0];
+          dyndatas.forEach((e: any) => {
+            let date = e.EFFECT_FROM_DATE.split('/');
+            e.EFFECT_FROM_DATE = date[2] + '-' + date[1] + '-' + date[0];
 
-           });
+          });
 
 
-           this.maindetails = dyndatas;
-          } else {
-            console.log("error");
-           
-          }
-        });
+          this.maindetails = dyndatas;
+        } else {
+          console.log("error");
+
+        }
+      });
 
 
   }
-
-  
-
-  
 
 }
