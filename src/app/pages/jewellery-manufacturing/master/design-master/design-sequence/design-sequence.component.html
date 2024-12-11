@@ -13,14 +13,15 @@
         <div class="row mb-2">
             <label for="inputPassword" id="ID001" class="col-sm-1 col-form-label">Process</label>
             <div class="col-md-3">
-                <mat-form-field style="width: 80%">
-                    <input type="text" matInput formControlName="processCode" (keydown)="lookupKeyPress($event,'processCode')"/>
-                </mat-form-field>
-                <master-search [MasterSearchData]="processCodeData" #overlayprocessSearch
+                <mat-form-field style="width: 100%;" appearance="outline">
+                    <input type="text" matInput formControlName="processCode" (keydown)="lookupKeyPress($event,'processCode')" [readonly]="viewMode"/>
+                    <master-search [MasterSearchData]="processCodeData"  class="masterSearch" #overlayprocessSearch
                     (newRowClick)="processCodeSelected($event)"></master-search>
+                </mat-form-field>
+               
             </div>
             <div class="col-md-3">
-                <mat-form-field style="width: 100%">
+                <mat-form-field style="width: 100%;" appearance="outline">
                     <input type="text" matInput formControlName="processDesc" />
                 </mat-form-field>
             </div>

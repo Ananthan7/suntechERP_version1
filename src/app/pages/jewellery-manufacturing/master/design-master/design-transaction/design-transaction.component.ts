@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
 })
 export class DesignTransactionComponent implements OnInit {
   @Input() content!: any; 
+  @Input() viewMode: any; 
+  @Input() editMode: any; 
 
   columnhead:any[]=['SRNO','Stock code','Producation','Prod Date','Job No','Job Date','Customer','S O Ref','Pcs','Value']
   designTransactionForm: FormGroup = this.formBuilder.group({
@@ -32,6 +34,18 @@ export class DesignTransactionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    
+    if (this.content?.FLAG) {
+      console.log(this.content)
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.editMode = true;
+      } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
+      }
+    }
   }
 
 
