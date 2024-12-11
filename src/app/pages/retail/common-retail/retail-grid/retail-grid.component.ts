@@ -368,7 +368,7 @@ export class RetailGridComponent implements OnInit {
       this.dataSource = result.dynamicData[0]
       
       this.dataSource.forEach((item: any) => {
-        console.log('data Refetch for retail template grid',item)
+        // console.log('data Refetch for retail template grid',item)
         this.templateFetched_Data = item;
         let parsedData;
         try {

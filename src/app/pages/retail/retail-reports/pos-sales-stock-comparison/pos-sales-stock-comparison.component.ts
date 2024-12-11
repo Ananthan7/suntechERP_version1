@@ -365,9 +365,22 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
 
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
-      //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      this.isLoading = false;
+      this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
 
-      console.log('Refetched Contents', this.content)
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
+      this.POS_Sales_Stock_ComparisonForm.controls.branch.setValue( ParcedPreFetchData?.CONTROL_DETAIL.strBranch? 
+        ParcedPreFetchData?.CONTROL_DETAIL.strBranch : ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH+'#');
+
+      this.dateToPass = {
+        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.frmDate,
+        toDate: ParcedPreFetchData?.CONTROL_DETAIL.toDate
+      };
+
+      this.POS_Sales_Stock_ComparisonForm.controls.transaction.setValue(ParcedPreFetchData?.CONTROL_DETAIL.transaction);
+      this.POS_Sales_Stock_ComparisonForm.controls.groupByMetal.setValue(ParcedPreFetchData?.CONTROL_DETAIL.mtlType);
+      this.POS_Sales_Stock_ComparisonForm.controls.groupByDiamond.setValue(ParcedPreFetchData?.CONTROL_DETAIL.diaType);
+      
     }
     else{
       const userBranch = localStorage.getItem('userbranch');
