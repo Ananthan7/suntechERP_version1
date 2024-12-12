@@ -512,7 +512,7 @@ export class ProcessMasterComponent implements OnInit {
     let form = this.processMasterForm.value
     if (this.commonService.emptyToZero(form.loss_standard) < this.commonService.emptyToZero(form.loss_min)) {
       this.lossData = true;
-      this.commonService.toastErrorByMsgId('MSG1438');
+      this.commonService.toastErrorByMsgId('MSG81536');
       // this.toastr.error('Standard % should be Greater than Minimum %');
     }
     if (this.commonService.emptyToZero(form.loss_standard) > this.commonService.emptyToZero(form.loss_max)) {
@@ -521,7 +521,7 @@ export class ProcessMasterComponent implements OnInit {
     }
     if (this.commonService.emptyToZero(form.loss_min) > this.commonService.emptyToZero(form.loss_max)) {
       this.lossData = true;
-      this.commonService.toastErrorByMsgId('MSG1810');
+      this.commonService.toastErrorByMsgId('MSG81538');
 
       //this.toastr.error('Minimum % should be Lesser than Maximum %');
     }
@@ -596,11 +596,11 @@ export class ProcessMasterComponent implements OnInit {
 
     if (form.ApprovalRequired == true) {
       if (this.commonService.nullToString(form.approvalProcess) == '') {
-        this.commonService.toastErrorByMsgId('MSG81513 ');//Approval Process must be Required
+        this.commonService.toastErrorByMsgId('MSG81513');//Approval Process must be Required
         return true;
       }
       if (this.commonService.nullToString(form.approvalCode) == '') {
-        this.commonService.toastErrorByMsgId('MSG81513 ');//Approval Process must be Required
+        this.commonService.toastErrorByMsgId('MSG81513');//Approval Process must be Required
         return true;
       }
     }
@@ -629,7 +629,7 @@ export class ProcessMasterComponent implements OnInit {
 
     if (form.loss == true) {
       if (this.commonService.emptyToZero(form.loss_standard) == 0) {
-        this.commonService.toastErrorByMsgId('MSG1807');//Standard loss cannot be empty
+        this.commonService.toastErrorByMsgId('MSG81535');//Standard % cannot be empty
         return true;
       }
       // else if (this.commonService.emptyToZero(form.loss_min) == 0) {
@@ -637,7 +637,7 @@ export class ProcessMasterComponent implements OnInit {
       //   return true;
       // }
       else if (this.commonService.emptyToZero(form.loss_max) == 0) {
-        this.commonService.toastErrorByMsgId('Max Loss cannot be empty');
+        this.commonService.toastErrorByMsgId('MSG81537');
         return true;
       }
       else if (form.LOSS_ACCODE == '') {
@@ -648,7 +648,7 @@ export class ProcessMasterComponent implements OnInit {
 
     if (form.recovery == true) {
       if (this.commonService.emptyToZero(form.standard_end) == 0) {
-        this.commonService.toastErrorByMsgId('Standard Recovery cannot be empty');// Recovery Minimum % Cannot be Zero
+        this.commonService.toastErrorByMsgId('MSG81535');// Recovery Minimum % Cannot be Zero
         return true;
       }
       // else if (form.min_end == '') {

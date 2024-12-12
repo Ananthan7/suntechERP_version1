@@ -66,6 +66,7 @@
                         type="text"
                         #codeInput
                         matInput
+                        maxlength="50"
                         formControlName="description"
                         UpperCaseDirective
                         autocomplete="off"
@@ -358,18 +359,18 @@
                     [showRowLines]="true"
                     [allowColumnResizing]="true"
                     class="mt-3"
+                    keyExpr="INCOME"
                     (onSelectionChanged)="onContactSelectionChanged($event)"
                   >
                     <dxo-selection mode="single"></dxo-selection>
                     <dxi-column
-                      dataField="SRNO"
+                      dataField="CUSTOMER_NAME"
                       caption="Name"
-                      class="tab"
                       cellTemplate="name"
                     >
                     </dxi-column>
                     <dxi-column
-                      dataField="DIVISION_CODE"
+                      dataField="DESIGNATION"
                       caption="Designation"
                       cellTemplate="designation"
                     >
@@ -381,32 +382,11 @@
                     >
                     </dxi-column>
                     <dxi-column
-                      dataField="MOBILE_NO"
+                      dataField="MOBILE"
                       caption="Mobile"
                       cellTemplate="mobile"
                     >
                     </dxi-column>
-
-                    <div *dxTemplate="let data of 'name'">
-                      <input
-                        [readonly]="viewMode"
-                        class="form-control"
-                        type="text"
-                        formControlName="name"
-                        [value]="data.value"
-                      />
-                    </div>
-
-                    <div *dxTemplate="let data of 'designation'">
-                      <input
-                        [readonly]="viewMode"
-                        class="form-control"
-                        type="text"
-                        id="description"
-                        formControlName="designation"
-                        [value]="data.value"
-                      />
-                    </div>
 
                     <div *dxTemplate="let data of 'email'">
                       <input
@@ -427,6 +407,26 @@
                         formControlName="mobile"
                         [value]="data.value"
                         (change)="getMobile($event, data)"
+                      />
+                    </div>
+                    <div *dxTemplate="let data of 'name'">
+                      <input
+                        [readonly]="viewMode"
+                        class="form-control"
+                        type="text"
+                        formControlName="name"
+                        [value]="data.value"
+                        (change)="getName($event, data)"
+                      />
+                    </div>
+                    <div *dxTemplate="let data of 'designation'">
+                      <input
+                        [readonly]="viewMode"
+                        class="form-control"
+                        type="text"
+                        formControlName="designation"
+                        [value]="data.value"
+                        (change)="getDesignation($event, data)"
                       />
                     </div>
                   </dx-data-grid>
