@@ -362,7 +362,6 @@ export class GeneralDocumentMasterComponent implements OnInit {
     if (this.flag == 'EDIT') {
       this.codeedit = true;
       this.disable_code = true;
-      this.editMode = true;
     } else if (this.flag == 'VIEW') {
       this.viewMode = true;
       this.codeedit = true;
@@ -505,7 +504,8 @@ export class GeneralDocumentMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        // this.flag = "VIEW";
+        this.activeModal.close('');
       }
     });
   }
@@ -523,6 +523,14 @@ export class GeneralDocumentMasterComponent implements OnInit {
     if (!kyc_desc.value || kyc_desc.value.trim() === "") {
       this.commonService.toastErrorByMsgId('MSG1193');
       this.renderer.selectRootElement('#description')?.focus();
+    }
+  }
+
+  checkremainder(){
+    const days = this.generaldocumentform.controls.reminderdays;
+    if (!days.value || days.value.trim() === ""  || days.value == 0) {
+      this.commonService.toastErrorByMsgId('MSG8001	');
+      this.renderer.selectRootElement('#reminderdays')?.focus();
     }
   }
 

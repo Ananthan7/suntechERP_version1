@@ -121,12 +121,15 @@ export class SupplierQuotaAllocationComponent implements OnInit {
     this.flag = this.content?.FLAG;
     this.fyearcode = this.content?.FYEARCODE;
     console.log(this.content)
+    if(this.flag == undefined){
+      this.renderer.selectRootElement('#partycode')?.focus();
+    }
     if(this.flag == 'EDIT'){
       this.disable_code = true;
-      this.editMode = true;
     }else if(this.flag == 'VIEW'){
       this.viewMode = true;
     }
+    
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.unq_id);

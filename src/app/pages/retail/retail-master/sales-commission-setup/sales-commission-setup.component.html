@@ -5,8 +5,9 @@
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
-    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
-    <div class="p-4 ">
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="DeleteController()"
+    [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    ></modal-header>    <div class="p-4 ">
         <form [formGroup]="salescommissionform">
 
             <div class="row">
@@ -16,7 +17,7 @@
                             Code :</label>
                         <div class="col-sm-8">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective id="code" #code
                                     autocomplete="off" />
                             </mat-form-field>
                         </div>

@@ -22,7 +22,7 @@
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" #codeInput id="codeInput" matInput id="code" formControlName="code"
                                             UpperCaseDirective [readonly]="viewOnly || codeedit" autocomplete="off"
-                                            (focusout)="checkcode()" />
+                                            (focusout)="checkcode()" maxlength="6"/>
                                         <mat-error *ngIf="generaldocumentform.controls['code'].hasError('required')">
                                             Code is required.
                                         </mat-error>
@@ -36,7 +36,7 @@
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" #codedesc id="description" matInput
                                             formControlName="description" [readonly]="viewOnly" autocomplete="off"
-                                            (focusout)="checkdesc()" />
+                                            (focusout)="checkdesc()" maxlength="40" />
                                         <mat-error
                                             *ngIf="generaldocumentform.controls['description'].hasError('required')">
                                             description is required.
@@ -49,8 +49,8 @@
                                     (+/-) : </label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="reminderdays" [readonly]="viewOnly"
-                                            maxlength="4" />
+                                        <input type="text" NumberOnly class="text-right"  matInput formControlName="reminderdays" id="reminderdays" #reminderdays [readonly]="viewOnly"
+                                            maxlength="4" (focusout)="checkremainder()" />
                                     </mat-form-field>
                                 </div>
                             </div>

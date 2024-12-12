@@ -142,7 +142,6 @@ export class SalesCommissionSetupComponent implements OnInit {
     console.log(this.content)
     if (this.flag == 'EDIT') {
       this.disable_code = true;
-      this.editMode = true;
     } else if (this.flag == 'VIEW') {
       this.viewMode = true;
     }
@@ -151,6 +150,7 @@ export class SalesCommissionSetupComponent implements OnInit {
       this.detailsapi(this.unq_id);
     }
     if (this.flag == undefined) {
+      this.renderer.selectRootElement('#code')?.focus();
       this.getbranchdata();
       this.getsalesmandata();
     }

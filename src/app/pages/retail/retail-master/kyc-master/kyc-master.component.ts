@@ -81,7 +81,6 @@ export class KycMasterComponent implements OnInit {
     this.flag = this.content?.FLAG;
     if (this.flag == 'EDIT') {
       this.disable_code = true;
-      this.editMode = true;
     }
     if (this.flag == 'VIEW') {
       this.viewOnly = true;
@@ -133,11 +132,14 @@ export class KycMasterComponent implements OnInit {
         console.log(this.dyndatas);
         // this.maindetails.push(...this.dyndatas?.Details)
         this.maindetails = [...this.maindetails, ...this.dyndatas?.Details];
+        result.response.Details.forEach((e:any) => {
+          this.doc_codes.push(e.KYC_DOCTYPE);      
+        });
       }, (err: any) => {
 
       })
     this.subscriptions.push(Sub);
-    // console.log(this.dyndatas.FA_CATEGORY);
+    console.log(this.doc_codes);
     console.log(this.maindetails);
   }
 
@@ -215,7 +217,8 @@ export class KycMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        // this.flag = "VIEW";
+        this.activeModal.close('');
       }
     });
   }
