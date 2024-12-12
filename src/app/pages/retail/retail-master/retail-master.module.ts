@@ -76,6 +76,8 @@ import { EmailTemplateComponent } from './email-template/email-template.componen
 import { FixedAssetsComponent } from './fixed-assets/fixed-assets.component';
 import { GiftVoucherDetailMasterComponent } from './gift-voucher-master/gift-voucher-detail-master/gift-voucher-detail-master.component';
 import { GpcGridComponentComponent } from './vat-master/gpc-grid-component/gpc-grid-component.component';
+import { ContactMasterComponent } from './sub-ledger-master/contact-master/contact-master.component';
+import { AutoAdditionalAmountComponent } from './additional-amount/auto-additional-amount/auto-additional-amount.component';
 
 
 @NgModule({
@@ -157,7 +159,9 @@ import { GpcGridComponentComponent } from './vat-master/gpc-grid-component/gpc-g
     EmailTemplateComponent,
     FixedAssetsComponent,
     GiftVoucherDetailMasterComponent,
-    GpcGridComponentComponent
+    GpcGridComponentComponent,
+    ContactMasterComponent,
+    AutoAdditionalAmountComponent
     
   ],
   imports: [
