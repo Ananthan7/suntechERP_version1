@@ -61,8 +61,7 @@
                     type="text"
                     matInput
                     formControlName="stdCharges"
-                    AmountDecimalInput
-                    [max]="13"
+                    AmountDecimalInputCustom
                     class="text-right"
                     (keydown)="preventInvalidInput($event)"
                   />
@@ -159,7 +158,7 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    [maxlength]="50"
+                    [maxlength]="40"
                     type="text"
                     [readonly]="flag === 'VIEW'"
                     matInput

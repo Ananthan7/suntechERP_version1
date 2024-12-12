@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTabGroup } from "@angular/material/tabs";
@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
   styleUrls: ["./overtime-master.component.scss"],
 })
 export class OvertimeMasterComponent implements OnInit {
+  @ViewChild("codeField") codeField!: ElementRef;
   @ViewChild("overlayUserDefined1") overlayUserDefined1!: MasterSearchComponent;
   @ViewChild("overlayUserDefined2") overlayUserDefined2!: MasterSearchComponent;
   @ViewChild("overlayUserDefined3") overlayUserDefined3!: MasterSearchComponent;
@@ -331,6 +332,12 @@ export class OvertimeMasterComponent implements OnInit {
     this.setFlag(this.flag, this.content);
   }
 
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
+
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "ADD") {
     }
@@ -341,6 +348,7 @@ export class OvertimeMasterComponent implements OnInit {
       this.editController(DATA);
     }
     if (FLAG === "DELETE") {
+      FLAG = "VIEW";
       this.DeleteController(DATA);
     }
   }
@@ -421,9 +429,8 @@ export class OvertimeMasterComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -437,7 +444,6 @@ export class OvertimeMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
         this.close("reloadMainGrid", true);
       }
     });

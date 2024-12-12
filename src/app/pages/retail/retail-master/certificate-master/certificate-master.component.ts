@@ -26,7 +26,6 @@ export class CertificateMasterComponent implements OnInit {
   overlayOffsetAccount!: MasterSearchComponent;
   @ViewChild("codeField") codeField!: ElementRef;
 
-
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   flag: any;
@@ -107,8 +106,6 @@ export class CertificateMasterComponent implements OnInit {
     this.initialController(this.flag, this.content);
   }
 
-
-  
   ngAfterViewInit(): void {
     if (this.flag === "ADD") {
       this.codeField.nativeElement.focus();
@@ -132,6 +129,7 @@ export class CertificateMasterComponent implements OnInit {
     }
 
     if (FLAG === "DELETE") {
+      FLAG = "VIEW";
       this.DeleteController(DATA);
     }
   }
@@ -192,9 +190,8 @@ export class CertificateMasterComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -208,7 +205,7 @@ export class CertificateMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        this.close("reloadMainGrid", true);
       }
     });
   }
@@ -460,14 +457,14 @@ export class CertificateMasterComponent implements OnInit {
                   : "Inserted successfully!",
                 icon: "success",
                 confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",  
+                confirmButtonText: "Ok",
               });
 
               this.close("reloadMainGrid", true);
             } else {
               Swal.fire({
                 title: "Failed",
-                 text: result.message
+                text: result.message
                   ? result.message
                   : "Not Inserted successfully!",
                 icon: "error",

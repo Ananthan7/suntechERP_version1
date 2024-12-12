@@ -8,11 +8,12 @@
 
 <!-- modal header component -->
 <modal-header
-  *ngIf="flag !== 'VIEW'"
-  [isViewDelete]="flag == 'VIEW'"
   (saveClick)="gstMasterMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
+  [isViewDelete]="false"
+  [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
 ></modal-header>
 
 <!-- content section -->
@@ -34,6 +35,8 @@
                     [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                     matInput
                     type="text"
+                    [maxlength]="15"
+                    #codeField
                     formControlName="gstCode"
                   />
 
@@ -61,6 +64,7 @@
                     [readonly]="flag === 'VIEW'"
                     matInput
                     type="text"
+                    [maxlength]="50"
                     formControlName="gstDesc"
                   />
                   <mat-error
@@ -1456,12 +1460,12 @@
                               />
 
                               <master-search
-                              *ngIf="flag != 'VIEW'"
-                              #overlayGroupOne
-                              [MasterSearchData]="hsnCodeData"
-                              class="masterSearch"
-                              (newRowClick)="hsnSelect($event, data)"
-                            ></master-search>
+                                *ngIf="flag != 'VIEW'"
+                                #overlayGroupOne
+                                [MasterSearchData]="hsnCodeData"
+                                class="masterSearch"
+                                (newRowClick)="hsnSelect($event, data)"
+                              ></master-search>
                             </mat-form-field>
                           </div>
 

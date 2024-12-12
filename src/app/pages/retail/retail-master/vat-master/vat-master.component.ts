@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTabGroup } from "@angular/material/tabs";
@@ -23,6 +23,7 @@ import { GpcGridComponentComponent } from "./gpc-grid-component/gpc-grid-compone
   styleUrls: ["./vat-master.component.scss"],
 })
 export class VatMasterComponent implements OnInit {
+  @ViewChild("codeField") codeField!: ElementRef;
   @ViewChild("tabGroup") tabGroup!: MatTabGroup;
   @ViewChild("overlayGroupOne") overlayGroupOne!: MasterSearchComponent;
   @ViewChild("overlayGroupTwo") overlayGroupTwo!: MasterSearchComponent;
@@ -352,6 +353,12 @@ export class VatMasterComponent implements OnInit {
     this.initialController(this.flag, this.content);
   }
 
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
+
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "ADD") {
     }
@@ -362,6 +369,7 @@ export class VatMasterComponent implements OnInit {
       this.editController(DATA);
     }
     if (FLAG === "DELETE") {
+      FLAG = "VIEW";
       this.DeleteController(DATA);
     }
   }
@@ -480,9 +488,8 @@ export class VatMasterComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -496,7 +503,6 @@ export class VatMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
         this.close("reloadMainGrid", true);
       }
     });
@@ -1360,19 +1366,18 @@ export class VatMasterComponent implements OnInit {
   formatDateCell = (row: any): string => {
     const date = row.VAT_DATE; // Adjust this if VAT_DATE is nested, e.g., row.VAT_DATE.value
     if (!date) {
-      return ''; // Handle null or undefined values
+      return ""; // Handle null or undefined values
     }
-  
+
     // Check if the date is already in valid ISO format
-    if (typeof date === 'string' && !isNaN(Date.parse(date))) {
+    if (typeof date === "string" && !isNaN(Date.parse(date))) {
       const parsedDate = new Date(date);
       const year = parsedDate.getFullYear();
-      const month = (parsedDate.getMonth() + 1).toString().padStart(2, '0');
-      const day = parsedDate.getDate().toString().padStart(2, '0');
+      const month = (parsedDate.getMonth() + 1).toString().padStart(2, "0");
+      const day = parsedDate.getDate().toString().padStart(2, "0");
       return `${year}-${month}-${day}`;
     }
-  
+
     return date; // Return as-is if the value cannot be parsed
   };
-  
 }

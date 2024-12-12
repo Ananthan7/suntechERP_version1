@@ -8,11 +8,12 @@
   </div>
   <!-- modal header component -->
   <modal-header
-    *ngIf="flag !== 'VIEW'"
     (saveClick)="gratuityMasterFormSubmit()"
     (cancelClick)="close()"
     (deleteClick)="DeleteController()"
-    [isViewDelete]="flag == 'VIEW'"
+    [isViewDelete]="false"
+    [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+    [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
   ></modal-header>
   <!-- content section -->
   <div class="p-4">
@@ -59,7 +60,8 @@
                     <input
                       [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                       type="text"
-                      maxlength="6"
+                      #codeField
+                      [maxlength]="6"
                       matInput
                       formControlName="code"
                       UpperCaseDirective
@@ -89,7 +91,7 @@
                     <input
                       [readonly]="flag === 'VIEW'"
                       type="text"
-                      #codeInput
+                      [maxlength]="40"
                       matInput
                       formControlName="description"
                       UpperCaseDirective
@@ -184,7 +186,7 @@
                       [readonly]="flag === 'VIEW'"
                       matInput
                       formControlName="debitAcDesc"
-                      UpperCaseDirective
+                       
                     />
 
                     <mat-error
@@ -240,7 +242,7 @@
                       [readonly]="flag === 'VIEW'"
                       matInput
                       formControlName="countryCode"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       (focusout)="openTab($event, 'countryCode')"
@@ -276,7 +278,7 @@
                       [readonly]="flag === 'VIEW'"
                       matInput
                       formControlName="countryDesc"
-                      UpperCaseDirective
+                       
                     />
                     <mat-error
                       *ngIf="
@@ -335,7 +337,7 @@
                       matInput
                       AmountDecimalInput
                       formControlName="amount"
-                      UpperCaseDirective
+                       
                       autocomplete="off"
                     />
                   </mat-form-field>
@@ -361,12 +363,11 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      type="text"
+                      type="number"
                       [readonly]="flag === 'VIEW'"
-                      #codeInput
                       matInput
                       formControlName="noOfDaysAndYear"
-                      UpperCaseDirective
+                      (keydown)="preventExtraDigits($event)"
                       autocomplete="off"
                     />
                   </mat-form-field>
@@ -384,11 +385,10 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       type="text"
-                      #codeInput
                       [readonly]="flag === 'VIEW'"
                       matInput
                       formControlName="noOfDaysAndMonth"
-                      UpperCaseDirective
+                      (keydown)="preventExtraDigits($event)"
                       autocomplete="off"
                     />
                   </mat-form-field>
@@ -496,7 +496,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined2"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined2
@@ -536,7 +536,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined3"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined3
@@ -576,7 +576,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined4"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined4
@@ -616,7 +616,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined5"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined5
@@ -658,7 +658,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined6"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined6
@@ -698,7 +698,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined7"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined7
@@ -738,7 +738,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined8"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined8
@@ -778,7 +778,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined9"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined9
@@ -818,7 +818,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined10"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined10
@@ -860,7 +860,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined11"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined11
@@ -900,7 +900,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined12"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined12
@@ -940,7 +940,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined13"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined3
@@ -980,7 +980,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined14"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined14
@@ -1020,7 +1020,7 @@
                       type="text"
                       matInput
                       formControlName="userDefined15"
-                      UpperCaseDirective
+                       
                     />
                     <master-search
                       #overlayUserDefined15

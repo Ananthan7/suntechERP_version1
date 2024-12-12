@@ -8,11 +8,12 @@
   </div>
   <!-- modal header component -->
   <modal-header
-    *ngIf="flag !== 'VIEW'"
     (saveClick)="deductionMasterFormSubmit()"
     (cancelClick)="close()"
     (deleteClick)="DeleteController()"
-    [isViewDelete]="flag == 'VIEW'"
+    [isViewDelete]="false"
+    [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+    [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
   ></modal-header>
   <!-- content section -->
   <div class="p-4">
@@ -40,6 +41,7 @@
                       matInput
                       formControlName="code"
                       autocomplete="off"
+                      #codeField
                     />
                     <mat-error
                       *ngIf="
@@ -68,6 +70,7 @@
                       [readonly]="flag == 'VIEW'"
                       type="text"
                       #codeInput
+                      maxlength="21"
                       matInput
                       formControlName="description"
                       autocomplete="off"
@@ -387,9 +390,7 @@
                 </label>
                 <div class="col-md-9">
                   <mat-form-field style="width: 100%" appearance="outline">
-                    <mat-select
-                      formControlName="calculationBasis"
-                    >
+                    <mat-select formControlName="calculationBasis">
                       <mat-option
                         *ngFor="let data of calculationBasisDropdown"
                         [value]="data.SRNO"
