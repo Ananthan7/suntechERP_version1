@@ -80,13 +80,15 @@ export class SalesPersonMasterComponent implements OnInit {
     if (!this.content) return
     this.salesPersonForm.controls.code.setValue(this.content.SALESPERSON_CODE)
     this.salesPersonForm.controls.description.setValue(this.content.DESCRIPTION)
-    this.salesPersonForm.controls.commisionMetal.setValue(this.content.COMMISSION)
+    this.salesPersonForm.controls.commisionMetal.setValue(this.commonService.transformDecimalVB(
+      this.commonService.allCompanyParameters?.BAMTDECIMALS, this.content.COMMISSION))
     this.salesPersonForm.controls.shortname.setValue(this.content.SP_SHORTNAME)
     this.salesPersonForm.controls.branch.setValue(this.content.SP_BRANCHCODE)
     this.salesPersonForm.controls.employeecode.setValue(this.content.EMPMST_CODE)
     this.salesPersonForm.controls.active.setValue(this.content.ACTIVE === 'Y' ? true : false)
     this.salesPersonForm.controls.glcode.setValue(this.content.SPACCODE)
-    this.salesPersonForm.controls.commisionOthers.setValue(this.content.COMMISSIONDIA)
+    this.salesPersonForm.controls.commisionOthers.setValue(this.commonService.transformDecimalVB(
+      this.commonService.allCompanyParameters?.BAMTDECIMALS,this.content.COMMISSIONDIA))
    
   }
 
@@ -446,5 +448,9 @@ export class SalesPersonMasterComponent implements OnInit {
     }
   }
 
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
 }
 

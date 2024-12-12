@@ -36,7 +36,7 @@
                                     :</label>
                                 <div class="col-md-4">
                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input type="text" #codeInput maxlength="15" matInput formControlName="divisionCode"  [readonly]="viewMode">
+                                        <input type="text" #codeInput maxlength="1" matInput formControlName="divisionCode"  [readonly]="viewMode">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-4">
@@ -58,7 +58,7 @@
                                     :</label>
                                 <div class="col-md-4">
                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input type="text" maxlength="15" matInput formControlName="itemCode" [readonly]="viewMode || editMode">
+                                        <input type="text" maxlength="12" matInput formControlName="itemCode" [readonly]="viewMode || editMode">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                                     :</label>
                                 <div class="col-md-9">
                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input type="text" #codeInput maxlength="25" matInput formControlName="description" [readonly]="viewMode">
+                                        <input type="text" #codeInput maxlength="40" matInput formControlName="description" [readonly]="viewMode">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@
                                     :</label>
                                 <div class="col-md-2">
                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input type="text" #codeInput maxlength="15" matInput formControlName="qtyRoundOff" class="text-right"  [readonly]="viewMode">
+                                        <input type="text" #codeInput maxlength="1" matInput formControlName="qtyRoundOff" class="text-right"  [readonly]="viewMode">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -148,7 +148,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input type="number" #codeInput maxlength="15" matInput formControlName="pcs" class="text-right" NumberOnly [readonly]="viewMode">
+                                        <input type="text" #codeInput maxlength="13" matInput formControlName="pcs" class="text-right" (input)="allowNumbersOnly($event)" [readonly]="viewMode">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
@@ -230,8 +230,8 @@
                                             <div class="row py-2">
                                                 <div class="col-sm-12">
                                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                                        <input type="number" #codeInput maxlength="15" matInput
-                                                            formControlName="purchaseConvFactor"  class="text-right"  [readonly]="viewMode">
+                                                        <input type="text" #codeInput maxlength="5" matInput
+                                                            formControlName="purchaseConvFactor"  class="text-right"  [readonly]="viewMode" PurityDecimal (input)="allowNumbersOnly($event)">
 
                                                     </mat-form-field>
                                                 </div>
@@ -246,8 +246,8 @@
                                                 </div>
                                                 <div class="col-sm-8">
                                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                                        <input type="number" #codeInput maxlength="15" matInput
-                                                            formControlName="purchaseCurrencyExRateDetails" class="text-right"  [readonly]="viewMode">
+                                                        <input type="text" #codeInput maxlength="15" matInput
+                                                            formControlName="purchaseCurrencyExRateDetails" class="text-right"  [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                                     </mat-form-field>
                                                 </div>
                                             </div>
@@ -263,8 +263,8 @@
                                                 <div class="col-sm-12">
                                                     <mat-form-field appearance="outline" style="width: 100%;">
                                                         <input type="text" #codeInput maxlength="15" matInput
-                                                            formControlName="salesRateType"  (focusout)="validateLookupField($event,rateTypecodeData,'salesRateType')"  (keydown)="lookupKeyPress($event,'salesRateType')" [readonly]="viewMode">
-                                                        <master-search [MasterSearchData]="rateTypecodeData" #salesRateTypeSearch
+                                                            formControlName="salesRateType"  (focusout)="validateLookupField($event,salesTypecodeData,'salesRateType')"  (keydown)="lookupKeyPress($event,'salesRateType')" [readonly]="viewMode">
+                                                        <master-search [MasterSearchData]="salesTypecodeData" #salesRateTypeSearch
                                                             (newRowClick)="salesrateTypecodeSelected($event)" *ngIf=" viewMode == false"
                                                             class="masterSearch">
                                                         </master-search>
@@ -274,8 +274,8 @@
                                             <div class="row py-2">
                                                 <div class="col-sm-12">
                                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                                        <input type="number" #codeInput maxlength="15" matInput
-                                                            formControlName="salesConvFactor" class="text-right"  [readonly]="viewMode">
+                                                        <input type="text" #codeInput maxlength="15" matInput
+                                                            formControlName="salesConvFactor" class="text-right"  [readonly]="viewMode" (input)="allowNumbersOnly($event)">
 
                                                     </mat-form-field>
                                                 </div>
@@ -290,8 +290,8 @@
                                                 </div>
                                                 <div class="col-sm-8">
                                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                                        <input type="number" #codeInput maxlength="15" matInput
-                                                            formControlName="salesCurrencyExRateDetails" class="text-right"  [readonly]="viewMode">
+                                                        <input type="text" #codeInput maxlength="15" matInput
+                                                            formControlName="salesCurrencyExRateDetails" class="text-right"  [readonly]="viewMode" (input)="allowNumbersOnly($event)">
 
                                                     </mat-form-field>
                                                 </div>
@@ -330,8 +330,8 @@
                                                 :</label>
                                             <div class="col-md-3">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="number" #codeInput maxlength="15" matInput
-                                                        formControlName="makingCurrency" class="text-right"  [readonly]="viewMode">
+                                                    <input type="text " #codeInput maxlength="15" matInput
+                                                        formControlName="makingCurrency" class="text-right"  [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-md-6">
@@ -350,8 +350,8 @@
                                                 :</label>
                                             <div class="col-md-9">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="number" #codeInput maxlength="15" matInput
-                                                        formControlName="standardRate" class="text-right" [readonly]="viewMode">
+                                                    <input type="text" #codeInput maxlength="13" matInput
+                                                        formControlName="standardRate" class="text-right" [readonly]="viewMode" AmountDecimalInput (input)="allowNumbersOnly($event)">
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -360,8 +360,8 @@
                                                 :</label>
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="number" #codeInput maxlength="15" matInput
-                                                        formControlName="margin"  class="text-right" [readonly]="viewMode">
+                                                    <input type="text" #codeInput maxlength="3" matInput
+                                                        formControlName="margin"  class="text-right" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -384,8 +384,8 @@
                                                 :</label>
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="number" #codeInput maxlength="15" matInput
-                                                        formControlName="reorderStockReaches"  class="text-right" [readonly]="viewMode">
+                                                    <input type="text" #codeInput maxlength="15" matInput
+                                                        formControlName="reorderStockReaches"  class="text-right" maxlength="13" [readonly]="viewMode" MetalDecimalInput (input)="allowNumbersOnly($event)">
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-md-4">
@@ -406,8 +406,8 @@
                                                 :</label>
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="number" #codeInput maxlength="15" matInput
-                                                        formControlName="reorderRateReaches"  class="text-right"  [readonly]="viewMode">
+                                                    <input type="text" #codeInput maxlength="15" matInput
+                                                        formControlName="reorderRateReaches"  class="text-right"  maxlength="13" [readonly]="viewMode" MetalDecimalInput (input)="allowNumbersOnly($event)">
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-md-4">
@@ -432,8 +432,8 @@
                                                 :</label>
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="number" #codeInput maxlength="15" matInput
-                                                        formControlName="minimumOrderQty" class="text-right" [readonly]="viewMode">
+                                                    <input type="text" #codeInput maxlength="15" matInput
+                                                        formControlName="minimumOrderQty" class="text-right" maxlength="13" [readonly]="viewMode" MetalDecimalInput (input)="allowNumbersOnly($event)">
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-md-4">
@@ -454,8 +454,8 @@
                                                 :</label>
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="number" #codeInput maxlength="15" matInput
-                                                        formControlName="maximumOrderQty" class="text-right" [readonly]="viewMode">
+                                                    <input type="text" #codeInput maxlength="15" matInput
+                                                        formControlName="maximumOrderQty" class="text-right" maxlength="13" [readonly]="viewMode" MetalDecimalInput (input)="allowNumbersOnly($event)">
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-md-4">

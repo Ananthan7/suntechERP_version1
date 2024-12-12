@@ -413,6 +413,12 @@ export class PosBranchTargetComponent implements OnInit {
     });
   }
 
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
