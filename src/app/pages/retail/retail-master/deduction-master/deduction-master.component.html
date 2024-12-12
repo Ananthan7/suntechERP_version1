@@ -316,6 +316,7 @@
                             AmountDecimalInput
                             formControlName="value"
                             autocomplete="off"
+                            (keydown)="handleInputRestrictions($event)"
                           />
                           <mat-error
                             *ngIf="

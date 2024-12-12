@@ -934,4 +934,33 @@ export class DeductionMasterComponent implements OnInit {
         break;
     }
   }
+
+  handleInputRestrictions(event: KeyboardEvent): void {
+    const inputElement = event.target as HTMLInputElement;
+    const value = inputElement.value;
+
+    const invalidKeys = ["e", "E", "+", "-"];
+
+    const allowedKeys = [
+      "Tab",
+      "Enter",
+      "ArrowLeft",
+      "ArrowRight",
+      "Backspace",
+      "Delete",
+    ];
+
+    if (allowedKeys.includes(event.key)) {
+      return;
+    }
+
+    if (invalidKeys.includes(event.key)) {
+      event.preventDefault();
+      return;
+    }
+
+    if (value.length >= 13) {
+      event.preventDefault();
+    }
+  }
 }
