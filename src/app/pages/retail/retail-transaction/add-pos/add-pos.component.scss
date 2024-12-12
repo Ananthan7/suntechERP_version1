@@ -225,10 +225,11 @@ button:disabled {
 
 .update-finish-button {
   // background-color: #1E3C72;
-  background-color: #295094 !important;
+  background-color: #6c91d0 !important;
   color: white;
   padding: 5px 10px;
   line-height: 1.5;
+  
 }
 
 .cancel-button {
@@ -291,4 +292,8 @@ button:disabled {
     opacity: 0.5;
   }
   
+}
+
+.equal-width {
+  width: 11%;
 }
