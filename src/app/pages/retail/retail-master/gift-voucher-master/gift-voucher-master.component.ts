@@ -172,6 +172,11 @@ export class GiftVoucherMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
 }
 
+allowNumbersOnly(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  input.value = input.value.replace(/[^0-9]/g, '');
+}
+
 
 setFormValues() {
   console.log(this.content);

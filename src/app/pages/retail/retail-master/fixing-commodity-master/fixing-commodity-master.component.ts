@@ -208,6 +208,20 @@ export class FixingCommodityMasterComponent implements OnInit {
     console.log(value);
     this.fixingcommodityForm.controls.purchaseRateType.setValue(value.RATE_TYPE);
   }
+
+  salesTypecodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 22,
+    SEARCH_FIELD: 'RATE_TYPE',
+    SEARCH_HEADING: 'Rate Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "RATE_TYPE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
   salesrateTypecodeSelected(value: any) {
     console.log(value);
     this.fixingcommodityForm.controls.salesRateType.setValue(value.RATE_TYPE);
@@ -495,6 +509,10 @@ this.subscriptions.push(Sub)
     });
   }
 
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
 
 
   // close(data?: any){
@@ -548,6 +566,7 @@ this.subscriptions.push(Sub)
           this.openOverlay(FORMNAME, event);
           return
         }
+
 
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
