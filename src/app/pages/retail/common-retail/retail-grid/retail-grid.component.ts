@@ -621,6 +621,24 @@ export class RetailGridComponent implements OnInit {
     }); 
   }
 
+  excelExport(data: any){
+    let gridData= JSON.parse(data.data['CONTROL_LIST_JSON']);
+    console.log(gridData.CONTROL_DETAIL)
+    let postData = {
+      "frmDate": gridData.CONTROL_DETAIL.frmDate,
+      "toDate": gridData.CONTROL_DETAIL.toDate,
+      "strBranch": gridData.CONTROL_DETAIL.strBranch,
+      "mtlType": gridData.CONTROL_DETAIL.mtlType,
+      "diaType": gridData.CONTROL_DETAIL.diaType,
+      "transaction": gridData.CONTROL_DETAIL.transaction,
+    }
+    let APIurl = "PosSalesAndStockComparison";
+    this.dataService.postDynamicAPI(APIurl, postData).subscribe((result: any) =>{
+      console.log(result)
+    })
+
+  }
+
   viewClick(event: any){
     this.actionViewClick.emit(event)
   }
