@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -23,6 +23,7 @@ import Swal from "sweetalert2";
   styleUrls: ["./deduction-master.component.scss"],
 })
 export class DeductionMasterComponent implements OnInit {
+  @ViewChild("codeField") codeField!: ElementRef;
   @ViewChild("overlayGlCode") overlayGlCode!: MasterSearchComponent;
   @ViewChild("overlayCountryCode") overlayCountryCode!: MasterSearchComponent;
   @ViewChild("overlayUserDefined1") overlayUserDefined1!: MasterSearchComponent;
@@ -362,6 +363,12 @@ export class DeductionMasterComponent implements OnInit {
     this.setFlag(this.flag, this.content);
   }
 
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
+
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "ADD") {
     }
@@ -455,9 +462,8 @@ export class DeductionMasterComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -471,7 +477,7 @@ export class DeductionMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        this.close("reloadMainGrid", true);
       }
     });
   }
@@ -494,7 +500,6 @@ export class DeductionMasterComponent implements OnInit {
       this.activeModal.close(data);
     }
   }
-
 
   lookupSelect(e: any, controller?: any, modelfield?: any) {
     console.log(e);
@@ -927,6 +932,35 @@ export class DeductionMasterComponent implements OnInit {
 
       default:
         break;
+    }
+  }
+
+  handleInputRestrictions(event: KeyboardEvent): void {
+    const inputElement = event.target as HTMLInputElement;
+    const value = inputElement.value;
+
+    const invalidKeys = ["e", "E", "+", "-"];
+
+    const allowedKeys = [
+      "Tab",
+      "Enter",
+      "ArrowLeft",
+      "ArrowRight",
+      "Backspace",
+      "Delete",
+    ];
+
+    if (allowedKeys.includes(event.key)) {
+      return;
+    }
+
+    if (invalidKeys.includes(event.key)) {
+      event.preventDefault();
+      return;
+    }
+
+    if (value.length >= 13) {
+      event.preventDefault();
     }
   }
 }

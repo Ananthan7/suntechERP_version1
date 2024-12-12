@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -23,6 +23,7 @@ import Swal from "sweetalert2";
   styleUrls: ["./gst-master.component.scss"],
 })
 export class GstMasterComponent implements OnInit {
+  @ViewChild("codeField") codeField!: ElementRef;
   @ViewChild("tabGroup") tabGroup!: MatTabGroup;
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
@@ -341,6 +342,12 @@ export class GstMasterComponent implements OnInit {
     this.initialController(this.flag, this.content);
   }
 
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
+
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "ADD") {
       this.getStateListData();
@@ -353,6 +360,7 @@ export class GstMasterComponent implements OnInit {
       this.getStateListData();
     }
     if (FLAG === "DELETE") {
+      FLAG = "VIEW";
       this.DeleteController(DATA);
     }
   }
@@ -501,9 +509,8 @@ export class GstMasterComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -517,7 +524,6 @@ export class GstMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
         this.close("reloadMainGrid", true);
       }
     });
@@ -813,9 +819,7 @@ export class GstMasterComponent implements OnInit {
     }
   }
 
-  checkPercentage(event: any) {
-   
-  }
+  checkPercentage(event: any) {}
 
   openTab(event: KeyboardEvent, formControlName: string) {
     const control = this.gstMasterMainForm.get(formControlName);
@@ -1274,43 +1278,50 @@ export class GstMasterComponent implements OnInit {
     const GSTCODE = this.gstMasterMainForm.value.gstCode;
     const GSTPERCENT = this.gstMasterMainForm.value.gstPercent;
     const inputValue = event.target.value;
-  
+
     if (!GSTCODE) {
       this.openDialog("Warning", "Please enter code first!", true);
       this.gstMasterMainForm.controls[controller].setValue("");
       return;
     }
-  
+
     if (controller === "gstPercent") {
       if (inputValue > 100) {
-        this.openDialog("Warning", "A percentage value cannot be greater than 100.", true);
+        this.openDialog(
+          "Warning",
+          "A percentage value cannot be greater than 100.",
+          true
+        );
         this.gstMasterMainForm.controls[controller].setValue("");
       } else {
         this.gstMasterMainForm.controls[controller].setValue(inputValue);
       }
     }
-  
+
     if (controller === "roundOff") {
       if (!GSTPERCENT) {
         this.openDialog("Warning", "Percentage must be more than zero.", true);
         this.gstMasterMainForm.controls[controller].setValue("");
         return;
       }
-  
+
       if (inputValue > 99) {
-        this.openDialog("Warning", "Round Off value cannot be greater than 99.", true);
+        this.openDialog(
+          "Warning",
+          "Round Off value cannot be greater than 99.",
+          true
+        );
         this.gstMasterMainForm.controls[controller].setValue("");
       } else {
         this.gstMasterMainForm.controls[controller].setValue(inputValue);
       }
     }
-  
+
     // Fetch data if both GST Code and Percent are valid
     if (GSTCODE && GSTPERCENT) {
       this.getDatewiseListData();
     }
   }
-  
 
   formatDate(inputDate: string): string {
     const parts = inputDate.split("/");

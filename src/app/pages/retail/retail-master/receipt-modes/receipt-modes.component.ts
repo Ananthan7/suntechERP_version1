@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
   styleUrls: ["./receipt-modes.component.scss"],
 })
 export class ReceiptModesComponent implements OnInit {
+  @ViewChild("codeField") codeField!: ElementRef;
   @ViewChild("overlayAccodeData") overlayAccodeData!: MasterSearchComponent;
   @ViewChild("overlayCommissionAccount")
   overlayCommissionAccount!: MasterSearchComponent;
@@ -156,6 +157,12 @@ export class ReceiptModesComponent implements OnInit {
     this.setFlag(this.flag, this.content);
   }
 
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
+
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "ADD") {
     }
@@ -173,7 +180,7 @@ export class ReceiptModesComponent implements OnInit {
   ViewController(DATA: any) {
     this.code = DATA.CREDIT_CODE;
     console.log(DATA);
-    
+
     this.receiptModesMainForm.controls["mode"].setValue(DATA.MODE.toString());
     this.receiptModesMainForm.controls["code"].setValue(DATA.CREDIT_CODE);
     this.receiptModesMainForm.controls["desc"].setValue(DATA.DESCRIPTION);
@@ -255,9 +262,8 @@ export class ReceiptModesComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -271,7 +277,7 @@ export class ReceiptModesComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        this.close("reloadMainGrid", true);
       }
     });
   }

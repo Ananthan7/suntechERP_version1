@@ -8,11 +8,12 @@
 
 <!-- modal header component -->
 <modal-header
-  *ngIf="flag !== 'VIEW'"
-  [isViewDelete]="flag == 'VIEW'"
   (saveClick)="vatMasterMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
+  [isViewDelete]="false"
+  [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
 ></modal-header>
 
 <!-- content section -->
@@ -29,11 +30,12 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    [maxlength]="6"
+                    [maxlength]="15"
                     UpperCaseDirective
-                    [readonly]="flag === 'VIEW'"
+                    [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                     matInput
                     type="text"
+                    #codeField
                     formControlName="vatCode"
                   />
                 </mat-form-field>
@@ -48,7 +50,7 @@
               <div class="col-md-9">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    [maxlength]="40"
+                    [maxlength]="50"
                     (input)="codeAlert($event, 'vatDesc')"
                     UpperCaseDirective
                     [readonly]="flag === 'VIEW'"

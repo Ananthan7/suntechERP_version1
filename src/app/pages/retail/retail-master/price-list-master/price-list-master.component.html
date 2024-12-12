@@ -9,13 +9,12 @@
 <!-- modal header component -->
 
 <modal-header
-  [isViewSave]="!viewMode"
-  [isViewCancel]="!viewMode"
-  [isViewMore]="!viewMode"
   (cancelClick)="close()"
   (saveClick)="formSubmit()"
   (deleteClick)="deleteCheckingPricList()"
-  [isViewDelete]="!viewMode && editMode"
+  [isViewDelete]="false"
+  [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
 ></modal-header>
 
 <!-- content section -->
@@ -26,134 +25,208 @@
         <div class="row">
           <div class="col-md-6">
             <div class="row align-items-center mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label">Price
-                    Code * :</label>
-                <div class="col-md-4">
-                    <mat-form-field appearance="outline" style="width: 70%;">
-                        <input type="text" matInput [readonly]="viewMode || editMode" maxlength="6"
-                            #priceCode appNoEmptySpace id="priceCode" formControlName="priceCode"
-                            (focusout)="checkCodeExists($event)" (keyup)="codeEnabled()"
-                            (input)="priceCode.value = priceCode.value.toUpperCase()" />
-                    </mat-form-field>
-                </div>
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Price Code * :</label
+              >
+              <div class="col-md-4">
+                <mat-form-field appearance="outline" style="width: 70%">
+                  <input
+                    type="text"
+                    matInput
+                    [readonly]="flag === 'VIEW' || flag === 'EDIT'"
+                    [maxlength]="6"
+                    #priceCode
+                    appNoEmptySpace
+                    id="priceCode"
+                    formControlName="priceCode"
+                    (focusout)="checkCodeExists($event)"
+                    (keyup)="codeEnabled()"
+                    (input)="priceCode.value = priceCode.value.toUpperCase()"
+                  />
+                </mat-form-field>
+              </div>
             </div>
             <div class="row align-items-center mb-1">
-                <label for="inputPassword" class="col-sm-2 col-form-label">Description
-                    * :</label>
-                <div class="col-md-10">
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" matInput #description appNoEmptySpace
-                            formControlName="description" [readonly]="viewMode || codeEnable"
-                            (input)="description.value = description.value.toUpperCase()"
-                            maxlength="40" />
-                    </mat-form-field>
-                </div>
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Description * :</label
+              >
+              <div class="col-md-10">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input
+                    type="text"
+                    matInput
+                    #description
+                    appNoEmptySpace
+                    formControlName="description"
+                    [readonly]="viewMode || codeEnable"
+                    (input)="
+                      description.value = description.value.toUpperCase()
+                    "
+                    maxlength="40"
+                  />
+                </mat-form-field>
+              </div>
             </div>
             <div class="row align-items-center mb-2">
-                <label for="inputPassword" class="col-sm-2 col-form-label">
-                    Price Type * :</label>
-                <div class="col-sm-2">
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <mat-select (selectionChange)="onPriceTypeChange()"
-                            formControlName="priceMethod" [disabled]="viewMode">
-                            <mat-option *ngFor="let priceType of priceTypeList"
-                                [value]="priceType.value" [disabled]="viewMode || codeEnable">
-                                {{ priceType.type }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-2">
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <mat-select [disabled]="viewMode" formControlName="priceSign"
-                            [required]="required">
-                            <mat-option *ngFor="let option of allOperatorList"
-                                [value]="option.operator" [disabled]="viewMode || codeEnable">
-                                {{ option.operator }}
-                            </mat-option>
-                        </mat-select>
-
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-2">
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" class="text-right" matInput AmountDecimalInput
-                            formControlName="priceValue" [max]="getMaxValueLength()"
-                            [readonly]="viewMode || codeEnable" />
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-2">
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <mat-select formControlName="finalPriceSign" [disabled]="viewMode">
-                            <mat-option *ngFor="let option of operatorsList" [value]="option.value"
-                                [disabled]="viewMode || codeEnable">
-                                {{ option.operation }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-2">
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" class="text-right" matInput [max]="5" AmountDecimalInput
-                            [readonly]="viewMode || codeEnable" formControlName="finalPriceValue"
-                            [required]="required" />
-                    </mat-form-field>
-                </div>
+              <label for="inputPassword" class="col-sm-2 col-form-label">
+                Price Type * :</label
+              >
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <mat-select
+                    (selectionChange)="onPriceTypeChange()"
+                    formControlName="priceMethod"
+                    [disabled]="viewMode"
+                  >
+                    <mat-option
+                      *ngFor="let priceType of priceTypeList"
+                      [value]="priceType.value"
+                      [disabled]="viewMode || codeEnable"
+                    >
+                      {{ priceType.type }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <mat-select
+                    [disabled]="viewMode"
+                    formControlName="priceSign"
+                    [required]="required"
+                  >
+                    <mat-option
+                      *ngFor="let option of allOperatorList"
+                      [value]="option.operator"
+                      [disabled]="viewMode || codeEnable"
+                    >
+                      {{ option.operator }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input
+                    type="text"
+                    class="text-right"
+                    matInput
+                    AmountDecimalInput
+                    formControlName="priceValue"
+                    [max]="getMaxValueLength()"
+                    [readonly]="viewMode || codeEnable"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <mat-select
+                    formControlName="finalPriceSign"
+                    [disabled]="viewMode"
+                  >
+                    <mat-option
+                      *ngFor="let option of operatorsList"
+                      [value]="option.value"
+                      [disabled]="viewMode || codeEnable"
+                    >
+                      {{ option.operation }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input
+                    type="text"
+                    class="text-right"
+                    matInput
+                    [max]="5"
+                    AmountDecimalInput
+                    [readonly]="viewMode || codeEnable"
+                    formControlName="finalPriceValue"
+                    [required]="required"
+                  />
+                </mat-form-field>
+              </div>
             </div>
 
             <div class="row align-items-center mb-2">
-                <label for="inputPassword" class="col-sm-3 col-form-label">Additional
-                    Value With Cost:</label>
-                <div class="col-sm-2">
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <mat-select formControlName="addlValueSign" [required]="required"
-                            [disabled]="viewMode">
-                            <mat-option *ngFor="let option of operatorsList" [value]="option.value"
-                                [disabled]="viewMode || codeEnable">
-                                {{ option.operation }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-2">
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" class="text-right" matInput AmountDecimalInput [max]="5"
-                            formControlName="addlValue" [readonly]="viewMode || codeEnable"
-                            [required]="required" />
-                    </mat-form-field>
-                </div>
+              <label for="inputPassword" class="col-sm-3 col-form-label"
+                >Additional Value With Cost:</label
+              >
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <mat-select
+                    formControlName="addlValueSign"
+                    [required]="required"
+                    [disabled]="viewMode"
+                  >
+                    <mat-option
+                      *ngFor="let option of operatorsList"
+                      [value]="option.value"
+                      [disabled]="viewMode || codeEnable"
+                    >
+                      {{ option.operation }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input
+                    type="text"
+                    class="text-right"
+                    matInput
+                    AmountDecimalInput
+                    [max]="5"
+                    formControlName="addlValue"
+                    [readonly]="viewMode || codeEnable"
+                    [required]="required"
+                  />
+                </mat-form-field>
+              </div>
             </div>
 
             <div class="row mb-1">
-                <div class="col-sm-3">
-                    <section class="example-section">
-                        <mat-checkbox class="example-margin" formControlName="priceRoundoff"
-                            (change)="roundoffDis()" [disabled]="viewMode || codeEnable">Round
-                            off
-                            Digits </mat-checkbox>
-                    </section>
-                </div>
-                <div class="col-md-2">
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" maxlength="5" matInput
-                            onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
-                            formControlName="roundoff_digit"
-                            [readonly]="viewMode || codeEnable || round" class="text-right" />
-                    </mat-form-field>
-                </div>
+              <div class="col-sm-3">
+                <section class="example-section">
+                  <mat-checkbox
+                    class="example-margin"
+                    formControlName="priceRoundoff"
+                    (change)="roundoffDis()"
+                    [disabled]="viewMode || codeEnable"
+                    >Round off Digits
+                  </mat-checkbox>
+                </section>
+              </div>
+              <div class="col-md-2">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input
+                    type="text"
+                    maxlength="5"
+                    matInput
+                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
+                    formControlName="roundoff_digit"
+                    [readonly]="viewMode || codeEnable || round"
+                    class="text-right"
+                  />
+                </mat-form-field>
+              </div>
             </div>
             <div class="row mb-1">
-                <div class="col-sm-4">
-                    <section class="example-section">
-                        <mat-checkbox formControlName="dontCalculate"
-                            *ngIf="this.priceListMasterForm.value.priceMethod != 1"
-                            class="example-margin" [disabled]="viewMode || codeEnable">Dont
-                            Calculate On Cost
-                            Change</mat-checkbox>
-                    </section>
-                </div>
+              <div class="col-sm-4">
+                <section class="example-section">
+                  <mat-checkbox
+                    formControlName="dontCalculate"
+                    *ngIf="this.priceListMasterForm.value.priceMethod != 1"
+                    class="example-margin"
+                    [disabled]="viewMode || codeEnable"
+                    >Dont Calculate On Cost Change</mat-checkbox
+                  >
+                </section>
+              </div>
             </div>
-        </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
   styleUrls: ["./gratuity-master.component.scss"],
 })
 export class GratuityMasterComponent implements OnInit {
+  @ViewChild("codeField") codeField!: ElementRef;
   @ViewChild("overlayDebitAc") overlayDebitAc!: MasterSearchComponent;
   @ViewChild("overlayCountryCode") overlayCountryCode!: MasterSearchComponent;
   @ViewChild("overlayUserDefined1") overlayUserDefined1!: MasterSearchComponent;
@@ -362,6 +363,12 @@ export class GratuityMasterComponent implements OnInit {
     this.setFlag(this.flag, this.content);
   }
 
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
+
   close(data?: any, calling?: boolean) {
     if (this.flag !== "VIEW" && !calling) {
       Swal.fire({
@@ -407,6 +414,7 @@ export class GratuityMasterComponent implements OnInit {
     }
 
     if (FLAG === "DELETE") {
+      FLAG = "VIEW";
       this.gratuityTypeData();
       this.ViewController(DATA);
       this.basedOnDropdown = this.getUniqueValues(
@@ -528,9 +536,8 @@ export class GratuityMasterComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -544,7 +551,7 @@ export class GratuityMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        this.close("reloadMainGrid", true);
       }
     });
   }
@@ -1034,5 +1041,27 @@ export class GratuityMasterComponent implements OnInit {
     console.log("Selected index:", selectedIndex);
 
     this.gratuityMasterForm.controls["basedOn"].setValue(selectedIndex);
+  }
+
+  preventExtraDigits(event: KeyboardEvent): void {
+    const inputElement = event.target as HTMLInputElement;
+    const value = inputElement.value;
+
+    const allowedKeys = [
+      "Tab",
+      "Enter",
+      "ArrowLeft",
+      "ArrowRight",
+      "Backspace",
+      "Delete",
+    ];
+
+    if (allowedKeys.includes(event.key)) {
+      return;
+    }
+
+    if (value.length >= 10) {
+      event.preventDefault();
+    }
   }
 }

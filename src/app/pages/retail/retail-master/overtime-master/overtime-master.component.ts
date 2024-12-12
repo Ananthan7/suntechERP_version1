@@ -1,5 +1,10 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTabGroup } from "@angular/material/tabs";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -7,6 +12,7 @@ import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
@@ -17,6 +23,7 @@ import Swal from "sweetalert2";
   styleUrls: ["./overtime-master.component.scss"],
 })
 export class OvertimeMasterComponent implements OnInit {
+  @ViewChild("codeField") codeField!: ElementRef;
   @ViewChild("overlayUserDefined1") overlayUserDefined1!: MasterSearchComponent;
   @ViewChild("overlayUserDefined2") overlayUserDefined2!: MasterSearchComponent;
   @ViewChild("overlayUserDefined3") overlayUserDefined3!: MasterSearchComponent;
@@ -50,6 +57,7 @@ export class OvertimeMasterComponent implements OnInit {
   @ViewChild("tabGroup") tabGroup!: MatTabGroup;
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
+  branchCode = this.commonService.branchCode;
 
   glCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -59,7 +67,7 @@ export class OvertimeMasterComponent implements OnInit {
     SEARCH_FIELD: "ACCODE",
     SEARCH_HEADING: "GL Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "ACCODE <>''",
+    WHERECONDITION: `ACCODE <> '' and  ADBRANCH_CODE= '${this.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -283,6 +291,7 @@ export class OvertimeMasterComponent implements OnInit {
   calculateByDropdown!: any[];
   code: any;
   countryCode: any;
+  dialogBox: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -295,11 +304,11 @@ export class OvertimeMasterComponent implements OnInit {
   ) {}
 
   overTimeMainForm: FormGroup = this.formBuilder.group({
-    code: [""],
-    description: [""],
-    glCode: [""],
-    glDesc: [""],
-    calculateBy: [""],
+    code: ["", [Validators.required]],
+    description: ["", [Validators.required]],
+    glCode: ["", [Validators.required]],
+    glDesc: ["", [Validators.required]],
+    calculateBy: [],
     perHour: [""],
     basedOn: [""],
     holidayOverTime: [""],
@@ -322,13 +331,20 @@ export class OvertimeMasterComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.getDropDowns();
-    this.countryCode = this.commonService.allbranchMaster.COUNTRY_CODE;
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
+    this.getDropDowns();
+    this.countryCode = this.commonService.allbranchMaster.COUNTRY_CODE;
+
     this.initialController(this.flag, this.content);
     this.setFlag(this.flag, this.content);
+  }
+
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
   }
 
   initialController(FLAG: any, DATA: any) {
@@ -341,6 +357,7 @@ export class OvertimeMasterComponent implements OnInit {
       this.editController(DATA);
     }
     if (FLAG === "DELETE") {
+      FLAG = "VIEW";
       this.DeleteController(DATA);
     }
   }
@@ -366,10 +383,10 @@ export class OvertimeMasterComponent implements OnInit {
       DATA.PER_FIXED.toString()
     );
     this.overTimeMainForm.controls["holidayOverTime"].setValue(
-      DATA.HOLIDAYOT === 0
+      DATA.HOLIDAYOT === 1
     );
     this.overTimeMainForm.controls["calculateArrear"].setValue(
-      DATA.CALCULATE_ARREAR === 0
+      DATA.CALCULATE_ARREAR === 1
     );
 
     this.overTimeMainForm.controls["userDefined1"].setValue(DATA.UDF1);
@@ -421,9 +438,8 @@ export class OvertimeMasterComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -437,7 +453,6 @@ export class OvertimeMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
         this.close("reloadMainGrid", true);
       }
     });
@@ -450,12 +465,21 @@ export class OvertimeMasterComponent implements OnInit {
     );
     console.log(this.basedOnDropdown);
 
+    this.flag === "ADD" &&
+      this.overTimeMainForm.controls["basedOn"].setValue(
+        this.basedOnDropdown[0].SRNO
+      );
+
     this.calculateByDropdown = this.getUniqueValues(
       this.commonService.getComboFilterByID("OVERTIME CALCULATION BY"),
       "ENGLISH"
     );
-
     console.log(this.calculateByDropdown);
+
+    this.flag === "ADD" &&
+      this.overTimeMainForm.controls["calculateBy"].setValue(
+        this.calculateByDropdown[0].SRNO
+      );
   }
 
   getUniqueValues(List: any[], field: string) {
@@ -842,6 +866,23 @@ export class OvertimeMasterComponent implements OnInit {
 
       default:
         break;
+    }
+  }
+
+  openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
+    this.dialogBox = this.dialog.open(DialogboxComponent, {
+      width: "40%",
+      disableClose: true,
+      data: { title, msg, okBtn, swapColor },
+    });
+  }
+
+  codeChecker(event: any, controller: any) {
+    let message = `Code cannot be empty!`;
+
+    if (!this.overTimeMainForm.value.code) {
+      this.overTimeMainForm.controls[controller].setValue("");
+      return this.openDialog("Warning", message, true);
     }
   }
 }
