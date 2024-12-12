@@ -1,13 +1,14 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbActiveModal, NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
+import { AutoAdditionalAmountComponent } from "./auto-additional-amount/auto-additional-amount.component";
 
 @Component({
   selector: "app-additional-amount",
@@ -26,6 +27,7 @@ export class AdditionalAmountComponent implements OnInit {
   editMode: boolean = false;
   codeEnable: boolean = false;
   typeList: any;
+  modalReference!: NgbModalRef;
   @ViewChild("typeCode") typeCode!: MasterSearchComponent;
   @ViewChild("debitCode") debitCode!: MasterSearchComponent;
   @ViewChild("creditCode") creditCode!: MasterSearchComponent;
@@ -85,7 +87,8 @@ export class AdditionalAmountComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private commonService: CommonServiceService,
-    private dataService: SuntechAPIService
+    private dataService: SuntechAPIService,
+    private modalService: NgbModal
   ) {}
 
   costAndPriceTypeMainForm: FormGroup = this.formBuilder.group({
@@ -480,7 +483,7 @@ export class AdditionalAmountComponent implements OnInit {
     let data1 = this.content.DEBIT_TYPE;
     console.log(data1);
     let api =
-      "AddlAmountMaster/GetAddAmountlMasterDetail/" + this.content.ADDL_CODE ;
+      "AddlAmountMaster/GetAddAmountlMasterDetail/" + this.content.ADDL_CODE;
     console.log(api);
     let Sub: Subscription = this.dataService
       .getDynamicAPI(api)
@@ -541,7 +544,6 @@ export class AdditionalAmountComponent implements OnInit {
     this.costAndPriceTypeMainForm.controls["transaction_code"].setValue(
       this.content.PLUS_MINUS.toString()
     );
-
   }
 
   setPostData() {
@@ -729,7 +731,7 @@ export class AdditionalAmountComponent implements OnInit {
             (err) => alert(err)
           );
         this.subscriptions.push(Sub);
-      }else{
+      } else {
         this.close("reloadMainGrid");
       }
     });
@@ -765,5 +767,26 @@ export class AdditionalAmountComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  openAdditionalAmount(data?: any) {
+    let flag = this.content?.FLAG;
+    console.log(flag);
+    const modalContent = {
+      data: data,
+      flag: flag,
+    };
+  
+    this.modalReference = this.modalService.open(
+      AutoAdditionalAmountComponent,
+      {
+        size: "xl",
+        backdrop: true, //'static'
+        keyboard: false,
+        windowClass: "modal-full-width",
+      }
+    );
+
+    this.modalReference.componentInstance.content = modalContent;
   }
 }
