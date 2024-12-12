@@ -48,6 +48,7 @@ export class JobcardComponent implements OnInit {
   //variables
   jobnumber: any[] = []
   viewMode: boolean = false;
+  viewMode1: boolean = true;
   editMode: boolean = false;
   modalReference: any;
   imageData: any;
@@ -767,6 +768,7 @@ export class JobcardComponent implements OnInit {
         this.tableData[0].stone_wt = result.response.STONE_WT;
         this.tableData[0].gross_wt = result.response.GROSS_WT;
         this.tableData[0].part_code = result.response.PART_CODE;
+        this.tableData[0]
 
         // Get the first object from DESIGN_STNMTL_DETAIL array
 
@@ -1092,12 +1094,15 @@ export class JobcardComponent implements OnInit {
           this.getDesignimagecode()
           this.jobsalesorderdetailDJ = data.JOB_SALESORDER_DETAIL_DJ || []
           if (this.jobsalesorderdetailDJ.length > 0) {
-            this.jobsalesorderdetailDJ.forEach((item: any) => {
+            this.jobsalesorderdetailDJ.forEach((item: any, index: number) => {
+              item.SRNO = index + 1
+              item.JOB_NUMBER = item.JOB_NUMBER + '/' + item.SRNO
               item.GROSS_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
               item.METAL_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
               item.STONE_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT, 'STONE')
-            
+
             });
+            console.log(this.jobsalesorderdetailDJ)
           }
 
         } else {
@@ -1229,7 +1234,7 @@ export class JobcardComponent implements OnInit {
       "JOB_PCS_PENDING": 0,
       "OUTSIDEJOB": true,
       "TREE_CODE": "",
-      "DEL_DATE":  this.jobCardFrom.value.deldate,
+      "DEL_DATE": this.jobCardFrom.value.deldate,
       "REP_STOCK_CODE": "",
       "REPAIRJOB": 0,
       "METAL_STOCK_CODE": this.jobCardFrom.value.lossbooking || "",
@@ -1245,7 +1250,7 @@ export class JobcardComponent implements OnInit {
       "ORDER_TYPE": this.jobCardFrom.value.orderType || "",
       "DESIGN_TYPE": this.jobCardFrom.value.jobtype || "",
       "SO_VOCNO": 0,
-      "SO_VOCDATE":"2024-12-11T11:41:56.796Z",
+      "SO_VOCDATE": "2024-12-11T11:41:56.796Z",
       "JOB_PURITY": this.jobCardFrom.value.purity || "",
       "DESIGN_DESC": this.jobCardFrom.value.designtype || "",
       "CUSTOMER_NAME": this.jobCardFrom.value.customername || "",
@@ -1308,15 +1313,15 @@ export class JobcardComponent implements OnInit {
           "PICTURE_PATH": "",
           "PART_CODE": "",
 
-          // "SINO": sn,
-          // "job_reference": this.jobCardFrom.value.jobno + '/' + sn,
-          // "part_code": e.Design_Code,
-          // "Description": e.Design_Description,
-          // "Pcs": "",
-          // "metal_color": "",
-          // "metal_wt": "",
-          // "stone_wt": "",
-          // "gross_wt": "",
+          "SINO": this.jobCardFrom.value.sn,
+          "job_reference": this.jobCardFrom.value.jobno + '/' + this.jobCardFrom.value.sn,
+          "part_code": this.jobCardFrom.value.Design_Code,
+          "Description": this.jobCardFrom.value.Design_Description,
+          "Pcs": this.jobCardFrom.value.pcs,
+          "metal_color": this.jobCardFrom.value.metal_color,
+          "metal_wt": this.jobCardFrom.value.metal_wt,
+          "stone_wt": this.jobCardFrom.value.stone_wt,
+          "gross_wt": this.jobCardFrom.value.gross_wt,
 
 
           "TREE_NO": "",
@@ -1860,6 +1865,7 @@ export class JobcardComponent implements OnInit {
     }
 
   }
+
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
     LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -1881,17 +1887,22 @@ export class JobcardComponent implements OnInit {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
-          let alertMsg = this.commonService.toastErrorByMsgId('MSG1531');
-          console.log(this.commonService.toastErrorByMsgId('MSG1531'));
+          // let alertMsg = this.commonService.toastErrorByMsgId('MSG1531');
           this.jobCardFrom.controls[FORMNAME].setValue('');
           this.jobCardFrom.controls.customername.setValue('');
           this.jobCardFrom.controls.designtype.setValue('');
           // this.renderer.selectRootElement(FORMNAME).focus();
           LOOKUPDATA.SEARCH_VALUE = '';
+          if (FORMNAME === 'orderType' || FORMNAME === 'designcode' || FORMNAME === 'country' || FORMNAME === 'brand' || FORMNAME === 'color' || FORMNAME === 'subcat' || FORMNAME === 'category' || FORMNAME === 'type' || FORMNAME === 'karat' || FORMNAME === 'prefix' || FORMNAME === 'costcode' || FORMNAME === 'customer' || FORMNAME === 'size' || FORMNAME === 'length' || FORMNAME === 'salesman' || FORMNAME === 'currency' || FORMNAME === 'mainmetal' || FORMNAME === 'time' || FORMNAME === 'range' || FORMNAME === 'seqcode' || FORMNAME === 'comments') {
+            this.showOverleyPanel(event, FORMNAME);
+            this.commonService.toastErrorByMsgId('MSG1531')
+          }
+          return;
+
           // if (alertMsg == null || alertMsg == undefined ) {
           //   return "NOT FOUND";
           // }
-          return this.ErrorMessageFounder(alertMsg) && console.log("data and error message fetched succesdsfully");
+          // return this.ErrorMessageFounder(alertMsg) && console.log("data and error message fetched succesdsfully");
 
 
         }

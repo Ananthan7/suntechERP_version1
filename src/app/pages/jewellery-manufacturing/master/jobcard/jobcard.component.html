@@ -178,12 +178,12 @@
                                             (dateChange)="formatDate($event)"
                                             [matDatepicker]="date"
                                             formControlName="date"
-                                            [readonly]="viewMode"
+                                            [disabled]="viewMode1"
                                             placeholder="DD/MM/YYYY"
                                             class="text-right" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="date"></mat-datepicker-toggle>
-                                        <mat-datepicker [disabled]="isSaved"
+                                        <mat-datepicker [disabled]="viewMode1"
                                             #date></mat-datepicker>
                                     </mat-form-field>
                                 </div>
@@ -823,7 +823,7 @@
                                                 id="ID041">Next</span>
                                         </button>
                                     </button>
-                                </div>
+                               
                                 <div class="p-2 bd-highlight">
                                     <div class="upload-btn">
                                         <button
@@ -836,6 +836,7 @@
                                             (change)="onFileChanged($event)">
                                     </div>
                                 </div>
+                            </div>
                             </div>
                         </div>
 
