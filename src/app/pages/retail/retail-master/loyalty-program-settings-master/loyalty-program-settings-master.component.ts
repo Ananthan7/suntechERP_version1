@@ -214,13 +214,15 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     );
     console.log(this.division_values)
     this.getdropdownvalues();
+    if(this.flag == undefined){
+      this.renderer.selectRootElement('#code')?.focus();
+    }
 
     if (this.flag == 'EDIT') {
       this.dis_group = true;
       this.detailsapi(this.unq_id);
       this.disable_code = true;
       this.codeedit = true;
-      this.editMode = true;
     } else if (this.flag == 'VIEW') {
       this.dis_group = true;
 
@@ -419,7 +421,8 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        // this.flag = "VIEW";
+        this.activeModal.close('');
       }
     });
   }
@@ -679,5 +682,12 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     this.maindetails[updatedSLNO].AMTSPENT = event.target.value;
   }
 
+  checkcode() {
+    const CodeControl = this.loyaltysettingform.controls.code;
+    if (!CodeControl.value || CodeControl.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1124');
+      this.renderer.selectRootElement('#code')?.focus();
+    }
+  }
 
 }

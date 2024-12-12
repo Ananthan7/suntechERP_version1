@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -46,8 +46,8 @@ export class FestivalMasterComponent implements OnInit {
 
   festivalmasterform: FormGroup = this.formBuilder.group({
     mid: [""],
-    code: [""],
-    description: [""],
+    code: ["",[Validators.required]],
+    description: ["",[Validators.required]],
     target: [""],
     year: this.formBuilder.array([]),
     fromDate: [""],

@@ -47,7 +47,7 @@ export class SubledgerPrefixMasterComponent implements OnInit {
   prefixmasterform: FormGroup = this.formBuilder.group({
     prefixcode: ["",[Validators.required]],
     prefixcodedesc: ["",[Validators.required]],
-    last_no: ["0000",[Validators.required]],
+    last_no: ["0000"],
   });
 
   codeData: MasterSearchModel = {
@@ -109,7 +109,6 @@ export class SubledgerPrefixMasterComponent implements OnInit {
     this.flag = this.content?.FLAG;
     if(this.flag == 'EDIT'){
       this.disable_code = true;
-      this.editMode = true;
     }else if(this.flag == 'VIEW'){
       this.viewMode = true;
     }
@@ -234,104 +233,109 @@ export class SubledgerPrefixMasterComponent implements OnInit {
       const control = this.prefixmasterform.controls[controlName];
       return control.hasError("required") && control.touched;
     });
+    
+    if(!requiredFieldsInvalid){
 
-
-    const postData = {
-      "PREFIX_CODE": this.prefixmasterform.controls.prefixcode.value,
-      "DESCRIPTION": this.prefixmasterform.controls.prefixcodedesc.value,
-      "LAST_NO": this.prefixmasterform.controls.last_no.value,
-      "CURRENCY_CODE": "" ,//"stri",
-      "CONV_RATE": 0,
-      "COST_CODE":  "" ,//"string",
-      "CATEGORY_CODE":  "" ,//"string",
-      "SUBCATEGORY_CODE":  "" ,//"string",
-      "BRAND_CODE": this.curr_branch,
-      "TYPE_CODE":  "" ,//"string",
-      "COUNTRY_CODE":  "" ,//"string",
-      "MID": 0,
-      "DIVISION":  "" ,//"s",
-      "SYSTEM_DATE":  new Date(),//"2024-11-18T08:34:11.298Z",
-      "PM_BRANCHCODE":  "" ,//"string",
-      "JOB_PREFIX": true,
-      "SETREF_PREFIX": true,
-      "BRANCH_CODE":  "" ,//"string",
-      "BOIL_PREFIX": true,
-      "SCHEME_PREFIX": true,
-      "UDF1":  "" ,//"string",
-      "UDF2":  "" ,//"string",
-      "UDF3":  "" ,//"string",
-      "UDF4": "" ,// "string",
-      "UDF5":  "" ,//"string",
-      "UDF6": "" ,// "string",
-      "UDF7":  "" ,//"string",
-      "UDF8":  "" ,//"string",
-      "UDF9":  "" ,//"string",
-      "UDF10":  "" ,//"string",
-      "UDF11":  "" ,//"string",
-      "UDF12":  "" ,//"string",
-      "UDF13":  "" ,//"string",
-      "UDF14":  "" ,//"string",
-      "UDF15":  "" ,//"string",
-      "TAG_WT": 0,
-      "COMP_PREFIX": true,
-      "DESIGN_PREFIX": true,
-      "REFINE_PREFIX": true,
-      "SUBLEDGER_PREFIX": true,
-      "SUFFIX_CODE": "" ,// "stri",
-      "HSN_CODE": "" ,// "string"
+      const postData = {
+        "PREFIX_CODE": this.prefixmasterform.controls.prefixcode.value,
+        "DESCRIPTION": this.prefixmasterform.controls.prefixcodedesc.value,
+        "LAST_NO": this.prefixmasterform.controls.last_no.value,
+        "CURRENCY_CODE": "" ,//"stri",
+        "CONV_RATE": 0,
+        "COST_CODE":  "" ,//"string",
+        "CATEGORY_CODE":  "" ,//"string",
+        "SUBCATEGORY_CODE":  "" ,//"string",
+        "BRAND_CODE": "",
+        "TYPE_CODE":  "" ,//"string",
+        "COUNTRY_CODE":  "" ,//"string",
+        "MID": 0,
+        "DIVISION":  "" ,//"s",
+        "SYSTEM_DATE":  new Date(),//"2024-11-18T08:34:11.298Z",
+        "PM_BRANCHCODE":  "" ,//"string",
+        "JOB_PREFIX": true,
+        "SETREF_PREFIX": true,
+        "BRANCH_CODE":  this.curr_branch,//"string",
+        "BOIL_PREFIX": true,
+        "SCHEME_PREFIX": true,
+        "UDF1":  "" ,//"string",
+        "UDF2":  "" ,//"string",
+        "UDF3":  "" ,//"string",
+        "UDF4": "" ,// "string",
+        "UDF5":  "" ,//"string",
+        "UDF6": "" ,// "string",
+        "UDF7":  "" ,//"string",
+        "UDF8":  "" ,//"string",
+        "UDF9":  "" ,//"string",
+        "UDF10":  "" ,//"string",
+        "UDF11":  "" ,//"string",
+        "UDF12":  "" ,//"string",
+        "UDF13":  "" ,//"string",
+        "UDF14":  "" ,//"string",
+        "UDF15":  "" ,//"string",
+        "TAG_WT": 0,
+        "COMP_PREFIX": true,
+        "DESIGN_PREFIX": true,
+        "REFINE_PREFIX": true,
+        "SUBLEDGER_PREFIX": true,
+        "SUFFIX_CODE": "" ,// "stri",
+        "HSN_CODE": "" ,// "string"
+      }
+  
+      if (this.flag === "EDIT") {
+        let API = `PrefixMaster/UpdatePrefixMaster/${this.unq_id}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `PrefixMaster/InsertPrefixMaster`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
+  
     }
+   
 
-    if (this.flag === "EDIT") {
-      let API = `PrefixMaster/UpdatePrefixMaster/${this.unq_id}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    } else {
-      let API = `PrefixMaster/InsertPrefixMaster`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    }
   }
 
   // close(data?: any) {

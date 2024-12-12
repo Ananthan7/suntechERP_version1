@@ -5,7 +5,9 @@
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
-    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="DeleteController()"
+    [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+    [isViewMore]="!viewMode"></modal-header>
     <div class="p-4 ">
         <form [formGroup]="loyaltysettingform">
             <div class="row mt-2">
@@ -16,8 +18,8 @@
                         <div class="col-md-2 p-0 ms-2">
                             <mat-form-field style="width: 100%;" appearance="outline">
                                 <input type="text" id="code" matInput class="p-0" formControlName="code"
-                                    [readonly]="viewOnly || disable_code" (change)="isexistingcode()" maxlength="15"
-                                    UpperCaseDirective />
+                                    [readonly]="viewOnly || disable_code" (change)="isexistingcode()" maxlength="15" id="code" #code
+                                    UpperCaseDirective  maxlength="6" (focusout)="checkcode()"/>
                             </mat-form-field>
                         </div>
                         <div class="col-md-4 p-0">

@@ -103,17 +103,7 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="sizefrom"
-                                [readonly]="viewOnly || readonly" (focusout)="
-                            SPvalidateLookupFieldModified(
-                              $event,
-                              sizeFromCodeData,
-                              ['sizefrom'],
-                              false,
-                              ['CODE'],
-                              false,
-                              true
-                            )
-                          " />
+                                [readonly]="viewOnly || readonly" />
                             <master-search *ngIf="false" [MasterSearchData]="sizeFromCodeData" class="masterSearch"
                                 (newRowClick)="sizefromselected($event)"></master-search>
                         </mat-form-field>
@@ -155,17 +145,7 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="shape"
-                                [readonly]="viewOnly || readonly" (focusout)="
-                            SPvalidateLookupFieldModified(
-                              $event,
-                              ShapecodeData,
-                              ['shape'],
-                              false,
-                              ['CODE'],
-                              false,
-                              true
-                            )
-                          " />
+                                [readonly]="viewOnly || readonly"  />
                             <master-search *ngIf="false" [MasterSearchData]="ShapecodeData" class="masterSearch"
                                 (newRowClick)="ShapecodeSelected($event)"></master-search>
                         </mat-form-field>
@@ -211,16 +191,7 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="sizeto"
-                                [readonly]="viewOnly || readonly" (focusout)="
-                            SPvalidateLookupFieldModified(
-                              $event,
-                              sizeToCodeData,
-                              ['sizeto'],
-                              false,
-                              ['CODE'],
-                              false,
-                              true
-                            )" />
+                                [readonly]="viewOnly || readonly"  />
                             <master-search *ngIf="false" [MasterSearchData]="sizeToCodeData" class="masterSearch"
                                 (newRowClick)="sizetoselected($event)"></master-search>
                         </mat-form-field>
@@ -231,8 +202,8 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Variance % +/-</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" maxlength="3" matInput formControlName="variance1"
-                                [readonly]="viewOnly" AmountDecimalInput appApplyOnlyNumbers />
+                            <input type="text" id="inputPassword" maxlength="5" matInput formControlName="variance1"
+                                [readonly]="viewOnly" AmountDecimalInput  />
 
                         </mat-form-field>
                     </div>
@@ -242,8 +213,8 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Variance % +/-</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" maxlength="3" matInput formControlName="variance2"
-                                [readonly]="viewOnly" AmountDecimalInput appApplyOnlyNumbers />
+                            <input type="text" id="inputPassword" maxlength="5" matInput formControlName="variance2"
+                                [readonly]="viewOnly" AmountDecimalInput  />
 
                         </mat-form-field>
                     </div>

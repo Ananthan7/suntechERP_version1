@@ -78,7 +78,6 @@ export class TransactionReferenceMasterComponent implements OnInit {
     console.log(this.content)
     if(this.flag == 'EDIT'){
       this.disable_code = true;
-      this.editMode = true;
     }else if(this.flag == 'VIEW'){
       this.viewMode = true;
     }

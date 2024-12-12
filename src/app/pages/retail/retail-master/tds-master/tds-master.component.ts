@@ -55,7 +55,7 @@ export class TdsMasterComponent implements OnInit {
     });
     if (this.flag == 'EDIT') {
       this.disable_code = true;
-      this.editMode = true;
+      this.editMode = false;
     } else if (this.flag == 'VIEW') {
       this.viewMode = true;
     } else if (this.flag == undefined) {
@@ -121,7 +121,7 @@ export class TdsMasterComponent implements OnInit {
     }
     if (FLAG === "EDIT") {
       this.editController(DATA);
-      this.editMode = true;
+      this.editMode = false;
     }
     if (FLAG === "DELETE") {
       this.DeleteController(DATA);
