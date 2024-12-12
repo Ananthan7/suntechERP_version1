@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -58,17 +58,17 @@ export class StoneWeightMasterComponent implements OnInit {
 
   stoneweightmaster: FormGroup = this.formBuilder.group({
     mid: [""],
-    sieveset: [""],
-    division: ["L"],
-    sievefrom: [""],
+    sieveset: ["", [Validators.required]],
+    division: ["L", [Validators.required]],
+    sievefrom: ["", [Validators.required]],
     sievefromdesc: [""],
-    sizefrom: [""],
+    sizefrom: ["", [Validators.required]],
     pcs: ["0"],
     pointerwt: ["0.0000"],
     shape: ["RD"],
-    sieveto: [""],
+    sieveto: ["", [Validators.required]],
     sievetodesc: [""],
-    sizeto: [""],
+    sizeto: ["", [Validators.required]],
     variance1: ["0.00"],
     variance2: ["0.00"],
 
@@ -128,6 +128,7 @@ export class StoneWeightMasterComponent implements OnInit {
     console.log(e);
     this.stoneweightmaster.controls.sievefrom.setValue(e.CODE);
     this.stoneweightmaster.controls.sievefromdesc.setValue(e.DESCRIPTION);
+    this.changesieve(e.CODE, 'from');
   }
 
   sieveToCodeData: MasterSearchModel = {
@@ -148,6 +149,7 @@ export class StoneWeightMasterComponent implements OnInit {
     console.log(e);
     this.stoneweightmaster.controls.sieveto.setValue(e.CODE);
     this.stoneweightmaster.controls.sievetodesc.setValue(e.DESCRIPTION);
+    this.changesieve(e.CODE, 'to');
   }
 
   ShapecodeData: MasterSearchModel = {
@@ -215,12 +217,12 @@ export class StoneWeightMasterComponent implements OnInit {
         this.viewOnly = true;
         this.viewMode = true;
         this.showheader = false;
-      }else if(this.flag == 'DELETE'){
+      } else if (this.flag == 'DELETE') {
         this.showheader = true;
         this.viewMode = true;
- 
 
-      }else {
+
+      } else {
         this.viewOnly = false;
         this.editMode = false;
 
@@ -375,6 +377,23 @@ export class StoneWeightMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
+  changesieve(code: any, field: any) {
+    if (code) {
+      let API = `Manufacturing/Master/DiaSizeWt/GetSizeFromUsingSieveFrom?SieveFrom=${code}&DBBranch=${this.branchCode}`;
+      let Sub: Subscription = this.dataService.getDynamicAPIwithParamsCustom(API, ``)
+        .subscribe((result: any) => {
+          console.log(result);
+          let size_fr = result.dynamicData[0][0].size;
+          if (field == 'from') {
+            this.stoneweightmaster.controls.sizefrom.setValue(size_fr);
+          } else {
+            this.stoneweightmaster.controls.sizeto.setValue(size_fr);
+          }
+        }, (err: any) => {
+        })
+      this.subscriptions.push(Sub);
+    }
+  }
 
   // close(data?: any) {
   //   if(data == 'reloadMainGrid'){
@@ -398,15 +417,15 @@ export class StoneWeightMasterComponent implements OnInit {
   //     }
   //   }
   //   // console.log(this.flag)
-  
+
   // }
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -423,8 +442,8 @@ export class StoneWeightMasterComponent implements OnInit {
       if (result.isConfirmed) {
         this.activeModal.close(data);
       }
-  }
-  )
+    }
+    )
   }
 
   deleteTableData() {
@@ -470,8 +489,8 @@ export class StoneWeightMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-      this.activeModal.close("");
-      this.flag = "VIEW";
+        this.activeModal.close("");
+        this.flag = "VIEW";
       }
     });
   }
@@ -489,11 +508,11 @@ export class StoneWeightMasterComponent implements OnInit {
     isCurrencyField: boolean,
     lookupFields?: string[],
     FROMCODE?: boolean,
-    dont_check?:boolean
+    dont_check?: boolean
   ) {
     const searchValue = event.target.value?.trim();
 
-    if (!searchValue || this.flag == "VIEW" || dont_check ) return;
+    if (!searchValue || this.flag == "VIEW") return;
 
     LOOKUPDATA.SEARCH_VALUE = searchValue;
 

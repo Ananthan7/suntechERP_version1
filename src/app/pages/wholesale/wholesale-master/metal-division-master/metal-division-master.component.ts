@@ -44,6 +44,8 @@ export class MetalDivisionMasterComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
+
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
@@ -351,6 +353,11 @@ export class MetalDivisionMasterComponent implements OnInit {
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else
+      {
+        this.close('reloadMainGrid');
+
       }
     });
   }

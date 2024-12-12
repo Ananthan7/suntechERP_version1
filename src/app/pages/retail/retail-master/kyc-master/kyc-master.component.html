@@ -6,9 +6,9 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header *ngIf="!this.viewMode" (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="DeleteController()"
-[isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-></modal-header>
+<modal-header *ngIf="!this.viewMode" (cancelClick)="close()" (saveClick)="formSubmit()"
+    (deleteClick)="DeleteController()" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+    [isViewMore]="!viewMode"></modal-header>
 <!-- content section -->
 
 <div class="container-fluid pt-3">
@@ -23,7 +23,8 @@
                         <label for="prefixcode" class="col-sm-2 col-form-label me-4">Kyc Code:</label>
                         <div class="col-md-2 p-0 ms-2">
                             <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" #kyccode id="kyccode" matInput class="p-0" formControlName="kyccode"  [readonly]="viewOnly || disable_code" maxlength="20" (focusout)="checkcode()" />
+                                <input type="text" #kyccode id="kyccode" matInput class="p-0" formControlName="kyccode"
+                                    [readonly]="viewOnly || disable_code" maxlength="20" (focusout)="checkcode()" />
                                 <mat-error *ngIf="kycform.controls['kyccode'].hasError('required')">
                                     Code is required.
                                 </mat-error>
@@ -31,8 +32,8 @@
                         </div>
                         <div class="col-md-5 p-0">
                             <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" id="kyccodedesc" matInput formControlName="kyccodedesc" [readonly]="viewOnly" (focusout)="checkdesc()"
-                                    class="p-0" />
+                                <input type="text" id="kyccodedesc" matInput formControlName="kyccodedesc"
+                                    [readonly]="viewOnly" (focusout)="checkdesc()" class="p-0" />
                                 <mat-error *ngIf="kycform.controls['kyccodedesc'].hasError('required')">
                                     Description is required.
                                 </mat-error>
@@ -44,8 +45,8 @@
                         <label for="last_no" class="col-sm-2 pe-0 col-form-label me-4">Transaction Limit:</label>
                         <div class="col-md-4 ">
                             <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="number" id="last_no" matInput formControlName="transactionlimit" [readonly]="viewOnly"
-                                    style="text-align: right;" AmountDecimalInput />
+                                <input type="number" id="last_no" matInput formControlName="transactionlimit"
+                                    [readonly]="viewOnly" style="text-align: right;" AmountDecimalInput />
                             </mat-form-field>
                         </div>
                     </div>
@@ -70,7 +71,7 @@
                         </dxi-column>
                         <dxi-column dataField="KYC_DOCTYPE" caption="Doc. Type" cellTemplate="kyc_doctype"></dxi-column>
 
-                            <!-- <div *dxTemplate="let data of 'kyc_doctype'">
+                        <!-- <div *dxTemplate="let data of 'kyc_doctype'">
                                 <input 
                                     type="text" 
                                     [disabled]="viewMode"  
@@ -86,19 +87,20 @@
                                 </master-search>
                             </div> -->
 
-                            <div *dxTemplate="let data of 'kyc_doctype'">
-                                <input href="" class="mx-1" [value]="data.value" [readonly]="viewOnly">
-                                <master-search *ngIf="flag!='VIEW'" [MasterSearchData]="kyccodetype"
-                                  (newRowClick)="selectedcodetype($event,data)">
-                                </master-search>
-                              </div>
+                        <div *dxTemplate="let data of 'kyc_doctype'">
+                            <input href="" class="mx-1" [value]="data.value" [readonly]="viewOnly">
+                            <master-search *ngIf="flag!='VIEW'" [MasterSearchData]="kyccodetype"
+                                (newRowClick)="selectedcodetype($event,data)">
+                            </master-search>
+                        </div>
 
-                        
+
 
                         <dxi-column dataField="KYC_DOCDESC" caption="Doc. Desc" cellTemplate="doc_desc"> </dxi-column>
 
                         <div *dxTemplate="let data of 'doc_desc'">
-                            <input type="text" [disabled]="viewMode"  (change)="docTypeDes(data,$event)" [value]="data.value" style="width: 100%;" />
+                            <input type="text" [disabled]="viewMode" (change)="docTypeDes(data,$event)"
+                                [value]="data.value" style="width: 100%;" />
                         </div>
 
 

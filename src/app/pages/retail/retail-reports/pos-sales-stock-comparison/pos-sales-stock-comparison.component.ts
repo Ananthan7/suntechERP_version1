@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-pos-sales-stock-comparison',
@@ -277,11 +278,40 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-              
+              "frmDate": this.dateToPass.fromDate,
+              "toDate": this.dateToPass.toDate,
+              "strBranch": this.POS_Sales_Stock_ComparisonForm.controls.branch.value,
+              "mtlType": this.POS_Sales_Stock_ComparisonForm.controls.groupByMetal.value,
+              "diaType": this.POS_Sales_Stock_ComparisonForm.controls.groupByDiamond.value,
+              "transaction": Math.floor(this.POS_Sales_Stock_ComparisonForm.controls.transaction.value || 0),
+              "LOGDATA": JSON.stringify(logData)
             }
          })
       }
     };
+
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
+      let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
+      if (Notifdata == 1) {
+        this.commonService.closeSnackBarMsg()
+        Swal.fire({
+          title: data || 'Success',
+          text: '',
+          icon: 'success',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })
+        this.popupVisible = false;
+        this.activeModal.close(data);
+      }
+      else {
+        this.toastr.error(Notifdata)
+      }
+    });
   }
 
   metalSalesChanged(event: any) { 
@@ -335,7 +365,22 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
 
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
-      //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      this.isLoading = false;
+      this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
+      this.POS_Sales_Stock_ComparisonForm.controls.branch.setValue( ParcedPreFetchData?.CONTROL_DETAIL.strBranch? 
+        ParcedPreFetchData?.CONTROL_DETAIL.strBranch : ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH+'#');
+
+      this.dateToPass = {
+        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.frmDate,
+        toDate: ParcedPreFetchData?.CONTROL_DETAIL.toDate
+      };
+
+      this.POS_Sales_Stock_ComparisonForm.controls.transaction.setValue(ParcedPreFetchData?.CONTROL_DETAIL.transaction);
+      this.POS_Sales_Stock_ComparisonForm.controls.groupByMetal.setValue(ParcedPreFetchData?.CONTROL_DETAIL.mtlType);
+      this.POS_Sales_Stock_ComparisonForm.controls.groupByDiamond.setValue(ParcedPreFetchData?.CONTROL_DETAIL.diaType);
+      
     }
     else{
       const userBranch = localStorage.getItem('userbranch');

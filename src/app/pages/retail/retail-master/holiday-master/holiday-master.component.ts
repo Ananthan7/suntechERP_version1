@@ -73,6 +73,8 @@ export class HolidayMasterComponent implements OnInit {
   });
 
   ngOnInit(): void {
+   
+
     if (this.content?.FLAG) {
       this.setFormValues()
       if (this.content?.FLAG == 'VIEW') {
@@ -82,6 +84,7 @@ export class HolidayMasterComponent implements OnInit {
         this.editMode = true;
 
       } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
 
         this.deleteMaster()
       }
@@ -402,6 +405,9 @@ removeRow(rowData: any): void {
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else{
+        this.close('reloadMainGrid')
       }
     });
   }

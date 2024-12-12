@@ -178,7 +178,7 @@
                                             (dateChange)="formatDate($event)"
                                             [matDatepicker]="date"
                                             formControlName="date"
-                                            [disabled]="viewMode"
+                                            [readonly]="viewMode"
                                             placeholder="DD/MM/YYYY"
                                             class="text-right" />
                                         <mat-datepicker-toggle matSuffix
@@ -538,7 +538,7 @@
                                             class="text-right" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="deldate"></mat-datepicker-toggle>
-                                        <mat-datepicker [disabled]="isSaved"  [startAt]="currentDate"
+                                        <mat-datepicker [disabled]="isSaved" [startAt]="currentDate"
                                             #deldate></mat-datepicker>
                                     </mat-form-field>
                                 </div>
@@ -737,7 +737,7 @@
                                     appearance="outline">
                                     <input type="text" matInput maxlength="9"
                                         NumberOnly class="text-right"
-                                        formControlName="totalpcs"
+                                        formControlName="JOB_PCS_TOTAL"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -749,7 +749,7 @@
                                     appearance="outline">
                                     <input type="text" matInput maxlength="9"
                                         NumberOnly class="text-right"
-                                        formControlName="pending"
+                                        formControlName="JOB_PCS_PENDING"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -762,7 +762,7 @@
                                     appearance="outline">
                                     <input type="text" matInput maxlength="9"
                                         NumberOnly class="text-right"
-                                        formControlName="parts"
+                                        formControlName="TOTAL_PCS"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -774,7 +774,7 @@
                                     appearance="outline">
                                     <input type="text" matInput maxlength="9"
                                         NumberOnly class="text-right"
-                                        formControlName="pending1"
+                                        formControlName="PENDING_PCS"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
