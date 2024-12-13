@@ -150,6 +150,7 @@ export class FestivalMasterComponent implements OnInit {
 
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
+      this.viewOnly = true;
       this.viewMode = true;
       this.ViewController(DATA);
     }
@@ -276,7 +277,6 @@ export class FestivalMasterComponent implements OnInit {
 
 
   detailsapi(fm_id: any) {
-    this.viewOnly = true;
 
     let API = `FestivalMaster/GetFestivalMasterDetail/${this.fm_id}`;
     let Sub: Subscription = this.apiService.getDynamicAPI(API)
@@ -507,8 +507,31 @@ export class FestivalMasterComponent implements OnInit {
   }
 
   changetodate(event: any, data: any) {
+    // const updatedSRNO = data.data.SRNO - 1;
+    // if(this.maindetails[updatedSRNO].FROMDATE < event.target.value){
+    //   this.maindetails[updatedSRNO].TODATE = event.target.value;
+    // }else{
+    //   console.log("errr");
+    // }
     const updatedSRNO = data.data.SRNO - 1;
-    this.maindetails[updatedSRNO].TODATE = event.target.value;
+
+    if (updatedSRNO >= 0 && updatedSRNO < this.maindetails.length) {
+      const fromDate = this.maindetails[updatedSRNO].FROMDATE;
+      const toDate = event.target.value;
+
+      const fromDateObj = new Date(fromDate);
+      const toDateObj = new Date(toDate);``
+
+      if (fromDateObj < toDateObj) {
+        this.maindetails[updatedSRNO].TODATE = toDate;
+      } else {
+        this.maindetails[updatedSRNO].TODATE = "";
+        this.commonService.toastErrorByMsgId('MSG1904');
+      }
+      } else {
+        console.log("Error: Invalid SRNO or index out of bounds.");
+      }
+
   }
 
   targetchange(event: any, data: any) {
