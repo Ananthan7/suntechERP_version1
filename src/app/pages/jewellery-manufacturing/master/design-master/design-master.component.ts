@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -20,6 +20,8 @@ import { MatRadioChange } from '@angular/material/radio';
   styleUrls: ['./design-master.component.scss']
 })
 export class DesignMasterComponent implements OnInit {
+    @ViewChild("codeField") codeField!: ElementRef;
+  
   @ViewChild('overlaycodeSearch') overlaycodeSearch!: MasterSearchComponent;
   @ViewChild('overlayprefixSearch') overlayprefixSearch!: MasterSearchComponent;
   @ViewChild('overlayparentDesignSearch') overlayparentDesignSearch!: MasterSearchComponent;
@@ -137,6 +139,7 @@ export class DesignMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  flag: any;
 
 
   constructor(
@@ -157,6 +160,10 @@ export class DesignMasterComponent implements OnInit {
   
   ngOnInit(): void {
 
+    this.flag = this.content
+    ? this.content.FLAG
+    : (this.content = { FLAG: "ADD" }).FLAG;
+
     if (this.content?.FLAG) {
       console.log(this.content)
       this.setAllInitialValues()
@@ -172,6 +179,12 @@ export class DesignMasterComponent implements OnInit {
         this.viewMode = true;
         this.deleteRecord()
       }
+    }
+  }
+
+    ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
     }
   }
 

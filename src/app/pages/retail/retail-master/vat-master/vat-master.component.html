@@ -30,12 +30,12 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    #codeField
                     [maxlength]="15"
                     UpperCaseDirective
                     [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                     matInput
                     type="text"
-                    #codeField
                     formControlName="vatCode"
                   />
                 </mat-form-field>
@@ -51,8 +51,7 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     [maxlength]="50"
-                    (input)="codeAlert($event, 'vatDesc')"
-                    UpperCaseDirective
+                    (input)="descriptionValidation('vatDesc')"
                     [readonly]="flag === 'VIEW'"
                     matInput
                     type="text"
@@ -70,11 +69,13 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    (focusout)="codeAlert($event, 'vatPercent')"
+                    (blur)="vatPercentFocusout($event)"
+                    (input)="vatPercentValidation('vatPercent')"
                     class="text-right"
                     ThreeDecimalInput
                     [readonly]="flag === 'VIEW'"
                     matInput
+                    #vatPercentField
                     type="number"
                     formControlName="vatPercent"
                   />
@@ -1349,20 +1350,17 @@
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
                                 maxlength="6"
-                                [readonly]="true"
                                 [value]="data.value"
                                 style="width: 100%"
                               />
-
                               <master-search
                                 *ngIf="flag != 'VIEW'"
-                                #overlayGroupOne
                                 [MasterSearchData]="expenseCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   gridDataBinding(
                                     $event,
-                                    data,
+                                    data.data,
                                     ['EXPENSE_ACCODE', 'EXPENSE_ACCODE_DESC'],
                                     'expense'
                                   )
@@ -1370,7 +1368,6 @@
                               ></master-search>
                             </mat-form-field>
                           </div>
-
                           <!-- Exp Account Description Column -->
                           <div
                             *dxTemplate="let data of 'expenseAccodeDescTemp'"
@@ -1398,10 +1395,18 @@
                             >
                               <input
                                 matInput
-                                [readonly]="true"
+                                [readonly]="flag === 'VIEW'"
                                 type="text"
                                 [value]="data.value"
                                 style="width: 100%"
+                                (focusout)="SPvalidateLookupGridModified(
+                                  $event,
+                                  hsnCodeData,
+                                  ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
+                                  ['CODE', 'DESCRIPTION'],
+                                  'expense',
+                                  data
+                                  )"
                               />
                               <master-search
                                 *ngIf="flag != 'VIEW'"

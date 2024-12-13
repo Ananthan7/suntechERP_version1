@@ -30,7 +30,7 @@
                     <label for="inputPassword" id="ID003" class="col-sm-3 col-form-label">Design * :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input type="text" matInput formControlName="code" UpperCaseDirective id="code"
+                       <input #codeField type="text" matInput formControlName="code" UpperCaseDirective id="code"
                           (focusout)="checkCodeExists($event)" (keydown)="lookupKeyPress($event,'code')"  [readonly]="viewMode || editableMode"/>
                         <master-search [MasterSearchData]="designCodeData" *ngIf=" viewMode == false && editableMode == false" class="masterSearch" #overlaycodeSearch
                           (newRowClick)="designCodeSelected($event)"></master-search>
