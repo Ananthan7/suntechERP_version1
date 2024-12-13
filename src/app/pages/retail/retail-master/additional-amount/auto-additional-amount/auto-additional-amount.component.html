@@ -10,6 +10,7 @@
   <modal-header
     (saveClick)="formSubmit()"
     (cancelClick)="close()"
+    [isViewDelete]="false"
     (deleteClick)="deleteRecord()"
   ></modal-header>
   <div class="row">
@@ -91,7 +92,7 @@
               </div>
               <div *dxTemplate="let data of 'percentage'">
                 <input
-                  class="form-control"
+                  class="form-control text-right"
                   type="number"
                   [value]="data.value"
                   (change)="getpercentage($event, data)"
@@ -100,7 +101,7 @@
               <div *dxTemplate="let data of 'branch'">
                 <input
                   class="form-control"
-                  type="number"
+                  type="text"
                   [readOnly]="true"
                   [(ngModel)]="branchCode"
                 />

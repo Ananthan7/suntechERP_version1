@@ -95,7 +95,7 @@ export class SubLedgerMasterComponent implements OnInit {
     sNo: [""],
     sl_accode_des: [""],
   });
-
+  postData:any=[];
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -207,10 +207,15 @@ export class SubLedgerMasterComponent implements OnInit {
     this.modalReference.componentInstance.content = data
     this.modalReference.result.then((postData) => {
       if (postData) {
+        this.ContacttableData.push(postData);
         // this.stoneIssueData.push(postData);
-        console.log(postData);
+        console.log("PostData: ",postData);
         
       }
+      this.postData = postData;
+      console.log("This.Post", this.postData);
+      console.log(this.ContacttableData);
+      
     });
   }
 
@@ -385,6 +390,9 @@ export class SubLedgerMasterComponent implements OnInit {
     if (this.content && this.content.FLAG == "EDIT") {
       this.update();
       return;
+    }
+    if (this.SubLedgerMasterForm.value.code == '') {
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
     }
 
     console.log(this.tableData);
