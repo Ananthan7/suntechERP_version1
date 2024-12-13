@@ -14,10 +14,10 @@
         <div class="row mt-2">
             <div class="col-md-12">
                 <div class="row mb-1">
-                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Code:</label>
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Code * :</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" formControlName="code" maxlength="6" [readonly]="viewMode || editMode" #code id="code" (input)="code.value = code.value.toUpperCase()"/>
+                            <input matInput type="text" formControlName="code" maxlength="6" [readonly]="viewMode || editMode" #code id="code" (input)="code.value = code.value.toUpperCase()"  (input)="onCodeInput(code.value)" (keypress)="omit_special_char($event)"/>
                         </mat-form-field>
                     </div>
                     <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Branches</label>
@@ -28,53 +28,66 @@
                 </div>
 
                 <div class="row mb-1">
-                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Description:</label>
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Description * :</label>
                     <div class="col-md-7">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" formControlName="description" maxlength="40" [readonly]="viewMode" />
+                            <input matInput type="text" formControlName="description" maxlength="40" [readonly]="viewMode || !isCodeFilled" (keypress)="omit_special_char($event)"/>
                         </mat-form-field>
                     </div>
                 </div>
 
                 <div class="row mb-1">
-                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Gift On:</label>
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Gift On * :</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <mat-select  formControlName="giftOn" [disabled]="viewMode">
+                            <mat-select  formControlName="giftOn" [disabled]="viewMode || !isCodeFilled">
                                 <mat-option value="All">All</mat-option>
                                 <mat-option value="Metal">Metal</mat-option>
                                 <mat-option value="Diamond">Diamond</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Division</label>
+                    <!-- <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Division</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <mat-select formControlName="division" multiple [disabled]="viewMode">
+                            <mat-select formControlName="division" multiple [disabled]="viewMode || !isCodeFilled">
                                 <mat-option *ngFor="let option of diamond_drop" [value]="option.DIVISION_CODE">
                                     {{ option.DIVISION_CODE }}
                                 </mat-option>
                             </mat-select>
                           </mat-form-field>
+                    </div> -->
+                    <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Division * : </label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <mat-select formControlName="division" multiple [disabled]="viewMode || !isCodeFilled" (selectionChange)="onSelectionChange($event)">
+                                <mat-option *ngFor="let option of diamond_drop" [value]="option.DIVISION_CODE">
+                                    {{ option.DIVISION_CODE}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
+                    
+                    
+
                 </div>
 
 
                 <div class="row mb-1">
-                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Validity:</label>
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Validity * :</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput  type="text" formControlName="validity" maxlength="3"  [readonly]="viewMode"  class="text-right"   (input)="allowNumbersOnly($event)" />
+                            <input matInput  type="text" formControlName="validity" maxlength="3"  [readonly]="viewMode || !isCodeFilled"  class="text-right"   (input)="allowNumbersOnly($event)" />
                         </mat-form-field>
                     </div>
                     <div class="col-md-1">
-                        <mat-checkbox class="example-margin"  formControlName="skip" [disabled]="viewMode" >Skip</mat-checkbox>
+                        <mat-checkbox class="example-margin"  formControlName="skip" [disabled]="viewMode || !isCodeFilled" >Skip</mat-checkbox>
                     </div>
-                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Cost Centre</label>
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Cost Centre * :</label>
 
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" formControlName="costCentre"  [readonly]="viewMode"  (focusout)="validateLookupField($event,costCenterData,'costCentre')"  (keydown)="lookupKeyPress($event,'costCentre')"/>
+                            <input matInput type="text" formControlName="costCentre"  [readonly]="viewMode || !isCodeFilled"  (focusout)="validateLookupField($event,costCenterData,'costCentre')"  (keydown)="lookupKeyPress($event,'costCentre')"/>
 
                             <master-search [MasterSearchData]="costCenterData" class="masterSearch"  *ngIf=" viewMode == false"
                             (newRowClick)="costCenterSelected($event)" #costCentrecodeSearch>
@@ -85,27 +98,34 @@
 
 
                 <div class="row mb-1">
-                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Amount:</label>
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Amount * :</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" formControlName="amount" maxlength="13"  [readonly]="viewMode"  class="text-right" AmountDecimalInput   (input)="allowNumbersOnly($event)" />
+                            <input matInput type="text" formControlName="amount" maxlength="13"  [readonly]="viewMode || !isCodeFilled"  class="text-right" AmountDecimalInput   (input)="allowNumbersOnly($event)" />
                         </mat-form-field>
                     </div>
-                    <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Base currency</label>
+                    <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Base currency * : </label>
 
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" formControlName="baseCurrency"  [readonly]="viewMode" class="text-right" AmountDecimalInput   (input)="allowNumbersOnly($event)" />
-                        </mat-form-field>
+                        <!-- <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput type="text" formControlName="baseCurrency"  [readonly]="viewMode || !isCodeFilled"    (input)="allowNumbersOnly($event)" />
+                        </mat-form-field> -->
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input [readonly]="viewMode || !isCodeFilled" type="text" matInput formControlName="baseCurrency"
+                               (focusout)="validateLookupField($event,currencyMasterData,'baseCurrency')"
+                               (keydown)="lookupKeyPress($event,'baseCurrency')" />
+                             <master-search class="masterSearch" *ngIf=" viewMode == false" [MasterSearchData]="currencyMasterData"
+                               #overlaycurrencySearch (newRowClick)="currencyCodeSelected($event)"></master-search>
+                           </mat-form-field>
                     </div>
                 </div>
 
 
                 <div class="row mb-1">
-                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Actual Amt:</label>
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Actual Amt * :</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" formControlName="actualAmt"  maxlength="13"  [readonly]="viewMode"  class="text-right" AmountDecimalInput   (input)="allowNumbersOnly($event)" />
+                            <input matInput type="text" formControlName="actualAmt"  maxlength="13"  [readonly]="viewMode || !isCodeFilled"  class="text-right" AmountDecimalInput   (input)="allowNumbersOnly($event)" />
                         </mat-form-field>
                     </div>
                   
@@ -113,18 +133,18 @@
 
 
                 <div class="row mb-1">
-                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Min Invoice Amt:</label>
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Min Invoice Amt * :</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="number" formControlName="minInvoiceAmt"  maxlength="13" [readonly]="viewMode" class="text-right" AmountDecimalInput/>
+                            <input matInput type="number" formControlName="minInvoiceAmt"  maxlength="13" [readonly]="viewMode || !isCodeFilled" class="text-right" AmountDecimalInput/>
                         </mat-form-field>
                     </div>
 
-                    <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Issue Type</label>
+                    <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Issue Type * :</label>
 
                     <div class="col-md-4">
                         <mat-radio-group aria-label="Select an option"
-                                formControlName="issueType" [disabled]="viewMode">
+                                formControlName="issueType" [disabled]="viewMode || !isCodeFilled">
                                 <mat-radio-button value="D"  class="mx-2">One Voucher Per Invoice</mat-radio-button>
                                 <mat-radio-button value="M"  class="mx-2">Multi Voucher Per Invoice</mat-radio-button>
                        </mat-radio-group>
@@ -136,10 +156,10 @@
 
 
                 <div class="row mb-1">
-                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Prefix:</label>
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Prefix * :</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" formControlName="prefix"  [readonly]="viewMode"  (focusout)="validateLookupField($event,prefixCodeData,'prefix')"  (keydown)="lookupKeyPress($event,'prefix')"/>
+                            <input matInput type="text" formControlName="prefix"  [readonly]="viewMode || !isCodeFilled"  (focusout)="validateLookupField($event,prefixCodeData,'prefix')"  (keydown)="lookupKeyPress($event,'prefix')"/>
                             <master-search [MasterSearchData]="prefixCodeData" class="masterSearch"  *ngIf=" viewMode == false"
                             (newRowClick)="prefixCodeSelected($event)"  #prefixcodeSearch >
                         </master-search>
@@ -148,7 +168,7 @@
                     <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Status</label>
 
                     <div class="col-md-2">
-                        <mat-checkbox class="example-margin" formControlName="active"  [disabled]="viewMode" >Active</mat-checkbox>
+                        <mat-checkbox class="example-margin" formControlName="active"  [disabled]="viewMode || !isCodeFilled" >Active</mat-checkbox>
                     </div>
                 </div>
                 <div class="row mb-1">

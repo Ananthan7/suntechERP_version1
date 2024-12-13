@@ -28,8 +28,9 @@
                             :</label>
                         <div class="col-sm-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="1" matInput formControlName="divisioncode"  [readonly]="viewMode || editMode">
-
+                                <input #codeField  type="text" #codeInput maxlength="1" matInput formControlName="divisioncode" (focusout)="validateLookupField($event,divisionCodeData,'divisioncode')" (keydown)="lookupKeyPress($event,'divisioncode')"  [readonly]="viewMode || editMode">
+                                <master-search  [MasterSearchData]="divisionCodeData" *ngIf=" viewMode == false"  (newRowClick)="divisionCodeSelected($event)"  class="masterSearch" #overlaydivisionSearch>
+                                </master-search>
                             </mat-form-field>
                         </div>
                     </div>
@@ -40,7 +41,7 @@
                             :</label>
                             <div class="col-sm-3">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="branchCode"   [readonly]="viewMode">
+                                    <input type="text"  maxlength="3"   matInput formControlName="branchCode"   [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         <div class="col-sm-6">

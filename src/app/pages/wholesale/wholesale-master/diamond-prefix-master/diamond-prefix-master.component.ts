@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -24,8 +24,10 @@ export class DiamondPrefixMasterComponent implements OnInit {
   userbranch = localStorage.getItem('userbranch');
   editMode: boolean = false;
   codeEnable: boolean = false;
+  flag: any;
 
 
+  @ViewChild("codeField") codeField!: ElementRef;
 
 
   @ViewChild('currencycodeSearch') currencycodeSearch!: MasterSearchComponent;
@@ -66,7 +68,10 @@ export class DiamondPrefixMasterComponent implements OnInit {
 
   ngOnInit(): void {
     // this.setCompanyCurrency()
-
+    this.flag = this.content
+    ? this.content.FLAG
+    : (this.content = { FLAG: "ADD" }).FLAG;
+    
     this.setFormValues()
     this.codeEnable = true;
 
@@ -85,6 +90,13 @@ export class DiamondPrefixMasterComponent implements OnInit {
       this.deleteMetalPrefix()
     }
   }
+
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
+
 
   diamondprefixForm: FormGroup = this.formBuilder.group({
     prefixcode: ['', [Validators.required]],
