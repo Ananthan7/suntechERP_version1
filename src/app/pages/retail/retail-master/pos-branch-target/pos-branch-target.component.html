@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Pos Branch Target Works</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Pos Branch Target</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -29,7 +29,7 @@
                             :</label>
                         <div class="col-sm-8">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="6" matInput formControlName="code" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || editMode">
+                                <input #codeField  type="text" #codeInput maxlength="6" matInput formControlName="code" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || editMode">
                             </mat-form-field>
                         </div>
                     </div>

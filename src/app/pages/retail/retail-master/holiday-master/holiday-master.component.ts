@@ -23,8 +23,10 @@ export class HolidayMasterComponent implements OnInit {
   currentDate = new Date();
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
+  flag: any;
 
   @ViewChild('countrycodeSearch') countrycodeSearch!: MasterSearchComponent;
+  @ViewChild("codeField") codeField!: ElementRef;
 
 
 
@@ -74,6 +76,10 @@ export class HolidayMasterComponent implements OnInit {
 
   ngOnInit(): void {
    
+    this.flag = this.content
+    ? this.content.FLAG
+    : (this.content = { FLAG: "ADD" }).FLAG;
+
 
     if (this.content?.FLAG) {
       this.setFormValues()
@@ -88,6 +94,12 @@ export class HolidayMasterComponent implements OnInit {
 
         this.deleteMaster()
       }
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
     }
   }
 

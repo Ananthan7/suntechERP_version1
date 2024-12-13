@@ -24,7 +24,7 @@
                     <label for="code" class="col-sm-2 col-form-label" id="ID029">Code</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%" appearance="outline">
-                        <input matInput="text" formControlName="code" id="code" [readonly]="viewMode || editMode" />
+                        <input #codeField  matInput type="text" formControlName="code" id="code" [readonly]="viewMode || editMode" />
                         <master-search class="masterSearch" [MasterSearchData]="codeCodeData"
                           (newRowClick)="codeSelected($event)" *ngIf=" viewMode == false" #countrycodeSearch>
                         </master-search>
