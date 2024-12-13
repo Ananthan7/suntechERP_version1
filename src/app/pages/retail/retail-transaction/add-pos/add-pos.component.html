@@ -632,45 +632,46 @@
               </mat-form-field>
             </div>
 
-            <div class="col-md-2" >
+            <div class="col-md-2">
               <div style="margin-top: 0px;">
-                <mat-checkbox color="primary" formControlName="tourVatRefuncYN" >
-                  Tourist VAT Refund
-                </mat-checkbox> 
+                <mat-checkbox color="primary" formControlName="tourVatRefuncYN" (change)="onCheckboxChange($event)">
+                  Tourist VAT Ref. 
+                </mat-checkbox>
               </div>
               <div style="margin-top: -9px;">
-                <mat-form-field appearance="outline" style="width: 100%" *ngIf="customerDataForm.value.tourVatRefuncYN">
-                  <input type="text" matInput formControlName="tourVatRefundNo" />
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input type="text" matInput formControlName="tourVatRefundNo"
+                    [disabled]="!customerDataForm.controls.tourVatRefuncYN.value"/>
                 </mat-form-field>
               </div>
             </div>
 
 
             <div class="col-12 col-md-8 d-flex flex-column" *ngIf="!viewOnly">
-              <label for="Related">Related Details:</label>
+              <label for="Related">Import:</label>
               <div class="row">
-                  <div class="col-12 col-md-5 mb-2">
+                  <div class="col-12 col-md-3 mb-2">
                       <button type="button" mat-flat-button [disabled]="!isNewButtonDisabled" (click)="importSalesEstimation()" 
-                      class="w-100 update-finish-button">
-                        Import Sales Estimation
+                      class="w-100 refund_Buttons">
+                         Sales Estimation
                       </button>
                   </div>
-                  <div class="col-12 col-md-4 mb-2">
-                      <button type="button" [disabled]="!isNewButtonDisabled" mat-flat-button class="w-100 update-finish-button" 
+                  <div class="col-12 col-md-3 mb-2">
+                      <button type="button" [disabled]="!isNewButtonDisabled" mat-flat-button class="w-100 refund_Buttons" 
                       (click)="importSalesOrder()">
-                        Import Sales Order
+                        Sales Order
                       </button>
                   </div>
                   <div class="col-12 col-md-3 mb-2" *ngIf="strUser=='SUNTECH'">
                       <button type="button" mat-flat-button [disabled]="!isNewButtonDisabled" (click)="openParamterDetails()" 
-                      class="w-100 update-finish-button">
+                      class="w-100 refund_Buttons">
                         Parameter Details
                       </button>
                   </div>
                   <div class="col-12 col-md-3 mb-2">
                       <button type="button" mat-flat-button (click)="openUserAttachmentModal()" [disabled]="!isNewButtonDisabled" 
-                      class="w-100 update-finish-button">
-                        {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
+                      class="w-100 refund_Buttons">
+                        {{ !viewOnly ? 'Attachment' : 'View Attachment' }}
                       </button>
                   </div>
               </div>
