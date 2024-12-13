@@ -83,8 +83,8 @@
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #salesGrid id="gridContainer" [dataSource]="metalSalesGridArr" [showBorders]="true"
                                 [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
-                                [columnAutoWidth]="true" (onSelectionChanged)="metalSalesChanged($event)">
-                                    <dxo-paging [pageSize]="12"></dxo-paging>
+                                [columnAutoWidth]="true" (onSelectionChanged)="metalSalesChanged($event)" class="MD_Grid">
+                                    <dxo-paging [pageSize]="10"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                     <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
                                     <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
@@ -94,7 +94,7 @@
                                     <dxi-column alignment="center" caption="Type" dataField="type"></dxi-column>
                                     <dxi-column alignment="right" caption="Pcs" dataField="TPCS"></dxi-column>
                                     <dxi-column alignment="right" caption="Gms" dataField="QTY"></dxi-column>
-                                    <dxi-column alignment="right" caption="Mkg. Value" dataField="mkgvalue"></dxi-column>
+                                    <dxi-column alignment="right" caption="Mkg. Value" dataField="mkgvalue" width="130"></dxi-column>
                                     <dxi-column alignment="right" caption="Metal Value" dataField="metalvalue"></dxi-column>
                                     <dxi-column alignment="right" caption="Total Value" dataField="amount"></dxi-column>
                                 
@@ -113,8 +113,8 @@
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #stockGrid id="gridContainer" [dataSource]="metalStockGridArr" [showBorders]="true"
                                 [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
-                                [columnAutoWidth]="true" (onSelectionChanged)="metalStockChanged($event)" class="MD-StockGrid-height">
-                                    <dxo-paging [pageSize]="12"></dxo-paging>
+                                [columnAutoWidth]="true" (onSelectionChanged)="metalStockChanged($event)" class="MD_Grid">
+                                    <dxo-paging [pageSize]="10"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                     <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
                                     <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
@@ -143,7 +143,7 @@
                                 <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #diamondSalesGrid id="gridContainer" [dataSource]="diamondSalesGridArr" [showBorders]="true"
                                 [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
-                                [columnAutoWidth]="true" (onSelectionChanged)="diamondSalesChanged($event)">
+                                [columnAutoWidth]="true" (onSelectionChanged)="diamondSalesChanged($event)" class="DD_Grid">
                                     <dxo-paging [pageSize]="10"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                     <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
