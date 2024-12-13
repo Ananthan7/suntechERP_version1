@@ -8,8 +8,9 @@
     </div>
     <!-- modal header component -->
     <!-- <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header> -->
-    <modal-header *ngIf="this.flag != 'VIEW'" (cancelClick)="close()" (saveClick)="formSubmit()" [isViewDelete]="editMode"></modal-header>
-
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="DeleteController()"
+    [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    ></modal-header>
     <!-- content section -->
     <div class="p-4 ">
         <form [formGroup]="supplierquotaform">
@@ -23,6 +24,8 @@
                             <mat-form-field style="width: 100%" appearance="outline">
                                 <input type="text" #codeInput matInput formControlName="partycode" UpperCaseDirective [readonly]="viewOnly"
                                     autocomplete="off" 
+                                    id="partycode"
+                                    #partycode
                                     (focusout)="
                                     SPvalidateLookupFieldModified(
                                       $event,

@@ -1,0 +1,122 @@
+<div>
+  <div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">
+      Auto Additional Amount Setup
+    </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <modal-header
+    (saveClick)="formSubmit()"
+    (cancelClick)="close()"
+    (deleteClick)="deleteRecord()"
+  ></modal-header>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="check_radio_btn">
+        <div class="col-md-12">
+          <div class="row mt-3">
+            <label
+              for="inputPassword"
+              id="ID002"
+              class="col-sm-2 col-form-label "
+              >Branch :
+            </label>
+            <div class="col-sm-2">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  [(ngModel)]="branchCode"
+                  type="text"
+                  matInput
+                  UpperCaseDirective
+                />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <dx-data-grid
+            id="gridContainer"
+            [dataSource]="tableData"
+            [showBorders]="true"
+            [showColumnLines]="true"
+            [showRowLines]="true"
+            [allowColumnResizing]="true"
+            class="mt-3"
+            (onSelectionChanged)="onSelectionChanged($event)"
+          >
+            <dxo-selection mode="single"></dxo-selection>
+            <dxi-column
+              dataField="VOCTYPE"
+              caption="Voc Type"
+              cellTemplate="voc_type"
+            >
+            </dxi-column>
+            <dxi-column
+              dataField="ADDL_CODE"
+              caption="Code"
+              cellTemplate="code"
+            >
+            </dxi-column>
+            <dxi-column
+              dataField="PERCENTAGE"
+              caption="Percentage"
+              cellTemplate="percentage"
+            >
+            </dxi-column>
+            <dxi-column
+              dataField="BRANCH_CODE"
+              caption="Branch Code"
+              cellTemplate="branch"
+            >
+            </dxi-column>
+            <div>
+                <div *dxTemplate="let data of 'voc_type'">
+                    <input
+                      class="form-control"
+                      type="text"
+                      [id]="'voc_type'"
+                      [value]="data.value"
+                      (change)="getVocType($event, data)"
+                    />
+                  </div>
+
+              <div *dxTemplate="let data of 'code'">
+                <input
+                  class="form-control"
+                  type="text"
+                  [value]="data.value"
+                  (change)="getcode($event, data)"
+                />
+              </div>
+              <div *dxTemplate="let data of 'percentage'">
+                <input
+                  class="form-control"
+                  type="number"
+                  [value]="data.value"
+                  (change)="getpercentage($event, data)"
+                />
+              </div>
+              <div *dxTemplate="let data of 'branch'">
+                <input
+                  class="form-control"
+                  type="number"
+                  [readOnly]="true"
+                  [(ngModel)]="branchCode"
+                />
+              </div>
+            </div>
+          </dx-data-grid>
+          <menu-buttons
+            [viewAddBtn]="true"
+            [viewDeleteBtn]="true"
+            [viewImportBtn]="false"
+            (addClick)="addTableData()"
+            (deleteClick)="removedata()"
+          >
+          </menu-buttons>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

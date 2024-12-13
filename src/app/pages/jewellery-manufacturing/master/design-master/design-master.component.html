@@ -74,8 +74,8 @@
                     <label for="inputPassword" id="ID007" class="col-sm-3 col-form-label">No Sub Items:</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="number" style="text-align: right;" [max]="10" (keyup)="noOfSubItems()" matInput
-                          formControlName="noOfSubItems" />
+                       <input [readonly]="viewMode" type="text" style="text-align: right;" maxlength="10" (keyup)="noOfSubItems()" matInput
+                          formControlName="noOfSubItems"  (input)="allowNumbersOnly($event)"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -236,7 +236,7 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label" id="ID026">Purity :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="purity" PurityDecimal/>
+                       <input [readonly]="viewMode" type="text" class="text-right" matInput formControlName="purity" PurityDecimal (input)="allowNumbersOnly($event)"/>
                       </mat-form-field>
                     </div>
                     <div class="col-md-3 pl-5">
@@ -260,7 +260,7 @@
                             <label for="inputPassword" id="ID029" class="col-sm-3 col-form-label">Width:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="text" class="text-right" matInput maxlength="10" NumberOnly formControlName="widthCad"/>
+                               <input [readonly]="viewMode" type="text" class="text-right" matInput maxlength="10" (input)="allowNumbersOnly($event)" formControlName="widthCad"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -274,7 +274,7 @@
                             <label for="inputPassword" id="ID031" class="col-sm-3 col-form-label">Thickness:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="text" class="text-right" matInput NumberOnly maxlength="14" formControlName="thickness"/>
+                               <input [readonly]="viewMode" type="text" class="text-right" matInput (input)="allowNumbersOnly($event)" maxlength="14" formControlName="thickness"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -326,7 +326,7 @@
                               Size:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="jewellerySize" maxlength="10"/>
+                               <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="jewellerySize" maxlength="10" (input)="allowNumbersOnly($event)"/>
                               </mat-form-field>
                             </div>
                             <!-- <div class="col-md-3">
@@ -349,7 +349,7 @@
                             <label for="inputPassword" id="ID040" class="col-sm-3 col-form-label">Req Metal:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="number" class="text-right" matInput MetalDecimalInput formControlName="reqmetal"/>
+                               <input [readonly]="viewMode" type="number" class="text-right" matInput MetalDecimalInput formControlName="reqmetal" (input)="allowNumbersOnly($event)"/>
                               </mat-form-field>
                             </div>
                             <div class="col-md-6">
@@ -647,13 +647,13 @@
                 <label for="inputPassword" id="ID062" class="col-sm-3 col-form-label">Height :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                   <input [readonly]="viewMode" type="text" class="text-right" matInput formControlName="height" NumberOnly />
+                   <input [readonly]="viewMode" type="text" class="text-right" matInput formControlName="height" (input)="allowNumbersOnly($event)" />
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" id="ID063" class="col-sm-3 col-form-label">Length :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                   <input [readonly]="viewMode" type="text" class="text-right" matInput formControlName="length" NumberOnly />
+                   <input [readonly]="viewMode" type="text" class="text-right" matInput formControlName="length" (input)="allowNumbersOnly($event)" />
                   </mat-form-field>
                 </div>
               </div>
@@ -662,14 +662,14 @@
                   :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                   <input [readonly]="viewMode" type="text" matInput formControlName="width" NumberOnly  class="text-right"
+                   <input [readonly]="viewMode" type="text" matInput formControlName="width" (input)="allowNumbersOnly($event)"  class="text-right"
                        />
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" id="ID065" class="col-sm-3 col-form-label">Radius :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                   <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="radius" NumberOnly />
+                   <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="radius" (input)="allowNumbersOnly($event)" />
                   </mat-form-field>
                 </div>
               </div>

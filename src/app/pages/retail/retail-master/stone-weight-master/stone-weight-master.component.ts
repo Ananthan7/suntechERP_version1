@@ -110,14 +110,28 @@ export class StoneWeightMasterComponent implements OnInit {
     this.stoneweightmaster.controls.division.setValue(e.DIVISION_CODE);
   }
 
+  // sieveFromCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 3,
+  //   SEARCH_FIELD: 'types',
+  //   SEARCH_HEADING: 'SIEVE MASTER',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "types = 'SIEVE MASTER'",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  //   FRONTENDFILTER: true,
+  // }
+
   sieveFromCodeData: MasterSearchModel = {
     PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
-    SEARCH_HEADING: 'SIEVE MASTER',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'SIEVE MASTER'",
+    RECORDS:46,
+    LOOKUPID:3,
+    ORDER_TYPE:0,
+    WHERECONDITION:"  SHAPE= 'RD' AND TYPES='SIEVE MASTER' ",
+    SEARCH_FIELD:"",
+    SEARCH_VALUE:"",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -128,28 +142,29 @@ export class StoneWeightMasterComponent implements OnInit {
     console.log(e);
     this.stoneweightmaster.controls.sievefrom.setValue(e.CODE);
     this.stoneweightmaster.controls.sievefromdesc.setValue(e.DESCRIPTION);
-    this.changesieve(e.CODE, 'from');
+    this.changesieve( 'from');
   }
 
   sieveToCodeData: MasterSearchModel = {
     PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
-    SEARCH_HEADING: 'Sieve To',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'SIEVE MASTER' AND CODE > ''",
+    RECORDS:46,
+    LOOKUPID:3,
+    ORDER_TYPE:0,
+    WHERECONDITION:"  SHAPE= 'RD' AND TYPES='SIEVE MASTER' ",
+    SEARCH_FIELD:"",
+    SEARCH_VALUE:"",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true,
   }
 
+
   sievetoselected(e: any) {
     console.log(e);
     this.stoneweightmaster.controls.sieveto.setValue(e.CODE);
     this.stoneweightmaster.controls.sievetodesc.setValue(e.DESCRIPTION);
-    this.changesieve(e.CODE, 'to');
+    this.changesieve( 'to');
   }
 
   ShapecodeData: MasterSearchModel = {
@@ -236,12 +251,17 @@ export class StoneWeightMasterComponent implements OnInit {
       this.stoneweightmaster.controls.sizefrom.setValue(this.content.SIZE_FROM);
       this.stoneweightmaster.controls.sizeto.setValue(this.content.SIZE_TO);
       this.stoneweightmaster.controls.pcs.setValue(this.content.PCS);
-      this.stoneweightmaster.controls.variance1.setValue(this.content.VARIANCE);
-      this.stoneweightmaster.controls.pointerwt.setValue(this.content.POINTER_WT);
-      this.stoneweightmaster.controls.variance2.setValue(this.content.VARIANCE_POINTERWT);
+      this.stoneweightmaster.controls.variance1.setValue(this.commonService.decimalQuantityFormat(this.content.VARIANCE,'AMOUNT'));
+      this.stoneweightmaster.controls.variance2.setValue(this.commonService.decimalQuantityFormat(this.content.VARIANCE_POINTERWT,'AMOUNT'));
       this.stoneweightmaster.controls.sievefromdesc.setValue(this.content.SIEVEFROM_DESC);
       this.stoneweightmaster.controls.sievetodesc.setValue(this.content.SIEVETO_DESC);
       this.stoneweightmaster.controls.sieveto.setValue(this.content.SIEVE_TO);
+      if (!isNaN(this.content.POINTER_WT)) {
+        this.stoneweightmaster.controls.pointerwt.setValue(this.content.POINTER_WT.toFixed(4));
+      } else {
+        this.stoneweightmaster.controls.pointerwt.setValue(0);
+      }
+      
     }
     else if (this.content?.FLAG == "DELETE") {
       this.viewOnly = true;
@@ -254,13 +274,16 @@ export class StoneWeightMasterComponent implements OnInit {
       this.stoneweightmaster.controls.sizefrom.setValue(this.content.SIZE_FROM);
       this.stoneweightmaster.controls.sizeto.setValue(this.content.SIZE_TO);
       this.stoneweightmaster.controls.pcs.setValue(this.content.PCS);
-      this.stoneweightmaster.controls.variance1.setValue(this.content.VARIANCE);
-      this.stoneweightmaster.controls.pointerwt.setValue(this.content.POINTER_WT);
-      this.stoneweightmaster.controls.variance2.setValue(this.content.VARIANCE_POINTERWT);
+      this.stoneweightmaster.controls.variance1.setValue(this.commonService.decimalQuantityFormat(this.content.VARIANCE,'AMOUNT'));
+      this.stoneweightmaster.controls.variance2.setValue(this.commonService.decimalQuantityFormat(this.content.VARIANCE_POINTERWT,'AMOUNT'));
       this.stoneweightmaster.controls.sievefromdesc.setValue(this.content.SIEVEFROM_DESC);
       this.stoneweightmaster.controls.sievetodesc.setValue(this.content.SIEVETO_DESC);
       this.stoneweightmaster.controls.sieveto.setValue(this.content.SIEVE_TO);
-      this.deleteTableData();
+      if (!isNaN(this.content.POINTER_WT)) {
+        this.stoneweightmaster.controls.pointerwt.setValue(this.content.POINTER_WT.toFixed(4));
+      } else {
+        this.stoneweightmaster.controls.pointerwt.setValue(0);
+      }      this.deleteTableData();
     }
   }
 
@@ -377,9 +400,8 @@ export class StoneWeightMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-  changesieve(code: any, field: any) {
-    if (code) {
-      let API = `Manufacturing/Master/DiaSizeWt/GetSizeFromUsingSieveFrom?SieveFrom=${code}&DBBranch=${this.branchCode}`;
+  changesieve(field: any) {
+      let API = `Manufacturing/Master/DiaSizeWt/GetSizeFromUsingSieveFrom?SieveFrom=RD14&DBBranch=${this.branchCode}`;
       let Sub: Subscription = this.dataService.getDynamicAPIwithParamsCustom(API, ``)
         .subscribe((result: any) => {
           console.log(result);
@@ -392,7 +414,7 @@ export class StoneWeightMasterComponent implements OnInit {
         }, (err: any) => {
         })
       this.subscriptions.push(Sub);
-    }
+    
   }
 
   // close(data?: any) {
