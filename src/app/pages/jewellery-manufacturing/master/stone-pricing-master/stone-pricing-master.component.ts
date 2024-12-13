@@ -538,30 +538,32 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
   setPostData() {
+    let form = this.stonePrizeMasterForm.value;
     return {
       "MID": this.content?.MID || 0,
       "SRNO": 0,
-      "CODE": this.stonePrizeMasterForm.value.price_code.toUpperCase() || "",
-      "DESCRIPTION": this.stonePrizeMasterForm.value.price_code.toUpperCase() + " " + this.stonePrizeMasterForm.value.shape.toUpperCase() + this.stonePrizeMasterForm.value.color.toUpperCase(),
-      "SHAPE": this.stonePrizeMasterForm.value.shape || "",
-      "COLOR": this.stonePrizeMasterForm.value.color || "",
-      "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
-      "SIZE_FROM": this.stonePrizeMasterForm.value.size_from || "",
-      "SIZE_TO": this.stonePrizeMasterForm.value.size_to || "",
-      "CURRENCYCODE": this.stonePrizeMasterForm.value.currency || "",
-      "ISSUE_RATE": this.stonePrizeMasterForm.value.issue_rate || 0,
-      "SELLING_RATE": this.stonePrizeMasterForm.value.selling_rate || 0,
+      "CODE": this.commonService.nullToString(form.price_code.toUpperCase()) || "",
+      "DESCRIPTION": this.commonService.nullToString(form.price_code.toUpperCase() + form.shape.toUpperCase() + form.color.toUpperCase()),
+      // "DESCRIPTION": this.stonePrizeMasterForm.value.price_code.toUpperCase() + " " + this.stonePrizeMasterForm.value.shape.toUpperCase() + this.stonePrizeMasterForm.value.color.toUpperCase(),
+      "SHAPE": this.commonService.nullToString(form.shape) || "",
+      "COLOR": this.commonService.nullToString(form.color)|| "",
+      "CLARITY": this.commonService.nullToString(form.clarity) || "",
+      "SIZE_FROM": this.commonService.nullToString(form.size_from) || "",
+      "SIZE_TO": this.commonService.nullToString(form.size_to) || "",
+      "CURRENCYCODE": this.commonService.nullToString(form.currency) || "",
+      "ISSUE_RATE": this.commonService.emptyToZero(form.issue_rate) || 0,
+      "SELLING_RATE": this.commonService.emptyToZero(form.selling_rate) || 0,
       "LAST_ISSUE_RATE": 0,
       "LAST_SELLING_RATE": 0,
-      "SELLING_PER": this.stonePrizeMasterForm.value.selling || 0,
-      "CARAT_WT": this.stonePrizeMasterForm.value.carat_wt || 0,
-      "SIEVE": this.stonePrizeMasterForm.value.sieve_form || "",
-      "SIEVE_SET": this.stonePrizeMasterForm.value.sieve_set || "",
-      "WEIGHT_FROM": this.stonePrizeMasterForm.value.wt_from || 0,
-      "WEIGHT_TO": this.stonePrizeMasterForm.value.wt_to || 0,
-      "SIEVE_TO": this.stonePrizeMasterForm.value.sieve_to || "",
-      "SIEVEFROM_DESC": this.commonService.nullToString(this.stonePrizeMasterForm.value.sieve_from_desc),
-      "SIEVETO_DESC": this.stonePrizeMasterForm.value.sieve_to_desc || "",
+      "SELLING_PER": this.commonService.emptyToZero(form.selling) || 0,
+      "CARAT_WT": this.commonService.emptyToZero(form.carat_wt) || 0,
+      "SIEVE": this.commonService.nullToString(form.sieve_form) || "",
+      "SIEVE_SET": this.commonService.nullToString(form.sieve_set) || "",
+      "WEIGHT_FROM": this.commonService.emptyToZero(form.wt_from) || 0,
+      "WEIGHT_TO": this.commonService.emptyToZero(form.wt_to) || 0,
+      "SIEVE_TO": this.commonService.nullToString(form.sieve_to) || "",
+      "SIEVEFROM_DESC": this.commonService.nullToString(form.sieve_from_desc),
+      "SIEVETO_DESC": this.commonService.nullToString(form.sieve_to_desc) || "",
       "LAST_UPDATE": new Date().toISOString()
     }
   }
@@ -680,7 +682,7 @@ export class StonePricingMasterComponent implements OnInit {
 
         if (result && result.status == "Success") {
           Swal.fire({
-            title: this.commonService.getMsgByID('MSG3641') || 'Success',
+            title: this.commonService.getMsgByID('MSG2443') || 'Success',
             text: '',
             icon: 'success',
             confirmButtonColor: '#336699',
