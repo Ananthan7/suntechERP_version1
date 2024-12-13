@@ -17,6 +17,8 @@ import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
 import { GpcGridComponentComponent } from "./gpc-grid-component/gpc-grid-component.component";
 
+import { ChangeDetectorRef } from "@angular/core";
+
 @Component({
   selector: "app-vat-master",
   templateUrl: "./vat-master.component.html",
@@ -24,6 +26,7 @@ import { GpcGridComponentComponent } from "./gpc-grid-component/gpc-grid-compone
 })
 export class VatMasterComponent implements OnInit {
   @ViewChild("codeField") codeField!: ElementRef;
+  @ViewChild("vatPercentField") vatPercentField!: ElementRef;
   @ViewChild("tabGroup") tabGroup!: MatTabGroup;
   @ViewChild("overlayGroupOne") overlayGroupOne!: MasterSearchComponent;
   @ViewChild("overlayGroupTwo") overlayGroupTwo!: MasterSearchComponent;
@@ -310,7 +313,8 @@ export class VatMasterComponent implements OnInit {
     private apiService: SuntechAPIService,
     private toastr: ToastrService,
     public dialog: MatDialog,
-    private commonService: CommonServiceService
+    private commonService: CommonServiceService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   vatMasterMainForm: FormGroup = this.formBuilder.group({
@@ -927,12 +931,14 @@ export class VatMasterComponent implements OnInit {
   }
 
   selectingRowFromExpenseHsnSacAllocationData(values: any) {
+    console.log(values);
     let indexes: number[] = [];
 
     // Find the indexes of the selected rows
     this.expenseHsnSacAllocationData.forEach(
       (value: { SN: string }, index: number) => {
         if (values.includes(parseFloat(value.SN))) {
+          console.log(index);
           indexes.push(index);
         }
       }
@@ -943,6 +949,7 @@ export class VatMasterComponent implements OnInit {
       "Selected Row Indexes:",
       this.selectedRowFromExpenseHasSacAllocation
     );
+    console.log(this.expenseHsnSacAllocationData);
   }
 
   selectingRowFromcostCenterAccountData(values: any) {
@@ -1006,6 +1013,14 @@ export class VatMasterComponent implements OnInit {
       width: "40%",
       disableClose: true,
       data: { title, msg, okBtn, swapColor },
+    });
+
+    this.dialogBox.afterClosed().subscribe((result: any) => {
+      if (result === "OK") {
+        return "OK";
+      } else {
+        return null;
+      }
     });
   }
 
@@ -1171,33 +1186,73 @@ export class VatMasterComponent implements OnInit {
     );
   }
 
-  codeAlert(event: any, controller: any) {
-    if (controller === "vatPercent") {
-      let message = `A percentage value cannot be greater than 100.`;
+  validateVATCode(controller?: any): boolean {
+    const VATCODE = this.vatMasterMainForm.value.vatCode;
+    if (!VATCODE) {
+      this.openDialog("Warning", "Code cannot be empty!", true);
+      this.vatMasterMainForm.controls[controller].reset();
+      this.dialogBox.afterClosed().subscribe((result: any) => {
+        if (result === "OK") {
+          setTimeout(() => {
+            this.codeField.nativeElement.focus();
+          }, 100);
+        }
+      });
+      return false;
+    }
+    return true;
+  }
 
+  descriptionValidation(controller: String): boolean {
+    return this.validateVATCode(controller);
+  }
+
+  vatPercentValidation(controller?: String): Boolean {
+    return this.validateVATCode(controller);
+  }
+
+  vatPercentFocusout(event: any): void {
+    let MESSAGE;
+    event.target.value > 100
+      ? (MESSAGE = `A percentage value cannot be greater than 100.`)
+      : (MESSAGE = `A percentage value cannot be lesser than 0.`);
+    let GSTCODE = this.vatMasterMainForm.value.vatCode;
+
+    if (GSTCODE) {
       if (event.target.value > 100) {
-        this.vatMasterMainForm.controls[controller].setValue("");
-        this.openDialog("Warning", message, true);
+        this.vatMasterMainForm.controls.vatPercent.reset();
+        this.openDialog("Warning", MESSAGE, true);
+        this.dialogBox.afterClosed().subscribe((result: any) => {
+          if (result === "OK") {
+            setTimeout(() => {
+              this.vatPercentField.nativeElement.focus();
+            }, 100);
+          }
+        });
       } else {
-        this.vatMasterMainForm.controls[controller].setValue(
-          event.target.value
-        );
+        this.vatMasterMainForm.controls.vatPercent.setValue(event.target.value);
       }
     }
 
-    const message = "Code must be enter!";
-    const GSTCODE = this.vatMasterMainForm.value.vatCode;
-    const GSTPERCENT = this.vatMasterMainForm.value.vatPercent;
+    if (GSTCODE) {
+      if (event.target.value < 1) {
+        this.vatMasterMainForm.controls.vatPercent.reset();
 
-    console.log("Value:", GSTCODE);
-
-    if (GSTCODE === "" || !GSTCODE) {
-      this.openDialog("Warning", message, true);
-      this.vatMasterMainForm.controls[controller].setValue(" ");
-    }
-
-    if (GSTCODE && GSTPERCENT) {
-      this.getAccountSettingDatewiseListData();
+        this.openDialog("Warning", MESSAGE, true);
+        this.dialogBox.afterClosed().subscribe((result: any) => {
+          if (result === "OK") {
+            setTimeout(() => {
+              this.vatPercentField.nativeElement.focus();
+            }, 100);
+          }
+        });
+      } else {
+        this.vatMasterMainForm.controls.vatPercent.setValue(event.target.value);
+        let GSTPERCENT = this.vatMasterMainForm.value.vatPercent;
+        if (GSTCODE && GSTPERCENT) {
+          this.getAccountSettingDatewiseListData();
+        }
+      }
     }
   }
 
@@ -1363,13 +1418,13 @@ export class VatMasterComponent implements OnInit {
 
     return false;
   }
+
   formatDateCell = (row: any): string => {
-    const date = row.VAT_DATE; // Adjust this if VAT_DATE is nested, e.g., row.VAT_DATE.value
+    const date = row.VAT_DATE;
     if (!date) {
-      return ""; // Handle null or undefined values
+      return "";
     }
 
-    // Check if the date is already in valid ISO format
     if (typeof date === "string" && !isNaN(Date.parse(date))) {
       const parsedDate = new Date(date);
       const year = parsedDate.getFullYear();
@@ -1378,6 +1433,116 @@ export class VatMasterComponent implements OnInit {
       return `${year}-${month}-${day}`;
     }
 
-    return date; // Return as-is if the value cannot be parsed
+    return date;
   };
+
+  SPvalidateLookupGridModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FIELDNAMES: string[],
+    LOOKUPFIELDS?: string[],
+    GRIDTYPE?: "costCenter" | "expense",
+    DATA?: any
+  ) {
+    let INDEX = DATA.data.SN;
+    const searchValue = event.target.value?.trim();
+
+    if (!searchValue || this.flag == "VIEW") return;
+
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.apiService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            console.log("In");
+
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Up");
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+
+                FIELDNAMES.forEach((fieldName, index) => {
+                  const field = LOOKUPFIELDS?.[index];
+                  if (field && field in matchedItem) {
+                    console.log(fieldName);
+                    console.log(field);
+
+                    // this.vatMasterMainForm.controls[fieldName].setValue(
+                    //   matchedItem[field]
+                    // );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearGridData(LOOKUPDATA, FIELDNAMES, GRIDTYPE, INDEX);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearGridData(LOOKUPDATA, FIELDNAMES, GRIDTYPE, INDEX);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearGridData(LOOKUPDATA, FIELDNAMES, GRIDTYPE, INDEX);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearGridData(LOOKUPDATA, FIELDNAMES, GRIDTYPE, INDEX);
+        },
+      });
+
+    this.subscriptions.push(sub);
+  }
+
+  clearGridData(
+    LOOKUPDATA: MasterSearchModel,
+    FIELDNAMES: string[],
+    GRIDTYPE: any,
+    INDEX: any
+  ) {
+
+    let index = INDEX-1
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FIELDNAMES.forEach((fieldName) => {
+      if (GRIDTYPE === "expense") {
+        console.log(this.expenseHsnSacAllocationData[index]);
+
+        console.log(fieldName);
+      }
+
+      if (GRIDTYPE === "costCenter") {
+        console.log(GRIDTYPE);
+        console.log(fieldName);
+      }
+    });
+  }
 }
