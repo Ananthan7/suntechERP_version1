@@ -31,7 +31,7 @@
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input [readonly]="viewMode || editMode" type="text" #codeInput maxlength="5" matInput
-                        formControlName="code" UpperCaseDirective autocomplete="off" />
+                        formControlName="code" UpperCaseDirective autocomplete="off" required />
                     </mat-form-field>
                   </div>
                   <div class="col-sm-4">
@@ -197,13 +197,13 @@
                     [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3"
                     keyExpr="INCOME" (onSelectionChanged)="onContactSelectionChanged($event)">
                     <dxo-selection mode="single"></dxo-selection>
-                    <dxi-column dataField="CUSTOMER_NAME" caption="Name" cellTemplate="name">
+                    <dxi-column dataField="CUSTOMER_NAME" caption="Name" >
                     </dxi-column>
-                    <dxi-column dataField="DESIGNATION" caption="Designation" cellTemplate="designation">
+                    <dxi-column dataField="DESIGNATION" caption="Designation" >
                     </dxi-column>
-                    <dxi-column dataField="EMAIL" caption="Email" cellTemplate="email">
+                    <dxi-column dataField="EMAIL" caption="Email">
                     </dxi-column>
-                    <dxi-column dataField="MOBILE" caption="Mobile" cellTemplate="mobile">
+                    <dxi-column dataField="MOBILE" caption="Mobile" >
                     </dxi-column>
 
                     <div *dxTemplate="let data of 'email'">

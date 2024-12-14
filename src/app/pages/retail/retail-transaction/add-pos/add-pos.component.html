@@ -632,43 +632,51 @@
               </mat-form-field>
             </div>
 
-            <div class="col-md-2" >
+            <div class="col-md-2">
               <div style="margin-top: 0px;">
-                <mat-checkbox color="primary" formControlName="tourVatRefuncYN" >
-                  Tourist VAT Refund
-                </mat-checkbox> 
+                <mat-checkbox color="primary" formControlName="tourVatRefuncYN" (change)="onCheckboxChange($event)">
+                  Tourist VAT Ref. 
+                </mat-checkbox>
               </div>
               <div style="margin-top: -9px;">
-                <mat-form-field appearance="outline" style="width: 100%" *ngIf="customerDataForm.value.tourVatRefuncYN">
-                  <input type="text" matInput formControlName="tourVatRefundNo" />
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input type="text" matInput formControlName="tourVatRefundNo"
+                    [disabled]="!customerDataForm.controls.tourVatRefuncYN.value"/>
                 </mat-form-field>
               </div>
             </div>
 
-            <div class="col-md-8" *ngIf="!viewOnly">
-              <!-- <span class="customheader mr-2" style="margin-right: 24px;"></span> -->
-              <label for="Related">Related Details:</label>
+
+            <div class="col-12 col-md-8 d-flex flex-column" *ngIf="!viewOnly">
+              <label for="Related">Import:</label>
               <div class="row">
-                <button type="button"  mat-flat-button [disabled]="!isNewButtonDisabled" (click)="importSalesEstimation()" class="update-finish-button
-                col-md-3 ">
-                  Import Sales Estimation
-                </button>
-      
-                <button type="button"  [disabled]="!isNewButtonDisabled" class="mx-2 col-md-3  update-finish-button" mat-flat-button (click)="importSalesOrder()">
-                  Import Sales Order
-                </button>
-      
-                <button type="button" mat-flat-button *ngIf="strUser=='SUNTECH'" [disabled]="!isNewButtonDisabled" (click)="openParamterDetails()"
-                  class="mx-2 update-finish-button col-md-3 ">
-                  Parameter Details
-                </button>
-      
-                <button type="button" mat-flat-button 
-                  (click)="openUserAttachmentModal()" [disabled]="!isNewButtonDisabled" class="update-finish-button col-md-2 ">
-                  {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
-                </button>
+                  <div class="col-12 col-md-3 mb-2">
+                      <button type="button" mat-flat-button [disabled]="!isNewButtonDisabled" (click)="importSalesEstimation()" 
+                      class="w-100 refund_Buttons">
+                         Sales Estimation
+                      </button>
+                  </div>
+                  <div class="col-12 col-md-3 mb-2">
+                      <button type="button" [disabled]="!isNewButtonDisabled" mat-flat-button class="w-100 refund_Buttons" 
+                      (click)="importSalesOrder()">
+                        Sales Order
+                      </button>
+                  </div>
+                  <div class="col-12 col-md-3 mb-2" *ngIf="strUser=='SUNTECH'">
+                      <button type="button" mat-flat-button [disabled]="!isNewButtonDisabled" (click)="openParamterDetails()" 
+                      class="w-100 refund_Buttons">
+                        Parameter Details
+                      </button>
+                  </div>
+                  <div class="col-12 col-md-3 mb-2">
+                      <button type="button" mat-flat-button (click)="openUserAttachmentModal()" [disabled]="!isNewButtonDisabled" 
+                      class="w-100 refund_Buttons">
+                        {{ !viewOnly ? 'Attachment' : 'View Attachment' }}
+                      </button>
+                  </div>
               </div>
             </div>
+            
           </div>
 
         </form>
@@ -1264,7 +1272,7 @@
                 <th style="width: 35%">Purchase</th>
               </tr>
               <tr *ngFor="let krd of karatRateDetails; let id = index">
-                <td>{{ krd.KARAT_CODE }}</td>
+                <td style="text-align: left">{{ krd.KARAT_CODE }}</td>
                 <td style="text-align: right; padding-right: 3px">
                   <input type="number" (change)="changeKaratRate($event, id)" style="text-align: right"
                     onwheel="this.blur()" [value]="krd.KARAT_RATE" class="karat_code" readonly />
