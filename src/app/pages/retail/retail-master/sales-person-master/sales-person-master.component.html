@@ -17,7 +17,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Code :</label>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="code" id="code" (focusout)="checkCodeExists($event)" [readonly]="viewMode || editMode" />
+                                    <input type="text" matInput formControlName="code" id="code" maxlength="6" (focusout)="checkCodeExists($event)" [readonly]="viewMode || editMode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3 pl-5">
@@ -29,7 +29,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Description :</label>
                             <div class="col-md-7">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="description"  [readonly]="viewMode" />
+                                    <input type="text" matInput formControlName="description" maxlength="40" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Short Name :</label>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="shortname" [readonly]="viewMode"  />
+                                    <input type="text" matInput formControlName="shortname" maxlength="30" [readonly]="viewMode"  />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Commision Metal % :</label>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="number" matInput formControlName="commisionMetal"  [readonly]="viewMode" class="text-right" />
+                                    <input type="text" matInput formControlName="commisionMetal" maxlength="13"  (input)="allowNumbersOnly($event)"  [readonly]="viewMode" class="text-right" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Commision Others % :</label>
                             <div class="col-md-5">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="number" matInput formControlName="commisionOthers"  [readonly]="viewMode"  class="text-right" />
+                                    <input type="text" matInput formControlName="commisionOthers" maxlength="13"  (input)="allowNumbersOnly($event)" [readonly]="viewMode"  class="text-right" AmountDecimalInput/>
                                 </mat-form-field>
                             </div>
                         </div>

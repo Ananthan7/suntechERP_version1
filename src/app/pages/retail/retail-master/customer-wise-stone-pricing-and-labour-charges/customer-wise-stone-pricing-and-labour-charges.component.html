@@ -18,7 +18,7 @@
               <label for="inputPassword" class="col-sm-2 col-form-label">Price Code :</label>
               <div class="col-md-2">
                 <mat-form-field style="width: 100%;" appearance="outline">
-                  <input type="text" matInput formControlName="pricecode" id="code"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || editMode"/>
+                  <input type="text" matInput formControlName="pricecode" id="code" maxlength="15"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || editMode"/>
                 </mat-form-field>
               </div>
 
@@ -34,7 +34,7 @@
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%;" appearance="outline">
-                  <input type="text" matInput formControlName="currencyDetail"  [readonly]="viewMode" (focusout)="validateLookupField($event,curencyCodeData,'currencyDetail')"  (keydown)="lookupKeyPress($event,'currencyDetail')"/>
+                  <input type="text" matInput formControlName="currencyDetail"  readonly (focusout)="validateLookupField($event,curencyCodeData,'currencyDetail')"  (keydown)="lookupKeyPress($event,'currencyDetail')"/>
                   <master-search [MasterSearchData]="curencyCodeData"  *ngIf=" viewMode == false" class="masterSearch"
                     (newRowClick)="curencyCodeSelected($event)" #currencyDetailcodeSearch>
                   </master-search>

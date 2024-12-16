@@ -32,6 +32,7 @@ export class PosBranchTargetComponent implements OnInit {
   description: any;
   code: any;
   alloy: any;
+  flag: any;
   slNo = 0;
   selectedIndexes: any = [];
   viewMode: boolean = false;
@@ -82,6 +83,7 @@ export class PosBranchTargetComponent implements OnInit {
   });
   @ViewChild('codeInput')
   codeInput!: ElementRef;
+  @ViewChild("codeField") codeField!: ElementRef;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -93,6 +95,11 @@ export class PosBranchTargetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    
+    this.flag = this.content
+    ? this.content.FLAG
+    : (this.content = { FLAG: "ADD" }).FLAG;
+
     this.viewModeField = true;
     if (this.content?.FLAG) {
       this.setFormValues();
@@ -110,7 +117,11 @@ export class PosBranchTargetComponent implements OnInit {
       }
     }
   }
-
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
   
   formatDate(event: any) {
     const inputValue = event.target.value;
@@ -412,6 +423,12 @@ export class PosBranchTargetComponent implements OnInit {
       }
     });
   }
+
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

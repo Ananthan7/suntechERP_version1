@@ -10,6 +10,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { Flag } from 'angular-feather/icons';
 import { GiftVoucherDetailMasterComponent } from './gift-voucher-detail-master/gift-voucher-detail-master.component';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-gift-voucher-master',
@@ -21,15 +22,20 @@ export class GiftVoucherMasterComponent implements OnInit {
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
   diamond_drop:any[]=[];
-
+  codeEnable: boolean = false;
+  ALL_DIVISIONS_VALUE = 'ALL';
+  isAllSelected:boolean = false;
   @Input() content!: any;
   tableData: any[] = [];
   viewMode: boolean = false;
   editMode:boolean = false;
-
+  isCodeFilled: boolean = false;
   @ViewChild('costCentrecodeSearch') costCentrecodeSearch!: MasterSearchComponent;
   @ViewChild('prefixcodeSearch') prefixcodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaycurrencySearch') overlaycurrencySearch!: MasterSearchComponent;
+  currencyDt: any;
 
+  
   
   
   constructor(
@@ -41,51 +47,106 @@ export class GiftVoucherMasterComponent implements OnInit {
     private commonService: CommonServiceService,
     private renderer: Renderer2,
 
-  ) { }
-  
+  ) { 
+    this.currencyDt = this.commonService.compCurrency;
 
-  ngOnInit(): void {
-    this.renderer.selectRootElement('#code')?.focus();
-
-    this.getmetal_divisionvalues();
-    if (this.content?.FLAG) {
-     
-      this.setFormValues();
-      console.log(this.content)
-      //this.setFormValues();
-      if (this.content.FLAG == 'VIEW') {
-        this.viewMode = true;
-      } else if (this.content.FLAG == 'EDIT') {
-        this.viewMode = false;
-        this.editMode = true;
-      } else if (this.content?.FLAG == 'DELETE') {
-        this.viewMode = true;
-        this.deleteRecord()
-      }
-    }
   }
-
 
   giftVoucherMasterForm: FormGroup = this.formBuilder.group({
 
-    code: [""],
-    description: [""],
-    giftOn: [""],
-    division: [""],
-    validity: [""],
+    code: ["", [Validators.required]],
+    description: ["", [Validators.required]],
+    giftOn: ["All"],
+    division: ["", [Validators.required]],
+    validity: ["", [Validators.required]],
     skip: [false],
-    costCentre: [""],
-    amount: [""],
+    costCentre: ["", [Validators.required]],
+    amount: ["", [Validators.required]],
     baseCurrency: [""],
-    actualAmt: [""],
-    minInvoiceAmt: [""],
-    issueType: [""],
-    prefix: [""],
+    actualAmt: ["", [Validators.required]],
+    minInvoiceAmt: ["", [Validators.required]],
+    issueType: ["D"],
+    prefix: ["", [Validators.required]],
     active: [false],
     dob: [""],
 
   })
 
+
+  ngOnInit(): void {
+
+    
+    this.renderer.selectRootElement('#code')?.focus();
+    this.codeEnabledMetal()
+  
+    this.setCompanyCurrency();
+
+    this.getmetal_divisionvalues();
+    if (this.content?.FLAG) {
+      this.setFormValues();
+      console.log(this.content)
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.codeEnable = false;
+        this.editMode = true;
+      } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
+      }
+
+    }
+
+    this.giftVoucherMasterForm.get('code')?.valueChanges.subscribe((value) => {
+      this.isCodeFilled = value && value.trim().length > 0;
+    });
+  }
+  omit_special_char(event:any)
+  {   
+     var k;  
+     k = event.charCode;  //         k = event.keyCode;  (Both can be used)
+     return((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57)); 
+  }
+
+  onCodeInput(value: string): void {
+    this.isCodeFilled = value.trim().length > 0;
+  }
+
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.currencyDt;
+    this.giftVoucherMasterForm.controls.baseCurrency.setValue(CURRENCY_CODE);
+
+    // if (this.commonService.allBranchCurrency && this.commonService.allBranchCurrency.length > 0) {
+    //   const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == CURRENCY_CODE);
+    //   if (CURRENCY_RATE.length > 0) {
+    //     this.giftVoucherMasterForm.controls.baseCurrency.setValue(this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE'));
+    //   } else {
+    //     console.error("No matching currency rate found for the given currency code.");
+    //   }
+    // } else {
+    //   console.error("allBranchCurrency is not defined or empty.");
+    // }
+  }
+
+
+
+  codeEnabledMetal() {
+    if (this.giftVoucherMasterForm.value.code == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
+  }
+
+  checkCode(): boolean {
+    if (this.giftVoucherMasterForm.value.code == '') {
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
+      return true
+    }
+    return false
+  }
 
   prefixCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -100,6 +161,8 @@ export class GiftVoucherMasterComponent implements OnInit {
   }
 
   prefixCodeSelected(e: any) {
+    if (this.checkCode()) return
+
     this.giftVoucherMasterForm.controls.prefix.setValue(e.PREFIX_CODE);
   }
 
@@ -117,9 +180,29 @@ export class GiftVoucherMasterComponent implements OnInit {
   }
   costCenterSelected(e:any){
     console.log(e);
+    if (this.checkCode()) return
+
     this.giftVoucherMasterForm.controls.costCentre.setValue(e.COST_CODE);
   }
 
+  currencyMasterData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 8,
+    SEARCH_FIELD: 'CURRENCY_CODE',
+    SEARCH_HEADING: 'CURRENCY MASTER',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CURRENCY_CODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  currencyCodeSelected(e:any){
+    console.log(e);
+    if (this.checkCode()) return
+
+    this.giftVoucherMasterForm.controls.baseCurrency.setValue(e.CURRENCY_CODE);
+  }
   close(data?: any) {
     if (data){
       this.viewMode = true;
@@ -147,29 +230,95 @@ export class GiftVoucherMasterComponent implements OnInit {
     )
   }
 
-  getmetal_divisionvalues() {
-    const API = 'POSTargetMaster/GetDiaDivisonsDropdown';
-    const Sub: Subscription = this.dataService.getDynamicAPI(API)
-        .subscribe(
-            (result: any) => {
-                console.log(result);
-                if (result?.dynamicData?.length) {
-                    this.diamond_drop = result.dynamicData[0];
-                    const allDivisionCodes = this.diamond_drop.map(option => option.DIVISION_CODE);
-                    const diaDivisionControl = this.giftVoucherMasterForm?.get('division');
-                    // if (diaDivisionControl) {
-                    //   if(this.content?.Flag == undefined){
-                    //     diaDivisionControl.setValue(allDivisionCodes); // Pre-select all divisions
-                    //   }
+//   getmetal_divisionvalues() {
+//     const API = 'POSTargetMaster/GetDiaDivisonsDropdown';
+//     const Sub: Subscription = this.dataService.getDynamicAPI(API)
+//         .subscribe(
+//             (result: any) => {
+//                 console.log(result);
+//                 if (result?.dynamicData?.length) {
+//                     this.diamond_drop = result.dynamicData[0];
+//                     const allDivisionCodes = this.diamond_drop.map(option => option.DIVISION_CODE);
+//                     const diaDivisionControl = this.giftVoucherMasterForm?.get('division');
+//                     // if (diaDivisionControl) {
+//                     //   if(this.content?.Flag == undefined){
+//                     //     diaDivisionControl.setValue(allDivisionCodes); // Pre-select all divisions
+//                     //   }
                      
-                    // }
-                }
-            },
-            (err: any) => {
-                console.error('Error fetching division values:', err);
-            }
-        );
-    this.subscriptions.push(Sub);
+//                     // }
+//                 }
+//             },
+//             (err: any) => {
+//                 console.error('Error fetching division values:', err);
+//             }
+//         );
+//     this.subscriptions.push(Sub);
+// }
+
+
+
+
+
+getmetal_divisionvalues() {
+  const API = 'POSTargetMaster/GetDiaDivisonsDropdown';
+  const Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe(
+          (result: any) => {
+              console.log(result);
+              if (result?.dynamicData?.length) {
+                  // Filter out the empty option or use it for "Select All"
+                  this.diamond_drop = result.dynamicData[0].filter(
+                      (option: any) => option.DIVISION_CODE.trim() !== ""
+                  );
+
+                  // Prepend "Select All" as the first option
+                  this.diamond_drop.unshift({
+                      DIVISION_CODE: this.ALL_DIVISIONS_VALUE,
+                      DESCRIPTION: "Select All",
+                  });
+
+                  const diaDivisionControl = this.giftVoucherMasterForm?.get('division');
+                  if (diaDivisionControl) {
+                      const allDivisionCodes = this.diamond_drop.map(option => option.DIVISION_CODE);
+                      // Optionally pre-select all options
+                      // diaDivisionControl.setValue(allDivisionCodes);
+                  }
+              }
+          },
+          (err: any) => {
+              console.error('Error fetching division values:', err);
+          }
+      );
+  this.subscriptions.push(Sub);
+}
+
+onSelectionChange(event: MatSelectChange) {
+  const diaDivisionControl = this.giftVoucherMasterForm?.get('division');
+  const selectedValues = event.value;
+
+  if (!diaDivisionControl) {
+      return;
+  }
+
+  if (selectedValues.includes(this.ALL_DIVISIONS_VALUE)) {
+      if (!this.isAllSelected) {
+          // Select all divisions
+          this.isAllSelected = true;
+          diaDivisionControl.setValue(this.diamond_drop.map(option => option.DIVISION_CODE).filter(code => code !== this.ALL_DIVISIONS_VALUE));
+      } else {
+          // Deselect all divisions
+          this.isAllSelected = false;
+          diaDivisionControl.setValue([]);
+      }
+  } else {
+      this.isAllSelected = selectedValues.length === this.diamond_drop.length - 1; // Exclude "Select All"
+  }
+}
+
+
+allowNumbersOnly(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  input.value = input.value.replace(/[^0-9]/g, '');
 }
 
 
@@ -193,8 +342,7 @@ setFormValues() {
   this.giftVoucherMasterForm.controls.issueType.setValue(this.content.ISSUE_TYPE === 'Y' ? 'D' : 'M')
   this.giftVoucherMasterForm.controls.active.setValue(this.content.STATUS === 'Y' ? true : false)
   this.giftVoucherMasterForm.controls.costCentre.setValue(this.content.COST_CODE)
-  this.giftVoucherMasterForm.controls.baseCurrency.setValue(this.commonService.transformDecimalVB(
-    this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.START_SKU_NO))
+  this.giftVoucherMasterForm.controls.baseCurrency.setValue(this.content.GIFT_CURRENCY_CODE)
 }
 
 
@@ -210,16 +358,16 @@ setFormValues() {
       "MIN_INVOICE_AMOUNT": this.commonService.emptyToZero(this.giftVoucherMasterForm.value.minInvoiceAmt),
       "GIFT_VALID_DAYS": this.commonService.emptyToZero(this.giftVoucherMasterForm.value.validity),
       "SKIP_VALID_DAYS": this.giftVoucherMasterForm.value.skip ,
-      "DIVISION": this.giftVoucherMasterForm.value.division.join(','),
+      "DIVISION": this.commonService.nullToString(this.giftVoucherMasterForm.value.division.join(',')),
       "PREFIX_CODE":  this.commonService.nullToString(this.giftVoucherMasterForm.value.prefix),
       "ISSUE_TYPE": this.giftVoucherMasterForm.value.issueType === 'D' ? true : false,
-      "GIFT_CURRENCY_CODE": "stri",
+      "GIFT_CURRENCY_CODE": this.commonService.nullToString(this.giftVoucherMasterForm.value.baseCurrency),
       "STATUS":  this.giftVoucherMasterForm.value.active,
       "SYSTEM_DATE": "2024-11-28T12:22:41.287Z",
       "USERNAME": "string",
       "COST_CODE": this.commonService.nullToString(this.giftVoucherMasterForm.value.costCentre),
       "GIFT_QUNATITY": 0,
-      "START_SKU_NO": this.commonService.emptyToZero(this.giftVoucherMasterForm.value.baseCurrency),
+      "START_SKU_NO": 0,
       "Details": [
         {
           "SRNO": 0,
@@ -262,10 +410,11 @@ setFormValues() {
       this.update()
       return
     }
-    // if (this.diamondprefixForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
+
+    if (this.giftVoucherMasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
 
     let API = 'GiftVoucherMaster'
     let postData = this.setPostData();
@@ -425,7 +574,10 @@ setFormValues() {
         case 'prefix':
           this.prefixcodeSearch.showOverlayPanel(event);
           break;
-
+          case 'baseCurrency':
+            this.overlaycurrencySearch.showOverlayPanel(event);
+            break;
+          
       default:
     }
   }
@@ -439,7 +591,9 @@ setFormValues() {
         case 'prefix':
           this.prefixcodeSearch.showOverlayPanel(event);
           break;
-
+          case 'baseCurrency':
+            this.overlaycurrencySearch.showOverlayPanel(event);
+            break;
 
       default:
         console.warn(`Unknown FORMNAME: ${FORMNAME}`);

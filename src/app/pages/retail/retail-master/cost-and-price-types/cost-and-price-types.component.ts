@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -26,6 +26,7 @@ interface ItemDetailsRow {
   styleUrls: ["./cost-and-price-types.component.scss"],
 })
 export class CostAndPriceTypesComponent implements OnInit {
+  @ViewChild("codeField") codeField!: ElementRef;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   @ViewChild("overlayDesignCode")
@@ -119,6 +120,11 @@ export class CostAndPriceTypesComponent implements OnInit {
     this.initialController(this.flag, this.content);
     this.setFlag(this.flag, this.content);
   }
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
 
   openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
     this.dialogBox = this.dialog.open(DialogboxComponent, {
@@ -131,6 +137,7 @@ export class CostAndPriceTypesComponent implements OnInit {
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
       this.ViewController(DATA);
+      this.getItemDetailsData()
     }
     if (FLAG === "EDIT") {
       this.editController(DATA);
@@ -209,9 +216,8 @@ export class CostAndPriceTypesComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -225,7 +231,7 @@ export class CostAndPriceTypesComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        this.close("reloadMainGrid", true);
       }
     });
   }
@@ -520,7 +526,6 @@ export class CostAndPriceTypesComponent implements OnInit {
         break;
 
       case "VIEW":
-        console.log("as View");
 
         this.costAndPriceTypeMainForm.controls["applyPriceValue"].disable();
         this.costAndPriceTypeMainForm.controls["forceMaking"].disable();
@@ -528,7 +533,6 @@ export class CostAndPriceTypesComponent implements OnInit {
         this.costAndPriceTypeMainForm.controls["standardPrice"].disable();
         this.costAndPriceTypeMainForm.controls["minimumPrice"].disable();
         this.costAndPriceTypeMainForm.controls["maximumPrice"].disable();
-        console.log(DATA.ISPRICECODE);
 
         this.applyPriceValueMethod(DATA.ISPRICECODE == "Y");
         break;
@@ -661,5 +665,20 @@ export class CostAndPriceTypesComponent implements OnInit {
         console.log("No matching case found for controller:", controller);
         break;
     }
+  }
+
+  getItemDetailsData() {
+    let API = `CostPriceTypeMetal/GetCostPriceTypeMetalDetail/${this.code}`;
+    let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result.status.trim() === "Success") {
+          console.log(result.response);
+        }
+      },
+      (err) => {
+        console.error("Error fetching data:", err);
+        this.commonService.toastErrorByMsgId("MSG1531");
+      }
+    );
   }
 }

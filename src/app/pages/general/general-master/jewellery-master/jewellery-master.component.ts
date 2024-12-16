@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -24,6 +24,8 @@ import { MasterSearchComponent } from "src/app/shared/common/master-search/maste
   styleUrls: ["./jewellery-master.component.scss"],
 })
 export class JewelleryMasterComponent implements OnInit {
+  @ViewChild("codeField") codeField!: ElementRef;
+
   @ViewChild('tab3Checkbox') tab3Checkbox!: MatCheckbox;
   @ViewChild('tabGroup') tabGroup!: MatTabGroup;
   @ViewChild('itemcodedetailcodeSearch') itemcodedetailcodeSearch!: MasterSearchComponent;
@@ -152,6 +154,7 @@ export class JewelleryMasterComponent implements OnInit {
   tableData: any[] = [];
   checkBoxesMode: string;
   allMode: string;
+  flag: any;
 
 
   constructor(
@@ -171,7 +174,10 @@ export class JewelleryMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.renderer.selectRootElement('#code')?.focus();
+    this.flag = this.content
+    ? this.content.FLAG
+    : (this.content = { FLAG: "ADD" }).FLAG;
+
 
     if (this.content?.FLAG) {
       console.log(this.content)
@@ -189,6 +195,12 @@ export class JewelleryMasterComponent implements OnInit {
 
   }
 
+
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
 
 
   jewellerymasterForm: FormGroup = this.formBuilder.group({
@@ -1801,5 +1813,10 @@ export class JewelleryMasterComponent implements OnInit {
         break;
     }
   }
+  
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
 
 }

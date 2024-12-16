@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -22,6 +22,9 @@ export class FixingCommodityMasterComponent implements OnInit {
   isDisableSaveBtn: boolean = false;
   editMode: boolean = false;
   currentDate: any = this.commonService.currentDate;
+  flag: any;
+
+  @ViewChild("codeField") codeField!: ElementRef;
   
   @ViewChild('divisionCodedetailcodeSearch') divisionCodedetailcodeSearch!: MasterSearchComponent;
   @ViewChild('costcentercodeSearch') costcentercodeSearch!: MasterSearchComponent;
@@ -46,6 +49,9 @@ export class FixingCommodityMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.flag = this.content
+    ? this.content.FLAG
+    : (this.content = { FLAG: "ADD" }).FLAG;
 
 
     if (this.content?.FLAG) {
@@ -64,7 +70,11 @@ export class FixingCommodityMasterComponent implements OnInit {
 
   }
 
-
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
 
 
   fixingcommodityForm: FormGroup = this.formBuilder.group({
@@ -208,6 +218,20 @@ export class FixingCommodityMasterComponent implements OnInit {
     console.log(value);
     this.fixingcommodityForm.controls.purchaseRateType.setValue(value.RATE_TYPE);
   }
+
+  salesTypecodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 22,
+    SEARCH_FIELD: 'RATE_TYPE',
+    SEARCH_HEADING: 'Rate Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "RATE_TYPE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
   salesrateTypecodeSelected(value: any) {
     console.log(value);
     this.fixingcommodityForm.controls.salesRateType.setValue(value.RATE_TYPE);
@@ -495,6 +519,10 @@ this.subscriptions.push(Sub)
     });
   }
 
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
 
 
   // close(data?: any){
@@ -548,6 +576,7 @@ this.subscriptions.push(Sub)
           this.openOverlay(FORMNAME, event);
           return
         }
+
 
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again

@@ -8,11 +8,12 @@
 
 <!-- modal header component -->
 <modal-header
-  *ngIf="flag !== 'VIEW'"
   (saveClick)="receiptModesMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
-  [isViewDelete]="flag === 'VIEW'"
+  [isViewDelete]="false"
+  [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
 ></modal-header>
 
 <!-- content section -->
@@ -52,8 +53,9 @@
                     matInput
                     type="text"
                     formControlName="code"
-                    maxlength="6"
+                    [maxlength]="6"
                     UpperCaseDirective
+                    #codeField
                   />
                 </mat-form-field>
               </div>
@@ -137,6 +139,7 @@
                     [readonly]="flag === 'VIEW'"
                     matInput
                     type="text"
+                    [maxlength]="4"
                     formControlName="currencyCode"
                   />
                 </mat-form-field>

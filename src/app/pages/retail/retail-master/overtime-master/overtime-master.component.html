@@ -8,11 +8,12 @@
 
 <!-- modal header component -->
 <modal-header
-  *ngIf="flag !== 'VIEW'"
-  [isViewDelete]="flag == 'VIEW'"
   (saveClick)="overTimeMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
+  [isViewDelete]="false"
+  [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
 ></modal-header>
 
 <!-- content section -->
@@ -27,8 +28,8 @@
                 <div class="col-md-12">
                   <div class="row mb-1">
                     <label for="code" class="col-sm-2 col-form-label" id="ID029"
-                      >Code</label
-                    >
+                      >Code <span class="text-danger">*</span>
+                    </label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%" appearance="outline">
                         <input
@@ -37,7 +38,18 @@
                           matInput
                           type="text"
                           formControlName="code"
+                          UpperCaseDirective
+                          #codeField
                         />
+                        <mat-error
+                          *ngIf="
+                            overTimeMainForm.controls['code'].hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          Code is required.
+                        </mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -47,16 +59,28 @@
                       for="description"
                       class="col-sm-2 col-form-label"
                       id="ID029"
-                      >Description</label
-                    >
+                      >Description <span class="text-danger">*</span>
+                    </label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%" appearance="outline">
                         <input
+                          (input)="codeChecker($event, 'description')"
+                          [maxlength]="40"
                           [readonly]="flag === 'VIEW'"
                           matInput
+                          UpperCaseDirective
                           type="text"
                           formControlName="description"
                         />
+                        <mat-error
+                          *ngIf="
+                            overTimeMainForm.controls['description'].hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          Description is required.
+                        </mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -66,11 +90,12 @@
                       for="glCode"
                       class="col-sm-2 col-form-label"
                       id="ID029"
-                      >GL Code</label
-                    >
+                      >GL Code <span class="text-danger">*</span>
+                    </label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%" appearance="outline">
                         <input
+                          (input)="codeChecker($event, 'glCode')"
                           [readonly]="flag === 'VIEW'"
                           matInput
                           type="text"
@@ -87,7 +112,11 @@
                         />
                         <master-search
                           #overlayGlCode
-                          *ngIf="flag != 'VIEW'"
+                          *ngIf="
+                            flag != 'VIEW' &&
+                            this.overTimeMainForm.value.code &&
+                            this.overTimeMainForm.value.code.length > 0
+                          "
                           class="masterSearch"
                           [MasterSearchData]="glCodeData"
                           (newRowClick)="
@@ -99,13 +128,23 @@
                           "
                         >
                         </master-search>
+
+                        <mat-error
+                          *ngIf="
+                            overTimeMainForm.controls['glCode'].hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          GL Code is required.
+                        </mat-error>
                       </mat-form-field>
                     </div>
 
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%" appearance="outline">
                         <input
-                          [readonly]="flag === 'VIEW'"
+                          [readonly]="true"
                           matInput
                           type="text"
                           formControlName="glDesc"
@@ -113,6 +152,16 @@
                             onKeyDown($event, ['glCode', 'glDesc'], glCodeData)
                           "
                         />
+
+                        <mat-error
+                          *ngIf="
+                            overTimeMainForm.controls['glDesc'].hasError(
+                              'required'
+                            )
+                          "
+                        >
+                          GL Description is required.
+                        </mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -144,6 +193,7 @@
                           matInput
                           class="text-right"
                           AmountDecimalInput
+                          [max]="14"
                           type="text"
                           formControlName="perHour"
                         />
@@ -194,7 +244,7 @@
                     <div class="col-md-4 mt-2">
                       <mat-checkbox
                         formControlName="calculateArrear"
-                        id="holidayOverTime"
+                        id="calculateArrear"
                       >
                         Calculate Arrear
                       </mat-checkbox>

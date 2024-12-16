@@ -52,13 +52,13 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Sp Gravity :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%" appearance="outline">
-                            <input type="number" matInput formControlName="sp_gravity" class="text-right"  [readonly]="viewMode || codeEnable" MetalDecimalInput/>
+                            <input type="text" matInput formControlName="sp_gravity" class="text-right" maxlength="13" [readonly]="viewMode || codeEnable" MetalDecimalInput (input)="allowNumbersOnly($event)"/>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">SP. Variance % :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%" appearance="outline">
-                            <input type="number" matInput formControlName="sp_variance" class="text-right"  [readonly]="viewMode || codeEnable" AmountDecimalInput/>
+                            <input type="text" matInput formControlName="sp_variance" class="text-right" maxlength="13" [readonly]="viewMode || codeEnable" AmountDecimalInput (input)="allowNumbersOnly($event)"/>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Division * :</label>
@@ -75,13 +75,13 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">POS :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%" appearance="outline">
-                            <input type="number" matInput formControlName="pos" class="text-right"  [readonly]="viewMode || codeEnable" AmountDecimalInput/>
+                            <input type="text" matInput formControlName="pos" class="text-right" maxlength="13" [readonly]="viewMode || codeEnable" AmountDecimalInput (input)="allowNumbersOnly($event)"/>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">POP MinMaxAmt :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%" appearance="outline">
-                            <input type="number" matInput formControlName="pop_minmaxamt" class="text-right"  [readonly]="viewMode || codeEnable" AmountDecimalInput/>
+                            <input type="text" matInput formControlName="pop_minmaxamt" class="text-right" maxlength="13"  [readonly]="viewMode || codeEnable" AmountDecimalInput (input)="allowNumbersOnly($event)"/>
                           </mat-form-field>
                         </div>
                         <div class="col-md-2 offset-md-2">

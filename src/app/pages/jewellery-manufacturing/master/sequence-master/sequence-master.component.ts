@@ -825,13 +825,13 @@ export class SequenceMasterComponent implements OnInit {
   }
   // stdLoss Change
   stdTimeChanged(data: any) {
-    this.checkTimeCondition(data)
+    // this.checkTimeCondition(data)
   }
 
   // maxLoss Change
   maxTimeChanged(data: any) {
     console.log(data, 'data');
-    this.checkTimeCondition(data)
+    // this.checkTimeCondition(data)
   }
 
 

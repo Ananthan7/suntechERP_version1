@@ -17,11 +17,15 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
   styleUrls: ['./reverse-price-ratio.component.scss']
 })
 export class ReversePriceRatioComponent implements OnInit {
+  @ViewChild("codeField") codeField!: ElementRef;
 
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   viewMode: boolean = false;
   editMode: boolean = false;
+  flag: any;
+  @ViewChild('overlaydivisionSearch') overlaydivisionSearch!: MasterSearchComponent;
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -35,6 +39,10 @@ export class ReversePriceRatioComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.flag = this.content
+    ? this.content.FLAG
+    : (this.content = { FLAG: "ADD" }).FLAG;
+
     if (this.content?.FLAG) {
       console.log(this.content)
       this.setFormValues();
@@ -49,6 +57,11 @@ export class ReversePriceRatioComponent implements OnInit {
        this.delete()
      }
    }
+  }
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
   }
 
 
@@ -99,6 +112,32 @@ export class ReversePriceRatioComponent implements OnInit {
 
   });
 
+  divisionCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "DIVISION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  divisionCodeSelected(e: any) {
+   // if (this.checkCode()) return
+
+    console.log(e);
+    this.reversepriceratioForm.controls.divisioncode.setValue(e.DIVISION_CODE);
+  }
+
+
+  checkCode(): boolean {
+    if (this.reversepriceratioForm.value.divisioncode == '') {
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
+      return true
+    }
+    return false
+  }
 
   setFormValues() {
     if (!this.content) return;
@@ -230,6 +269,11 @@ export class ReversePriceRatioComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
 
 
   delete(){
@@ -315,5 +359,61 @@ export class ReversePriceRatioComponent implements OnInit {
     }
     )
   }
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.reversepriceratioForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    }
+
+    lookupKeyPress(event: any, form?: any) {
+      if (event.key == 'Tab' && event.target.value == '') {
+        this.showOverleyPanel(event, form)
+      }
+      if (event.key === 'Enter') {
+        if (event.target.value == '') this.showOverleyPanel(event, form)
+        event.preventDefault();
+      }
+    }
+    
+    openOverlay(FORMNAME: string, event: any) {
+      switch (FORMNAME) {
+        case 'divisioncode':
+          this.overlaydivisionSearch.showOverlayPanel(event);
+          break;
+        default:
+          console.warn(`Unknown FORMNAME: ${FORMNAME}`);
+          break;
+      }
+    }
+
+    showOverleyPanel(event: any, formControlName: string) {
+      switch (formControlName) {
+        case 'divisioncode':
+          this.overlaydivisionSearch.showOverlayPanel(event);
+          break;
+        default:
+      }
+    }
+
 
 }

@@ -68,6 +68,7 @@ export class PriceListMasterComponent implements OnInit {
     { type: 'Fixed', value: 1 },
   ];
   isDisabled = false;
+  flag: any;
 
 
 
@@ -81,6 +82,9 @@ export class PriceListMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.flag = this.content
+    ? this.content.FLAG
+    : (this.content = { FLAG: "ADD" }).FLAG;
     this.renderer.selectRootElement('#priceCode')?.focus();
 
     this.round = true;

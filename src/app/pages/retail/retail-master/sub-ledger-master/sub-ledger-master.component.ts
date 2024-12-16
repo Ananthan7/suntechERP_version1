@@ -1,7 +1,7 @@
 import { Code } from "angular-feather/icons";
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -9,6 +9,7 @@ import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { ContactMasterComponent } from "./contact-master/contact-master.component";
 
 @Component({
   selector: "app-sub-ledger-master",
@@ -37,6 +38,7 @@ export class SubLedgerMasterComponent implements OnInit {
   data: any = [];
   selectedIndexes: any = [];
   selectedContactndexes: any = [];
+  modalReference!: NgbModalRef;
 
   CityCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -93,13 +95,14 @@ export class SubLedgerMasterComponent implements OnInit {
     sNo: [""],
     sl_accode_des: [""],
   });
-
+  postData:any=[];
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit(): void {
@@ -190,6 +193,30 @@ export class SubLedgerMasterComponent implements OnInit {
   getAccodeDec(data: any, value: any) {
     // this.tableData.SL_ACCODE_DESC = data.target.value;
     this.tableData[value.data.SRNO - 1].SL_ACCODE_DESC = data.target.value;
+  }
+
+  openConatactMaster(data?: any){
+
+    this.modalReference = this.modalService.open(ContactMasterComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+
+    this.modalReference.componentInstance.content = data
+    this.modalReference.result.then((postData) => {
+      if (postData) {
+        this.ContacttableData.push(postData);
+        // this.stoneIssueData.push(postData);
+        console.log("PostData: ",postData);
+        
+      }
+      this.postData = postData;
+      console.log("This.Post", this.postData);
+      console.log(this.ContacttableData);
+      
+    });
   }
 
   addContactTableData() {
@@ -363,6 +390,9 @@ export class SubLedgerMasterComponent implements OnInit {
     if (this.content && this.content.FLAG == "EDIT") {
       this.update();
       return;
+    }
+    if (this.SubLedgerMasterForm.value.code == '') {
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
     }
 
     console.log(this.tableData);
