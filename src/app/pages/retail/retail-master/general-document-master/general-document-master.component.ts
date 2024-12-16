@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -36,6 +36,37 @@ export class GeneralDocumentMasterComponent implements OnInit {
     private renderer: Renderer2,
 
   ) { }
+
+
+  
+  generaldocumentform: FormGroup = this.formBuilder.group({
+    code: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    reminderdays: ['',[Validators.required]],
+    cust_applicable: [''],
+    cust_mandatory: [''],
+    branch_applicable: [''],
+    branch_mandatory: [''],
+    supplier_applicable: [''],
+    supplier_mandatory: [''],
+    employee_applicable: [''],
+    employee_mandatory: [''],
+    user_defined_1: [''],
+    user_defined_2: [''],
+    user_defined_3: [''],
+    user_defined_4: [''],
+    user_defined_5: [''],
+    user_defined_6: [''],
+    user_defined_7: [''],
+    user_defined_8: [''],
+    user_defined_9: [''],
+    user_defined_10: [''],
+    user_defined_11: [''],
+    user_defined_12: [''],
+    user_defined_13: [''],
+    user_defined_14: [''],
+    user_defined_15: [''],
+  });
 
 
   UDF1Data: MasterSearchModel = {
@@ -325,34 +356,6 @@ export class GeneralDocumentMasterComponent implements OnInit {
 
 
 
-  generaldocumentform: FormGroup = this.formBuilder.group({
-    code: ['', [Validators.required]],
-    description: ['', [Validators.required]],
-    reminderdays: [''],
-    cust_applicable: [''],
-    cust_mandatory: [''],
-    branch_applicable: [''],
-    branch_mandatory: [''],
-    supplier_applicable: [''],
-    supplier_mandatory: [''],
-    employee_applicable: [''],
-    employee_mandatory: [''],
-    user_defined_1: [''],
-    user_defined_2: [''],
-    user_defined_3: [''],
-    user_defined_4: [''],
-    user_defined_5: [''],
-    user_defined_6: [''],
-    user_defined_7: [''],
-    user_defined_8: [''],
-    user_defined_9: [''],
-    user_defined_10: [''],
-    user_defined_11: [''],
-    user_defined_12: [''],
-    user_defined_13: [''],
-    user_defined_14: [''],
-    user_defined_15: [''],
-  })
 
   ngOnInit(): void {
     console.log(this?.content);
@@ -566,88 +569,106 @@ export class GeneralDocumentMasterComponent implements OnInit {
     // console.log( this.generaldocumentform.controls.cust_mandatory.value)
     // return;
 
-
-    const postData = {
-      "MID": 0,
-      "GENMST_CODE": this.generaldocumentform.controls.code.value,
-      "GENMST_DESC": this.generaldocumentform.controls.description.value,
-      "GENMST_REMAINDER_DAYS": this.generaldocumentform.controls.reminderdays.value,
-      "GENMST_CUST_APPLICABLE": this.generaldocumentform.controls.cust_applicable.value ? 1 : 0,
-      "GENMST_CUST_MANDATORY": this.generaldocumentform.controls.cust_mandatory.value ? 1 : 0,
-      "GENMST_BRANCH_APPLICABLE": this.generaldocumentform.controls.branch_applicable.value ? 1 : 0,
-      "GENMST_BRANCH_MANDATORY": this.generaldocumentform.controls.branch_mandatory.value ? 1 : 0,
-      "GENMST_SUPPLIER_APPLICABLE": this.generaldocumentform.controls.supplier_applicable.value ? 1 : 0,
-      "GENMST_SUPPLIER_MANDATORY": this.generaldocumentform.controls.supplier_mandatory.value ? 1 : 0,
-      "GENMST_EMP_APPLICABLE": this.generaldocumentform.controls.employee_applicable.value ? 1 : 0,
-      "GENMST_EMP_MANDATORY": this.generaldocumentform.controls.employee_mandatory.value ? 1 : 0,
-      "UDF1": this.generaldocumentform.controls.user_defined_1.value,
-      "UDF2": this.generaldocumentform.controls.user_defined_2.value,
-      "UDF3": this.generaldocumentform.controls.user_defined_3.value,
-      "UDF4": this.generaldocumentform.controls.user_defined_4.value,
-      "UDF5": this.generaldocumentform.controls.user_defined_5.value,
-      "UDF6": this.generaldocumentform.controls.user_defined_6.value,
-      "UDF7": this.generaldocumentform.controls.user_defined_7.value,
-      "UDF8": this.generaldocumentform.controls.user_defined_8.value,
-      "UDF9": this.generaldocumentform.controls.user_defined_9.value,
-      "UDF10": this.generaldocumentform.controls.user_defined_10.value,
-      "UDF11": this.generaldocumentform.controls.user_defined_11.value,
-      "UDF12": this.generaldocumentform.controls.user_defined_12.value,
-      "UDF13": this.generaldocumentform.controls.user_defined_13.value,
-      "UDF14": this.generaldocumentform.controls.user_defined_14.value,
-      "UDF15": this.generaldocumentform.controls.user_defined_15.value
-    }
-
-    if (this.flag === "EDIT") {
-      let API = `GeneralDocumentMaster/UpdatetGeneralDocumentMaster/${this.unq_id}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
+      Object.keys(this.generaldocumentform.controls).forEach((controlName) => {
+          const control = this.generaldocumentform.controls[controlName];
+          if (control.validator && control.validator({} as AbstractControl)) {
+            control.markAsTouched();
           }
         });
-    } else {
-      let API = `GeneralDocumentMaster/InsertGeneralDocumentMaster`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
+    
+        const requiredFieldsInvalid = Object.keys(
+          this.generaldocumentform.controls
+        ).some((controlName) => {
+          const control = this.generaldocumentform.controls[controlName];
+          return control.hasError("required") && control.touched;
         });
-    }
+
+        if(!requiredFieldsInvalid){
+          const postData = {
+            "MID": 0,
+            "GENMST_CODE": this.generaldocumentform.controls.code.value,
+            "GENMST_DESC": this.generaldocumentform.controls.description.value,
+            "GENMST_REMAINDER_DAYS": this.generaldocumentform.controls.reminderdays.value,
+            "GENMST_CUST_APPLICABLE": this.generaldocumentform.controls.cust_applicable.value ? 1 : 0,
+            "GENMST_CUST_MANDATORY": this.generaldocumentform.controls.cust_mandatory.value ? 1 : 0,
+            "GENMST_BRANCH_APPLICABLE": this.generaldocumentform.controls.branch_applicable.value ? 1 : 0,
+            "GENMST_BRANCH_MANDATORY": this.generaldocumentform.controls.branch_mandatory.value ? 1 : 0,
+            "GENMST_SUPPLIER_APPLICABLE": this.generaldocumentform.controls.supplier_applicable.value ? 1 : 0,
+            "GENMST_SUPPLIER_MANDATORY": this.generaldocumentform.controls.supplier_mandatory.value ? 1 : 0,
+            "GENMST_EMP_APPLICABLE": this.generaldocumentform.controls.employee_applicable.value ? 1 : 0,
+            "GENMST_EMP_MANDATORY": this.generaldocumentform.controls.employee_mandatory.value ? 1 : 0,
+            "UDF1": this.generaldocumentform.controls.user_defined_1.value,
+            "UDF2": this.generaldocumentform.controls.user_defined_2.value,
+            "UDF3": this.generaldocumentform.controls.user_defined_3.value,
+            "UDF4": this.generaldocumentform.controls.user_defined_4.value,
+            "UDF5": this.generaldocumentform.controls.user_defined_5.value,
+            "UDF6": this.generaldocumentform.controls.user_defined_6.value,
+            "UDF7": this.generaldocumentform.controls.user_defined_7.value,
+            "UDF8": this.generaldocumentform.controls.user_defined_8.value,
+            "UDF9": this.generaldocumentform.controls.user_defined_9.value,
+            "UDF10": this.generaldocumentform.controls.user_defined_10.value,
+            "UDF11": this.generaldocumentform.controls.user_defined_11.value,
+            "UDF12": this.generaldocumentform.controls.user_defined_12.value,
+            "UDF13": this.generaldocumentform.controls.user_defined_13.value,
+            "UDF14": this.generaldocumentform.controls.user_defined_14.value,
+            "UDF15": this.generaldocumentform.controls.user_defined_15.value
+          }
+      
+          if (this.flag === "EDIT") {
+            let API = `GeneralDocumentMaster/UpdatetGeneralDocumentMaster/${this.unq_id}`;
+            let sub: Subscription = this.apiService
+              .putDynamicAPI(API, postData)
+              .subscribe((result) => {
+                if (result.status.trim() === "Success") {
+                  Swal.fire({
+                    title: "Success",
+                    text: result.message ? result.message : "Updated successfully!",
+                    icon: "success",
+                    confirmButtonColor: "#336699",
+                    confirmButtonText: "Ok",
+                  });
+      
+                  this.close("reloadMainGrid");
+                } else {
+                  Swal.fire({
+                    title: "Failed",
+                    text: result.message ? result.message : "Failed!",
+                    icon: "error",
+                    confirmButtonColor: "#336699",
+                    confirmButtonText: "Ok",
+                  });
+                }
+              });
+          } else {
+            let API = `GeneralDocumentMaster/InsertGeneralDocumentMaster`;
+            let sub: Subscription = this.apiService
+              .postDynamicAPI(API, postData)
+              .subscribe((result) => {
+                if (result.status.trim() === "Success") {
+                  Swal.fire({
+                    title: "Success",
+                    text: result.message ? result.message : "Inserted successfully!",
+                    icon: "success",
+                    confirmButtonColor: "#336699",
+                    confirmButtonText: "Ok",
+                  });
+      
+                  this.close("reloadMainGrid");
+                } else {
+                  Swal.fire({
+                    title: "Failed",
+                    text: "Not Inserted Successfully",
+                    icon: "error",
+                    confirmButtonColor: "#336699",
+                    confirmButtonText: "Ok",
+                  });
+                }
+              });
+          }
+        }
+
+
+   
   }
 
   BranchDataSelected(e: any) {

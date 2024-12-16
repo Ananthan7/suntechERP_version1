@@ -31,6 +31,8 @@ export class BuyBackPolicyComponent implements OnInit {
   currentDate: any = this.commonService.currentDate;
   percent:any;
   divisionOptions: { DIVISION_CODE: string; DESCRIPTION: string }[] = [];
+  flag: any;
+  @ViewChild("codeField") codeField!: ElementRef;
 
   policycodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -67,7 +69,9 @@ export class BuyBackPolicyComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    this.flag = this.content
+    ? this.content.FLAG
+    : (this.content = { FLAG: "ADD" }).FLAG;
 
 
     this.viewModeField = true;
@@ -87,6 +91,11 @@ export class BuyBackPolicyComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
   // getDivisionOptions(): void {
 
   //   let API = 'BuyBackPolicyMaster/GetbuybackpolicyDivisondropdownList';

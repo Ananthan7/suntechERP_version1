@@ -190,6 +190,7 @@ export class MeltingIssueComponent implements OnInit {
     vocdate: ['', [Validators.required]],
     MAIN_VOCTYPE: [''],
     UNQ_JOB_ID: [''],
+    DIVCODE: [''],
   });
 
 
@@ -1110,6 +1111,7 @@ export class MeltingIssueComponent implements OnInit {
           // this.meltingIssueFrom.controls.pcs.setValue(data[0].PCS)
           this.meltingIssueFrom.controls.workerdes.setValue(data[0].WORKERDESC)
           this.meltingIssueFrom.controls.processdes.setValue(data[0].PROCESSDESC)
+          this.meltingIssueFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
           // this.meltingIssueFrom.controls.grossweight.setValue(data[0].NETWT)
           // this.meltingIssueFrom.controls.purity.setValue(data[0].PURITY)
           // this.meltingIssueFrom.controls.netweight.setValue(data[0].NETWT)
