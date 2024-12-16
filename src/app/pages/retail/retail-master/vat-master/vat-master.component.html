@@ -1352,10 +1352,30 @@
                                 maxlength="6"
                                 [value]="data.value"
                                 style="width: 100%"
+                                (focusout)="
+                                  SPvalidateLookupGridModified(
+                                    $event,
+                                    hsnCodeData,
+                                    ['EXPENSE_ACCODE', 'EXPENSE_ACCODE_DESC'],
+                                    ['CODE', 'DESCRIPTION'],
+                                    'expense',
+                                    data.data
+                                  )
+                                "
+                                (keydown)="
+                                  openTabFromGrid(
+                                    $event,
+                                    ['EXPENSE_ACCODE', 'EXPENSE_ACCODE_DESC'],
+                                    data.data,
+                                    'expense',
+                                    'EEXPENSE_ACCODE'
+                                  )
+                                "
                               />
                               <master-search
                                 *ngIf="flag != 'VIEW'"
-                                [MasterSearchData]="expenseCodeData"
+                                [MasterSearchData]="hsnCodeData"
+                                #overlayEEXPENSEACCODE
                                 class="masterSearch"
                                 (newRowClick)="
                                   gridDataBinding(
@@ -1399,24 +1419,35 @@
                                 type="text"
                                 [value]="data.value"
                                 style="width: 100%"
-                                (focusout)="SPvalidateLookupGridModified(
-                                  $event,
-                                  hsnCodeData,
-                                  ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
-                                  ['CODE', 'DESCRIPTION'],
-                                  'expense',
-                                  data
-                                  )"
+                                (focusout)="
+                                  SPvalidateLookupGridModified(
+                                    $event,
+                                    hsnCodeData,
+                                    ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
+                                    ['CODE', 'DESCRIPTION'],
+                                    'expense',
+                                    data.data
+                                  )
+                                "
+                                (keydown)="
+                                  openTabFromGrid(
+                                    $event,
+                                    ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
+                                    data.data,
+                                    'expense',
+                                    'EHSN_SAC_CODE'
+                                  )
+                                "
                               />
                               <master-search
                                 *ngIf="flag != 'VIEW'"
-                                #overlayGroupOne
+                                #overlayEHSNSACCODE
                                 [MasterSearchData]="hsnCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   gridDataBinding(
                                     $event,
-                                    data,
+                                    data.data,
                                     ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
                                     'expense'
                                   )
@@ -1447,7 +1478,12 @@
                               [value]="data.value"
                               [disabled]="flag === 'VIEW'"
                               (valueChange)="
-                                updateField($event, data, 'TAX_REG', 'expense')
+                                updateField(
+                                  $event,
+                                  data.data,
+                                  'TAX_REG',
+                                  'expense'
+                                )
                               "
                             >
                             </dx-check-box>
@@ -1463,7 +1499,7 @@
                               (valueChange)="
                                 updateField(
                                   $event,
-                                  data,
+                                  data.data,
                                   'REVERSECHARGE_UNREG',
                                   'expense'
                                 )
@@ -1482,7 +1518,7 @@
                               (valueChange)="
                                 updateField(
                                   $event,
-                                  data,
+                                  data.data,
                                   'ELIGIBLE_INPUTCREDIT',
                                   'expense'
                                 )
@@ -1538,7 +1574,9 @@
                           keyExpr="SN"
                           (onSelectionChanged)="onSelectionChanged($event, 0)"
                           [paging]="{ pageSize: 10 }"
+                          (focusout)="unSelectThroughFocusOut('costCenter')"
                         >
+                          >
                           <dxo-selection mode="single"></dxo-selection>
                           <dxo-scrolling mode="standard"></dxo-scrolling>
                           <dxo-pager
@@ -1623,7 +1661,7 @@
                                 (change)="
                                   updateField(
                                     $event,
-                                    data,
+                                    data.data,
                                     'COST_CODE',
                                     'costCenter'
                                   )
@@ -1651,6 +1689,7 @@
                                 maxlength="6"
                                 [value]="data.value"
                                 style="flex: 1"
+                                (keydown)="openGPCGrid($event, data)"
                               />
 
                               <i
@@ -1660,7 +1699,7 @@
                                   font-weight: bold;
                                   cursor: pointer;
                                 "
-                                (click)="openGPCGrid(null, data)"
+                                (click)="openGPCGrid($event, data)"
                               ></i>
                             </mat-form-field>
                           </div>
@@ -1676,7 +1715,7 @@
                                 (change)="
                                   updateField(
                                     $event,
-                                    data,
+                                    data.data,
                                     'GPC_ACCODE_DESC',
                                     'costCenter'
                                   )
@@ -1698,22 +1737,41 @@
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
                                 maxlength="6"
-                                [readonly]="true"
                                 [value]="data.value"
                                 style="width: 100%"
+                                (focusout)="
+                                  SPvalidateLookupGridModified(
+                                    $event,
+                                    hsnCodeData,
+                                    ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
+                                    ['CODE', 'DESCRIPTION'],
+                                    'costCenter',
+                                    data.data
+                                  )
+                                "
+                                (keydown)="
+                                  openTabFromGrid(
+                                    $event,
+                                    ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
+                                    data.data,
+                                    'costCenter',
+                                    'CHSN_SAC_CODE'
+                                  )
+                                "
                               />
 
                               <master-search
                                 *ngIf="flag != 'VIEW'"
-                                #overlayGroupOne
+                                #overlayCHSNSACCODE
                                 [MasterSearchData]="hsnCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
                                   gridDataBinding(
                                     $event,
-                                    data,
+                                    data.data,
                                     ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
-                                    'costCenter'
+                                    'costCenter',
+                                    true
                                   )
                                 "
                               ></master-search>
@@ -1743,7 +1801,7 @@
                               (valueChange)="
                                 updateField(
                                   $event,
-                                  data,
+                                  data.data,
                                   'TAX_REG',
                                   'costCenter'
                                 )
@@ -1762,7 +1820,7 @@
                               (valueChange)="
                                 updateField(
                                   $event,
-                                  data,
+                                  data.data,
                                   'REVERSECHARGE_UNREG',
                                   'costCenter'
                                 )
@@ -1781,7 +1839,7 @@
                               (valueChange)="
                                 updateField(
                                   $event,
-                                  data,
+                                  data.data,
                                   'ELIGIBLE_INPUTCREDIT',
                                   'costCenter'
                                 )

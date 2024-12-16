@@ -432,7 +432,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let parentDetail: any;
     let PROCESS_FORMDETAILS: any;
     //if flag is present
-    if (this.content[0]?.FLAG) {
+    let flag = this.content[0]?.FLAG || this.content[0]?.HEADERDETAILS.FLAG
+    if (flag && flag != "ADD") {
       //setting conditions related to flag
       this.setFlagMode(this.content[0]?.FLAG)
       this.processTransferdetailsForm.controls.FLAG.setValue(this.content[0]?.FLAG)
@@ -440,8 +441,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       let compData = this.content[0]?.JOB_PROCESS_TRN_COMP_DJ || [] // setting component data
       // setting component grid data
       this.metalDetailData = []
+      this.processTransferdetailsForm.controls.SETTED_FLAG.setValue(true)
       compData.forEach((item: any, index: any) => {
         item.FRM_PCS = item.SETTED_PCS
+        item.SETTED_FLAG = item.SETTED
         if (item.GROSS_WT > 0) {
           item.SRNO = index + 1
           if(this.commonService.Null2BitValue(item.SETTED)==false){

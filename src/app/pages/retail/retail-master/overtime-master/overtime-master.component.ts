@@ -5,7 +5,9 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
+import { MatSelect } from "@angular/material/select";
 import { MatTabGroup } from "@angular/material/tabs";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
@@ -631,16 +633,18 @@ export class OvertimeMasterComponent implements OnInit {
     formControlName: string,
     LookupData?: MasterSearchModel
   ) {
-    if (LookupData) {
-      this.onKeyDown(event, ["glCode", "glDesc"], LookupData);
-    }
-    const control = this.overTimeMainForm.get(formControlName);
+    const input = (event?.target as HTMLInputElement).value;
+    console.log(input);
+
     if (
       (event.key === "Tab" || event.key === "Enter") &&
-      control?.value === "" &&
-      control?.valid
+      (!input || input === "")
     ) {
       this.openPanel(event, formControlName);
+    }
+
+    if (LookupData) {
+      this.onKeyDown(event, ["glCode", "glDesc"], LookupData);
     }
   }
 
@@ -875,14 +879,63 @@ export class OvertimeMasterComponent implements OnInit {
       disableClose: true,
       data: { title, msg, okBtn, swapColor },
     });
+
+    this.dialogBox.afterClosed().subscribe((result: any) => {
+      if (result === "OK") {
+        return "OK";
+      } else {
+        return null;
+      }
+    });
   }
 
   codeChecker(event: any, controller: any) {
     let message = `Code cannot be empty!`;
-
     if (!this.overTimeMainForm.value.code) {
       this.overTimeMainForm.controls[controller].setValue("");
-      return this.openDialog("Warning", message, true);
+      this.openDialog("Warning", message, true);
+      this.dialogBox.afterClosed().subscribe((result: any) => {
+        if (result === "OK") {
+          setTimeout(() => {
+            this.codeField.nativeElement.focus();
+          }, 100);
+        }
+      });
+    }
+  }
+
+  onDropdownToggle(isOpen: boolean, dropdown: MatSelect) {
+    if (isOpen) {
+      console.log("Dropdown opened");
+      let message = `Code cannot be empty!`;
+
+      if (!this.overTimeMainForm.value.code) {
+        this.openDialog("Warning", message, true);
+        this.dialogBox.afterClosed().subscribe((result: any) => {
+          if (result === "OK") {
+            setTimeout(() => {
+              dropdown.close();
+              this.codeField.nativeElement.focus();
+            }, 100);
+          }
+        });
+      }
+    }
+  }
+
+  codeCheckerForCheckbox(event: MatCheckboxChange, controller: any) {
+    if (!this.overTimeMainForm.value.code) {
+      this.overTimeMainForm.controls[controller].setValue(false);
+      let message = `Code cannot be empty!`;
+
+      this.openDialog("Warning", message, true);
+      this.dialogBox.afterClosed().subscribe((result: any) => {
+        if (result === "OK") {
+          setTimeout(() => {
+            this.codeField.nativeElement.focus();
+          }, 100);
+        }
+      });
     }
   }
 }

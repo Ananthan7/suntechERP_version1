@@ -35,7 +35,11 @@ export class GiftVoucherMasterComponent implements OnInit {
   @ViewChild('overlaycurrencySearch') overlaycurrencySearch!: MasterSearchComponent;
   currencyDt: any;
 
-  
+  fetchedBranchData: any = {}; // Data for app-branch-division
+  branchDivisionControlsTooltip: string = ''; // Tooltip content
+  formattedBranchDivisionData: string = ''; // Formatted branch-division data string
+  isBranchDivisionVisible: boolean = false; // Toggle visibility of app-branch-division
+  @Input() isActive: boolean = false; // Control active state
   
   
   constructor(
@@ -69,6 +73,7 @@ export class GiftVoucherMasterComponent implements OnInit {
     prefix: ["", [Validators.required]],
     active: [false],
     dob: [""],
+    branchDivision: [''],
 
   })
 
@@ -83,14 +88,17 @@ export class GiftVoucherMasterComponent implements OnInit {
 
     this.getmetal_divisionvalues();
     if (this.content?.FLAG) {
-      this.setFormValues();
+
       console.log(this.content)
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        this.setFormValues();
       } else if (this.content.FLAG == 'EDIT') {
         this.viewMode = false;
         this.codeEnable = false;
         this.editMode = true;
+        this.isCodeFilled = true;
+        this.setFormValues();
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteRecord()
@@ -101,6 +109,8 @@ export class GiftVoucherMasterComponent implements OnInit {
     this.giftVoucherMasterForm.get('code')?.valueChanges.subscribe((value) => {
       this.isCodeFilled = value && value.trim().length > 0;
     });
+
+   // this.fetchedBranchData = this.getBranchDivisionData();
   }
   omit_special_char(event:any)
   {   
@@ -325,7 +335,8 @@ allowNumbersOnly(event: Event): void {
 setFormValues() {
   console.log(this.content);
   if (!this.content) return
-  this.giftVoucherMasterForm.controls.code.setValue(this.content.BRANCH_CODE)
+  this.giftVoucherMasterForm.controls.branchDivision.setValue(this.content.BRANCH_CODE)
+  this.giftVoucherMasterForm.controls.code.setValue(this.content.GIFT_TYPE_ON)
   this.giftVoucherMasterForm.controls.giftOn.setValue(this.content.GIFT_CODE)
   this.giftVoucherMasterForm.controls.description.setValue(this.content.GIFT_NAME)
   this.giftVoucherMasterForm.controls.amount.setValue(this.commonService.transformDecimalVB(
@@ -349,10 +360,10 @@ setFormValues() {
   setPostData(){
     return {
       "MID": 0,
-      "BRANCH_CODE": this.commonService.nullToString(this.giftVoucherMasterForm.value.code.toUpperCase()),
+      "BRANCH_CODE": this.commonService.nullToString(this.giftVoucherMasterForm.value.branchDivision), 
       "GIFT_CODE": this.commonService.nullToString(this.giftVoucherMasterForm.value.giftOn),
       "GIFT_NAME": this.commonService.nullToString(this.giftVoucherMasterForm.value.description),
-      "GIFT_TYPE_ON": "string",
+      "GIFT_TYPE_ON":  this.commonService.nullToString(this.giftVoucherMasterForm.value.code.toUpperCase()),
       "GIFT_AMOUNT":  this.commonService.emptyToZero(this.giftVoucherMasterForm.value.amount),
       "ACTUAL_AMOUNT": this.commonService.emptyToZero(this.giftVoucherMasterForm.value.actualAmt),
       "MIN_INVOICE_AMOUNT": this.commonService.emptyToZero(this.giftVoucherMasterForm.value.minInvoiceAmt),
@@ -447,7 +458,7 @@ setFormValues() {
       return
     }
 
-    let API = 'GiftVoucherMaster/' + this.content.BRANCH_CODE +'/'+ this.content.GIFT_CODE;
+    let API = 'GiftVoucherMaster/' + this.content.GIFT_TYPE_ON +'/'+ this.content.GIFT_CODE;
     let postData = this.setPostData()
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -487,7 +498,7 @@ setFormValues() {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'GiftVoucherMaster/' + this.content.BRANCH_CODE +'/'+ this.content.GIFT_CODE;
+        let API = 'GiftVoucherMaster/' + this.content.GIFT_TYPE_ON +'/'+ this.content.GIFT_CODE;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result.status == "Success") {
@@ -601,4 +612,76 @@ setFormValues() {
     }
   }
 
+  getBranchDivisionData() {
+    // Replace this with actual data-fetching logic
+    return {
+      BranchData: [{ BRANCH_CODE: 'BR001' }, { BRANCH_CODE: 'BR002' }],
+      DivisionData: [{ DIVISION_CODE: 'DIV001' }, { DIVISION_CODE: 'DIV002' }],
+      AreaData: [{ AREA_CODE: 'AREA001' }],
+      BusinessCategData: [{ CATEGORY_CODE: 'CAT001' }]
+    };
+  }
+
+  toggleBranchDivision() {
+    this.isBranchDivisionVisible = !this.isBranchDivisionVisible; // Toggle visibility
+  }
+
+  selectedData(data: any) {
+    console.log(data);
+    // if (this.checkCode()) return
+
+
+    let content = `Current Selected Branches:  \n`;
+    let content2 = `Current Selected Divisions:  \n`;
+    let content3 = `Current Selected Area:  \n`;
+    let content4 = `Current Selected B category:  \n`;
+    let branchDivisionData = '';
+
+    // Process Branch Data
+    if (data.BranchData) {
+      data.BranchData.forEach((Bdata: any) => {
+        branchDivisionData += Bdata.BRANCH_CODE + '#';
+        content += Bdata.BRANCH_CODE ? `${Bdata.BRANCH_CODE}, ` : '';
+      });
+    }
+
+    // Process Division Data
+    if (data.DivisionData) {
+      data.DivisionData.forEach((Ddata: any) => {
+        branchDivisionData += Ddata.DIVISION_CODE + '#';
+        content2 += Ddata.DIVISION_CODE ? `${Ddata.DIVISION_CODE}, ` : '';
+      });
+    }
+
+    // Process Area Data
+    if (data.AreaData) {
+      data.AreaData.forEach((Adata: any) => {
+        branchDivisionData += Adata.AREA_CODE + '#';
+        content3 += Adata.AREA_CODE ? `${Adata.AREA_CODE}, ` : '';
+      });
+    }
+
+    // Process Business Category Data
+    if (data.BusinessCategData) {
+      data.BusinessCategData.forEach((BCdata: any) => {
+        branchDivisionData += BCdata.CATEGORY_CODE + '#';
+        content4 += BCdata.CATEGORY_CODE ? `${BCdata.CATEGORY_CODE}, ` : '';
+      });
+    }
+
+    // Remove trailing commas
+    content = content.replace(/, $/, '');
+    content2 = content2.replace(/, $/, '');
+    content3 = content3.replace(/, $/, '');
+    content4 = content4.replace(/, $/, '');
+
+    // Set tooltip content
+    this.branchDivisionControlsTooltip = content + '\n' + content2 + '\n' + content3 + '\n' + content4;
+
+    // Update form control with formatted data
+    this.formattedBranchDivisionData = branchDivisionData;
+    this.giftVoucherMasterForm.controls.branchDivision.setValue(this.formattedBranchDivisionData);
+  }
 }
+  
+
