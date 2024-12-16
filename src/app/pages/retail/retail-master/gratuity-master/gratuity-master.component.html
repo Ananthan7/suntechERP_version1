@@ -8,6 +8,7 @@
   </div>
   <!-- modal header component -->
   <modal-header
+    [isViewMore]="this.flag !== 'VIEW'"
     (saveClick)="gratuityMasterFormSubmit()"
     (cancelClick)="close()"
     (deleteClick)="DeleteController()"
@@ -33,6 +34,8 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <mat-select
+                      #type
+                      (openedChange)="onDropdownToggle($event, type)"
                       (selectionChange)="GetGridThroughType($event)"
                       formControlName="type"
                     >
@@ -66,6 +69,7 @@
                       formControlName="code"
                       UpperCaseDirective
                       autocomplete="off"
+                      (input)="codeChecker($event, 'code')"
                     />
                     <mat-error
                       *ngIf="
@@ -96,6 +100,7 @@
                       formControlName="description"
                       UpperCaseDirective
                       autocomplete="off"
+                      (input)="codeChecker($event, 'description')"
                     />
 
                     <mat-error
@@ -147,6 +152,7 @@
                           false
                         )
                       "
+                      (input)="codeChecker($event, 'debitAc')"
                       [readonly]="flag === 'VIEW'"
                       type="text"
                       matInput
@@ -155,7 +161,11 @@
                     <master-search
                       #overlayDebitAc
                       (focusout)="openTab($event, 'debitAc')"
-                      *ngIf="flag != 'VIEW'"
+                      *ngIf="
+                        flag != 'VIEW' &&
+                        this.gratuityMasterForm.value.code &&
+                        this.gratuityMasterForm.value.code.length > 0
+                      "
                       class="masterSearch"
                       [MasterSearchData]="debitAccCode"
                       (newRowClick)="
@@ -183,10 +193,9 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       type="text"
-                      [readonly]="flag === 'VIEW'"
                       matInput
                       formControlName="debitAcDesc"
-                       
+                      [readonly]="true"
                     />
 
                     <mat-error
@@ -238,16 +247,20 @@
                           false
                         )
                       "
+                      (input)="codeChecker($event, 'countryCode')"
                       type="text"
                       [readonly]="flag === 'VIEW'"
                       matInput
                       formControlName="countryCode"
-                       
                     />
                     <master-search
                       (focusout)="openTab($event, 'countryCode')"
                       #overlayCountryCode
-                      *ngIf="flag != 'VIEW'"
+                      *ngIf="
+                        flag != 'VIEW' &&
+                        this.gratuityMasterForm.value.code &&
+                        this.gratuityMasterForm.value.code.length > 0
+                      "
                       class="masterSearch"
                       [MasterSearchData]="countryCodeData"
                       (newRowClick)="
@@ -275,10 +288,9 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       type="text"
-                      [readonly]="flag === 'VIEW'"
+                      [readonly]="true"
                       matInput
                       formControlName="countryDesc"
-                       
                     />
                     <mat-error
                       *ngIf="
@@ -311,7 +323,12 @@
                 </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
-                    <mat-select formControlName="basedOn">
+                    <mat-select
+                      #basedOn
+                      formControlName="basedOn"
+                      (selectionChange)="enableAmount($event)"
+                      (openedChange)="onDropdownToggle($event, basedOn)"
+                    >
                       <mat-option
                         *ngFor="let data of basedOnDropdown"
                         [value]="data.SRNO"
@@ -333,12 +350,14 @@
                     <input
                       [readonly]="flag === 'VIEW'"
                       type="text"
-                      style="text-align: right"
+                      class="text-right"
+                      [min]="0"
+                      [max]="13"
                       matInput
                       AmountDecimalInput
                       formControlName="amount"
-                       
                       autocomplete="off"
+                      (input)="codeChecker($event, 'amount')"
                     />
                   </mat-form-field>
                 </div>
@@ -363,11 +382,17 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      class="text-right"
                       type="number"
                       [readonly]="flag === 'VIEW'"
                       matInput
                       formControlName="noOfDaysAndYear"
-                      (keydown)="preventExtraDigits($event)"
+                      (keydown)="
+                        handleInputRestrictions($event, 'noOfDaysAndYear')
+                      "
+                      (input)="
+                        handleInputRestrictions($event, 'noOfDaysAndYear')
+                      "
                       autocomplete="off"
                     />
                   </mat-form-field>
@@ -384,11 +409,17 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      type="text"
+                      class="text-right"
+                      type="number"
                       [readonly]="flag === 'VIEW'"
                       matInput
                       formControlName="noOfDaysAndMonth"
-                      (keydown)="preventExtraDigits($event)"
+                      (keydown)="
+                        handleInputRestrictions($event, 'noOfDaysAndMonth')
+                      "
+                      (input)="
+                        handleInputRestrictions($event, 'noOfDaysAndMonth')
+                      "
                       autocomplete="off"
                     />
                   </mat-form-field>
@@ -496,7 +527,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined2"
-                       
                     />
                     <master-search
                       #overlayUserDefined2
@@ -536,7 +566,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined3"
-                       
                     />
                     <master-search
                       #overlayUserDefined3
@@ -576,7 +605,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined4"
-                       
                     />
                     <master-search
                       #overlayUserDefined4
@@ -616,7 +644,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined5"
-                       
                     />
                     <master-search
                       #overlayUserDefined5
@@ -658,7 +685,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined6"
-                       
                     />
                     <master-search
                       #overlayUserDefined6
@@ -698,7 +724,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined7"
-                       
                     />
                     <master-search
                       #overlayUserDefined7
@@ -738,7 +763,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined8"
-                       
                     />
                     <master-search
                       #overlayUserDefined8
@@ -778,7 +802,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined9"
-                       
                     />
                     <master-search
                       #overlayUserDefined9
@@ -818,7 +841,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined10"
-                       
                     />
                     <master-search
                       #overlayUserDefined10
@@ -860,7 +882,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined11"
-                       
                     />
                     <master-search
                       #overlayUserDefined11
@@ -900,7 +921,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined12"
-                       
                     />
                     <master-search
                       #overlayUserDefined12
@@ -940,7 +960,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined13"
-                       
                     />
                     <master-search
                       #overlayUserDefined3
@@ -980,7 +999,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined14"
-                       
                     />
                     <master-search
                       #overlayUserDefined14
@@ -1020,7 +1038,6 @@
                       type="text"
                       matInput
                       formControlName="userDefined15"
-                       
                     />
                     <master-search
                       #overlayUserDefined15

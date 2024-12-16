@@ -175,8 +175,13 @@
                     >
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%" appearance="outline">
-                        <mat-select formControlName="calculateBy">
+                        <mat-select
+                          #calculateBy
+                          formControlName="calculateBy"
+                          (openedChange)="onDropdownToggle($event, calculateBy)"
+                        >
                           <mat-option
+                            (input)="codeChecker($event, 'glCode')"
                             *ngFor="let data of calculateByDropdown"
                             [value]="data.SRNO"
                           >
@@ -196,6 +201,7 @@
                           [max]="14"
                           type="text"
                           formControlName="perHour"
+                          (input)="codeChecker($event, 'perHour')"
                         />
                       </mat-form-field>
                     </div>
@@ -217,7 +223,11 @@
                     >
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%" appearance="outline">
-                        <mat-select formControlName="basedOn">
+                        <mat-select
+                          #basedOn
+                          formControlName="basedOn"
+                          (openedChange)="onDropdownToggle($event, basedOn)"
+                        >
                           <mat-option
                             *ngFor="let data of basedOnDropdown"
                             [value]="data.SRNO"
@@ -230,6 +240,9 @@
 
                     <div class="col-md-4 mt-2">
                       <mat-checkbox
+                        (change)="
+                          codeCheckerForCheckbox($event, 'holidayOverTime')
+                        "
                         formControlName="holidayOverTime"
                         id="holidayOverTime"
                       >
@@ -243,6 +256,9 @@
 
                     <div class="col-md-4 mt-2">
                       <mat-checkbox
+                        (change)="
+                          codeCheckerForCheckbox($event, 'calculateArrear')
+                        "
                         formControlName="calculateArrear"
                         id="calculateArrear"
                       >
