@@ -103,7 +103,7 @@ export class StonePricingMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 86,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'sieve Set',
+    SEARCH_HEADING: 'Sieve Set',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'SIEVE SET MASTER'",
     VIEW_INPUT: true,
@@ -546,7 +546,7 @@ export class StonePricingMasterComponent implements OnInit {
       "DESCRIPTION": this.commonService.nullToString(form.price_code.toUpperCase() + form.shape.toUpperCase() + form.color.toUpperCase()),
       // "DESCRIPTION": this.stonePrizeMasterForm.value.price_code.toUpperCase() + " " + this.stonePrizeMasterForm.value.shape.toUpperCase() + this.stonePrizeMasterForm.value.color.toUpperCase(),
       "SHAPE": this.commonService.nullToString(form.shape) || "",
-      "COLOR": this.commonService.nullToString(form.color)|| "",
+      "COLOR": this.commonService.nullToString(form.color) || "",
       "CLARITY": this.commonService.nullToString(form.clarity) || "",
       "SIZE_FROM": this.commonService.nullToString(form.size_from) || "",
       "SIZE_TO": this.commonService.nullToString(form.size_to) || "",
@@ -595,9 +595,7 @@ export class StonePricingMasterComponent implements OnInit {
     else if (this.commonService.nullToString(form.wt_to) == '') {
       this.commonService.toastErrorByMsgId('MSG3565')//"wt_to cannot be empty"
       return true
-    }
-
-    else if (this.commonService.nullToString(form.issue_rate) == '') {
+    } else if (this.commonService.nullToString(form.issue_rate) == '') {
       this.commonService.toastErrorByMsgId('MSG1723')//"issue_rate cannot be empty"
       return true
     }
@@ -638,12 +636,12 @@ export class StonePricingMasterComponent implements OnInit {
       this.update()
       return
     }
-
+    if (this.submitValidation(this.stonePrizeMasterForm.value)) return;
     if (this.checkCondition(this.stonePrizeMasterForm.value.carat_wt, 'MSG1095')) return;
     if (this.checkCondition(this.stonePrizeMasterForm.value.wt_from, 'MSG3565')) return;
     if (this.checkCondition(this.stonePrizeMasterForm.value.wt_to, 'MSG3565')) return;
     if (this.checkCondition(this.stonePrizeMasterForm.value.issue_rate, 'MSG1723')) return;
-    if (this.submitValidation(this.stonePrizeMasterForm.value)) return;
+ 
 
 
 
@@ -658,8 +656,8 @@ export class StonePricingMasterComponent implements OnInit {
     }
 
 
-    console.log( typeof(this.stonePrizeMasterForm.value.selling) );
-    console.log(typeof(this.stonePrizeMasterForm.value.selling_rate));
+    console.log(typeof (this.stonePrizeMasterForm.value.selling));
+    console.log(typeof (this.stonePrizeMasterForm.value.selling_rate));
 
 
     if (
@@ -670,7 +668,7 @@ export class StonePricingMasterComponent implements OnInit {
       return;
     }
 
-    
+
 
 
 
@@ -781,7 +779,7 @@ export class StonePricingMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return

@@ -22,9 +22,30 @@
                     </div>
                     <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Branches</label>
 
-                    <div class="col-md-2">
-                        <button class="btn btn-primary btn-sm">Branch</button>
-                        </div>
+                    <!-- <div class="col-md-2">
+                        <button class="btn btn-outline-primary metal-issue-del-btn">Branch</button>
+                        </div> -->
+
+                        <div class="col-md-2">
+                            <!-- Branch button -->
+                            <!-- <button type="button"  class="btn btn-outline-primary metal-issue-del-btn" (click)="toggleBranchDivision()">Branch</button> -->
+                          
+                            <!-- app-branch-division should toggle visibility -->
+                            <div  *ngIf=" viewMode == false && !isCodeFilled == false" class="branch-division-container">
+                                
+                              <app-branch-division
+                                [fetchData]="fetchedBranchData" 
+                                (newRowClick)="selectedData($event)"
+                                class="branchDivisionelectr" 
+                                [matTooltip]="branchDivisionControlsTooltip"
+                                matTooltipClass="custom-tooltip"  
+                                matTooltipPosition="above">
+                              </app-branch-division>
+                            </div>
+                          </div>
+                          
+                          
+                          
                 </div>
 
                 <div class="row mb-1">
@@ -136,7 +157,7 @@
                     <label for="code" class="col-sm-2 col-form-label" id="ID029">Min Invoice Amt * :</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="number" formControlName="minInvoiceAmt"  maxlength="13" [readonly]="viewMode || !isCodeFilled" class="text-right" AmountDecimalInput/>
+                            <input matInput type="text" formControlName="minInvoiceAmt"  maxlength="13" [readonly]="viewMode || !isCodeFilled" class="text-right" AmountDecimalInput  (input)="allowNumbersOnly($event)" />
                         </mat-form-field>
                     </div>
 

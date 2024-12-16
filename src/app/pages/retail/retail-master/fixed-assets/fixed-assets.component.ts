@@ -1,9 +1,13 @@
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSelect } from '@angular/material/select';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 
@@ -22,9 +26,12 @@ export class FixedAssetsComponent implements OnInit {
   viewOnly: boolean = false;
   codeedit: boolean = false;
   dyndatas: any = [];
+  methodlist: any = [];
   viewMode: boolean = false;
   editMode: boolean = false;
   disable_code:boolean = false;
+  allowfields:boolean = false;
+  dialogBox:any;
 
 
   constructor(
@@ -32,7 +39,8 @@ export class FixedAssetsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private apiService: SuntechAPIService,
     private commonService: CommonServiceService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    public dialog: MatDialog
 
 
 
@@ -106,29 +114,105 @@ export class FixedAssetsComponent implements OnInit {
     this.fa_id = this.content?.MID;
     console.log(this.fa_id);
     this.flag = this.content?.FLAG;
+
+    this.methodlist = this.getUniqueValues(
+      this.commonService.getComboFilterByID("Depreciation Method"),
+      "ENGLISH"
+      );
+
+
     if(this.flag == undefined){
       this.renderer.selectRootElement('#assets_code')?.focus();
     }
     if(this.flag == 'EDIT'){
       this.disable_code = true;
+      this.allowfields = true;
     }else if(this.content?.FLAG == 'VIEW'){
         this.viewOnly = true;
         this.viewMode = true;
+        this.allowfields = true;
+        
     }
     this.initialController(this.flag, this.content);
   }
+
+  getUniqueValues(List: any[], field: string) {
+    return List.filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex((t) => t[field] === item[field] && t[field] !=="")
+);
+}
+  
+
   ngAfterViewInit() {
     if (this.flag == undefined && this.assetsCodeInput) {
       this.assetsCodeInput.nativeElement.focus();
     }
   }
+
+
   checkcode() {
     const CodeControl = this.fixedassetsform.controls.assets_code;
     if (!CodeControl.value || CodeControl.value.trim() === "") {
       this.commonService.toastErrorByMsgId('MSG1124');
       this.renderer.selectRootElement('#assets_code')?.focus();
+      this.allowfields = false;
+    }else{
+      this.allowfields = true;
     }
   }
+
+  onDropdownToggle(isOpen: boolean, dropdown: MatSelect) {
+    if (isOpen) {
+      console.log("Dropdown opened");
+      let message = "Code cannot be empty!";
+
+      if (!this.fixedassetsform.value.code) {
+        this.openDialog("Warning", message, true);
+        this.dialogBox.afterClosed().subscribe((result: any) => {
+          if (result === "OK") {
+            setTimeout(() => {
+              dropdown.close();
+              this.renderer.selectRootElement('#assets_code')?.focus();
+            }, 100);
+          }
+        });
+}
+}
+}
+
+  codeChecker(event: any, controller: any) {
+    let message = "Code cannot be empty!";
+    if (!this.fixedassetsform.value.assets_code) {
+      this.fixedassetsform.controls[controller].setValue("");
+      this.openDialog("Warning", message, true);
+      this.dialogBox.afterClosed().subscribe((result: any) => {
+        if (result === "OK") {
+          setTimeout(() => {
+            // this.codeField.nativeElement.focus();
+            this.renderer.selectRootElement('#assets_code')?.focus();
+          }, 100);
+        }
+    });
+ }
+}
+
+openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
+  this.dialogBox = this.dialog.open(DialogboxComponent, {
+    width: "40%",
+    disableClose: true,
+    data: { title, msg, okBtn, swapColor },
+  });
+
+  this.dialogBox.afterClosed().subscribe((result: any) => {
+    if (result === "OK") {
+      return "OK";
+    } else {
+      return null;
+    }
+    });
+  }
 
   UDF1Data: MasterSearchModel = {
     PAGENO: 1,
@@ -331,7 +415,6 @@ export class FixedAssetsComponent implements OnInit {
 
 
   selectedfixingassets(e: any) {
-    console.log(e);
     this.fixedassetsform.controls.category_code.setValue(e.CODE);
     this.fixedassetsform.controls.category_code_desc.setValue(e.DESCRIPTION);
   }
@@ -853,6 +936,22 @@ export class FixedAssetsComponent implements OnInit {
       console.warn("Controller or modelfield is missing.");
     }
   }
+
+  codeCheckerForCheckbox(event: MatCheckboxChange, controller: any) {
+    if (!this.fixedassetsform.value.code) {
+      this.fixedassetsform.controls[controller].setValue(false);
+      let message = "Code cannot be empty"!;
+
+      this.openDialog("Warning", message, true);
+      this.dialogBox.afterClosed().subscribe((result: any) => {
+        if (result === "OK") {
+          setTimeout(() => {
+            this.renderer.selectRootElement('#assets_code')?.focus();
+          }, 100);
+        }
+   });
+}
+}
 
 
 

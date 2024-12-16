@@ -735,7 +735,7 @@
                       <th>Std Loss</th>
                       <td>
                         <mat-form-field appearance="outline"
-                          style="width: 130px;">
+                          style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_STD_LOSS" />
@@ -784,7 +784,7 @@
                       <td>Act. Loss</td>
                       <td>
                         <mat-form-field appearance="outline"
-                          style="width: 130px;">
+                          style="width: 110px;">
                           <input type="text" matInput maxlength="10"
                             (focusout)="txtLossBooked_Validating()"
                             MetalDecimalInput
@@ -850,7 +850,7 @@
                       <th>Gain</th>
                       <td>
                         <mat-form-field appearance="outline"
-                          style="width: 130px;">
+                          style="width: 110px;">
                           <input type="text" matInput class="text-right"
                             MetalDecimalInput
                             formControlName="METAL_GainGrWt" />
@@ -933,7 +933,7 @@
                       </td>
                       <td colspan="2">
                         <mat-form-field appearance="outline"
-                          style="width: 130px;">
+                          style="width: 180px;">
                           <input type="text" matInput class="text-right"
                             NumberOnly readonly
                             formControlName="METAL_BalPCS" />
@@ -970,7 +970,7 @@
                       </td>
                       <td colspan="2">
                         <mat-form-field appearance="outline"
-                          style="width: 130px;">
+                          style="width: 180px;">
                           <input type="text" matInput class="text-right"
                             readonly
                             formControlName="METAL_BalGrWt" />
@@ -1009,7 +1009,7 @@
                       <!-- BalStoneWt -->
                       <td colspan="2">
                         <mat-form-field appearance="outline"
-                          style="width: 130px;">
+                          style="width: 180px;">
                           <input type="text" matInput readonly
                             formControlName="METAL_BalStoneWt"
                             class="text-right" />
@@ -1047,7 +1047,7 @@
                       <!-- BalIronWt -->
                       <td colspan="2">
                         <mat-form-field appearance="outline"
-                          style="width: 130px;">
+                          style="width: 180px;">
                           <input type="text" matInput class="text-right"
                             formControlName="METAL_BalIronWt"
                             readonly />
@@ -1084,7 +1084,7 @@
                       <!-- BalNetWt -->
                       <td colspan="2">
                         <mat-form-field appearance="outline"
-                          style="width: 130px;">
+                          style="width: 180px;">
                           <input type="text" matInput readonly
                             class="text-right"
                             formControlName="METAL_BalNetWt" />
@@ -1120,7 +1120,7 @@
                       </td>
                       <td colspan="2">
                         <mat-form-field appearance="outline"
-                          style="width: 130px;">
+                          style="width: 180px;">
                           <input type="text" matInput readonly
                             formControlName="METAL_BalPureWt"
                             class="text-right" />
@@ -1138,16 +1138,12 @@
                       <label for="input" class="col-sm-4 col-form-label">Start
                         Date</label>
                       <div class="col-sm-7">
-                        <!-- <mat-form-field appearance="outline" style="width: 100%;">
-                          <input type="date" matInput formControlName="startdate"
-                            id="startdate" (focusout)="onStartDateChange()" />
-                        </mat-form-field> -->
                         <mat-form-field appearance="outline"
-                          style="width: 100%">
+                          style="width: 100%;">
                           <input matInput DateValidation
                             (dateChange)="onStartDateChange()"
                             [matDatepicker]="start" formControlName="startdate"
-                            placeholder="DD/MM/YYYY" />
+                            placeholder="DD/MM/YYYY"/>
                           <mat-datepicker-toggle matSuffix
                             [for]="start"></mat-datepicker-toggle>
                           <mat-datepicker #start></mat-datepicker>
@@ -1159,7 +1155,7 @@
                         Date</label>
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline"
-                          style="width: 100%">
+                          style="width: 100%;">
                           <input matInput DateValidation
                             [matDatepicker]="end" formControlName="enddate"
                             placeholder="DD/MM/YYYY" [min]="minEndDate" />

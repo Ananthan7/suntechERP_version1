@@ -38,6 +38,7 @@ export class WholesaleSalesmanTargetDetailsComponent implements OnInit {
     { field: 'Diamond', value: 'd' },
     { field: 'Metal', value: 'm' }
   ];
+  
   targetonlist: any[] = [{ field: "Sales Amount" }, { field: "Quantity" },{ field: "Gp" }];
 
   wholesaledetailsform: FormGroup = this.formBuilder.group({

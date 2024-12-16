@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { WholesaleSalesmanTargetDetailsComponent } from './wholesale-salesman-target-details/wholesale-salesman-target-details.component';
@@ -44,10 +44,10 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
   ) { }
 
   wholesalesmanform: FormGroup = this.formBuilder.group({
-    salesman: [""],
-    fin_year: [""],
+    salesman: ["",[Validators.required]],
+    fin_year: ["",[Validators.required]],
     datefrom: [""],
-    code: [""],
+    code: ["",[Validators.required]],
     dateto: [""],
    
   });
@@ -123,6 +123,8 @@ setcodevalues(){
     WHERECONDITION: "SALESPERSON_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    FRONTENDFILTER :true,
+    LOAD_ONCLICK :true
   }
 
   selectedsalesman(e:any){
@@ -133,7 +135,6 @@ setcodevalues(){
   ngOnInit(): void {
     console.log(this.content);
    
-    // this.wst_id = this.content?.MID;
     this.wst_id = this.content?.TARGET_CODE;
     console.log(this.wst_id);
     this.flag = this.content?.FLAG;
@@ -253,6 +254,26 @@ setcodevalues(){
 
   formSubmit() {
 
+    if(this.maindetails.length == 0 || !this.maindetails.length){
+      this.commonService.toastErrorByMsgId('MSG1200');
+      return;
+    }
+
+    Object.keys(this.wholesalesmanform.controls).forEach((controlName) => {
+      const control = this.wholesalesmanform.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
+
+    const requiredFieldsInvalid = Object.keys(
+      this.wholesalesmanform.controls
+    ).some((controlName) => {
+      const control = this.wholesalesmanform.controls[controlName];
+      return control.hasError("required") && control.touched;
+  });
+
+  if(!requiredFieldsInvalid){
     const postData = {
 
       "TARGET_CODE": this.wholesalesmanform.controls.code.value,
@@ -318,6 +339,9 @@ setcodevalues(){
           }
         });
     }
+  }
+
+
 
   }
 
@@ -447,27 +471,7 @@ setcodevalues(){
 
               console.log("Filtered Search Result:", searchResult);
 
-              if (FROMCODE === true) {
-                searchResult = [
-                  ...searchResult.filter(
-                    (item: any) =>
-                      item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
-                  ),
-                  ...searchResult.filter(
-                    (item: any) =>
-                      item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
-                  ),
-                ];
-              } else if (FROMCODE === false) {
-                searchResult = [
-                  ...searchResult.filter(
-                    (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
-                  ),
-                  ...searchResult.filter(
-                    (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
-                  ),
-                ];
-              }
+             
 
               if (searchResult?.length) {
                 const matchedItem = searchResult[0];

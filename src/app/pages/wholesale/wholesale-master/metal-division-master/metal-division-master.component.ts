@@ -47,14 +47,17 @@ export class MetalDivisionMasterComponent implements OnInit {
     this.renderer.selectRootElement('#code')?.focus();
 
     if (this.content?.FLAG) {
-      this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
         this.viewDisable = true;
         this.viewMode = true;
+        this.setFormValues();
+
         // this.processMasterForm();
       } else if (this.content.FLAG == 'EDIT') {
         this.editableMode = true;
         this.editMode = true;
+        this.setFormValues();
+
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteMetalDivision()
