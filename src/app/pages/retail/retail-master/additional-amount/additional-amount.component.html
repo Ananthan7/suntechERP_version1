@@ -345,6 +345,7 @@
                 <button
                   type="button"
                   class="col-md-12 p-4 mb-4 btn btn-primary text-center"
+                  [disabled]="viewMode || editMode"
                   (click)="openAdditionalAmount()"
                 >
                   Auto Additional Amount

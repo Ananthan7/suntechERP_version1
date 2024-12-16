@@ -224,12 +224,10 @@ button:disabled {
 }
 
 .update-finish-button {
-  // background-color: #1E3C72;
-  background-color: #6c91d0 !important;
+  background-color: #1E3C72;
   color: white;
   padding: 5px 10px;
   line-height: 1.5;
-  
 }
 
 .cancel-button {
@@ -296,4 +294,10 @@ button:disabled {
 
 .equal-width {
   width: 11%;
+}
+
+.refund_Buttons{
+  padding: 5px 10px;
+  line-height: 1.5;
+  background-color: #abb0b5 !important;
 }

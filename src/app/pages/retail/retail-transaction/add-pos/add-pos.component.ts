@@ -1948,7 +1948,14 @@ export class AddPosComponent implements OnInit {
   }
 
 
-
+  onCheckboxChange(event: any) {
+    if (event.checked) {
+      this.customerDataForm.get('tourVatRefundNo')?.enable();
+    } else {
+      this.customerDataForm.get('tourVatRefundNo')?.disable();
+      this.customerDataForm.get('tourVatRefundNo')?.reset();
+    }
+  }
 
   onChanges(): void {
     this.customerDataForm.value.tourVatRefuncYN.valueChanges.subscribe((isChecked: any) => {
