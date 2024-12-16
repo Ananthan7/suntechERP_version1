@@ -142,11 +142,12 @@ export class JobcardComponent implements OnInit {
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 7,
+    LOOKUPID: 278,
     SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Customer Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    // WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: `@strAcCode=''`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -383,6 +384,7 @@ export class JobcardComponent implements OnInit {
     srewFiled: [''],
     instruction: [''],
     picture_name: [''],
+    DESIGN_DESC: [''],
     FLAG: ['']
 
   });
@@ -677,9 +679,9 @@ export class JobcardComponent implements OnInit {
   designCodeSelected(e: any) {
     console.log(e);
     this.jobCardFrom.controls.designcode.setValue(e.Design_Code);
-    this.jobCardFrom.controls.designtype.setValue(e.Design_Description);
+    this.jobCardFrom.controls.designtype.setValue(e.Design_Description.toUpperCase());
     //this.jobCardFrom.controls.jobtype.setValue(e.Design_Description);
-
+    this.jobsalesorderdetailDJ = [];
     let length = this.tableData.length;
     let sn = length + 1;
     if (this.tableData.length == 0) {
@@ -786,7 +788,6 @@ export class JobcardComponent implements OnInit {
         this.tableData[0].stone_wt = result.response.STONE_WT;
         this.tableData[0].gross_wt = result.response.GROSS_WT;
         this.tableData[0].part_code = result.response.PART_CODE;
-        this.tableData[0]
 
         // Get the first object from DESIGN_STNMTL_DETAIL array
 
@@ -959,8 +960,8 @@ export class JobcardComponent implements OnInit {
 
   customerCodeSelected(e: any) {
     console.log(e);
-    this.jobCardFrom.controls.customer.setValue(e.ACCODE);
-    this.jobCardFrom.controls.customername.setValue(e.ACCOUNT_HEAD);
+    this.jobCardFrom.controls.customer.setValue(e['Account Code']);
+    this.jobCardFrom.controls.customername.setValue(e['Account Description'].toUpperCase());
   }
 
   costCodeSelected(e: any) {
@@ -1203,7 +1204,7 @@ export class JobcardComponent implements OnInit {
       "JOB_NUMBER": this.commonService.nullToString(this.jobCardFrom.value.jobno) || "",
       "BRANCH_CODE": this.branchCode,
       "JOB_DATE": this.jobCardFrom.value.jobdate || "",
-      "JOB_DESCRIPTION": "",
+      "JOB_DESCRIPTION": this.jobCardFrom.value.designtype.toUpperCase(),
       "JOB_PREFIX": "",
       "CURRENCY_CODE": this.jobCardFrom.value.currency || "",
       "CC_RATE": 0,
@@ -1968,7 +1969,7 @@ export class JobcardComponent implements OnInit {
             this.jobCardFrom.controls.jobtype.setValue(matchedItem2.DESIGN_TYPE);
             this.jobCardFrom.controls.type.setValue(matchedItem2.TYPE_CODE);
             this.jobCardFrom.controls.purity.setValue(matchedItem2.PURITY);
-            this.getDesigncode()
+            // this.getDesigncode()
           }
         } else {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
