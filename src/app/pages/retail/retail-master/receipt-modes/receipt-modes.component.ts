@@ -1,4 +1,5 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { DatePipe } from "@angular/common";
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -113,13 +114,22 @@ export class ReceiptModesComponent implements OnInit {
   excludeTax!: boolean;
   LoyaltyItem!: boolean;
   modeDorpdown!: any[];
+  fetchedBranchDataParam: any= [];
+  fetchedBranchData: any[] =[];
+  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
+  branchDivisionControlsTooltip: any;
+  formattedBranchDivisionData: any;
+  isEnableRCM!:boolean
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private apiService: SuntechAPIService,
     private toastr: ToastrService,
-    private commonService: CommonServiceService
+    private commonService: CommonServiceService,
+    private datePipe: DatePipe,
+    private cdr: ChangeDetectorRef
   ) {}
 
   receiptModesMainForm: FormGroup = this.formBuilder.group({
@@ -141,13 +151,11 @@ export class ReceiptModesComponent implements OnInit {
     loyalty: [""],
     rcmCredit: [""],
     excludeTax: [""],
+    
   });
 
   ngOnInit(): void {
-    this.modeDorpdown = this.getUniqueValues(
-      this.commonService.getComboFilterByID("Receipt Mode"),
-      "ENGLISH"
-    );
+
 
     this.flag = this.content
       ? this.content.FLAG
@@ -417,6 +425,8 @@ export class ReceiptModesComponent implements OnInit {
         this.LoyaltyItem = checked;
         break;
       case "rcmCredit":
+        this.isEnableRCM = checked
+        this.cdr.detectChanges()
         this.RcmCreditCard = checked;
         break;
       case "excludeTax":
@@ -432,6 +442,19 @@ export class ReceiptModesComponent implements OnInit {
     this.flag = currentFlag;
 
     switch (this.flag) {
+      
+
+      case "ADD":
+
+      this.modeDorpdown = this.getUniqueValues(
+        this.commonService.getComboFilterByID("Receipt Mode"),
+        "ENGLISH"
+      );
+        this.receiptModesMainForm.controls["mode"].setValue(this.modeDorpdown[0].SRNO)
+        console.log(this.modeDorpdown);
+        
+
+        break;
       case "VIEW":
         this.receiptModesMainForm.controls["loyalty"].disable();
         this.receiptModesMainForm.controls["rcmCredit"].disable();
@@ -602,5 +625,73 @@ export class ReceiptModesComponent implements OnInit {
     FORMNAMES.forEach((formName) => {
       this.receiptModesMainForm.controls[formName].setValue("");
     });
+  }
+
+  prefillScreenValues(){
+    if ( Object.keys(this.content).length > 0) {
+      //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+    }
+    else{
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.receiptModesMainForm.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+   
+      this.dateToPass = {
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!
+      };
+    }
+  }
+
+  selectedData(data: any) {
+    console.log(data)
+    // let content= ``, content2 =``,  content3 =``, content4 =``
+    let content = `Current Selected Branches:  \n`
+    let content2 = `Current Selected Divisions:  \n`
+    let content3 = `Current Selected Area:  \n`
+    let content4 = `Current Selected B category:  \n`
+    let branchDivisionData = '';
+    if(data.BranchData){
+      // content = `Current Selected Branches:  \n`
+      data.BranchData.forEach((Bdata: any)=>{
+        branchDivisionData += Bdata.BRANCH_CODE+'#'
+        content += Bdata.BRANCH_CODE ? `${Bdata.BRANCH_CODE}, ` : ''
+      }) 
+    }
+
+    if(data.DivisionData){
+      // content2 = `Current Selected Divisions:  \n`
+      data.DivisionData.forEach((Ddata: any)=>{
+        branchDivisionData += Ddata.DIVISION_CODE+'#'
+        content2 += Ddata.DIVISION_CODE ? `${Ddata.DIVISION_CODE}, ` : ''
+      }) 
+    }
+
+    if(data.AreaData){
+      // content3 = `Current Selected Area:  \n`
+      data.AreaData.forEach((Adata: any)=>{
+        branchDivisionData += Adata.AREA_CODE+'#'
+        content3 += Adata.AREA_CODE ? `${Adata.AREA_CODE}, ` : ''
+      }) 
+    }
+
+    if(data.BusinessCategData){
+      // content4 = `Current Selected B category:  \n`
+      data.BusinessCategData.forEach((BCdata: any)=>{
+        branchDivisionData += BCdata.CATEGORY_CODE+'#'
+        content4 += BCdata.CATEGORY_CODE ? `${BCdata.CATEGORY_CODE}, ` : ''
+      }) 
+    }
+
+    content = content.replace(/, $/, '');
+    content2 = content2.replace(/, $/, '');
+    content3 = content3.replace(/, $/, '');
+    content4 = content4.replace(/, $/, '');
+    this.branchDivisionControlsTooltip = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
+
+    this.formattedBranchDivisionData = branchDivisionData
+    this.receiptModesMainForm.controls.branches.setValue(this.formattedBranchDivisionData);
   }
 }
