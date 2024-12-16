@@ -520,19 +520,47 @@ export class FestivalMasterComponent implements OnInit {
       const toDate = event.target.value;
 
       const fromDateObj = new Date(fromDate);
-      const toDateObj = new Date(toDate);``
+      const toDateObj = new Date(toDate);
 
       if (fromDateObj < toDateObj) {
         this.maindetails[updatedSRNO].TODATE = toDate;
       } else {
+        console.log(fromDateObj);
+        console.log(toDateObj);
         this.maindetails[updatedSRNO].TODATE = "";
         this.commonService.toastErrorByMsgId('MSG1904');
+        console.log( this.maindetails[updatedSRNO].TODATE )
       }
       } else {
         console.log("Error: Invalid SRNO or index out of bounds.");
       }
 
   }
+
+  // fromdatecheck(event: any, data: any){
+  //   console.log("in");
+  //   const updatedSRNO = data.data.SRNO - 1;
+
+  //   if (updatedSRNO >= 0 && updatedSRNO < this.maindetails.length) {
+  //     const fromDate = this.maindetails[updatedSRNO].FROMDATE;
+  //     const toDate = event.target.value;
+
+  //     const fromDateObj = new Date(fromDate);
+  //     const toDateObj = new Date(toDate);
+
+  //     if (fromDateObj < toDateObj) {
+  //       this.maindetails[updatedSRNO].TODATE = toDate;
+  //     } else {
+  //       console.log(fromDateObj);
+  //       console.log(toDateObj);
+  //       this.maindetails[updatedSRNO].TODATE = "";
+  //       this.commonService.toastErrorByMsgId('MSG1904');
+  //       console.log( this.maindetails[updatedSRNO].TODATE )
+  //     }
+  //     } else {
+  //       console.log("Error: Invalid SRNO or index out of bounds.");
+  //     }
+  // }
 
   targetchange(event: any, data: any) {
     const updatedSRNO = data.data.SRNO - 1;
