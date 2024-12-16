@@ -238,7 +238,7 @@
                 >Branches</label
               >
 
-              <div class="col-md-10">
+              <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     [readonly]="flag === 'VIEW'"
@@ -247,6 +247,19 @@
                     formControlName="branches"
                   />
                 </mat-form-field>
+              </div>
+              <div class="col-md-2">
+                <button type="button" class="btn btn-primary text-center">
+                  ...
+                  <app-branch-division
+                    [fetchData]="fetchedBranchData"
+                    (newRowClick)="selectedData($event)"
+                    class="branchDivisionelectr"
+                    [matTooltip]="branchDivisionControlsTooltip"
+                    matTooltipClass="custom-tooltip"
+                    matTooltipPosition="above"
+                  ></app-branch-division>
+                </button>
               </div>
             </div>
 
@@ -308,92 +321,117 @@
 
             <div class="row mb-1">
               <div class="col-md-2 pt-1"></div>
-              <label for="rcmInput" class="col-sm-2 col-form-label" id="ID029"
-                >RCM Input</label
-              >
-
-              <div class="col-md-2">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <input
-                    [readonly]="flag === 'VIEW'"
-                    matInput
-                    type="text"
-                    formControlName="rcmInput"
-                  />
-                </mat-form-field>
-              </div>
-
-              <label for="outputVat" class="col-sm-2 col-form-label" id="ID029"
-                >Output Vat</label
-              >
-
               <div class="col-md-4">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <input
-                    [readonly]="flag === 'VIEW'"
-                    matInput
-                    type="text"
-                    formControlName="outputVat"
-                    (keydown)="openTab($event, 'outputVat')"
-                    (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        outputVatCodeData,
-                        ['outputVat'],
-                        ['CODE']
-                      )
-                    "
-                  />
+                <div class="row" *ngIf="isEnableRCM; else emptyDiv">
+                  <label
+                    for="rcmInput"
+                    class="col-sm-5 col-form-label"
+                    id="ID029"
+                    >RCM Input</label
+                  >
 
-                  <master-search
-                    *ngIf="flag != 'VIEW'"
-                    #overlayOutputVat
-                    [MasterSearchData]="outputVatCodeData"
-                    class="masterSearch"
-                    (newRowClick)="
-                      lookupSelect($event, ['outputVat'], ['CODE'])
-                    "
-                  ></master-search>
-                </mat-form-field>
+                  <div class="col-md-7">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="rcmInput"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <ng-template #emptyDiv>
+                  <div class="row"></div>
+                </ng-template>
+              </div>
+              <div class="col-md-6">
+                <div class="row">
+                  <label
+                    for="outputVat"
+                    class="col-sm-4 col-form-label"
+                    id="ID029"
+                    >Output Vat</label
+                  >
+
+                  <div class="col-md-8">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="outputVat"
+                        (keydown)="openTab($event, 'outputVat')"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            outputVatCodeData,
+                            ['outputVat'],
+                            ['CODE']
+                          )
+                        "
+                      />
+
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        #overlayOutputVat
+                        [MasterSearchData]="outputVatCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, ['outputVat'], ['CODE'])
+                        "
+                      ></master-search>
+                    </mat-form-field>
+                  </div>
+                </div>
               </div>
             </div>
 
             <div class="row mb-1">
               <div class="col-md-2 pt-1"></div>
-              <label
-                for="rcmOutputVat"
-                class="col-sm-2 col-form-label"
-                id="ID029"
-                >RCM Output VAT</label
-              >
-
-              <div class="col-md-2">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <input
-                    [readonly]="flag === 'VIEW'"
-                    matInput
-                    type="text"
-                    formControlName="rcmOutputVat"
-                  />
-                </mat-form-field>
-              </div>
-
-              <label for="vat" class="col-sm-2 col-form-label" id="ID029"
-                >Vat %</label
-              >
 
               <div class="col-md-4">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <input
-                    ThreeDecimalInput
-                    class="text-right"
-                    [readonly]="flag === 'VIEW'"
-                    matInput
-                    type="number"
-                    (keydown)="preventInvalidInput($event)"
-                    formControlName="vat"
-                  />
-                </mat-form-field>
+                <div class="row" *ngIf="isEnableRCM; else emptyDiv">
+                  <label
+                    for="rcmOutputVat"
+                    class="col-sm-5 col-form-label"
+                    id="ID029"
+                    >RCM Output VAT</label
+                  >
+
+                  <div class="col-md-7">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="rcmOutputVat"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="row">
+                  <label for="vat" class="col-sm-4 col-form-label" id="ID029"
+                    >Vat %</label
+                  >
+
+                  <div class="col-md-8">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        ThreeDecimalInput
+                        class="text-right"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="number"
+                        (keydown)="preventInvalidInput($event)"
+                        formControlName="vat"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

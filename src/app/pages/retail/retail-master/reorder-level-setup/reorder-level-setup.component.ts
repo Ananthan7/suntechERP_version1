@@ -64,14 +64,17 @@ export class ReorderLevelSetupComponent implements OnInit {
     this.getGroup();
 
     if (this.content?.FLAG) {
-      this.setFormValues();
       console.log(this.content)
       //this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        this.setFormValues();
+
       } else if (this.content.FLAG == 'EDIT') {
         this.viewMode = false;
         this.editMode = true;
+        this.setFormValues();
+
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteRecord()

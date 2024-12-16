@@ -8,14 +8,17 @@
   <div class="row">
     <div class="col-md-12">
       <div class="col-md-8">
-        <mat-form-field style="width: 70%" appearance="outline">
-          <input
-            matInput
-            type="text"
-            (input)="getSerachedData($event)"
-            placeholder="Search GPC"
-          />
-        </mat-form-field>
+        <form [formGroup]="searchForm">
+          <mat-form-field style="width: 70%" appearance="outline">
+            <input
+            formControlName="searchValue"
+              matInput
+              type="text"
+              (input)="getSerachedData($event)"
+              placeholder="Search GPC"
+            />
+          </mat-form-field>
+        </form>
       </div>
     </div>
   </div>

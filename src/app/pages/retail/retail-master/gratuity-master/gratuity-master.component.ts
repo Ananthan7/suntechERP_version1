@@ -6,12 +6,15 @@ import {
   Validators,
 } from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import { MatSelectChange } from "@angular/material/select";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSelect, MatSelectChange } from "@angular/material/select";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
+import { ThankyouModule } from "src/app/account/thankyou/thankyou.module";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
@@ -59,6 +62,7 @@ export class GratuityMasterComponent implements OnInit {
   optionalData: any;
   basedOnDropdown: any;
   private subscriptions: Subscription[] = [];
+  branchCode = this.commonService.branchCode;
 
   columnHeadings: any[] = [
     { FIELD: "SRNO", CAPTION: "SRNO" },
@@ -75,7 +79,7 @@ export class GratuityMasterComponent implements OnInit {
     SEARCH_FIELD: "ACCODE",
     SEARCH_HEADING: "Debit A/C Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: `ADBRANCH_CODE= '${this.branchCode}'  AND  ACCODE <>''`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -308,6 +312,36 @@ export class GratuityMasterComponent implements OnInit {
     FRONTENDFILTER: true,
   };
 
+  excludeAnnualLeaves!: boolean;
+  excludeUnpaidLeaves!: boolean;
+  excludePaidLeaves!: boolean;
+  excludeHalfPaidLeaves!: boolean;
+  isEnableAmount: boolean = true;
+  dialogBox: any;
+
+  constructor(
+    private activeModal: NgbActiveModal,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private apiService: SuntechAPIService,
+    private toastr: ToastrService,
+    public dialog: MatDialog,
+    private commonService: CommonServiceService
+  ) {}
+  ngOnInit(): void {
+    this.flag = this.content
+      ? this.content.FLAG
+      : (this.content = { FLAG: "ADD" }).FLAG;
+    this.initialController(this.flag, this.content);
+    this.setFlag(this.flag, this.content);
+  }
+
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
+
   gratuityMasterForm: FormGroup = this.formBuilder.group({
     type: [""],
     code: ["", [Validators.required]],
@@ -325,7 +359,7 @@ export class GratuityMasterComponent implements OnInit {
     amount: [""],
     excludeHalfPaidLeaves: [""],
     noOfDaysAndYear: [""],
-    noOfDaysAndMonth: [""],
+    noOfDaysAndMonth: [30],
     userDefined1: [""],
     userDefined2: [""],
     userDefined3: [""],
@@ -342,32 +376,6 @@ export class GratuityMasterComponent implements OnInit {
     userDefined14: [""],
     userDefined15: [""],
   });
-  excludeAnnualLeaves!: boolean;
-  excludeUnpaidLeaves!: boolean;
-  excludePaidLeaves!: boolean;
-  excludeHalfPaidLeaves!: boolean;
-
-  constructor(
-    private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
-    private formBuilder: FormBuilder,
-    private apiService: SuntechAPIService,
-    private toastr: ToastrService,
-    private commonService: CommonServiceService
-  ) {}
-  ngOnInit(): void {
-    this.flag = this.content
-      ? this.content.FLAG
-      : (this.content = { FLAG: "ADD" }).FLAG;
-    this.initialController(this.flag, this.content);
-    this.setFlag(this.flag, this.content);
-  }
-
-  ngAfterViewInit(): void {
-    if (this.flag === "ADD") {
-      this.codeField.nativeElement.focus();
-    }
-  }
 
   close(data?: any, calling?: boolean) {
     if (this.flag !== "VIEW" && !calling) {
@@ -443,7 +451,9 @@ export class GratuityMasterComponent implements OnInit {
       console.log(ALTERDATADETAILS);
 
       this.gratuityMasterForm.controls["code"].setValue(DATA.CODE);
-      this.gratuityMasterForm.controls["basedOn"].setValue(DATA.BASED_ON);
+      this.gratuityMasterForm.controls["basedOn"].setValue(
+        DATA.BASED_ON.toString()
+      );
       this.gratuityMasterForm.controls["countryCode"].setValue(
         DATA.COUNTRYCODE
       );
@@ -691,7 +701,9 @@ export class GratuityMasterComponent implements OnInit {
             } else {
               Swal.fire({
                 title: "Failed",
-                text: "Not Inserted Successfully",
+                text: result.message
+                  ? result.message
+                  : "Not Inserted Successfully",
                 icon: "error",
                 confirmButtonColor: "#336699",
                 confirmButtonText: "Ok",
@@ -705,6 +717,13 @@ export class GratuityMasterComponent implements OnInit {
   }
 
   boxChecker(event: MatCheckboxChange, controller: any) {
+    if (
+      !this.gratuityMasterForm.value.code ||
+      this.gratuityMasterForm.value.code === ""
+    ) {
+      this.codeCheckerForCheckbox(event, controller);
+    }
+
     switch (controller) {
       case "excludeAnnualLeaves":
         this.excludeAnnualLeaves = event.checked;
@@ -952,7 +971,10 @@ export class GratuityMasterComponent implements OnInit {
               SRNO: index.toString().toString(),
             })
           );
-          console.log(this.typeData);
+          this.gratuityMasterForm.controls["type"].setValue(
+            this.typeData[0].SRNO
+          );
+          this.GratuityGridData(this.typeData[0].SRNO);
         }
       },
       (err) => {
@@ -966,9 +988,27 @@ export class GratuityMasterComponent implements OnInit {
     this.flag = currentFlag;
 
     switch (this.flag) {
+      case "ADD":
+        this.gratuityMasterForm.controls["amount"].setValue(
+          this.commonService.decimalQuantityFormat(
+            this.commonService.emptyToZero(0),
+            "AMOUNT"
+          )
+        );
+
+        this.gratuityMasterForm.controls["basedOn"].setValue(
+          this.basedOnDropdown[0].SRNO
+        );
+
+        this.gratuityMasterForm.controls["amount"].disable();
+
+        break;
+
       case "VIEW":
+        this.gratuityMasterForm.controls["basedOn"].disable();
+        this.gratuityMasterForm.controls["type"].disable();
+
         this.gratuityMasterForm.controls["excludeAnnualLeaves"].disable();
-        // this.gratuityMasterForm.controls["type"].disable();
         this.gratuityMasterForm.controls["excludeUnpaidLeaves"].disable();
         this.gratuityMasterForm.controls["excludePaidLeaves"].disable();
         this.gratuityMasterForm.controls["excludeHalfPaidLeaves"].disable();
@@ -1043,9 +1083,17 @@ export class GratuityMasterComponent implements OnInit {
     this.gratuityMasterForm.controls["basedOn"].setValue(selectedIndex);
   }
 
-  preventExtraDigits(event: KeyboardEvent): void {
+  handleInputRestrictions(
+    event: KeyboardEvent | Event,
+    formControl: any
+  ): void {
+    if (
+      !this.gratuityMasterForm.value.code ||
+      this.gratuityMasterForm.value.code === ""
+    ) {
+      return this.codeChecker(event, formControl);
+    }
     const inputElement = event.target as HTMLInputElement;
-    const value = inputElement.value;
 
     const allowedKeys = [
       "Tab",
@@ -1056,12 +1104,95 @@ export class GratuityMasterComponent implements OnInit {
       "Delete",
     ];
 
-    if (allowedKeys.includes(event.key)) {
-      return;
+    if (event instanceof KeyboardEvent) {
+      const isNumberKey = event.key >= "0" && event.key <= "9";
+
+      if (allowedKeys.includes(event.key) || isNumberKey) {
+        return;
+      }
+
+      event.preventDefault();
     }
 
-    if (value.length >= 10) {
-      event.preventDefault();
+    if (event instanceof Event) {
+      inputElement.value = inputElement.value
+        .replace(/[^0-9]/g, "")
+        .slice(0, 10);
+    }
+  }
+
+  enableAmount(event: MatSelectChange) {
+    if (event.value === "3") {
+      this.gratuityMasterForm.controls["amount"].enable();
+    } else if (event.value !== "3") {
+      this.gratuityMasterForm.controls["amount"].setValue("");
+      this.gratuityMasterForm.controls["amount"].disable();
+    }
+  }
+
+  openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
+    this.dialogBox = this.dialog.open(DialogboxComponent, {
+      width: "40%",
+      disableClose: true,
+      data: { title, msg, okBtn, swapColor },
+    });
+
+    this.dialogBox.afterClosed().subscribe((result: any) => {
+      if (result === "OK") {
+        return "OK";
+      } else {
+        return null;
+      }
+    });
+  }
+
+  codeChecker(event: any, controller: any) {
+    let message = `Code cannot be empty!`;
+    if (!this.gratuityMasterForm.value.code) {
+      this.gratuityMasterForm.controls[controller].setValue("");
+      this.openDialog("Warning", message, true);
+      this.dialogBox.afterClosed().subscribe((result: any) => {
+        if (result === "OK") {
+          setTimeout(() => {
+            this.codeField.nativeElement.focus();
+          }, 100);
+        }
+      });
+    }
+  }
+
+  onDropdownToggle(isOpen: boolean, dropdown: MatSelect) {
+    if (isOpen) {
+      console.log("Dropdown opened");
+      let message = `Code cannot be empty!`;
+
+      if (!this.gratuityMasterForm.value.code) {
+        this.openDialog("Warning", message, true);
+        this.dialogBox.afterClosed().subscribe((result: any) => {
+          if (result === "OK") {
+            setTimeout(() => {
+              dropdown.close();
+              this.codeField.nativeElement.focus();
+            }, 100);
+          }
+        });
+      }
+    }
+  }
+
+  codeCheckerForCheckbox(event: MatCheckboxChange, controller: any) {
+    if (!this.gratuityMasterForm.value.code) {
+      this.gratuityMasterForm.controls[controller].setValue(false);
+      let message = `Code cannot be empty!`;
+
+      this.openDialog("Warning", message, true);
+      this.dialogBox.afterClosed().subscribe((result: any) => {
+        if (result === "OK") {
+          setTimeout(() => {
+            this.codeField.nativeElement.focus();
+          }, 100);
+        }
+      });
     }
   }
 }

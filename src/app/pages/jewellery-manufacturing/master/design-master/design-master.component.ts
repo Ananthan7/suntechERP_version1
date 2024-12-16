@@ -166,14 +166,16 @@ export class DesignMasterComponent implements OnInit {
 
     if (this.content?.FLAG) {
       console.log(this.content)
-      this.setAllInitialValues()
+     
      // this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        this.setAllInitialValues()
       } else if (this.content.FLAG == 'EDIT') {
         this.viewMode = false;
         this.editMode = true;
         this.editableMode = true;
+        this.setAllInitialValues()
 
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;

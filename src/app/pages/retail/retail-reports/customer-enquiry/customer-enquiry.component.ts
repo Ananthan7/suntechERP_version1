@@ -354,60 +354,60 @@ export class CustomerEnquiryComponent implements OnInit {
     let postData = {
       "SPID": "171",
       "parameter": {
-        "NAME" : this.customerEnquiryForm.controls.Name.value,
-        "SPOUSE" : this.customerEnquiryForm.controls.Spouse.value,
-        "CODEFROM" : this.customerEnquiryForm.controls.customerfrom.value,
-        "CODETO" : this.customerEnquiryForm.controls.customerto.value,
-        "COUNTRY" : this.customerEnquiryForm.controls.country.value,
-        "NATIONALITY" : this.customerEnquiryForm.controls.nationality.value,
-        "CITY" : this.customerEnquiryForm.controls.city.value,
-        "RELIGION" : this.customerEnquiryForm.controls.religion.value,
-        "TYPE" : this.customerEnquiryForm.controls.type.value,
-        "LOYALTYCODE" : this.customerEnquiryForm.controls.loyalty.value,
-        "CATEGORY" : this.customerEnquiryForm.controls.category.value,
-        "MARITALSTATUS" : this.customerEnquiryForm.controls.MaritalStatusSelection.value,
-        "GENDER" : this.customerEnquiryForm.controls.GenderSelection.value,
-        "MOBILE" : this.customerEnquiryForm.controls.mobileContact.value,
-        "TELRES" : this.customerEnquiryForm.controls.telephoneContact.value,
-        "EMAIL" : this.customerEnquiryForm.controls.Email.value,
-        "BIRTHFROMDATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.DOBValue.value),
-        "BIRTHTODATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.DOBValue2.value),
-        "WEDDINGFROMDATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.WeddingDateValue.value),
-        "WEDDINGTODATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.WeddingDateValue2.value),
-        "STATE" : this.customerEnquiryForm.controls.state.value,
-        "SALDATEFROM" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.saleDateFrom.value),
-        "SALDATETO" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.dateTo.value),
-        "DIVISION" : null, //this.customerEnquiryForm.controls.division.value,
-        "BRANCHLIST": this.customerEnquiryForm.controls.branch.value,
-        "USERBRANCH" : localStorage.getItem('userbranch')
-
-        //Grid Data visibility
-        // "NAME" : '',  
-        // "SPOUSE" : null,  
-        // "CODEFROM" : null,  
-        // "CODETO" : null,   
-        // "COUNTRY" : null,   
-        // "NATIONALITY": null,  
-        // "CITY" : null, 
-        // "RELIGION" :null,   
-        // "TYPE" : null,  
-        // "LOYALTYCODE" : null,   
-        // "CATEGORY" : null,  
-        // "MARITALSTATUS" : null, 
-        // "GENDER" : null,  
-        // "MOBILE" : null,  
-        // "TELRES" : null,   
-        // "EMAIL" : null,  
-        // "BIRTHFROMDATE" : null,  
-        // "BIRTHTODATE" : null,   
-        // "WEDDINGFROMDATE" : null,  
-        // "WEDDINGTODATE" : null, 
-        // "STATE" : null,   
-        // "SALDATEFROM" : null,   
-        // "SALDATETO" : null,   
-        // "DIVISION" : null, 
-        // "BRANCHLIST" : '',  
+        // "NAME" : this.customerEnquiryForm.controls.Name.value,
+        // "SPOUSE" : this.customerEnquiryForm.controls.Spouse.value,
+        // "CODEFROM" : this.customerEnquiryForm.controls.customerfrom.value,
+        // "CODETO" : this.customerEnquiryForm.controls.customerto.value,
+        // "COUNTRY" : this.customerEnquiryForm.controls.country.value,
+        // "NATIONALITY" : this.customerEnquiryForm.controls.nationality.value,
+        // "CITY" : this.customerEnquiryForm.controls.city.value,
+        // "RELIGION" : this.customerEnquiryForm.controls.religion.value,
+        // "TYPE" : this.customerEnquiryForm.controls.type.value,
+        // "LOYALTYCODE" : this.customerEnquiryForm.controls.loyalty.value,
+        // "CATEGORY" : this.customerEnquiryForm.controls.category.value,
+        // "MARITALSTATUS" : this.customerEnquiryForm.controls.MaritalStatusSelection.value,
+        // "GENDER" : this.customerEnquiryForm.controls.GenderSelection.value,
+        // "MOBILE" : this.customerEnquiryForm.controls.mobileContact.value,
+        // "TELRES" : this.customerEnquiryForm.controls.telephoneContact.value,
+        // "EMAIL" : this.customerEnquiryForm.controls.Email.value,
+        // "BIRTHFROMDATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.DOBValue.value),
+        // "BIRTHTODATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.DOBValue2.value),
+        // "WEDDINGFROMDATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.WeddingDateValue.value),
+        // "WEDDINGTODATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.WeddingDateValue2.value),
+        // "STATE" : this.customerEnquiryForm.controls.state.value,
+        // "SALDATEFROM" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.saleDateFrom.value),
+        // "SALDATETO" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.dateTo.value),
+        // "DIVISION" : null, //this.customerEnquiryForm.controls.division.value,
+        // "BRANCHLIST": this.customerEnquiryForm.controls.branch.value,
         // "USERBRANCH" : localStorage.getItem('userbranch')
+
+        // Grid Data visibility
+        "NAME" : '',  
+        "SPOUSE" : null,  
+        "CODEFROM" : null,  
+        "CODETO" : null,   
+        "COUNTRY" : null,   
+        "NATIONALITY": null,  
+        "CITY" : null, 
+        "RELIGION" :null,   
+        "TYPE" : null,  
+        "LOYALTYCODE" : null,   
+        "CATEGORY" : null,  
+        "MARITALSTATUS" : null, 
+        "GENDER" : null,  
+        "MOBILE" : null,  
+        "TELRES" : null,   
+        "EMAIL" : null,  
+        "BIRTHFROMDATE" : null,  
+        "BIRTHTODATE" : null,   
+        "WEDDINGFROMDATE" : null,  
+        "WEDDINGTODATE" : null, 
+        "STATE" : null,   
+        "SALDATEFROM" : null,   
+        "SALDATETO" : null,   
+        "DIVISION" : null, 
+        "BRANCHLIST" : '',  
+        "USERBRANCH" : localStorage.getItem('userbranch')
       },
     }
     this.commonService.showSnackBarMsg('MSG81447');
@@ -548,9 +548,9 @@ export class CustomerEnquiryComponent implements OnInit {
       case 'Sales Register':
         this.isLoading = false;
         payloadData = {
-          "SPID": "",
+          "SPID": "163",
           "parameter": {
-            "strCertCode ": ''    
+            "strCertCode ": this.customerEnquiryForm.controls.customerfrom.value   //'1344' 
           }  
         };
       break;
@@ -695,7 +695,7 @@ export class CustomerEnquiryComponent implements OnInit {
       // this.retailAdvanceReceiptRegisterForm.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.strBRANCHES);
       // this.fetchedBranchData= paresedItem?.CONTROL_DETAIL.strBRANCHES.split("#")
       // this.fetchedBranchDataParam = paresedItem?.CONTROL_DETAIL.strBRANCHES
-
+      this.isLoading = false;
     }
     else{
       const userBranch = localStorage.getItem('userbranch');

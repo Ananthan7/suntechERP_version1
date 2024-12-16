@@ -41,14 +41,17 @@ export class KaratMasterComponent implements OnInit {
     this.codeEnable = true;
     this.initializeForm();
     if (this.content?.FLAG) {
-      this.setFormValues();
     console.log(this.content);
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
+        this.setFormValues();
+
       } else if (this.content.FLAG == 'EDIT') {
       this.codeEnable = false;
       this.editableMode = true;
         this.editMode = true;
+       this.setFormValues();
+
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteRecord()

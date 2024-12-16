@@ -24,6 +24,8 @@ export class PosBranchTargetComponent implements OnInit {
 
 
   @Input() content!: any;
+  diamond_drop: any[] = [];
+  metal_drop: any[] = [];
 
   tableData: any[] = [];
   userName = localStorage.getItem('username');
@@ -101,16 +103,20 @@ export class PosBranchTargetComponent implements OnInit {
     : (this.content = { FLAG: "ADD" }).FLAG;
 
     this.viewModeField = true;
+    this.getmetal_divisionvalues();
+    this.getdiamond_divisionvalues();
     if (this.content?.FLAG) {
-      this.setFormValues();
+     
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
         this.editCode = true;
+        this.setFormValues();
       } else if (this.content.FLAG == 'EDIT') {
         this.editCode = true;
         this.viewMode = false;
         this.codeEnable = false;
         this.editMode = true;
+        this.setFormValues();
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
         this.delete()
@@ -176,6 +182,9 @@ export class PosBranchTargetComponent implements OnInit {
     }
 
   setPostData() {
+    console.log(this.posbranchtarget.value.diaDivision)
+    console.log(this.posbranchtarget.value.metalDivision)
+
     return {
       "MID": 0,
       "TARGET_CODE": this.commonService.nullToString(this.posbranchtarget.value.code),
@@ -192,8 +201,8 @@ export class PosBranchTargetComponent implements OnInit {
       "GOLD_AMOUNT":  this.commonService.emptyToZero(this.posbranchtarget.value.goldMaking),
       "GOLD_QTY":  this.commonService.emptyToZero(this.posbranchtarget.value.goldQty),
       "SYSTEM_DATE": "2024-11-15T09:45:19.213Z",
-      "DIA_DIVISIONS":  this.commonService.nullToString(this.posbranchtarget.value.diaDivision),
-      "MTL_DIVISIONS": this.commonService.nullToString(this.posbranchtarget.value.metalDivision),
+      "DIA_DIVISIONS":  this.posbranchtarget.controls.diaDivision.value.join(","), 
+      "MTL_DIVISIONS":  this.posbranchtarget.controls.metalDivision.value.join(","),  
       "SALES_AMOUNT":this.commonService.nullToString(this.posbranchtarget.value.salesAmount),
       "METAL_MKGCHARGE": this.commonService.nullToString(this.posbranchtarget.value.profit),
       "METAL_QTY": this.commonService.nullToString(this.posbranchtarget.value.quantity),
@@ -319,8 +328,8 @@ export class PosBranchTargetComponent implements OnInit {
          this.posbranchtarget.controls.diamond.setValue(data.DIA_AMOUNT);
          this.posbranchtarget.controls.goldMaking.setValue(data.GOLD_AMOUNT);
          this.posbranchtarget.controls.goldQty.setValue(data.GOLD_QTY);
-         this.posbranchtarget.controls.diaDivision.setValue(data.DIA_DIVISIONS);
-         this.posbranchtarget.controls.metalDivision.setValue(data.MTL_DIVISIONS);
+         this.posbranchtarget.controls.diaDivision.setValue(data.DIA_DIVISIONS.split(","));
+         this.posbranchtarget.controls.metalDivision.setValue(data.MTL_DIVISIONS.split(","));
          this.posbranchtarget.controls.salesAmount.setValue(data.SALES_AMOUNT);
          this.posbranchtarget.controls.profit.setValue(data.METAL_MKGCHARGE);
          this.posbranchtarget.controls.quantity.setValue(data.METAL_QTY);
@@ -442,6 +451,52 @@ export class PosBranchTargetComponent implements OnInit {
   //     event.preventDefault();
   //   }
   // }
+
+  getmetal_divisionvalues() {
+    let API = `POSTargetMaster/GetDiaDivisonsDropdown`;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
+      (result: any) => {
+        console.log(result);
+        this.diamond_drop = result.dynamicData[0];
+        console.log(this.diamond_drop);
+        const allDivisionCodes = this.diamond_drop.map(
+          (option) => option.DIVISION_CODE
+        );
+        const diaDivisionControl =
+          this.posbranchtarget?.get("diaDivision");
+        if (diaDivisionControl) {
+          if (this.flag == undefined) {
+            diaDivisionControl.setValue(allDivisionCodes);
+          }
+        }
+      },
+      (err: any) => {}
+    );
+    this.subscriptions.push(Sub);
+  }
+
+ getdiamond_divisionvalues() {
+  let API = `POSTargetMaster/GetMetalDivisonsDropdown`;
+  let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
+    (result: any) => {
+      console.log(result);
+      this.metal_drop = result.dynamicData[0];
+      console.log(this.metal_drop);
+      const allDivisionCodes = this.metal_drop.map(
+        (option) => option.DIVISION_CODE
+      );
+      const diaDivisionControl =
+        this.posbranchtarget?.get("metalDivision");
+      if (diaDivisionControl) {
+        if (this.flag == undefined) {
+          diaDivisionControl.setValue(allDivisionCodes);
+        }
+      }
+    },
+    (err: any) => {}
+  );
+  this.subscriptions.push(Sub);
+}
 
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {

@@ -68,17 +68,28 @@ export class AlloyMasterComponent implements OnInit {
   prefixMasterDetail: any;
   curr_type: boolean = true;
   // master search data starts
+  // codeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 14,
+  //   SEARCH_FIELD: 'PREFIX_CODE',
+  //   SEARCH_HEADING: 'CODE',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "DIVISION='S'",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
   codeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 14,
     SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'CODE',
-    SEARCH_VALUE: '',
+    SEARCH_VALUE: '', // Initialize as empty
     WHERECONDITION: "DIVISION='S'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
+  };  
   costCenterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -113,7 +124,7 @@ export class AlloyMasterComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true,
-    
+
   }
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -256,25 +267,25 @@ export class AlloyMasterComponent implements OnInit {
     priceScheme: [''],
     pricenumber: [''],
     price1code: [''],
-    price1per: [''],
-    price1Fc: [''],
-    price1Lc: [''],
+    price1per: [0],
+    price1Fc: [0],
+    price1Lc: [0],
     price2code: [''],
-    price2per: [''],
-    price2Fc: [''],
-    price2Lc: [''],
+    price2per: [0],
+    price2Fc: [0],
+    price2Lc: [0],
     price3code: [''],
-    price3per: [''],
-    price3Fc: [''],
-    price3Lc: [''],
+    price3per: [0],
+    price3Fc: [0],
+    price3Lc: [0],
     price4code: [''],
-    price4per: [''],
-    price4Fc: [''],
-    price4Lc: [''],
+    price4per: [0],
+    price4Fc: [0],
+    price4Lc: [0],
     price5code: [''],
-    price5per: [''],
-    price5Fc: [''],
-    price5Lc: [''],
+    price5per: [0],
+    price5Fc: [0],
+    price5Lc: [0],
     description: ['', [Validators.required]],
     metal: [''],
     color: [''],
@@ -600,7 +611,7 @@ export class AlloyMasterComponent implements OnInit {
 
   onFileChanged(event: any) {
     this.image = event.target.files[0].name
-    console.log(this.url)
+    console.log(this.image)
     let reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
       let file = event.target.files[0];
@@ -609,6 +620,20 @@ export class AlloyMasterComponent implements OnInit {
         this.image = reader.result;
       };
     }
+  }
+
+  getDesignimagecode() {
+    let API = `ImageforJobCad/${this.alloyMastereForm.value.code}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.image = data.map((item: any) => item.imagepath)
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
 
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
@@ -672,25 +697,27 @@ export class AlloyMasterComponent implements OnInit {
   alloyCodeValidate(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     if (this.alloyMastereForm.value.selectMasterOnly) {
       this.validateLookupField(event, LOOKUPDATA, FORMNAME)
-      console.log("this is working Now 1");
     } else {
       this.checkCodeExists()
-      console.log("this is working Now 2");
     }
+  }
+
+  updateSearchValue(event: any) {
+    const inputValue = event.target.value; // Get the input value
+    this.codeData.SEARCH_VALUE = inputValue; // Omit the last 6 characters
+    console.log('Updated SEARCH_VALUE:', this.codeData.SEARCH_VALUE);
   }
 
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    console.log(event.target.value);
-
-
-  //  if (FORMNAME == 'code') return;
-    
+    // console.log(event.target.value);
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+
+    let sanitizedValue = event.target.value.slice(0, -6);
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${FORMNAME === 'code' ? sanitizedValue : event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     // this.commonService.toastInfoByMsgId('MSG81447');
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
@@ -698,7 +725,7 @@ export class AlloyMasterComponent implements OnInit {
       .subscribe((result) => {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        console.log(data);
+        // console.log(data[0].PREFIX_CODE);
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.alloyMastereForm.controls[FORMNAME].setValue('')
@@ -707,8 +734,7 @@ export class AlloyMasterComponent implements OnInit {
           return
         }
         this.alloyMasterFormChecks(FORMNAME)// for validations
-        if(FORMNAME == 'priceScheme'){
-
+        if (FORMNAME == 'priceScheme') {
           let postData = {
             "SPID": "066",
             "parameter": {
@@ -718,7 +744,7 @@ export class AlloyMasterComponent implements OnInit {
           // if(this.alloyMastereForm.value.price5code.length > 0) return
           let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
             .subscribe((result) => {
-              if (result.status == "Success") {                
+              if (result.status == "Success") {
                 this.priceSchemeDetails = result.dynamicData[0] || []
                 if (this.priceSchemeDetails?.length > 0) {
                   this.resetAllPriceDetails();
@@ -885,7 +911,7 @@ export class AlloyMasterComponent implements OnInit {
 
   percentageCalculate(strpriceLC: any) {
     let weightAvgCostLC = this.commonService.emptyToZero(this.alloyMastereForm.value.weightAvgCostLC)
-    let avgPercentage = ((parseInt(strpriceLC) - weightAvgCostLC) / weightAvgCostLC) * 100
+    let avgPercentage = Number((parseInt(strpriceLC) - weightAvgCostLC) / weightAvgCostLC) * 100
     console.log(avgPercentage)
     return avgPercentage.toFixed(1)
   }
@@ -1068,12 +1094,12 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.code.setValue(code)
     this.alloyMastereForm.controls.description.setValue(description)
 
-    console.log(e); 
+    console.log(e);
     this.prefixCodeValidate()
   }
 
   prefixCodeValidate() {
-  
+
     const code = this.alloyMastereForm.value.code;
     if (!code) return;
     let API = `PrefixMaster/GetPrefixMasterDetail/${code}`;
@@ -1093,7 +1119,7 @@ export class AlloyMasterComponent implements OnInit {
           this.prefixMasterDetail.LAST_NO = this.incrementAndPadNumber(this.prefixMasterDetail.LAST_NO, 1)
           this.alloyMastereForm.controls.code.setValue(this.prefixMasterDetail.PREFIX_CODE + this.prefixMasterDetail.LAST_NO)
           console.log(this.prefixMasterDetail.PREFIX_CODE + this.prefixMasterDetail.LAST_NO);
-          
+
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -1106,7 +1132,7 @@ export class AlloyMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  
+
   incrementAndPadNumber(input: any, incrementBy: any) {
     // Convert the input to an integer and increment it
     let incrementedValue = parseInt(input, 10) + incrementBy;
@@ -1252,7 +1278,7 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   checkCode4Price() {
-    if (this.alloyMastereForm.value.price4code == '') {
+    if (this.alloyMastereForm.controls['price4code'].value == '') {
       this.commonService.toastErrorByMsgId('Price 4 code Emty');
       return true;
     }
@@ -1921,7 +1947,7 @@ export class AlloyMasterComponent implements OnInit {
         } else {
           this.prefixCodeValidate()
           console.log("This Working Prefix code");
-          
+
         }
       }, err => {
         this.alloyMastereForm.controls.code.setValue('')
@@ -2145,9 +2171,19 @@ export class AlloyMasterComponent implements OnInit {
 
   showOverleyPanel(event: any, formControlName: string) {
     switch (formControlName) {
-      case 'code':
-        this.overlaycodeSearch.showOverlayPanel(event);
+      // case 'code':
+      //   this.overlaycodeSearch.showOverlayPanel(event);
+      //   break;
+      case 'code': {
+        let sanitizedValue = event.target.value.slice(0, -6); // Remove the last 6 characters
+        if (sanitizedValue) { // Optional: Check if the sanitized value exists
+          console.log(`Sanitized value: ${sanitizedValue}`);
+          this.overlaycodeSearch.showOverlayPanel(event);
+        } else {
+          console.warn("Value after sanitization is empty.");
+        }
         break;
+      }
       case 'costCenter':
         this.overlaycostCenterSearch.showOverlayPanel(event);
         break;
