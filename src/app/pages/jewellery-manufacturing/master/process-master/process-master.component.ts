@@ -655,10 +655,10 @@ export class ProcessMasterComponent implements OnInit {
       //   this.commonService.toastErrorByMsgId('MSG81365');
       //   return true;
       // }
-      // else if (form.RECOV_ACCODE == '') {
-      // this.commonService.toastErrorByMsgId('Recovery Account Code Cannot be Empty');
-      //   return true;
-      // }
+      else if (form.RECOV_ACCODE == '') {
+      this.commonService.toastErrorByMsgId('MSG81365');
+        return true;
+      }
     }
 
     if (form.allowGain == true) {

@@ -801,14 +801,16 @@
                                     <button class="btn btnnew border-dark">
                                         <!-- <img [src]="content.PICTURE_NAME" style="width:200px;height:185px" > -->
                                         <img src={{urls}}
-                                            style="width:200px;height:185px">
+                                            style="width:200px;height:185px"
+                                            alt="Uploaded Image"
+                                            [src]="uploadedImages[currentIndex]">
                                         <button class="carousel-control-prev"
                                             type="button"
                                             data-bs-target="#carouselExampleControls"
                                             data-bs-slide="prev">
                                             <span
                                                 class="carousel-control-prev-icon"
-                                                aria-hidden="true"></span>
+                                                (click)="previousImage()"></span>
                                             <span id="ID040"
                                                 class="visually-hidden">Previous</span>
                                         </button>
@@ -818,11 +820,12 @@
                                             data-bs-slide="next">
                                             <span
                                                 class="carousel-control-next-icon"
-                                                aria-hidden="true"></span>
+                                                (click)="nextImage()"></span>
                                             <span class="visually-hidden"
                                                 id="ID041">Next</span>
                                         </button>
                                     </button>
+                                </div>
                                
                                 <div class="p-2 bd-highlight">
                                     <div class="upload-btn">
@@ -836,7 +839,7 @@
                                             (change)="onFileChanged($event)">
                                     </div>
                                 </div>
-                            </div>
+                           
                             </div>
                         </div>
 

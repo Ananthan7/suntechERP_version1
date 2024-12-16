@@ -20,7 +20,7 @@
                             :</label>
                         <div class="col-sm-8">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="6" matInput formControlName="policycode" (focusout)="validateLookupField($event,policycodeData,'policycode')"  (keydown)="lookupKeyPress($event,'policycode')" [readonly]="viewMode || editMode">
+                                <input #codeField type="text" #codeInput maxlength="6" matInput formControlName="policycode" (focusout)="validateLookupField($event,policycodeData,'policycode')"  (keydown)="lookupKeyPress($event,'policycode')" [readonly]="viewMode || editMode">
                                 <master-search *ngIf=" viewMode == false && editMode == false" [MasterSearchData]="policycodeData"
                                     (newRowClick)="policycodeSelected($event)" class="masterSearch" #overlaypolicycodeSearch>
                                 </master-search>

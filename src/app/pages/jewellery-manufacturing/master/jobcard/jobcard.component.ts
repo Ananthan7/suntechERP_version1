@@ -69,6 +69,8 @@ export class JobcardComponent implements OnInit {
   yearMonth?: String;
   currentDate: any = this.commonService.currentDate;
   UpdatetDate = moment(new Date(), 'DD/MM/YYYY');
+  uploadedImages: string[] = []; // Array to store image URLs
+  currentIndex = 0;
 
 
   urls: string | ArrayBuffer | null | undefined;
@@ -107,7 +109,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 10,
     SEARCH_FIELD: 'DESCRIPTION',
-    SEARCH_HEADING: 'Length Code',
+    SEARCH_HEADING: 'Length',
     SEARCH_VALUE: '',
     WHERECONDITION: "DESCRIPTION<>''",
     VIEW_INPUT: true,
@@ -119,7 +121,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 10,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Order type',
+    SEARCH_HEADING: 'Order',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'ORDERTYPE MASTER'",
     VIEW_INPUT: true,
@@ -131,7 +133,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 16,
     SEARCH_FIELD: 'DESIGN_CODE',
-    SEARCH_HEADING: 'Design type',
+    SEARCH_HEADING: 'Design Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "DESIGN_HOLD = '0'",
     VIEW_INPUT: true,
@@ -156,7 +158,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 15,
     SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Cost type',
+    SEARCH_HEADING: 'Cost',
     SEARCH_VALUE: '',
     WHERECONDITION: "COST_CODE<> ''",
     VIEW_INPUT: true,
@@ -178,7 +180,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 14,
     SEARCH_FIELD: 'PREFIX_CODE',
-    SEARCH_HEADING: 'Prefix type',
+    SEARCH_HEADING: 'Prefix',
     SEARCH_VALUE: '',
     WHERECONDITION: "PREFIX_CODE<> ''",
     VIEW_INPUT: true,
@@ -190,7 +192,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 17,
     SEARCH_FIELD: 'KARAT_CODE',
-    SEARCH_HEADING: 'Karat type',
+    SEARCH_HEADING: 'Karat',
     SEARCH_VALUE: '',
     WHERECONDITION: "KARAT_CODE<> ''",
     VIEW_INPUT: true,
@@ -214,7 +216,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 30,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Category type',
+    SEARCH_HEADING: 'Category',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES='CATEGORY MASTER'",
     VIEW_INPUT: true,
@@ -226,7 +228,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 35,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color type',
+    SEARCH_HEADING: 'Color',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'COLOR SET'",
     VIEW_INPUT: true,
@@ -238,7 +240,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 26,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Country type',
+    SEARCH_HEADING: 'Country',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES='COUNTRY MASTER'",
     VIEW_INPUT: true,
@@ -250,7 +252,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 1,
     SEARCH_FIELD: 'SALESPERSON_CODE',
-    SEARCH_HEADING: 'Salesman type',
+    SEARCH_HEADING: 'Salesman',
     SEARCH_VALUE: '',
     WHERECONDITION: "SALESPERSON_CODE<> ''",
     VIEW_INPUT: true,
@@ -262,7 +264,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Sub Category type',
+    SEARCH_HEADING: 'Sub Category',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES='SUB CATEGORY MASTER'",
     VIEW_INPUT: true,
@@ -274,7 +276,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 32,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Brand type',
+    SEARCH_HEADING: 'Brand',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES='BRAND MASTER' AND DIV_D=1",
     VIEW_INPUT: true,
@@ -286,7 +288,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 23,
     SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock type',
+    SEARCH_HEADING: 'Stock',
     SEARCH_VALUE: '',
     WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
@@ -298,7 +300,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 8,
     SEARCH_FIELD: 'CURRENCY_CODE',
-    SEARCH_HEADING: 'Currency type',
+    SEARCH_HEADING: 'Currency',
     SEARCH_VALUE: '',
     WHERECONDITION: "CURRENCY_CODE<> ''",
     VIEW_INPUT: true,
@@ -309,7 +311,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Time type',
+    SEARCH_HEADING: 'Time',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES='TIME MASTER' AND DIV_D=1",
     VIEW_INPUT: true,
@@ -321,7 +323,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Range type',
+    SEARCH_HEADING: 'Range',
     SEARCH_VALUE: '',
     WHERECONDITION: "types = 'RANGE MASTER' AND DIV_D=1",
     VIEW_INPUT: true,
@@ -333,7 +335,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 93,
     SEARCH_FIELD: 'SEQ_CODE',
-    SEARCH_HEADING: 'Sequence type',
+    SEARCH_HEADING: 'Sequence',
     SEARCH_VALUE: '',
     WHERECONDITION: "SEQ_CODE<> ''",
     VIEW_INPUT: true,
@@ -389,7 +391,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 23,
     SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Main Metal type',
+    SEARCH_HEADING: 'Main Metal',
     SEARCH_VALUE: '',
     WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
     VIEW_INPUT: true,
@@ -401,7 +403,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Size Code',
+    SEARCH_HEADING: 'Size',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
@@ -491,16 +493,32 @@ export class JobcardComponent implements OnInit {
     }
   }
 
-  onFileChanged(event: any) {
-    this.url = event.target.files[0].name
-    console.log(this.url)
-    let reader = new FileReader();
-    if (event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.urls = reader.result;
+  onFileChanged(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const files = target?.files;
+
+    if (files && files.length > 0) {
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        this.uploadedImages.push(e.target.result); // Add the image to the array
       };
+
+      reader.readAsDataURL(files[0]); // Read the uploaded file as a data URL
+    }
+  }
+
+  nextImage(): void {
+    if (this.uploadedImages.length > 0) {
+      this.currentIndex = (this.currentIndex + 1) % this.uploadedImages.length;
+    }
+  }
+
+  previousImage(): void {
+    if (this.uploadedImages.length > 0) {
+      this.currentIndex =
+        (this.currentIndex - 1 + this.uploadedImages.length) %
+        this.uploadedImages.length;
     }
   }
 

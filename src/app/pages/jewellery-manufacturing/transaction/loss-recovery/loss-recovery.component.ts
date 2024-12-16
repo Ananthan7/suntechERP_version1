@@ -155,24 +155,36 @@ export class LossRecoveryComponent implements OnInit {
     this.lossRecoveryFrom.controls.vocDate.setValue(this.currentDate)
     this.lossRecoveryFrom.controls.fromDate.setValue(this.currentDate)
     this.lossRecoveryFrom.controls.toDate.setValue(this.currentDate)
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.editMode = true;
+      }
+      if (this.content.FLAG == 'DELETE') {
+       
+      }
+      this.lossRecoveryFrom.controls.FLAG.setValue(this.content.FLAG)
 
-    this.generateVocNo()
-    this.setInitialValues()
+    } else {
+      this.setInitialValues()
+    }
   }
 
-  private setInitialValues() {
+  setInitialValues() {
     let branchParam = this.comService.allbranchMaster
     console.log('This location code' + branchParam);
     this.lossRecoveryFrom.controls.locationTo.setValue(branchParam.DMFGMLOC)
   }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -199,7 +211,7 @@ export class LossRecoveryComponent implements OnInit {
 
   uploadSubmited(file: any) {
     this.Attachedfile = file
-    console.log(this.Attachedfile);    
+    console.log(this.Attachedfile);
   }
 
   userDataSelected(e: any) {
@@ -300,10 +312,15 @@ export class LossRecoveryComponent implements OnInit {
       this.comService.toastErrorByMsgId('MSG1939')// vocType  CANNOT BE EMPTY
       return true
     }
+    if (this.comService.nullToString(form.jobNo) == '')  {
+      this.comService.toastErrorByMsgId('MSG1039')// no line items
+      return true
+    }
     else if (this.comService.nullToString(form.VocNo) == '') {
       this.comService.toastErrorByMsgId('MSG1940')//"VocNo cannot be empty"
       return true
     }
+   
     return false;
   }
 
