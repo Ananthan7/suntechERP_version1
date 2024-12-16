@@ -78,6 +78,7 @@ import { GiftVoucherDetailMasterComponent } from './gift-voucher-master/gift-vou
 import { GpcGridComponentComponent } from './vat-master/gpc-grid-component/gpc-grid-component.component';
 import { ContactMasterComponent } from './sub-ledger-master/contact-master/contact-master.component';
 import { AutoAdditionalAmountComponent } from './additional-amount/auto-additional-amount/auto-additional-amount.component';
+import { CustomdialogboxComponent } from './vat-master/customdialogbox/customdialogbox.component';
 
 
 @NgModule({
@@ -161,7 +162,8 @@ import { AutoAdditionalAmountComponent } from './additional-amount/auto-addition
     GiftVoucherDetailMasterComponent,
     GpcGridComponentComponent,
     ContactMasterComponent,
-    AutoAdditionalAmountComponent
+    AutoAdditionalAmountComponent,
+    CustomdialogboxComponent
     
   ],
   imports: [
