@@ -188,6 +188,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.meltingIssuedetailsFrom.controls.process.setValue(this.content.process || this.content.HEADERDETAILS.processcode);
     this.meltingIssuedetailsFrom.controls.processdes.setValue(this.content.processdes || this.content.HEADERDETAILS.processdes);
     this.meltingIssuedetailsFrom.controls.worker.setValue(this.content.worker || this.content.HEADERDETAILS.worker);
+    this.meltingIssuedetailsFrom.controls.DIVCODE.setValue(this.content.DIVCODE || this.content.HEADERDETAILS.DIVCODE);
     this.meltingIssuedetailsFrom.controls.workerdes.setValue(this.content.workerdes || this.content.HEADERDETAILS.workerdes);
     this.meltingIssuedetailsFrom.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
     this.meltingIssuedetailsFrom.controls.subjobno.setValue(this.content.subjobno || this.content.HEADERDETAILS.subjobno)
@@ -299,7 +300,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     METAL_STONE: [''],
     UNQ_JOB_ID: [''],
     BRANCH_CODE: [''],
-    DivCode: ['']
+    DIVCODE: ['']
   });
   submitValidations(form: any) {
     if (this.comService.nullToString(form.jobno) == '') {
@@ -348,7 +349,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "WORKER_DESC": this.meltingIssuedetailsFrom.value.workerdes,
       "STOCK_CODE": this.meltingIssuedetailsFrom.value.stockcode,
       "STOCK_DESCRIPTION": this.meltingIssuedetailsFrom.value.stockdes,
-      "DIVCODE": "S",
+      "DIVCODE": this.meltingIssuedetailsFrom.value.DIVCODE.toUpperCase(),
       "KARAT_CODE": "",
       "PCS": this.meltingIssuedetailsFrom.value.pcs,
       "GROSS_WT": this.meltingIssuedetailsFrom.value.grossweight,
@@ -588,8 +589,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
       .subscribe((result) => {
         this.comService.closeSnackBarMsg();
         if (result.status === "Success" && result.dynamicData) {
-          const stockDetails = result.dynamicData[2][0];
-          if (stockDetails.length === 0) {
+          const stockDetails = result.dynamicData[2]?.[0];
+          if (!stockDetails) {
             this.overlaystockcodeSearch.closeOverlayPanel();
             this.meltingIssuedetailsFrom.controls.stockcode.setValue('');  
             this.comService.toastErrorByMsgId('MSG1531');  
