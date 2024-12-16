@@ -61,7 +61,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput  id="assets_code" #assets_code  formControlName="assets_code"
-                                            [readonly]="viewOnly || disable_code" maxlength="15" (focusout)="checkcode()"/>
+                                            [readonly]="viewOnly || disable_code" maxlength="6" (focusout)="checkcode()" UpperCaseDirective/>
                                             <mat-error *ngIf="fixedassetsform.controls['assets_code'].hasError('required')">
                                                 Code is required.
                                             </mat-error>
@@ -77,7 +77,7 @@
                                 <div class="col-md-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="description"
-                                            [readonly]="viewOnly" />
+                                            [readonly]="viewOnly" maxlength="50" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -193,9 +193,11 @@
                                                   ['BRANCH_CODE','BRANCH_NAME'],
                                                   false
                                                 )
-                                              " />
-                                        <master-search
-                                        *ngIf="this.flag != 'VIEW'"
+                                              " 
+                                              (input)="codeChecker($event,'Branchcode')"/>
+                                        <master-search 
+                                        
+                                        *ngIf="this.flag != 'VIEW' && this.allowfields"
                                          class="masterSearch" [MasterSearchData]="branchCodeData"
                                             (newRowClick)="branchCodeSelected($event)">
                                         </master-search>
@@ -226,9 +228,10 @@
                                                   ['CODE','DESCRIPTION'],
                                                   false
                                                 )
-                                              " />
+                                              " 
+                                               (input)="codeChecker($event,'department')"/>
                                         <master-search 
-                                        *ngIf="this.flag != 'VIEW'"
+                                        *ngIf="this.flag != 'VIEW' && this.allowfields"
                                         class="masterSearch" [MasterSearchData]="departmentcodedata"
                                             (newRowClick)="selecteddepartment($event)">
                                         </master-search>
@@ -259,9 +262,10 @@
                                                   ['DESCRIPTION','LOCATION_CODE'],
                                                   false
                                                 )
-                                              " />
+                                              " 
+                                              (input)="codeChecker($event,'loc_code')" />
                                         <master-search 
-                                        *ngIf="this.flag != 'VIEW'"
+                                        *ngIf="this.flag != 'VIEW' && this.allowfields"
                                          class="masterSearch" [MasterSearchData]="locationCodeData"
                                             (newRowClick)="selectionlocation($event)">
                                         </master-search>
@@ -291,9 +295,9 @@
                                               ['CODE','DESCRIPTION'],
                                               false
                                             )
-                                          " />
+                                          "  (input)="codeChecker($event,'used_by_code')" />
                                         <master-search 
-                                        *ngIf="this.flag != 'VIEW'"
+                                        *ngIf="this.flag != 'VIEW' && this.allowfields"
                                          class="masterSearch" [MasterSearchData]="usedcodedata"
                                             (newRowClick)="selectedused($event)">
                                         </master-search>
@@ -323,9 +327,9 @@
                                               ['CODE','DESCRIPTION'],
                                               false
                                             )
-                                          " />
+                                          "  (input)="codeChecker($event,'type_code')" />
                                         <master-search 
-                                        *ngIf="this.flag != 'VIEW'"
+                                        *ngIf="this.flag != 'VIEW' && this.allowfields"
                                         class="masterSearch" [MasterSearchData]="typeCodeData"
                                             (newRowClick)="typeSelected($event)">
                                         </master-search>
@@ -415,7 +419,7 @@
                                                         <input matInput [matDatepicker]="start_from" name="start_from"
                                                             placeholder="DD/MM/YYYY" formControlName="start_from"
                                                             readonly="true" [readonly]="viewOnly" />
-                                                        <mat-datepicker-toggle *ngIf="this.flag != 'VIEW'" matSuffix
+                                                        <mat-datepicker-toggle *ngIf="this.flag != 'VIEW' && allowfields" matSuffix
                                                             [for]="start_from"></mat-datepicker-toggle>
                                                     </mat-form-field>
                                                     <mat-datepicker #start_from></mat-datepicker>
@@ -431,38 +435,41 @@
                                                     <mat-form-field style="width: 100%" appearance="outline">
 
                                                         <mat-select formControlName="method" [disabled]="viewMode">
-                                                            <mat-option value="Straight Line">Straight Line</mat-option>
-                                                            <mat-option value="Write Down">Write Down</mat-option>
-
+                                                            <!-- <mat-option value="Straight Line">Straight Line</mat-option>
+                                                            <mat-option value="Write Down">Write Down</mat-option> -->
+                                                            <mat-option
+                                                            *ngFor="let data of methodlist"
+                                                            [value]="data.SRNO"
+                                                          >
+                                                            {{ data.ENGLISH }}
+                                                            </mat-option>
                                                         </mat-select>
+
                                                     </mat-form-field>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <mat-radio-group aria-label="Select an option" formControlName="percent"
-                                                    class="d-flex">
-                                                    <mat-radio-button value="P" id="ID015" class="mx-2">
+
+                                                <mat-radio-group aria-label="Select an option" formControlName="percent" [disabled]="viewOnly" class="d-flex">
+                                                    <mat-radio-button value="percentage" class="mx-2" [disabled]="!allowfields">
                                                         <b>%</b>
-                                                        <mat-form-field style="width: 30% ;margin-inline: 5px;"
-                                                            appearance="outline">
-                                                            <input type="number" matInput formControlName="life_period"
-                                                                [readonly]="viewOnly" UpperCaseDirective />
+                                                        <mat-form-field class="input-field" appearance="outline">
+                                                            <input type="number" matInput formControlName="life_period" [readonly]="viewOnly && allowfields" UpperCaseDirective />
                                                         </mat-form-field>
                                                         <span> (Yearly)</span>
                                                     </mat-radio-button>
-                                                    <mat-radio-button value="P" id="ID014" class="mx-2">
-                                                        <b>Life
-                                                            Period</b>
-                                                        <mat-form-field style="width: 30%; margin-inline: 5px;"
-                                                            appearance="outline">
-                                                            <input type="number" matInput formControlName="months"
-                                                                [readonly]="viewOnly" UpperCaseDirective />
+                                                
+                                                    <mat-radio-button value="life_period" class="mx-2" [disabled]="!allowfields">
+                                                        <b>Life Period</b>
+                                                        <mat-form-field class="input-field" appearance="outline">
+                                                            <input type="number" matInput formControlName="months" [readonly]="viewOnly && allowfields" UpperCaseDirective />
                                                         </mat-form-field>
                                                         <span> (In Month)</span>
                                                     </mat-radio-button>
                                                 </mat-radio-group>
+                                                
                                             </div>
                                             <!-- <div class="col-md-3">
                                                 <mat-radio-group aria-label="Select an option"
@@ -487,7 +494,7 @@
                                                                 name="last_dep_date" placeholder="DD/MM/YYYY"
                                                                 formControlName="last_dep_date" readonly="true"
                                                                 [readonly]="viewOnly" />
-                                                            <mat-datepicker-toggle *ngIf="this.flag != 'VIEW'" matSuffix
+                                                            <mat-datepicker-toggle *ngIf="this.flag != 'VIEW' && allowfields" matSuffix
                                                                 [for]="last_dep_date"></mat-datepicker-toggle>
                                                         </mat-form-field>
                                                         <mat-datepicker #last_dep_date></mat-datepicker>
@@ -521,8 +528,10 @@
                                                       ['CODE','DESCRIPTION'],
                                                       false
                                                     )
-                                                  " />
-                                                <master-search  *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="statusCodeData"
+                                                  "  (input)="codeChecker($event,'status')"/>
+                                                <master-search 
+                                                *ngIf="this.flag != 'VIEW' && this.allowfields"
+                                                 class="masterSearch" [MasterSearchData]="statusCodeData"
                                                     (newRowClick)="statusCodeSelected($event)">
                                                 </master-search>
                                             </mat-form-field>
@@ -544,7 +553,7 @@
                                                             name="disposal_date" placeholder="DD/MM/YYYY"
                                                             formControlName="disposal_date" readonly="true"
                                                             [readonly]="viewOnly" />
-                                                        <mat-datepicker-toggle  *ngIf="this.flag != 'VIEW'" matSuffix
+                                                        <mat-datepicker-toggle  *ngIf="this.flag != 'VIEW' && allowfields" matSuffix
                                                             [for]="disposal_date"></mat-datepicker-toggle>
                                                     </mat-form-field>
                                                     <mat-datepicker #disposal_date></mat-datepicker>
@@ -554,8 +563,8 @@
 
                                         <div class="row">
                                             <div class="col-sm-4">
-                                                <mat-checkbox id="ID022" formControlName="opening"
-                                                    class="example-margin">
+                                                <mat-checkbox id="ID022" formControlName="opening" [disabled]="viewOnly && allowfields"
+                                                    class="example-margin" (change)="codeCheckerForCheckbox($event, 'opening')">
                                                     Opening</mat-checkbox>
                                             </div>
                                         </div>
@@ -590,8 +599,11 @@
                                                           ['ACCODE','ACCOUNT_HEAD'],
                                                           false
                                                         )
-                                                      " />
-                                                    <master-search  *ngIf="this.flag != 'VIEW'" class="masterSearch"
+                                                      " 
+                                                      (input)="codeChecker($event,'supplier_code')"/>
+                                                    <master-search 
+                                                    *ngIf="this.flag != 'VIEW' && this.allowfields"
+                                                      class="masterSearch"
                                                         [MasterSearchData]="supplierCodeData"
                                                         (newRowClick)="supplierCodeSelected($event)">
                                                     </master-search>
@@ -620,8 +632,11 @@
                                                           ['SUBLEDGER_CODE','SUBLEDGER_CODE'],
                                                           false
                                                         )
-                                                      " />
-                                                    <master-search  *ngIf="this.flag != 'VIEW'" class="masterSearch"
+                                                      " 
+                                                      (input)="codeChecker($event,'subledger_code')"/>
+                                                    <master-search  
+                                                    *ngIf="this.flag != 'VIEW' && this.allowfields"
+                                                    class="masterSearch"
                                                         [MasterSearchData]="subledgerCodeData"
                                                         (newRowClick)="subledgerCodeSelected($event)">
                                                     </master-search>
@@ -652,7 +667,7 @@
                                                     <input matInput [matDatepicker]="supp_inv_date" name="supp_inv_date"
                                                         placeholder="DD/MM/YYYY" formControlName="supp_inv_date"
                                                         readonly="true" [readonly]="viewOnly" />
-                                                    <mat-datepicker-toggle *ngIf="this.flag != 'VIEW'" matSuffix
+                                                    <mat-datepicker-toggle *ngIf="this.flag != 'VIEW' && allowfields" matSuffix
                                                         [for]="supp_inv_date"></mat-datepicker-toggle>
                                                 </mat-form-field>
                                                 <mat-datepicker #supp_inv_date></mat-datepicker>
@@ -712,8 +727,11 @@
                                                                   ['CODE'],
                                                                   false
                                                                 )
-                                                              " />
-                                                            <master-search  *ngIf="this.flag != 'VIEW'" class="masterSearch"
+                                                              "
+                                                              (input)="codeChecker($event,'doc_type')" />
+                                                            <master-search 
+                                                            *ngIf="this.flag != 'VIEW' && this.allowfields"
+                                                              class="masterSearch"
                                                                 [MasterSearchData]="docTypeData"
                                                                 (newRowClick)="docTypeSelected($event)">
                                                             </master-search>
@@ -737,8 +755,11 @@
                                                                   ['CODE'],
                                                                   false
                                                                 )
-                                                              " />
-                                                            <master-search  *ngIf="this.flag != 'VIEW'" class="masterSearch"
+                                                              "
+                                                               (input)="codeChecker($event,'doc_no')" />
+                                                            <master-search
+                                                            *ngIf="this.flag != 'VIEW' && this.allowfields" 
+                                                              class="masterSearch"
                                                                 [MasterSearchData]="BranchData"
                                                                 (newRowClick)="BranchDataSelected($event)">
                                                             </master-search>
@@ -834,7 +855,7 @@
                                         <input matInput [matDatepicker]="created_on" name="created_on"
                                             placeholder="DD/MM/YYYY" formControlName="created_on" readonly="true"
                                             [readonly]="viewOnly" />
-                                        <mat-datepicker-toggle *ngIf="this.flag != 'VIEW'" matSuffix [for]="created_on"></mat-datepicker-toggle>
+                                        <mat-datepicker-toggle *ngIf="this.flag != 'VIEW' && allowfields" matSuffix [for]="created_on"></mat-datepicker-toggle>
                                     </mat-form-field>
                                     <mat-datepicker #created_on></mat-datepicker>
                                 </div>
@@ -853,7 +874,7 @@
                                             <input matInput [matDatepicker]="warranty" name="warranty"
                                                 placeholder="DD/MM/YYYY" formControlName="warranty" readonly="true"
                                                 [readonly]="viewOnly" />
-                                            <mat-datepicker-toggle *ngIf="this.flag != 'VIEW'" matSuffix [for]="warranty"></mat-datepicker-toggle>
+                                            <mat-datepicker-toggle *ngIf="this.flag != 'VIEW' && allowfields" matSuffix [for]="warranty"></mat-datepicker-toggle>
                                         </mat-form-field>
                                         <mat-datepicker #warranty></mat-datepicker>
                                     </div>
@@ -864,7 +885,7 @@
                                             <input matInput [matDatepicker]="service_upto" name="service_upto"
                                                 placeholder="DD/MM/YYYY" formControlName="service_upto" readonly="true"
                                                 [readonly]="viewOnly" />
-                                            <mat-datepicker-toggle *ngIf="this.flag != 'VIEW'" matSuffix
+                                            <mat-datepicker-toggle *ngIf="this.flag != 'VIEW' && allowfields" matSuffix
                                                 [for]="service_upto"></mat-datepicker-toggle>
                                         </mat-form-field>
                                         <mat-datepicker #service_upto></mat-datepicker>
@@ -877,7 +898,7 @@
                                             <input matInput [matDatepicker]="insurance_upto" name="insurance_upto"
                                                 placeholder="DD/MM/YYYY" formControlName="insurance_upto"
                                                 [readonly]="viewOnly" readonly="true" />
-                                            <mat-datepicker-toggle *ngIf="this.flag != 'VIEW'" matSuffix
+                                            <mat-datepicker-toggle *ngIf="this.flag != 'VIEW' && allowfields" matSuffix
                                                 [for]="insurance_upto"></mat-datepicker-toggle>
                                         </mat-form-field>
                                         <mat-datepicker #insurance_upto></mat-datepicker>
@@ -889,7 +910,7 @@
                                             <input matInput [matDatepicker]="reg_upto" name="reg_upto"
                                                 placeholder="DD/MM/YYYY" formControlName="reg_upto" readonly="true"
                                                 [readonly]="viewOnly" />
-                                            <mat-datepicker-toggle *ngIf="this.flag != 'VIEW'" matSuffix [for]="reg_upto"></mat-datepicker-toggle>
+                                            <mat-datepicker-toggle *ngIf="this.flag != 'VIEW' && allowfields" matSuffix [for]="reg_upto"></mat-datepicker-toggle>
                                         </mat-form-field>
                                         <mat-datepicker #reg_upto></mat-datepicker>
                                     </div>
@@ -900,7 +921,7 @@
                                             <input matInput [matDatepicker]="certi_upto" name="certi_upto"
                                                 [readonly]="viewOnly" placeholder="DD/MM/YYYY"
                                                 formControlName="certi_upto" readonly="true" />
-                                            <mat-datepicker-toggle *ngIf="this.flag != 'VIEW'" matSuffix [for]="certi_upto"></mat-datepicker-toggle>
+                                            <mat-datepicker-toggle *ngIf="this.flag != 'VIEW' && allowfields" matSuffix [for]="certi_upto"></mat-datepicker-toggle>
                                         </mat-form-field>
                                         <mat-datepicker #certi_upto></mat-datepicker>
                                     </div>
@@ -930,8 +951,12 @@
                                               ['CODE'],
                                               false
                                             )
-                                          " />
-                                        <master-search  *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="UDF1Data"
+                                          "
+                                           (input)="codeChecker($event,'userdefined_1')"
+                                           />
+                                        <master-search  
+                                        *ngIf="this.flag != 'VIEW' && this.allowfields"  
+                                        class="masterSearch" [MasterSearchData]="UDF1Data"
                                             (newRowClick)="UDF1CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
@@ -953,8 +978,12 @@
                                               ['CODE'],
                                               false
                                             )
-                                          " />
-                                        <master-search  *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="UDF2Data"
+                                          "
+                                           (input)="codeChecker($event,'userdefined_1')"
+                                           />
+                                        <master-search  
+                                        *ngIf="this.flag != 'VIEW' && this.allowfields"  
+                                        class="masterSearch" [MasterSearchData]="UDF2Data"
                                             (newRowClick)="UDF2CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
@@ -976,8 +1005,12 @@
                                               ['CODE'],
                                               false
                                             )
-                                          " />
-                                        <master-search  *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="UDF3Data"
+                                          "
+                                        (input)="codeChecker($event,'userdefined_3')"
+                                           />
+                                        <master-search  
+                                        *ngIf="this.flag != 'VIEW' && this.allowfields"  
+                                         class="masterSearch" [MasterSearchData]="UDF3Data"
                                             (newRowClick)="UDF3CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
@@ -999,8 +1032,13 @@
                                               ['CODE'],
                                               false
                                             )
-                                          " />
-                                        <master-search  *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="UDF4Data"
+                                          " 
+                                        (input)="codeChecker($event,'userdefined_4')"
+
+                                        />
+                                        <master-search  
+                                        *ngIf="this.flag != 'VIEW' && this.allowfields" 
+                                         class="masterSearch" [MasterSearchData]="UDF4Data"
                                             (newRowClick)="UDF4CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
@@ -1022,8 +1060,11 @@
                                               ['CODE'],
                                               false
                                             )
-                                          " />
-                                        <master-search  *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="UDF5Data"
+                                          "
+                                           (input)="codeChecker($event,'userdefined_4')" />
+                                        <master-search
+                                        *ngIf="this.flag != 'VIEW' && this.allowfields" 
+                                          class="masterSearch" [MasterSearchData]="UDF5Data"
                                             (newRowClick)="UDF5CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>

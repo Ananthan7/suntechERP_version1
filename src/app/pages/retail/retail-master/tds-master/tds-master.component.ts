@@ -49,6 +49,11 @@ export class TdsMasterComponent implements OnInit {
     this.apiService.getDynamicAPI(API).subscribe((result) => {
       if (result.status.trim() === 'Success') {
         this.finyears = result.dynamicData[0].map((e: any) => e.FYEARCODE);
+        let len = this.finyears.length;
+        let last_year = this.finyears[len - 1];
+        console.log(last_year);
+        this.tdsform.controls.financial_year.setValue(last_year);
+
       } else {
         this.finyears = [];
       }
