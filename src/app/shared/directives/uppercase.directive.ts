@@ -1,34 +1,23 @@
-import {  Directive, ElementRef, HostListener, Renderer2  } from '@angular/core';
-import { NgControl } from '@angular/forms';
+import { Directive, ElementRef, HostListener } from "@angular/core";
+import { NgControl } from "@angular/forms";
 
 @Directive({
-  selector: '[UpperCaseDirective]'
+  selector: "[UpperCaseDirective]",
 })
 export class UppercaseDirective {
-  constructor(private el: ElementRef,
-    private renderer: Renderer2,
-  ) { }
+  constructor(private el: ElementRef, private control: NgControl) {}
 
-  @HostListener('input') onInputChange() {
-    this.transformToUppercase();
-  }
-
-  private transformToUppercase() {
+  @HostListener("input", ["$event"])
+  onInputChange(event: Event) {
     const input = this.el.nativeElement;
     const start = input.selectionStart;
     const end = input.selectionEnd;
 
-    // Convert only letters to uppercase
-    input.value = input.value?.trimStart().replace(/[a-z]/g, (char: string) => char.toUpperCase());
+    const transformedValue = input.value.toUpperCase();
 
-    // Restore the cursor position
+    input.value = transformedValue;
+    this.control.control?.setValue(transformedValue, { emitEvent: false });
+
     input.setSelectionRange(start, end);
   }
-  // @HostListener('input', ['$event']) onInputChange(event: Event): void {
-  //   const input = this.el.nativeElement as HTMLInputElement;
-  //   const res = input.value.toString().toUpperCase();
-  //   console.log(input.value,'fires');
-  //   this.renderer.setProperty(input, 'value', res);
-
-  // }
 }

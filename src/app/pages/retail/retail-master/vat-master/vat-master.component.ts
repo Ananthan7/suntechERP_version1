@@ -76,11 +76,14 @@ export class VatMasterComponent implements OnInit {
   overlayEHSNSACCODE!: MasterSearchComponent;
   @ViewChild("overlayEEXPENSEACCODE")
   overlayEEXPENSEACCODE!: MasterSearchComponent;
+  @ViewChild("overlayCHSNSACCODE")
+  overlayCHSNSACCODE!: MasterSearchComponent;
 
   @ViewChild("overlayPosVatRefundCredit")
   overlayPosVatRefundCredit!: MasterSearchComponent;
 
   private subscriptions: Subscription[] = [];
+  private isFocusOutHandled = false;
   @Input() content!: any;
 
   expenseHsnSacAllocationData: any[] = [];
@@ -819,17 +822,19 @@ export class VatMasterComponent implements OnInit {
     event: KeyboardEvent,
     gridField: string[],
     data: any,
-    gridType: any
+    gridType: any,
+    fieldName: string
   ) {
     let input = (event.target as HTMLInputElement).value;
     let index = data.SN - 1;
 
     if ((event.key === "Tab" || event.key === "Enter") && !input) {
-      this.openGridPanel(event, gridField[0]);
+      this.openGridPanel(event, fieldName);
     }
 
     if (event.key === "Backspace" || event.key === "Delete") {
-      if (input.length == 1) {
+      console.log(input);
+      if (!input || input.length <= 1 || input == "") {
         if (gridType === "costCenter") {
           this.costCenterAccountData[index][gridField[1]] = "";
           this.costCenterAccountData[index][gridField[0]] = "";
@@ -840,17 +845,20 @@ export class VatMasterComponent implements OnInit {
       }
     }
   }
-  openGridPanel(event: any, formControlName: string) {
-    switch (formControlName) {
-      case "HSN_SAC_CODE":
+  openGridPanel(event: any, fieldName: string) {
+    switch (fieldName) {
+      case "EHSN_SAC_CODE":
         this.overlayEHSNSACCODE.showOverlayPanel(event);
         break;
-      case "EXPENSE_ACCODE":
+      case "EEXPENSE_ACCODE":
         this.overlayEEXPENSEACCODE.showOverlayPanel(event);
+        break;
+      case "CHSN_SAC_CODE":
+        this.overlayCHSNSACCODE.showOverlayPanel(event);
         break;
 
       default:
-        console.warn(`Unknown form control name: ${formControlName}`);
+        console.warn(`Unknown form control name: ${fieldName}`);
     }
   }
 
@@ -1232,7 +1240,7 @@ export class VatMasterComponent implements OnInit {
                     : event.DESCRIPTION,
                 };
               }
-            );  
+            );
           }, 100);
         } else if (result === "Cancel") {
           this.costCenterAccountData[currentIndex][gridField[0]] = event.CODE;
@@ -1303,7 +1311,7 @@ export class VatMasterComponent implements OnInit {
     let MESSAGE;
     event.target.value > 100
       ? (MESSAGE = `A percentage value cannot be greater than 100.`)
-      : (MESSAGE = `A percentage value cannot be lesser than 0.`);
+      : (MESSAGE = `A percentage value cannot be negative (-) or less than Zero (0).`);
     let GSTCODE = this.vatMasterMainForm.value.vatCode;
 
     if (GSTCODE) {
@@ -1426,33 +1434,47 @@ export class VatMasterComponent implements OnInit {
     this.searching = true;
   }
 
-  openGPCGrid(data: any, index?: any) {
-    const modalRef: NgbModalRef = this.modalService.open(
-      GpcGridComponentComponent,
-      {
-        size: "md",
-        backdrop: true,
-        keyboard: false,
-        centered: true,
-      }
-    );
-    modalRef.componentInstance.receiptData = { ...data };
+  openGPCGrid(event?: any, index?: any): void {
+    const clickedElement = event.target as HTMLElement;
 
-    modalRef.result.then(
-      (row) => {
-        if (row) {
-          let currentIndex = index.data.SN - 1;
+    if (clickedElement && clickedElement.tagName === "I") {
+      console.log("Button was clicked");
+    }
+    if (
+      event.key === "Tab" ||
+      event.key === "Enter" ||
+      (clickedElement && clickedElement.tagName === "I")
+    ) {
+      const searchValue = (event?.target as HTMLInputElement)?.value || "";
 
-          this.costCenterAccountData[currentIndex].GPC_ACCODE =
-            row[0].GPC_ACCODE;
-          this.costCenterAccountData[currentIndex].GPC_ACCODE_DESC =
-            row[0].Account_Head;
+      const modalRef: NgbModalRef = this.modalService.open(
+        GpcGridComponentComponent,
+        {
+          size: "md",
+          backdrop: true,
+          keyboard: false,
+          centered: true,
         }
-      },
-      (dismissReason) => {
-        console.log("Modal dismissed:", dismissReason);
-      }
-    );
+      );
+
+      modalRef.componentInstance.searchValue = searchValue;
+
+      modalRef.result.then(
+        (row) => {
+          if (row) {
+            const currentIndex = index.data.SN - 1;
+
+            this.costCenterAccountData[currentIndex].GPC_ACCODE =
+              row[0].GPC_ACCODE;
+            this.costCenterAccountData[currentIndex].GPC_ACCODE_DESC =
+              row[0].Account_Head;
+          }
+        },
+        (dismissReason) => {
+          console.log("Modal dismissed:", dismissReason);
+        }
+      );
+    }
   }
 
   formatDate(inputDate: string): string {

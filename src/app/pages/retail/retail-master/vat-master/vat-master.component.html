@@ -1367,7 +1367,8 @@
                                     $event,
                                     ['EXPENSE_ACCODE', 'EXPENSE_ACCODE_DESC'],
                                     data.data,
-                                    'expense'
+                                    'expense',
+                                    'EEXPENSE_ACCODE'
                                   )
                                 "
                               />
@@ -1433,7 +1434,8 @@
                                     $event,
                                     ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
                                     data.data,
-                                    'expense'
+                                    'expense',
+                                    'EHSN_SAC_CODE'
                                   )
                                 "
                               />
@@ -1687,6 +1689,7 @@
                                 maxlength="6"
                                 [value]="data.value"
                                 style="flex: 1"
+                                (keydown)="openGPCGrid($event, data)"
                               />
 
                               <i
@@ -1696,7 +1699,7 @@
                                   font-weight: bold;
                                   cursor: pointer;
                                 "
-                                (click)="openGPCGrid(null, data)"
+                                (click)="openGPCGrid($event, data)"
                               ></i>
                             </mat-form-field>
                           </div>
@@ -1746,11 +1749,20 @@
                                     data.data
                                   )
                                 "
+                                (keydown)="
+                                  openTabFromGrid(
+                                    $event,
+                                    ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
+                                    data.data,
+                                    'costCenter',
+                                    'CHSN_SAC_CODE'
+                                  )
+                                "
                               />
 
                               <master-search
                                 *ngIf="flag != 'VIEW'"
-                                #overlayGroupOne
+                                #overlayCHSNSACCODE
                                 [MasterSearchData]="hsnCodeData"
                                 class="masterSearch"
                                 (newRowClick)="
