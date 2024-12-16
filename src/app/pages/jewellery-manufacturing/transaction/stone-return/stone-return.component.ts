@@ -29,12 +29,20 @@ export class StoneReturnComponent implements OnInit {
     { title: 'SRNO', field: 'SRNO', format: '', alignment: 'center' },
     { title: 'VOCNO', field: 'VOCNO', format: '', alignment: 'left' },
     { title: 'VOCTYPE', field: 'VOCTYPE', format: '', alignment: 'left' },
-    { title: 'VOCDATE', field: 'VOCDATE', format: 'dd/MM/yyyy',dataType: 'date', alignment: 'left' },
+    {
+      title: 'VOCDATE',
+      field: 'VOCDATE',
+      alignment: 'left',
+      formatter: (cell: { getValue: () => string | number | Date; }) => {
+        const date = new Date(cell.getValue());
+        return date.toLocaleDateString('en-GB'); // Formats to DD/MM/YYYY
+      }
+    },
     { title: 'JOB NUMBER', field: 'JOB_NUMBER', format: '', alignment: 'left' },
     { title: 'JOB DATE', field: 'JOB_DATE', format: 'dd/MM/yyyy', dataType: 'date',alignment: 'left' },
-    { title: 'JOB SO', field: 'JOB_SO_NUMBER', format: '', alignment: 'left' },
+    { title: 'JOB SO', field: 'JOB_SO_NUMBER', format: '', alignment: 'right' },
     { title: 'JOB DESCRIPTION', field: 'JOB_DESCRIPTION', format: '', alignment: 'left' },
-    { title: 'PCS', field: 'PCS', format: '', alignment: 'left' },
+    { title: 'PCS', field: 'PCS', format: '', alignment: 'right' },
     { title: 'UNQ JOB ID', field: 'UNQ_JOB_ID', format: '', alignment: 'left' },
     { title: 'BRANCH', field: 'BRANCH_CODE', format: '', alignment: 'left' },
     { title: 'DESIGN CODE', field: 'DESIGN_CODE', format: '', alignment: 'left' },
@@ -47,13 +55,13 @@ export class StoneReturnComponent implements OnInit {
     { title: 'COLOR', field: 'COLOR', format: '', alignment: 'left' },
     { title: 'CLARITY', field: 'CLARITY', format: '', alignment: 'left' },
     { title: 'SIZE', field: 'SIZE', format: '', alignment: 'left' },
-    { title: 'GROSS WT', field: 'GROSS_WT', format: '', alignment: 'left' },
+    { title: 'GROSS WT', field: 'GROSS_WT', format: '', alignment: 'right' },
     { title: 'CURRENY CODE', field: 'CURRENY_CODE', format: '', alignment: 'left' },
     { title: 'CURRENY RATE', field: 'CURRENY_RATE', format: '', alignment: 'left' },
-    { title: 'RATEFC', field: 'RATEFC', format: '', alignment: 'left' },
-    { title: 'RATELC', field: 'RATELC', format: '', alignment: 'left' },
-    { title: 'AMOUNTFC', field: 'AMOUNTFC', format: '', alignment: 'left' },
-    { title: 'AMOUNTLC', field: 'AMOUNTLC', format: '', alignment: 'left' },
+    { title: 'RATEFC', field: 'RATEFC', format: '', alignment: 'right' },
+    { title: 'RATELC', field: 'RATELC', format: '', alignment: 'right' },
+    { title: 'AMOUNTFC', field: 'AMOUNTFC', format: '', alignment: 'right' },
+    { title: 'AMOUNTLC', field: 'AMOUNTLC', format: '', alignment: 'right' },
     { title: 'PROCESS CODE', field: 'PROCESS_CODE', format: '', alignment: 'left' },
     { title: 'PROCESS NAME', field: 'PROCESS_NAME', format: '', alignment: 'left' },
     { title: 'WORKER CODE', field: 'WORKER_CODE', format: '', alignment: 'left' },
@@ -61,40 +69,40 @@ export class StoneReturnComponent implements OnInit {
     { title: 'WIP ACCOUNT', field: 'WIP_ACCOUNT', format: '', alignment: 'left' },
     { title: 'LOCTYPE CODE', field: 'LOCTYPE_CODE', format: '', alignment: 'left' },
     { title: 'STOCK CODE BRK', field: 'STOCK_CODE_BRK', format: '', alignment: 'left' },
-    { title: 'WASTAGE QTY', field: 'WASTAGE_QTY', format: '', alignment: 'left' },
-    { title: 'WASTAGE AMT', field: 'WASTAGE_AMT', format: '', alignment: 'left' },
-    { title: 'WASTAGE TOTAL', field: 'WASTAGE_TOTAL', format: '', alignment: 'left' },
+    { title: 'WASTAGE QTY', field: 'WASTAGE_QTY', format: '', alignment: 'right' },
+    { title: 'WASTAGE AMT', field: 'WASTAGE_AMT', format: '', alignment: 'right' },
+    { title: 'WASTAGE TOTAL', field: 'WASTAGE_TOTAL', format: '', alignment: 'right' },
     { title: 'NAVSEQNO', field: 'NAVSEQNO', format: '', alignment: 'left' },
     { title: 'YEARMONTH', field: 'YEARMONTH', format: '', alignment: 'left' },
     { title: 'DOCTIME', field: 'DOCTIME', format: '', alignment: 'left' },
     { title: 'SMAN', field: 'SMAN', format: '', alignment: 'left' },
     { title: 'REMARK', field: 'REMARK', format: '', alignment: 'left' },
-    { title: 'TOTAL GROSS WT', field: 'TOTAL_GROSS_WT', format: '', alignment: 'left' },
+    { title: 'TOTAL GROSS WT', field: 'TOTAL_GROSS_WT', format: '', alignment: 'right' },
     { title: 'UNQ DESIGN ID', field: 'UNQ_DESIGN_ID', format: '', alignment: 'left' },
     { title: 'UNIQUEID', field: 'UNIQUEID', format: '', alignment: 'left' },
-    { title: 'TOTAL AMOUNT FC', field: 'TOTAL_AMOUNT_FC', format: '', alignment: 'left' },
-    { title: 'TOTAL AMOUNT LC', field: 'TOTAL_AMOUNT_LC', format: '', alignment: 'left' },
-    { title: 'ISBROCKEN', field: 'ISBROCKEN', format: '', alignment: 'left' },
+    { title: 'TOTAL AMOUNT FC', field: 'TOTAL_AMOUNT_FC', format: '', alignment: 'right' },
+    { title: 'TOTAL AMOUNT LC', field: 'TOTAL_AMOUNT_LC', format: '', alignment: 'right' },
+    { title: 'ISBROCKEN', field: 'ISBROCKEN', format: '', alignment: 'right' },
     { title: 'BASE CONV RATE', field: 'BASE_CONV_RATE', format: '', alignment: 'left' },
     { title: 'DT BRANCH CODE', field: 'DT_BRANCH_CODE', format: '', alignment: 'left' },
     { title: 'DT VOCTYPE', field: 'DT_VOCTYPE', format: '', alignment: 'left' },
-    { title: 'DT VOCNO', field: 'DT_VOCNO', format: '', alignment: 'left' },
+    { title: 'DT VOCNO', field: 'DT_VOCNO', format: '', alignment: 'right' },
     { title: 'DT YEARMONTH', field: 'DT_YEARMONTH,', format: '', alignment: 'left' },
     { title: 'RET TO DESC', field: 'RET_TO_DESC', format: '', alignment: 'left' },
     { title: 'RET TO', field: 'RET_TO', format: '', alignment: 'left' },
-    { title: 'WASTAGE PER', field: 'WASTAGE_PER', format: '', alignment: 'left' },
-    { title: 'TOTAL PCS', field: 'TOTAL_PCS', format: '', alignment: 'left' },
+    { title: 'WASTAGE PER', field: 'WASTAGE_PER', format: '', alignment: 'right' },
+    { title: 'TOTAL PCS', field: 'TOTAL_PCS', format: '', alignment: 'right' },
     { title: 'LABOUR CODE', field: 'LABOUR_CODE', format: '', alignment: 'left' },
     { title: 'LAB ACCODE', field: 'LAB_ACCODE', format: '', alignment: 'left' },
-    { title: 'LAB RATEFC', field: 'LAB_RATEFC', format: '', alignment: 'left' },
-    { title: 'LAB RATELC', field: 'LAB_RATELC', format: '', alignment: 'left' },
-    { title: 'LAB AMOUNTFC', field: 'LAB_AMOUNTFC', format: '', alignment: 'left' },
-    { title: 'LAB AMOUNTLC', field: 'LAB_AMOUNTLC', format: '', alignment: 'left' },
+    { title: 'LAB RATEFC', field: 'LAB_RATEFC', format: '', alignment: 'right' },
+    { title: 'LAB RATELC', field: 'LAB_RATELC', format: '', alignment: 'right' },
+    { title: 'LAB AMOUNTFC', field: 'LAB_AMOUNTFC', format: '', alignment: 'right' },
+    { title: 'LAB AMOUNTLC', field: 'LAB_AMOUNTLC', format: '', alignment: 'right' },
     { title: 'LAB UNIT', field: 'LAB_UNIT', format: '', alignment: 'left' },
-    { title: 'ISMISSING', field: 'ISMISSING', format: '', alignment: 'left' },
+    { title: 'ISMISSING', field: 'ISMISSING', format: '', alignment: 'right' },
     { title: 'VAR PER', field: 'VAR_PER', format: '', alignment: 'left' },
-    { title: 'ORG LAB RATE', field: 'ORG_LAB_RATE', format: '', alignment: 'left' },
-    { title: 'ORG LAB AMT', field: 'ORG_LAB_AMT', format: '', alignment: 'left' },
+    { title: 'ORG LAB RATE', field: 'ORG_LAB_RATE', format: '', alignment: 'right' },
+    { title: 'ORG LAB AMT', field: 'ORG_LAB_AMT', format: '', alignment: 'right' },
     { title: 'SUB STOCK CODE', field: 'SUB_STOCK_CODE', format: '', alignment: 'left' },
 
   ];
@@ -231,6 +239,22 @@ export class StoneReturnComponent implements OnInit {
     this.Attachedfile = file
     console.log(this.Attachedfile);    
   }
+  formatDateToDDMMYYYY(date: string): string {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+  loadDataForGrid() {
+    this.stoneReturnData = this.stoneReturnData.map(item => {
+      return {
+        ...item,
+        VOCDATE: this.formatDateToDDMMYYYY(item.VOCDATE),
+        JOB_DATE: this.formatDateToDDMMYYYY(item.JOB_DATE),
+      };
+    });
+  }
 
   setFormValues() {
     if (this.content?.FLAG) return
@@ -306,10 +330,11 @@ export class StoneReturnComponent implements OnInit {
                 SRNO: element.SRNO,
                 VOCNO: element.VOCNO,
                 VOCTYPE: element.VOCTYPE,
-                VOCDATE: element.VOCDATE,
+                VOCDATE: this.commonService.formatDDMMYY(element.VOCDATE),
                 JOB_NUMBER: element.JOB_NUMBER,
-                JOB_DATE: element.JOB_DATE,
+                JOB_DATE: this.commonService.formatDDMMYY(element.JOB_DATE),
                 JOB_SO_NUMBER: element.JOB_SO_NUMBER,
+                JOB_DESCRIPTION: element.JOB_DESCRIPTION,
                 UNQ_JOB_ID: element.UNQ_JOB_ID,
                 BRANCH_CODE: element.BRANCH_CODE,
                 DESIGN_CODE: element.DESIGN_CODE,
@@ -461,7 +486,8 @@ export class StoneReturnComponent implements OnInit {
       detailDataToParent.SRNO = this.stoneReturnData.length + 1
       this.stoneReturnData.push(detailDataToParent);
       // this.recalculateSRNO()
-    }
+      this.loadDataForGrid()
+    } 
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
       this.commonService.showSnackBarMsg('MSG81512')
@@ -608,7 +634,7 @@ export class StoneReturnComponent implements OnInit {
 
     let API = 'JobStoneReturnMasterDJ/InsertJobStoneReturnMasterDJ'
     let postData = this.setPostData(this.stonereturnFrom.value);
-
+    console.log(postData,'postdata')
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result && result.status == "Success") {

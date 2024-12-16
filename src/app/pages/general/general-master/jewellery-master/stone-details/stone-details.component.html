@@ -5,7 +5,7 @@
     </button>
   </div>
   <!-- modal header component -->
- <modal-header  (cancelClick)="close()" [isViewContinue]="true" (saveClick)="formSubmit()"> </modal-header> 
+ <modal-header  (cancelClick)="close()" [isViewContinue]="false" (saveClick)="formSubmit()" [isViewDelete]="false" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"> </modal-header> 
 
       <form [formGroup]="enterStoneDetailsForm">
         <div class="container-fluid pt-3">
@@ -18,7 +18,7 @@
                           <label for="inputPassword" class="col-sm-5 col-form-label"> Stock Code :</label>
                           <div class="col-md-2">
                             <mat-form-field  style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput maxlength="15" formControlName="Stockcode" />
+                              <input type="text" matInput maxlength="15" formControlName="Stockcode" [readonly]="viewMode"/>
                             </mat-form-field>
                           </div>
                           <div class="col-md-5">

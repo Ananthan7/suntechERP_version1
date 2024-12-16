@@ -20,10 +20,10 @@
                         <div class="row mt-2">
                             <div class="col-md-10">
                                 <div class="row">
-                                    <label for="prefixcode" class="col-sm-2 col-form-label">Prefix Code:</label>
+                                    <label for="prefixcode" class="col-sm-2 col-form-label">Prefix Code:  <span class="text-danger">  *</span></label>
                                     <div class="col-md-4 p-0 ms-2">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input type="text" id="prefixcode" matInput id="prefixcodeInput"  formControlName="prefixcode" [readonly]="viewOnly || disable_code" (change)="isexistingcode()"
+                                            <input type="text" matInput id="prefixcodeInput"  #prefixcodeInput formControlName="prefixcode" [readonly]="viewOnly || disable_code" (change)="isexistingcode()"
                                                 class="p-0" maxlength="2" UpperCaseDirective (focusout)="checkcode()"/>
                                                 <mat-error *ngIf="prefixmasterform.controls['prefixcode'].hasError('required')">
                                                     PreCode is required.

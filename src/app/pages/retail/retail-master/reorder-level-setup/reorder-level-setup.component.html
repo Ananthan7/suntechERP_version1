@@ -7,7 +7,8 @@
 </div>
 
 <!-- modal header component -->
-<modal-header  (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"  [isViewDelete]="editMode" [isViewSave]="!viewMode"></modal-header>
+<modal-header  (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"   [isViewDelete]="false" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+[isViewMore]="!viewMode"></modal-header>
 
 <!-- content section -->
 <div class="container-fluid pt-3">
@@ -33,7 +34,7 @@
               <label for="code" class="col-sm-2 col-form-label" id="ID029">Code</label>
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput type="text" formControlName="code" [readonly]="viewMode || editMode" #code (input)="code.value = code.value.toUpperCase()"/>
+                  <input matInput type="text" formControlName="code" id="code" maxlength="15" [readonly]="viewMode || editMode" #code (input)="code.value = code.value.toUpperCase()"/>
                 </mat-form-field>
               </div>
               <!-- <div class="col-md-6">

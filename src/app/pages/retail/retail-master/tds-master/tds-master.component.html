@@ -27,8 +27,9 @@
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="section_code"
-                                                    UpperCaseDirective autocomplete="off" maxlength="6"  (change)="getgridvalues()" />
-
+                                                    id="section_code" #section_code UpperCaseDirective
+                                                    autocomplete="off" maxlength="6" (change)="getgridvalues()"
+                                                    (focusout)="checksection()" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -81,7 +82,8 @@
                                                 ['ACCODE'],
                                                 false
                                             )" />
-                                                <master-search *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="creditacdata"
+                                                <master-search *ngIf="this.flag != 'VIEW'" class="masterSearch"
+                                                    [MasterSearchData]="creditacdata"
                                                     (newRowClick)="creditcodeselected($event)">
                                                 </master-search>
                                             </mat-form-field>
@@ -108,7 +110,8 @@
                                                     ['ACCODE'],
                                                     false
                                                 )" />
-                                                <master-search *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="debitacdata"
+                                                <master-search *ngIf="this.flag != 'VIEW'" class="masterSearch"
+                                                    [MasterSearchData]="debitacdata"
                                                     (newRowClick)="debitcodeselected($event)">
                                                 </master-search>
                                             </mat-form-field>
@@ -119,7 +122,8 @@
 
                             <div class="row text-center">
                                 <div class="col-sm-8">
-                                    <mat-checkbox formControlName="call" id="call" [disabled]="viewMode"> Cal On Taxable Amt</mat-checkbox>
+                                    <mat-checkbox formControlName="call" id="call" [disabled]="viewMode"> Cal On Taxable
+                                        Amt</mat-checkbox>
                                 </div>
                             </div>
                         </div>
@@ -168,7 +172,7 @@
                             </dxi-column>
 
                             <div *dxTemplate="let data of 'effdate'">
-                                <input type="date" [disabled]="viewMode"   [value]="data.value" style="width: 100%;" />
+                                <input type="date" [disabled]="viewMode" [value]="data.value" style="width: 100%;" />
                             </div>
 
 
@@ -176,7 +180,8 @@
                             </dxi-column>
 
                             <div *dxTemplate="let data of 'individual_per'">
-                                <input type="number" [disabled]="viewMode"   [value]="data.value" style="width: 100%;" (change)="individual_change($event,data)"/>
+                                <input type="number" [disabled]="viewMode" class="text-right" [value]="data.value"
+                                    style="width: 100%;" (change)="individual_change($event,data)" />
                             </div>
 
 
@@ -184,21 +189,25 @@
                             </dxi-column>
 
                             <div *dxTemplate="let data of 'company_per'">
-                                <input type="number" [disabled]="viewMode"   [value]="data.value" style="width: 100%;" (change)="company_change($event,data)" />
+                                <input type="number" [disabled]="viewMode" class="text-right" [value]="data.value"
+                                    style="width: 100%;" (change)="company_change($event,data)" />
                             </div>
 
                             <dxi-column dataField="NOPAN_PER" caption="No Pan %" cellTemplate="nopan_per">
                             </dxi-column>
 
                             <div *dxTemplate="let data of 'nopan_per'">
-                                <input type="number" [disabled]="viewMode"   [value]="data.value" style="width: 100%;" (change)="nopan_change($event,data)" />
+                                <input type="number" [disabled]="viewMode" class="text-right" [value]="data.value"
+                                    style="width: 100%;" (change)="nopan_change($event,data)" />
                             </div>
 
-                            <dxi-column dataField="TDS_LIMIT" caption="TDS Limit" cellTemplate="tdslimit_per">
+                            <dxi-column dataField="TDS_LIMIT" caption="TDS Limit" class="text-right"
+                                cellTemplate="tdslimit_per">
                             </dxi-column>
 
                             <div *dxTemplate="let data of 'tdslimit_per'">
-                                <input type="number" [disabled]="viewMode"   [value]="data.value" style="width: 100%;"  (change)="tdslimit_chnage($event,data)"/>
+                                <input type="number" [disabled]="viewMode" class="text-right" [value]="data.value"
+                                    style="width: 100%;" (change)="tdslimit_chnage($event,data)" />
                             </div>
 
 

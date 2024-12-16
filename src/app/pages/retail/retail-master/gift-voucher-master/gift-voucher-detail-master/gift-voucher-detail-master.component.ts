@@ -24,9 +24,10 @@ export class GiftVoucherDetailMasterComponent implements OnInit {
   diamond_drop:any[]=[];
   tableDataProcess: any[] = [];
   @Input() content!: any;
+  @Input() viewMode: any;
+  @Input() editMode: any;
+
   tableData: any[] = [];
-  viewMode: boolean = false;
-  editMode:boolean = false;
   columnhead: any[] = ['SRNO', 'PROCESS_CODE', 'POINTS', 'STD_LOSS', 'MAX_LOSS', 'STD_TIME', 'LOSS_ACCODE', 'WIP_ACCODE', 'TIMEON_PROCESS']
   constructor(
     private activeModal: NgbActiveModal,

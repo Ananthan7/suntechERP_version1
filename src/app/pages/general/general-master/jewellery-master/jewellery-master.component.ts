@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -160,7 +160,9 @@ export class JewelleryMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private commonService: CommonServiceService
+    private commonService: CommonServiceService,
+    private renderer: Renderer2,
+
   ) {
     this.allMode = "allPages";
     this.checkBoxesMode = themes.current().startsWith("material")
@@ -169,6 +171,7 @@ export class JewelleryMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
 
     if (this.content?.FLAG) {
       console.log(this.content)
@@ -793,6 +796,8 @@ export class JewelleryMasterComponent implements OnInit {
         windowClass: "modal-full-width",
       }
     );
+    modalRef.componentInstance.editMode = this.editMode;
+    modalRef.componentInstance.viewMode = this.viewMode;
     modalRef.result.then((postData) => {
       console.log(postData);
       if (postData) {
@@ -817,6 +822,8 @@ export class JewelleryMasterComponent implements OnInit {
         windowClass: "modal-full-width",
       }
     );
+    modalRef.componentInstance.editMode = this.editMode;
+    modalRef.componentInstance.viewMode = this.viewMode;
     modalRef.componentInstance.tablecount = tablecount;
     modalRef.result.then((postData) => {
       console.log(postData);
@@ -1543,6 +1550,9 @@ export class JewelleryMasterComponent implements OnInit {
             (err) => alert(err)
           );
         this.subscriptions.push(Sub);
+      }else
+      {
+        this.close("reloadMainGrid");
       }
     });
   }
@@ -1791,5 +1801,10 @@ export class JewelleryMasterComponent implements OnInit {
         break;
     }
   }
+  
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
 
 }

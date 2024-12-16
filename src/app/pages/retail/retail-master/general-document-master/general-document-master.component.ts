@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -25,7 +25,8 @@ export class GeneralDocumentMasterComponent implements OnInit {
   editMode: boolean = false;
   viewMode: boolean = false;
   codeedit: boolean = false;
-
+  prefixcode = new FormControl('');
+  @ViewChild('codeInput') codeInput!: ElementRef;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -361,7 +362,6 @@ export class GeneralDocumentMasterComponent implements OnInit {
     if (this.flag == 'EDIT') {
       this.codeedit = true;
       this.disable_code = true;
-      this.editMode = true;
     } else if (this.flag == 'VIEW') {
       this.viewMode = true;
       this.codeedit = true;
@@ -370,6 +370,13 @@ export class GeneralDocumentMasterComponent implements OnInit {
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.unq_id);
+    }
+  }
+
+  ngAfterViewInit() {
+
+    if (this.codeInput && this.flag == undefined) {
+      this.codeInput.nativeElement.focus();
     }
   }
 
@@ -497,7 +504,8 @@ export class GeneralDocumentMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        // this.flag = "VIEW";
+        this.activeModal.close('');
       }
     });
   }
@@ -515,6 +523,14 @@ export class GeneralDocumentMasterComponent implements OnInit {
     if (!kyc_desc.value || kyc_desc.value.trim() === "") {
       this.commonService.toastErrorByMsgId('MSG1193');
       this.renderer.selectRootElement('#description')?.focus();
+    }
+  }
+
+  checkremainder(){
+    const days = this.generaldocumentform.controls.reminderdays;
+    if (!days.value || days.value.trim() === ""  || days.value == 0) {
+      this.commonService.toastErrorByMsgId('MSG8001	');
+      this.renderer.selectRootElement('#reminderdays')?.focus();
     }
   }
 

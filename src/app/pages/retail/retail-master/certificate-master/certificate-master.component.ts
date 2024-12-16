@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -24,6 +24,7 @@ export class CertificateMasterComponent implements OnInit {
   @ViewChild("overlayLedger") overlayLedger!: MasterSearchComponent;
   @ViewChild("overlayOffsetAccount")
   overlayOffsetAccount!: MasterSearchComponent;
+  @ViewChild("codeField") codeField!: ElementRef;
 
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
@@ -105,6 +106,12 @@ export class CertificateMasterComponent implements OnInit {
     this.initialController(this.flag, this.content);
   }
 
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
+
   domainValidator(control: AbstractControl): ValidationErrors | null {
     const emailValue = control.value;
     if (emailValue && !/^[\w-\.]+@([\w-]+\.)+[a-zA-Z]{2,}$/.test(emailValue)) {
@@ -122,6 +129,7 @@ export class CertificateMasterComponent implements OnInit {
     }
 
     if (FLAG === "DELETE") {
+      FLAG = "VIEW";
       this.DeleteController(DATA);
     }
   }
@@ -182,9 +190,8 @@ export class CertificateMasterComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -198,7 +205,7 @@ export class CertificateMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        this.close("reloadMainGrid", true);
       }
     });
   }
@@ -450,14 +457,14 @@ export class CertificateMasterComponent implements OnInit {
                   : "Inserted successfully!",
                 icon: "success",
                 confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",  
+                confirmButtonText: "Ok",
               });
 
               this.close("reloadMainGrid", true);
             } else {
               Swal.fire({
                 title: "Failed",
-                 text: result.message
+                text: result.message
                   ? result.message
                   : "Not Inserted successfully!",
                 icon: "error",
@@ -474,6 +481,35 @@ export class CertificateMasterComponent implements OnInit {
 
   preventInvalidInput(event: KeyboardEvent) {
     if (["e", "E", "+", "-"].includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  handleInputRestrictions(event: KeyboardEvent): void {
+    const inputElement = event.target as HTMLInputElement;
+    const value = inputElement.value;
+
+    const invalidKeys = ["e", "E", "+", "-"];
+
+    const allowedKeys = [
+      "Tab",
+      "Enter",
+      "ArrowLeft",
+      "ArrowRight",
+      "Backspace",
+      "Delete",
+    ];
+
+    if (allowedKeys.includes(event.key)) {
+      return;
+    }
+
+    if (invalidKeys.includes(event.key)) {
+      event.preventDefault();
+      return;
+    }
+
+    if (value.length >= 13) {
       event.preventDefault();
     }
   }

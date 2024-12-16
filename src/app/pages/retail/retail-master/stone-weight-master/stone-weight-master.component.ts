@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -19,6 +19,8 @@ export class StoneWeightMasterComponent implements OnInit {
   data: any;
   viewMode: boolean = false;
   editMode: boolean = false;
+  showheader: boolean = true;
+  readonly: boolean = true;
   @Input() content!: any;
   mid: any;
   branchCode?: any = localStorage.getItem("userbranch");
@@ -56,17 +58,17 @@ export class StoneWeightMasterComponent implements OnInit {
 
   stoneweightmaster: FormGroup = this.formBuilder.group({
     mid: [""],
-    sieveset: [""],
-    division: ["L"],
-    sievefrom: [""],
+    sieveset: ["", [Validators.required]],
+    division: ["L", [Validators.required]],
+    sievefrom: ["", [Validators.required]],
     sievefromdesc: [""],
-    sizefrom: [""],
+    sizefrom: ["", [Validators.required]],
     pcs: ["0"],
     pointerwt: ["0.0000"],
     shape: ["RD"],
-    sieveto: [""],
+    sieveto: ["", [Validators.required]],
     sievetodesc: [""],
-    sizeto: [""],
+    sizeto: ["", [Validators.required]],
     variance1: ["0.00"],
     variance2: ["0.00"],
 
@@ -108,14 +110,28 @@ export class StoneWeightMasterComponent implements OnInit {
     this.stoneweightmaster.controls.division.setValue(e.DIVISION_CODE);
   }
 
+  // sieveFromCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 3,
+  //   SEARCH_FIELD: 'types',
+  //   SEARCH_HEADING: 'SIEVE MASTER',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "types = 'SIEVE MASTER'",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  //   FRONTENDFILTER: true,
+  // }
+
   sieveFromCodeData: MasterSearchModel = {
     PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
-    SEARCH_HEADING: 'SIEVE MASTER',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'SIEVE MASTER'",
+    RECORDS:46,
+    LOOKUPID:3,
+    ORDER_TYPE:0,
+    WHERECONDITION:"  SHAPE= 'RD' AND TYPES='SIEVE MASTER' ",
+    SEARCH_FIELD:"",
+    SEARCH_VALUE:"",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -126,26 +142,29 @@ export class StoneWeightMasterComponent implements OnInit {
     console.log(e);
     this.stoneweightmaster.controls.sievefrom.setValue(e.CODE);
     this.stoneweightmaster.controls.sievefromdesc.setValue(e.DESCRIPTION);
+    this.changesieve( 'from');
   }
 
   sieveToCodeData: MasterSearchModel = {
     PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
-    SEARCH_HEADING: 'Sieve To',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'SIEVE MASTER' AND CODE > ''",
+    RECORDS:46,
+    LOOKUPID:3,
+    ORDER_TYPE:0,
+    WHERECONDITION:"  SHAPE= 'RD' AND TYPES='SIEVE MASTER' ",
+    SEARCH_FIELD:"",
+    SEARCH_VALUE:"",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true,
   }
 
+
   sievetoselected(e: any) {
     console.log(e);
     this.stoneweightmaster.controls.sieveto.setValue(e.CODE);
     this.stoneweightmaster.controls.sievetodesc.setValue(e.DESCRIPTION);
+    this.changesieve( 'to');
   }
 
   ShapecodeData: MasterSearchModel = {
@@ -207,13 +226,20 @@ export class StoneWeightMasterComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.content);
     this.flag = this.content?.FLAG;
+    console.log(this.flag);
     if (this.content?.FLAG == "EDIT" || this.content?.FLAG == "VIEW") {
       if (this.content?.FLAG == "VIEW") {
         this.viewOnly = true;
         this.viewMode = true;
-      }else {
+        this.showheader = false;
+      } else if (this.flag == 'DELETE') {
+        this.showheader = true;
+        this.viewMode = true;
+
+
+      } else {
         this.viewOnly = false;
-        this.editMode = true;
+        this.editMode = false;
 
       }
       this.mid = this.content.MID;
@@ -225,12 +251,17 @@ export class StoneWeightMasterComponent implements OnInit {
       this.stoneweightmaster.controls.sizefrom.setValue(this.content.SIZE_FROM);
       this.stoneweightmaster.controls.sizeto.setValue(this.content.SIZE_TO);
       this.stoneweightmaster.controls.pcs.setValue(this.content.PCS);
-      this.stoneweightmaster.controls.variance1.setValue(this.content.VARIANCE);
-      this.stoneweightmaster.controls.pointerwt.setValue(this.content.POINTER_WT);
-      this.stoneweightmaster.controls.variance2.setValue(this.content.VARIANCE_POINTERWT);
+      this.stoneweightmaster.controls.variance1.setValue(this.commonService.decimalQuantityFormat(this.content.VARIANCE,'AMOUNT'));
+      this.stoneweightmaster.controls.variance2.setValue(this.commonService.decimalQuantityFormat(this.content.VARIANCE_POINTERWT,'AMOUNT'));
       this.stoneweightmaster.controls.sievefromdesc.setValue(this.content.SIEVEFROM_DESC);
       this.stoneweightmaster.controls.sievetodesc.setValue(this.content.SIEVETO_DESC);
       this.stoneweightmaster.controls.sieveto.setValue(this.content.SIEVE_TO);
+      if (!isNaN(this.content.POINTER_WT)) {
+        this.stoneweightmaster.controls.pointerwt.setValue(this.content.POINTER_WT.toFixed(4));
+      } else {
+        this.stoneweightmaster.controls.pointerwt.setValue(0);
+      }
+      
     }
     else if (this.content?.FLAG == "DELETE") {
       this.viewOnly = true;
@@ -243,13 +274,16 @@ export class StoneWeightMasterComponent implements OnInit {
       this.stoneweightmaster.controls.sizefrom.setValue(this.content.SIZE_FROM);
       this.stoneweightmaster.controls.sizeto.setValue(this.content.SIZE_TO);
       this.stoneweightmaster.controls.pcs.setValue(this.content.PCS);
-      this.stoneweightmaster.controls.variance1.setValue(this.content.VARIANCE);
-      this.stoneweightmaster.controls.pointerwt.setValue(this.content.POINTER_WT);
-      this.stoneweightmaster.controls.variance2.setValue(this.content.VARIANCE_POINTERWT);
+      this.stoneweightmaster.controls.variance1.setValue(this.commonService.decimalQuantityFormat(this.content.VARIANCE,'AMOUNT'));
+      this.stoneweightmaster.controls.variance2.setValue(this.commonService.decimalQuantityFormat(this.content.VARIANCE_POINTERWT,'AMOUNT'));
       this.stoneweightmaster.controls.sievefromdesc.setValue(this.content.SIEVEFROM_DESC);
       this.stoneweightmaster.controls.sievetodesc.setValue(this.content.SIEVETO_DESC);
       this.stoneweightmaster.controls.sieveto.setValue(this.content.SIEVE_TO);
-      this.deleteTableData();
+      if (!isNaN(this.content.POINTER_WT)) {
+        this.stoneweightmaster.controls.pointerwt.setValue(this.content.POINTER_WT.toFixed(4));
+      } else {
+        this.stoneweightmaster.controls.pointerwt.setValue(0);
+      }      this.deleteTableData();
     }
   }
 
@@ -366,6 +400,22 @@ export class StoneWeightMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
+  changesieve(field: any) {
+      let API = `Manufacturing/Master/DiaSizeWt/GetSizeFromUsingSieveFrom?SieveFrom=RD14&DBBranch=${this.branchCode}`;
+      let Sub: Subscription = this.dataService.getDynamicAPIwithParamsCustom(API, ``)
+        .subscribe((result: any) => {
+          console.log(result);
+          let size_fr = result.dynamicData[0][0].size;
+          if (field == 'from') {
+            this.stoneweightmaster.controls.sizefrom.setValue(size_fr);
+          } else {
+            this.stoneweightmaster.controls.sizeto.setValue(size_fr);
+          }
+        }, (err: any) => {
+        })
+      this.subscriptions.push(Sub);
+    
+  }
 
   // close(data?: any) {
   //   if(data == 'reloadMainGrid'){
@@ -389,15 +439,15 @@ export class StoneWeightMasterComponent implements OnInit {
   //     }
   //   }
   //   // console.log(this.flag)
-  
+
   // }
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -414,11 +464,12 @@ export class StoneWeightMasterComponent implements OnInit {
       if (result.isConfirmed) {
         this.activeModal.close(data);
       }
-  }
-  )
+    }
+    )
   }
 
   deleteTableData() {
+    this.viewMode = true;
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -460,6 +511,7 @@ export class StoneWeightMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
+        this.activeModal.close("");
         this.flag = "VIEW";
       }
     });
@@ -477,7 +529,8 @@ export class StoneWeightMasterComponent implements OnInit {
     FORMNAMES: string[],
     isCurrencyField: boolean,
     lookupFields?: string[],
-    FROMCODE?: boolean
+    FROMCODE?: boolean,
+    dont_check?: boolean
   ) {
     const searchValue = event.target.value?.trim();
 

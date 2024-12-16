@@ -6,7 +6,8 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMetalPrefix()"
-    [isViewDelete]="editMode" [isViewSave]="!viewMode"></modal-header>
+[isViewDelete]="editMode"  [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+[isViewMore]="!viewMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="diamondprefixForm">
@@ -19,11 +20,11 @@
                                     <div class="col-md-9">
                                         <div class="row align-items-center mb-1">
                                             <label for="inputPassword" class="col-sm-2 col-form-label">Prefix
-                                                Code :</label>
+                                                Code * :</label>
                                             <div class="col-md-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput formControlName="prefixcode" #prefixcode
-                                                        UpperCaseDirective
+                                                        UpperCaseDirective id="code"  (focusout)="checkCodeExists($event)"
                                                         (input)="prefixcode.value = prefixcode.value.toUpperCase()"
                                                         maxlength="6" [readonly]="editableMode || viewMode" />
                                                 </mat-form-field>
@@ -33,7 +34,7 @@
                                                     <input type="text" matInput formControlName="prefixcodedes"
                                                         #prefixcodedes UpperCaseDirective
                                                         (input)="prefixcodedes.value = prefixcodedes.value.toUpperCase()"
-                                                        maxlength="50" [readonly]="editableMode || viewMode" />
+                                                        maxlength="50" [readonly]=" viewMode || codeEnable" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -42,8 +43,8 @@
                                                 No :</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <input type="text" matInput formControlName="lastno" NumberOnly
-                                                        maxlength="7" [readonly]="viewMode" class="text-right"/>
+                                                    <input type="text" matInput formControlName="lastno" maxlength="10"
+                                                     [readonly]="viewMode || codeEnable" class="text-right"     (input)="allowNumbersOnly($event)" />                         
                                                 </mat-form-field>
                                             </div>
                                             <label for="currency" class="col-sm-2 col-form-label">Currency
@@ -51,7 +52,7 @@
                                             <div class="col-md-2">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input id="currency" type="text" matInput formControlName="currency"
-                                                        [readonly]="viewMode"  (focusout)="validateLookupField($event,currencyCodeData,'currency')"  (keydown)="lookupKeyPress($event,'currency')"/>
+                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,currencyCodeData,'currency')"  (keydown)="lookupKeyPress($event,'currency')"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="currencyCodeData"
                                                         (newRowClick)="currencyCodeSelected($event)" #currencycodeSearch>
@@ -64,7 +65,7 @@
                                                     style="width: 100%; margin-left: -38; text-align: right;"
                                                     appearance="outline">
                                                     <input id="currencyRate" type="number" matInput SixDecimalInput
-                                                        formControlName="currencyRate" [readonly]="viewMode" />
+                                                        formControlName="currencyRate" [readonly]="viewMode || codeEnable" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -75,7 +76,7 @@
                                             <div class="col-md-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput formControlName="costcode"
-                                                        [readonly]="viewMode"  (focusout)="validateLookupField($event,costCodeData,'costcode')"  (keydown)="lookupKeyPress($event,'costcode')"/>
+                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,costCodeData,'costcode')"  (keydown)="lookupKeyPress($event,'costcode')"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="costCodeData"
                                                         (newRowClick)="costCodeSelected($event)" #costcodeSearch>
@@ -88,7 +89,7 @@
                                             <div class="col-md-2">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input id="brand" type="text" matInput formControlName="brand"
-                                                        [readonly]="viewMode" (focusout)="validateLookupField($event,BrandCodeData,'brand')"  (keydown)="lookupKeyPress($event,'brand')"/>
+                                                        [readonly]="viewMode || codeEnable" (focusout)="validateLookupField($event,BrandCodeData,'brand')"  (keydown)="lookupKeyPress($event,'brand')"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="BrandCodeData"
                                                         (newRowClick)="brandCodeSelected($event)"  #brandcodeSearch>
@@ -104,7 +105,7 @@
                                             <div class="col-md-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput formControlName="Category"
-                                                        [readonly]="viewMode"  (focusout)="validateLookupField($event,categoryCodeData,'Category')"  (keydown)="lookupKeyPress($event,'Category')"/>
+                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,categoryCodeData,'Category')"  (keydown)="lookupKeyPress($event,'Category')"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="categoryCodeData" 
                                                         (newRowClick)="categoryCodeSelected($event)" #CategorycodeSearch>
@@ -117,7 +118,7 @@
                                             <div class="col-md-2">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input id="Type" type="text" matInput formControlName="Type"
-                                                        [readonly]="viewMode"  (focusout)="validateLookupField($event,typeCodeData,'Type')"  (keydown)="lookupKeyPress($event,'Type')"/>
+                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,typeCodeData,'Type')"  (keydown)="lookupKeyPress($event,'Type')"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="typeCodeData"
                                                         (newRowClick)="typeCodeSelected($event)" #TypecodeSearch>
@@ -134,7 +135,7 @@
                                             <div class="col-md-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput formControlName="subCategory"
-                                                        [readonly]="viewMode"   (focusout)="validateLookupField($event,subcategoryCodeData,'subCategory')"  (keydown)="lookupKeyPress($event,'subCategory')"/>
+                                                        [readonly]="viewMode || codeEnable"   (focusout)="validateLookupField($event,subcategoryCodeData,'subCategory')"  (keydown)="lookupKeyPress($event,'subCategory')"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="subcategoryCodeData"
                                                         (newRowClick)="subcategoryCodeSelected($event)" #subCategorycodeSearch>
@@ -147,7 +148,7 @@
                                             <div class="col-md-2">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input id="Country" type="text" matInput formControlName="Country"
-                                                        [readonly]="viewMode"  (focusout)="validateLookupField($event,countryCodeData,'Country')"  (keydown)="lookupKeyPress($event,'Country')"/>
+                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,countryCodeData,'Country')"  (keydown)="lookupKeyPress($event,'Country')"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="countryCodeData"
                                                         (newRowClick)="countryCodeSelected($event)" #CountrycodeSearch>
@@ -163,7 +164,7 @@
                                             <div class="col-md-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput formControlName="branch"
-                                                        [readonly]="viewMode"  (focusout)="validateLookupField($event,BranchCodeData,'branch')"  (keydown)="lookupKeyPress($event,'branch')"/>
+                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,BranchCodeData,'branch')"  (keydown)="lookupKeyPress($event,'branch')"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="BranchCodeData"
                                                         (newRowClick)="branchCodeSelected($event)" #branchcodeSearch>
@@ -177,7 +178,7 @@
                                             <div class="col-md-2">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput
-                                                        formControlName="suffixcode" [readonly]="viewMode" maxlength="4"/>
+                                                        formControlName="suffixcode" [readonly]="viewMode || codeEnable" maxlength="4"/>
                                                 </mat-form-field>
 
                                             </div>
@@ -188,7 +189,7 @@
                                             <div class="col-md-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput formControlName="hsn"
-                                                        [readonly]="viewMode" />
+                                                        [readonly]="viewMode || codeEnable" />
                                                     <master-search *ngIf="!viewMode" class="masterSearch"
                                                         [MasterSearchData]="HSNCodeData"
                                                         (newRowClick)="HSNCenterSelected($event)">
@@ -202,7 +203,7 @@
                                                 <div class="form-check mb-2">
                                                     <div class="form-check-label">
                                                         <mat-checkbox type="checkbox" formControlName="setrefprefix"
-                                                            [disabled]="viewMode">
+                                                            [disabled]="viewMode || codeEnable">
                                                             Set Ref Prefix
                                                         </mat-checkbox>
                                                     </div>
@@ -213,7 +214,7 @@
                                                 <div class="form-check">
                                                     <div class="form-check-label">
                                                         <mat-checkbox type="checkbox" type="checkbox"
-                                                            formControlName="jobcardprefix" [disabled]="viewMode">
+                                                            formControlName="jobcardprefix" [disabled]="viewMode || codeEnable">
                                                             Job Prefix
                                                         </mat-checkbox>
                                                     </div>
@@ -223,7 +224,7 @@
                                                 <div class="form-check">
                                                     <div class="form-check-label">
                                                         <mat-checkbox type="checkbox" type="checkbox"
-                                                            formControlName="boilProcessPrefix" [disabled]="viewMode">
+                                                            formControlName="boilProcessPrefix" [disabled]="viewMode || codeEnable">
                                                             BoilProcess Prefix
                                                         </mat-checkbox>
                                                     </div>
@@ -235,7 +236,7 @@
                                                 <div class="form-check mb-2">
                                                     <div class="form-check-label">
                                                         <mat-checkbox type="checkbox" formControlName="Componentprefix"
-                                                            [disabled]="viewMode">
+                                                            [disabled]="viewMode || codeEnable">
                                                             Component Prefix
                                                         </mat-checkbox>
                                                     </div>
@@ -245,7 +246,7 @@
                                                 <div class="form-check  mb-2">
                                                     <div class="form-check-label">
                                                         <mat-checkbox type="checkbox" formControlName="designprefix"
-                                                            [disabled]="viewMode">
+                                                            [disabled]="viewMode || codeEnable">
                                                             Design Prefix
                                                         </mat-checkbox>
                                                     </div>
@@ -265,7 +266,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Collection:</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input [readonly]="viewMode" type="text" matInput
+                                            <input [readonly]="viewMode || codeEnable" type="text" matInput
                                                 formControlName="collection"
                                                 (focusout)="validateLookupField($event,itemcodeData,'collection')"
                                                 (keydown)="lookupKeyPress($event,'collection')" />
@@ -280,7 +281,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Sub Collection:</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input [readonly]="viewMode" type="text" matInput
+                                            <input [readonly]="viewMode || codeEnable" type="text" matInput
                                                 formControlName="sub_collection"
                                                 (focusout)="validateLookupField($event,itemcodeData,'sub_collection')"
                                                 (keydown)="lookupKeyPress($event,'sub_collection')" />
@@ -294,7 +295,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Stone Type/Look:</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input [readonly]="viewMode" type="text" matInput
+                                            <input [readonly]="viewMode || codeEnable" type="text" matInput
                                                 formControlName="stone_type"
                                                 (focusout)="validateLookupField($event,stoneTypeCodeData,'stone_type')"
                                                 (keydown)="lookupKeyPress($event,'stone_type')" />
@@ -308,7 +309,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Setting :</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input [readonly]="viewMode" type="text" matInput formControlName="setting"
+                                            <input [readonly]="viewMode || codeEnable" type="text" matInput formControlName="setting"
                                                 (focusout)="validateLookupField($event,settingTypeCodeData,'setting')"
                                                 (keydown)="lookupKeyPress($event,'setting')" />
                                             <master-search class="masterSearch" [MasterSearchData]="settingTypeCodeData"
@@ -321,7 +322,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Shape :</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input [readonly]="viewMode" type="text" matInput formControlName="shape"
+                                            <input [readonly]="viewMode || codeEnable" type="text" matInput formControlName="shape"
                                                 (focusout)="validateLookupField($event,shapeCodeData,'shape')"
                                                 (keydown)="lookupKeyPress($event,'shape')" />
                                             <master-search class="masterSearch" [MasterSearchData]="shapeCodeData"
@@ -334,7 +335,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Inc.Cat :</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input [readonly]="viewMode" type="text" matInput formControlName="inc_cat"
+                                            <input [readonly]="viewMode || codeEnable" type="text" matInput formControlName="inc_cat"
                                                 (focusout)="validateLookupField($event,itemcodeData,'inc_cat')"
                                                 (keydown)="lookupKeyPress($event,'inc_cat')" />
                                             <master-search class="masterSearch" [MasterSearchData]="itemcodeData"
@@ -347,7 +348,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Order Ref :</label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input [readonly]="viewMode" type="text" matInput
+                                            <input [readonly]="viewMode || codeEnable" type="text" matInput
                                                 formControlName="order_ref"
                                                 (focusout)="validateLookupField($event,itemcodeData,'order_ref')"
                                                 (keydown)="lookupKeyPress($event,'order_ref')" />

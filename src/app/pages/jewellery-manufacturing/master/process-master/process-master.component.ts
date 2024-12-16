@@ -512,7 +512,7 @@ export class ProcessMasterComponent implements OnInit {
     let form = this.processMasterForm.value
     if (this.commonService.emptyToZero(form.loss_standard) < this.commonService.emptyToZero(form.loss_min)) {
       this.lossData = true;
-      this.commonService.toastErrorByMsgId('MSG1438');
+      this.commonService.toastErrorByMsgId('MSG81536');
       // this.toastr.error('Standard % should be Greater than Minimum %');
     }
     if (this.commonService.emptyToZero(form.loss_standard) > this.commonService.emptyToZero(form.loss_max)) {
@@ -521,7 +521,7 @@ export class ProcessMasterComponent implements OnInit {
     }
     if (this.commonService.emptyToZero(form.loss_min) > this.commonService.emptyToZero(form.loss_max)) {
       this.lossData = true;
-      this.commonService.toastErrorByMsgId('MSG1810');
+      this.commonService.toastErrorByMsgId('MSG81538');
 
       //this.toastr.error('Minimum % should be Lesser than Maximum %');
     }
@@ -539,7 +539,7 @@ export class ProcessMasterComponent implements OnInit {
 
     if (this.commonService.emptyToZero(recLoss) < this.commonService.emptyToZero(minRec)) {
       this.recoveryData = true;
-      this.commonService.toastErrorByMsgId('MSG1438');
+      this.commonService.toastErrorByMsgId('Standard Recovery Should be greater than Minimum Recovery');
       // this.toastr.error('Standard % should be Greater than Minimum %');
 
     }
@@ -596,11 +596,11 @@ export class ProcessMasterComponent implements OnInit {
 
     if (form.ApprovalRequired == true) {
       if (this.commonService.nullToString(form.approvalProcess) == '') {
-        this.commonService.toastErrorByMsgId('MSG81513 ');//Approval Process must be Required
+        this.commonService.toastErrorByMsgId('MSG81513');//Approval Process must be Required
         return true;
       }
       if (this.commonService.nullToString(form.approvalCode) == '') {
-        this.commonService.toastErrorByMsgId('MSG81513 ');//Approval Process must be Required
+        this.commonService.toastErrorByMsgId('MSG81513');//Approval Process must be Required
         return true;
       }
     }
@@ -629,15 +629,15 @@ export class ProcessMasterComponent implements OnInit {
 
     if (form.loss == true) {
       if (this.commonService.emptyToZero(form.loss_standard) == 0) {
-        this.commonService.toastErrorByMsgId('MSG1395');//loss cannot be empty
+        this.commonService.toastErrorByMsgId('MSG81535');//Standard % cannot be empty
         return true;
       }
-      else if (this.commonService.emptyToZero(form.loss_min) == 0) {
-        this.commonService.toastErrorByMsgId('MSG1395');
-        return true;
-      }
+      // else if (this.commonService.emptyToZero(form.loss_min) == 0) {
+      //   this.commonService.toastErrorByMsgId('MSG1395');
+      //   return true;
+      // }
       else if (this.commonService.emptyToZero(form.loss_max) == 0) {
-        this.commonService.toastErrorByMsgId('MSG1395');
+        this.commonService.toastErrorByMsgId('MSG81537');
         return true;
       }
       else if (form.LOSS_ACCODE == '') {
@@ -648,13 +648,13 @@ export class ProcessMasterComponent implements OnInit {
 
     if (form.recovery == true) {
       if (this.commonService.emptyToZero(form.standard_end) == 0) {
-        this.commonService.toastErrorByMsgId('MSG81365');// Recovery Minimum % Cannot be Zero
+        this.commonService.toastErrorByMsgId('MSG81535');// Recovery Minimum % Cannot be Zero
         return true;
       }
-      else if (form.min_end == '') {
-        this.commonService.toastErrorByMsgId('MSG81365');
-        return true;
-      }
+      // else if (form.min_end == '') {
+      //   this.commonService.toastErrorByMsgId('MSG81365');
+      //   return true;
+      // }
       // else if (form.RECOV_ACCODE == '') {
       // this.commonService.toastErrorByMsgId('Recovery Account Code Cannot be Empty');
       //   return true;
@@ -791,13 +791,26 @@ export class ProcessMasterComponent implements OnInit {
     }
     // Confirm adding all users
     this.UsersConfirmation().then((firstResult) => {
-      if (firstResult.isConfirmed) { // If confirmed, proceed with next confirm
-        // Confirm adding all sequences
+      if (firstResult.isConfirmed) { // If confirmed, proceed with the next confirm
         this.sequencesConfirmation().then((secondResult) => {
-          this.saveFinalData()
+          if (secondResult.isConfirmed) {
+            this.saveFinalData();
+          } else if (secondResult.isDenied) {
+            this.saveFinalData();
+          }
         });
+      } else if (firstResult.isDenied) {
+        this.sequencesConfirmation().then((secondResult) => {
+          if (secondResult.isConfirmed) {
+            this.saveFinalData();
+          } else if (secondResult.isDenied) {
+            this.saveFinalData();
+          }
+        });
+      } else if (firstResult.isDismissed) {
+        console.log('User canceled the operation.');
       }
-    });
+    });    
   }
   // API call for INSERT
   saveFinalData() {
@@ -1045,46 +1058,49 @@ export class ProcessMasterComponent implements OnInit {
   private isSameAccountCodeSelected(accountCode: any, formControlName: string): boolean {
     // console.log(this.processMasterForm.value, 'this.processMasterForm.value');
     let flag = false;
+    // alert(this.processMasterForm.value.LOSS_ACCODE.toUpperCase)
+    // alert(accountCode)
     switch (formControlName) {
+      
       case 'WIPaccount':
         flag = (
-          this.processMasterForm.value.LOSS_ACCODE === accountCode ||
-          this.processMasterForm.value.RECOV_ACCODE === accountCode ||
-          this.processMasterForm.value.GAIN_ACCODE === accountCode
+          this.processMasterForm.value.LOSS_ACCODE.toUpperCase() === accountCode.toUpperCase() ||          
+          this.processMasterForm.value.RECOV_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.GAIN_ACCODE.toUpperCase() === accountCode.toUpperCase()
         );
         return flag
       case 'LOSS_ACCODE':
         flag = (
-          this.processMasterForm.value.RECOV_ACCODE === accountCode ||
-          this.processMasterForm.value.GAIN_ACCODE === accountCode ||
-          this.processMasterForm.value.WIPaccount === accountCode
+          this.processMasterForm.value.RECOV_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.GAIN_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.WIPaccount.toUpperCase() === accountCode.toUpperCase()
         );
         return flag
       case 'RECOV_ACCODE':
         flag = (
-          this.processMasterForm.value.LOSS_ACCODE === accountCode ||
-          this.processMasterForm.value.GAIN_ACCODE === accountCode ||
-          this.processMasterForm.value.WIPaccount === accountCode
+          this.processMasterForm.value.LOSS_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.GAIN_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.WIPaccount.toUpperCase() === accountCode.toUpperCase()
         );
         return flag
       case 'GAIN_ACCODE':
         flag = (
-          this.processMasterForm.value.LOSS_ACCODE === accountCode ||
-          this.processMasterForm.value.RECOV_ACCODE === accountCode ||
-          this.processMasterForm.value.WIPaccount === accountCode
+          this.processMasterForm.value.LOSS_ACCODE .toUpperCase()=== accountCode.toUpperCase() ||
+          this.processMasterForm.value.RECOV_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.WIPaccount.toUpperCase() === accountCode.toUpperCase()
         );
         return flag
       case 'WIPaccount':
         flag = (
-          this.processMasterForm.value.WIPaccount === accountCode
+          this.processMasterForm.value.WIPaccount.toUpperCase() === accountCode.toUpperCase()
         );
         return flag
       default:
         flag = (
-          this.processMasterForm.value.LOSS_ACCODE === accountCode ||
-          this.processMasterForm.value.RECOV_ACCODE === accountCode ||
-          this.processMasterForm.value.GAIN_ACCODE === accountCode ||
-          this.processMasterForm.value.WIPaccount === accountCode
+          this.processMasterForm.value.LOSS_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.RECOV_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.GAIN_ACCODE.toUpperCase() === accountCode.toUpperCase() ||
+          this.processMasterForm.value.WIPaccount.toUpperCase() === accountCode.toUpperCase()
         );
         return flag;
     }

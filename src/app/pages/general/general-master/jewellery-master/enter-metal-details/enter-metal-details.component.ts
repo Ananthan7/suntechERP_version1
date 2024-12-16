@@ -18,6 +18,8 @@ export class EnterMetalDetailsComponent implements OnInit {
   subscriptions: any;
   @Input() content!: any;
   tableData: any[] = [];
+  @Input() viewMode :any;
+  @Input() editMode :any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -36,6 +38,19 @@ export class EnterMetalDetailsComponent implements OnInit {
     stockCode: [''],
     karat: [''],
     rateType: [''],
+    purity: [''],
+    pureWeight: [''],
+    metalWt: [''],
+    rate: [''],
+    amountFC: [''],
+    amountLC: [''],
+    sale: [''],
+    saleamountFC: [''],
+    metalRateGMS: [''],
+    labourCharge: [''],
+    labourrate: [''],
+    labouramount: [''],
+    salesamountLC: [''],
   });
 
   stockCodeData: MasterSearchModel = {

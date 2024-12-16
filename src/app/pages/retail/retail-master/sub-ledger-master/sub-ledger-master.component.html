@@ -7,15 +7,8 @@
     </button>
   </div>
   <!-- modal header component -->
-  <modal-header
-    [isViewSave]="!viewMode"
-    [isViewCancel]="!viewMode"
-    [isViewMore]="!viewMode"
-    (saveClick)="formSubmit()"
-    (cancelClick)="close()"
-    [isViewDelete]="!viewMode && editableMode"
-    (deleteClick)="deleteRecord()"
-  ></modal-header>
+  <modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (saveClick)="formSubmit()"
+    (cancelClick)="close()" [isViewDelete]="false" (deleteClick)="deleteRecord()"></modal-header>
   <!-- content section -->
   <div class="row p-4">
     <div class="col-md-12">
@@ -27,76 +20,38 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-check form-switch">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="Party"
-                      />
+                      <input class="form-check-input" type="checkbox" role="switch" id="Party" />
                       <label class="form-check-label" for="Party">Party</label>
                     </div>
                   </div>
                 </div>
                 <div class="row">
-                  <label
-                    for="inputPassword"
-                    id="ID001"
-                    class="col-sm-2 col-form-label"
-                  >
-                    Sub-Ledger Code :</label
-                  >
+                  <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">
+                    Sub-Ledger Code :</label>
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input
-                        [readonly]="viewMode"
-                        type="text"
-                        #codeInput
-                        maxlength="5"
-                        matInput
-                        formControlName="code"
-                        UpperCaseDirective
-                        autocomplete="off"
-                      />
+                      <input [readonly]="viewMode || editMode" type="text" #codeInput maxlength="5" matInput
+                        formControlName="code" UpperCaseDirective autocomplete="off" required />
                     </mat-form-field>
                   </div>
                   <div class="col-sm-4">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input
-                        [readonly]="viewMode"
-                        type="text"
-                        #codeInput
-                        matInput
-                        formControlName="description"
-                        UpperCaseDirective
-                        autocomplete="off"
-                      />
+                      <input [readonly]="viewMode" type="text" #codeInput matInput maxlength="50"
+                        formControlName="description" UpperCaseDirective autocomplete="off" />
                     </mat-form-field>
                   </div>
                   <div class="col-md-3">
-                    <mat-checkbox
-                      id="ID022"
-                      formControlName="active"
-                      class="example-margin"
-                    >
+                    <mat-checkbox id="ID022" formControlName="active" class="example-margin">
                       Active
                     </mat-checkbox>
                   </div>
                 </div>
                 <div class="row">
-                  <label
-                    for="inputPassword"
-                    id="ID002"
-                    class="col-sm-2 col-form-label"
-                    >Country :
+                  <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Country :
                   </label>
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input
-                        [readonly]="viewMode"
-                        type="text"
-                        matInput
-                        formControlName="country"
-                        UpperCaseDirective
+                      <input [readonly]="viewMode" type="text" matInput formControlName="country" UpperCaseDirective
                         (focusout)="
                           SPvalidateLookupFieldModified(
                             $event,
@@ -105,37 +60,21 @@
                             false,
                             ['CODE']
                           )
-                        "
-                        (keydown)="
+                        " (keydown)="
                           onKeyDown($event, ['country'], PRCountryCodeData)
-                        "
-                      />
-                      <master-search
-                        *ngIf="!viewMode"
-                        class="masterSearch"
-                        [MasterSearchData]="PRCountryCodeData"
-                        #overlayCountrySearch
-                        (newRowClick)="CountryCodeDataSelected($event)"
-                      >
+                        " />
+                      <master-search *ngIf="!viewMode" class="masterSearch" [MasterSearchData]="PRCountryCodeData"
+                        #overlayCountrySearch (newRowClick)="CountryCodeDataSelected($event)">
                       </master-search>
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="row">
-                  <label
-                    for="inputPassword"
-                    id="ID002"
-                    class="col-sm-2 col-form-label"
-                    >State :
+                  <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">State :
                   </label>
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input
-                        [readonly]="viewMode"
-                        type="text"
-                        matInput
-                        formControlName="state"
-                        UpperCaseDirective
+                      <input [readonly]="viewMode" type="text" matInput formControlName="state" UpperCaseDirective
                         (focusout)="
                           SPvalidateLookupFieldModified(
                             $event,
@@ -144,37 +83,21 @@
                             false,
                             ['CODE']
                           )
-                        "
-                        (keydown)="
+                        " (keydown)="
                           onKeyDown($event, ['state'], PRStateCodeData)
-                        "
-                      />
-                      <master-search
-                        *ngIf="!viewMode"
-                        class="masterSearch"
-                        #overlayStateSearch
-                        [MasterSearchData]="PRStateCodeData"
-                        (newRowClick)="StateCodeDataSelected($event)"
-                      >
+                        " />
+                      <master-search *ngIf="!viewMode" class="masterSearch" #overlayStateSearch
+                        [MasterSearchData]="PRStateCodeData" (newRowClick)="StateCodeDataSelected($event)">
                       </master-search>
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="row">
-                  <label
-                    for="inputPassword"
-                    id="ID002"
-                    class="col-sm-2 col-form-label"
-                    >City :
+                  <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">City :
                   </label>
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input
-                        [readonly]="viewMode"
-                        type="text"
-                        matInput
-                        formControlName="city"
-                        UpperCaseDirective
+                      <input [readonly]="viewMode" type="text" matInput formControlName="city" UpperCaseDirective
                         (focusout)="
                           SPvalidateLookupFieldModified(
                             $event,
@@ -183,59 +106,31 @@
                             false,
                             ['CODE']
                           )
-                        "
-                        (keydown)="onKeyDown($event, ['city'], CityCodeData)"
-                      />
-                      <master-search
-                        *ngIf="!viewMode"
-                        class="masterSearch"
-                        #overlayCitySearch
-                        [MasterSearchData]="CityCodeData"
-                        (newRowClick)="CityCodeDataSelected($event)"
-                      >
+                        " (keydown)="onKeyDown($event, ['city'], CityCodeData)" />
+                      <master-search *ngIf="!viewMode" class="masterSearch" #overlayCitySearch
+                        [MasterSearchData]="CityCodeData" (newRowClick)="CityCodeDataSelected($event)">
                       </master-search>
                     </mat-form-field>
                   </div>
                 </div>
 
                 <div class="row mb-3">
-                  <label
-                    for="inputPassword"
-                    id="ID002"
-                    class="col-sm-2 col-form-label"
-                    >Business Address :
+                  <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Business Address :
                   </label>
                   <div class="col-sm-4">
                     <mat-form-field style="width: 90%" appearance="outline">
-                      <textarea
-                        [readonly]="viewMode"
-                        matInput
-                        id="inputAddress"
-                        formControlName="address"
-                        rows="4"
-                      ></textarea>
+                      <textarea [readonly]="viewMode" matInput id="inputAddress" formControlName="address"
+                        rows="4"></textarea>
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="row mb-1">
-                  <label
-                    for="inputPassword"
-                    id="ID001"
-                    class="col-sm-2 col-form-label"
-                  >
-                    Created By :</label
-                  >
+                  <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">
+                    Created By :</label>
                   <div class="col-sm-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input
-                        [readonly]="viewMode"
-                        type="text"
-                        #codeInput
-                        matInput
-                        formControlName="created_by"
-                        UpperCaseDirective
-                        autocomplete="off"
-                      />
+                      <input [readonly]="viewMode" type="text" #codeInput matInput formControlName="created_by"
+                        UpperCaseDirective autocomplete="off" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -247,62 +142,29 @@
               <div class="col-md-8">
                 <div class="check_radio_btn">
                   <div class="col-md-12">
-                    <menu-buttons
-                      *ngIf="!viewMode"
-                      [viewAddBtn]="true"
-                      [viewDeleteBtn]="true"
-                      [viewImportBtn]="false"
-                      (addClick)="addTableData()"
-                      (deleteClick)="removedata()"
-                    >
+                    <menu-buttons *ngIf="!viewMode" [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                      (addClick)="addTableData()" (deleteClick)="removedata()">
                     </menu-buttons>
 
-                    <dx-data-grid
-                      id="gridContainer"
-                      [dataSource]="tableData"
-                      [showBorders]="true"
-                      [showColumnLines]="true"
-                      [showRowLines]="true"
-                      [allowColumnResizing]="true"
-                      keyExpr="SRNO"
-                      class="mt-3"
-                      (onSelectionChanged)="onSelectionChanged($event)"
-                    >
+                    <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
+                      [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO"
+                      class="mt-3" (onSelectionChanged)="onSelectionChanged($event)">
                       <dxo-selection mode="single"></dxo-selection>
                       <dxi-column dataField="SRNO" caption="SN" class="tab">
                       </dxi-column>
-                      <dxi-column
-                        dataField="SL_ACCODE"
-                        caption="A/C Code"
-                        cellTemplate="sl_accode"
-                      >
+                      <dxi-column dataField="SL_ACCODE" caption="A/C Code" cellTemplate="sl_accode">
                       </dxi-column>
-                      <dxi-column
-                        dataField="SL_ACCODE_DESC"
-                        caption="A/C Description"
-                        cellTemplate="sl_accode_des"
-                      >
+                      <dxi-column dataField="SL_ACCODE_DESC" caption="A/C Description" cellTemplate="sl_accode_des">
                       </dxi-column>
                       <div>
                         <div *dxTemplate="let data of 'sl_accode'">
-                          <input
-                            [readonly]="viewMode"
-                            class="form-control"
-                            type="text"
-                            id="description"
-                            [value]="data.value"
-                            (change)="getAccode($event, data)"
-                          />
+                          <input [readonly]="viewMode" class="form-control" type="text" id="description"
+                            [value]="data.value" (change)="getAccode($event, data)" />
                         </div>
 
                         <div *dxTemplate="let data of 'sl_accode_des'">
-                          <input
-                            [readonly]="viewMode"
-                            class="form-control"
-                            type="text"
-                            [value]="data.value"
-                            (change)="getAccodeDec($event, data)"
-                          />
+                          <input [readonly]="viewMode" class="form-control" type="text" [value]="data.value"
+                            (change)="getAccodeDec($event, data)" />
                         </div>
                       </div>
                     </dx-data-grid>
@@ -311,25 +173,12 @@
               </div>
               <div class="col-md-4">
                 <div class="row mb-1">
-                  <label
-                    for="inputPassword"
-                    id="ID001"
-                    class="col-sm-12 col-form-label"
-                  >
-                    Allocated Account Prospects</label
-                  >
+                  <label for="inputPassword" id="ID001" class="col-sm-12 col-form-label">
+                    Allocated Account Prospects</label>
                   <div class="col-sm-12">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input
-                        [readonly]="viewMode"
-                        type="text"
-                        #codeInput
-                        maxlength="5"
-                        matInput
-                        formControlName="allocated_account"
-                        UpperCaseDirective
-                        autocomplete="off"
-                      />
+                      <input [readonly]="viewMode" type="text" #codeInput maxlength="5" matInput
+                        formControlName="allocated_account" UpperCaseDirective autocomplete="off" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -340,94 +189,39 @@
             <div class="col-md-12">
               <div class="check_radio_btn">
                 <div class="col-md-12">
-                  <menu-buttons
-                    *ngIf="!viewMode"
-                    [viewAddBtn]="true"
-                    [viewDeleteBtn]="true"
-                    [viewImportBtn]="false"
-                    (addClick)="addContactTableData()"
-                    (deleteClick)="removeContactdata()"
-                  >
+                  <menu-buttons *ngIf="!viewMode" [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                    (addClick)="openConatactMaster()" (deleteClick)="removeContactdata()">
                   </menu-buttons>
 
-                  <dx-data-grid
-                    id="gridContainer"
-                    [dataSource]="ContacttableData"
-                    [showBorders]="true"
-                    [showColumnLines]="true"
-                    [showRowLines]="true"
-                    [allowColumnResizing]="true"
-                    class="mt-3"
-                    (onSelectionChanged)="onContactSelectionChanged($event)"
-                  >
+                  <dx-data-grid id="gridContainer" [dataSource]="ContacttableData" [showBorders]="true"
+                    [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3"
+                    keyExpr="INCOME" (onSelectionChanged)="onContactSelectionChanged($event)">
                     <dxo-selection mode="single"></dxo-selection>
-                    <dxi-column
-                      dataField="SRNO"
-                      caption="Name"
-                      class="tab"
-                      cellTemplate="name"
-                    >
+                    <dxi-column dataField="CUSTOMER_NAME" caption="Name" >
                     </dxi-column>
-                    <dxi-column
-                      dataField="DIVISION_CODE"
-                      caption="Designation"
-                      cellTemplate="designation"
-                    >
+                    <dxi-column dataField="DESIGNATION" caption="Designation" >
                     </dxi-column>
-                    <dxi-column
-                      dataField="EMAIL"
-                      caption="Email"
-                      cellTemplate="email"
-                    >
+                    <dxi-column dataField="EMAIL" caption="Email">
                     </dxi-column>
-                    <dxi-column
-                      dataField="MOBILE_NO"
-                      caption="Mobile"
-                      cellTemplate="mobile"
-                    >
+                    <dxi-column dataField="MOBILE" caption="Mobile" >
                     </dxi-column>
-
-                    <div *dxTemplate="let data of 'name'">
-                      <input
-                        [readonly]="viewMode"
-                        class="form-control"
-                        type="text"
-                        formControlName="name"
-                        [value]="data.value"
-                      />
-                    </div>
-
-                    <div *dxTemplate="let data of 'designation'">
-                      <input
-                        [readonly]="viewMode"
-                        class="form-control"
-                        type="text"
-                        id="description"
-                        formControlName="designation"
-                        [value]="data.value"
-                      />
-                    </div>
 
                     <div *dxTemplate="let data of 'email'">
-                      <input
-                        [readonly]="viewMode"
-                        class="form-control"
-                        type="text"
-                        formControlName="email"
-                        [value]="data.value"
-                        (change)="getEmail($event, data)"
-                      />
+                      <input [readonly]="viewMode" class="form-control" type="text" formControlName="email"
+                        [value]="data.value" (change)="getEmail($event, data)" />
                     </div>
 
                     <div *dxTemplate="let data of 'mobile'">
-                      <input
-                        [readonly]="viewMode"
-                        class="form-control"
-                        type="number"
-                        formControlName="mobile"
-                        [value]="data.value"
-                        (change)="getMobile($event, data)"
-                      />
+                      <input [readonly]="viewMode" class="form-control" type="number" formControlName="mobile"
+                        [value]="data.value" (change)="getMobile($event, data)" />
+                    </div>
+                    <div *dxTemplate="let data of 'name'">
+                      <input [readonly]="viewMode" class="form-control" type="text" formControlName="name"
+                        [value]="data.value" (change)="getName($event, data)" />
+                    </div>
+                    <div *dxTemplate="let data of 'designation'">
+                      <input [readonly]="viewMode" class="form-control" type="text" formControlName="designation"
+                        [value]="data.value" (change)="getDesignation($event, data)" />
                     </div>
                   </dx-data-grid>
                 </div>

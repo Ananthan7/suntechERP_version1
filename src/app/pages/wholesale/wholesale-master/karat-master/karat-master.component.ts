@@ -21,7 +21,8 @@ export class KaratMasterComponent implements OnInit {
   isDisableSaveBtn: boolean = false;
   viewMode: boolean = false;
   editMode: boolean = false;
-
+  codeEnable: boolean = false;
+  editableMode: boolean = false;
 
   @ViewChild('overlaydivisionSearch') overlaydivisionSearch!: MasterSearchComponent;
 
@@ -32,41 +33,28 @@ export class KaratMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) { }
 
   ngOnInit(): void {
-
-
+    this.renderer.selectRootElement('#code')?.focus();
+    this.codeEnable = true;
+    this.initializeForm();
     if (this.content?.FLAG) {
       this.setFormValues();
     console.log(this.content);
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
       } else if (this.content.FLAG == 'EDIT') {
+      this.codeEnable = false;
+      this.editableMode = true;
         this.editMode = true;
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteRecord()
       }
     }
-
- 
-
-    const standardpurityControl = this.karatmasterFrom.get('standardpurity');
-
-    if (standardpurityControl) {
-      standardpurityControl.valueChanges.subscribe((value) => {
-        this.karatmasterFrom.patchValue(
-          {
-            minimum: value,
-            maximum: value,
-          },
-          { emitEvent: false }
-        );
-      });
-    } else {
-      console.error("Control 'standardpurity' not found in the form group.");
-    }
+    this.deciStdpurity();
   }
 
   karatmasterFrom: FormGroup = this.formBuilder.group({
@@ -97,13 +85,112 @@ export class KaratMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
   divisionCodeSelected(e: any) {
+    if (this.checkCode()) return
+
     console.log(e);
     this.karatmasterFrom.controls.division.setValue(e.DIVISION_CODE);
   }
 
+
+  deciStdpurity() {
+    const standardpurityControl = this.karatmasterFrom.get('standardpurity');
+  
+    if (standardpurityControl) {
+      standardpurityControl.valueChanges.subscribe((value) => {
+        const formattedValue = parseFloat(value || 0).toFixed(6); 
+        this.karatmasterFrom.patchValue(
+          {
+            minimum: formattedValue,
+            maximum: formattedValue,
+          },
+          { emitEvent: false }
+        );
+      });
+    } else {
+      console.error("Control 'standardpurity' not found in the form group.");
+    }
+  }
+  
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+
+  private initializeForm() {
+    this.karatmasterFrom.controls.standardpurity.setValue(
+      this.commonService.decimalQuantityFormat(0, 'PURITY'))
+    this.karatmasterFrom.controls.minimum.setValue(
+      this.commonService.decimalQuantityFormat(0, 'PURITY'))
+    this.karatmasterFrom.controls.maximum.setValue(
+      this.commonService.decimalQuantityFormat(0, 'PURITY'))
+  }
+
+  codeEnabled() {
+    if (this.karatmasterFrom.value.karatcode == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
+  }
+
+  stdpurityval(){
+
+    if(this.karatmasterFrom.value.standardpurity > 1.0100){
+      this.commonService.toastErrorByMsgId('Purity cannot be more than 1.01000');
+
+      this.karatmasterFrom.controls.standardpurity.setValue('');
+      return;
+    }
+
+  }
+
+
+  checkCodeExists(event: any) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; 
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; 
+    };
+    
+    const API = 'karatMaster/CheckIfKaratCodePresent/' + event.target.value;
+    const sub = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: 'Code Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then(() => {
+            // Clear the input value
+            this.karatmasterFrom.controls.karatcode.setValue('');
+            this.renderer.selectRootElement('#code').focus();
+
+          });
+          this.commonService.toastErrorByMsgId('MSG1121')//Code Already Exists
+        }else{
+          this.codeEnable = false;
+        }
+      }, err => {
+        this.karatmasterFrom.reset();
+
+      });
+
+    this.subscriptions.push(sub);
+
+  }
+
+  checkCode(): boolean {
+    if (this.karatmasterFrom.value.karatcode == '') {
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
+      return true
+    }
+    return false
   }
 
   setFormValues() {
@@ -112,15 +199,22 @@ export class KaratMasterComponent implements OnInit {
     this.karatmasterFrom.controls.division.setValue(this.content.DIVISION_CODE);
     this.karatmasterFrom.controls.karatcode.setValue(this.content.KARAT_CODE);
     this.karatmasterFrom.controls.karatcodedes.setValue(this.content.KARAT_DESC);
-    this.karatmasterFrom.controls.standardpurity.setValue(this.content.STD_PURITY);
-    this.karatmasterFrom.controls.minimum.setValue(this.content.PURITY_FROM);
-    this.karatmasterFrom.controls.maximum.setValue(this.content.PURITY_TO);
-    this.karatmasterFrom.controls.sp_gravity.setValue(this.content.SPGRVT);
-    this.karatmasterFrom.controls.sp_variance.setValue(this.content.SPGRVT_VAR);
-    this.karatmasterFrom.controls.pos.setValue(this.content.POSMINMAXAMT);
-    this.karatmasterFrom.controls.pop_minmaxamt.setValue(this.content.POPMINMAXAMT);
-    this.karatmasterFrom.controls.scrap.setValue(this.content.IS_SCRAP);
-    this.karatmasterFrom.controls.showinweb.setValue(this.content.SHOWINWEB);
+    this.karatmasterFrom.controls.standardpurity.setValue(this.commonService.transformDecimalVB(
+    this.commonService.allCompanyParameters?.MRATEDECIMALS,this.content.STD_PURITY));
+    this.karatmasterFrom.controls.minimum.setValue(this.commonService.transformDecimalVB(
+      this.commonService.allCompanyParameters?.MRATEDECIMALS,this.content.PURITY_FROM));
+    this.karatmasterFrom.controls.maximum.setValue(this.commonService.transformDecimalVB(
+      this.commonService.allCompanyParameters?.MRATEDECIMALS,this.content.PURITY_TO));
+    this.karatmasterFrom.controls.sp_gravity.setValue(this.commonService.transformDecimalVB(
+      this.commonService.allbranchMaster?.BMQTYDECIMALS, this.content.SPGRVT));
+    this.karatmasterFrom.controls.sp_variance.setValue(this.commonService.transformDecimalVB(
+      this.commonService.allbranchMaster?.BAMTDECIMALS, this.content.SPGRVT_VAR));
+    this.karatmasterFrom.controls.pos.setValue(this.commonService.transformDecimalVB(
+      this.commonService.allbranchMaster?.BAMTDECIMALS, this.content.POSMINMAXAMT));
+    this.karatmasterFrom.controls.pop_minmaxamt.setValue(this.commonService.transformDecimalVB(
+    this.commonService.allbranchMaster?.BAMTDECIMALS, this.content.POPMINMAXAMT));
+    this.karatmasterFrom.controls.scrap.setValue(this.content.IS_SCRAP == 'Y' ? true : false);
+    this.karatmasterFrom.controls.showinweb.setValue(this.content.SHOWINWEB == 'Y' ? true : false);
 
   }
 
@@ -283,6 +377,10 @@ export class KaratMasterComponent implements OnInit {
           }, err => alert(err))
         this.subscriptions.push(Sub)
       }
+      else
+      {
+        this.close('reloadMainGrid')
+      }
     });
   }
 
@@ -342,5 +440,11 @@ export class KaratMasterComponent implements OnInit {
         default:
       }
     }
+
+    allowNumbersOnly(event: Event): void {
+      const input = event.target as HTMLInputElement;
+      input.value = input.value.replace(/[^0-9]/g, '');
+  }
+  
 
   }

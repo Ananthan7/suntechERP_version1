@@ -24,7 +24,7 @@
                                         Branch Code :</label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="branchcode" id="branch_code" UpperCaseDirective
+                                            <input type="text" matInput formControlName="branchcode" #branch_code id="branch_code" UpperCaseDirective
                                                 autocomplete="off" (focusout)="
                                                 SPvalidateLookupFieldModified(
                                                   $event,
@@ -157,7 +157,7 @@
 
                             
                             <div *dxTemplate="let data of 'bud_amount'">
-                                <input type="number" [disabled]="viewMode"  (change)="setamount(data,$event)" [value]="data.value" style="width: 100%;" AmountDecimalInput />
+                                <input type="number" [disabled]="viewMode" class="text-right"  (change)="setamount(data,$event)" [value]="data.value.toFixed(2)" style="width: 100%;" AmountDecimalInput />
                             </div>
 
 

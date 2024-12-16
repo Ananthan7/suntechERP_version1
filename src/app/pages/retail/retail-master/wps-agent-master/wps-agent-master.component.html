@@ -8,11 +8,12 @@
   </div>
   <!-- modal header component -->
   <modal-header
-    *ngIf="flag !== 'VIEW'"
     (saveClick)="WPSAgentMasterFormSubmit()"
     (cancelClick)="close()"
     (deleteClick)="DeleteController()"
-    [isViewDelete]="flag == 'VIEW'"
+    [isViewDelete]="false"
+    [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+    [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
   ></modal-header>
   <!-- content section -->
   <div class="p-4">
@@ -36,10 +37,11 @@
                       type="text"
                       [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                       matInput
-                      maxlength="6"
+                      [maxlength]="6"
                       formControlName="code"
                       (change)="onInput($event, 'code', true)"
                       autocomplete="off"
+                      #codeField
                     />
                     <mat-error
                       *ngIf="
@@ -69,6 +71,7 @@
                       formControlName="description"
                       UpperCaseDirective
                       autocomplete="off"
+                      [maxlength]="40"
                     />
 
                     <mat-error
@@ -201,6 +204,7 @@
                       type="text"
                       matInput
                       formControlName="bankCode"
+                      [maxlength]="40"
                       [readonly]="flag == 'VIEW'"
                     />
                     <master-search
@@ -254,6 +258,7 @@
                       matInput
                       formControlName="bankName"
                       autocomplete="off"
+                      [maxlength]="50"
                     />
                   </mat-form-field>
                 </div>
@@ -274,6 +279,7 @@
                       matInput
                       formControlName="bankBranch"
                       autocomplete="off"
+                      maxlength="40"
                     />
                   </mat-form-field>
                 </div>
@@ -294,6 +300,7 @@
                       matInput
                       formControlName="accountNo"
                       autocomplete="off"
+                      [maxlength]="20"
                     />
                   </mat-form-field>
                 </div>
@@ -379,6 +386,7 @@
                 <div class="col-sm-9">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [maxlength]="20"
                       type="text"
                       matInput
                       formControlName="swiftCode"
@@ -398,6 +406,7 @@
                 <div class="col-sm-9">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [maxlength]="20"
                       type="text"
                       matInput
                       formControlName="sortCode"
@@ -418,6 +427,7 @@
                 <div class="col-sm-9">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [maxlength]="20"
                       type="text"
                       matInput
                       formControlName="routingCode"

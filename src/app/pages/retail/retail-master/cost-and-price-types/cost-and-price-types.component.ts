@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -26,6 +26,7 @@ interface ItemDetailsRow {
   styleUrls: ["./cost-and-price-types.component.scss"],
 })
 export class CostAndPriceTypesComponent implements OnInit {
+  @ViewChild("codeField") codeField!: ElementRef;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   @ViewChild("overlayDesignCode")
@@ -107,16 +108,22 @@ export class CostAndPriceTypesComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    console.log(this.content);
+
     this.branchCode = this.commonService.branchCode;
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
 
-      console.log(this.flag);
-      
+    console.log(this.flag);
 
     this.initialController(this.flag, this.content);
     this.setFlag(this.flag, this.content);
+  }
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
   }
 
   openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
@@ -130,6 +137,7 @@ export class CostAndPriceTypesComponent implements OnInit {
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
       this.ViewController(DATA);
+      this.getItemDetailsData()
     }
     if (FLAG === "EDIT") {
       this.editController(DATA);
@@ -208,9 +216,8 @@ export class CostAndPriceTypesComponent implements OnInit {
                 confirmButtonText: "Ok",
               });
 
-              response.status === "Success"
-                ? this.close("reloadMainGrid", true)
-                : console.log("Delete Error");
+              response.status === "Success" &&
+                this.close("reloadMainGrid", true);
             },
             error: (err) => {
               Swal.fire({
@@ -224,7 +231,7 @@ export class CostAndPriceTypesComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        this.close("reloadMainGrid", true);
       }
     });
   }
@@ -273,9 +280,15 @@ export class CostAndPriceTypesComponent implements OnInit {
         PARTY: this.costAndPriceTypeMainForm.value.party,
         DEFAULT_WASTAGE: this.costAndPriceTypeMainForm.value.defaultWastage,
         DIVISION_CODE: this.costAndPriceTypeMainForm.value.division,
-        STD_PRICE: this.costAndPriceTypeMainForm.value.standardPrice || "",
-        MIN_PRICE: this.costAndPriceTypeMainForm.value.minimumPrice || "",
-        MAX_PRICE: this.costAndPriceTypeMainForm.value.maximumPrice || "",
+        STD_PRICE:
+          this.costAndPriceTypeMainForm.value.standardPrice ||
+          this.stdMaxAndMinPriceDropdown[0].VALUE,
+        MIN_PRICE:
+          this.costAndPriceTypeMainForm.value.minimumPrice ||
+          this.stdMaxAndMinPriceDropdown[0].VALUE,
+        MAX_PRICE:
+          this.costAndPriceTypeMainForm.value.maximumPrice ||
+          this.stdMaxAndMinPriceDropdown[0].VALUE,
         STD_VARIANCE: this.costAndPriceTypeMainForm.value.standardVariance || 0,
         ISPRICECODE: this.applyPriceValue,
         LASTUPDATED: new Date(),
@@ -513,10 +526,15 @@ export class CostAndPriceTypesComponent implements OnInit {
         break;
 
       case "VIEW":
+
         this.costAndPriceTypeMainForm.controls["applyPriceValue"].disable();
         this.costAndPriceTypeMainForm.controls["forceMaking"].disable();
         this.costAndPriceTypeMainForm.controls["party"].disable();
-        this.applyPriceValueMethod(DATA.ISPRICECODE);
+        this.costAndPriceTypeMainForm.controls["standardPrice"].disable();
+        this.costAndPriceTypeMainForm.controls["minimumPrice"].disable();
+        this.costAndPriceTypeMainForm.controls["maximumPrice"].disable();
+
+        this.applyPriceValueMethod(DATA.ISPRICECODE == "Y");
         break;
 
       default:
@@ -526,6 +544,7 @@ export class CostAndPriceTypesComponent implements OnInit {
 
   applyPriceValueMethod(event: MatCheckboxChange | boolean) {
     this.applyPriceValue = typeof event === "boolean" ? event : event.checked;
+    console.log(this.applyPriceValue);
 
     const action = this.applyPriceValue ? "disable" : "enable";
 
@@ -646,5 +665,20 @@ export class CostAndPriceTypesComponent implements OnInit {
         console.log("No matching case found for controller:", controller);
         break;
     }
+  }
+
+  getItemDetailsData() {
+    let API = `CostPriceTypeMetal/GetCostPriceTypeMetalDetail/${this.code}`;
+    let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result.status.trim() === "Success") {
+          console.log(result.response);
+        }
+      },
+      (err) => {
+        console.error("Error fetching data:", err);
+        this.commonService.toastErrorByMsgId("MSG1531");
+      }
+    );
   }
 }

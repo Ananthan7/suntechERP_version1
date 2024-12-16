@@ -8,11 +8,12 @@
 
 <!-- modal header component -->
 <modal-header
-  *ngIf="flag !== 'VIEW'"
   (saveClick)="receiptModesMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
-  [isViewDelete]="flag === 'VIEW'"
+  [isViewDelete]="false"
+  [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
 ></modal-header>
 
 <!-- content section -->
@@ -28,14 +29,14 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input
-                    [readonly]="flag === 'VIEW'"
-                    matInput
-                    min="0"
-                    type="number"
-                    formControlName="mode"
-                    (keydown)="preventInvalidInput($event)"
-                  />
+                  <mat-select formControlName="mode">
+                    <mat-option
+                      *ngFor="let data of modeDorpdown"
+                      [value]="data.SRNO"
+                    >
+                      {{ data.ENGLISH }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
             </div>
@@ -48,11 +49,13 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    [readonly]="flag === 'VIEW'"
+                    [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                     matInput
                     type="text"
                     formControlName="code"
-                    maxlength="6"
+                    [maxlength]="6"
+                    UpperCaseDirective
+                    #codeField
                   />
                 </mat-form-field>
               </div>
@@ -61,6 +64,7 @@
                   <input
                     [readonly]="flag === 'VIEW'"
                     matInput
+                    [maxlength]="40"
                     type="text"
                     formControlName="desc"
                   />
@@ -79,7 +83,30 @@
                     matInput
                     type="text"
                     formControlName="accode"
+                    (keydown)="openTab($event, 'accode')"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        AccodeData,
+                        ['accode', 'currencyCode'],
+                        ['CODE', 'DESCRIPTION']
+                      )
+                    "
                   />
+
+                  <master-search
+                    *ngIf="flag != 'VIEW'"
+                    #overlayAccodeData
+                    [MasterSearchData]="AccodeData"
+                    class="masterSearch"
+                    (newRowClick)="
+                      lookupSelect(
+                        $event,
+                        ['accode', 'currencyCode'],
+                        ['CODE', 'DESCRIPTION']
+                      )
+                    "
+                  ></master-search>
                 </mat-form-field>
               </div>
 
@@ -90,14 +117,13 @@
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    AmountDecimalInput
+                    ThreeDecimalInput
                     class="text-right"
                     [readonly]="flag === 'VIEW'"
                     matInput
                     min="0"
                     type="number"
                     formControlName="commision"
-                    (keydown)="preventInvalidInput($event)"
                   />
                 </mat-form-field>
               </div>
@@ -113,6 +139,7 @@
                     [readonly]="flag === 'VIEW'"
                     matInput
                     type="text"
+                    [maxlength]="4"
                     formControlName="currencyCode"
                   />
                 </mat-form-field>
@@ -132,7 +159,25 @@
                     matInput
                     type="text"
                     formControlName="commisionAccount"
+                    (keydown)="openTab($event, 'commisionAccount')"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        commisionCodeData,
+                        ['commisionAccount'],
+                        ['CODE']
+                      )
+                    "
                   />
+                  <master-search
+                    *ngIf="flag != 'VIEW'"
+                    #overlayCommisionAccount
+                    [MasterSearchData]="commisionCodeData"
+                    class="masterSearch"
+                    (newRowClick)="
+                      lookupSelect($event, ['commisionAccount'], ['CODE'])
+                    "
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -148,7 +193,24 @@
                     matInput
                     type="text"
                     formControlName="bank"
+                    (keydown)="openTab($event, 'bank')"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        bankCodeData,
+                        ['bank'],
+                        ['CODE']
+                      )
+                    "
                   />
+
+                  <master-search
+                    *ngIf="flag != 'VIEW'"
+                    #overlayBankCode
+                    [MasterSearchData]="bankCodeData"
+                    class="masterSearch"
+                    (newRowClick)="lookupSelect($event, ['bank'], ['CODE'])"
+                  ></master-search>
                 </mat-form-field>
               </div>
 
@@ -159,7 +221,7 @@
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    AmountDecimalInput
+                    ThreeDecimalInput
                     class="text-right"
                     [readonly]="flag === 'VIEW'"
                     matInput
@@ -222,7 +284,24 @@
                     matInput
                     type="text"
                     formControlName="inputVat"
+                    (keydown)="openTab($event, 'inputVat')"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        inputVatCodeData,
+                        ['inputVat'],
+                        ['CODE']
+                      )
+                    "
                   />
+
+                  <master-search
+                    *ngIf="flag != 'VIEW'"
+                    #overlayInputVat
+                    [MasterSearchData]="inputVatCodeData"
+                    class="masterSearch"
+                    (newRowClick)="lookupSelect($event, ['inputVat'], ['CODE'])"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -255,7 +334,26 @@
                     matInput
                     type="text"
                     formControlName="outputVat"
+                    (keydown)="openTab($event, 'outputVat')"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        outputVatCodeData,
+                        ['outputVat'],
+                        ['CODE']
+                      )
+                    "
                   />
+
+                  <master-search
+                    *ngIf="flag != 'VIEW'"
+                    #overlayOutputVat
+                    [MasterSearchData]="outputVatCodeData"
+                    class="masterSearch"
+                    (newRowClick)="
+                      lookupSelect($event, ['outputVat'], ['CODE'])
+                    "
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -287,7 +385,7 @@
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    AmountDecimalInput
+                    ThreeDecimalInput
                     class="text-right"
                     [readonly]="flag === 'VIEW'"
                     matInput

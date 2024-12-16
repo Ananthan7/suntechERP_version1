@@ -407,8 +407,17 @@ export class PosBranchTargetComponent implements OnInit {
           }, err => alert(err))
         this.subscriptions.push(Sub)
       }
+      else{
+        this.close('reloadMainGrid');
+      }
     });
   }
+
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

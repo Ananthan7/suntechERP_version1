@@ -145,7 +145,7 @@ export class YearlyBudgetPlannerDetailsComponent implements OnInit {
     let data = months.map((month, index) => ({
       "FYEARCODE": "",
       "BRANCH_CODE": "",
-      "SRNO": 0,
+      "SRNO": index,
       "ACCODE": "string", 
       "MONTHNAME": month,
       "BUDGETED_AMT": 0,

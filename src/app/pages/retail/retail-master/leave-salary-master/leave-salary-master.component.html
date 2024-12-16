@@ -8,10 +8,12 @@
   </div>
   <!-- modal header component -->
   <modal-header
-    *ngIf="content?.FLAG !== 'VIEW'"
+  [isViewSave]="!viewMode"
+  [isViewCancel]="!viewMode"
+  [isViewMore]="!viewMode"
     (saveClick)="formSubmit()"
     (cancelClick)="close()"
-    [isViewDelete]="deleteMode"
+    [isViewDelete]="false"
     (deleteClick)="deleteRecord()"
   ></modal-header>
   <!-- content section -->
@@ -33,9 +35,10 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       type="text"
-                      [readonly]="viewMode"
+                      [readonly]="viewMode || editMode"
                       #codeInput
                       matInput
+                      maxlength="6"
                       formControlName="code"
                       UpperCaseDirective
                       autocomplete="off"
@@ -93,19 +96,19 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          debitCode,
+                          debitcode,
                           ['debit'],
                           false,
-                          ['CODE']
+                          ['ACCODE']
                         )
                       "
-                      (keydown)="onKeyDown($event, ['debit'], debitCode)"
+                      (keydown)="onKeyDown($event, ['debit'], debitcode)"
                     />
                     <master-search
                       *ngIf="!viewMode"
                       #overlayDebit
                       class="masterSearch"
-                      [MasterSearchData]="debitCode"
+                      [MasterSearchData]="debitcode"
                       (newRowClick)="BranchDataSelected($event)"
                     >
                     </master-search>
@@ -118,18 +121,14 @@
                   >Based On :
                 </label>
                 <div class="col-sm-2">
-                  <mat-form-field
-                    style="width: 100%"
-                    appearance="outline"
-                    
-                  >
+                  <mat-form-field style="width: 100%" appearance="outline">
                     <mat-select formControlName="basedOn">
                       <mat-option
-                      *ngFor="let option of basedOne"
-                      [value]="option.ENGLISH"
-                    >
-                      {{ option.ENGLISH }}
-                    </mat-option>
+                        *ngFor="let option of basedOnDropdown"
+                        [value]="option.SRNO"
+                      >
+                        {{ option.ENGLISH }}
+                      </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -205,6 +204,8 @@
                       [readonly]="viewMode"
                       type="text"
                       matInput
+                      maxlength="3"
+                      NumericFilter
                       formControlName="noOfTime"
                       UpperCaseDirective
                     />
@@ -222,6 +223,8 @@
                       [readonly]="viewMode"
                       type="text"
                       matInput
+                      maxlength="3"
+                      NumericFilter
                       formControlName="in"
                       UpperCaseDirective
                     />

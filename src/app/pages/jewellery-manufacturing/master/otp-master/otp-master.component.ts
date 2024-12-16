@@ -30,7 +30,7 @@ export class OtpMasterComponent implements OnInit {
   countryCode: any;
   selectedRow: any;
   otpGridData: any[] = [];
-
+  viewMode:boolean= false;
   columnHeader: any[] = [
     { CAPTION: "SRNO", FIELD: "SrNo" },
     { CAPTION: "USER", FIELD: "LEVEL_USER" },
@@ -82,12 +82,14 @@ export class OtpMasterComponent implements OnInit {
       this.OTPGridData();
     }
     if (FLAG === "VIEW") {
+      this.viewMode = true;
       this.ViewController(DATA);
     }
     if (FLAG === "EDIT") {
       this.editController(DATA);
     }
     if (FLAG === "DELETE") {
+      this.viewMode = true;
       this.DeleteController(DATA);
     }
   }
@@ -156,8 +158,8 @@ export class OtpMasterComponent implements OnInit {
             },
           });
         this.subscriptions.push(Sub);
-      } else {
-        this.flag = "VIEW";
+      }  else {
+        this.close("reloadMainGrid");
       }
     });
   }

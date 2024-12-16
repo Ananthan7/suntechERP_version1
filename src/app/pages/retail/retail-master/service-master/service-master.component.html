@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="deleteRecord()"  [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="deleteRecord()"  [isViewDelete]="false" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="serviceForm">
@@ -16,7 +16,7 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Code :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput formControlName="servicecode"  [readonly]="viewMode || editMode" />
+                            <input type="text" matInput formControlName="servicecode" id="servicecode" maxlength="12" (focusout)="checkCodeExists($event)" [readonly]="viewMode || editMode" />
                           </mat-form-field>
                         </div>
                         <div class="col-md-3">
@@ -30,7 +30,7 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Description :</label>
                         <div class="col-md-10">
                           <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput formControlName="description" [readonly]="viewMode" />
+                            <input type="text" matInput formControlName="description" maxlength="40" [readonly]="viewMode" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -47,7 +47,7 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Amount(AED) :</label>
                         <div class="col-md-4">
                           <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="number" matInput formControlName="amountAED" AmountDecimalInput class="text-right" [readonly]="viewMode" />
+                            <input type="text" matInput formControlName="amountAED" maxlength="13" AmountDecimalInput class="text-right" [readonly]="viewMode"   (input)="allowNumbersOnly($event)" />
                           </mat-form-field>
                         </div>
                       

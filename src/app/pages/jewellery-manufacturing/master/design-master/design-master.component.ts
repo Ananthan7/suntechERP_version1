@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -20,6 +20,8 @@ import { MatRadioChange } from '@angular/material/radio';
   styleUrls: ['./design-master.component.scss']
 })
 export class DesignMasterComponent implements OnInit {
+    @ViewChild("codeField") codeField!: ElementRef;
+  
   @ViewChild('overlaycodeSearch') overlaycodeSearch!: MasterSearchComponent;
   @ViewChild('overlayprefixSearch') overlayprefixSearch!: MasterSearchComponent;
   @ViewChild('overlayparentDesignSearch') overlayparentDesignSearch!: MasterSearchComponent;
@@ -86,6 +88,7 @@ export class DesignMasterComponent implements OnInit {
   viewMode: boolean = false;
   fieldDisable : boolean = false;
   FieldEnable : boolean = false;
+  editableMode: boolean = false;
 
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
@@ -136,6 +139,7 @@ export class DesignMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  flag: any;
 
 
   constructor(
@@ -145,12 +149,44 @@ export class DesignMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     private modalService: NgbModal,
+    private renderer: Renderer2,
   ) { }
 
   // close(data?: any) {
   //   //TODO reset forms and data before closing
   //   this.activeModal.close(data);
   // }
+
+  
+  ngOnInit(): void {
+
+    this.flag = this.content
+    ? this.content.FLAG
+    : (this.content = { FLAG: "ADD" }).FLAG;
+
+    if (this.content?.FLAG) {
+      console.log(this.content)
+      this.setAllInitialValues()
+     // this.setFormValues();
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.editMode = true;
+        this.editableMode = true;
+
+      } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
+      }
+    }
+  }
+
+    ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
 
   close(data?: any) {
     if (data){
@@ -179,28 +215,6 @@ export class DesignMasterComponent implements OnInit {
     )
   }
 
-  ngOnInit(): void {
-
-   // this.images = ['assets/images/transparentImg.png'] ;
-
-   // this.setAllInitialValues()
-    //this.setFormValues()
-
-    if (this.content?.FLAG) {
-      console.log(this.content)
-      this.setAllInitialValues()
-     // this.setFormValues();
-      if (this.content.FLAG == 'VIEW') {
-        this.viewMode = true;
-      } else if (this.content.FLAG == 'EDIT') {
-        this.viewMode = false;
-        this.editMode = true;
-      } else if (this.content?.FLAG == 'DELETE') {
-        this.viewMode = true;
-        this.deleteRecord()
-      }
-    }
-  }
 
 
   onSelectionChanged(event: any) {
@@ -324,6 +338,8 @@ export class DesignMasterComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.componentInstance.editMode = this.editMode;
+    modalRef.componentInstance.viewMode = this.viewMode;
   }
 
   openaddLabourChargesDetails() {
@@ -333,6 +349,8 @@ export class DesignMasterComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.componentInstance.editMode = this.editMode;
+    modalRef.componentInstance.viewMode = this.viewMode;
   }
 
   openaddDesignTransaction() {
@@ -342,6 +360,8 @@ export class DesignMasterComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.componentInstance.editMode = this.editMode;
+    modalRef.componentInstance.viewMode = this.viewMode;
   }
   // validateLookupField(event: any,LOOKUPDATA: MasterSearchModel,FORMNAME: string) {
   //   LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -1915,7 +1935,7 @@ onFileChangedimage(event: any) {
         if (result.response) {
           if(result.status == "Success"){
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG3641') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -1959,7 +1979,7 @@ onFileChangedimage(event: any) {
         if (result.response) {
           if(result.status == "Success"){
             Swal.fire({
-              title: result.message || 'Success',
+              title: this.commonService.getMsgByID('MSG3641') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',
@@ -1979,7 +1999,15 @@ onFileChangedimage(event: any) {
     this.subscriptions.push(Sub)
   }
   checkCodeExists(event: any) {
-    if (event.target.value == '') return
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
+    // console.log('this w');
+    
     let API = 'DesignMaster/CheckIfDesignCodePresent/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -2057,6 +2085,7 @@ onFileChangedimage(event: any) {
                     this.designmasterForm.reset()
                     this.tableData = []
                     this.close()
+
                   }
                 });
               }
@@ -2065,6 +2094,11 @@ onFileChangedimage(event: any) {
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else
+      {
+        this.close('reloadMainGrid')
+
       }
     });
   }
@@ -2583,6 +2617,12 @@ onFileChangedimage(event: any) {
   
     
   }
+
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+
   
 }
 

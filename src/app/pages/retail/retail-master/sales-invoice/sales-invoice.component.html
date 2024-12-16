@@ -7,8 +7,12 @@
 </div>
 <!-- modal header component -->
 <modal-header
+  [isViewSave]="!viewMode"
+  [isViewCancel]="!viewMode"
+  [isViewMore]="!viewMode"
   (saveClick)="formSave()"
   (cancelClick)="close()"
+  [isViewDelete]="false"
   (deleteClick)="deleteMaster()"
 ></modal-header>
 <!-- content section -->
@@ -22,7 +26,13 @@
           >
           <div class="col-md-7">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input matInput="text" formControlName="mode" />
+              <input
+                maxlength="6"
+                [readonly]="viewMode || editMode"
+                matInput="text"
+                formControlName="desc_code"
+                (focusout)="descCodeCheck($event)"
+              />
             </mat-form-field>
           </div>
         </div>
@@ -33,7 +43,17 @@
           >
           <div class="col-md-4">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input matInput="text" formControlName="mode" />
+              <input
+                [readonly]="viewMode"
+                matInput="text"
+                [matDatepicker]="date"
+                formControlName="start_from"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="date"
+              ></mat-datepicker-toggle>
+              <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
             </mat-form-field>
           </div>
         </div>
@@ -44,7 +64,15 @@
           >
           <div class="col-md-4">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input matInput="text" formControlName="mode" />
+              <!-- <input matInput="text" formControlName="division" /> -->
+              <mat-select formControlName="division">
+                <mat-option
+                  *ngFor="let option of divisionCode"
+                  [value]="option.DIVISION_CODE"
+                >
+                  {{ option.DIVISION_CODE }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
         </div>
@@ -54,35 +82,40 @@
           class="pt-4"
           style="width: 100%"
           appearance="outline"
-          formControlName="amltype"
+          formControlName="retail_wholesale"
         >
           <div class="row m-3">
             <div class="col-md-6">
-              <mat-radio-button value="Individual" class="me-3"
+              <mat-radio-button value="true" class="me-3"
                 >Wholesale</mat-radio-button
               >
             </div>
 
             <div class="col-md-6">
-              <mat-radio-button value="Company">Retail</mat-radio-button>
+              <mat-radio-button value="false">Retail</mat-radio-button>
             </div>
           </div>
-
+        </mat-radio-group>
+        <mat-radio-group
+          class="pt-4"
+          style="width: 100%"
+          appearance="outline"
+          formControlName="metal_diamond"
+        >
           <div class="row m-3">
             <div class="col-md-6">
-              <mat-radio-button value="Individual" class="me-3"
+              <mat-radio-button class="me-3" value="true"
                 >Metal</mat-radio-button
               >
             </div>
 
             <div class="col-md-6">
-              <mat-radio-button value="Company">Dimond</mat-radio-button>
+              <mat-radio-button value="false">Dimond</mat-radio-button>
             </div>
           </div>
         </mat-radio-group>
-
         <div class="row m-3">
-          <mat-checkbox formControlName="creditCardLimitCheck" id="ID006">
+          <mat-checkbox formControlName="component" id="ID006">
             Components Wise
           </mat-checkbox>
         </div>
@@ -94,7 +127,15 @@
           >
           <div class="col-md-5">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input matInput="text" formControlName="mode" />
+              <!-- <input matInput="text" formControlName="attr_grp" /> -->
+              <mat-select formControlName="attr_grp">
+                <mat-option
+                  *ngFor="let option of attrGroup"
+                  [value]="option.SRNO"
+                >
+                  {{ option.ENGLISH }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
         </div>
@@ -105,7 +146,15 @@
           >
           <div class="col-md-5">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input matInput="text" formControlName="mode" />
+              <!-- <input matInput="text" formControlName="comp_grp" /> -->
+              <mat-select formControlName="comp_grp">
+                <mat-option
+                  *ngFor="let option of compGroup"
+                  [value]="option.SRNO"
+                >
+                  {{ option.ENGLISH }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
         </div>
@@ -116,7 +165,15 @@
           >
           <div class="col-md-5">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input matInput="text" formControlName="mode" />
+              <!-- <input matInput="text" formControlName="base_price" /> -->
+              <mat-select formControlName="base_price">
+                <mat-option
+                  *ngFor="let option of baseGroup"
+                  [value]="option.SRNO"
+                >
+                  {{ option.ENGLISH }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
         </div>
@@ -139,6 +196,7 @@
       <mat-tab-group #tabGroup>
         <mat-tab label="Group Details">
           <menu-buttons
+            *ngIf="!viewMode"
             [viewAddBtn]="true"
             [viewDeleteBtn]="true"
             [viewImportBtn]="false"
@@ -153,30 +211,62 @@
                 [dataSource]="groupDetailsData"
                 #dataGrid
                 id="gridContainer"
-                keyExpr="MID"
+                keyExpr="SRNO"
                 [showBorders]="true"
                 (onSelectionChanged)="onSelectionChanged($event)"
               >
-                <!-- Paging disabled -->
-                <dxo-paging [enabled]="false"></dxo-paging>
-
-                <!-- Cell Editing Enabled -->
-                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-
-                <!-- Multiple Selection Mode -->
-                <dxo-selection mode="multiple"></dxo-selection>
-
-                <!-- Virtual Scrolling -->
-                <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                <!-- Columns Definition -->
+                <dxo-selection mode="single"></dxo-selection>
+                <dxi-column dataField="SRNO" caption="SN" class="tab">
+                </dxi-column>
                 <dxi-column
-                  *ngFor="let column of groupDetailsColumns"
-                  [dataField]="column.dataField"
-                  [caption]="column.caption"
-                  [allowEditing]="true"
-                  alignment="center"
-                ></dxi-column>
+                  dataField="DISC_GROUP1"
+                  caption="Discount Group 1"
+                  cellTemplate="disc_grp1"
+                >
+                </dxi-column>
+                <dxi-column
+                  dataField="DISC_GROUP2"
+                  caption="Discount Group 2"
+                  cellTemplate="disc_grp2"
+                >
+                </dxi-column>
+                <dxi-column
+                  dataField="DISC_PERC"
+                  caption="Discount%"
+                  cellTemplate="disc_per"
+                >
+                </dxi-column>
+                <div>
+                  <div *dxTemplate="let data of 'disc_grp1'">
+                    <input
+                      [readonly]="viewMode"
+                      class="form-control"
+                      type="text"
+                      id="description"
+                      [value]="data.value"
+                      (change)="getDisc1($event, data)"
+                    />
+                  </div>
+
+                  <div *dxTemplate="let data of 'disc_grp2'">
+                    <input
+                      [readonly]="viewMode"
+                      class="form-control"
+                      type="text"
+                      [value]="data.value"
+                      (change)="getDisc2($event, data)"
+                    />
+                  </div>
+                  <div *dxTemplate="let data of 'disc_per'">
+                    <input
+                      [readonly]="viewMode"
+                      class="form-control"
+                      type="text"
+                      [value]="data.value"
+                      (change)="getDiscPer($event, data)"
+                    />
+                  </div>
+                </div>
               </dx-data-grid>
             </div>
           </div>

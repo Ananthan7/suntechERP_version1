@@ -18,6 +18,7 @@ export class DailyClosingSummaryWatchComponent implements OnInit {
     todate: [''],
     templateName: [''],
 
+    transactionValue: [''],
     groupBySelection: ['']
   
 
@@ -35,7 +36,13 @@ export class DailyClosingSummaryWatchComponent implements OnInit {
   transactionWiseSummaryArr: any =[];
   isLoading: boolean = false;
 
-
+  TransactionValueArr: any = [
+    {key: 0, value: 'Sales'},  {key: 1, value: 'Sales Returns'}, {key: 3, value: 'Net Sales'}
+  ]
+  groupByArr: any = [
+    { value: 'Type'},  { value: 'Category'}, { value: 'Sub Category'}, { value: 'Brand'}, { value: 'Country'},
+    { value: 'Design'}, { value: 'Stock Code'}, { value: 'Cost Code'}
+  ]
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private datePipe: DatePipe,
     private dataService: SuntechAPIService,  private toastr: ToastrService,
   ) { }
@@ -209,6 +216,9 @@ export class DailyClosingSummaryWatchComponent implements OnInit {
         fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
         toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!
       };
+
+      this.dailyClosingSummary_WatchForm.controls.transactionValue.setValue(this.TransactionValueArr[0].key);
+      this.dailyClosingSummary_WatchForm.controls.groupBySelection.setValue(this.groupByArr[0].value)
     }
   }
 

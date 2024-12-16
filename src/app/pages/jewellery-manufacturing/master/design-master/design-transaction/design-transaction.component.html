@@ -13,8 +13,8 @@
         <div class="row mb-2">
             <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">Number of Records to Display</label>
             <div class="col-md-4">
-                <mat-form-field style="width: 100%">
-                    <input type="text" matInput formControlName="numberOfRecordsToDisplay" />
+                <mat-form-field style="width: 100%;" appearance="outline">
+                    <input type="text" matInput formControlName="numberOfRecordsToDisplay" [readonly]="viewMode"/>
                 </mat-form-field>
             </div>
         </div>
@@ -38,8 +38,8 @@
                 <div class="row mb-2">
                     <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">Pcs Produced d</label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%">
-                            <input type="number" matInput formControlName="numberOfRecordsToDisplay" />
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" matInput formControlName="numberOfRecordsToDisplay" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -51,32 +51,32 @@
                     <label for="inputPassword" id="ID003" class="col-sm-12 col-form-label">Frist Tranction Details</label>
                     <label for="inputPassword" id="ID004" class="col-sm-4 col-form-label">Production On</label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%">
-                            <input type="number" matInput formControlName="fristTranctionProductionOn" />
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" matInput formControlName="fristTranctionProductionOn" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID005" class="col-sm-4 col-form-label">Production No</label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%">
-                            <input type="number" matInput formControlName="fristTranctionProductionNo" />
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" matInput formControlName="fristTranctionProductionNo" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID006" class="col-sm-4 col-form-label">Customer</label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%">
-                            <input type="number" matInput formControlName="fristTranctionCustomer" />
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" matInput formControlName="fristTranctionCustomer" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID007" class="col-sm-4 col-form-label">Cost</label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%">
-                            <input type="number" matInput formControlName="fristTranctionCost" />
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" matInput formControlName="fristTranctionCost" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID008" class="col-sm-4 col-form-label">Stock ID</label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%">
-                            <input type="number" matInput formControlName="fristTranctionStockId" />
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" matInput formControlName="fristTranctionStockId" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -86,32 +86,32 @@
                     <label for="inputPassword" id="ID009" class="col-sm-12 col-form-label">Last Tranction Details</label>
                     <label for="inputPassword" id="ID004" class="col-sm-4 col-form-label">Production On</label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%">
-                            <input type="number" matInput formControlName="lastTranctionProductionOn" />
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" matInput formControlName="lastTranctionProductionOn" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID005" class="col-sm-4 col-form-label">Production No</label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%">
-                            <input type="number" matInput formControlName="lastTranctionProductionNo" />
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" matInput formControlName="lastTranctionProductionNo" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID006" class="col-sm-4 col-form-label">Customer</label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%">
-                            <input type="number" matInput formControlName="lastTranctionCustomer" />
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" matInput formControlName="lastTranctionCustomer" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID007" class="col-sm-4 col-form-label">Cost</label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%">
-                            <input type="number" matInput formControlName="lastTranctionCost" />
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" matInput formControlName="lastTranctionCost" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID008" class="col-sm-4 col-form-label">Stock ID</label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%">
-                            <input type="number" matInput formControlName="lastTranctionStockId" />
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" matInput formControlName="lastTranctionStockId" [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                 </div>

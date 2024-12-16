@@ -93,7 +93,7 @@
                                     <master-search class="masterSearch"
                                         [MasterSearchData]="MeltingCodeData"
                                         #overlayMeltingType
-                                        *ngIf="!viewMode"
+                                        *ngIf="!isFieldsReadonly"
                                         (newRowClick)="MeltingCodeSelected($event)"></master-search>
                                 </mat-form-field>
 
@@ -117,7 +117,7 @@
                                         (focusout)="jobNumberValidate($event)" />
                                     <master-search class="masterSearch"
                                         [MasterSearchData]="jobnoCodeData"
-                                        *ngIf="isJobNumberSearchVisible && !viewMode"
+                                        *ngIf="isJobNumberSearchVisible && !isFieldsReadonly"
                                         #overlayjobNoSearch
                                         (newRowClick)="jobnoCodeSelected($event)"></master-search>
                                 </mat-form-field>
@@ -353,11 +353,12 @@
                                             summaryType="sum"
                                             displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="GROSS_WT"
-                                            summaryType="sum"
-                                            [valueFormat]="gridAmountDecimalFormat"
-                                            displayFormat="{0}">
-                                        </dxi-total-item>
+                                            <dxi-total-item column="GROSS_WT"
+                                                summaryType="sum"
+                                                [valueFormat]="gridAmountDecimalFormat"
+                                                displayFormat="{0}"
+                                                [customizeText]="customizeText">
+                                            </dxi-total-item>
                                         <dxi-total-item column="PUREWT"
                                             summaryType="sum"
                                             [valueFormat]="gridAmountDecimalFormat"
@@ -403,7 +404,7 @@
                                 </dx-data-grid>
                                 <button class="btn btn-primary add-btn"
                                     *ngIf="!viewMode"
-                                    (click)="open(mymodal)">Add
+                                    (click)="open(mymodal)" [disabled]="detailsAdded">Add
                                     Alloy
                                 </button>
                                 <div class="col-md-6">

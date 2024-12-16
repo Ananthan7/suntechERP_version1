@@ -26,19 +26,28 @@
               <div class="col-md-6">
                 <div class="row">
                   <label for="inputPassword" class="col-sm-4 col-form-label">
-                    Code :</label
+                    Code <span>* :</span> </label
                   >
                   <div class="col-sm-4">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
+                        id="code" #code
                         type="text"
                         matInput
                         formControlName="code"
                         maxlength="5"
                         UpperCaseDirective
+                        (keyup)="codeEnabled()"
                         autocomplete="off"
-                        [readonly]="viewMode"
+                        [readonly]="viewMode || editMode"
                       />
+                      <mat-error
+                      *ngIf="
+                       departmentMasterForm .controls['code'].hasError('required')
+                      "
+                    >
+                     Code is required.
+                    </mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -54,6 +63,7 @@
                         formControlName="Description"
                         UpperCaseDirective
                         autocomplete="off"
+                        maxlength="50"
                         [readonly]="viewMode || codeEnable"
                       />
                     </mat-form-field>
@@ -163,9 +173,9 @@
                       >
                         <mat-option
                           *ngFor="let option of weekOff"
-                          [value]="option.value"
+                          [value]="option.SRNO"
                         >
-                          {{ option.name }}
+                          {{ option.ENGLISH }}
                         </mat-option>
                         <!-- <mat-option value="1">Yes</mat-option>
                                                 <mat-option value="0">No</mat-option> -->
@@ -180,9 +190,9 @@
                       >
                         <mat-option
                           *ngFor="let option of weekOffType"
-                          [value]="option.value"
+                          [value]="option.SRNO"
                         >
-                          {{ option.name }}
+                          {{ option.ENGLISH }}
                         </mat-option>
                         <!-- <mat-option value="1">Yes</mat-option>
                                                 <mat-option value="0">No</mat-option> -->
@@ -210,9 +220,9 @@
                       >
                         <mat-option
                           *ngFor="let option of weekOff"
-                          [value]="option.value"
+                          [value]="option.SRNO"
                         >
-                          {{ option.name }}
+                          {{ option.ENGLISH }}
                         </mat-option>
                         <!-- <mat-option value="1">Yes</mat-option>
                                                 <mat-option value="0">No</mat-option> -->
@@ -227,9 +237,9 @@
                       >
                         <mat-option
                           *ngFor="let option of weekOffType"
-                          [value]="option.value"
+                          [value]="option.SRNO"
                         >
-                          {{ option.name }}
+                          {{ option.ENGLISH }}
                         </mat-option>
                         <!-- <mat-option value="1">Yes</mat-option>
                                                 <mat-option value="0">No</mat-option> -->
@@ -735,7 +745,7 @@
                         <input
                           type="text"
                           matInput
-                          formControlName="AIDebitExpCode"
+                          formControlName="AIDebitExpCode"  
                           UpperCaseDirective
                           autocomplete="off"
                           [readonly]="viewMode || codeEnable"

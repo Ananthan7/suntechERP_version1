@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -62,9 +62,14 @@ export class BuyBackPolicyComponent implements OnInit {
     private toastr: ToastrService,
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
+
   ) { }
 
   ngOnInit(): void {
+
+
+
     this.viewModeField = true;
     this.getDivisionOptions()
     console.log(this.content);
@@ -372,6 +377,10 @@ export class BuyBackPolicyComponent implements OnInit {
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else
+      {
+        this.close('reloadMainGrid')
       }
     });
   }

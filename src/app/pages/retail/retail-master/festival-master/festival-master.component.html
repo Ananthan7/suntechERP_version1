@@ -17,22 +17,22 @@
             <div class="col-md-8">
 
                 <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Code</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Code <span class="text-danger"> *</span></label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" id="fes_code" matInput formControlName="code"
-                            [readonly]="viewOnly || disable_code"  maxlength="6" (focusout)="checkcode()" />
+                            <input type="text" id="inputPassword" id="fes_code" #fes_code matInput formControlName="code"
+                            [readonly]="viewOnly || disable_code"  UpperCaseDirective maxlength="6" (focusout)="checkcode()" maxlength="6"/>
                         </mat-form-field>
                     </div>
 
                 </div>
 
                 <div class="row align-items-center my-2">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Description</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Description  <span  class="text-danger"> *</span></label>
                     <div class="col-md-8">
-                        <mat-form-field style="width: 100%;" id="fes_desc" appearance="outline">
+                        <mat-form-field style="width: 100%;" #fes_desc id="fes_desc" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="description"
-                                [readonly]="viewOnly" (focusout)="checkdesc()"/>
+                                [readonly]="viewOnly" (focusout)="checkdesc()" maxlength="50"/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -158,7 +158,7 @@
 
                 <div *dxTemplate="let data of 'target'">
                     
-                    <input type="number" [disabled]="viewMode"  (change)="tragetchange($event,data)" [value]="data.value" style="width: 100%;" AmountDecimalInput/>
+                    <input type="number" [disabled]="viewMode"  class="text-right" (change)="targetchange($event,data)" [value]="data.value" style="width: 100%;" AmountDecimalInput/>
                 </div>
             </dx-data-grid>
 
@@ -166,7 +166,7 @@
         </div>
         <div class="row mt-2">
             <div class="col-md-3">
-                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
+                <menu-buttons *ngIf="this.flag != 'VIEW'" [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
                     [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
                     (deleteClick)="deleteTableData()">
                 </menu-buttons>

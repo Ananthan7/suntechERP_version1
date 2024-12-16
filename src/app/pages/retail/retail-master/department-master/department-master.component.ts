@@ -1,10 +1,12 @@
 import { DatePipe } from "@angular/common";
 import { Component, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
@@ -76,15 +78,18 @@ export class DepartmentMasterComponent implements OnInit {
   overlayuserDefined14Search!: MasterSearchComponent;
   @ViewChild("overlayuserDefined15Search")
   overlayuserDefined15Search!: MasterSearchComponent;
+  branchCode: any = this.commonService.branchCode;
+
+  dialogBox: any;
 
   selectedTabIndex = 0;
   tableData: any = [];
   editMode: boolean = false;
-  codeEnable: boolean = false;
+  codeEnable: boolean = true;
   private subscriptions: Subscription[] = [];
   isloading: boolean = false;
   viewMode: boolean = false;
-  deleteMode:boolean = false;
+  deleteMode: boolean = false;
   isDisabled: boolean = false;
   editableMode: boolean = false;
 
@@ -131,10 +136,11 @@ export class DepartmentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 126,
-    SEARCH_FIELD: "CODE",
+    ORDER_TYPE: 0,
+    WHERECONDITION: "CODE<> ''",
+    SEARCH_FIELD: "",
     SEARCH_HEADING: "Air Ticket Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -157,10 +163,11 @@ export class DepartmentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
+    ORDER_TYPE: 1,
+    WHERECONDITION: `ACCODE<> '' and  ADBRANCH_CODE= '${this.branchCode}'`,
     SEARCH_FIELD: "ACCODE",
     SEARCH_HEADING: "Debit Expenses",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "ACCODE<> ''",
+    SEARCH_VALUE: '',
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -507,7 +514,7 @@ export class DepartmentMasterComponent implements OnInit {
   ];
 
   departmentMasterForm: FormGroup = this.formBuilder.group({
-    code: [""],
+    code: ["", Validators.required],
     Description: [""],
     CountryCode: [""],
     CountryCodeDes: [""],
@@ -584,7 +591,8 @@ export class DepartmentMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private commonService: CommonServiceService,
     private dataService: SuntechAPIService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -601,29 +609,30 @@ export class DepartmentMasterComponent implements OnInit {
         this.codeEnable = false;
       } else if (this.content?.FLAG == "DELETE") {
         this.viewMode = true;
-        this.deleteMode = true;
+        this.deleteMode = false;
         this.deleteDepartmentMaster();
       }
     }
 
+
     this.weekOff = this.commonService
-    .getComboFilterByID("Days of Week")
-    .filter(
-      (value: any, index: any, self: any) =>
-        index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
-    );
+      .getComboFilterByID("Days of Week")
+      .filter(
+        (value: any, index: any, self: any) =>
+          index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
+      );
     console.log(this.weekOff);
-    
+
     this.weekOffType = this.commonService
-    .getComboFilterByID("Weekly Off Type")
-    .filter(
-      (value: any, index: any, self: any) =>
-        index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
-    );
+      .getComboFilterByID("Weekly Off Type")
+      .filter(
+        (value: any, index: any, self: any) =>
+          index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
+      );
     console.log(this.weekOffType);
-    console.log( this.commonService.getComboFilterByID("Weekly Off Type"));
-    
+    console.log(this.commonService.getComboFilterByID("Weekly Off Type"));
   }
+
 
   close(data?: any) {
     if (data) {
@@ -651,48 +660,74 @@ export class DepartmentMasterComponent implements OnInit {
     });
   }
 
+  codeEnabled() {
+    if (this.departmentMasterForm.value.code == '') {
+      this.codeEnable = true;
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
+    }
+    else {
+      this.codeEnable = false;
+    }
+  }
+
+checkCode(): boolean {
+  if (this.departmentMasterForm.value.code == '') {
+    this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
+    return true
+  }
+  return false
+  }
   CountryCodeDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.CountryCode.setValue(e.CODE);
     this.departmentMasterForm.controls.CountryCodeDes.setValue(e.DESCRIPTION);
   }
 
   oneTimeCodeDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.oneTimeCode.setValue(e.CODE);
   }
 
   leaveSalaryCodeDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.leaveSalaryCode.setValue(e.CODE);
   }
 
   airTicketCodeDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.airTicketCode.setValue(e.CODE);
   }
 
   GratuityCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.GratuityCode.setValue(e.CODE);
   }
 
   AIDebitExpCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.AIDebitExpCode.setValue(e.ACCODE);
   }
 
   AICreditCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.AICreditCode.setValue(e.ACCODE);
   }
 
   DebitExpensesLeaveSalDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.DebitExpensesLeaveSal.setValue(e.ACCODE);
   }
 
   DebitExpensesAirTicketSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.DebitExpensesAirTicket.setValue(
       e.ACCODE
@@ -700,11 +735,13 @@ export class DepartmentMasterComponent implements OnInit {
   }
 
   DebitExpensesGratuityDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.DebitExpensesGratuity.setValue(e.ACCODE);
   }
 
   CreditExpensesLeaveSalDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.CreditExpensesLeaveSal.setValue(
       e.ACCODE
@@ -713,12 +750,14 @@ export class DepartmentMasterComponent implements OnInit {
 
   CreditExpensesAirTicketSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
     this.departmentMasterForm.controls.CreditExpensesAirTicket.setValue(
       e.ACCODE
     );
   }
 
   CreditExpensesGratuityDataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.CreditExpensesGratuity.setValue(
       e.ACCODE
@@ -726,67 +765,83 @@ export class DepartmentMasterComponent implements OnInit {
   }
 
   OtherAmountValueSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.OtherAmountValue.setValue(e.ACCODE);
   }
 
   UserDefined1DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined1.setValue(e.CODE);
   }
   UserDefined2DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined2.setValue(e.CODE);
   }
   UserDefined3DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined3.setValue(e.CODE);
   }
   UserDefined4DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined4.setValue(e.CODE);
   }
   UserDefined5DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined5.setValue(e.CODE);
   }
   UserDefined6DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined6.setValue(e.CODE);
   }
   UserDefined7DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined7.setValue(e.CODE);
   }
   UserDefined8DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined8.setValue(e.CODE);
   }
   UserDefined9DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined9.setValue(e.CODE);
   }
   UserDefined10DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined10.setValue(e.CODE);
   }
   UserDefined11DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined11.setValue(e.CODE);
   }
   UserDefined12DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined12.setValue(e.CODE);
   }
   UserDefined13DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined13.setValue(e.CODE);
   }
   UserDefined14DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined14.setValue(e.CODE);
   }
   UserDefined15DataSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.departmentMasterForm.controls.UserDefined15.setValue(e.CODE);
   }
@@ -1360,16 +1415,16 @@ export class DepartmentMasterComponent implements OnInit {
       this.content.PDEPTMST_LEAVESALARY_ACCODE
     );
     this.departmentMasterForm.controls.PDEPTMST_WEEKOFF1.setValue(
-      this.content.PDEPTMST_WEEKOFF1
+      this.content.PDEPTMST_WEEKOFF1.toString()
     );
     this.departmentMasterForm.controls.PDEPTMST_HALFDAY1.setValue(
-      this.content.PDEPTMST_HALFDAY1
+      this.content.PDEPTMST_HALFDAY1.toString()
     );
     this.departmentMasterForm.controls.PDEPTMST_WEEKOFF2.setValue(
-      this.content.PDEPTMST_WEEKOFF2
+      this.content.PDEPTMST_WEEKOFF2.toString()
     );
     this.departmentMasterForm.controls.PDEPTMST_HALFDAY2.setValue(
-      this.content.PDEPTMST_HALFDAY2
+      this.content.PDEPTMST_HALFDAY2.toString()
     );
     this.departmentMasterForm.controls.Shift2.setValue(
       this.content.PDEPTMST_SHIFT2
@@ -1377,7 +1432,9 @@ export class DepartmentMasterComponent implements OnInit {
     this.departmentMasterForm.controls.Shift3.setValue(
       this.content.PDEPTMST_SHIFT3
     );
-    this.departmentMasterForm.controls.shift.setValue(this.content.PDEPTMST_SHIFT.toString());
+    this.departmentMasterForm.controls.shift.setValue(
+      this.content.PDEPTMST_SHIFT.toString()
+    );
     this.departmentMasterForm.controls.shift.markAsPristine();
     this.departmentMasterForm.controls.shift.markAsTouched();
     this.departmentMasterForm.controls.CountryCode.setValue(
@@ -1602,46 +1659,60 @@ export class DepartmentMasterComponent implements OnInit {
     return postData;
   }
 
+  openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
+    this.dialogBox = this.dialog.open(DialogboxComponent, {
+      width: "40%",
+      disableClose: true,
+      data: { title, msg, okBtn, swapColor },
+    });
+  }
+
   formSubmit() {
     if (this.content?.FLAG == "VIEW") return;
     if (this.content?.FLAG == "EDIT") {
       this.updateDepartmentMaster();
       return;
     }
-    let API = "PayDepartmentMaster/InsertPayDepartmentMaster";
-    let postData = this.setPostData();
 
-    this.commonService.showSnackBarMsg("MSG81447");
-    let Sub: Subscription = this.dataService
-      .postDynamicAPI(API, postData)
-      .subscribe(
-        (result) => {
-          console.log("result", result);
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: "Saved Successfully",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.departmentMasterForm.reset();
-                  this.tableData = [];
-                  this.close("reloadMainGrid");
-                }
-              });
+    if (this.departmentMasterForm.controls["code"].value == "") {
+      let message = `Code is mandatory ! `;
+      return this.openDialog("Warning", message, true);
+    } else {
+      let API = "PayDepartmentMaster/InsertPayDepartmentMaster";
+      let postData = this.setPostData();
+
+      this.commonService.showSnackBarMsg("MSG81447");
+      let Sub: Subscription = this.dataService
+        .postDynamicAPI(API, postData)
+        .subscribe(
+          (result) => {
+            console.log("result", result);
+            if (result.response) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: "Saved Successfully",
+                  text: "",
+                  icon: "success",
+                  confirmButtonColor: "#336699",
+                  confirmButtonText: "Ok",
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.departmentMasterForm.reset();
+                    this.tableData = [];
+                    this.close("reloadMainGrid");
+                  }
+                });
+              }
+            } else {
+              this.commonService.toastErrorByMsgId("MSG3577");
             }
-          } else {
+          },
+          (err) => {
             this.commonService.toastErrorByMsgId("MSG3577");
           }
-        },
-        (err) => {
-          this.commonService.toastErrorByMsgId("MSG3577");
-        }
-      );
-    this.subscriptions.push(Sub);
+        );
+      this.subscriptions.push(Sub);
+    }
   }
 
   updateDepartmentMaster() {
@@ -1751,6 +1822,9 @@ export class DepartmentMasterComponent implements OnInit {
             (err) => alert(err)
           );
         this.subscriptions.push(Sub);
+      }
+      else {
+        this.close("reloadMainGrid");
       }
     });
   }

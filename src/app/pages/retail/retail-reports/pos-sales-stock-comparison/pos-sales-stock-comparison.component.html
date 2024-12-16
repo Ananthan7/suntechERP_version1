@@ -32,11 +32,11 @@
             <div class="row mb-4">
                 <label for="transaction"  class="col-sm-1 col-form-label"  id="ID002"> Transaction</label>
                 <div class="col-md-2">
-                    <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
-                        <mat-select  formControlName="transaction">
-                          <mat-option value=0>Sales</mat-option>
-                          <mat-option value=1>Sales Returns</mat-option>
-                          <mat-option value=2>Net Sales</mat-option>
+                    <mat-form-field>
+                        <mat-select formControlName="transaction">
+                          <mat-option *ngFor="let option of options" [value]="option.value">
+                            {{ option.label }}
+                          </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -50,13 +50,9 @@
                             <div class="col-md-9">
                                 <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
                                     <mat-select  formControlName="groupByMetal">
-                                        <mat-option value="Type" class="text-uppercase">Type</mat-option>
-                                        <mat-option value="Karat" class="text-uppercase">Karat</mat-option>
-                                        <mat-option value="Karat" class="text-uppercase">Brand</mat-option>
-                                        <mat-option value="Karat" class="text-uppercase">Country</mat-option>
-                                        <mat-option value="Stock Code" class="text-uppercase">Stock Code</mat-option>
-                                        <mat-option value="Category" class="text-uppercase">Category</mat-option>
-                                        <mat-option value="Cost Code" class="text-uppercase">Cost Code</mat-option>
+                                        <mat-option *ngFor="let item of groupByMetalArr" [value]="item.value">
+                                            {{item.label}}
+                                        </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -67,14 +63,9 @@
                             <div class="col-md-9">
                                 <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
                                     <mat-select  formControlName="groupByDiamond">
-                                        <mat-option value="Type" class="text-uppercase">Type</mat-option>
-                                        <mat-option value="Category" class="text-uppercase">Category</mat-option>
-                                        <mat-option value="Sub Category" class="text-uppercase">Sub Category</mat-option>
-                                        <mat-option value="Brand" class="text-uppercase">Brand</mat-option>
-                                        <mat-option value="Country" class="text-uppercase">Country</mat-option>
-                                        <mat-option value="Design" class="text-uppercase">Design</mat-option>
-                                        <mat-option value="Stock Code" class="text-uppercase">Stock Code</mat-option>
-                                        <mat-option value="Cost Code" class="text-uppercase">Cost Code</mat-option>
+                                        <mat-option *ngFor="let item of groupByDiamondArr" [value]="item.value">
+                                            {{ item.label }}
+                                        </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -84,28 +75,29 @@
             </div>
 
             <div class="row mb-1">
-                <mat-tab-group (selectedTabChange)="onTabChange($event)">
+                <mat-tab-group>
                     <mat-tab label="Metal Division">
                         <div class="row mt-1">
                             <div class="col-md-6">
                                 <div class="grid-label text-center mt-1 text-warning" id="ID006">Sales</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
-                                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="salesGridArr" [showBorders]="true"
-                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
-                                    <dxo-paging [pageSize]="12"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-
-                                    
-                                    <dxi-column alignment="center" caption="Division"></dxi-column>
-                                    <dxi-column alignment="center" caption="Branch"></dxi-column>
-                                    <dxi-column alignment="center" caption="Type"></dxi-column>
-                                    <dxi-column alignment="center" caption="Pcs"></dxi-column>
-                                    <dxi-column alignment="center" caption="Gms"></dxi-column>
-                                    <dxi-column alignment="center" caption="Mkg. Value"></dxi-column>
-                                    <dxi-column alignment="center" caption="Metal Value"></dxi-column>
-                                    <dxi-column alignment="center" caption="Total Value"></dxi-column>
-
+                                <dx-data-grid #salesGrid id="gridContainer" [dataSource]="metalSalesGridArr" [showBorders]="true"
+                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
+                                [columnAutoWidth]="true" (onSelectionChanged)="metalSalesChanged($event)" class="MD_Grid">
+                                    <dxo-paging [pageSize]="10"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                                    <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
+                                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+                                
+                                    <dxi-column alignment="left" caption="Division" dataField="DIVDESC"></dxi-column>
+                                    <dxi-column alignment="left" caption="Branch" dataField="BRANCH_CODE"></dxi-column>
+                                    <dxi-column alignment="center" caption="Type" dataField="type"></dxi-column>
+                                    <dxi-column alignment="right" caption="Pcs" dataField="TPCS"></dxi-column>
+                                    <dxi-column alignment="right" caption="Gms" dataField="QTY"></dxi-column>
+                                    <dxi-column alignment="right" caption="Mkg. Value" dataField="mkgvalue" width="130"></dxi-column>
+                                    <dxi-column alignment="right" caption="Metal Value" dataField="metalvalue"></dxi-column>
+                                    <dxi-column alignment="right" caption="Total Value" dataField="amount"></dxi-column>
+                                
                                     <dxo-summary>
                                         <dxi-total-item column="Pcs" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                                         <dxi-total-item column="Gms" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
@@ -113,25 +105,26 @@
                                         <dxi-total-item column="Metal Value" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                                         <dxi-total-item column="Total Value" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                                     </dxo-summary>
-                                </dx-data-grid>  
+                                </dx-data-grid>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="grid-label text-center mt-1 text-warning" id="ID007">Stock</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
-                                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="stockGridArr" [showBorders]="true"
-                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
-                                    <dxo-paging [pageSize]="12"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-
+                                <dx-data-grid #stockGrid id="gridContainer" [dataSource]="metalStockGridArr" [showBorders]="true"
+                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
+                                [columnAutoWidth]="true" (onSelectionChanged)="metalStockChanged($event)" class="MD_Grid">
+                                    <dxo-paging [pageSize]="10"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                                    <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
+                                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
                                     
-                                    <dxi-column alignment="center" caption="Division"></dxi-column>
-                                    <dxi-column alignment="center" caption="Branch"></dxi-column>
-                                    <dxi-column alignment="center" caption="Type"></dxi-column>
-                                    <dxi-column alignment="center" caption="Pcs"></dxi-column>
-                                    <dxi-column alignment="center" caption="Gms"></dxi-column>
-                                    <dxi-column alignment="center" caption="Mkg. Value"></dxi-column>
+                                    <dxi-column alignment="left" caption="Division" dataField="DIVDESC"></dxi-column>
+                                    <dxi-column alignment="left" caption="Branch" dataField="BRANCH_CODE"></dxi-column>
+                                    <dxi-column alignment="center" caption="Type" dataField="type"></dxi-column>
+                                    <dxi-column alignment="right" caption="Pcs" dataField="TPCS"></dxi-column>
+                                    <dxi-column alignment="right" caption="Gms" dataField="QTY"></dxi-column>
+                                    <dxi-column alignment="right" caption="Mkg. Value" dataField="amount"></dxi-column>
 
                                     <dxo-summary>
                                         <dxi-total-item column="Pcs" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
@@ -148,18 +141,19 @@
                             <div class="col-md-6">
                                 <div class="grid-label text-center mt-1 text-warning" id="ID006">Sales</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
-                                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="diamonSalesGridArr" [showBorders]="true"
-                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
-                                    <dxo-paging [pageSize]="12"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-
+                                <dx-data-grid #diamondSalesGrid id="gridContainer" [dataSource]="diamondSalesGridArr" [showBorders]="true"
+                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
+                                [columnAutoWidth]="true" (onSelectionChanged)="diamondSalesChanged($event)" class="DD_Grid">
+                                    <dxo-paging [pageSize]="10"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                                    <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
+                                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
                                     
-                                    <dxi-column alignment="center" caption="Branch"></dxi-column>
-                                    <dxi-column alignment="center" caption="Type"></dxi-column>
-                                    <dxi-column alignment="center" caption="Pcs"></dxi-column>
-                                    <dxi-column alignment="center" caption="Weight"></dxi-column>
-                                    <dxi-column alignment="center" caption="Amount"></dxi-column>
+                                    <dxi-column alignment="left" caption="Branch" dataField="BRANCH_CODE"></dxi-column>
+                                    <dxi-column alignment="left" caption="Type" dataField="type"></dxi-column>
+                                    <dxi-column alignment="right" caption="Pcs" dataField="TPCS"></dxi-column>
+                                    <dxi-column alignment="right" caption="Weight" dataField="QTY"></dxi-column>
+                                    <dxi-column alignment="center" caption="Amount" dataField="amount"></dxi-column>
 
                                     <dxo-summary>
                                         <dxi-total-item column="Pcs" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
@@ -172,18 +166,19 @@
                             <div class="col-md-6">
                                 <div class="grid-label text-center mt-1 text-warning" id="ID008">Physical Stock</div>
                                 <app-loader [isLoading]="isLoading"></app-loader>
-                                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="physicalStockGridArr" [showBorders]="true"
-                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
-                                    <dxo-paging [pageSize]="12"></dxo-paging>
-                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-
+                                <dx-data-grid #diamondStockGrid id="gridContainer" [dataSource]="physicalStockGridArr" [showBorders]="true"
+                                [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"
+                                [columnAutoWidth]="true" (onSelectionChanged)="diamondStockChanged($event)">
+                                    <dxo-paging [pageSize]="10"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                                    <dxo-scrolling mode="standard" useNative="false"></dxo-scrolling>
+                                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
                                     
-                                    <dxi-column alignment="center" caption="Branch"></dxi-column>
-                                    <dxi-column alignment="center" caption="Type"></dxi-column>
-                                    <dxi-column alignment="center" caption="Pcs"></dxi-column>
-                                    <dxi-column alignment="center" caption="Gms"></dxi-column>
-                                    <dxi-column alignment="center" caption="Mkg. Value"></dxi-column>
+                                    <dxi-column alignment="center" caption="Branch" dataField="BRANCH_CODE"></dxi-column>
+                                    <dxi-column alignment="center" caption="Type" dataField="type"></dxi-column>
+                                    <dxi-column alignment="right" caption="Pcs" dataField="TPCS"></dxi-column>
+                                    <dxi-column alignment="right" caption="Gms" dataField="QTY"></dxi-column>
+                                    <dxi-column alignment="right" caption="Mkg. Value" dataField="amount"></dxi-column>
 
                                     <dxo-summary>
                                         <dxi-total-item column="Pcs" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
@@ -221,8 +216,7 @@
 
             
             <div class="row mt-2 justify-content-end mx-2" [ngClass]="{'loading-class': isLoading }">
-                <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
-                (printClicked)="printBtnClick()"></app-report-screen-buttons>
+                <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (excelClicked)="excelExport()"></app-report-screen-buttons>
             </div>
         </div>
     </form>

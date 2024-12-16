@@ -171,7 +171,7 @@ export class ReversePriceRatioComponent implements OnInit {
       return
     }
 
-    let API = 'PriceRatioMaster/InsertPriceRatioMaster/';
+    let API = 'PriceRatioMaster/InsertPriceRatioMaster';
     let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe(
@@ -230,6 +230,11 @@ export class ReversePriceRatioComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
 
 
   delete(){
@@ -281,6 +286,10 @@ export class ReversePriceRatioComponent implements OnInit {
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else
+      {
+        this.close('reloadMainGrid')
       }
     });
   }

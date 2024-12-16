@@ -33,7 +33,7 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       type="text"
-                      [readonly]="viewMode"
+                      [readonly]="viewMode || editMode"
                       #codeInput
                       matInput
                       [maxlength]="6"
@@ -84,19 +84,19 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          debitCode,
+                          debitcode,
                           ['debit'],
                           false,
                           ['ACCODE']
                         )
                       "
-                      (keydown)="onKeyDown($event, ['debit'], debitCode)"
+                      (keydown)="onKeyDown($event, ['debit'], debitcode)"
                     />
                     <master-search
                       *ngIf="!viewMode"
                       #overlayDebit
                       class="masterSearch"
-                      [MasterSearchData]="debitCode"
+                      [MasterSearchData]="debitcode"
                       (newRowClick)="BranchDataSelected($event)"
                     >
                     </master-search>
@@ -155,6 +155,7 @@
                       [readonly]="viewMode"
                       type="text"
                       matInput
+                      maxlength="3" NumericFilter
                       formControlName="noOfTime"
                       UpperCaseDirective
                     />
@@ -172,6 +173,7 @@
                       [readonly]="viewMode"
                       type="text"
                       matInput
+                      maxlength="3" NumericFilter
                       formControlName="in"
                       UpperCaseDirective
                     />

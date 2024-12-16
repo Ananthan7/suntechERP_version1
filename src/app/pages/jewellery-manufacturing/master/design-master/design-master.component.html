@@ -6,7 +6,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()" [isViewDelete]="false" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 <!-- content section -->
 
 <div class="pos-sales-modalbody modelbody">
@@ -30,9 +30,9 @@
                     <label for="inputPassword" id="ID003" class="col-sm-3 col-form-label">Design * :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="text" matInput formControlName="code" UpperCaseDirective autocomplete="off"
-                          (focusout)="checkCodeExists($event)" (keydown)="lookupKeyPress($event,'code')" />
-                        <master-search [MasterSearchData]="designCodeData" *ngIf=" viewMode == false" class="masterSearch" #overlaycodeSearch
+                       <input #codeField type="text" matInput formControlName="code" UpperCaseDirective id="code"
+                          (focusout)="checkCodeExists($event)" (keydown)="lookupKeyPress($event,'code')"  [readonly]="viewMode || editableMode"/>
+                        <master-search [MasterSearchData]="designCodeData" *ngIf=" viewMode == false && editableMode == false" class="masterSearch" #overlaycodeSearch
                           (newRowClick)="designCodeSelected($event)"></master-search>
                       </mat-form-field>
                     </div>
@@ -68,14 +68,14 @@
                     <label for="inputPassword" id="ID006" class="col-sm-3 col-form-label">Attribute :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="text" UpperCaseDirective autocomplete="off" matInput   formControlName="attribute" />
+                       <input [readonly]="viewMode" type="text" UpperCaseDirective autocomplete="off" matInput maxlength="15"  formControlName="attribute" />
                       </mat-form-field>
                     </div>
                     <label for="inputPassword" id="ID007" class="col-sm-3 col-form-label">No Sub Items:</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="number" style="text-align: right;" (keyup)="noOfSubItems()" matInput
-                          formControlName="noOfSubItems" />
+                       <input [readonly]="viewMode" type="text" style="text-align: right;" maxlength="10" (keyup)="noOfSubItems()" matInput
+                          formControlName="noOfSubItems"  (input)="allowNumbersOnly($event)"/>
                       </mat-form-field>
                     </div>
                   </div>
@@ -93,7 +93,7 @@
                     <label for="inputPassword" id="ID009" class="col-sm-3 col-form-label">Set Ref:</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="text" matInput formControlName="setref" />
+                       <input [readonly]="viewMode" type="text" matInput  maxlength="20"  formControlName="setref" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -111,7 +111,7 @@
                     <label for="inputPassword" id="ID011" class="col-sm-3 col-form-label">Pair Ref :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="text" matInput formControlName="pairref"/>
+                       <input [readonly]="viewMode" type="text" matInput formControlName="pairref" maxlength="6" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -129,7 +129,7 @@
                     <label for="inputPassword" id="ID013" class="col-sm-3 col-form-label">Vendor Ref :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="text" matInput formControlName="vendorref"/>
+                       <input [readonly]="viewMode" type="text" matInput formControlName="vendorref" maxlength="20" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -147,7 +147,7 @@
                     <label for="inputPassword" id="ID015" class="col-sm-3 col-form-label">Surface :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="text" matInput formControlName="surface"/>
+                       <input [readonly]="viewMode" type="text" matInput formControlName="surface" maxlength="6" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -236,7 +236,7 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label" id="ID026">Purity :</label>
                     <div class="col-md-3">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="purity" PurityDecimal/>
+                       <input [readonly]="viewMode" type="text" class="text-right" matInput formControlName="purity" PurityDecimal (input)="allowNumbersOnly($event)"/>
                       </mat-form-field>
                     </div>
                     <div class="col-md-3 pl-5">
@@ -254,13 +254,13 @@
                             <label for="inputPassword" id="ID028" class="col-sm-3 col-form-label">Cad Designer:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="text" matInput formControlName="cadDesigner"/>
+                               <input [readonly]="viewMode" type="text" matInput formControlName="cadDesigner" maxlength="20" />
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" id="ID029" class="col-sm-3 col-form-label">Width:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="text" class="text-right" matInput maxlength="27" NumberOnly formControlName="widthCad"/>
+                               <input [readonly]="viewMode" type="text" class="text-right" matInput maxlength="10" (input)="allowNumbersOnly($event)" formControlName="widthCad"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -268,13 +268,13 @@
                             <label for="inputPassword" id="ID030" class="col-sm-3 col-form-label">Designer:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="text" matInput formControlName="designer"/>
+                               <input [readonly]="viewMode" type="text" matInput formControlName="designer" maxlength="20" />
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" id="ID031" class="col-sm-3 col-form-label">Thickness:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="text" class="text-right" matInput NumberOnly maxlength="20" formControlName="thickness"/>
+                               <input [readonly]="viewMode" type="text" class="text-right" matInput (input)="allowNumbersOnly($event)" maxlength="14" formControlName="thickness"/>
                               </mat-form-field>
                             </div>
                           </div>
@@ -282,7 +282,7 @@
                             <label for="inputPassword" id="ID032" class="col-sm-3 col-form-label">Grade:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="text" matInput formControlName="grade"/>
+                               <input [readonly]="viewMode" type="text" matInput formControlName="grade" maxlength="25" />
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" id="ID033" class="col-sm-3 col-form-label">Metal Wt :</label>
@@ -298,7 +298,7 @@
                               Maker:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="text" matInput formControlName="model"/>
+                               <input [readonly]="viewMode" type="text" matInput formControlName="model" maxlength="20" />
                               </mat-form-field>
                             </div>
                             <label for="inputPassword" id="ID035" class="col-sm-3 col-form-label">Currency *
@@ -317,7 +317,7 @@
                             <label for="inputPassword" id="ID036" class="col-sm-3 col-form-label">Instructor:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="text" matInput formControlName="instructor"/>
+                               <input [readonly]="viewMode" type="text" matInput formControlName="instructor" maxlength="20" />
                               </mat-form-field>
                             </div>
                           </div>
@@ -326,7 +326,7 @@
                               Size:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="jewellerySize"/>
+                               <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="jewellerySize" maxlength="10" (input)="allowNumbersOnly($event)"/>
                               </mat-form-field>
                             </div>
                             <!-- <div class="col-md-3">
@@ -349,7 +349,7 @@
                             <label for="inputPassword" id="ID040" class="col-sm-3 col-form-label">Req Metal:</label>
                             <div class="col-md-3">
                               <mat-form-field style="width: 100%;" appearance="outline">
-                               <input [readonly]="viewMode" type="number" class="text-right" matInput MetalDecimalInput formControlName="reqmetal"/>
+                               <input [readonly]="viewMode" type="number" class="text-right" matInput MetalDecimalInput formControlName="reqmetal" (input)="allowNumbersOnly($event)"/>
                               </mat-form-field>
                             </div>
                             <div class="col-md-6">
@@ -371,7 +371,7 @@
                           </div>
                           <div class="row align-items-center mb-1">
                             <div class="col-md-6">
-                              <textarea id="story" name="story" rows="5" cols="23" formControlName="textbox1"></textarea>
+                              <textarea id="story" name="story" rows="5" cols="23" maxlength="200"  formControlName="textbox1" [readOnly]="viewMode"></textarea>
                             </div>
                             <div class="col-md-3">
                               <mat-checkbox class="example-margin" id="ID044" formControlName="customerexclusive"  [disabled]="viewMode">Customer
@@ -576,7 +576,7 @@
                     <label for="inputPassword" id="ID057" class="col-sm-6 col-form-label">Engraving Text:</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="text" matInput  formControlName="engravingtext"/>
+                       <input [readonly]="viewMode" type="text" matInput  formControlName="engravingtext" maxlength="20" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -584,7 +584,7 @@
                     <label for="inputPassword" id="ID058" class="col-sm-6 col-form-label">Comments:</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="text" matInput  formControlName="comments"/>
+                       <input [readonly]="viewMode" type="text" matInput  formControlName="comments" maxlength="20" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -592,7 +592,7 @@
                     <label for="inputPassword" id="ID059" class="col-sm-6 col-form-label">Fault Details:</label>
                     <div class="col-md-6">
                       <mat-form-field style="width: 100%;" appearance="outline">
-                       <input [readonly]="viewMode" type="text" matInput  formControlName="faultdetails"/>
+                       <input [readonly]="viewMode" type="text" matInput  formControlName="faultdetails" maxlength="20" />
                       </mat-form-field>
                     </div>
                   </div>
@@ -647,13 +647,13 @@
                 <label for="inputPassword" id="ID062" class="col-sm-3 col-form-label">Height :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                   <input [readonly]="viewMode" type="text" class="text-right" matInput formControlName="height" NumberOnly />
+                   <input [readonly]="viewMode" type="text" class="text-right" matInput formControlName="height" (input)="allowNumbersOnly($event)" />
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" id="ID063" class="col-sm-3 col-form-label">Length :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                   <input [readonly]="viewMode" type="text" class="text-right" matInput formControlName="length" NumberOnly />
+                   <input [readonly]="viewMode" type="text" class="text-right" matInput formControlName="length" (input)="allowNumbersOnly($event)" />
                   </mat-form-field>
                 </div>
               </div>
@@ -662,14 +662,14 @@
                   :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                   <input [readonly]="viewMode" type="text" matInput formControlName="width" NumberOnly  class="text-right"
+                   <input [readonly]="viewMode" type="text" matInput formControlName="width" (input)="allowNumbersOnly($event)"  class="text-right"
                        />
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" id="ID065" class="col-sm-3 col-form-label">Radius :</label>
                 <div class="col-md-3">
                   <mat-form-field style="width: 100%;" appearance="outline">
-                   <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="radius" NumberOnly />
+                   <input [readonly]="viewMode" type="number" class="text-right" matInput formControlName="radius" (input)="allowNumbersOnly($event)" />
                   </mat-form-field>
                 </div>
               </div>
@@ -678,6 +678,7 @@
           <div class="row pl-4">
             <div class="col-md-3 d-flex mb-2">
               <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+              [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                 (addClick)="selectedTabIndex == 0 ? adddata() : adddatas();"
                 (deleteClick)="selectedTabIndex == 0 ? removedata():removedatas()">
               </menu-buttons>
@@ -1020,6 +1021,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributes()" (deleteClick)="removedataAttributes()">
                         </menu-buttons>
                       </div>
@@ -1046,6 +1048,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributesCountry()" (deleteClick)="removedataAttributesCountry()">
                         </menu-buttons>
                       </div>
@@ -1071,6 +1074,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributesDyeCodeRange()"
                           (deleteClick)="removedataAttributesDyeCodeRange()">
                         </menu-buttons>
@@ -1097,6 +1101,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributesWeightRange()" (deleteClick)="removedataAttributesWeightRange()">
                         </menu-buttons>
                       </div>
@@ -1123,6 +1128,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributesWaxModels()" (deleteClick)="removedataAttributesWaxModels()">
                         </menu-buttons>
                       </div>
@@ -1149,6 +1155,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributeApprovedVendors()"
                           (deleteClick)="removedataAttributesApprovedVendors()">
                         </menu-buttons>
@@ -1184,6 +1191,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributeEnamelColor()" (deleteClick)="removedataAttributesEnamelColor()">
                         </menu-buttons>
                       </div>
@@ -1209,6 +1217,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributeComponents()" (deleteClick)="removedataAttributesComponents()">
                         </menu-buttons>
                       </div>
@@ -1234,6 +1243,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributeSizeRange()" (deleteClick)="removedataAttributesSizeRange()">
                         </menu-buttons>
                       </div>
@@ -1262,6 +1272,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributeWidthRange()" (deleteClick)="removedataAttributesWidthRange()">
                         </menu-buttons>
                       </div>
@@ -1289,6 +1300,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributeLength()" (deleteClick)="removedataAttributesLength()">
                         </menu-buttons>
                       </div>
@@ -1316,6 +1328,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributeHeight()" (deleteClick)="removedataAttributesHeight()">
                         </menu-buttons>
                       </div>
@@ -1342,6 +1355,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributeKaratRange()" (deleteClick)="removedataAttributesKaratRange()">
                         </menu-buttons>
                       </div>
@@ -1371,6 +1385,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributeColorRange()" (deleteClick)="removedataAttributesColorRange()">
                         </menu-buttons>
                       </div>
@@ -1399,6 +1414,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributeStockCode()" (deleteClick)="removedataAttributesStockCode()">
                         </menu-buttons>
                       </div>
@@ -1425,6 +1441,7 @@
                     <div class="row mt-2">
                       <div class="col-md-3 d-flex mb-2">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" 
                           (addClick)="adddataAttributeFinishingRange()" (deleteClick)="removedataAttributesStockCode()">
                         </menu-buttons>
                       </div>

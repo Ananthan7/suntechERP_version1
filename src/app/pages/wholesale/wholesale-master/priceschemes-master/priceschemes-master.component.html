@@ -6,129 +6,178 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    (deleteClick)="deleteRecord()"  [isViewDelete]="editMode" [isViewSave]="!viewMode"
-    [isViewCancel]="!viewMode" [isViewMore]="!viewMode" ></modal-header>
+    (deleteClick)="deleteRecord()"
+    [isViewDelete]="editMode" [isViewSave]="!viewMode"
+    [isViewCancel]="!viewMode"
+    [isViewMore]="!viewMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="priceSchemaMasterForm">
             <div class="container-fluid pt-3">
-                <div class="card metal-sales-card">
-                    <div class="card-body sales-card-body p-2">
-                        <div class="row justify-content-between">
+                <!-- <div class="card metal-sales-card">
+                    <div class="card-body sales-card-body p-2"> -->
+                <div class="row justify-content-between">
+                    <div class="col-md-8">
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword"
+                                class="col-sm-2 col-form-label">Price
+                                Code * :</label>
+                            <div class="col-md-2">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="priceCode" id="code"
+                                        appNoEmptySpace
+                                        #priceCode
+                                        (input)="priceCode.value = priceCode.value.toUpperCase()"
+                                        placeholder="Code"
+                                        [readonly]="viewMode || editMode"
+                                        (focusout)="priceCodeValidate($event)"
+                                        maxlength="20" (keyup)="codeEnabled()"
+                                        autocomplete="off" />
+                                </mat-form-field>
+                            </div>
                             <div class="col-md-8">
-                                <div class="row align-items-center mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-2 col-form-label">Price
-                                        Code * :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="priceCode" id="code"
-                                                appNoEmptySpace
-                                                #priceCode
-                                                (input)="priceCode.value = priceCode.value.toUpperCase()"
-                                                placeholder="Code"
-                                                [readonly]="viewMode || editMode"
-                                                (focusout)="priceCodeValidate($event)"
-                                                maxlength="20" (keyup)="codeEnabled()"
-                                                autocomplete="off"/>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput #Description
-                                            appNoEmptySpace maxlength="40"
-                                                formControlName="priceDescription"
-                                                [readonly]="viewMode || codeEnable"
-                                                (input)="Description.value = Description.value.toUpperCase()"
-                                                placeholder="Description" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput #Description
+                                        appNoEmptySpace maxlength="40"
+                                        formControlName="priceDescription"
+                                        [readonly]="viewMode || codeEnable"
+                                        (input)="Description.value = Description.value.toUpperCase()"
+                                        placeholder="Description" />
+                                </mat-form-field>
+                            </div>
+                        </div>
 
-                                <div class="row align-items-center mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-2 col-form-label">Price 1 * :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput
-                                                formControlName="price1"   
-                                                (input)="inputValidate($event)" (keydown)="lookupKeyPress($event,'price1')"
-                                                UpperCaseDirective
-                                                (focusout)="validateLookupField($event,priceCodeData,'price1')" appNoEmptySpace [readonly]="viewMode || codeEnable" (input)="enableNextField('price1', 'price2')"/>
-                                        </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="priceCodeData" #overlayprice1
-                                            (newRowClick)="priceCodeSelected($event, 'price1')"  *ngIf="viewMode == false">
-                                        </master-search>
-                                    </div>
-                                    <label for="inputPassword"
-                                        class="col-sm-2 col-form-label">Price 3
-                                        :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput
-                                                formControlName="price3"  (input)="inputValidate($event)"
-                                                UpperCaseDirective (keydown)="lookupKeyPress($event,'price3')"
-                                                (focusout)="validateLookupField($event,priceCodeData,'price3')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price3')?.disabled ?? false" (input)="enableNextField('price3', 'price4')"/>
-                                        </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="priceCodeData" #overlayprice3
-                                            (newRowClick)="priceCodeSelected($event, 'price3')" *ngIf="price3SearchEnable == true">
-                                        </master-search>
-                                    </div>
-                                    <label for="inputPassword"
-                                        class="col-sm-2 col-form-label">Price 5
-                                        :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput
-                                                formControlName="price5"   (input)="inputValidate($event)"
-                                                UpperCaseDirective (keydown)="lookupKeyPress($event,'price5')"
-                                                (focusout)="validateLookupField($event,priceCodeData,'price5')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price5')?.disabled ?? false"/>
-                                        </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="priceCodeData" #overlayprice5
-                                            (newRowClick)="priceCodeSelected($event, 'price5')" *ngIf="price5SearchEnable == true">
-                                        </master-search>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-2 col-form-label">Price 2 * :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput
-                                                formControlName="price2"   (input)="inputValidate($event)"
-                                                UpperCaseDirective (keydown)="lookupKeyPress($event,'price2')"
-                                                (focusout)="validateLookupField($event,priceCodeData,'price2')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price2')?.disabled ?? false"  (input)="enableNextField('price2', 'price3')"/>
-                                        </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="priceCodeData" #overlayprice2
-                                            (newRowClick)="priceCodeSelected($event, 'price2')" *ngIf="price2SearchEnable == true">
-                                        </master-search>
-                                    </div>
-                                    <label for="inputPassword"
-                                        class="col-sm-2 col-form-label">Price 4
-                                        :</label>
-                                    <div class="col-md-2">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput
-                                                formControlName="price4"   (input)="inputValidate($event)"
-                                                UpperCaseDirective (keydown)="lookupKeyPress($event,'price4')"
-                                                (focusout)="validateLookupField($event,priceCodeData,'price4')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price4')?.disabled ?? false" (input)="enableNextField('price4', 'price5')"/>
-                                        </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="priceCodeData" #overlayprice4
-                                            (newRowClick)="priceCodeSelected($event, 'price4')" *ngIf="price4SearchEnable == true">
-                                        </master-search>
-                                    </div>
-                                </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword"
+                                class="col-sm-2 col-form-label">Price 1 *
+                                :</label>
+                            <div class="col-md-2">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="price1"
+                                        (input)="inputValidate($event)"
+                                        (keydown)="lookupKeyPress($event,'price1')"
+                                        UpperCaseDirective
+                                        (focusout)="validateLookupField($event,priceCodeData,'price1')"
+                                        appNoEmptySpace
+                                        [readonly]="viewMode || codeEnable"
+                                        (input)="enableNextField('price1', 'price2')" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="priceCodeData"
+                                        #overlayprice1
+                                        (newRowClick)="priceCodeSelected($event, 'price1')"
+                                        *ngIf="viewMode == false">
+                                    </master-search>
+                                </mat-form-field>
+
+                            </div>
+                            <label for="inputPassword"
+                                class="col-sm-2 col-form-label">Price 3
+                                :</label>
+                            <div class="col-md-2">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="price3"
+                                        (input)="inputValidate($event)"
+                                        UpperCaseDirective
+                                        (keydown)="lookupKeyPress($event,'price3')"
+                                        (focusout)="validateLookupField($event,priceCodeData,'price3')"
+                                        [readonly]="viewMode"
+                                        [disabled]="priceSchemaMasterForm.get('price3')?.disabled ?? false"
+                                        (input)="enableNextField('price3', 'price4')" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="priceCodeData"
+                                        #overlayprice3
+                                        (newRowClick)="priceCodeSelected($event, 'price3')"
+                                        *ngIf="price3SearchEnable == true">
+                                    </master-search>
+                                </mat-form-field>
+
+                            </div>
+                            <label for="inputPassword"
+                                class="col-sm-2 col-form-label">Price 5
+                                :</label>
+                            <div class="col-md-2">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="price5"
+                                        (input)="inputValidate($event)"
+                                        UpperCaseDirective
+                                        (keydown)="lookupKeyPress($event,'price5')"
+                                        (focusout)="validateLookupField($event,priceCodeData,'price5')"
+                                        [readonly]="viewMode"
+                                        [disabled]="priceSchemaMasterForm.get('price5')?.disabled ?? false" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="priceCodeData"
+                                        #overlayprice5
+                                        (newRowClick)="priceCodeSelected($event, 'price5')"
+                                        *ngIf="price5SearchEnable == true">
+                                    </master-search>
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword"
+                                class="col-sm-2 col-form-label">Price 2 *
+                                :</label>
+                            <div class="col-md-2">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="price2"
+                                        (input)="inputValidate($event)"
+                                        UpperCaseDirective
+                                        (keydown)="lookupKeyPress($event,'price2')"
+                                        (focusout)="validateLookupField($event,priceCodeData,'price2')"
+                                        [readonly]="viewMode"
+                                        [disabled]="priceSchemaMasterForm.get('price2')?.disabled ?? false"
+                                        (input)="enableNextField('price2', 'price3')" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="priceCodeData"
+                                        #overlayprice2
+                                        (newRowClick)="priceCodeSelected($event, 'price2')"
+                                        *ngIf="price2SearchEnable == true">
+                                    </master-search>
+                                </mat-form-field>
+
+                            </div>
+                            <label for="inputPassword"
+                                class="col-sm-2 col-form-label">Price 4
+                                :</label>
+                            <div class="col-md-2">
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="price4"
+                                        (input)="inputValidate($event)"
+                                        UpperCaseDirective
+                                        (keydown)="lookupKeyPress($event,'price4')"
+                                        (focusout)="validateLookupField($event,priceCodeData,'price4')"
+                                        [readonly]="viewMode"
+                                        [disabled]="priceSchemaMasterForm.get('price4')?.disabled ?? false"
+                                        (input)="enableNextField('price4', 'price5')" />
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="priceCodeData"
+                                        #overlayprice4
+                                        (newRowClick)="priceCodeSelected($event, 'price4')"
+                                        *ngIf="price4SearchEnable == true">
+                                    </master-search>
+                                </mat-form-field>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- </div>
+            </div> -->
 
         </form>
     </div>

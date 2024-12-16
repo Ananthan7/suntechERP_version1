@@ -8,11 +8,12 @@
 
 <!-- modal header component -->
 <modal-header
-  *ngIf="flag !== 'VIEW'"
-  [isViewDelete]="flag == 'VIEW'"
   (saveClick)="vatMasterMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
+  [isViewDelete]="false"
+  [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
 ></modal-header>
 
 <!-- content section -->
@@ -29,8 +30,10 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    #codeField
+                    [maxlength]="15"
                     UpperCaseDirective
-                    [readonly]="flag === 'VIEW'"
+                    [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                     matInput
                     type="text"
                     formControlName="vatCode"
@@ -47,8 +50,8 @@
               <div class="col-md-9">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    (input)="codeAlert($event, 'vatDesc')"
-                    UpperCaseDirective
+                    [maxlength]="50"
+                    (input)="descriptionValidation('vatDesc')"
                     [readonly]="flag === 'VIEW'"
                     matInput
                     type="text"
@@ -66,11 +69,13 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    (input)="codeAlert($event, 'vatPercent')"
+                    (blur)="vatPercentFocusout($event)"
+                    (input)="vatPercentValidation('vatPercent')"
                     class="text-right"
                     ThreeDecimalInput
                     [readonly]="flag === 'VIEW'"
                     matInput
+                    #vatPercentField
                     type="number"
                     formControlName="vatPercent"
                   />
@@ -1197,7 +1202,7 @@
                     <dx-data-grid
                       id="gridContainer"
                       [showBorders]="true"
-                      [dataSource]="accountDateWiseGstDetailsData"
+                      [dataSource]="accountSettingDateWiseVatDetailsData"
                       [showColumnLines]="true"
                       [showRowLines]="true"
                       class="mt-3"
@@ -1209,13 +1214,21 @@
 
                       <dxi-column
                         *ngFor="
-                          let data of accountDateWiseGstDetailsColumnHeadings
+                          let data of accountSettingDateWiseVatDetailsColumnHeadings
                         "
                         [dataField]="data.field"
                         [caption]="data.caption"
                         [allowEditing]="true"
                         alignment="center"
                         backgroundcolor="#000"
+                        [format]="
+                          data.field === 'VAT_PER'
+                            ? { type: 'fixedPoint', precision: 3 }
+                            : null
+                        "
+                        [calculateCellValue]="
+                          data.field === 'VAT_DATE' ? formatDateCell : null
+                        "
                       >
                       </dxi-column>
                     </dx-data-grid>
@@ -1226,24 +1239,44 @@
                 <div class="row mb-1">
                   <div class="col-md-12 mt-2">
                     <div class="row mb-1">
-                      <menu-buttons
-                        *ngIf="flag !== 'VIEW'"
-                        [viewAddBtn]="true"
-                        [viewDeleteBtn]="true"
-                        [viewImportBtn]="false"
-                        (addClick)="addRowFunc('Expense HSN/SAC Allocation')"
-                        (deleteClick)="
-                          deleteRowFunc('Expense HSN/SAC Allocation')
-                        "
-                      >
-                      </menu-buttons>
+                      <div class="col-md-4 pt-4">
+                        <menu-buttons
+                          *ngIf="flag !== 'VIEW'"
+                          [viewAddBtn]="true"
+                          [viewDeleteBtn]="true"
+                          [viewImportBtn]="false"
+                          (addClick)="addRowFunc(1)"
+                          (deleteClick)="deleteRowFunc(1)"
+                        >
+                        </menu-buttons>
+                      </div>
+                      <div class="col-md-8">
+                        <mat-form-field
+                          style="width: 50%"
+                          class="pt-4"
+                          appearance="outline"
+                        >
+                          <input
+                            [readonly]="flag === 'VIEW'"
+                            matInput
+                            type="text"
+                            formControlName="searchValue"
+                            (input)="getSerachValue($event)"
+                            placeholder="Search Expense HSN/SAC Allocation"
+                          />
+                        </mat-form-field>
+                      </div>
                     </div>
                     <div class="row pt-2">
                       <div class="col-md-12">
                         <dx-data-grid
                           #dataGrid
                           id="gridContainer"
-                          [dataSource]="expenseHsnOrSacAllocationData"
+                          [dataSource]="
+                            searching
+                              ? expenseHsnSearchData
+                              : expenseHsnSacAllocationData
+                          "
                           [showBorders]="true"
                           [allowColumnReordering]="true"
                           [allowColumnResizing]="true"
@@ -1251,13 +1284,8 @@
                           [columnAutoWidth]="true"
                           [showColumnLines]="true"
                           [showRowLines]="true"
-                          keyExpr="SRNO"
-                          (onSelectionChanged)="
-                            onSelectionChanged(
-                              $event,
-                              'Expense HSN/SAC Allocation'
-                            )
-                          "
+                          keyExpr="SN"
+                          (onSelectionChanged)="onSelectionChanged($event, 1)"
                         >
                           <dxo-selection mode="single"></dxo-selection>
                           <dxo-scrolling mode="virtual"></dxo-scrolling>
@@ -1265,8 +1293,8 @@
                           <!-- Columns -->
                           <dxi-column
                             alignment="center"
-                            dataField="SRNO"
-                            caption="SRNO"
+                            dataField="SN"
+                            caption="SN"
                           ></dxi-column>
                           <dxi-column
                             alignment="center"
@@ -1322,22 +1350,24 @@
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
                                 maxlength="6"
-                                [readonly]="true"
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
-
                               <master-search
                                 *ngIf="flag != 'VIEW'"
-                                #overlayGroupOne
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="expenseCodeData"
                                 class="masterSearch"
-                                (newRowClick)="expenseSelect($event, data)"
+                                (newRowClick)="
+                                  gridDataBinding(
+                                    $event,
+                                    data.data,
+                                    ['EXPENSE_ACCODE', 'EXPENSE_ACCODE_DESC'],
+                                    'expense'
+                                  )
+                                "
                               ></master-search>
                             </mat-form-field>
                           </div>
-
                           <!-- Exp Account Description Column -->
                           <div
                             *dxTemplate="let data of 'expenseAccodeDescTemp'"
@@ -1351,16 +1381,8 @@
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
                                 [readonly]="true"
-                                (change)="
-                                  updateField(
-                                    $event,
-                                    data,
-                                    'EXPENSE_ACCODE_DESC'
-                                  )
-                                "
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
                             </mat-form-field>
                           </div>
@@ -1375,13 +1397,31 @@
                                 matInput
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
-                                (change)="
-                                  updateField($event, data, 'HSN_SAC_CODE')
-                                "
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
+                                (focusout)="SPvalidateLookupGridModified(
+                                  $event,
+                                  hsnCodeData,
+                                  ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
+                                  ['CODE', 'DESCRIPTION'],
+                                  'expense',
+                                  data
+                                  )"
                               />
+                              <master-search
+                                *ngIf="flag != 'VIEW'"
+                                #overlayGroupOne
+                                [MasterSearchData]="hsnCodeData"
+                                class="masterSearch"
+                                (newRowClick)="
+                                  gridDataBinding(
+                                    $event,
+                                    data,
+                                    ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
+                                    'expense'
+                                  )
+                                "
+                              ></master-search>
                             </mat-form-field>
                           </div>
 
@@ -1393,14 +1433,10 @@
                             >
                               <input
                                 matInput
-                                [readonly]="flag === 'VIEW'"
+                                [readonly]="true"
                                 type="text"
-                                (change)="
-                                  updateField($event, data, 'HSN_SAC_DESC')
-                                "
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
                             </mat-form-field>
                           </div>
@@ -1411,7 +1447,7 @@
                               [value]="data.value"
                               [disabled]="flag === 'VIEW'"
                               (valueChange)="
-                                updateField($event, data, 'TAX_REG')
+                                updateField($event, data, 'TAX_REG', 'expense')
                               "
                             >
                             </dx-check-box>
@@ -1425,7 +1461,12 @@
                               [value]="data.value"
                               [disabled]="flag === 'VIEW'"
                               (valueChange)="
-                                updateField($event, data, 'REVERSECHARGE_UNREG')
+                                updateField(
+                                  $event,
+                                  data,
+                                  'REVERSECHARGE_UNREG',
+                                  'expense'
+                                )
                               "
                             >
                             </dx-check-box>
@@ -1442,7 +1483,8 @@
                                 updateField(
                                   $event,
                                   data,
-                                  'ELIGIBLE_INPUTCREDIT'
+                                  'ELIGIBLE_INPUTCREDIT',
+                                  'expense'
                                 )
                               "
                             >
@@ -1458,22 +1500,24 @@
                 <div class="row mb-1">
                   <div class="col-md-12">
                     <div class="row mb-1 mt-2">
-                      <div class="col-md-2">
+                      <div *ngIf="flag !== 'VIEW'" class="pt-4 col-md-2">
                         <button
                           type="button"
                           class="btn btn-primary text-center"
+                          (click)="getGPCAccountData()"
                         >
                           Fill GPC Account
                         </button>
                       </div>
 
-                      <div class="col-md-3">
+                      <div class="col-md-3 pt-4">
                         <menu-buttons
+                          *ngIf="flag !== 'VIEW'"
                           [viewAddBtn]="true"
                           [viewDeleteBtn]="true"
                           [viewImportBtn]="false"
-                          (addClick)="addRowFunc('Cost Center Account')"
-                          (deleteClick)="deleteRowFunc('Cost Center Account')"
+                          (addClick)="addRowFunc(0)"
+                          (deleteClick)="deleteRowFunc(0)"
                         >
                         </menu-buttons>
                       </div>
@@ -1491,24 +1535,35 @@
                           [columnAutoWidth]="true"
                           [showColumnLines]="true"
                           [showRowLines]="true"
-                          keyExpr="SRNO"
-                          (onSelectionChanged)="
-                            onSelectionChanged($event, 'Cost Center Account')
-                          "
+                          keyExpr="SN"
+                          (onSelectionChanged)="onSelectionChanged($event, 0)"
+                          [paging]="{ pageSize: 10 }"
                         >
                           <dxo-selection mode="single"></dxo-selection>
-                          <dxo-scrolling mode="virtual"></dxo-scrolling>
+                          <dxo-scrolling mode="standard"></dxo-scrolling>
+                          <dxo-pager
+                            *ngIf="costCenterAccountData.length"
+                            [showInfo]="true"
+                            [visible]="true"
+                            [showPageSizeSelector]="true"
+                            [allowedPageSizes]="
+                              costCenterAccountData &&
+                              costCenterAccountData.length > 100
+                                ? [10, 20, 50]
+                                : []
+                            "
+                          ></dxo-pager>
 
                           <!-- Columns -->
                           <dxi-column
                             alignment="center"
-                            dataField="SRNO"
-                            caption="SRNO"
+                            dataField="SN"
+                            caption="SN"
                           ></dxi-column>
                           <dxi-column
                             alignment="center"
-                            dataField="COSTCENTER"
-                            caption="COSTCENTER"
+                            dataField="COST_CODE"
+                            caption="COST_CODE"
                             cellTemplate="costCenterTemp"
                           ></dxi-column>
                           <dxi-column
@@ -1561,23 +1616,32 @@
                               appearance="outline"
                             >
                               <input
+                                maxlength="6"
                                 matInput
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
                                 (change)="
-                                  updateField($event, data, 'COSTCENTER')
+                                  updateField(
+                                    $event,
+                                    data,
+                                    'COST_CODE',
+                                    'costCenter'
+                                  )
                                 "
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
                             </mat-form-field>
                           </div>
 
                           <!-- Exp Account Description Column -->
-                          <div *dxTemplate="let data of 'gpcAccodeTemp'"> 
+                          <div *dxTemplate="let data of 'gpcAccodeTemp'">
                             <mat-form-field
-                              style="width: 100%"
+                              style="
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                              "
                               appearance="outline"
                             >
                               <input
@@ -1585,23 +1649,21 @@
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
                                 maxlength="6"
-                                [readonly]="true"
                                 [value]="data.value"
-                                style="width: 100%"
-                                required
+                                style="flex: 1"
                               />
 
-                              <master-search
-                                *ngIf="flag != 'VIEW'"
-                                #overlayGroupOne
-                                [MasterSearchData]="groupCodeData"
-                                class="masterSearch"
-                                (newRowClick)="GPCSelect($event, data)"
-                              ></master-search>
+                              <i
+                                class="pi pi-search"
+                                style="
+                                  font-size: 12px;
+                                  font-weight: bold;
+                                  cursor: pointer;
+                                "
+                                (click)="openGPCGrid(null, data)"
+                              ></i>
                             </mat-form-field>
                           </div>
-
-                          <!-- HSN Code Column -->
                           <div *dxTemplate="let data of 'gpcAccodeDescTemp'">
                             <mat-form-field
                               style="width: 100%"
@@ -1612,11 +1674,15 @@
                                 [readonly]="flag === 'VIEW'"
                                 type="text"
                                 (change)="
-                                  updateField($event, data, 'GPC_ACCODE_DESC')
+                                  updateField(
+                                    $event,
+                                    data,
+                                    'GPC_ACCODE_DESC',
+                                    'costCenter'
+                                  )
                                 "
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
                             </mat-form-field>
                           </div>
@@ -1635,15 +1701,21 @@
                                 [readonly]="true"
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
 
                               <master-search
                                 *ngIf="flag != 'VIEW'"
                                 #overlayGroupOne
-                                [MasterSearchData]="groupCodeData"
+                                [MasterSearchData]="hsnCodeData"
                                 class="masterSearch"
-                                (newRowClick)="HSNSelect($event, data)"
+                                (newRowClick)="
+                                  gridDataBinding(
+                                    $event,
+                                    data,
+                                    ['HSN_SAC_CODE', 'HSN_SAC_DESC'],
+                                    'costCenter'
+                                  )
+                                "
                               ></master-search>
                             </mat-form-field>
                           </div>
@@ -1659,7 +1731,6 @@
                                 type="text"
                                 [value]="data.value"
                                 style="width: 100%"
-                                required
                               />
                             </mat-form-field>
                           </div>
@@ -1670,7 +1741,12 @@
                               [value]="data.value"
                               [disabled]="flag === 'VIEW'"
                               (valueChange)="
-                                updateField($event, data, 'TAX_REG')
+                                updateField(
+                                  $event,
+                                  data,
+                                  'TAX_REG',
+                                  'costCenter'
+                                )
                               "
                             >
                             </dx-check-box>
@@ -1684,7 +1760,12 @@
                               [value]="data.value"
                               [disabled]="flag === 'VIEW'"
                               (valueChange)="
-                                updateField($event, data, 'REVERSECHARGE_UNREG')
+                                updateField(
+                                  $event,
+                                  data,
+                                  'REVERSECHARGE_UNREG',
+                                  'costCenter'
+                                )
                               "
                             >
                             </dx-check-box>
@@ -1701,7 +1782,8 @@
                                 updateField(
                                   $event,
                                   data,
-                                  'ELIGIBLE_INPUTCREDIT'
+                                  'ELIGIBLE_INPUTCREDIT',
+                                  'costCenter'
                                 )
                               "
                             >

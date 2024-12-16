@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { log } from 'console';
 import { Subscription } from 'rxjs';
@@ -15,16 +15,20 @@ import Swal from 'sweetalert2';
 })
 export class KycMasterComponent implements OnInit {
   @Input() content!: any;
-  maindetails:any=[];
-  viewMode:boolean = false;
+  maindetails: any = [];
+  viewMode: boolean = false;
   data: any;
-  flag:any;
-  kyc_id:any;
+  flag: any;
+  kyc_id: any;
   private subscriptions: Subscription[] = [];
-  viewOnly:boolean = false;
-  dyndatas:any;
-  disable_code:boolean = false;
-  editMode:boolean = false;
+  viewOnly: boolean = false;
+  dyndatas: any;
+  disable_code: boolean = false;
+  editMode: boolean = false;
+  prefixcode = new FormControl('');
+  @ViewChild('kyccode') kyccodeInput!: ElementRef;
+  doc_codes: any[] = [];
+
 
 
   constructor(
@@ -39,10 +43,10 @@ export class KycMasterComponent implements OnInit {
 
   kycform: FormGroup = this.formBuilder.group({
     mid: [""],
-    kyccode: ["",[Validators.required]],
-    kyccodedesc: ["",[Validators.required]],
-    transactionlimit: [".000",[Validators.required]],
-   
+    kyccode: ["", [Validators.required]],
+    kyccodedesc: ["", [Validators.required]],
+    transactionlimit: [".000", [Validators.required]],
+
   });
 
   kyccodetype: MasterSearchModel = {
@@ -57,27 +61,29 @@ export class KycMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true,
   }
-  
-  selectedcodetype(e: any,data:any) {
-    console.log(data);
-    console.log(e);
-    const updatedSRNO = data.data.KYC_SRNO - 1; 
-    console.log(updatedSRNO)
-    this.maindetails[updatedSRNO].KYC_DOCTYPE = e.GENMST_CODE;
-    this.maindetails[updatedSRNO].KYC_DOCDESC = e.GENMST_DESC;
-    console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].GENMST_CODE);
-    console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].GENMST_DESC);
+
+  selectedcodetype(e: any, data: any) {
+    const updatedSRNO = data.data.KYC_SRNO - 1;
+    if (this.doc_codes.includes(e.GENMST_CODE)) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Duplicate Code',
+      });
+    } else {
+      this.doc_codes.push(e.GENMST_CODE);
+      this.maindetails[updatedSRNO].KYC_DOCTYPE = e.GENMST_CODE;
+      this.maindetails[updatedSRNO].KYC_DOCDESC = e.GENMST_DESC;
+    }
   }
 
   ngOnInit(): void {
     console.log(this.content);
     this.flag = this.content?.FLAG;
-    if(this.flag == 'EDIT'){
+    if (this.flag == 'EDIT') {
       this.disable_code = true;
-      this.editMode = true;
     }
-    if(this.flag == 'VIEW'){
-      this.viewOnly =true;
+    if (this.flag == 'VIEW') {
+      this.viewOnly = true;
       this.viewMode = true;
     }
     this.kyc_id = this.content?.KYC_CODE;
@@ -91,7 +97,14 @@ export class KycMasterComponent implements OnInit {
     }
   }
 
-  
+  ngAfterViewInit() {
+
+    if (this.kyccodeInput && this.flag == undefined) {
+      this.kyccodeInput.nativeElement.focus();
+    }
+  }
+
+
   checkcode() {
     const kyc_code = this.kycform.controls.kyccode;
     if (!kyc_code.value || kyc_code.value.trim() === "") {
@@ -119,15 +132,18 @@ export class KycMasterComponent implements OnInit {
         console.log(this.dyndatas);
         // this.maindetails.push(...this.dyndatas?.Details)
         this.maindetails = [...this.maindetails, ...this.dyndatas?.Details];
+        result.response.Details.forEach((e:any) => {
+          this.doc_codes.push(e.KYC_DOCTYPE);      
+        });
       }, (err: any) => {
 
       })
     this.subscriptions.push(Sub);
-    // console.log(this.dyndatas.FA_CATEGORY);
+    console.log(this.doc_codes);
     console.log(this.maindetails);
   }
 
-  
+
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
       this.ViewController(DATA);
@@ -150,8 +166,8 @@ export class KycMasterComponent implements OnInit {
       this.commonService.decimalQuantityFormat(
         this.commonService.emptyToZero(this.content?.KYC_TRANSLIMIT),
         "AMOUNT"
-      )
-    );
+      )
+    );
   }
 
   editController(DATA: any) {
@@ -201,19 +217,20 @@ export class KycMasterComponent implements OnInit {
           });
         this.subscriptions.push(Sub);
       } else {
-        this.flag = "VIEW";
+        // this.flag = "VIEW";
+        this.activeModal.close('');
       }
     });
   }
 
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -230,17 +247,17 @@ export class KycMasterComponent implements OnInit {
       if (result.isConfirmed) {
         this.activeModal.close(data);
       }
-    }
-    )
-  }
+    }
+    )
+  }
 
-  formSubmit(){
+  formSubmit() {
 
     const postData = {
       "MID": 0,
-      "KYC_CODE":  this.kycform.controls.kyccode.value,
-      "KYC_DESC":  this.kycform.controls.kyccodedesc.value,
-      "KYC_TRANSLIMIT":  this.kycform.controls.transactionlimit.value,
+      "KYC_CODE": this.kycform.controls.kyccode.value,
+      "KYC_DESC": this.kycform.controls.kyccodedesc.value,
+      "KYC_TRANSLIMIT": this.kycform.controls.transactionlimit.value,
       "Details": this.maindetails
     }
     console.log(postData);
@@ -274,7 +291,7 @@ export class KycMasterComponent implements OnInit {
       let API = `KYCMaster/InsertKYCMaster`;
       let sub: Subscription = this.apiService
         .postDynamicAPI(API, postData)
-        .subscribe((result:any) => {
+        .subscribe((result: any) => {
           if (result.status.trim() === "Success") {
             Swal.fire({
               title: "Success",
@@ -303,38 +320,38 @@ export class KycMasterComponent implements OnInit {
 
   docType(data: any, event: any) {
     console.log('New Value:', event.target.value);
-    console.log(data);  
-    const updatedSRNO = data.data.KYC_SRNO - 1; 
+    console.log(data);
+    const updatedSRNO = data.data.KYC_SRNO - 1;
     this.maindetails[updatedSRNO].KYC_DOCTYPE = event.target.value;
     console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].KYC_DOCTYPE);
   }
-  
+
 
   docTypeDes(data: any, event: any) {
-    const updatedSRNO = data.data.KYC_SRNO - 1; 
+    const updatedSRNO = data.data.KYC_SRNO - 1;
     this.maindetails[updatedSRNO].KYC_DOCDESC = event.target.value;
-  
+
     console.log('Updated DOC_TYPE:', this.maindetails[updatedSRNO].KYC_DOCDESC);
   }
 
-  addTableData(){
-    if(this.kycform.controls.kyccode.value == ""){
+  addTableData() {
+    if (this.kycform.controls.kyccode.value == "") {
       Swal.fire({
         title: 'Error',
         text: 'Code Cannot be Empty',
       });
-    }else if(this.kycform.controls.kyccodedesc.value == ""){
+    } else if (this.kycform.controls.kyccodedesc.value == "") {
       Swal.fire({
         title: 'Error',
         text: 'Description Cannot be Empty',
       });
-    }else{
+    } else {
 
       let srno = this.maindetails.length;
-      srno+=1;
+      srno += 1;
 
       let data = {
-        "UNIQUEID": srno ,
+        "UNIQUEID": srno,
         "KYC_DETCODE": "",
         "KYC_SRNO": srno,
         "KYC_DOCTYPE": "",
@@ -342,14 +359,14 @@ export class KycMasterComponent implements OnInit {
       }
       this.maindetails.push(data);
       this.cdr.detectChanges();
-      
+
     }
 
   }
 
-  deleteTableData(){
+  deleteTableData() {
     if (this.maindetails.length > 0) {
-      this.maindetails.pop(); 
+      this.maindetails.pop();
     }
   }
 

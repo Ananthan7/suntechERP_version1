@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -20,6 +20,8 @@ export class ServiceMasterComponent implements OnInit {
   tableData: any[] = [];
   viewMode: boolean = false;
   editMode: boolean = false;
+  codeEnable: boolean = false;
+
 
   @ViewChild('accountcodeSearch') accountcodeSearch!: MasterSearchComponent;
   @ViewChild('designCodeSearch') designCodeSearch!: MasterSearchComponent;
@@ -40,10 +42,12 @@ export class ServiceMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2
   ) { }
 
   ngOnInit(): void {
-
+    this.renderer.selectRootElement('#servicecode')?.focus();
+    this.codeEnable = true;
     if (this.content?.FLAG) {
       console.log(this.content)
       this.setFormValues();
@@ -52,6 +56,8 @@ export class ServiceMasterComponent implements OnInit {
       } else if (this.content.FLAG == 'EDIT') {
         this.viewMode = false;
         this.editMode = true;
+        this.codeEnable = false;
+
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteRecord()
@@ -102,6 +108,60 @@ export class ServiceMasterComponent implements OnInit {
       }
     }
     )
+  }
+
+  allowNumbersOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+
+
+  checkCodeExists(event: any) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
+    // console.log('this w');
+    
+    const API = 'ServiceMaster/CheckIfServiceCodePresent/' + event.target.value;
+    const sub = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: 'Code Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then(() => {
+            // Clear the input value
+            this.serviceForm.controls.servicecode.setValue('');
+            this.renderer.selectRootElement('#servicecode').focus();
+
+          });
+          this.commonService.toastErrorByMsgId('MSG1121')//Code Already Exists
+        }else{
+          this.codeEnable = false;
+        }
+      }, err => {
+        this.serviceForm.reset();
+
+      });
+
+    this.subscriptions.push(sub);
+
+  }
+
+  codeEnabledService() {
+    if (this.serviceForm.value.servicecode == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
   }
 
   setFormValues() {
@@ -212,6 +272,11 @@ export class ServiceMasterComponent implements OnInit {
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
+
+
+
+
+
   deleteRecord() {
     Swal.fire({
       title: 'Are you sure?',
@@ -257,6 +322,11 @@ export class ServiceMasterComponent implements OnInit {
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else
+      {
+        this.close('reloadMainGrid')
+
       }
     });
   }

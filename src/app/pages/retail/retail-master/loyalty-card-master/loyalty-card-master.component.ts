@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatError } from '@angular/material/form-field';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -163,29 +163,38 @@ export class LoyaltyCardMasterComponent implements OnInit {
   }
 
   checkvalue() {
-    let points_from = this.loyaltycardform.controls.pointsfrom.value;
-    let points_to = this.loyaltycardform.controls.pointsto.value;
+    if(this.flag == undefined){
+      let points_from = Number(this.loyaltycardform.controls.pointsfrom.value);
+    let points_to = Number(this.loyaltycardform.controls.pointsto.value);
     if (points_from >= points_to) {
         this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
         this.renderer.selectRootElement('#pointsto')?.focus();
     } else {
         this.loyaltycardform.controls.pointsto.setErrors(null);
     }
+    }
+    
   }
 
     check_greater(){
-      let points_from = this.loyaltycardform.controls.pointsfrom.value;
-      let points_to = this.loyaltycardform.controls.pointsto.value;
-      
-      if (this.last_points_to >= points_from) {
-        this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromlower: true });
-        this.renderer.selectRootElement('#pointsfrom')?.focus();
-      }else  if (points_from >= points_to) {
-        this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
-        this.renderer.selectRootElement('#pointsto')?.focus();
-      } else {
-        this.loyaltycardform.controls.pointsfrom.setErrors(null);
-      }
+      if(this.flag == undefined){
+        let points_from = Number(this.loyaltycardform.controls.pointsfrom.value);
+        let points_to = Number(this.loyaltycardform.controls.pointsto.value);
+        if(points_from<=0){
+          this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromzero: true });
+          this.renderer.selectRootElement('#pointsfrom')?.focus();
+          // this.renderer.selectRootElement('#pointsfrom')?.reset();
+        }
+        else if (this.last_points_to >= points_from) {
+          this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromlower: true });
+          this.renderer.selectRootElement('#pointsfrom')?.focus();
+        }else  if (points_from >= points_to) {
+          this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
+          this.renderer.selectRootElement('#pointsto')?.focus();
+        } else {
+          this.loyaltycardform.controls.pointsfrom.setErrors(null);
+        }
+      }     
 
     }
 
@@ -272,19 +281,52 @@ export class LoyaltyCardMasterComponent implements OnInit {
   }
 
   formSubmit() {
+    let points_from = Number(this.loyaltycardform.controls.pointsfrom.value);
+    let points_to = Number(this.loyaltycardform.controls.pointsto.value);
+    if (points_from >= points_to) {
+        this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
+        this.renderer.selectRootElement('#pointsto')?.focus();
+        Swal.fire({
+          title: 'Error',
+          text: 'Points to should be higher than points from.',
+        });
+        return
+    } else if (this.last_points_to >= points_from) {
+      this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromlower: true });
+      this.renderer.selectRootElement('#pointsfrom')?.focus();
+      Swal.fire({
+        title: 'Error',
+        text: 'Points from should be higher than last points to.',
+      });
+      return 
+    }
+
+    Object.keys(this.loyaltycardform.controls).forEach((controlName) => {
+      const control = this.loyaltycardform.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
+
+    const requiredFieldsInvalid = Object.keys(
+      this.loyaltycardform.controls
+    ).some((controlName) => {
+      const control = this.loyaltycardform.controls[controlName];
+      return control.hasError("required") && control.touched;
+    });
 
     const postData = {
       "MID": 0,
       "CODE": this.loyaltycardform.controls.code.value,
       "DESCRIPTION": this.loyaltycardform.controls.codedesc.value,
-      "POINTS_FROM": this.loyaltycardform.controls.pointsfrom.value,
-      "POINTS_TO": this.loyaltycardform.controls.pointsto.value,
-      "MTL_DISCOUNT_PER": this.loyaltycardform.controls.metaldiscount.value || 0,
-      "DIA_DISCOUNT_PER": this.loyaltycardform.controls.diamonddiscount.value || 0,
+      "POINTS_FROM": Number(this.loyaltycardform.controls.pointsfrom.value),
+      "POINTS_TO": Number(this.loyaltycardform.controls.pointsto.value),
+      "MTL_DISCOUNT_PER": Number(this.loyaltycardform.controls.metaldiscount.value) || 0,
+      "DIA_DISCOUNT_PER": Number(this.loyaltycardform.controls.diamonddiscount.value) || 0,
       "SEND_MSG": this.loyaltycardform.controls.sendmessage.value ? true : false,
       "SEND_EMAIL": this.loyaltycardform.controls.sendemail.value ? true : false,
-      "POINT_EXP_DAYS": this.loyaltycardform.controls.pointexpdays.value || 0,
-      "POINT_CONV_PER": this.loyaltycardform.controls.pointmulfact.value || 0,
+      "POINT_EXP_DAYS": Number(this.loyaltycardform.controls.pointexpdays.value) || 0,
+      "POINT_CONV_PER": Number(this.loyaltycardform.controls.pointmulfact.value) || 0,
       "PICTURE_NAME": "string"
     }
 

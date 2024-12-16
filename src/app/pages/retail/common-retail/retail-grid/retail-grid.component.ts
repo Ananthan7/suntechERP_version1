@@ -379,12 +379,14 @@ export class RetailGridComponent implements OnInit {
  
         const fromVocDate = this.datePipe.transform(parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE ||
           parsedData.CONTROL_DETAIL?.strFmDate || parsedData.CONTROL_DETAIL?.FrVocDate || parsedData.CONTROL_DETAIL?.str_FmDate
-          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.FRVOCDATE || parsedData.CONTROL_DETAIL?.STRFMDATE, 'yyyy-MM-dd')!
+          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.FRVOCDATE || parsedData.CONTROL_DETAIL?.STRFMDATE
+          || parsedData.CONTROL_DETAIL?.frmDate,  'yyyy-MM-dd')!
         
       
         const toVocDate = this.datePipe.transform(parsedData.CONTROL_DETAIL?.TOVOCDATE || parsedData.CONTROL_DETAIL?.STRTODATE ||
           parsedData.CONTROL_DETAIL?.strToDate || parsedData.CONTROL_DETAIL?.ToVocDate || parsedData.CONTROL_DETAIL?.str_ToDate
-          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.TOVOCDATE, 'yyyy-MM-dd')!
+          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.TOVOCDATE
+          || parsedData.CONTROL_DETAIL?.toDate, 'yyyy-MM-dd')!
       
         item.FROMVOCDATE = fromVocDate;
         item.TOVOCDATE = toVocDate;
@@ -617,6 +619,24 @@ export class RetailGridComponent implements OnInit {
         }
       };
     }); 
+  }
+
+  excelExport(data: any){
+    let gridData= JSON.parse(data.data['CONTROL_LIST_JSON']);
+    console.log(gridData.CONTROL_DETAIL)
+    let postData = {
+      "frmDate": gridData.CONTROL_DETAIL.frmDate,
+      "toDate": gridData.CONTROL_DETAIL.toDate,
+      "strBranch": gridData.CONTROL_DETAIL.strBranch,
+      "mtlType": gridData.CONTROL_DETAIL.mtlType,
+      "diaType": gridData.CONTROL_DETAIL.diaType,
+      "transaction": gridData.CONTROL_DETAIL.transaction,
+    }
+    let APIurl = "PosSalesAndStockComparison";
+    this.dataService.postDynamicAPI(APIurl, postData).subscribe((result: any) =>{
+      console.log(result)
+    })
+
   }
 
   viewClick(event: any){

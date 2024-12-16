@@ -1,11 +1,13 @@
-import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { DxDataGridComponent } from 'devextreme-angular';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-pos-sales-stock-comparison',
@@ -19,7 +21,7 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     todate: [''],
     templateName: [''],
 
-    transaction: [0],
+    transaction: [''],
     groupByMetal: [''],
     groupByDiamond: ['']
   
@@ -32,20 +34,55 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
   isLoading: boolean = false;
-  salesGridArr: any = [];
-  stockGridArr: any = [];
-  diamonSalesGridArr: any = [];
+  metalSalesGridArr: any = [];
+  metalStockGridArr: any = [];
+  diamondSalesGridArr: any = [];
   physicalStockGridArr: any = [];
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
 
+  options = [
+    { value: 0, label: 'Sales' },
+    { value: 1, label: 'Sales Returns' },
+    { value: 2, label: 'Net Sales' },
+  ];
+  groupByMetalArr = [
+    { value: 'Type', label: 'Type' },
+    { value: 'Karat', label: 'Karat' },
+    { value: 'Brand', label: 'Brand' },
+    { value: 'Country', label: 'Country' },
+    { value: 'Stock Code', label: 'Stock Code' },
+    { value: 'Category', label: 'Category' },
+    { value: 'Cost Code', label: 'Cost Code' },
+  ]
+  groupByDiamondArr = [
+    { value: 'Type', label: 'Type' },
+    { value: 'Category', label: 'Category' },
+    { value: 'Sub Category', label: 'Sub Category' },
+    { value: 'Brand', label: 'Brand' },
+    { value: 'Country', label: 'Country' },
+    { value: 'Design', label: 'Design' },
+    { value: 'Stock Code', label: 'Stock Code' },
+    { value: 'Cost Code', label: 'Cost Code' },
+  ]
+
+  @ViewChild('salesGrid', { static: false }) salesGrid!: DxDataGridComponent;
+  @ViewChild('stockGrid', { static: false }) stockGrid!: DxDataGridComponent;
+  @ViewChild('diamondSalesGrid', { static: false }) diamondSalesGrid!: DxDataGridComponent;
+  @ViewChild('diamondStockGrid', { static: false }) diamondStockGrid!: DxDataGridComponent;
+  selectedMetalSalesData: any = [];
+  selectedMetalStockData: any = [];
+  selectedDiamondSales: any = [];
+  selectedDiamondStock: any = [];
+
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private datePipe: DatePipe,
     private dataService: SuntechAPIService, private commonService: CommonServiceService,  private toastr: ToastrService,
+    private decimalPipe: DecimalPipe
   ) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
-   
+    this.gridAPI();
   }
 
   close(data?: any) {
@@ -58,7 +95,25 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     if (e.rowType === 'header') {
       e.cellElement.style.textAlign = 'center';
     }
-  } 
+
+    if (e.rowType === 'data') {
+      const column = e.column.dataField;
+      if (['mkgvalue', 'QTY', 'metalvalue', 'amount'].includes(column)) {
+        e.cellElement.innerText = this.commonService.setCommaSerperatedNumber(e.value, 'AMOUNT');
+      }
+    }
+
+    // if (e.rowType === 'totalFooter') {
+    //   const value = e.totalItem.summaryCells;
+    //   value.forEach((item: any)=>{
+    //     console.log(item.column)
+    //     if (['mkgvalue', 'QTY', 'metalvalue', 'amount'].includes(item.column)) {
+    //       console.log(item)
+    //     }
+    //   })
+    // } 
+  }
+ 
 
   popupClosed(){
     if (this.content && Object.keys(this.content).length > 0) {
@@ -73,14 +128,6 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     }
   }
 
-
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
   setDateValue(event: any){
     if(event.FromDate){
       this.POS_Sales_Stock_ComparisonForm.controls.fromdate.setValue(event.FromDate);
@@ -143,23 +190,20 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     this.POS_Sales_Stock_ComparisonForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
-
-  onTabChange(event: any){
-
-  }
-
   gridAPI(){
     this.isLoading = true;
     let APIurl = "PosSalesAndStockComparison";
+
+    // const branchSelectionlastElement = this.POS_Sales_Stock_ComparisonForm.controls.branch.value.split('#').pop()!.replace('#', '');
+    // const formatterBranches = this.POS_Sales_Stock_ComparisonForm.controls.branch.value.slice(0, -1) + branchSelectionlastElement;
+
     let postData = {
-      "parameter": {
         "frmDate": this.dateToPass.fromDate,
         "toDate": this.dateToPass.toDate,
         "strBranch": this.POS_Sales_Stock_ComparisonForm.controls.branch.value,
         "mtlType": this.POS_Sales_Stock_ComparisonForm.controls.groupByMetal.value,
         "diaType": this.POS_Sales_Stock_ComparisonForm.controls.groupByDiamond.value,
         "transaction": Math.floor(this.POS_Sales_Stock_ComparisonForm.controls.transaction.value || 0)
-      }
     }
 
     this.commonService.showSnackBarMsg('MSG81447');
@@ -176,53 +220,167 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
         return
       }
       else{
+        this.metalSalesGridArr = response.dtMtlSales;
+        this.metalSalesGridArr?.forEach((item: any)=>{
+          if (Object.keys(item.type).length === 0 && item.type.constructor === Object) {
+            item.type = null;
+          }
+          item.mkgvalue = this.commonService.setCommaSerperatedNumber(item.mkgvalue, 'AMOUNT');
+          item.QTY = this.commonService.setCommaSerperatedNumber(item.QTY, 'AMOUNT');
+          item.metalvalue = this.commonService.setCommaSerperatedNumber(item.metalvalue, 'AMOUNT');
+          item.amount = this.commonService.setCommaSerperatedNumber(item.amount, 'AMOUNT');
+        })
+
+        this.metalStockGridArr = response.dtMtlStock;
+        this.metalStockGridArr.forEach((item: any)=>{
+          if (Object.keys(item.type).length === 0 && item.type.constructor === Object) {
+            item.type = null;
+          }
+        })
+
+        this.diamondSalesGridArr = response.dtDiaSales;
+
+
+        this.physicalStockGridArr = response.dtDiaStock;
         this.isLoading = false;
       }
     })
   }
 
- saveTemplate(){
+  saveTemplate(){
     this.popupVisible = true;
     console.log(this.POS_Sales_Stock_ComparisonForm.controls.templateName.value)
   }
   saveTemplate_DB(){
-      
-  }
-
-  previewClick(){
-    this.isLoading = true
-
-    let postData = {
-      "SPID": "",
-      "parameter": {
-        
-      }
+      let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
     }
-    console.log(postData) 
-    setTimeout(()=>{
-      this.isLoading = false;
-    }, 300)     
-  }
-
-  printBtnClick(){
-    this.isLoading = true
-
-    let postData = {
-      "SPID": "",
+    const payload = {
+      "SPID": "0115",
       "parameter": {
-        
+        "FLAG": 'INSERT',
+        "CONTROLS": JSON.stringify({
+            "CONTROL_HEADER": {
+              "USERNAME": localStorage.getItem('username'),
+              "TEMPLATEID": this.commonService.getModuleName(),
+              "TEMPLATENAME": this.POS_Sales_Stock_ComparisonForm.controls.templateName.value,
+              "FORM_NAME": this.commonService.getModuleName(),
+              "ISDEFAULT": 1
+            },
+            "CONTROL_DETAIL": {
+              "frmDate": this.dateToPass.fromDate,
+              "toDate": this.dateToPass.toDate,
+              "strBranch": this.POS_Sales_Stock_ComparisonForm.controls.branch.value,
+              "mtlType": this.POS_Sales_Stock_ComparisonForm.controls.groupByMetal.value,
+              "diaType": this.POS_Sales_Stock_ComparisonForm.controls.groupByDiamond.value,
+              "transaction": Math.floor(this.POS_Sales_Stock_ComparisonForm.controls.transaction.value || 0),
+              "LOGDATA": JSON.stringify(logData)
+            }
+         })
       }
-    }
-    console.log(postData) 
-    setTimeout(()=>{
-      this.isLoading = false;
-    }, 300)     
+    };
+
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
+      let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
+      if (Notifdata == 1) {
+        this.commonService.closeSnackBarMsg()
+        Swal.fire({
+          title: data || 'Success',
+          text: '',
+          icon: 'success',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })
+        this.popupVisible = false;
+        this.activeModal.close(data);
+      }
+      else {
+        this.toastr.error(Notifdata)
+      }
+    });
   }
+
+  metalSalesChanged(event: any) { 
+    this.selectedMetalSalesData = event.selectedRowsData;
+
+    // Clear selection on the stock grid and refresh
+    this.stockGrid.instance.clearSelection();
+    this.stockGrid.instance.refresh();
+  }
+  metalStockChanged(event: any) {
+    this.selectedMetalStockData = event.selectedRowsData;
+
+    // Clear selection on the sales grid and refresh
+    this.salesGrid.instance.clearSelection();
+    this.salesGrid.instance.refresh();
+  }
+  diamondSalesChanged(event: any){
+    this.selectedDiamondSales = event.selectedRowsData;
+
+    // Clear selection on the diamond-sales grid
+    this.diamondStockGrid.instance.clearSelection();
+  }
+  diamondStockChanged(event: any){
+    this.selectedDiamondStock = event.selectedRowsData;
+
+    // Clear selection on the diamond-sales grid
+    this.diamondSalesGrid.instance.clearSelection();
+  }
+  
+
+  excelExport(){
+    if(this.selectedMetalSalesData.length > 0){
+      this.commonService.exportExcel(this.selectedMetalSalesData, "Metal Division- Sales details");
+      // console.log('MD-Sales', this.selectedMetalSalesData)
+    }
+    else if(this.selectedMetalStockData.length > 0){
+      this.commonService.exportExcel(this.selectedMetalStockData, "Metal Division- Stock details");
+      // console.log('MD-Sales', this.selectedMetalStockData)
+    }
+    else if(this.selectedDiamondSales.length > 0){
+      this.commonService.exportExcel(this.selectedDiamondSales, "Diamond Division- Sales details");
+      // console.log('MD-Sales', this.selectedMetalStockData)
+    }
+    else if(this.selectedDiamondStock.length > 0){
+      this.commonService.exportExcel(this.selectedDiamondStock, "Diamond Division- Stock details");
+      // console.log('MD-Sales', this.selectedMetalStockData)
+    }
+  }
+ 
 
 
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
-      //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      this.isLoading = false;
+      this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
+      this.POS_Sales_Stock_ComparisonForm.controls.branch.setValue( ParcedPreFetchData?.CONTROL_DETAIL.strBranch? 
+        ParcedPreFetchData?.CONTROL_DETAIL.strBranch : ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH+'#');
+
+      this.dateToPass = {
+        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.frmDate,
+        toDate: ParcedPreFetchData?.CONTROL_DETAIL.toDate
+      };
+
+      this.POS_Sales_Stock_ComparisonForm.controls.transaction.setValue(ParcedPreFetchData?.CONTROL_DETAIL.transaction);
+      this.POS_Sales_Stock_ComparisonForm.controls.groupByMetal.setValue(ParcedPreFetchData?.CONTROL_DETAIL.mtlType);
+      this.POS_Sales_Stock_ComparisonForm.controls.groupByDiamond.setValue(ParcedPreFetchData?.CONTROL_DETAIL.diaType);
+      
     }
     else{
       const userBranch = localStorage.getItem('userbranch');
@@ -232,9 +390,13 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
+
+      this.POS_Sales_Stock_ComparisonForm.controls.transaction.setValue(this.options[0].value);
+      this.POS_Sales_Stock_ComparisonForm.controls.groupByMetal.setValue(this.groupByMetalArr[0].value);
+      this.POS_Sales_Stock_ComparisonForm.controls.groupByDiamond.setValue(this.groupByDiamondArr[0].value);
     }
   }
 

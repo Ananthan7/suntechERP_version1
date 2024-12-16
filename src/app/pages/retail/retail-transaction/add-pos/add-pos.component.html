@@ -394,7 +394,7 @@
       </div>
     </section>
   </div> -->
-<div class="row p-2" style="margin: 6px 6px 0px 6px">
+<div class="row" style="margin: 6px 16px 0px 6px;">
   <div class="col-xl-12">
     <form [formGroup]="vocDataForm" style="width: 100%; max-width: none">
       <div class="row" style="margin-bottom: 10px">
@@ -412,23 +412,26 @@
             </button>
           </div>
         </div>
-        <div class="col-md-1">
+
+        <div class="col-md-1 equal-width">
           <label for="voc_type">Voucher</label>
-          <mat-form-field appearance="outline" style="width: 100%">
+          <mat-form-field appearance="outline">
             <input type="text" matInput id="voc_type" formControlName="voc_type" readonly />
           </mat-form-field>
         </div>
-        <div class="col-md-1">
+
+        <div class="col-md-1 equal-width">
           <label for="fcn_voc_no">{{ vocno_lbl }}</label>
-          <mat-form-field appearance="outline" style="width: 100%">
+          <mat-form-field appearance="outline">
             <input type="text"  NumberOnlyWithoutComma [maxLength]="6"  (change)="ValidatingVocNo($event)" matInput
               formControlName="fcn_voc_no" 
               [readonly]="voucherDetails?.LOCKVOUCHERNO || viewOnly" class="st_txt_right" />
           </mat-form-field>
         </div>
-        <div class="col-md-1">
+
+        <div class="col-md-1 equal-width">
           <label for="txtCurrency">Currency</label>
-          <mat-form-field appearance="outline" style="width: 100%">
+          <mat-form-field appearance="outline" >
             <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" readonly
               [matAutocomplete]="currencyList" />
             <mat-autocomplete #currencyList="matAutocomplete" autoActiveFirstOption
@@ -437,9 +440,9 @@
           </mat-form-field>
         </div>
 
-        <div class="col-md-1">
+        <div class="col-md-1 equal-width">
           <label for="txtCurRate">Cur. Rate</label>
-          <mat-form-field appearance="outline" style="width: 100%">
+          <mat-form-field appearance="outline">
             <input class="st_txt_right" type="text" matInput id="txtCurRate" SixDecimalInput
               formControlName="txtCurRate"
               [readonly]="viewOnly || this.vocDataForm.value.txtCurrency == this.comFunc.compCurrency"
@@ -447,9 +450,9 @@
           </mat-form-field>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-1 equal-width">
           <label for="vocdate">Date</label>
-          <mat-form-field appearance="outline" style="width: 100%">
+          <mat-form-field appearance="outline" >
             <input matInput DateValidation (dateChange)="formatDate($event)" [matDatepicker]="dob" readonly
               formControlName="vocdate" [min]="voucherDetails?.BLOCKBACKDATEDENTRIES ? this.comFunc.currentDate : null"
               [max]="voucherDetails?.BLOCKFUTUREDATE ? this.comFunc.currentDate : null" placeholder="DD/MM/YYYY" />
@@ -458,7 +461,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-1 equal-width">
           <label for="sales_person">{{ sales_person_lbl }}</label>
           <mat-form-field style="width: -webkit-fill-available" appearance="outline">
             <input type="text" [readonly]="viewOnly" matInput  (focusout)="SPvalidateLookupField($event,enteredByCode,'sales_person',false)" formControlName="sales_person" />
@@ -501,8 +504,8 @@
 
   </div>
 </div>
-<div class="row" style="padding: 0px 15px 15px 15px">
 
+<div class="row" style="padding: 0px 15px 15px 15px">
   <div class="col-xl-9">
     <div style="background-color: #ffffff">
       <div>
@@ -609,7 +612,7 @@
               <button type="button" *ngIf="!viewOnly"  style="font-size: 12px;"
                 (click)="open(more_customer_detail_modal, false, null, false,false,true)" mat-flat-button
                 class="update-finish-button" >
-                {{ this.customerDetails.MOBILE == null || undefined ? 'Add Customer' : 'Edit Customer' }}
+                {{ this.customerDetails.MOBILE == null || undefined ? 'Add Customer' : 'Update Customer' }}
               </button>
             </div>
           </div>
@@ -629,47 +632,59 @@
               </mat-form-field>
             </div>
 
-            <div class="col-md-3 d-flex justify-content-center align-items-center checkBoxCustom"
-              [style.pointer-events]="viewOnly ? 'none' : 'auto'">
-              <mat-checkbox color="primary" formControlName="tourVatRefuncYN">
-                Tourist VAT Refund Ref #
-              </mat-checkbox>
+            <div class="col-md-2">
+              <div style="margin-top: 0px;">
+                <mat-checkbox color="primary" formControlName="tourVatRefuncYN" (change)="onCheckboxChange($event)">
+                  Tourist VAT Ref. 
+                </mat-checkbox>
+              </div>
+              <div style="margin-top: -9px;">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input type="text" matInput formControlName="tourVatRefundNo"
+                    [disabled]="!customerDataForm.controls.tourVatRefuncYN.value"/>
+                </mat-form-field>
+              </div>
             </div>
 
-            <div class="col-md-3" *ngIf="customerDataForm.value.tourVatRefuncYN">
-              <label for="tourVatRefundNo">Tourist VAT Refund Ref #</label>
-              <mat-form-field appearance="outline" style="width: 100%">
-                <input type="text" matInput formControlName="tourVatRefundNo" />
-              </mat-form-field>
+
+            <div class="col-12 col-md-8 d-flex flex-column" *ngIf="!viewOnly">
+              <label for="Related">Import:</label>
+              <div class="row">
+                  <div class="col-12 col-md-3 mb-2">
+                      <button type="button" mat-flat-button [disabled]="!isNewButtonDisabled" (click)="importSalesEstimation()" 
+                      class="w-100 refund_Buttons">
+                         Sales Estimation
+                      </button>
+                  </div>
+                  <div class="col-12 col-md-3 mb-2">
+                      <button type="button" [disabled]="!isNewButtonDisabled" mat-flat-button class="w-100 refund_Buttons" 
+                      (click)="importSalesOrder()">
+                        Sales Order
+                      </button>
+                  </div>
+                  <div class="col-12 col-md-3 mb-2" *ngIf="strUser=='SUNTECH'">
+                      <button type="button" mat-flat-button [disabled]="!isNewButtonDisabled" (click)="openParamterDetails()" 
+                      class="w-100 refund_Buttons">
+                        Parameter Details
+                      </button>
+                  </div>
+                  <div class="col-12 col-md-3 mb-2">
+                      <button type="button" mat-flat-button (click)="openUserAttachmentModal()" [disabled]="!isNewButtonDisabled" 
+                      class="w-100 refund_Buttons">
+                        {{ !viewOnly ? 'Attachment' : 'View Attachment' }}
+                      </button>
+                  </div>
+              </div>
             </div>
-
-
-
+            
           </div>
-
 
         </form>
 
-        <div *ngIf="!viewOnly"  class="text-right mt-2">
-          <span class="customheader mr-2" style="margin-right: 24px;">Related Details:</span>
+        <div   class="text-right mt-2">
+          
 
-          <button type="button"  mat-flat-button [disabled]="!isNewButtonDisabled" (click)="importSalesEstimation()" class="update-finish-button">
-            Import Sales Estimation
-          </button>
-
-          <button type="button"  [disabled]="!isNewButtonDisabled" class="mx-2 update-finish-button" mat-flat-button (click)="importSalesOrder()">
-            Import Sales Order
-          </button>
-
-          <button type="button" mat-flat-button *ngIf="strUser=='SUNTECH'" [disabled]="!isNewButtonDisabled" (click)="openParamterDetails()"
-            class="button-spacing update-finish-button">
-            Parameter Details
-          </button>
-
-          <button type="button" mat-flat-button 
-            (click)="openUserAttachmentModal()" [disabled]="!isNewButtonDisabled" class="update-finish-button">
-            {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
-          </button>
+         
         </div>
 
         <div class="col-md-12 m-t-10" style="padding: 0px">
@@ -1257,7 +1272,7 @@
                 <th style="width: 35%">Purchase</th>
               </tr>
               <tr *ngFor="let krd of karatRateDetails; let id = index">
-                <td>{{ krd.KARAT_CODE }}</td>
+                <td style="text-align: left">{{ krd.KARAT_CODE }}</td>
                 <td style="text-align: right; padding-right: 3px">
                   <input type="number" (change)="changeKaratRate($event, id)" style="text-align: right"
                     onwheel="this.blur()" [value]="krd.KARAT_RATE" class="karat_code" readonly />

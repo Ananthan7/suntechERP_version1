@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="delete()" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="delete()" [isViewDelete]="false" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
 [isViewMore]="!viewMode"></modal-header>
 <!-- content section -->
 
@@ -40,7 +40,7 @@
                             :</label>
                             <div class="col-sm-3">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" #codeInput maxlength="15" matInput formControlName="branchCode"   [readonly]="viewMode">
+                                    <input type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="branchCode"   [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         <div class="col-sm-6">
@@ -60,7 +60,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3"  formControlName="metalRatio"  [disabled]="viewMode">Metal Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="metalRatioDetail" [readonly]="viewMode" >
+                                    <input class="text-right" type="text" #codeInput maxlength="3" matInput formControlName="metalRatioDetail" [readonly]="viewMode" maxlength="3" AmountDecimalInput (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3" formControlName="stoneRatio"  [disabled]="viewMode">Stone Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="stoneRatioDetail" [readonly]="viewMode" >
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="stoneRatioDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3"  formControlName="labourRatio"  [disabled]="viewMode">Labour Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="labourRatioDetail"  [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="labourRatioDetail"  [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3" formControlName="kundanRatio"  [disabled]="viewMode">Kundan Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="kundanRatioDetail" [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="kundanRatioDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3" formControlName="wastageRatio"  [disabled]="viewMode">Wastage Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="wastageRatioDetail" [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="wastageRatioDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3"  formControlName="total"  [disabled]="viewMode">Total %</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="totalDetail" [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="totalDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3" formControlName="metalRatioDia"  [disabled]="viewMode">Metal Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="metalRatioDiaDetail" [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="metalRatioDiaDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -128,7 +128,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3" formControlName="stoneRatioDia"  [disabled]="viewMode">Stone Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="stoneRatioDetail" [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="stoneRatioDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3" formControlName="labourRatioDia"  [disabled]="viewMode">Labour Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="labourRatioDiaDetail" [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="labourRatioDiaDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -145,7 +145,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3" formControlName="totalDia"  [disabled]="viewMode">Total %</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="totalDiaDetail" [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="totalDiaDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -159,7 +159,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3" formControlName="LooseSplittingRatio"  [disabled]="viewMode">Loose Diamond Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="LooseSplittingRatioDetail" [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="LooseSplittingRatioDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -167,7 +167,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3" formControlName="colorstoneRatio"  [disabled]="viewMode">Color Stone Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="colorstoneRatioDetail" [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="colorstoneRatioDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -175,7 +175,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3" formControlName="pearlsRatio"  [disabled]="viewMode">Pearls Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="pearlsRatioDetail" [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="pearlsRatioDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -183,7 +183,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3" formControlName="zirconRatio"  [disabled]="viewMode">Zircon Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="zirconRatioDetail" [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="zirconRatioDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -191,7 +191,7 @@
                             <mat-checkbox class="example-margin" class="col-md-3" formControlName="totalDiaone"  [disabled]="viewMode">Total %</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="totalDiaoneDetail" [readonly]="viewMode">
+                                    <input class="text-right" type="text" #codeInput maxlength="3" AmountDecimalInput  matInput formControlName="totalDiaoneDetail" [readonly]="viewMode" (input)="allowNumbersOnly($event)">
                                 </mat-form-field>
                             </div>
                         </div>

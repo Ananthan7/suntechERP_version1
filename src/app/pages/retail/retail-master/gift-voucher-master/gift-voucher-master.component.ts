@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -39,10 +39,14 @@ export class GiftVoucherMasterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
+
   ) { }
   
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#code')?.focus();
+
     this.getmetal_divisionvalues();
     if (this.content?.FLAG) {
      
@@ -168,6 +172,11 @@ export class GiftVoucherMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
 }
 
+allowNumbersOnly(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  input.value = input.value.replace(/[^0-9]/g, '');
+}
+
 
 setFormValues() {
   console.log(this.content);
@@ -246,6 +255,8 @@ setFormValues() {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
+    modalRef.componentInstance.editMode = this.editMode;
+    modalRef.componentInstance.viewMode = this.viewMode;
   }
   
 
@@ -366,6 +377,9 @@ setFormValues() {
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
+      }
+      else{
+        this.close('reloadMainGrid')
       }
     });
   }

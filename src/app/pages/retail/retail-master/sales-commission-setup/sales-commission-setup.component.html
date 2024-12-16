@@ -5,8 +5,9 @@
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
-    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
-    <div class="p-4 ">
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="DeleteController()"
+    [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    ></modal-header>    <div class="p-4 ">
         <form [formGroup]="salescommissionform">
 
             <div class="row">
@@ -16,7 +17,7 @@
                             Code :</label>
                         <div class="col-sm-8">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective id="code" #code
                                     autocomplete="off" />
                             </mat-form-field>
                         </div>
@@ -61,9 +62,14 @@
                         <label for="inputPassword" id="ID001" class="col-md-4 col-form-label">
                             Group :</label>
                         <div class="col-md-8">
-                            <mat-form-field style="width: 100%;" appearance="outline" formControlName="group">
-                                <mat-select>
-                                    <mat-option></mat-option>
+                            <mat-form-field style="width: 100%;" appearance="outline">
+                                <mat-select formControlName="group">
+                                    <mat-option
+                                        *ngFor="let data of grouplist"
+                                        [value]="data.ENGLISH"
+                                        >
+                                        {{ data.ENGLISH }}
+                                    </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -74,7 +80,7 @@
 
                     <div class="row">
                         <div class="boxed-label">
-                            <h6><input type="checkbox" class="mx-2"/>Metal Commission Type</h6>
+                            <h6><input type="checkbox" class="mx-2" (click)="metalcheck()" formControlName="metal_check"/>Metal Commission Type</h6>
                         </div>
                         <div class="your-box-container">
                             <div class="row" style="padding-inline: 5px;">
@@ -94,7 +100,7 @@
                 <div class="col-md-3">
                     <div class="row"  style="padding-inline: 5px;">
                         <div class="boxed-label">
-                            <h6><input type="checkbox" class="mx-2"/>Diamond Commission Type</h6>
+                            <h6><input type="checkbox" class="mx-2" formControlName="diamond_check" (click)="diamondcheck()"/>Diamond Commission Type</h6>
                         </div>
                         <div class="your-box-container">
                             <div class="row">
@@ -119,9 +125,13 @@
                                 <label for="inputPassword" class="col-sm-5 col-form-label">Dia Divisions
                                     :</label>
                                 <div class="col-md-7">
-                                    <mat-form-field style="width: 100%;" appearance="outline">
-                                        <mat-select formControlName="dia_division">
-                                            <mat-option></mat-option>
+                                    <mat-form-field style="width: 100%;" appearance="outline" >
+                                        <mat-select formControlName="dia_division"  multiple [disabled]="viewOnly || dis_diamond">
+                                            <mat-option
+                                            *ngFor="let option of diamond_drop"
+                                            [value]="option.DIVISION_CODE">
+                                            {{ option.DIVISION_CODE }}
+                                        </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -130,9 +140,13 @@
                                 <label for="inputPassword" class="col-sm-5 col-form-label">Metal Divisions
                                     :</label>
                                 <div class="col-md-7">
-                                    <mat-form-field style="width: 100%;" appearance="outline">
-                                        <mat-select formControlName="metal_divisions_">
-                                            <mat-option></mat-option>
+                                    <mat-form-field style="width: 100%;" appearance="outline" >
+                                        <mat-select formControlName="metal_divisions_" multiple  [disabled]="viewOnly || dis_metal">
+                                            <mat-option
+                                            *ngFor="let option of metal_drop"
+                                            [value]="option.DIVISION_CODE">
+                                            {{ option.DIVISION_CODE }}
+                                        </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -162,11 +176,26 @@
                                     [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
                                     keyExpr="SRNO">
                                     <dxi-column dataField="SRNO" caption="SR NO"></dxi-column>
-                                    <dxi-column dataField="GROUPTYPE" caption="GroupType"></dxi-column>
-                                    <dxi-column dataField="RANGEFROM" caption="RangeFrom"></dxi-column>
-                                    <dxi-column dataField="RANGETO" caption="RangeTo"></dxi-column>
-                                    <dxi-column dataField="COMMISSION" caption="Commission"></dxi-column>
-                                    <dxi-column dataField="POINTS" caption="Points"></dxi-column>
+                                    <dxi-column dataField="GROUPTYPE" caption="GroupType" cellTemplate="group_type"></dxi-column>
+                                    <div *dxTemplate="let data of 'group_type'">
+                                        <input type="text" class="text-right" [disabled]="viewMode"  (change)="change_group_type(data,$event)" [value]="data.value" style="width: 100%;" />
+                                    </div>
+                                    <dxi-column dataField="RANGEFROM" caption="RangeFrom" cellTemplate="range_from"></dxi-column>
+                                    <div *dxTemplate="let data of 'range_from'">
+                                        <input type="text" class="text-right" [disabled]="viewMode"  (change)="change_range_from(data,$event)" [value]="data.value.toFixed(2)" style="width: 100%;" />
+                                    </div>
+                                    <dxi-column dataField="RANGETO" caption="RangeTo" cellTemplate="range_to"></dxi-column>
+                                    <div *dxTemplate="let data of 'range_to'">
+                                        <input type="text" class="text-right" [disabled]="viewMode"  (change)="change_range_to(data,$event)" [value]="data.value.toFixed(2)" style="width: 100%;" />
+                                    </div>
+                                    <dxi-column dataField="COMMISSION" caption="Commission" cellTemplate="comission"></dxi-column>
+                                    <div *dxTemplate="let data of 'comission'">
+                                        <input type="text" class="text-right" [disabled]="viewMode"  (change)="change_comission(data,$event)" [value]="data.value.toFixed(2)" style="width: 100%;" />
+                                    </div>
+                                    <dxi-column dataField="POINTS" caption="Points" cellTemplate="points"></dxi-column>
+                                    <div *dxTemplate="let data of 'points'">
+                                        <input type="text" class="text-right" [disabled]="viewMode"  (change)="change_points(data,$event)" [value]="data.value.toFixed(2)" style="width: 100%;" />
+                                    </div>
                                 </dx-data-grid>
                             </div>
                         </div>
@@ -175,16 +204,16 @@
                     <mat-tab label="Branch">
                         <div class="row">
                             <div class="col-md-4">
-                                <dx-data-grid id="gridContainer" [dataSource]="maindetails2" [showBorders]="true"
+                                <dx-data-grid id="gridContainer" [dataSource]="maindetails3" [showBorders]="true"
                                     [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
-                                    keyExpr="SRNO" (onSelectionChanged)="onSelectionChanged($event)" >
+                                    keyExpr="SSRNO" (onSelectionChanged)="onSelectionChanged($event)" >
                                     
-                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                    <dxo-paging [enabled]="true"  [pageSize]="15"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                                     <dxo-selection mode="multiple"></dxo-selection>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
-                                    <dxi-column dataField="SRNO" caption="SR NO"></dxi-column>
-                                    <dxi-column dataField="BRANCH" caption="Branch"></dxi-column>
+                                    <dxi-column dataField="SSRNO" caption="SR NO"></dxi-column>
+                                    <dxi-column dataField="BRANCH_CODE" caption="Branch"></dxi-column>
                                 </dx-data-grid>
                             </div>
                         </div>
@@ -192,19 +221,54 @@
                     <mat-tab label="Salesman">
                         <div class="row">
                             <div class="col-md-6">
-                                <dx-data-grid id="gridContainer" [dataSource]="maindetails2" [showBorders]="true"
+                                <!-- <dx-data-grid id="gridContainer" [dataSource]="maindetails4" [showBorders]="true"
                                     [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
-                                    keyExpr="SRNO"  (onSelectionChanged)="onSelectionChanged($event)"
+                                    keyExpr="SRNO1"  (onSelectionChanged)="onSelectionChanged($event)"   [paging]="{ pageSize: 10 }"
                                     >
                      
-                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                    <dxo-pager [showInfo]="true"></dxo-pager>
                                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                                     <dxo-selection mode="multiple"></dxo-selection>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
-                                    <dxi-column dataField="SRNO" caption="SR NO"></dxi-column>
-                                    <dxi-column dataField="GROUP_NAME" caption="Group_Name"></dxi-column>
-                                    <dxi-column dataField="SALESPERSON" caption="SALESPERSON"></dxi-column>
-                                </dx-data-grid>
+                                    <dxi-column dataField="SRNO1" caption="SR NO"></dxi-column>
+                                    <dxi-column dataField="GROUP_NAME" caption="Group_Name" cellTemplate="group_name"></dxi-column>
+                                    <div *dxTemplate="let data of 'group_name'">
+                                        <input type="text" class="text-right" [disabled]="viewMode"  (change)="change_groupname(data,$event)" [value]="" style="width: 100%;" />
+                                    </div>
+                                    <dxi-column dataField="SALESPERSON_CODE" caption="SALESPERSON"></dxi-column>
+                                </dx-data-grid> -->
+
+                                <dx-data-grid 
+  id="gridContainer" 
+  [dataSource]="maindetails4" 
+  [showBorders]="true"
+  [showColumnLines]="true" 
+  [showRowLines]="true" 
+  [allowColumnResizing]="true"
+  keyExpr="SRNO1"  
+  (onSelectionChanged)="onSelectionChanged($event)"   
+  [paging]="{ enabled: true, pageSize: 10 }"
+>
+  <dxo-pager [showInfo]="true" [showNavigationButtons]="true"></dxo-pager>
+  <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+  <dxo-selection mode="multiple"></dxo-selection>
+
+  
+  <dxi-column dataField="SRNO1" caption="SR NO"></dxi-column>
+  <dxi-column dataField="GROUP_NAME" caption="Group_Name" cellTemplate="group_name"></dxi-column>
+  <div *dxTemplate="let data of 'group_name'">
+      <input 
+        type="text" 
+        class="text-right" 
+        [disabled]="viewMode"  
+        (change)="change_groupname(data, $event)" 
+        [value]="" 
+        style="width: 100%;" 
+      />
+  </div>
+  <dxi-column dataField="SALESPERSON_CODE" caption="SALESPERSON"></dxi-column>
+</dx-data-grid>
+
                             </div>
                         </div>
 

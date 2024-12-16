@@ -104,6 +104,8 @@ import { AlphabetOnlyDirective } from './directives/appAlphabetOnly.directive';
 import { AlphaNumericOnlyDirective } from './directives/appAlphaNumericOnly';
 import { ApplyOnlyNumbersDirective } from './directives/apply-only-numbers.directive';
 import { ReportScreenButtonsComponent } from './common/report-screen-buttons/report-screen-buttons.component';
+import { RestrictNegativeDirective } from './directives/no-negative';
+
 
 
 
@@ -160,7 +162,9 @@ import { ReportScreenButtonsComponent } from './common/report-screen-buttons/rep
     DateComponent,
     AsOnDateComponent,
     CommonButtonsComponent,
-    ReportScreenButtonsComponent
+    ReportScreenButtonsComponent,
+    RestrictNegativeDirective
+    
   ],
   imports: [
     CommonModule,
@@ -207,7 +211,7 @@ import { ReportScreenButtonsComponent } from './common/report-screen-buttons/rep
     MatCheckboxModule, MatProgressSpinnerModule,
     OverlayPanelModule, DragDropModule,
     MatTableModule, NgbCarouselModule,
-    MatRadioModule, MatCardModule, ZXingScannerModule, NgxBarcodeScannerModule,BarcodeScannerLivestreamModule,
+    MatRadioModule, MatCardModule, ZXingScannerModule, NgxBarcodeScannerModule,BarcodeScannerLivestreamModule
   ],
   exports: [
     //component exports
@@ -300,7 +304,8 @@ import { ReportScreenButtonsComponent } from './common/report-screen-buttons/rep
     MatRadioModule, MatCardModule,
     OverlayPanelModule, DragDropModule,
     MatTableModule, CalendarModule,
-    BranchDivisionComponent, ReportToControlComponent,DateComponent, AsOnDateComponent, CommonButtonsComponent, ReportScreenButtonsComponent
+    BranchDivisionComponent, ReportToControlComponent,DateComponent, AsOnDateComponent, CommonButtonsComponent, ReportScreenButtonsComponent,
+    RestrictNegativeDirective
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })

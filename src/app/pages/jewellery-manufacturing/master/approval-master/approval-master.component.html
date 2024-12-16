@@ -12,15 +12,11 @@
     [isViewCopy]="!viewMode" (saveClick)="formSubmit()"
     (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header> -->
 
-<modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
-    [isViewMore]="!viewMode" (cancelClick)="close()"
-    (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"
-    [isViewDelete]="!viewMode && editableMode"
-    [isViewAttachment]="!viewMode"
-    (attachmentClick)="attachmentClicked()"></modal-header>
+<modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="close()"
+    (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="!viewMode && editableMode"
+    [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
 <!-- component to upload attachment -->
-<attachment-upload (uploadSubmit)="uploadSubmited($event)"
-    [savedAttachment]="savedAttachments"></attachment-upload>
+<attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
 <!-- content section -->
 <div class="row">
     <form [formGroup]="approvalMasterForm">
@@ -29,35 +25,23 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="row">
-                            <label for="inputPassword" id="ID001"
-                                class="col-sm-3 col-form-label">Code * :</label>
+                            <label for="inputPassword" id="ID001" class="col-sm-3 col-form-label">Code * :</label>
                             <div class="col-md-6">
-                                <mat-form-field style="width: 100%;"
-                                    appearance="outline">
-                                    <input #codeInput type="text" matInput
-                                        id="code" formControlName="code"
-                                        (focusout)="checkCodeExists($event)"
-                                        maxlength="6" UpperCaseDirective
-                                        [readonly]="editableMode || viewMode"
-                                        [disabled]="viewMode" />
+                                <mat-form-field style="width: 100%;" appearance="outline">
+                                    <input #codeInput type="text" matInput id="code" formControlName="code"
+                                        (focusout)="checkCodeExists($event)" maxlength="6" UpperCaseDirective
+                                        [readonly]="editableMode || viewMode" [disabled]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="inputPassword" id="ID002"
-                                class="col-sm-3 col-form-label">Description *
+                            <label for="inputPassword" id="ID002" class="col-sm-3 col-form-label">Description *
                                 :</label>
                             <div class="col-md-6">
-                                <mat-form-field style="width: 100%;"
-                                    appearance="outline">
-                                    <input type="text" matInput
-                                        formControlName="description"
-                                        autocomplete="off"
-                                        maxlength="100"
-                                        UpperCaseDirective
-                                        (focusout)="checkSpecialCharacters();"
-                                        [readonly]="viewMode || codeEnable"
-                                        [disabled]="viewMode" />
+                                <mat-form-field style="width: 100%;" appearance="outline">
+                                    <input type="text" matInput formControlName="description" autocomplete="off"
+                                        maxlength="100" UpperCaseDirective (focusout)="checkSpecialCharacters();"
+                                        [readonly]="viewMode || codeEnable" [disabled]="viewMode" />
                                 </mat-form-field>
 
                             </div>
@@ -69,129 +53,116 @@
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-3 d-flex mb-2">
-                                <menu-buttons [viewAddBtn]="true"
-                                    [viewDeleteBtn]="true "
-                                    [viewImportBtn]="false"
-                                    [viewAddBtn]="!viewMode"
-                                    [viewDeleteBtn]="!viewMode"
-                                    (addClick)="adddata()"
+                                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
+                                    [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="adddata()"
                                     (deleteClick)="removedata()">
                                 </menu-buttons>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <dx-data-grid id="gridContainer"
-                                    [dataSource]="tableData"
-                                    [showBorders]="true"
-                                    [showColumnLines]="true"
-                                    [showRowLines]="true"
-                                    [allowColumnResizing]="true"
-                                    keyExpr="SRNO"
-                                    (onSelectionChanged)="onSelectionChanged($event)"
+                                <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
+                                    [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
+                                    keyExpr="SRNO" (onSelectionChanged)="onSelectionChanged($event)"
                                     (onKeyDown)="handleArrowKeyNavigation($event)">
                                     <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
                                     <!-- <dxo-selection [selectAllMode]="allMode"
                                             [showCheckBoxesMode]="checkBoxesMode"
                                             mode="multiple"></dxo-selection> -->
-                                    <dxo-selection
-                                        mode="single"></dxo-selection>
+                                    <dxo-selection mode="single"></dxo-selection>
 
-                                    <dxi-column caption="Details"
-                                        alignment="center">
-                                        <dxi-column dataField="SRNO"
-                                            caption="SN"> </dxi-column>
-                                        <dxi-column dataField="USER_CODE"
-                                            caption="User Id"
-                                            cellTemplate="usertemp">
+                                    <dxi-column caption="Details" alignment="center">
+                                        <dxi-column dataField="SRNO" caption="SN"> </dxi-column>
+                                        <dxi-column dataField="USER_CODE" caption="User Id" cellTemplate="usertemp">
                                         </dxi-column>
-                                        <dxi-column dataField="APPR_TYPE"
-                                            caption="Type"
-                                            cellTemplate="typetemp">
+                                        <dxi-column dataField="APPR_TYPE" caption="Type" cellTemplate="typetemp">
                                         </dxi-column>
-                                        <dxi-column dataField="APPRREQUIRED"
-                                            caption="Mandatory"
+                                        <dxi-column dataField="APPRREQUIRED" caption="Mandatory"
                                             cellTemplate="Mandatorytemp">
                                         </dxi-column>
-                                        <dxi-column dataField="ATTACH_REQ"
-                                            caption="Attachment Required"
-                                            width="auto"
+                                        <dxi-column dataField="ATTACH_REQ" caption="Attachment Required" width="auto"
                                             cellTemplate="atttemp">
                                         </dxi-column>
                                     </dxi-column>
-                                    <dxi-column caption="Alert Type"
-                                        alignment="center">
-                                        <dxi-column dataField="ORG_MESSAGE"
-                                            caption="Message"
+                                    <dxi-column caption="Alert Type" alignment="center">
+                                        <dxi-column dataField="ORG_MESSAGE" caption="Message"
                                             cellTemplate="messagetemp">
                                         </dxi-column>
-                                        <dxi-column dataField="MOBILE_NO"
-                                            caption="Mobile Number"
+                                        <dxi-column dataField="MOBILE_NO" caption="Mobile Number"
                                             cellTemplate="mobilenumber">
                                         </dxi-column>
-                                        <dxi-column dataField="EMAIL"
-                                            caption="Email"
-                                            cellTemplate="emailtemp">
+                                        <dxi-column dataField="EMAIL" caption="Email" cellTemplate="emailtemp">
                                         </dxi-column>
-                                        <dxi-column dataField="EMAIL_ID"
-                                            caption="Email ID"
-                                            cellTemplate="emailid">
+                                        <dxi-column dataField="EMAIL_ID" caption="Email ID" cellTemplate="emailid">
                                         </dxi-column>
-                                        <dxi-column dataField="SYS_MESSAGE"
-                                            caption="System Message"
+                                        <dxi-column dataField="SYS_MESSAGE" caption="System Message"
                                             cellTemplate="systemtemp">
                                         </dxi-column>
                                     </dxi-column>
 
                                     <div *dxTemplate="let data of 'usertemp'">
-                                        <a href="javascript:void(0)"
+                                        <!-- <a href="javascript:void(0)"
                                             class="mx-1"
                                             [innerHTML]="data.value"></a>
                                         <master-search [MasterSearchData]="user"
                                             (newRowClick)="userDataSelected($event,data,'usertemp')"
                                             *ngIf="userCodeEnable == false">
-                                        </master-search>
+                                        </master-search> -->
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput [value]="data.value" [readonly]="viewMode"
+                                                (focusout)="validateLookupField($event,user,'USER_CODE',data)"
+                                                UpperCaseDirective autocomplete="off"
+                                                (keydown)="lookupKeyPress($event,'USER_CODE')" />
+                                            <master-search [MasterSearchData]="user" class="masterSearch"
+                                                *ngIf="!viewMode" (newRowClick)="userDataSelected($event,data)"
+                                                #overlayUsercode>
+                                            </master-search>
+                                        </mat-form-field>
                                     </div>
-
                                     <div *dxTemplate="let data of 'typetemp'">
-                                        <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a> -->
+
+                                        <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value" ></a>  -->
                                         <div>
-                                            <select
-                                                (change)="typedataselected($event,data)"
-                                                [value]="data.value"
+                                            <!-- <select (change)="typedataselected($event,data)" [value]="data.value"
                                                 [disabled]="viewMode">
-                                                <option
-                                                    value="0">Initial</option>
-                                                <option
-                                                    value="1">Intermediate</option>
+                                                <option value="0">Initial</option>
+                                                <option value="1">Intermediate</option>
+                                                <option value="2">Final</option>
+                                            </select> -->
+                                            <select class="form-select" (change)="typedataselected($event,data)"
+                                                [value]="data.value" [disabled]="viewMode">
+                                                <option value="0">Initial</option>
+                                                <option value="1">Intermediate</option>
                                                 <option value="2">Final</option>
                                             </select>
                                         </div>
-
                                     </div>
 
-                                    <div
-                                        *dxTemplate="let data1 of 'Mandatorytemp'">
+                                    <!-- <div *dxTemplate="let data of 'typetemp'">
+                                        
+                                        <mat-form-field style="width: 100%;" appearance="outline">
+                                            <mat-select [disabled]="viewMode" [value]="data.value" (selectionChange)="typedataselected($event,data)">
+                                                <mat-option value="0">Initial</mat-option>
+                                                <mat-option value="1">Intermediate</mat-option>
+                                                <mat-option value="2">Final</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div> -->
 
-                                        <input type="checkbox"
-                                            (change)="Mandatorycheckevent($event,data1)"
-                                            [checked]="data1.value"
-                                            [disabled]="viewMode" />
+                                    <div *dxTemplate="let data1 of 'Mandatorytemp'">
+
+                                        <input type="checkbox" (change)="Mandatorycheckevent($event,data1)"
+                                            [checked]="data1.value" [disabled]="viewMode" />
                                     </div>
 
                                     <div *dxTemplate="let data2 of 'atttemp'">
-                                        <input type="checkbox"
-                                            (change)="attachcheckevent($event,data2)"
-                                            [checked]="data2.value"
-                                            [disabled]="viewMode" />
+                                        <input type="checkbox" (change)="attachcheckevent($event,data2)"
+                                            [checked]="data2.value" [disabled]="viewMode" />
                                     </div>
 
-                                    <div
-                                        *dxTemplate="let data of 'messagetemp'">
-                                        <input type="checkbox"
-                                            (change)="messagecheckevent($event,data)"
-                                            [checked]="data.value"
-                                            [disabled]="viewMode" />
+                                    <div *dxTemplate="let data of 'messagetemp'">
+                                        <input type="checkbox" (change)="messagecheckevent($event,data)"
+                                            [checked]="data.value" [disabled]="viewMode" />
                                     </div>
                                     <!-- <div
                                         *dxTemplate="let data of 'mobilenumber'">
@@ -206,42 +177,43 @@
                                             (keypress)="isNumeric($event)" />
 
                                     </div> -->
-                                    <div
-                                        *dxTemplate="let data of 'mobilenumber'">
-                                        <input type="number"
-                                            (change)="mobilenumber($event, data)"
-                                            style="text-align: left; width: 100%;"
-                                            [value]="data.value"
-                                            [disabled]="data.value == '' || viewMode"
-                                            [readonly]="viewMode"
-                                            (keypress)="isNumeric($event)"
-                                            maxlength="10"
+                                    <div *dxTemplate="let data of 'mobilenumber'">
+                                        <!-- <input type="number" (change)="mobilenumber($event, data)"
+                                            style="text-align: left; width: 100%;" [value]="data.value"
+                                            [disabled]="data.value == '' || viewMode" [readonly]="viewMode"
+                                            (keypress)="isNumeric($event)" maxlength="10"
                                             (keydown)="handleKeydown($event, data)"
-                                            (input)="enforceMaxLength($event)" />
+                                            (input)="enforceMaxLength($event)" /> -->
                                         <!-- Additional handler to enforce max length -->
+
+                                        <mat-form-field style="width: 100%;" appearance="outline">
+                                            <input type="text" matInput autocomplete="off" [value]="data.value"
+                                                (keypress)="isNumeric($event)" maxlength="10"
+                                                (keydown)="handleKeydown($event, data)"
+                                                (change)="mobilenumber($event, data)" NumericFilter
+                                                [readonly]="viewMode || codeEnable" [disabled]="viewMode" />
+                                        </mat-form-field>
                                     </div>
 
                                     <div *dxTemplate="let data of 'emailtemp'">
-                                        <input type="checkbox"
-                                            (change)="emailcheckevent($event,data)"
-                                            [checked]="data.value"
-                                            [disabled]="viewMode" />
+                                        <input type="checkbox" (change)="emailcheckevent($event,data)"
+                                            [checked]="data.value" [disabled]="viewMode" />
                                     </div>
                                     <div *dxTemplate="let data of 'emailid'">
-                                        <input type="email"
-                                            (change)="emailid($event,data)"
-                                            [value]="data.value"
-                                            [disabled]="data.value == ''"
-                                            style="width: 100%;" required
-                                            maxlength="30"
-                                            [readonly]="viewMode" />
+                                        <!-- <input type="email" (change)="emailid($event,data)" [value]="data.value"
+                                            [disabled]="data.value == ''" style="width: 100%;" required maxlength="30"
+                                            [readonly]="viewMode" /> -->
+
+                                        <mat-form-field style="width: 100%;" appearance="outline">
+                                            <input type="email" matInput autocomplete="off" [value]="data.value"
+                                            (change)="emailid($event,data)" required maxlength="30"
+                                                [readonly]="viewMode" [disabled]="viewMode" />
+                                        </mat-form-field>
                                     </div>
 
                                     <div *dxTemplate="let data of 'systemtemp'">
-                                        <input type="checkbox"
-                                            (change)="systemcheckevent($event,data)"
-                                            [checked]="data.value"
-                                            [disabled]="viewMode" />
+                                        <input type="checkbox" (change)="systemcheckevent($event,data)"
+                                            [checked]="data.value" [disabled]="viewMode" />
                                     </div>
 
                                 </dx-data-grid>
