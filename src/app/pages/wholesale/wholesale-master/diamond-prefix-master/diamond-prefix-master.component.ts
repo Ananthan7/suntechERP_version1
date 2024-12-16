@@ -72,17 +72,20 @@ export class DiamondPrefixMasterComponent implements OnInit {
     ? this.content.FLAG
     : (this.content = { FLAG: "ADD" }).FLAG;
     
-    this.setFormValues()
     this.codeEnable = true;
 
     // this.setCompanyCurrency()
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true
+    this.setFormValues()
+
 
     } else if (this.content.FLAG == 'EDIT') {
       this.editableMode = true;
       this.editMode = true
       this.codeEnable = false;
+    this.setFormValues()
+
 
     }
     else if (this.content.FLAG == 'DELETE') {
