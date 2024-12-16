@@ -128,7 +128,7 @@
                             <div class="col-sm-8">
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" #codeInput maxlength="13" matInput formControlName="goldMaking"
-                                        class="text-right" [readonly]="viewMode" AmountDecimalInput (input)="allowNumbersOnly($event)">
+                                        class="text-right" [readonly]="viewMode"  (input)="allowNumbersOnly($event)">
 
                                 </mat-form-field>
                             </div>
@@ -139,7 +139,7 @@
                             <div class="col-sm-8">
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" #codeInput maxlength="13" matInput formControlName="goldQty"
-                                        class="text-right" [readonly]="viewMode" AmountDecimalInput (input)="allowNumbersOnly($event)">
+                                        class="text-right" [readonly]="viewMode"  (input)="allowNumbersOnly($event)">
 
                                 </mat-form-field>
                             </div>
