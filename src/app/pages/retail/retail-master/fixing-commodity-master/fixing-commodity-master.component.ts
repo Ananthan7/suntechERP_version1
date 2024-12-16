@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -22,6 +22,9 @@ export class FixingCommodityMasterComponent implements OnInit {
   isDisableSaveBtn: boolean = false;
   editMode: boolean = false;
   currentDate: any = this.commonService.currentDate;
+  flag: any;
+
+  @ViewChild("codeField") codeField!: ElementRef;
   
   @ViewChild('divisionCodedetailcodeSearch') divisionCodedetailcodeSearch!: MasterSearchComponent;
   @ViewChild('costcentercodeSearch') costcentercodeSearch!: MasterSearchComponent;
@@ -46,6 +49,9 @@ export class FixingCommodityMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.flag = this.content
+    ? this.content.FLAG
+    : (this.content = { FLAG: "ADD" }).FLAG;
 
 
     if (this.content?.FLAG) {
@@ -64,7 +70,11 @@ export class FixingCommodityMasterComponent implements OnInit {
 
   }
 
-
+  ngAfterViewInit(): void {
+    if (this.flag === "ADD") {
+      this.codeField.nativeElement.focus();
+    }
+  }
 
 
   fixingcommodityForm: FormGroup = this.formBuilder.group({

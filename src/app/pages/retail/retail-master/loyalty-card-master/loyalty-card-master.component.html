@@ -135,8 +135,8 @@
                                             Points Exp. Days : </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="pointexpdays"
-                                                    maxlength="13"
+                                                <input type="text" class="text-right" #codeInput matInput formControlName="pointexpdays"
+                                                    maxlength="10" appApplyOnlyNumbers
                                                     [readonly]="viewOnly" autocomplete="off" />
                                             </mat-form-field>
                                         </div>
@@ -167,8 +167,8 @@
                                             Points Multiply Fact : </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="number" #codeInput matInput formControlName="pointmulfact"
-                                                    [readonly]="viewOnly" autocomplete="off" />
+                                                <input type="text" #codeInput matInput formControlName="pointmulfact"
+                                                    [readonly]="viewOnly" class="text-right" AmountDecimalInput maxlength="13" autocomplete="off" />
                                             </mat-form-field>
                                         </div>
                                     </div>

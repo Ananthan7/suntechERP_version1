@@ -17,7 +17,7 @@
                         <div class="col-md-10">
                             <div class="row mb-1">
                                 <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">
-                                    Code :</label>
+                                    Code : <span class="text-danger"> *</span></label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" #codeInput id="codeInput" matInput id="code" formControlName="code"
@@ -31,7 +31,7 @@
                             </div>
                             <div class="row mb-1">
                                 <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">
-                                    Description :</label>
+                                    Description :  <span class="text-danger"> *</span></label>
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" #codedesc id="description" matInput
@@ -46,7 +46,7 @@
                             </div>
                             <div class="row">
                                 <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Reminder Days
-                                    (+/-) : </label>
+                                    (+/-) :   <span class="text-danger">  *</span></label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" NumberOnly class="text-right"  matInput formControlName="reminderdays" id="reminderdays" #reminderdays [readonly]="viewOnly"
