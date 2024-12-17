@@ -14,10 +14,10 @@
                 <div class="col-md-8">
                     <div class="row mb-2">
                         <label for="inputPassword" id="ID001" class="col-md-4 col-form-label">
-                            Ref Code :</label>
+                            Ref Code : <span class="text-danger"> *</span></label>
                         <div class="col-md-4 p-0">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput #ref_code id="ref_code" formControlName="ref_code" UpperCaseDirective
+                                <input type="text" matInput #ref_code id="ref_code" formControlName="ref_code" UpperCaseDirective
                                     autocomplete="off" (focusout)="checkcode()" (change)="isexistingcode()" />
                                 <mat-error *ngIf="transactionform.controls['ref_code'].hasError('required')">
                                     Code is required.
@@ -28,12 +28,21 @@
 
                     <div class="row  mb-2">
                         <label for="inputPassword" id="ID001" class="col-md-4 col-form-label">
-                           Client Name :</label>
+                           Client Name : <span class="text-danger"> *</span></label>
                         <div class="col-md-2 p-0">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="client_name" id="client_name" #client_name UpperCaseDirective
-                                    autocomplete="off" />
-                                <master-search class="masterSearch" [MasterSearchData]="clientnamedata"
+                                <input type="text" #client_name matInput formControlName="client_name" id="client_name" UpperCaseDirective
+                                    autocomplete="off"  (focusout)=" SPvalidateLookupFieldModified(
+                                        $event,
+                                        clientnamedata,
+                                        ['client_name','client_name_desc'],
+                                        false,
+                                        ['ACCODE','ACCOUNT_HEAD'],
+                                        false
+                                      )
+                                    "                      
+                                    />
+                                <master-search *ngIf="this.flag != 'VIEW' && this.code_occurs" class="masterSearch" [MasterSearchData]="clientnamedata"
                                     (newRowClick)="clientcodeselect($event)">
                                 </master-search>
                             </mat-form-field>
@@ -48,7 +57,7 @@
                     <div class="row mb-2">
                         <div class="row">
                             <label for="datefrom" id="ID001" class="col-md-4 col-form-label">
-                                Ref Date :
+                                Ref Date :  <span class="text-danger"> *</span>
                             </label>
                             <div class="col-md-4 ">
                                 <mat-form-field style="width: 100%" appearance="outline">
@@ -65,7 +74,7 @@
 
                     <div class="row mb-2">
                         <label for="inputPassword" id="ID001" class="col-md-4 col-form-label">
-                            Status :</label>
+                            Status : <span class="text-danger"> *</span></label>
                         <div class="col-md-4 p-0">
 
                             <mat-form-field style="width: 100%;" appearance="outline">

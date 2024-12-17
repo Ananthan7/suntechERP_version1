@@ -7,11 +7,14 @@
     </button>
   </div>
   <!-- modal header component -->
-  <modal-header
+  <!-- <modal-header
     *ngIf="this.flag != 'VIEW'"
     (cancelClick)="close()"
     (saveClick)="formSubmit()"
-  ></modal-header>
+  ></modal-header> -->
+  <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="DeleteController()"
+  [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+  [isViewMore]="!viewMode"></modal-header>
   <!-- content section -->
   <div class="p-4">
     <form [formGroup]="salespersontargetform">
@@ -25,13 +28,13 @@
                   id="ID001"
                   class="col-sm-4 col-form-label"
                 >
-                  Code :</label
+                  Code : <span class="text-danger"> *</span></label
                 >
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       type="text"
-                      #codeInput
+                      #code
                       matInput
                       id="code"
                       formControlName="code"
@@ -65,9 +68,21 @@
                       UpperCaseDirective
                       autocomplete="off"
                       [readonly]="viewOnly"
+
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          finyearcodedata,
+                          ['finyear'],
+                          false,
+                          ['FYEARCODE'],
+                          false
+                        )
+                      "
+
                     />
                     <master-search
-                      *ngIf="this.flag != 'VIEW'"
+                      *ngIf="this.flag != 'VIEW' && code_occurs"
                       class="masterSearch"
                       [MasterSearchData]="finyearcodedata"
                       (newRowClick)="selectedfinyear($event)"
@@ -172,7 +187,7 @@
                     />
 
                     <master-search
-                      *ngIf="this.flag != 'VIEW'"
+                      *ngIf="this.flag != 'VIEW' && code_occurs"
                       [MasterSearchData]="SalesmanData"
                       #overlaysalesman
                       class="masterSearch"
@@ -392,7 +407,7 @@
             id="gridContainer"
             keyExpr="MID"
             [showBorders]="true"
-            (onSelectionChanged)="onSelectionChanged()"
+            (onSelectionChanged)="onSelectionChanged($event)"
             keyExpr="SRNO"
             [paging]="{ pageSize: 15 }"
           >
@@ -429,7 +444,7 @@
             [allowColumnResizing]="true"
             keyExpr="SRNO"
           >
-            <dxi-column dataField="SRNO" caption="SR NO"></dxi-column>
+            <dxi-column dataFField="SRNO" caption="SR NO"></dxi-column>
             <dxi-column dataField="MONTH" caption="MONTH"></dxi-column>
 
             <dxi-column

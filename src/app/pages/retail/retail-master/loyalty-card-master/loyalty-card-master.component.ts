@@ -173,7 +173,18 @@ export class LoyaltyCardMasterComponent implements OnInit {
         this.loyaltycardform.controls.pointsto.setErrors(null);
     }
     }
-    
+  }
+
+  checkexp_days(){
+    let days = this.loyaltycardform.controls.pointexpdays.value;
+    if(days>10){
+      Swal.fire({
+        title: 'Warning',
+        text: 'Please enter a value less than 10',
+      })
+      this.loyaltycardform.controls.pointexpdays.reset();
+      this.renderer.selectRootElement('#pointexpdays')?.focus();
+    }
   }
 
     check_greater(){

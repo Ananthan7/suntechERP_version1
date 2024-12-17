@@ -49,10 +49,10 @@
                             (focusout)="
                             SPvalidateLookupFieldModified(
                               $event,
-                              enteredCodeData,
-                              ['fin_year'],
+                              finyearcodedata,
+                              ['fin_year','datefrom','dateto'],
                               false,
-                              ['CODE'],
+                              ['FYEARCODE','STARTYEAR','ENDYEAR'],
                               false
                             )
                           " 
@@ -108,7 +108,22 @@
             </div>
 
             <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true" [showColumnLines]="true"
-                [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SLNO">
+                [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SLNO"
+                (onEditingStart)="addTableData($event)"
+                >
+
+                <dxo-editing
+                      [allowUpdating]="true"
+                      [allowDeleting]="!viewOnly"
+                    >
+                      <dxo-texts
+                        alignment="right"
+                        [editRow]="viewOnly ? 'View' : 'Edit'"
+                        deleteRow="Remove"
+                      >
+                      </dxo-texts>
+                    </dxo-editing>
+                    <dxo-selection mode="single"></dxo-selection>
 
 
                 <dxi-column dataField="SLNO" caption="S.NO"> </dxi-column>

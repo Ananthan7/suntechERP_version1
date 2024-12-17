@@ -74,6 +74,8 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
     WHERECONDITION:"",
     VIEW_INPUT: true,
     VIEW_TABLE:true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER:true
 }
 
 setcodevalues(){
@@ -160,7 +162,7 @@ setcodevalues(){
 
     let postData = {
       PAGENO: 1,
-      RECORDS: 10,
+      RECORDS: 100,
       LOOKUPID: 103,
       SEARCH_FIELD: '',
       SEARCH_HEADING: 'FIN YEAR',
@@ -395,13 +397,25 @@ setcodevalues(){
 
 
   
-  addTableData(){
+  addTableData(event?:any){
+
     this.modalReference = this.modalService.open(WholesaleSalesmanTargetDetailsComponent, {
       size: 'xl',
       backdrop: true,
       keyboard: false,
       windowClass: 'modal-full-width',
   });
+
+  this.modalReference.componentInstance.parent_code = this.wholesalesmanform.controls.code.value;
+  this.modalReference.componentInstance.grid_length = this.maindetails.length;
+  this.modalReference.componentInstance.fyear_code = this.wholesalesmanform.controls.fin_year.value;
+  this.modalReference.componentInstance.salesperson_code = this.wholesalesmanform.controls.salesman.value;
+  this.modalReference.componentInstance.flag = this.flag;
+  if(event?.data != undefined){
+  this.modalReference.componentInstance.data = event.data;
+
+  }
+
 
   this.modalReference.closed.subscribe((result) => {
     if (result) {
@@ -548,6 +562,11 @@ setcodevalues(){
       console.warn("Controller or modelfield is missing.");
     }
   }
+
+
+  // onSelectionChanged(e:any){
+  //     console.log(e);
+  // }
 
 
 
