@@ -24,6 +24,8 @@ export class SalesPersonMasterComponent implements OnInit {
   viewMode: boolean = false;
   userbranch = localStorage.getItem('userbranch');
   editMode:boolean = false;
+  isCodeFilled: boolean = false;
+
 
   @ViewChild('overlaybranchSearch') overlaybranchSearch!: MasterSearchComponent;
   @ViewChild('overlayemployeecodeSearch') overlayemployeecodeSearch!: MasterSearchComponent;
@@ -56,17 +58,22 @@ export class SalesPersonMasterComponent implements OnInit {
         this.viewMode = false;
         this.editMode = true;
         this.setFormValues();
+        this.isCodeFilled = true;
+
          
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteRecord()
       }
     }
+    this.salesPersonForm.get('code')?.valueChanges.subscribe((value) => {
+      this.isCodeFilled = value && value.trim().length > 0;
+    });
   }
   
   salesPersonForm: FormGroup = this.formBuilder.group({
     code: [''],
-    active: [''],
+    active: [true],
     description: [''],
     shortname: [''],
     commisionMetal: [''],
@@ -84,17 +91,20 @@ export class SalesPersonMasterComponent implements OnInit {
     this.salesPersonForm.controls.code.setValue(this.content.SALESPERSON_CODE)
     this.salesPersonForm.controls.description.setValue(this.content.DESCRIPTION)
     this.salesPersonForm.controls.commisionMetal.setValue(this.commonService.transformDecimalVB(
-      this.commonService.allCompanyParameters?.BAMTDECIMALS, this.content.COMMISSION))
+    this.commonService.allbranchMaster?.BAMTDECIMALS, this.content.COMMISSION))
     this.salesPersonForm.controls.shortname.setValue(this.content.SP_SHORTNAME)
     this.salesPersonForm.controls.branch.setValue(this.content.SP_BRANCHCODE)
     this.salesPersonForm.controls.employeecode.setValue(this.content.EMPMST_CODE)
     this.salesPersonForm.controls.active.setValue(this.content.ACTIVE === 'Y' ? true : false)
     this.salesPersonForm.controls.glcode.setValue(this.content.SPACCODE)
     this.salesPersonForm.controls.commisionOthers.setValue(this.commonService.transformDecimalVB(
-      this.commonService.allCompanyParameters?.BAMTDECIMALS,this.content.COMMISSIONDIA))
+    this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.COMMISSIONDIA))
    
   }
 
+  onCodeInput(value: string): void {
+    this.isCodeFilled = value.trim().length > 0;
+  }
 
   BranchCodeData: MasterSearchModel = {
     PAGENO: 1,

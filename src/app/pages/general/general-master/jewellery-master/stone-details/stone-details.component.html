@@ -23,7 +23,7 @@
                           </div>
                           <div class="col-md-5">
                             <mat-form-field  style="width: 100%;"  appearance="outline">
-                              <input type="text" matInput  formControlName="StockcodeDes" maxlength="6" [readonly]="viewMode" (focusout)="validateLookupField($event,StockcodeData,'StockcodeDes')"  (keydown)="lookupKeyPress($event,'StockcodeDes')"/>
+                              <input type="text" matInput  formControlName="StockcodeDes"  [readonly]="viewMode" (focusout)="validateLookupField($event,StockcodeData,'StockcodeDes')"  (keydown)="lookupKeyPress($event,'StockcodeDes')"/>
                               <master-search  class="masterSearch" [MasterSearchData]="StockcodeData" (newRowClick)="StockcodeSelected($event)"   *ngIf=" viewMode == false"  #StockcodeDescodeSearch>
                               </master-search>
                             </mat-form-field>     
