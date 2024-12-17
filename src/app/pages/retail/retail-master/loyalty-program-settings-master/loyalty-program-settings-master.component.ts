@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { Subscription } from 'rxjs';
@@ -20,6 +20,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
   maindetails2: any = [];
   division_values: any;
   viewMode: boolean = false;
+  code_occurs: boolean = false;
   modalReference!: NgbModalRef;
   @Input() content!: any;
   unq_id: any;
@@ -47,7 +48,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
 
 
   loyaltysettingform: FormGroup = this.formBuilder.group({
-    code: [''],
+    code: ['',[Validators.required]],
     codedesc: [''],
     division: [''],
     divisions: [''],
@@ -57,7 +58,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     group2search: [''],
     group3: [''],
     group3search: [''],
-    standardamt1: [''],
+    standardamt1: ['',[Validators.required]],
     standardamt2: [''],
     standardamt3: [''],
     standardamt4: [''],
@@ -105,7 +106,9 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     SEARCH_HEADING: 'Group 1',
     WHERECONDITION: "",
     SEARCH_FIELD: "",
-    SEARCH_VALUE: ""
+    SEARCH_VALUE: "",
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER:true
   }
 
   group2data: MasterSearchModel = {
@@ -116,7 +119,9 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     SEARCH_HEADING: 'Group 2',
     WHERECONDITION: "",
     SEARCH_FIELD: "",
-    SEARCH_VALUE: ""
+    SEARCH_VALUE: "",
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER:true
   }
 
   group3data: MasterSearchModel = {
@@ -127,7 +132,9 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     SEARCH_HEADING: 'Group 3',
     WHERECONDITION: "",
     SEARCH_FIELD: "",
-    SEARCH_VALUE: ""
+    SEARCH_VALUE: "",
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER:true
   }
 
 
@@ -457,100 +464,128 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
 
   formSubmit() {
 
-    let datas = this.maindetails;
-    let allgroup_1 = '';
-    let allgroup_2 = '';
-    let allgroup_3 = '';
+    Object.keys(this.loyaltysettingform.controls).forEach((controlName) => {
+      const control = this.loyaltysettingform.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
 
-    if (Array.isArray(datas)) {
-      datas.forEach((e: any) => {
-        allgroup_1 += e.INVFILT1_VALUES + ',';
-        allgroup_2 += e.INVFILT2_VALUES + ',';
-        allgroup_3 += e.INVFILT3_VALUES + ',';
-      });
-    }
-    allgroup_1 = allgroup_1.slice(0, -1);
-    allgroup_2 = allgroup_2.slice(0, -1);
-    allgroup_3 = allgroup_3.slice(0, -1);
+    const requiredFieldsInvalid = Object.keys(
+      this.loyaltysettingform.controls
+    ).some((controlName) => {
+      const control = this.loyaltysettingform.controls[controlName];
+      return control.hasError("required") && control.touched;
+    });
 
-    const postData = {
-      "MID": 0,
-      "CODE": this.loyaltysettingform.controls.code.value,
-      "DESCRIPTION": this.loyaltysettingform.controls.codedesc.value,
-      "ALL_DIVISION": this.loyaltysettingform.controls.division.value,//"string",
-      "FILTER1": this.loyaltysettingform.controls.group1.value,
-      "FILTER2": this.loyaltysettingform.controls.group2.value,
-      "FILTER3": this.loyaltysettingform.controls.group3.value,
-      "ALL_GRP1": allgroup_1,//"string",
-      "ALL_GRP2": allgroup_2,//"string",
-      "ALL_GRP3": allgroup_3,//"string",
-      "STD_AMT_PERPOINT": this.loyaltysettingform.controls.standardamt1.value,
-      "CREATED_BY": this.curr_user,
-      "CREATED_ON": new Date(),
-      "FILTERFILED1": this.loyaltysettingform.controls.group1search.value,
-      "FILTERFILED2": this.loyaltysettingform.controls.group2search.value,
-      "FILTERFILED3": this.loyaltysettingform.controls.group3search.value,
-      "DONT_CAL_POINTS": this.loyaltysettingform.controls.calculate_points.value ? true : false,
-      "STD_AMT_REDEEMPOINT": this.loyaltysettingform.controls.redeem.value,
-      "NO_POINTSSLAB": this.loyaltysettingform.controls.no_redeem_points.value ? true : false,
-      "FIRST_REF_PER": this.loyaltysettingform.controls.reference1.value,
-      "STD_REF_PER": this.loyaltysettingform.controls.subreference.value,
-      "Detail": this.maindetails
-    }
+    if(!requiredFieldsInvalid){
 
-    // console.log(postData); return;
+      let len = this.maindetails.length;
+      if(len<=0){
+        this.commonService.toastErrorByMsgId('MSG1453');
+        Swal.fire({
+          title: 'Error',
+          text: 'No Detail Found!!',
+        });return;
+      }
 
-    if (this.flag === "EDIT") {
-      let API = `LoyaltySettingMaster/UpdateLoyaltySettingMaster/${this.unq_id}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
+      let datas = this.maindetails;
+      let allgroup_1 = '';
+      let allgroup_2 = '';
+      let allgroup_3 = '';
+  
+      if (Array.isArray(datas)) {
+        datas.forEach((e: any) => {
+          allgroup_1 += e.INVFILT1_VALUES + ',';
+          allgroup_2 += e.INVFILT2_VALUES + ',';
+          allgroup_3 += e.INVFILT3_VALUES + ',';
         });
-    } else {
-      let API = `LoyaltySettingMaster/InsertLoyaltySettingMaster`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+      }
+      allgroup_1 = allgroup_1.slice(0, -1);
+      allgroup_2 = allgroup_2.slice(0, -1);
+      allgroup_3 = allgroup_3.slice(0, -1);
+  
+      const postData = {
+        "MID": 0,
+        "CODE": this.loyaltysettingform.controls.code.value,
+        "DESCRIPTION": this.loyaltysettingform.controls.codedesc.value,
+        "ALL_DIVISION": this.loyaltysettingform.controls.division.value,//"string",
+        "FILTER1": this.loyaltysettingform.controls.group1.value,
+        "FILTER2": this.loyaltysettingform.controls.group2.value,
+        "FILTER3": this.loyaltysettingform.controls.group3.value,
+        "ALL_GRP1": allgroup_1,//"string",
+        "ALL_GRP2": allgroup_2,//"string",
+        "ALL_GRP3": allgroup_3,//"string",
+        "STD_AMT_PERPOINT": this.loyaltysettingform.controls.standardamt1.value,
+        "CREATED_BY": this.curr_user,
+        "CREATED_ON": new Date(),
+        "FILTERFILED1": this.loyaltysettingform.controls.group1search.value,
+        "FILTERFILED2": this.loyaltysettingform.controls.group2search.value,
+        "FILTERFILED3": this.loyaltysettingform.controls.group3search.value,
+        "DONT_CAL_POINTS": this.loyaltysettingform.controls.calculate_points.value ? true : false,
+        "STD_AMT_REDEEMPOINT": this.loyaltysettingform.controls.redeem.value,
+        "NO_POINTSSLAB": this.loyaltysettingform.controls.no_redeem_points.value ? true : false,
+        "FIRST_REF_PER": this.loyaltysettingform.controls.reference1.value,
+        "STD_REF_PER": this.loyaltysettingform.controls.subreference.value,
+        "Detail": this.maindetails
+      }
+  
+      // console.log(postData); return;
+  
+      if (this.flag === "EDIT") {
+        let API = `LoyaltySettingMaster/UpdateLoyaltySettingMaster/${this.unq_id}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `LoyaltySettingMaster/InsertLoyaltySettingMaster`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
     }
+
+  
   }
 
 
@@ -687,7 +722,152 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     if (!CodeControl.value || CodeControl.value.trim() === "") {
       this.commonService.toastErrorByMsgId('MSG1124');
       this.renderer.selectRootElement('#code')?.focus();
+    }else{
+      this.code_occurs = true;
     }
   }
+
+    SPvalidateLookupFieldModified(
+      event: any,
+      LOOKUPDATA: MasterSearchModel,
+      FORMNAMES: string[],
+      isCurrencyField: boolean,
+      lookupFields?: string[],
+      FROMCODE?: boolean,
+      dont_check?: boolean
+    ) {
+      const searchValue = event.target.value?.trim();
+  
+      if (!searchValue || this.flag == "VIEW") return;
+  
+      LOOKUPDATA.SEARCH_VALUE = searchValue;
+  
+      const param = {
+        PAGENO: LOOKUPDATA.PAGENO,
+        RECORDS: LOOKUPDATA.RECORDS,
+        LOOKUPID: LOOKUPDATA.LOOKUPID,
+        WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+        searchField: LOOKUPDATA.SEARCH_FIELD,
+        searchValue: LOOKUPDATA.SEARCH_VALUE,
+      };
+  
+      this.commonService.showSnackBarMsg("MSG81447");
+  
+      const sub: Subscription = this.apiService
+        .postDynamicAPI("MasterLookUp", param)
+        .subscribe({
+          next: (result: any) => {
+            this.commonService.closeSnackBarMsg();
+            const data = result.dynamicData?.[0];
+  
+            console.log("API Response Data:", data);
+  
+            if (data?.length) {
+              if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+  
+                let searchResult = this.commonService.searchAllItemsInArray(
+                  data,
+                  LOOKUPDATA.SEARCH_VALUE
+                );
+  
+                console.log("Filtered Search Result:", searchResult);
+  
+                if (FROMCODE === true) {
+                  searchResult = [
+                    ...searchResult.filter(
+                      (item: any) =>
+                        item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
+                    ),
+                    ...searchResult.filter(
+                      (item: any) =>
+                        item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
+                    ),
+                  ];
+                } else if (FROMCODE === false) {
+                  searchResult = [
+                    ...searchResult.filter(
+                      (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
+                    ),
+                    ...searchResult.filter(
+                      (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
+                    ),
+                  ];
+                }
+  
+                if (searchResult?.length) {
+                  const matchedItem = searchResult[0];
+  
+                  FORMNAMES.forEach((formName, index) => {
+                    const field = lookupFields?.[index];
+                    if (field && field in matchedItem) {
+  
+                      this.loyaltysettingform.controls[formName].setValue(
+                        matchedItem[field]
+                      );
+                    } else {
+                      console.error(
+                        `Property ${field} not found in matched item.`
+                      );
+                      this.commonService.toastErrorByMsgId("No data found");
+                      this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                    }
+                  });
+                } else {
+                  this.commonService.toastErrorByMsgId("No data found");
+                  this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                }
+              }
+            } else {
+              this.commonService.toastErrorByMsgId("No data found");
+              this.clearLookupData(LOOKUPDATA, FORMNAMES);
+            }
+          },
+          error: () => {
+            this.commonService.toastErrorByMsgId("MSG2272");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          },
+        });
+  
+      this.subscriptions.push(sub);
+    }
+  
+    clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+      LOOKUPDATA.SEARCH_VALUE = "";
+      FORMNAMES.forEach((formName) => {
+        this.loyaltysettingform.controls[formName].setValue("");
+      });
+    }
+  
+    lookupSelect(e: any, controller?: any, modelfield?: any) {
+      console.log(e);
+      if (Array.isArray(controller) && Array.isArray(modelfield)) {
+        // Handle multiple controllers and fields
+        if (controller.length === modelfield.length) {
+          controller.forEach((ctrl, index) => {
+            const field = modelfield[index];
+            const value = e[field];
+            if (value !== undefined) {
+              this.loyaltysettingform.controls[ctrl].setValue(value);
+            } else {
+              console.warn(`Model field '${field}' not found in event object.`);
+            }
+          });
+        } else {
+          console.warn(
+            "Controller and modelfield arrays must be of equal length."
+          );
+        }
+      } else if (controller && modelfield) {
+        // Handle single controller and field
+        const value = e[modelfield];
+        if (value !== undefined) {
+          this.loyaltysettingform.controls[controller].setValue(value);
+        } else {
+          console.warn(`Model field '${modelfield}' not found in event object.`);
+        }
+      } else {
+        console.warn("Controller or modelfield is missing.");
+      }
+    }
 
 }

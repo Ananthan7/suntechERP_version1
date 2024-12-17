@@ -14,7 +14,7 @@
                 <div class="col-md-12">
 
                     <div class="row mt-2">
-                        <label for="prefixcode" class="col-sm-2 col-form-label">Code :</label>
+                        <label for="prefixcode" class="col-sm-2 col-form-label">Code :<span class="text-danger"> *</span></label>
                         <div class="col-md-2 p-0 ms-2">
                             <mat-form-field style="width: 100%;" appearance="outline">
                                 <input type="text" id="code" matInput class="p-0" formControlName="code"
@@ -66,8 +66,18 @@
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="divisions" [readonly]="viewOnly"
-                                                    autocomplete="off" />
-                                                <master-search class="masterSearch" [MasterSearchData]="divisiondata"
+                                                    autocomplete="off" 
+                                                    (focusout)="
+                                                    SPvalidateLookupFieldModified(
+                                                      $event,
+                                                      divisiondata,
+                                                      ['divisions'],
+                                                      false,
+                                                      ['DIVISION_CODE'],
+                                                      false
+                                                    )
+                                                  "  />
+                                                <master-search *ngIf="this.flag != 'VIEW' && code_occurs" class="masterSearch" [MasterSearchData]="divisiondata"
                                                     (newRowClick)="divisiondataselected($event)">
                                                 </master-search>
                                             </mat-form-field>
@@ -101,9 +111,19 @@
                                     <div class="row">
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="group1search"
-                                                    autocomplete="off" />
-                                                <master-search *ngIf="this.flag != 'VIEW'"  class="masterSearch" [MasterSearchData]="group1data"
+                                                <input type="text" matInput formControlName="group1search"
+                                                    autocomplete="off" 
+                                                    (focusout)="
+                                                    SPvalidateLookupFieldModified(
+                                                      $event,
+                                                      group1data,
+                                                      ['group1search'],
+                                                      false,
+                                                      ['Code'],
+                                                      false
+                                                    )
+                                                  " />
+                                                <master-search *ngIf="this.flag != 'VIEW' && code_occurs"  class="masterSearch" [MasterSearchData]="group1data"
                                                     (newRowClick)="groupselected($event,'group1search')">
                                                 </master-search>
                                             </mat-form-field>
@@ -137,9 +157,20 @@
                                     <div class="row">
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="group2search"
-                                                    autocomplete="off" [readonly]="viewOnly" />
-                                                <master-search *ngIf="this.flag != 'VIEW'"  class="masterSearch" [MasterSearchData]="group2data"
+                                                <input type="text"  matInput formControlName="group2search"
+                                                    autocomplete="off" [readonly]="viewOnly" 
+                                                    (focusout)="
+                                                    SPvalidateLookupFieldModified(
+                                                      $event,
+                                                      group2data,
+                                                      ['group2search'],
+                                                      false,
+                                                      ['Code'],
+                                                      false
+                                                    )
+                                                  "
+                                                  />
+                                                <master-search *ngIf="this.flag != 'VIEW' && code_occurs"  class="masterSearch" [MasterSearchData]="group2data"
                                                     (newRowClick)="groupselected($event,'group2search')">
                                                 </master-search>
                                             </mat-form-field>
@@ -173,9 +204,20 @@
                                     <div class="row">
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="group3search"
-                                                    autocomplete="off" />
-                                                <master-search *ngIf="this.flag != 'VIEW'" class="masterSearch" [MasterSearchData]="group3data"
+                                                <input type="text"  matInput formControlName="group3search"
+                                                    autocomplete="off" 
+                                                    (focusout)="
+                                                    SPvalidateLookupFieldModified(
+                                                      $event,
+                                                      group3data,
+                                                      ['group3search'],
+                                                      false,
+                                                      ['Code'],
+                                                      false
+                                                    )
+                                                  " 
+                                                   />
+                                                <master-search *ngIf="this.flag != 'VIEW' && code_occurs" class="masterSearch" [MasterSearchData]="group3data"
                                                     (newRowClick)="groupselected($event,'group3search')">
                                                 </master-search>
                                             </mat-form-field>
@@ -193,7 +235,7 @@
                                     <div class="row">
                                         <label for="prefixcode" class="col-sm-12 col-form-label">Standard Amount Spent
                                             For 1
-                                            Point </label>
+                                            Point  <span class="text-danger"> *</span></label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">

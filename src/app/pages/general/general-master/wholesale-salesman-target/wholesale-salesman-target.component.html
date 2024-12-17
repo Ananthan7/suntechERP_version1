@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">SalesMan</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">SalesMan  <span class="text-danger"> *</span></label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="salesman"  id="salesman" #salesman  [readonly]="viewMode"
@@ -42,17 +42,17 @@
                 </div>
 
                 <div class="row align-items-center my-2">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Fin. Year </label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Fin. Year <span class="text-danger"> *</span></label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="fin_year"    [readonly]="viewMode"
                             (focusout)="
                             SPvalidateLookupFieldModified(
                               $event,
-                              enteredCodeData,
-                              ['fin_year'],
+                              finyearcodedata,
+                              ['fin_year','datefrom','dateto'],
                               false,
-                              ['CODE'],
+                              ['FYEARCODE','STARTYEAR','ENDYEAR'],
                               false
                             )
                           " 
@@ -77,7 +77,7 @@
                 </div>
 
                 <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Code</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Code <span class="text-danger"> *</span></label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="code"  (focusin)="setcodevalues()"  [readonly]="viewMode" [disabled]="disable_code" maxlength="15" />
@@ -108,7 +108,22 @@
             </div>
 
             <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true" [showColumnLines]="true"
-                [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SLNO">
+                [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SLNO"
+                (onEditingStart)="addTableData($event)"
+                >
+
+                <dxo-editing
+                      [allowUpdating]="true"
+                      [allowDeleting]="!viewOnly"
+                    >
+                      <dxo-texts
+                        alignment="right"
+                        [editRow]="viewOnly ? 'View' : 'Edit'"
+                        deleteRow="Remove"
+                      >
+                      </dxo-texts>
+                    </dxo-editing>
+                    <dxo-selection mode="single"></dxo-selection>
 
 
                 <dxi-column dataField="SLNO" caption="S.NO"> </dxi-column>

@@ -135,9 +135,9 @@
                                             Points Exp. Days : </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" class="text-right" #codeInput matInput formControlName="pointexpdays"
-                                                    maxlength="10" appApplyOnlyNumbers
-                                                    [readonly]="viewOnly" autocomplete="off" />
+                                                <input type="number" class="text-right" matInput formControlName="pointexpdays" id="pointexpdays" #pointexpdays
+                                                  max="10" appApplyOnlyNumbers 
+                                                    [readonly]="viewOnly" autocomplete="off" (focusout)="checkexp_days()"/>
                                             </mat-form-field>
                                         </div>
                                     </div>

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -28,6 +28,7 @@ export class SalesCommissionSetupComponent implements OnInit {
   disable_code: boolean = false;
   dis_metal: boolean = false;
   dis_diamond: boolean = false;
+  code_occurs: boolean = false;
   flag: any;
   combotype:any[]=[];
 
@@ -45,17 +46,28 @@ export class SalesCommissionSetupComponent implements OnInit {
   ) { }
 
   salescommissionform: FormGroup = this.formBuilder.group({
-    code: [''],
-    start_date: [ new Date(),''],
-    end_date: [new Date(),''],
-    group: [''],
-    metal_commission: [''],
-    diamond_commission: [''],
+    code: ['', [Validators.required]],
+    start_date: [new Date(), [Validators.required]],
+    end_date: [new Date(), [Validators.required]],
+    group: ['',[Validators.required]],
+    metal_commission: ['',],
+    diamond_commission: ['',],
     dia_division: [''],
     metal_divisions_: [''],
     metal_check: [''],
     diamond_check: [''],
   });
+
+
+  checkcode(){
+    const CodeControl = this.salescommissionform.controls.code;
+    if (!CodeControl.value || CodeControl.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1124');
+      this.renderer.selectRootElement('#code')?.focus();
+    }else{
+      this.code_occurs = true;
+    }
+  }
 
   getmetal_divisionvalues() {
     let API = `POSComissionSetup/POSComissionSetupMetalDivFilter`;
@@ -64,13 +76,13 @@ export class SalesCommissionSetupComponent implements OnInit {
         // console.log(result);
         this.metal_drop = result.dynamicData[0]
         // console.log(this.metal_drop)
-        const allDivisionCodes = this.metal_drop.map(option => option.DIVISION_CODE);
-        const diaDivisionControl = this.salescommissionform?.get('metal_divisions_');
-        if (diaDivisionControl) {
-          if (this.flag == undefined) {
-            diaDivisionControl.setValue(allDivisionCodes);
-          }
-        }
+        // const allDivisionCodes = this.metal_drop.map(option => option.DIVISION_CODE);
+        // const diaDivisionControl = this.salescommissionform?.get('metal_divisions_');
+        // if (diaDivisionControl) {
+        //   if (this.flag == undefined) {
+        //     diaDivisionControl.setValue(allDivisionCodes);
+        //   }
+        // }
       }, (err: any) => {
 
       })
@@ -84,13 +96,13 @@ export class SalesCommissionSetupComponent implements OnInit {
         // console.log(result);
         this.diamond_drop = result.dynamicData[0]
         // console.log(this.diamond_drop)
-        const allDivisionCodes = this.diamond_drop.map(option => option.DIVISION_CODE);
-        const diaDivisionControl = this.salescommissionform?.get('dia_division');
-        if (diaDivisionControl) {
-          if (this.flag == undefined) {
-            diaDivisionControl.setValue(allDivisionCodes);
-          }
-        }
+        // const allDivisionCodes = this.diamond_drop.map(option => option.DIVISION_CODE);
+        // const diaDivisionControl = this.salescommissionform?.get('dia_division');
+        // if (diaDivisionControl) {
+        //   if (this.flag == undefined) {
+        //     diaDivisionControl.setValue(allDivisionCodes);
+        //   }
+        // }
       }, (err: any) => {
 
       })
@@ -142,6 +154,7 @@ export class SalesCommissionSetupComponent implements OnInit {
     console.log(this.content)
     if (this.flag == 'EDIT') {
       this.disable_code = true;
+      this.code_occurs = true;
     } else if (this.flag == 'VIEW') {
       this.viewMode = true;
     }
@@ -153,6 +166,18 @@ export class SalesCommissionSetupComponent implements OnInit {
       this.renderer.selectRootElement('#code')?.focus();
       this.getbranchdata();
       this.getsalesmandata();
+      this.salescommissionform.controls.group.setValue('type');
+      this.salescommissionform.controls.metal_check.setValue(true);
+      this.salescommissionform.controls.metal_commission.setValue('F');
+
+      this.salescommissionform.controls.diamond_commission.reset();
+      this.salescommissionform.controls.diamond_commission.disable();
+      this.salescommissionform.controls.diamond_check.setValue(false);
+      this.salescommissionform.controls.dia_division.reset();
+      this.salescommissionform.controls.dia_division.disable();
+
+
+
     }
   }
 
@@ -244,92 +269,98 @@ export class SalesCommissionSetupComponent implements OnInit {
     // let metal_division = this.supplierquotaform.controls.metal_division.value;
     // console.log(metal_division);
 
-    let metal_division = this.salescommissionform.controls.metal_divisions_.value;
-    let metal_division_str = metal_division.join(',');
+    if(!requiredFieldsInvalid){
 
-    let dia_division = this.salescommissionform.controls.metal_divisions_.value;
-    let dia_division_str = dia_division.join(',');
+      let metal_division = this.salescommissionform.controls.metal_divisions_.value;
+      let metal_division_str = metal_division.join(',');
+  
+      let dia_division = this.salescommissionform.controls.metal_divisions_.value;
+      let dia_division_str = dia_division.join(',');
+  
+  
+      const postData = {
+        "MID": 0,
+        "COMMISION_CODE": this.salescommissionform.controls.code.value,
+        "COMM_DISC_GROUP": this.salescommissionform.controls.group.value,
+        "METAL_COMM_TYPE": 0,
+        "DIAMOND_COMM_TYPE": 0,
+        "METAL_DIVISION": metal_division_str,// "string",
+        "DIAMOND_DIVISION":  dia_division_str , //"string",
+        "START_DATE" : this.salescommissionform.controls.start_date.value,
+        "END_DATE" : this.salescommissionform.controls.end_date.value,
+        "COMM_EXCLUSIVE": true,
+        "COMM_ADDON": true,
+        "Details":  this.maindetails2
+        // "Details": [
+        //   {
+        //     "UNIQUEID": 0,
+        //     "COMMISION_CODE": "string",
+        //     "SRNO": 0,
+        //     "GROUP_CODE": "string",
+        //     "RANGE_FROM": 0,
+        //     "RANGE_TO": 0,
+        //     "COMM_RATE": 0,
+        //     "COMM_POINTS": 0
+        //   }
+        // ]
+      }
+  
+  
+      if (this.flag === "EDIT") {
+        let API = `POSComissionSetup/UpdatePOSComissionSetup/${this.unq_id}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `POSComissionSetup/InsertPOSComissionSetup`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
 
-
-    const postData = {
-      "MID": 0,
-      "COMMISION_CODE": this.salescommissionform.controls.code.value,
-      "COMM_DISC_GROUP": this.salescommissionform.controls.group.value,
-      "METAL_COMM_TYPE": 0,
-      "DIAMOND_COMM_TYPE": 0,
-      "METAL_DIVISION": metal_division_str,// "string",
-      "DIAMOND_DIVISION":  dia_division_str , //"string",
-      "START_DATE" : this.salescommissionform.controls.start_date.value,
-      "END_DATE" : this.salescommissionform.controls.end_date.value,
-      "COMM_EXCLUSIVE": true,
-      "COMM_ADDON": true,
-      "Details":  this.maindetails2
-      // "Details": [
-      //   {
-      //     "UNIQUEID": 0,
-      //     "COMMISION_CODE": "string",
-      //     "SRNO": 0,
-      //     "GROUP_CODE": "string",
-      //     "RANGE_FROM": 0,
-      //     "RANGE_TO": 0,
-      //     "COMM_RATE": 0,
-      //     "COMM_POINTS": 0
-      //   }
-      // ]
+      
     }
 
-
-    if (this.flag === "EDIT") {
-      let API = `POSComissionSetup/UpdatePOSComissionSetup/${this.unq_id}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    } else {
-      let API = `POSComissionSetup/InsertPOSComissionSetup`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    }
 
   }
 

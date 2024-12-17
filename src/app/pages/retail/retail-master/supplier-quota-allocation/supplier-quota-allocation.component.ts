@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -26,6 +26,7 @@ export class SupplierQuotaAllocationComponent implements OnInit {
   disable_code:boolean = false;
   editMode:boolean = false;
   viewMode:boolean = false;
+  code_occurs:boolean = false;
   dyndatas: any;
   fyearcode:any;
 
@@ -45,10 +46,10 @@ export class SupplierQuotaAllocationComponent implements OnInit {
 
 
   supplierquotaform: FormGroup = this.formBuilder.group({
-    partycode:[''],
+    partycode:['',[Validators.required]],
     metal_division:[''],
     periodType:[''],
-    fin_year:[''],
+    fin_year:['',[Validators.required]],
   });
   
   finyearcodedata: MasterSearchModel = {
@@ -61,6 +62,8 @@ export class SupplierQuotaAllocationComponent implements OnInit {
     WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
 
   PartyCodeData: MasterSearchModel = {
@@ -73,6 +76,8 @@ export class SupplierQuotaAllocationComponent implements OnInit {
     WHERECONDITION: "ACCODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER:true
   }
 
   PartyCodeSelected(event: any) {
@@ -82,17 +87,16 @@ export class SupplierQuotaAllocationComponent implements OnInit {
 
   selectedfinyear(e: any) {
     this.supplierquotaform.controls.fin_year.setValue(e.FYEARCODE);
+    // this.code_occurs = true;
   }
 
   getdiamond_divisionvalues(){
     let API = `POSTargetMaster/GetMetalDivisonsDropdown`;
     let Sub: Subscription = this.apiService.getDynamicAPI(API)
       .subscribe((result: any) => {
-        console.log(result);
         this.metal_drop = result.dynamicData[0]
-        console.log(this.metal_drop)
         const allDivisionCodes = this.metal_drop.map(option => option.DIVISION_CODE);
-        const diaDivisionControl = this.supplierquotaform?.get('metal_divisions_');
+        const diaDivisionControl = this.supplierquotaform?.get('metal_division');
         if (diaDivisionControl) {
           if(this.flag == undefined){
             diaDivisionControl.setValue(allDivisionCodes); 
@@ -105,7 +109,6 @@ export class SupplierQuotaAllocationComponent implements OnInit {
   }
 
   duration_type(){
-    console.log(this.supplierquotaform.controls.periodType.value);
     this.dur_type = this.supplierquotaform.controls.periodType.value;
     if(this.dur_type == "monthWise"){
         this.loadgridvalues();
@@ -136,6 +139,8 @@ export class SupplierQuotaAllocationComponent implements OnInit {
     }
     if(this.flag == undefined){
       this.loadgridvalues();
+      this.getfinyearvalues();
+      this.supplierquotaform.controls.periodType.setValue('monthWise');
     }
   }
 
@@ -155,6 +160,29 @@ export class SupplierQuotaAllocationComponent implements OnInit {
 
   editController(DATA: any) {
     this.ViewController(DATA);
+  }
+
+  getfinyearvalues(){
+
+    let postData = {
+      PAGENO: 1,
+      RECORDS: 100,
+      LOOKUPID: 103,
+      SEARCH_FIELD: '',
+      SEARCH_HEADING: 'FIN YEAR',
+      SEARCH_VALUE: '',
+      WHERECONDITION:"",
+      VIEW_INPUT: true,
+      VIEW_TABLE:true,
+  }    
+    let API = `MasterLookUp`;
+    let Sub: Subscription = this.apiService.postDynamicAPI(API,postData)
+      .subscribe((result: any) => {
+        let last_data = result.dynamicData[0];
+        let index = last_data.length -1;
+        this.supplierquotaform.controls.fin_year.setValue(last_data[index].FYEARCODE)      
+      },
+    ) 
   }
 
   ViewController(DATA: any) {
@@ -313,96 +341,100 @@ export class SupplierQuotaAllocationComponent implements OnInit {
     // let metal_division = this.supplierquotaform.controls.metal_division.value;
     // console.log(metal_division);
 
-    let metal_division = this.supplierquotaform.controls.metal_division.value;
-    let metal_division_str = metal_division.join(',');
-    console.log(metal_division_str);
-
-    this.maindetails.forEach((e:any) => {
-      e.PARTYCODE = this.supplierquotaform.controls.partycode.value;
-      e.FYEARCODE = this.supplierquotaform.controls.fin_year.value;
-    });
-
-
-
-
-    const postData = {
-      "MID": 0,
-      "PARTYCODE":  this.supplierquotaform.controls.partycode.value,//"string",
-      "FYEARCODE": this.supplierquotaform.controls.fin_year.value,//"string",
-      "DIVISIONS": metal_division_str, //this.supplierquotaform.controls.metal_division.value,//"string",
-      "SYSTEM_DATE": new Date(),
-      "MONTHWISE": this.supplierquotaform.controls.periodType.value == "monthWise" ? true :false,   //true,
-      "WEEKWISE": this.supplierquotaform.controls.periodType.value == "weekWise" ? true :false, //true,
-      "supplierQuotaDetails": this.maindetails
-      // [
-      //   {
-      //     "UNIQUEID": 0,
-      //     "SRNO": 0,
-      //     "PARTYCODE": "string",
-      //     "FYEARCODE": "string",
-      //     "QTY_G": 0,
-      //     "QTY_S": 0,
-      //     "QTY_T": 0,
-      //     "QTY_P": 0,
-      //     "MONTH": "string",
-      //     "WEEK": "string"
-      //   }
-      // ]
+    if(!requiredFieldsInvalid){
+      let metal_division = this.supplierquotaform.controls.metal_division.value;
+      let metal_division_str = metal_division.join(',');
+      console.log(metal_division_str);
+  
+      this.maindetails.forEach((e:any) => {
+        e.PARTYCODE = this.supplierquotaform.controls.partycode.value;
+        e.FYEARCODE = this.supplierquotaform.controls.fin_year.value;
+      });
+  
+  
+  
+  
+      const postData = {
+        "MID": 0,
+        "PARTYCODE":  this.supplierquotaform.controls.partycode.value,//"string",
+        "FYEARCODE": this.supplierquotaform.controls.fin_year.value,//"string",
+        "DIVISIONS": metal_division_str, //this.supplierquotaform.controls.metal_division.value,//"string",
+        "SYSTEM_DATE": new Date(),
+        "MONTHWISE": this.supplierquotaform.controls.periodType.value == "monthWise" ? true :false,   //true,
+        "WEEKWISE": this.supplierquotaform.controls.periodType.value == "weekWise" ? true :false, //true,
+        "supplierQuotaDetails": this.maindetails
+        // [
+        //   {
+        //     "UNIQUEID": 0,
+        //     "SRNO": 0,
+        //     "PARTYCODE": "string",
+        //     "FYEARCODE": "string",
+        //     "QTY_G": 0,
+        //     "QTY_S": 0,
+        //     "QTY_T": 0,
+        //     "QTY_P": 0,
+        //     "MONTH": "string",
+        //     "WEEK": "string"
+        //   }
+        // ]
+      }
+  
+      // console.log(postData);return;
+  
+      if (this.flag === "EDIT") {
+        let API = `SupplierQuota/UpdateSupplierQuota/${this.unq_id}/${this.fyearcode}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `SupplierQuota/InsertSupplierQuota`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
     }
 
-    // console.log(postData);return;
 
-    if (this.flag === "EDIT") {
-      let API = `SupplierQuota/UpdateSupplierQuota/${this.unq_id}/${this.fyearcode}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    } else {
-      let API = `SupplierQuota/InsertSupplierQuota`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    }
 
   }
 
@@ -562,28 +594,6 @@ export class SupplierQuotaAllocationComponent implements OnInit {
               );
 
               console.log("Filtered Search Result:", searchResult);
-
-              if (FROMCODE === true) {
-                searchResult = [
-                  ...searchResult.filter(
-                    (item: any) =>
-                      item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
-                  ),
-                  ...searchResult.filter(
-                    (item: any) =>
-                      item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
-                  ),
-                ];
-              } else if (FROMCODE === false) {
-                searchResult = [
-                  ...searchResult.filter(
-                    (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
-                  ),
-                  ...searchResult.filter(
-                    (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
-                  ),
-                ];
-              }
 
               if (searchResult?.length) {
                 const matchedItem = searchResult[0];

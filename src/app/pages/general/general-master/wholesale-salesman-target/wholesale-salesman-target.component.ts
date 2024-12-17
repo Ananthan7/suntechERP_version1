@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { WholesaleSalesmanTargetDetailsComponent } from './wholesale-salesman-target-details/wholesale-salesman-target-details.component';
@@ -44,10 +44,10 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
   ) { }
 
   wholesalesmanform: FormGroup = this.formBuilder.group({
-    salesman: [""],
-    fin_year: [""],
+    salesman: ["",[Validators.required]],
+    fin_year: ["",[Validators.required]],
     datefrom: [""],
-    code: [""],
+    code: ["",[Validators.required]],
     dateto: [""],
    
   });
@@ -74,6 +74,8 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
     WHERECONDITION:"",
     VIEW_INPUT: true,
     VIEW_TABLE:true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER:true
 }
 
 setcodevalues(){
@@ -123,6 +125,8 @@ setcodevalues(){
     WHERECONDITION: "SALESPERSON_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    FRONTENDFILTER :true,
+    LOAD_ONCLICK :true
   }
 
   selectedsalesman(e:any){
@@ -133,7 +137,6 @@ setcodevalues(){
   ngOnInit(): void {
     console.log(this.content);
    
-    // this.wst_id = this.content?.MID;
     this.wst_id = this.content?.TARGET_CODE;
     console.log(this.wst_id);
     this.flag = this.content?.FLAG;
@@ -159,7 +162,7 @@ setcodevalues(){
 
     let postData = {
       PAGENO: 1,
-      RECORDS: 10,
+      RECORDS: 100,
       LOOKUPID: 103,
       SEARCH_FIELD: '',
       SEARCH_HEADING: 'FIN YEAR',
@@ -253,6 +256,26 @@ setcodevalues(){
 
   formSubmit() {
 
+    if(this.maindetails.length == 0 || !this.maindetails.length){
+      this.commonService.toastErrorByMsgId('MSG1200');
+      return;
+    }
+
+    Object.keys(this.wholesalesmanform.controls).forEach((controlName) => {
+      const control = this.wholesalesmanform.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
+
+    const requiredFieldsInvalid = Object.keys(
+      this.wholesalesmanform.controls
+    ).some((controlName) => {
+      const control = this.wholesalesmanform.controls[controlName];
+      return control.hasError("required") && control.touched;
+  });
+
+  if(!requiredFieldsInvalid){
     const postData = {
 
       "TARGET_CODE": this.wholesalesmanform.controls.code.value,
@@ -318,6 +341,9 @@ setcodevalues(){
           }
         });
     }
+  }
+
+
 
   }
 
@@ -371,13 +397,25 @@ setcodevalues(){
 
 
   
-  addTableData(){
+  addTableData(event?:any){
+
     this.modalReference = this.modalService.open(WholesaleSalesmanTargetDetailsComponent, {
       size: 'xl',
       backdrop: true,
       keyboard: false,
       windowClass: 'modal-full-width',
   });
+
+  this.modalReference.componentInstance.parent_code = this.wholesalesmanform.controls.code.value;
+  this.modalReference.componentInstance.grid_length = this.maindetails.length;
+  this.modalReference.componentInstance.fyear_code = this.wholesalesmanform.controls.fin_year.value;
+  this.modalReference.componentInstance.salesperson_code = this.wholesalesmanform.controls.salesman.value;
+  this.modalReference.componentInstance.flag = this.flag;
+  if(event?.data != undefined){
+  this.modalReference.componentInstance.data = event.data;
+
+  }
+
 
   this.modalReference.closed.subscribe((result) => {
     if (result) {
@@ -447,27 +485,7 @@ setcodevalues(){
 
               console.log("Filtered Search Result:", searchResult);
 
-              if (FROMCODE === true) {
-                searchResult = [
-                  ...searchResult.filter(
-                    (item: any) =>
-                      item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
-                  ),
-                  ...searchResult.filter(
-                    (item: any) =>
-                      item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
-                  ),
-                ];
-              } else if (FROMCODE === false) {
-                searchResult = [
-                  ...searchResult.filter(
-                    (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
-                  ),
-                  ...searchResult.filter(
-                    (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
-                  ),
-                ];
-              }
+             
 
               if (searchResult?.length) {
                 const matchedItem = searchResult[0];
@@ -544,6 +562,11 @@ setcodevalues(){
       console.warn("Controller or modelfield is missing.");
     }
   }
+
+
+  // onSelectionChanged(e:any){
+  //     console.log(e);
+  // }
 
 
 

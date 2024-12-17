@@ -18,10 +18,12 @@ export class YearlyBudgetPlannerDetailsComponent implements OnInit {
   maindetails: any = [];
   maindetails_clone: any = [];
   data:any=[];
-  @Input () tablecount :any;
+  @Input () flag :any;
   curr_branch = localStorage.getItem('userbranch');
   // @Input () fin_year :any;
   detailmonth :any[]=[];
+  editMode:boolean =false;
+  viewMode:boolean =false;
 
 
 
