@@ -33,6 +33,7 @@ export class ComponentMasterComponent implements OnInit {
   currentDate: any = new Date();
   isPCSDisabled: boolean = false;
   iskaratDisabled: boolean = false;
+  isKaratdisabled: boolean = false;
   tableData: any[] = [];
   maindetails: any[] = [];
   selectedIndexes: any = [];
@@ -426,27 +427,7 @@ export class ComponentMasterComponent implements OnInit {
     this.componentmasterForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType());
   }
 
-  divisionCodeSelected(value: any, data: any, controlName: string) {
-    this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
-    // this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
-
-    if (value.DIVISION === 'M') {
-      this.isPCSDisabled = true;
-      this.iskaratDisabled = false;
-    } else {
-      this.isPCSDisabled = false;
-      this.iskaratDisabled = true;
-    }
-    if (value.DIVISION === 'S') {
-      this.iskaratDisabled = true;
-    } else {
-      this.iskaratDisabled = false;
-    }
-  }
-  viewKaratCodeSearch(item: any) {
-    if (item.data.DIVCODE == 'L') return false;
-    return true
-  }
+  
   Attachedfile: any[] = [];
   AttachedfileGrid: any[] = [];
   savedAttachments: any[] = [];
@@ -460,6 +441,25 @@ export class ComponentMasterComponent implements OnInit {
     this.Attachedfile = file
 
   }
+
+  divisionCodeSelected(value: any, data: any, controlName: string) {
+    this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
+    // this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
+    console.log(value.DIVISION_CODE);
+    
+    if (value.DIVISION == 'M' || value.DIVISION == 'G') {
+      this.isPCSDisabled = true;
+      this.iskaratDisabled = false;
+    } else {
+      this.isPCSDisabled = false;
+      this.iskaratDisabled = true;
+    }
+  }
+  viewKaratCodeSearch(item: any) {
+    if (item.data.DIVCODE == 'L') return false;
+    return true
+  }
+
   stockClicked(param: any) {
     if (this.commonService.nullToString(param.data.DIVCODE) != '') {
       this.stockCodeData.WHERECONDITION = `DIVISION = '${param.data.DIVCODE}' and SUBCODE = 0`;
@@ -1684,11 +1684,13 @@ export class ComponentMasterComponent implements OnInit {
     if (this.editMode && FORMNAME === 'codedes') {
       return;
     }
-
+    console.log(event.target.value);
+    
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let sanitizedValue = event.target.value.slice(0, -6)
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${FORMNAME === 'code' ? sanitizedValue : event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
