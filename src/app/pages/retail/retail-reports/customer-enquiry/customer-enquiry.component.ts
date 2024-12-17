@@ -547,15 +547,15 @@ export class CustomerEnquiryComponent implements OnInit {
 
       case 'Sales Register':
         this.isLoading = false;
-        payloadData = {
-          "SPID": "163",
-          "parameter": {
-            "strCertCode ": this.customerEnquiryForm.controls.customerfrom.value   //'1344' 
-          }  
-        };
+        // payloadData = { API call needed & export
+        //   "SPID": "163",
+        //   "parameter": {
+        //     "strCertCode ": this.customerEnquiryForm.controls.customerfrom.value   //'1344' 
+        //   }  
+        // };
       break;
 
-      case 'Address Label':
+      case 'Address Label':  //Preview is needed
       this.isLoading = false; 
       payloadData = {
         "SPID": "",
@@ -565,7 +565,7 @@ export class CustomerEnquiryComponent implements OnInit {
       };
       break;
 
-      case 'Previlage Card':
+      case 'Previlage Card': //need to handle frm FE
         payloadData = {
           "SPID": "162",
           "parameter": {
@@ -574,7 +574,7 @@ export class CustomerEnquiryComponent implements OnInit {
         };
       break;
 
-      case 'Send Email':
+      case 'Send Email': // rest discuss wiht muneer
       this.isLoading = false;
       payloadData = {
         "SPID": "",
@@ -615,6 +615,7 @@ export class CustomerEnquiryComponent implements OnInit {
       console.log(result);
       let data = result.dynamicData;
       let printContent = data[0][0].HTMLOUT;
+      debugger
       if (printContent && Object.keys(printContent).length > 0) {
         this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
         const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
