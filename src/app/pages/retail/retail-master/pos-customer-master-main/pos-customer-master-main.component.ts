@@ -418,6 +418,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.vocDetails);
+    
     this.compAccode = this.comService?.allCompanyParameters?.COMPACCODE;
     this.loyaltyCode = this.comService.allbranchMaster?.LOYALTY_CODE;
     this.getCustomerDetailsValidation =

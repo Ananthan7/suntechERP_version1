@@ -28,6 +28,7 @@ interface ItemDetailsRow {
 export class CostAndPriceTypesComponent implements OnInit {
   @ViewChild("codeField") codeField!: ElementRef;
   @Input() content!: any;
+  @Input() vocDetails?: any;
   private subscriptions: Subscription[] = [];
   @ViewChild("overlayDesignCode")
   overlayDesignCode!: MasterSearchComponent;
@@ -108,7 +109,7 @@ export class CostAndPriceTypesComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log(this.content);
+    console.log(this.vocDetails);
 
     this.branchCode = this.commonService.branchCode;
     this.flag = this.content
@@ -137,7 +138,7 @@ export class CostAndPriceTypesComponent implements OnInit {
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
       this.ViewController(DATA);
-      this.getItemDetailsData()
+      this.getItemDetailsData();
     }
     if (FLAG === "EDIT") {
       this.editController(DATA);
@@ -311,9 +312,9 @@ export class CostAndPriceTypesComponent implements OnInit {
           STD_VARIANCE: Number(item.STD_VARIANCE) || 0,
           REMARK: "",
           DT_BRANCH_CODE: this.branchCode,
-          DT_VOCTYPE: this.branchCode,
+          DT_VOCTYPE: this.commonService.getqueryParamVocType(),
           DT_VOCNO: 0,
-          DT_YEARMONTH: this.branchCode,
+          DT_YEARMONTH: this.commonService.yearSelected,
         })),
       };
 
@@ -526,7 +527,6 @@ export class CostAndPriceTypesComponent implements OnInit {
         break;
 
       case "VIEW":
-
         this.costAndPriceTypeMainForm.controls["applyPriceValue"].disable();
         this.costAndPriceTypeMainForm.controls["forceMaking"].disable();
         this.costAndPriceTypeMainForm.controls["party"].disable();
