@@ -422,6 +422,7 @@
                                                 formControlName="priceScheme"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,priceSchemeData,'priceScheme')"
+                                                (change)="resetAllPriceDetails()"
                                                 (keydown)="lookupKeyPress($event,'priceScheme')" />
                                             <master-search
                                                 *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
@@ -439,19 +440,19 @@
                                 <div class="col-sm-2">
                                     <h6 id="ID021">Cost</h6>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-2">
                                     <h6 id="ID022">Code</h6>
                                 </div>
                                 <div class="col-sm-2">
                                     <h6 id="ID023">%</h6>
                                 </div>
-                                <div class="col-sm-2"
+                                <div class="col-sm-3"
                                     *ngIf="alloyMastereForm.value.currency !== 'Local'">
                                     <h6 id="ID024"> Cost({{
                                         alloyMastereForm.value.currency
                                         }})</h6>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <h6 id="ID025">LC</h6>
                                 </div>
                             </div>
@@ -459,8 +460,8 @@
                                 <div class="col-sm-2">
                                     <h6 id="ID026">Price 1</h6>
                                 </div>
-                                <div class="col-sm-4">
-                                    <mat-form-field style="width: 70%"
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
                                             formControlName="price1code"
@@ -490,7 +491,7 @@
                                             [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
@@ -501,7 +502,7 @@
                                             (focusout)="price1FcChange()" />
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
@@ -517,8 +518,8 @@
                                 <div class="col-sm-2">
                                     <h6 id="ID027">Price 2</h6>
                                 </div>
-                                <div class="col-sm-4">
-                                    <mat-form-field style="width: 70%"
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
                                             formControlName="price2code"
@@ -546,7 +547,7 @@
                                             [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
@@ -557,7 +558,7 @@
                                             (focusout)="price2FcChange()" />
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
@@ -573,8 +574,8 @@
                                 <div class="col-sm-2">
                                     <h6 id="ID028">Price 3</h6>
                                 </div>
-                                <div class="col-sm-4">
-                                    <mat-form-field style="width: 70%"
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
                                             formControlName="price3code"
@@ -602,7 +603,7 @@
                                             [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
@@ -613,7 +614,7 @@
                                             (focusout)="price3FcChange()" />
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
@@ -629,8 +630,8 @@
                                 <div class="col-sm-2">
                                     <h6 id="ID029">Price 4</h6>
                                 </div>
-                                <div class="col-sm-4">
-                                    <mat-form-field style="width: 70%"
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
                                             formControlName="price4code"
@@ -658,7 +659,7 @@
                                             [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
@@ -669,7 +670,7 @@
                                             (focusout)="price4FcChange()" />
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
@@ -685,8 +686,8 @@
                                 <div class="col-sm-2">
                                     <h6 id="ID030">Price 5</h6>
                                 </div>
-                                <div class="col-sm-4">
-                                    <mat-form-field style="width: 70%"
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
                                             formControlName="price5code"
@@ -714,7 +715,7 @@
                                             [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
@@ -725,7 +726,7 @@
                                             (focusout)="price5FcChange()" />
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
@@ -741,8 +742,8 @@
                                 <div class="col-sm-2">
                                     <h6 id="ID031">HSN</h6>
                                 </div>
-                                <div class="col-sm-4">
-                                    <mat-form-field style="width: 70%"
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 100%"
                                         appearance="outline">
                                         <input type="text" matInput
                                             formControlName="hsncode"
