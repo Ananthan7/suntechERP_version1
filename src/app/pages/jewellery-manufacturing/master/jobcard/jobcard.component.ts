@@ -387,6 +387,7 @@ export class JobcardComponent implements OnInit {
     instruction: [''],
     picture_name: [''],
     DESIGN_DESC: [''],
+    imagepath:[''],
     FLAG: ['']
 
   });
@@ -551,6 +552,12 @@ export class JobcardComponent implements OnInit {
         
     }
   }
+  deldateFilter = (date: Date | null): boolean => {
+    if (this.jobCardFrom.value.jobdate) {
+      return date ? date >= this.jobCardFrom.value.jobdate : false;
+    }
+    return true;  
+  };
 
 
   openaddcomponent() {
@@ -653,18 +660,7 @@ export class JobcardComponent implements OnInit {
       this.jobCardFrom.controls.vocdate.setValue(new Date(date))
     }
   }
-  checkDates() {
-    const jobDate = new Date(this.jobCardFrom.get('jobdate')?.value);
-    const deliveryDate = new Date(this.jobCardFrom.get('deldate')?.value);
 
-    if (jobDate > deliveryDate) {
-      this.errorMessage = 'Job Date cannot be greater than Delivery Date.';
-      this.isSubmitDisabled = true;
-    } else {
-      this.errorMessage = '';
-      this.isSubmitDisabled = false;
-    }
-  }
   /**USE: close modal window */
   // close(data?: any) {
   //   this.activeModal.close(data);
@@ -724,16 +720,16 @@ export class JobcardComponent implements OnInit {
     let length = this.tableData.length;
     let sn = length + 1;
     if (this.tableData.length == 0) {
-      let data = {
+      const data = {
         "SINO": sn,
         "job_reference": this.jobCardFrom.value.jobno + '/' + sn,
-        "part_code": e.Design_Code,
-        "Description": e.Design_Description,
-        "Pcs": e.Pcs,
-        "metal_color": e.metal_color,
-        "metal_wt": e.metal_wt,
-        "stone_wt": e.stone_wt,
-        "gross_wt": e.gross_wt,
+        "part_code": this.commonService.nullToString(e.Design_Code),
+        "Description": this.commonService.nullToString(e.Design_Description),
+        "Pcs": this.commonService.nullToString(e.Pcs),
+        "metal_color": this.commonService.nullToString(e.metal_color),
+        "metal_wt": this.commonService.nullToString(e.metal_wt),
+        "stone_wt": this.commonService.nullToString(e.stone_wt),
+        "gross_wt": this.commonService.nullToString(e.gross_wt),
       };
       this.tableData.push(data);
       console.log(data, 'tabledate')
@@ -816,7 +812,7 @@ export class JobcardComponent implements OnInit {
         this.jobCardFrom.controls['category'].setValue(result.response.CATEGORY_CODE);
         this.jobCardFrom.controls['setref'].setValue(result.response.SET_REF);
         console.log(result.response.PICTURE_NAME, 'picyure')
-        this.jobCardFrom.controls['picture_name'].setValue(result.response.PICTURE_NAME);
+        this.jobCardFrom.controls['imagepath'].setValue(result.response.PICTURE_NAME);
 
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
@@ -827,7 +823,7 @@ export class JobcardComponent implements OnInit {
         this.tableData[0].stone_wt = result.response.STONE_WT;
         this.tableData[0].gross_wt = result.response.GROSS_WT;
         this.tableData[0].part_code = result.response.PART_CODE;
-
+        this.tableData[0].SINO = result.response.SINO;
         // Get the first object from DESIGN_STNMTL_DETAIL array
 
         const firstDetail = result.response.DESIGN_STNMTL_DETAIL;
@@ -971,10 +967,10 @@ export class JobcardComponent implements OnInit {
               SIEVE_SET: element.SIEVE_SET,
               PROCESS_TYPE: element.PROCESS_TYPE,
               PURITY: element.PURITY,
-              metal_wt: metalWt.toString(),
-              stone_wt: stoneWt.toString(),
-              part_code: result.response.DESIGN_CODE,
-              Description: result.response.DESIGN_DESCRIPTION,
+              metal_wt: this.commonService.nullToString(metalWt.toString()),
+              stone_wt: this.commonService.nullToString(stoneWt.toString()),
+              part_code: this.commonService.nullToString(result.response.DESIGN_CODE),
+              Description: this.commonService.nullToString(result.response.DESIGN_DESCRIPTION),
               SIZE: result.response.SIZE || "",
               LENGTH: result.response.LENGTH || "",
               CLOSE_TYPE: element.CLOSE_TYPE || "",
@@ -1116,7 +1112,7 @@ export class JobcardComponent implements OnInit {
           this.jobCardFrom.controls.designcode.setValue(data.DESIGN_CODE)
           this.jobCardFrom.controls.seqcode.setValue(data.SEQ_CODE)
           this.jobCardFrom.controls.designcode.setValue(data.DESIGN_CODE)
-          this.jobCardFrom.controls.picture_name.setValue(data.PICTURE_NAME)
+          this.jobCardFrom.controls.imagepath.setValue(data.PICTURE_NAME)
           this.jobCardFrom.controls.setref.setValue(data.SET_REF)
           this.jobCardFrom.controls.JOB_PCS_TOTAL.setValue(data.JOB_PCS_TOTAL)
           this.jobCardFrom.controls.JOB_PCS_PENDING.setValue(data.JOB_PCS_PENDING)
@@ -1255,7 +1251,7 @@ export class JobcardComponent implements OnInit {
       "BRAND_CODE": this.jobCardFrom.value.brand || "",
       "DESIGN_CODE": this.jobCardFrom.value.designcode || "",
       "SEQ_CODE": this.jobCardFrom.value.seqcode || "",
-      "PICTURE_NAME": this.commonService.nullToString(this.jobCardFrom.value.picture_name),
+      "PICTURE_NAME": this.commonService.nullToString(this.jobCardFrom.value.imagepath),
       "DEPARTMENT_CODE": "",
       "JOB_INSTRUCTION": this.commonService.nullToString(this.jobCardFrom.value.instruction),
       "SET_REF": this.jobCardFrom.value.setref || "",
@@ -1493,7 +1489,7 @@ export class JobcardComponent implements OnInit {
       "BRAND_CODE": this.jobCardFrom.value.brand || "",
       "DESIGN_CODE": this.jobCardFrom.value.designcode || "",
       "SEQ_CODE": this.jobCardFrom.value.seqcode || "",
-      "PICTURE_NAME": this.commonService.nullToString(this.jobCardFrom.value.picture_name),
+      "PICTURE_NAME": this.commonService.nullToString(this.jobCardFrom.value.imagepath),
       "DEPARTMENT_CODE": "",
       "JOB_INSTRUCTION": "",
       "SET_REF": this.jobCardFrom.value.setref || "",
