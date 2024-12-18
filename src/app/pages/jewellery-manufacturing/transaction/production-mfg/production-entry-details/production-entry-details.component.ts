@@ -488,14 +488,14 @@ export class ProductionEntryDetailsComponent implements OnInit {
     let dblTmpNetWt = 0;
 
     dblTmpNetWt = this.emptyToZero(form.METAL_WT);
-    let actualPureWt = this.commonService.pureWeightCalculate(dblTmpNetWt,this.emptyToZero(form.Job_Purity));
-    let newPureWt = this.commonService.pureWeightCalculate(dblTmpNetWt,this.emptyToZero(form.PURITY))
-    
+    let actualPureWt = this.commonService.pureWeightCalculate(dblTmpNetWt, this.emptyToZero(form.Job_Purity));
+    let newPureWt = this.commonService.pureWeightCalculate(dblTmpNetWt, this.emptyToZero(form.PURITY))
+
     actualPureWt = this.commonService.decimalQuantityFormat(actualPureWt, 'METAL');
     newPureWt = this.commonService.decimalQuantityFormat(newPureWt, 'METAL');
-    this.setValueWithDecimal('PURE_WT',newPureWt, 'METAL')
-    let txtDPurityDiff = this.commonService.purityDiffCalculate(actualPureWt,newPureWt);
-    this.setValueWithDecimal('PURITY_DIFF',txtDPurityDiff, 'METAL')
+    this.setValueWithDecimal('PURE_WT', newPureWt, 'METAL')
+    let txtDPurityDiff = this.commonService.purityDiffCalculate(actualPureWt, newPureWt);
+    this.setValueWithDecimal('PURITY_DIFF', txtDPurityDiff, 'METAL')
   }
   priceSchemeValidate(e: any) {
     this.productiondetailsFrom.controls.pricescheme.setValue(e.PRICE_CODE)
@@ -627,14 +627,16 @@ export class ProductionEntryDetailsComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
-          let data = result.dynamicData[0]
+          let data = result.dynamicData[0] || []
           // let result3 = result.dynamicData[2]
           // this.setVendorRef(result) //supplier ref 
+          if (data.length == 1) {
+            this.setFormNullToString('PROCESS_CODE', data[0].PROCESS)
+            this.setFormNullToString('PROCESS_NAME', data[0].PROCESSDESC)
+            this.setFormNullToString('WORKER_CODE', data[0].WORKER)
+            this.setFormNullToString('WORKER_NAME', data[0].WORKERDESC)
+          }
 
-          // this.setFormNullToString('PROCESS_CODE', data[0].PROCESS)
-          // this.setFormNullToString('PROCESS_NAME', data[0].PROCESSDESC)
-          // this.setFormNullToString('WORKER_CODE', data[0].WORKER)
-          // this.setFormNullToString('WORKER_NAME', data[0].WORKERDESC)
           this.setFormNullToString('UNQ_DESIGN_ID', data[0].UNQ_DESIGN_ID)
           this.setFormNullToString('JOB_SO_NUMBER', data[0].JOB_SO_NUMBER)
           this.setFormNullToString('STOCK_CODE', data[0].STOCK_CODE)

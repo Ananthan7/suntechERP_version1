@@ -447,7 +447,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         item.SETTED_FLAG = item.SETTED
         if (item.GROSS_WT > 0) {
           item.SRNO = index + 1
-          if(this.commonService.Null2BitValue(item.SETTED)==false){
+          if (this.commonService.Null2BitValue(item.SETTED) == false) {
             this.processTransferdetailsForm.controls.SETTED_FLAG.setValue(false)
           }
           // item.GROSS_WT = Math.abs(item.GROSS_WT)
@@ -463,7 +463,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ// setting detail data
       PROCESS_FORMDETAILS = this.content[0]?.PROCESS_FORMDETAILS
       this.metalDetailData = this.content[0]?.TRN_STNMTL_GRID || [] // setting component grid data
-      if(PROCESS_FORMDETAILS){
+      if (PROCESS_FORMDETAILS) {
         this.processTransferdetailsForm.controls.SETTED_FLAG.setValue(PROCESS_FORMDETAILS.SETTED_FLAG)
       }
       this.setFormDecimal('METAL_ScrapPCS', 0, 'METAL')
@@ -545,7 +545,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     // set fomvalidater for checking previous value
     this.FORM_VALIDATER = this.processTransferdetailsForm.value;
   }
- 
+
   locationCodeValidate(event: any) {
     let postData = {
       "SPID": "057",
@@ -645,7 +645,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormDecimal('METAL_FromPureWt', parentDetail.FRM_PURE_WT, 'METAL')
     this.setFormDecimal('METAL_ToPureWt', parentDetail.TO_PURE_WT, 'METAL')
     this.setFormDecimal('METAL_ScrapPureWt', parentDetail.SCRAP_PURE_WT, 'METAL')
-    let stdLoss = (this.emptyToZero(parentDetail.LOSS_QTY)/this.emptyToZero(parentDetail.FRM_METAL_WT))*100
+    let stdLoss = (this.emptyToZero(parentDetail.LOSS_QTY) / this.emptyToZero(parentDetail.FRM_METAL_WT)) * 100
     this.setFormDecimal('METAL_STD_LOSS', stdLoss, 'METAL')
     this.processTransferdetailsForm.controls.METAL_FromPCS.setValue(parentDetail.FRM_PCS)
     this.processTransferdetailsForm.controls.METAL_ToPCS.setValue(parentDetail.TO_PCS)
@@ -939,10 +939,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         try {
           let response = result.dynamicData
-          let userflag:any[] = []
+          let userflag: any[] = []
           // set second result from job sales order dj table
           if (response.length > 1) {
-            userflag= response[2]
+            userflag = response[1]
             this.setDataFromSalesOrderDj(response[2]);
           }
           // SET frist result of subjob details
@@ -966,11 +966,17 @@ export class ProcessTransferDetailsComponent implements OnInit {
               this.setSubJob_Details(this.subJobDetailData)
             }
           } else {
-            if(this.commonService.Null2BitValue(userflag[0].USERALLOCATIONFLAG)){
+            if (this.commonService.Null2BitValue(userflag[0].USERALLOCATIONFLAG)) {
+              let msg = this.commonService.getMsgByID('MSG7958') //	Access to Process not Authorised
+              this.showOkDialog(msg)
               return
             }
             this.resetPTFDetails()
             let msg = this.commonService.getMsgByID('MSG7957') //	No Worker is having balance
+            this.showOkDialog(msg)
+          }
+          if (this.commonService.Null2BitValue(userflag[0].USERALLOCATIONFLAG)) {
+            let msg = this.commonService.getMsgByID('MSG7958') //	Access to Process not Authorised
             this.showOkDialog(msg)
           }
         } catch (error) {
@@ -1613,7 +1619,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // for diamond tab
   calculateSTNMTLdata(result: any) {
-   
+
   }
 
   Calc_TimeDiff(): void {
@@ -1811,8 +1817,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
       element.SELECTED = true
       element.GEN = 'GEN'
       element.FROM_STOCK_CODE = element.STOCK_CODE,
-      element.FROM_SUB_STOCK_CODE = element.SUB_STOCK_CODE,
-      element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+        element.FROM_SUB_STOCK_CODE = element.SUB_STOCK_CODE,
+        element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
       element.NET_WT = this.commonService.setCommaSerperatedNumber(element.NET_WT, 'METAL')
       element.STONE_WT = this.commonService.setCommaSerperatedNumber(element.STONE_WT, 'STONE')
       element.PURITY = this.commonService.setCommaSerperatedNumber(element.PURITY, 'PURITY')
@@ -3963,7 +3969,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         let txtBalStoneWt = (this.emptyToZero(form.METAL_FRM_STONE_WT) - (this.emptyToZero(form.METAL_TO_STONE_WT) + this.emptyToZero(form.txtMScrapStoneWt)));
         let txtBalNetWt = (this.emptyToZero(form.METAL_FromNetWeight) - (this.emptyToZero(form.METAL_ToNetWt) + this.emptyToZero(form.METAL_ScrapNetWt) + this.emptyToZero(form.METAL_LossBooked)));
         // let txtBalPureWt = (this.emptyToZero(form.METAL_FromPureWt) - (this.emptyToZero(form.METAL_ToPureWt) + this.emptyToZero(form.METAL_ScrapPureWt) + this.emptyToZero(form.METAL_LossPureWt)));
-        let txtBalPureWt = this.commonService.pureWeightCalculate(txtBalGrWt,form.PURITY)
+        let txtBalPureWt = this.commonService.pureWeightCalculate(txtBalGrWt, form.PURITY)
         let txtBalIronWt = (this.emptyToZero(form.METAL_FromIronWeight) - (this.emptyToZero(form.METAL_ToIronWt) + this.emptyToZero(form.METAL_ToIronScrapWt)));
         this.setFormDecimal('METAL_BalPCS', txtBalPCS, 'METAL')
         this.setFormDecimal('METAL_BalGrWt', txtBalGrWt, 'METAL')
