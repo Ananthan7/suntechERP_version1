@@ -78,7 +78,7 @@
                                             [matDatepicker]="jobdate"
                                             placeholder="DD/MM/YYYY"
                                             [readonly]="viewMode"
-                                            class="text-right" (change)="checkDates()"/>
+                                            class="text-right"/>
                                         <mat-datepicker-toggle matSuffix
                                             [for]="jobdate"></mat-datepicker-toggle>
                                         <mat-datepicker [disabled]="isSaved"
@@ -536,7 +536,7 @@
                                             formControlName="deldate"
                                             [readonly]="viewMode"
                                             placeholder="DD/MM/YYYY"
-                                            class="text-right" (change)="checkDates()"/>
+                                            class="text-right"   [matDatepickerFilter]="deldateFilter" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="deldate"></mat-datepicker-toggle>
                                         <mat-datepicker [disabled]="isSaved"
