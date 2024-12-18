@@ -402,6 +402,7 @@ export class AlloyMasterComponent implements OnInit {
 
   price1LcChange() {
     if (this.checkCode1Price()) return
+    if (this.alloyMastereForm.value.priceScheme == '') {
     const form = this.alloyMastereForm.value;
     let curr = this.commonService.CCToFC(form.currency, form.price1Lc)
     this.alloyMastereForm.get('price1Fc')!.setValue(
@@ -410,60 +411,69 @@ export class AlloyMasterComponent implements OnInit {
     // Update percentage calculation
     this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(form.price1Lc));
     console.log(this.percentageCalculate(form.price1Lc));
-
+  }
   }
 
   price2LcChange() {
     if (this.checkCode2Price()) return
+    if (this.alloyMastereForm.value.priceScheme == '') {
     const form = this.alloyMastereForm.value;
     let curr = this.commonService.CCToFC(form.currency, form.price2Lc)
     this.alloyMastereForm.get('price2Fc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'THREE'));
     // Update percentage calculation
     this.alloyMastereForm.get('price2per')!.setValue(this.percentageCalculate(form.price2Lc));
     console.log(this.percentageCalculate(form.price2Lc));
+    }
   }
 
   price3LcChange() {
     if (this.checkCode3Price()) return
+    if (this.alloyMastereForm.value.priceScheme == '') {
     const form = this.alloyMastereForm.value;
     let curr = this.commonService.CCToFC(form.currency, form.price3Lc)
     this.alloyMastereForm.get('price3Fc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'THREE'));
     // Update percentage calculation
     this.alloyMastereForm.get('price3per')!.setValue(this.percentageCalculate(form.price3Lc));
+    }
   }
 
   price4LcChange() {
-    if (this.checkCode4Price()) return
-    const form = this.alloyMastereForm.value;
-    let curr = this.commonService.CCToFC(form.currency, form.price4Lc)
-    this.alloyMastereForm.get('price4Fc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'THREE'));
-    // Update percentage calculation
-    this.alloyMastereForm.get('price4per')!.setValue(this.percentageCalculate(form.price4Lc));
+    if (this.checkCode4Price()) return    
+    if (this.alloyMastereForm.value.priceScheme == '') {
+      const form = this.alloyMastereForm.value;
+      let curr = this.commonService.CCToFC(form.currency, form.price4Lc)
+      this.alloyMastereForm.get('price4Fc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'THREE'));
+      // Update percentage calculation
+      this.alloyMastereForm.get('price4per')!.setValue(this.percentageCalculate(form.price4Lc));  
+    }  
   }
 
   price5LcChange() {
     if (this.checkCode5Price()) return
+    if (this.alloyMastereForm.value.priceScheme == '') {
     const form = this.alloyMastereForm.value;
     let curr = this.commonService.CCToFC(form.currency, form.price5Lc)
     this.alloyMastereForm.get('price5Fc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'THREE'));
     // Update percentage calculation
     this.alloyMastereForm.get('price5per')!.setValue(this.percentageCalculate(form.price5Lc));
+    }
   }
 
   price1FcChange() {
     if (this.checkCode1Price()) return
+    if (this.alloyMastereForm.value.priceScheme == '') {
     const form = this.alloyMastereForm.value;
     let curr = this.commonService.FCToCC(form.currency, form.price1Fc)
     this.alloyMastereForm.get('price1Lc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'AMOUNT'));
 
     // Update percentage calculation
     this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(form.price1Fc));
-
+    }
   }
 
   price2FcChange() {
     if (this.checkCode2Price()) return
-
+    if (this.alloyMastereForm.value.priceScheme == '') {
     const form = this.alloyMastereForm.value;
     let curr = this.commonService.FCToCC(form.currency, form.price2Fc)
     this.alloyMastereForm.get('price2Lc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'AMOUNT'));
@@ -471,11 +481,12 @@ export class AlloyMasterComponent implements OnInit {
     // Update percentage calculation
     this.alloyMastereForm.get('price2per')!.setValue(this.percentageCalculate(form.price2Fc));
     console.log(this.percentageCalculate(form.price2Fc));
+    }
   }
 
   price3FcChange() {
     if (this.checkCode3Price()) return
-
+    if (this.alloyMastereForm.value.priceScheme == '') {
     const form = this.alloyMastereForm.value;
     let curr = this.commonService.FCToCC(form.currency, form.price3Fc)
     this.alloyMastereForm.get('price3Lc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'AMOUNT'));
@@ -483,11 +494,12 @@ export class AlloyMasterComponent implements OnInit {
     // Update percentage calculation
     this.alloyMastereForm.get('price3per')!.setValue(this.percentageCalculate(form.price3Fc));
     console.log(this.percentageCalculate(form.price3Fc));
+    }
   }
 
   price4FcChange() {
     if (this.checkCode4Price()) return
-
+    if (this.alloyMastereForm.value.priceScheme == '') {
     const form = this.alloyMastereForm.value;
     let curr = this.commonService.FCToCC(form.currency, form.price4Fc)
     this.alloyMastereForm.get('price4Lc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'AMOUNT'));
@@ -495,11 +507,12 @@ export class AlloyMasterComponent implements OnInit {
     // Update percentage calculation
     this.alloyMastereForm.get('price4per')!.setValue(this.percentageCalculate(form.price4Fc));
     console.log(this.percentageCalculate(form.price4Fc));
+    }
   }
 
   price5FcChange() {
     if (this.checkCode5Price()) return
-
+    if (this.alloyMastereForm.value.priceScheme == '') {
     const form = this.alloyMastereForm.value;
     let curr = this.commonService.FCToCC(form.currency, form.price5Fc)
     this.alloyMastereForm.get('price5Lc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'AMOUNT'));
@@ -507,6 +520,7 @@ export class AlloyMasterComponent implements OnInit {
     // Update percentage calculation
     this.alloyMastereForm.get('price5per')!.setValue(this.percentageCalculate(form.price5Fc));
     console.log(this.percentageCalculate(form.price5Fc));
+    }
   }
 
 
