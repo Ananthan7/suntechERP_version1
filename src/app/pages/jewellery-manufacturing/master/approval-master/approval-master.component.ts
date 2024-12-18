@@ -74,7 +74,7 @@ export class ApprovalMasterComponent implements OnInit {
     EMAIL: [false],
     MOBILE_NO: [''],
     EMAIL_ID: [''],
-
+    USER_CODE:[''],
   });
 
 
@@ -466,6 +466,7 @@ moveCharacter(value: string, index: number, direction: number): string {
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.approvalMasterForm.controls[FORMNAME].setValue('')
+          this.openOverlay(FORMNAME, event);
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
@@ -492,6 +493,14 @@ moveCharacter(value: string, index: number, direction: number): string {
         break;
         default:
         break
+    }
+  }
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'USER_CODE':
+        this.overlayUsercode.showOverlayPanel(event);
+        break;
     }
   }
 

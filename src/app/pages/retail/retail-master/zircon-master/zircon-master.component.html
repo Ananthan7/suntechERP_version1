@@ -8,11 +8,13 @@
 
 <!-- modal header component -->
 <modal-header
-  *ngIf="flag !== 'VIEW'"
+  [isViewMore]="!['VIEW', 'DELETE'].includes(flag)"
   (saveClick)="zirconMasterMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
-  [isViewDelete]="flag == 'VIEW'"
+  [isViewDelete]="false"
+  [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
 ></modal-header>
 
 <!-- content section -->
@@ -29,10 +31,12 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [maxlength]="6"
                     type="text"
                     [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                     matInput
                     formControlName="code"
+                    (focusout)="prefillPrefixCodes($event)"
                   />
                 </mat-form-field>
               </div>

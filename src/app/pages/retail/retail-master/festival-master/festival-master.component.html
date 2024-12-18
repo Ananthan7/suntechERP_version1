@@ -1,43 +1,73 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal"> Festival Master
-    </h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
-        <i class="feather icon-x close-icon"></i>
-    </button>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Festival Master</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="DeleteController()"
-[isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+<modal-header
+  (cancelClick)="close()"
+  (saveClick)="formSubmit()"
+  (deleteClick)="DeleteController()"
+  [isViewDelete]="editMode"
+  [isViewSave]="!viewMode"
+  [isViewCancel]="!viewMode"
+  [isViewMore]="!viewMode"
 ></modal-header>
 <!-- content section -->
 
 <div class="container-fluid pt-3">
-    <form [formGroup]="festivalmasterform" class="p-1">
-        <div class="row">
-            <div class="col-md-8">
+  <form [formGroup]="festivalmasterform" class="p-1">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="row align-items-center">
+          <label for="inputPassword" class="col-sm-2 col-form-label"
+            >Code <span class="text-danger"> *</span></label
+          >
+          <div class="col-md-2">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input
+                type="text"
+                id="inputPassword"
+                id="fes_code"
+                #fes_code
+                matInput
+                formControlName="code"
+                [readonly]="viewOnly || disable_code"
+                UpperCaseDirective
+                maxlength="6"
+                (focusout)="checkcode()"
+                maxlength="6"
+              />
+            </mat-form-field>
+          </div>
+        </div>
 
-                <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Code <span class="text-danger"> *</span></label>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" id="fes_code" #fes_code matInput formControlName="code"
-                            [readonly]="viewOnly || disable_code"  UpperCaseDirective maxlength="6" (focusout)="checkcode()" maxlength="6"/>
-                        </mat-form-field>
-                    </div>
+        <div class="row align-items-center my-2">
+          <label for="inputPassword" class="col-sm-2 col-form-label"
+            >Description <span class="text-danger"> *</span></label
+          >
+          <div class="col-md-8">
+            <mat-form-field
+              style="width: 100%"
+              #fes_desc
+              id="fes_desc"
+              appearance="outline"
+            >
+              <input
+                type="text"
+                id="inputPassword"
+                matInput
+                formControlName="description"
+                [readonly]="viewOnly"
+                (focusout)="checkdesc()"
+                maxlength="50"
+              />
+            </mat-form-field>
+          </div>
+        </div>
 
-                </div>
-
-                <div class="row align-items-center my-2">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Description  <span  class="text-danger"> *</span></label>
-                    <div class="col-md-8">
-                        <mat-form-field style="width: 100%;" #fes_desc id="fes_desc" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="description"
-                                [readonly]="viewOnly" (focusout)="checkdesc()" maxlength="50"/>
-                        </mat-form-field>
-                    </div>
-                </div>
-
-                <!-- <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
+        <!-- <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
                     [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
 
                     <dxi-column dataField="SRNO" caption="S.NO">
@@ -78,7 +108,7 @@
                     </dxi-column>
 
                 </dx-data-grid> -->
-                <!-- <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
+        <!-- <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
                     [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
 
                     <dxo-selection mode="single"></dxo-selection>
@@ -128,49 +158,121 @@
 
                 </dx-data-grid> -->
 
-                
-                <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
-                [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="maindetails"
+          [showBorders]="true"
+          [showColumnLines]="true"
+          [showRowLines]="true"
+          [allowColumnResizing]="true"
+          keyExpr="SRNO"
+        >
+          <dxi-column dataField="SRNO" caption="S.NO"></dxi-column>
 
-                <dxi-column dataField="SRNO" caption="S.NO">
-                </dxi-column>
-                <dxi-column dataField="YEAR" caption="year" cellTemplate="year"> </dxi-column>
+          <dxi-column
+            dataField="YEAR"
+            caption="Year"
+            cellTemplate="year"
+          ></dxi-column>
 
-                <div *dxTemplate="let data of 'year'">
-                    <input type="number" [disabled]="viewMode" [value]="data.value" style="width: 100%;"  (change)="changeyear($event,data)"/>
-                </div>
+          <dxi-column
+            dataField="FROMDATE"
+            caption="From Date"
+            cellTemplate="from_date"
+          ></dxi-column>
 
-                <dxi-column dataField="FROMDATE" caption="From Date" cellTemplate="from_date"> </dxi-column>
+          <dxi-column
+            dataField="TODATE"
+            caption="To Date"
+            cellTemplate="to_date"
+          ></dxi-column>
 
-                <div *dxTemplate="let data of 'from_date'">
-                    
-                    <input type="date" [disabled]="viewMode"   [value]="data.value" style="width: 100%;"  (change)="changefromdate($event,data)" />
-                </div>
-                <dxi-column dataField="TODATE" caption="To Date" cellTemplate="to_date"> </dxi-column>
+          <dxi-column
+            dataField="FEST_TARGET"
+            caption="Target"
+            cellTemplate="target"
+          ></dxi-column>
 
-                <div *dxTemplate="let data of 'to_date'">
-                    
-                    <input type="date" [disabled]="viewMode"  [value]="data.value" style="width: 100%;"  (change)="changetodate($event,data)"/>
-                    <!-- <dx-date-box [(value)]="data.value"  displayFormat="dd/MM/yyyy" [disabled]="viewMode" style="width: 100%;" (valueChanged)="changefromdate($event, data)"></dx-date-box>
-                    <dx-date-box [(value)]="data.value"  displayFormat="dd/MM/yyyy" [disabled]="viewMode" style="width: 100%;" (valueChanged)="changetodate($event, data)" style="height:20%"></dx-date-box> -->
-                </div>
-                <dxi-column dataField="FEST_TARGET" caption="Target" cellTemplate="target"> </dxi-column>
+          <div *dxTemplate="let data of 'year'">
+            <input
+              type="number"
+              [disabled]="viewMode"
+              [value]="data?.value"
+              style="width: 100%"
+              (change)="changeyear($event, data?.data)"
+            />
+          </div>
 
-                <div *dxTemplate="let data of 'target'">
-                    
-                    <input type="number" [disabled]="viewMode"  class="text-right" (change)="targetchange($event,data)" [value]="data.value" style="width: 100%;" AmountDecimalInput/>
-                </div>
-            </dx-data-grid>
+          <div *dxTemplate="let data of 'from_date'">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input
+                matInput
+                [readonly]="flag === 'VIEW'"
+                [matDatepicker]="pickerFrom"
+                (dateChange)="changeFromDate($event, data?.data)"
+                [value]="data?.data?.FROMDATE | date: 'yyyy-MM-dd'"
+                [disabled]="viewMode"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerFrom"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerFrom></mat-datepicker>
+            </mat-form-field>
+          </div>
 
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-3">
-                <menu-buttons *ngIf="this.flag != 'VIEW'" [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
-                    [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
-                    (deleteClick)="deleteTableData()">
-                </menu-buttons>
-            </div>
-        </div>
-    </form>
+          <div *dxTemplate="let data of 'to_date'">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input
+                matInput
+                [readonly]="flag === 'VIEW'"
+                [matDatepicker]="pickerTo"
+                (dateChange)="changeToDate($event, data?.data)"
+                [value]="data?.data?.TODATE || ''"
+                [min]="data?.data?.FROMDATE || null"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="pickerTo"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #pickerTo></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div *dxTemplate="let data of 'target'">
+            <input
+              type="number"
+              [disabled]="viewMode"
+              class="text-right"
+              (change)="targetchange($event, data.data)"
+              [value]="data?.value"
+              style="width: 100%"
+              AmountDecimalInput
+            />
+          </div>
+        </dx-data-grid>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-3">
+        <menu-buttons
+          *ngIf="this.flag != 'VIEW'"
+          [viewAddBtn]="true"
+          [viewDeleteBtn]="true"
+          [viewImportBtn]="false"
+          [viewAddBtn]="!viewMode"
+          [viewDeleteBtn]="!viewMode"
+          (addClick)="addTableData()"
+          (deleteClick)="deleteTableData()"
+        >
+        </menu-buttons>
+      </div>
+    </div>
+  </form>
 </div>
+
+<!-- <input type="date" [disabled]="viewMode"   [value]="data.value" style="width: 100%;" (change)="changefromdate($event,data)" /> -->
+<!-- <input type="date" [disabled]="viewMode"  [value]="data.value" style="width: 100%;"  (change)="changetodate($event,data)"/> -->
+
+<!-- <dx-date-box [(value)]="data.value"  displayFormat="dd/MM/yyyy" [disabled]="viewMode" style="width: 100%;" (valueChanged)="changefromdate($event, data)"></dx-date-box>
+                    <dx-date-box [(value)]="data.value"  displayFormat="dd/MM/yyyy" [disabled]="viewMode" style="width: 100%;" (valueChanged)="changetodate($event, data)" style="height:20%"></dx-date-box> -->

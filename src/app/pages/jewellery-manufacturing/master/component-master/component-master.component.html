@@ -23,8 +23,10 @@
 
                         <div class="row mb-2">
                             <section class="example-section" id="ID010">
-                                <mat-checkbox class="example-margin" formControlName="selectMasterOnly"
-                                    (change)="selectMasterOnlyChange($event)" [disabled]="viewMode">Select From
+                                <mat-checkbox class="example-margin"
+                                    formControlName="selectMasterOnly"
+                                    (change)="selectMasterOnlyChange($event)"
+                                    [disabled]="viewMode">Select From
                                     Master</mat-checkbox>
                             </section>
                             <label for="input" id="ID001"
@@ -37,8 +39,7 @@
                                         [readonly]="editableMode || viewMode"
                                         [disabled]="viewMode" #code
                                         (focusout)="componentCodeValidate($event,codeCodeData,'code')"
-                                        UpperCaseDirective
-                                        autocomplete="off"
+                                        UpperCaseDirective autocomplete="off"
                                         (keyup)="codeEnabled()"
                                         (keydown)="lookupKeyPress($event,'code')" />
                                     <master-search
@@ -98,7 +99,8 @@
                                         [MasterSearchData]="typeCodeData"
                                         *ngIf="viewMode == false"
                                         class="mstrScrch" #overlaytypeSearch
-                                        (newRowClick)="typeCodeSelected($event)"></master-search>
+                                        (newRowClick)="typeCodeSelected($event)">
+                                    </master-search>
                                 </mat-form-field>
 
                             </div>
@@ -331,8 +333,7 @@
                                 <button class="carousel-control-prev"
                                     type="button" id="ID015"
                                     data-bs-target="#carouselExampleControls"
-                                    data-bs-slide="prev"
-                                    [disabled]="viewMode"
+                                    data-bs-slide="prev" [disabled]="viewMode"
                                     (click)="previous()">
                                     <span class="carousel-control-prev-icon"
                                         aria-hidden="true"></span>
@@ -342,8 +343,7 @@
                                 <button class="carousel-control-next"
                                     type="button" id="ID016"
                                     data-bs-target="#carouselExampleControls"
-                                    data-bs-slide="next"
-                                    [disabled]="viewMode"
+                                    data-bs-slide="next" [disabled]="viewMode"
                                     (click)="next()">
                                     <span class="carousel-control-next-icon"
                                         aria-hidden="true"></span>
@@ -466,17 +466,17 @@
                                         caption="Sieve from"
                                         cellTemplate="sieveFromtemp">
                                     </dxi-column>
-                                    <dxi-column dataField="Description"
-                                        caption="Description"
-                                        cellTemplate="descriptiontemp">
+                                    <dxi-column caption="Description"
+                                        [width]="100"
+                                        cellTemplate="sieveFromDescriptiontemp">
                                     </dxi-column>
                                     <dxi-column dataField="SIEVE_TO"
                                         caption="Sieve To"
                                         cellTemplate="sieveTotemp">
                                     </dxi-column>
-                                    <dxi-column dataField="Description"
-                                        caption="Description"
-                                        cellTemplate="descriptiontemp">
+                                    <dxi-column caption="Description"
+                                        [width]="100"
+                                        cellTemplate="sieveTodescriptiontemp">
                                     </dxi-column>
                                     <div
                                         *dxTemplate="let data of 'divisiontemp'">
@@ -506,7 +506,8 @@
                                         <a href="javascript:void(0)"
                                             class="mx-1"
                                             [innerHTML]="data.value"></a>
-                                        <master-search *ngIf="!iskaratDisabled"
+                                        <master-search
+                                            *ngIf="!iskaratDisabled || !isKaratdisabled"
                                             [MasterSearchData]="karatCodeData"
                                             (newRowClick)="karatCodeSelected($event,data,'karattemp')">
                                         </master-search>
@@ -534,7 +535,7 @@
                                             style="width: 100%;" required /> -->
                                         <mat-form-field appearance="outline"
                                             style="width: 100%;">
-                                            <input type="text" matInput readonly
+                                            <input type="text" matInput
                                                 class="text-right"
                                                 [value]="data.value"
                                                 (change)="pcstemp($event,data)"
@@ -668,7 +669,7 @@
                                             style="width: 100%;" required /> -->
                                         <mat-form-field appearance="outline"
                                             style="width: 100%;">
-                                            <input type="text" matInput readonly
+                                            <input type="text" matInput
                                                 style="width: 100%;"
                                                 [value]="data.value"
                                                 (change)="remark($event,data)"
@@ -683,7 +684,7 @@
                                             style="width: 100%;" required /> -->
                                         <mat-form-field appearance="outline"
                                             style="width: 100%;">
-                                            <input type="text" matInput readonly
+                                            <input type="text" matInput
                                                 class="text-right"
                                                 [value]="data.value"
                                                 (change)="pointerWt($event,data)"
@@ -739,6 +740,16 @@
                                     </div>
 
                                     <div
+                                        *dxTemplate="let data of 'sieveFromDescriptiontemp'">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
+                                            <input type="text" matInput
+                                                [value]="data.value"
+                                                [readonly]="viewMode || codeEnable" />
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div
                                         *dxTemplate="let data of 'sieveTotemp'">
                                         <!-- <input type="email" (change)="sieveTo($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
@@ -750,6 +761,16 @@
                                             *ngIf="!isPCSDisabled"
                                             (newRowClick)="sieveToCodeSelected($event,data,'sieveTotemp')">
                                         </master-search>
+                                    </div>
+
+                                    <div
+                                        *dxTemplate="let data of 'sieveTodescriptiontemp'">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
+                                            <input type="text" matInput
+                                                [value]="data.value"
+                                                [readonly]="viewMode || codeEnable" />
+                                        </mat-form-field>
                                     </div>
 
                                 </dx-data-grid>
@@ -811,21 +832,18 @@
         </div>
         <div class="modal-body" *ngIf="savedAttachment.length > 0">
             <div class="row">
-                <dx-data-grid id="gridContainer"
-                    [dataSource]="savedAttachment"
-                    [showRowLines]="true"
-                    height="150" [columnAutoWidth]="true"
-                    [showBorders]="true"
+                <dx-data-grid id="gridContainer" [dataSource]="savedAttachment"
+                    [showRowLines]="true" height="150"
+                    [columnAutoWidth]="true" [showBorders]="true"
                     [allowColumnResizing]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-selection mode="single"></dxo-selection>
                     <!-- <dxi-column dataField="BRANCH_CODE" caption="Remarks"
                     alignment="left">
                 </dxi-column> -->
-                    <dxi-column dataField="file"
-                        cellTemplate="attachmentTemp" caption="Attachment"
-                        [allowEditing]="true"
-                        alignment="center">
+                    <dxi-column dataField="file" cellTemplate="attachmentTemp"
+                        caption="Attachment"
+                        [allowEditing]="true" alignment="center">
                     </dxi-column>
                     <div *dxTemplate="let data of 'attachmentTemp'">
                         <a (click)="openAttachment(data)"
@@ -843,9 +861,8 @@
                     style="border-left: 2px dashed #d3d3d3;">
                     <div class="d-flex align-items-center">
                         <div class="p-2">
-                            <input class="fileAttach pt-2"
-                                type="file" accept=".png, .jpg, .jpeg"
-                                multiple 
+                            <input class="fileAttach pt-2" type="file"
+                                accept=".png, .jpg, .jpeg" multiple
                                 (change)="onFileChangedimage($event)"
                                 [disabled]="viewMode" />
                         </div>
@@ -853,39 +870,35 @@
                 </div>
             </div>
             <div class="row">
-                <dx-data-grid id="gridContainer"
-                    [dataSource]="AttachedfileGrid"
-                    [showRowLines]="true"
-                    height="350" [columnAutoWidth]="true"
-                    [showBorders]="true"
+                <dx-data-grid id="gridContainer" [dataSource]="AttachedfileGrid"
+                    [showRowLines]="true" height="350"
+                    [columnAutoWidth]="true" [showBorders]="true"
                     [allowColumnResizing]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <!-- <dxo-selection mode="single"></dxo-selection> -->
-                    <dxi-column dataField="FILE"
-                        caption="Attachment" cellTemplate="FILEtemplate"
-                        alignment="left">
+                    <dxi-column dataField="FILE" caption="Attachment"
+                        cellTemplate="FILEtemplate" alignment="left">
                         <div *dxTemplate="let item of 'FILEtemplate'">
                             {{item.data.NAME}}
                         </div>
                     </dxi-column>
                     <dxi-column dataField="DEFAULT"
                         cellTemplate="DEFAULTtemplate" caption="Default"
-                        [allowEditing]="true"
-                        alignment="center">
+                        [allowEditing]="true" alignment="center">
                         <div *dxTemplate="let data of 'DEFAULTtemplate'">
-                            <mat-checkbox [checked]="data.data.DEFAULT" 
+                            <mat-checkbox [checked]="data.data.DEFAULT"
                                 (change)="defaultCheckboxChange($event,data)">
                             </mat-checkbox>
                         </div>
                     </dxi-column>
                     <dxi-column dataField="PICTURE_TYPE"
                         cellTemplate="PICTURE_TYPEtemplate" caption="Type"
-                        [allowEditing]="true"
-                        alignment="center">
+                        [allowEditing]="true" alignment="center">
                         <div *dxTemplate="let data of 'PICTURE_TYPEtemplate'">
-                            <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
-                                <mat-select >
-                                  <mat-option value=0></mat-option>
+                            <mat-form-field appearance="outline" ngClass="me-1"
+                                style="width:100%">
+                                <mat-select>
+                                    <mat-option value=0></mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>

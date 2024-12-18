@@ -8,7 +8,8 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()"
+    <modal-header (saveClick)="formSubmit()" [isViewDelete]="false"
+        [isViewSave]="!viewMode"
         (cancelClick)="close()"></modal-header>
     <!-- content section -->
     <form [formGroup]="jobCardFrom">
@@ -77,7 +78,7 @@
                                             [matDatepicker]="jobdate"
                                             placeholder="DD/MM/YYYY"
                                             [readonly]="viewMode"
-                                            class="text-right" />
+                                            class="text-right"/>
                                         <mat-datepicker-toggle matSuffix
                                             [for]="jobdate"></mat-datepicker-toggle>
                                         <mat-datepicker [disabled]="isSaved"
@@ -133,7 +134,7 @@
                                         maxlength="30"
                                         oninput="this.value = this.value.toUpperCase()"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,customerCodeData,'customer')"
+                                        (focusout)="SPvalidateLookupField($event,customerCodeData,'customer')"
                                         (input)="inputValidate($event)"
                                         (keydown)="lookupKeyPress($event,'customer')" />
                                     <master-search
@@ -535,10 +536,11 @@
                                             formControlName="deldate"
                                             [readonly]="viewMode"
                                             placeholder="DD/MM/YYYY"
-                                            class="text-right" />
+                                            class="text-right"   [matDatepickerFilter]="deldateFilter" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="deldate"></mat-datepicker-toggle>
-                                        <mat-datepicker [disabled]="isSaved" [startAt]="currentDate"
+                                        <mat-datepicker [disabled]="isSaved"
+                                            [startAt]="currentDate"
                                             #deldate></mat-datepicker>
                                     </mat-form-field>
                                 </div>
@@ -795,16 +797,16 @@
                     </div>
                     <div class="col-md-3">
                         <div class="row mt-5 mb-2">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12" style="margin-left: 84px;">
                                 <!-- <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea> -->
                                 <div class="upload-btn-wrapper">
-                                    <button class="btn btnnew border-dark">
+                                    
                                         <!-- <img [src]="content.PICTURE_NAME" style="width:200px;height:185px" > -->
-                                        <img src={{urls}}
-                                            style="width:200px;height:185px"
-                                            alt="Uploaded Image"
-                                            [src]="uploadedImages[currentIndex]">
-                                        <button class="carousel-control-prev"
+                                      
+                                            <image-slider style="height: 200px; width: 200; margin-left: 70px;"
+                                                [imageArray]="imagepath"></image-slider>
+                                     
+                                        <!-- <button class="carousel-control-prev"
                                             type="button"
                                             data-bs-target="#carouselExampleControls"
                                             data-bs-slide="prev">
@@ -813,8 +815,8 @@
                                                 (click)="previousImage()"></span>
                                             <span id="ID040"
                                                 class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button class="carousel-control-next"
+                                        </button> -->
+                                        <!-- <button class="carousel-control-next"
                                             type="button"
                                             data-bs-target="#carouselExampleControls"
                                             data-bs-slide="next">
@@ -823,23 +825,23 @@
                                                 (click)="nextImage()"></span>
                                             <span class="visually-hidden"
                                                 id="ID041">Next</span>
-                                        </button>
-                                    </button>
+                                        </button> -->
+                                 
                                 </div>
-                               
-                                <div class="p-2 bd-highlight">
+
+                                <div class="p-2 bd-highlight" style="margin-left: -77px;">
                                     <div class="upload-btn">
                                         <button
                                             class="btn btnnew bgColourUpdate"
-                                            id="ID015"> Image</button>
+                                            id="ID015" [disabled]="viewMode"> Image</button>
                                         <input type="file" name="uploadproduct"
                                             accept=".png, .jpg, .jpeg"
-                                            #fileInput
+                                            #fileInput  [disabled]="viewMode"
                                             class="uploadproduct"
                                             (change)="onFileChanged($event)">
                                     </div>
                                 </div>
-                           
+
                             </div>
                         </div>
 

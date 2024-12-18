@@ -164,14 +164,23 @@ export class CustomerPriceMasterComponent implements OnInit {
       this.isDisableSaveBtn = false;
     }
   }
-
+  currentTabIndex: number = 0
+  onTabChange(index: number): void {
+    console.log('Selected tab index:', index);
+    this.currentTabIndex = index
+  }
   Change_Prices() {
-    if (this.tableDatastone?.length > 0) {
+    let data = []
+    if (this.currentTabIndex == 0) data = this.tableDatastone
+    if (this.currentTabIndex == 1) data = this.tableDatalabour
+    if (this.currentTabIndex == 2) data = this.designChanges
+    debugger
+    if (data?.length > 0) {
       let form = this.customerpricemasterForm.value;
       if (this.commonService.emptyToZero(form.changePrice) <= 0) return
       let percentage = 0
       let nNewRate = 0
-      this.tableDatastone.forEach((item: any) => {
+      data.forEach((item: any) => {
         if (item.SELECT1) {
           nNewRate = this.commonService.emptyToZero(item.SELLING_RATE)
           if (form.calculateMethod == this.priceOptions[0]) {
@@ -191,12 +200,22 @@ export class CustomerPriceMasterComponent implements OnInit {
             }
           } else if (form.calculateMethod == this.priceOptions[2]) {
             //fixed
-            nNewRate = form.this.commonService.emptyToZero(form.changePrice)
+            nNewRate = this.commonService.emptyToZero(form.changePrice)
           }
-          item.SELLING_RATE = this.commonService.decimalQuantityFormat(nNewRate, 'AMOUNT')
+          item.SELLING_RATE = this.commonService.decimalQuantityFormat(nNewRate, 'THREE')
         }
       })
     }
+  }
+  /**use: checkbox change */
+  stoneDataSelected(event: any) {
+    this.tableDatastone[event.data.SRNO - 1].SELECT1 = !event.data.SELECT1;
+  }
+  labourDataSelected(event: any) {
+    this.tableDatalabour[event.data.SRNO - 1].SELECT1 = !event.data.SELECT1;
+  }
+  designDataSelected(event: any) {
+    this.designChanges[event.data.SRNO - 1].SELECT1 = !event.data.SELECT1;
   }
   stonepricing() {
     let postData = {
@@ -210,9 +229,19 @@ export class CustomerPriceMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.tableDatastone = result.dynamicData[0] || []
-          this.tableDatastone.forEach((item)=> item.SELECT1 = true)
-          if (this.tableDatastone?.length == 0) {
+          let data = result.dynamicData[0] || []
+          if (data?.length > 0) {
+            this.tableDatastone = this.commonService.arrayEmptyObjectToString(data)
+            this.tableDatastone.forEach((item, index) => {
+              item.SRNO = index + 1
+              item.SELECT1 = false
+              item.ISSUE_RATE = this.commonService.decimalQuantityFormat(item.ISSUE_RATE, 'THREE');
+              item.SELLING_RATE = this.commonService.decimalQuantityFormat(item.SELLING_RATE, 'THREE');
+              item.WEIGHT_FROM = this.commonService.decimalQuantityFormat(item.WEIGHT_FROM, 'STONE');
+              item.WEIGHT_TO = this.commonService.decimalQuantityFormat(item.WEIGHT_TO, 'STONE');
+              item.CARAT_WT = this.commonService.decimalQuantityFormat(item.CARAT_WT, 'STONE');
+            })
+          } else {
             this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
           }
 
@@ -237,12 +266,20 @@ export class CustomerPriceMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
-
-          this.tableDatalabour = result.dynamicData[0] || []
-          if (this.tableDatalabour?.length == 0) {
+          let data = result.dynamicData[0] || []
+          if (data.length > 0) {
+            this.tableDatalabour = this.commonService.arrayEmptyObjectToString(data)
+            this.tableDatalabour.forEach((item: any, i: any) => {
+              item.SELECT1 = false
+              item.SRNO = i + 1;
+              item.CARATWT_FROM = this.commonService.decimalQuantityFormat(item.CARATWT_FROM, 'STONE');
+              item.CARATWT_TO = this.commonService.decimalQuantityFormat(item.CARATWT_TO, 'STONE');
+              item.COST_RATE = this.commonService.decimalQuantityFormat(item.COST_RATE, 'THREE');
+              item.SELLING_RATE = this.commonService.decimalQuantityFormat(item.SELLING_RATE, 'THREE');
+            });
+          } else {
             this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
           }
-
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG81451')// Server Error
@@ -251,7 +288,6 @@ export class CustomerPriceMasterComponent implements OnInit {
   }
 
   designcharge() {
-
     //this.customerpricemasterForm.controls.priceScheme.setValue(e.PRICE_CODE)
     let postData = {
       "SPID": "097",
@@ -265,10 +301,15 @@ export class CustomerPriceMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           this.designChanges = result.dynamicData[0] || []
-          if (this.designChanges?.length == 0) {
-            // this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
+          if (this.designChanges?.length > 0) {
+            this.designChanges = this.commonService.arrayEmptyObjectToString(this.designChanges)
+            this.designChanges.forEach((item: any, i: any) => {
+              item.SELECT1 = false
+              item.SRNO = i + 1;
+              item.COST_RATE = this.commonService.decimalQuantityFormat(item.COST_RATE, 'THREE');
+              item.SELLING_RATE = this.commonService.decimalQuantityFormat(item.SELLING_RATE, 'THREE');
+            });
           }
-
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG81451')// Server Error
@@ -641,7 +682,7 @@ export class CustomerPriceMasterComponent implements OnInit {
         if (result.response) {
           if (result.status == "Success") {
             Swal.fire({
-              title:  this.commonService.getMsgByID('MSG3641') || 'Success',
+              title: this.commonService.getMsgByID('MSG3641') || 'Success',
               text: '',
               icon: 'success',
               confirmButtonColor: '#336699',

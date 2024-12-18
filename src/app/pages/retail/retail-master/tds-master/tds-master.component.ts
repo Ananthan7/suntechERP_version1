@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -22,6 +22,7 @@ export class TdsMasterComponent implements OnInit {
   viewOnly: boolean = false;
   viewMode: boolean = false;
   editMode: boolean = false;
+  code_occurs: boolean = false;
   dyndatas: any;
   tds: any;
   flag: any;
@@ -74,9 +75,9 @@ export class TdsMasterComponent implements OnInit {
 
   tdsform: FormGroup = this.formBuilder.group({
     section_code: ['', [Validators.required]],
-    financial_year: [''],
-    description: [''],
-    credit_ac: [''],
+    financial_year: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    credit_ac: ['', [Validators.required]],
     debit_ac: [''],
     call: [''],
     effdate: [''],
@@ -94,6 +95,7 @@ export class TdsMasterComponent implements OnInit {
     SEARCH_VALUE: "",
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true,
+    
   }
   creditcodeselected(e: any) {
     console.log(e);
@@ -127,6 +129,7 @@ export class TdsMasterComponent implements OnInit {
     if (FLAG === "EDIT") {
       this.editController(DATA);
       this.editMode = false;
+      this.code_occurs = true;
     }
     if (FLAG === "DELETE") {
       this.DeleteController(DATA);
@@ -138,6 +141,16 @@ export class TdsMasterComponent implements OnInit {
     if (code == "" || code.trim() == "") {
       this.commonService.toastErrorByMsgId('MSG1124');
       this.renderer.selectRootElement('#section_code')?.focus();
+    }else{
+      this.code_occurs = true;
+    }
+  }
+
+  checkdesc(){
+    let desc = this.tdsform.controls.description.value;
+    if (desc == "" || desc.trim() == "") {
+      this.commonService.toastErrorByMsgId('MSG1193');
+      this.renderer.selectRootElement('#desc')?.focus();
     }
   }
 
@@ -259,36 +272,29 @@ export class TdsMasterComponent implements OnInit {
 
   formSubmit() {
 
-    this.maindetails.forEach((e: any) => {
-      e.BRANCH_CODE = this.curr_branch;
-      e.UNIQUE_ID = e.SRNO;
-      e.REFMID = 0;
-      e.ON_TAXABLEAMT = true;
-      e.INCLUDE_GST = true;
+    Object.keys(this.tdsform.controls).forEach((controlName) => {
+      const control = this.tdsform.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
     });
 
-    const postData = {
-      "TDS_CODE": this.tdsform.controls.section_code.value,
-      "TDS_DESCRIPTION": this.tdsform.controls.description.value,
-      "CREDIT_AC_CODE": this.tdsform.controls.credit_ac.value,
-      "SYSTEM_DATE": new Date(),
-      "MID": 0,
-      "INDIVIDUAL_PER": 0,
-      "COMPANY_PER": 0,
-      "NOPAN_PER": 0,
-      "DEBIT_AC_CODE": this.tdsform.controls.debit_ac.value,
-      "BRANCH_CODE": this.curr_branch,
-      "TDS_LIMIT": 0,
-      "ON_TAXABLEAMT": this.tdsform.controls.call.value,
-      "INCLUDE_GST": true,
-      "tdsDetails":
-        this.maindetails
+    const requiredFieldsInvalid = Object.keys(
+      this.tdsform.controls
+    ).some((controlName) => {
+      const control = this.tdsform.controls[controlName];
+      return control.hasError("required") && control.touched;
+    });
 
-    }
-
-    if (this.flag === "EDIT") {
-
-
+    if(!requiredFieldsInvalid){
+      this.maindetails.forEach((e: any) => {
+        e.BRANCH_CODE = this.curr_branch;
+        e.UNIQUE_ID = e.SRNO;
+        e.REFMID = 0;
+        e.ON_TAXABLEAMT = true;
+        e.INCLUDE_GST = true;
+      });
+  
       const postData = {
         "TDS_CODE": this.tdsform.controls.section_code.value,
         "TDS_DESCRIPTION": this.tdsform.controls.description.value,
@@ -301,64 +307,89 @@ export class TdsMasterComponent implements OnInit {
         "DEBIT_AC_CODE": this.tdsform.controls.debit_ac.value,
         "BRANCH_CODE": this.curr_branch,
         "TDS_LIMIT": 0,
-        "ON_TAXABLEAMT": this.tdsform.controls.call.value == 'Y' ? true : false,
+        "ON_TAXABLEAMT": this.tdsform.controls.call.value,
         "INCLUDE_GST": true,
         "tdsDetails":
           this.maindetails
-
+  
       }
-
-
-      let API = `TDSMaster/UpdateTDSMaster/${this.unq_id}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    } else {
-      let API = `TDSMaster/InsertTDSMaster`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+  
+      if (this.flag === "EDIT") {
+  
+  
+        const postData = {
+          "TDS_CODE": this.tdsform.controls.section_code.value,
+          "TDS_DESCRIPTION": this.tdsform.controls.description.value,
+          "CREDIT_AC_CODE": this.tdsform.controls.credit_ac.value,
+          "SYSTEM_DATE": new Date(),
+          "MID": 0,
+          "INDIVIDUAL_PER": 0,
+          "COMPANY_PER": 0,
+          "NOPAN_PER": 0,
+          "DEBIT_AC_CODE": this.tdsform.controls.debit_ac.value,
+          "BRANCH_CODE": this.curr_branch,
+          "TDS_LIMIT": 0,
+          "ON_TAXABLEAMT": this.tdsform.controls.call.value == 'Y' ? true : false,
+          "INCLUDE_GST": true,
+          "tdsDetails":
+            this.maindetails
+  
+        }
+  
+  
+        let API = `TDSMaster/UpdateTDSMaster/${this.unq_id}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `TDSMaster/InsertTDSMaster`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
     }
+
+  
   }
 
   SPvalidateLookupFieldModified(

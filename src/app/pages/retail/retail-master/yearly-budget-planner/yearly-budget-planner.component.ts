@@ -101,6 +101,8 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER:true
   }
 
   selectedfinyear(e: any) {
@@ -221,6 +223,8 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true,
   }
+
+
   branchCodeSelected(e: any) {
     console.log(e);
     this.yearlybudgetform.controls.branchcode.setValue(e.BRANCH_CODE);
@@ -458,7 +462,7 @@ export class YearlyBudgetPlannerComponent implements OnInit {
         keyboard: false,
         windowClass: 'modal-full-width',
       });
-      // this.modalReference.componentInstance.tablecount = tablecount;
+      this.modalReference.componentInstance.flag = this.flag;
 
       this.modalReference.closed.subscribe((result) => {
         if (result) {
@@ -468,9 +472,7 @@ export class YearlyBudgetPlannerComponent implements OnInit {
           console.log(result);
         }
       });
-
     }
-
   }
 
   deleteTableData() {

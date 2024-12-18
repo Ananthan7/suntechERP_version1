@@ -325,13 +325,16 @@ export class AllowanceMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId("Calculation Basis cannot be empty"); //"description cannot be empty"
       return true;
     } else if (this.commonService.nullToString(form.value) == "") {
-      this.commonService.toastErrorByMsgId("value cannot be empty"); //"description cannot be empty"
+      this.commonService.toastErrorByMsgId("value cannot be empty"); //"Value cannot be empty"
       return true;
     } else if (this.commonService.nullToString(form.glcode) == "") {
-      this.commonService.toastErrorByMsgId("value cannot be empty"); //"description cannot be empty"
+      this.commonService.toastErrorByMsgId("Gl Code cannot be empty"); //"GL Code cannot be empty"
       return true;
     } else if (this.commonService.nullToString(form.countrycode) == "") {
-      this.commonService.toastErrorByMsgId("value cannot be empty"); //"description cannot be empty"
+      this.commonService.toastErrorByMsgId("Country Code cannot be empty"); //"Country Code cannot be empty"
+      return true;
+    }else if (this.commonService.nullToString(form.calc_method) == "") {
+      this.commonService.toastErrorByMsgId("Calculation Method Fixed/Percentage cannot be empty"); //"Country Code cannot be empty"
       return true;
     }
     return false;

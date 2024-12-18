@@ -5,8 +5,10 @@
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
 
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  
+    [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    ></modal-header>
 
     <form [formGroup]="yearlybudgetdetailsform" class="text-center p-4">
         <div class="row">

@@ -6,6 +6,7 @@
 </div>
 <!-- modal header component -->
 <modal-header
+[isViewMore]="!['VIEW', 'DELETE'].includes(flag)"
   (cancelClick)="close()"
   (saveClick)="boxMasterMainFormSubmit()"
   (deleteClick)="DeleteController()"

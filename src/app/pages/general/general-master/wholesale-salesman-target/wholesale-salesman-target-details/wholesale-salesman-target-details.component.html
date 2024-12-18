@@ -16,12 +16,12 @@
             <div class="col-md-6">
                 <div class="row ms-2">
                     <div class="col-md-3">
-                        <label for="inputPassword" class="col-sm-8 col-form-label">Target Amount</label>
+                        <label for="inputPassword" class="col-sm-8 col-form-label">Target Amount <span class="text-danger"> *</span></label>
                     </div>
                     <div class="col-md-7">
                         <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="number" id="inputPassword" matInput formControlName="target_amount"
-                                AmountDecimalInput class="text-right" />
+                                AmountDecimalInput class="text-right" (focusout)="setmonth()" />
                         </mat-form-field>
                     </div>
                     <div class="col-md-2">
@@ -41,35 +41,35 @@
                     <div class="your-box-container">
                         <div class="row">
                             <label for="input" is="ID001" class="col-sm-4 col-form-label">Detail Target Code
-                                :</label>
+                                : <span class="text-danger"> *</span></label>
                             <div class="col-sm-8">
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" #codeInput maxlength="15" matInput
-                                        formControlName="detail_target_code">
+                                        formControlName="detail_target_code" UpperCaseDirective [readonly]="code_value">
 
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
                             <label for="input" is="ID001" class="col-sm-4 col-form-label">Description
-                                :</label>
+                                : <span class="text-danger"> *</span></label>
                             <div class="col-sm-8">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" #codeInput maxlength="15" matInput formControlName="description">
+                                    <input type="text" #codeInput maxlength="15" matInput UpperCaseDirective formControlName="description">
                                 </mat-form-field>
                             </div>
                         </div>
 
                         <div class="row">
                             <label for="input" is="ID001" class="col-sm-4 col-form-label">Division
-                                :</label>
+                                : <span class="text-danger"> *</span></label>
                             <div class="col-sm-8">
                                 <!-- <mat-form-field appearance="outline" style="width: 100%;">
                             <input type="text" #codeInput maxlength="15" matInput formControlName="division">
                         </mat-form-field> -->
 
-                                <mat-form-field style="width: 100%" appearance="outline">
-                                    <mat-select formControlName="division" [(value)]="selectedDivision">
+                                <mat-form-field style="width: 100%" appearance="outline" (selectionChange)="change_divisions_value()">
+                                    <mat-select formControlName="division" [(value)]="selectedDivision" >
                                         <mat-option *ngFor="let data of divisionlist" [value]="data.value">
                                             {{ data.field }}
                                         </mat-option>
@@ -81,7 +81,7 @@
 
                         <div class="row">
                             <label for="input" is="ID001" class="col-sm-4 col-form-label">Target On
-                                :</label>
+                                : <span class="text-danger"> *</span></label>
                             <div class="col-sm-8">
                                 <!-- <mat-form-field appearance="outline" style="width: 100%;">
                             <input type="text" #codeInput maxlength="15" matInput formControlName="target_on">
@@ -310,10 +310,26 @@
             </div>
 
             <div class="col-md-6 mt-1">
-                <dx-data-grid style=" height: 350px;">
+                <!-- <dx-data-grid style=" height: 350px;">
                     <dxi-column dataField="MONTH" caption="Month"></dxi-column>
                     <dxi-column dataField="TARGET_AMOUNT" caption="Target Amount"></dxi-column>
-                </dx-data-grid>
+                </dx-data-grid> -->
+
+                        <dx-data-grid id="gridContainer" [dataSource]="maindetails_dt" [showBorders]="true"
+                            [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SLNO"
+                            style="height: 250px;">
+
+                            <dxi-column dataField="SLNO" caption="S.NO">
+                            </dxi-column>
+
+                            <dxi-column dataField="MONTH" caption="Month"></dxi-column>
+                            <dxi-column dataField="TARGET_AMOUNT" caption="Target Amount" cellTemplate="target_amount"></dxi-column>
+                            
+                            <div *dxTemplate="let data of 'target_amount'">
+                                <input type="number" class="text-right"  (change)="settotalamount(data,$event)" [value]="data.value.toFixed(2)" style="width: 100%;" AmountDecimalInput />
+                            </div>
+
+                        </dx-data-grid>
 
                 <div class="row mt-4">
                     <label class="col-form-label">Target Selection</label>

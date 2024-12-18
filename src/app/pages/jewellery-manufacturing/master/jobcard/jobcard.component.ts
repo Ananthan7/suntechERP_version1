@@ -71,8 +71,9 @@ export class JobcardComponent implements OnInit {
   UpdatetDate = moment(new Date(), 'DD/MM/YYYY');
   uploadedImages: string[] = []; // Array to store image URLs
   currentIndex = 0;
-
-
+  errorMessage: string = '';
+  isSubmitDisabled: boolean = false;
+  imagepath: any[] =[];
   urls: string | ArrayBuffer | null | undefined;
   url: any;
   allMode: string;
@@ -84,6 +85,7 @@ export class JobcardComponent implements OnInit {
   currencyDt: any;
   jobMaterialBOQ: any = [];
   jobsalesorderdetailDJ: any = [];
+  isButtonReadOnly: boolean = true;
 
   commentsCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -385,6 +387,7 @@ export class JobcardComponent implements OnInit {
     instruction: [''],
     picture_name: [''],
     DESIGN_DESC: [''],
+    imagepath:[''],
     FLAG: ['']
 
   });
@@ -433,6 +436,7 @@ export class JobcardComponent implements OnInit {
           break;
         case 'EDIT':
           this.editMode = true;
+          this.setLoadFormValues();
           break;
         case 'DELETE':
           this.viewMode = true;
@@ -495,24 +499,48 @@ export class JobcardComponent implements OnInit {
     }
   }
 
-  onFileChanged(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const files = target?.files;
+  // onFileChanged(event: Event): void {
+  //   if (this.viewMode) {
+  //     return; 
+  //   }
+  //   const target = event.target as HTMLInputElement;
+  //   const files = target?.files;
 
-    if (files && files.length > 0) {
+  //   if (files && files.length > 0) {
+  //     const reader = new FileReader();
+
+  //     reader.onload = (e: any) => {
+  //       this.uploadedImages.push(e.target.result); // Add the image to the array
+  //     };
+
+  //     reader.readAsDataURL(files[0]); 
+  //     // Read the uploaded file as a data URL
+  //   }
+  // }
+  onFileChanged(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
       const reader = new FileReader();
 
-      reader.onload = (e: any) => {
-        this.uploadedImages.push(e.target.result); // Add the image to the array
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        const imageDataUrl = e.target?.result as string; // Base64 or Data URL
+
+        // Add the uploaded image to the imageArray
+        this.imagepath.push(imageDataUrl);
       };
 
-      reader.readAsDataURL(files[0]); // Read the uploaded file as a data URL
+      reader.readAsDataURL(file); // Convert file to Base64 string
     }
   }
+
 
   nextImage(): void {
     if (this.uploadedImages.length > 0) {
       this.currentIndex = (this.currentIndex + 1) % this.uploadedImages.length;
+      
     }
   }
 
@@ -521,8 +549,15 @@ export class JobcardComponent implements OnInit {
       this.currentIndex =
         (this.currentIndex - 1 + this.uploadedImages.length) %
         this.uploadedImages.length;
+        
     }
   }
+  deldateFilter = (date: Date | null): boolean => {
+    if (this.jobCardFrom.value.jobdate) {
+      return date ? date >= this.jobCardFrom.value.jobdate : false;
+    }
+    return true;  
+  };
 
 
   openaddcomponent() {
@@ -685,16 +720,16 @@ export class JobcardComponent implements OnInit {
     let length = this.tableData.length;
     let sn = length + 1;
     if (this.tableData.length == 0) {
-      let data = {
+      const data = {
         "SINO": sn,
         "job_reference": this.jobCardFrom.value.jobno + '/' + sn,
-        "part_code": e.Design_Code,
-        "Description": e.Design_Description,
-        "Pcs": e.Pcs,
-        "metal_color": e.metal_color,
-        "metal_wt": e.metal_wt,
-        "stone_wt": e.stone_wt,
-        "gross_wt": e.gross_wt,
+        "part_code": this.commonService.nullToString(e.Design_Code),
+        "Description": this.commonService.nullToString(e.Design_Description),
+        "Pcs": this.commonService.nullToString(e.Pcs),
+        "metal_color": this.commonService.nullToString(e.metal_color),
+        "metal_wt": this.commonService.nullToString(e.metal_wt),
+        "stone_wt": this.commonService.nullToString(e.stone_wt),
+        "gross_wt": this.commonService.nullToString(e.gross_wt),
       };
       this.tableData.push(data);
       console.log(data, 'tabledate')
@@ -713,7 +748,7 @@ export class JobcardComponent implements OnInit {
         if (result.response) {
           let data = result.response
           console.log(data, 'pic')
-          this.urls = data.map((item: any) => item.imagepath)
+          this.imagepath = data.map((item: any) => item.imagepath)
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG1531')
@@ -777,7 +812,7 @@ export class JobcardComponent implements OnInit {
         this.jobCardFrom.controls['category'].setValue(result.response.CATEGORY_CODE);
         this.jobCardFrom.controls['setref'].setValue(result.response.SET_REF);
         console.log(result.response.PICTURE_NAME, 'picyure')
-        this.jobCardFrom.controls['picture_name'].setValue(result.response.PICTURE_NAME);
+        this.jobCardFrom.controls['imagepath'].setValue(result.response.PICTURE_NAME);
 
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
@@ -788,7 +823,7 @@ export class JobcardComponent implements OnInit {
         this.tableData[0].stone_wt = result.response.STONE_WT;
         this.tableData[0].gross_wt = result.response.GROSS_WT;
         this.tableData[0].part_code = result.response.PART_CODE;
-
+        this.tableData[0].SINO = result.response.SINO;
         // Get the first object from DESIGN_STNMTL_DETAIL array
 
         const firstDetail = result.response.DESIGN_STNMTL_DETAIL;
@@ -932,10 +967,10 @@ export class JobcardComponent implements OnInit {
               SIEVE_SET: element.SIEVE_SET,
               PROCESS_TYPE: element.PROCESS_TYPE,
               PURITY: element.PURITY,
-              metal_wt: metalWt.toString(),
-              stone_wt: stoneWt.toString(),
-              part_code: result.response.DESIGN_CODE,
-              Description: result.response.DESIGN_DESCRIPTION,
+              metal_wt: this.commonService.nullToString(metalWt.toString()),
+              stone_wt: this.commonService.nullToString(stoneWt.toString()),
+              part_code: this.commonService.nullToString(result.response.DESIGN_CODE),
+              Description: this.commonService.nullToString(result.response.DESIGN_DESCRIPTION),
               SIZE: result.response.SIZE || "",
               LENGTH: result.response.LENGTH || "",
               CLOSE_TYPE: element.CLOSE_TYPE || "",
@@ -1077,7 +1112,7 @@ export class JobcardComponent implements OnInit {
           this.jobCardFrom.controls.designcode.setValue(data.DESIGN_CODE)
           this.jobCardFrom.controls.seqcode.setValue(data.SEQ_CODE)
           this.jobCardFrom.controls.designcode.setValue(data.DESIGN_CODE)
-          this.jobCardFrom.controls.picture_name.setValue(data.PICTURE_NAME)
+          this.jobCardFrom.controls.imagepath.setValue(data.PICTURE_NAME)
           this.jobCardFrom.controls.setref.setValue(data.SET_REF)
           this.jobCardFrom.controls.JOB_PCS_TOTAL.setValue(data.JOB_PCS_TOTAL)
           this.jobCardFrom.controls.JOB_PCS_PENDING.setValue(data.JOB_PCS_PENDING)
@@ -1216,7 +1251,7 @@ export class JobcardComponent implements OnInit {
       "BRAND_CODE": this.jobCardFrom.value.brand || "",
       "DESIGN_CODE": this.jobCardFrom.value.designcode || "",
       "SEQ_CODE": this.jobCardFrom.value.seqcode || "",
-      "PICTURE_NAME": this.commonService.nullToString(this.jobCardFrom.value.picture_name),
+      "PICTURE_NAME": this.commonService.nullToString(this.jobCardFrom.value.imagepath),
       "DEPARTMENT_CODE": "",
       "JOB_INSTRUCTION": this.commonService.nullToString(this.jobCardFrom.value.instruction),
       "SET_REF": this.jobCardFrom.value.setref || "",
@@ -1454,7 +1489,7 @@ export class JobcardComponent implements OnInit {
       "BRAND_CODE": this.jobCardFrom.value.brand || "",
       "DESIGN_CODE": this.jobCardFrom.value.designcode || "",
       "SEQ_CODE": this.jobCardFrom.value.seqcode || "",
-      "PICTURE_NAME": this.commonService.nullToString(this.jobCardFrom.value.picture_name),
+      "PICTURE_NAME": this.commonService.nullToString(this.jobCardFrom.value.imagepath),
       "DEPARTMENT_CODE": "",
       "JOB_INSTRUCTION": "",
       "SET_REF": this.jobCardFrom.value.setref || "",
@@ -2042,6 +2077,12 @@ export class JobcardComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1460')
           this.jobCardFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+        }
+        switch (FORMNAME) {
+          case 'customer':
+            this.showOverleyPanel(event, 'customer');
+            break;
+          default:
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG1531')

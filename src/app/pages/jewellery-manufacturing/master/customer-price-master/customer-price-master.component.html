@@ -18,7 +18,7 @@
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="customerpricemasterForm">
-      <div class="container-fluid pt-3">
+      <div class=" p-3">
         <div class="row justify-content-between">
           <div class="col-md-12">
             <div class="row">
@@ -180,7 +180,8 @@
                     <div class="row pt-4">
                       <div class="col-md-10">
                         <mat-radio-group formControlName="calculateMethod">
-                          <mat-radio-button *ngFor="let option of priceOptions" [value]="option">
+                          <mat-radio-button *ngFor="let option of priceOptions"
+                            [value]="option">
                             <b>{{ option }} &nbsp;</b>
                           </mat-radio-button>
                         </mat-radio-group>
@@ -220,8 +221,9 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12 pt-3">
-          <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+        <div class="col-md-12 p-3">
+          <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1"
+            (selectedIndexChange)="onTabChange($event)">
             <mat-tab label="Stone Pricing">
               <dx-data-grid #dataGrid id="gridContainer" width="100%"
                 height="400px" [dataSource]="tableDatastone"
@@ -234,7 +236,7 @@
                   alignment="right"></dxi-column>
                 <div *dxTemplate="let data of 'limitTemplate'">
                   <mat-checkbox [checked]="data.value" [disabled]="viewMode"
-                    (change)="changedCheckbox(data)"></mat-checkbox>
+                    (change)="stoneDataSelected(data)"></mat-checkbox>
                 </div>
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
 
@@ -261,45 +263,42 @@
                 </dxi-column>
                 <dxi-column dataField="SIZE_FROM" width="auto"
                   caption="SIZE_FROM" [allowEditing]="true"
-                  alignment="center">
+                  alignment="right">
                 </dxi-column>
                 <dxi-column dataField="SIZE_TO" width="auto" caption="SIZE_TO"
-                  [allowEditing]="true" alignment="center">
+                  [allowEditing]="true" alignment="right">
                 </dxi-column>
                 <dxi-column dataField="WEIGHT_FROM" width="auto"
                   caption="WEIGHT_FROM" [allowEditing]="true"
-                  alignment="center">
+                  alignment="right">
                 </dxi-column>
                 <dxi-column dataField="WEIGHT_TO" width="auto"
                   caption="WEIGHT_TO" [allowEditing]="true"
-                  alignment="center">
+                  alignment="right">
                 </dxi-column>
                 <dxi-column dataField="CARAT_WT" width="auto" caption="CARAT_WT"
                   [allowEditing]="true"
-                  alignment="center">
+                  alignment="right">
                 </dxi-column>
                 <dxi-column dataField="CURRANCY" width="auto" caption="CURRANCY"
                   [allowEditing]="true"
-                  alignment="center">
+                  alignment="right">
                 </dxi-column>
                 <dxi-column dataField="ISSUE_RATE" width="auto"
                   caption="ISSUE_RATE" [allowEditing]="true"
-                  alignment="center">
+                  alignment="right">
                 </dxi-column>
                 <dxi-column dataField="SELLING_RATE" width="auto"
                   caption="SELLING_RATE" [allowEditing]="true"
-                  alignment="center">
+                  alignment="right">
                 </dxi-column>
                 <dxi-column dataField="SELLING_PER" width="auto"
                   caption="SELLING_PER" [allowEditing]="true"
-                  alignment="center">
+                  alignment="right">
                 </dxi-column>
               </dx-data-grid>
             </mat-tab>
             <mat-tab label="Labour Charges">
-              <!-- <dx-data-grid #dataGrid id="gridContainer"  [height]="250" [showBorders]="true"
-                [dataSource]="tableDatalabour" [height]="200" [allowColumnResizing]="true" [showRowLines]="true"
-                [disabled]="viewMode"> -->
               <dx-data-grid #dataGrid id="gridContainer" width="100%"
                 height="400px" [dataSource]="tableDatalabour"
                 [showRowLines]="true" [allowColumnResizing]="true"
@@ -308,10 +307,10 @@
 
                 <dxi-column width="auto" dataField="SELECT1" caption
                   cellTemplate="limitTemplate"
-                  alignment="right"></dxi-column>
+                  alignment="center"></dxi-column>
                 <div *dxTemplate="let data of 'limitTemplate'">
                   <mat-checkbox [checked]="data.value" [disabled]="viewMode"
-                    (change)="changedCheckbox(data)"></mat-checkbox>
+                    (change)="labourDataSelected(data)"></mat-checkbox>
                 </div>
 
                 <dxi-column dataField="LABOUR_CODE" width="auto"
@@ -336,24 +335,24 @@
                   alignment="center"> </dxi-column>
                 <dxi-column dataField="CARATWT_FROM" width="auto"
                   caption="CARATWT FROM" [allowEditing]="true"
-                  alignment="center"> </dxi-column>
+                  alignment="right"> </dxi-column>
                 <dxi-column dataField="CARATWT_TO" width="auto"
                   caption="CARATWT TO" [allowEditing]="true"
-                  alignment="center"> </dxi-column>
+                  alignment="right"> </dxi-column>
                 <dxi-column dataField="CURRENCY_CODE" width="auto"
                   caption="CURRENCY CODE" [allowEditing]="true"
-                  alignment="center"> </dxi-column>
+                  alignment="right"> </dxi-column>
                 <dxi-column dataField="CRACCODE" width="auto" caption="CRACCODE"
                   [allowEditing]="true"
                   alignment="center">
                 </dxi-column>
                 <dxi-column dataField="COST_RATE" width="auto"
                   caption="COST RATE" [allowEditing]="true"
-                  alignment="center">
+                  alignment="right">
                 </dxi-column>
                 <dxi-column dataField="SELLING_RATE" width="auto"
                   caption="SELLING RATE" [allowEditing]="true"
-                  alignment="center">
+                  alignment="right">
                 </dxi-column>
                 <!-- <dxi-column *ngFor="let data of columnheader1" dataField="{{ data.field }}" caption="{{ data.title }}"
                   [allowEditing]="true" alignment="center" backgroundcolor="#000" [width]="100">
@@ -378,7 +377,7 @@
                   alignment="right"></dxi-column>
                 <div *dxTemplate="let data of 'limitTemplate'">
                   <mat-checkbox [checked]="data.value" [disabled]="viewMode"
-                    (change)="changedCheckbox(data)"></mat-checkbox>
+                    (change)="designDataSelected(data)"></mat-checkbox>
                 </div>
                 <dxi-column dataField="DESIGN_CODE" width="auto"
                   caption="DESIGN CODE" alignment="center">
@@ -406,10 +405,10 @@
 
                 <dxi-column dataField="COST_RATE" width="auto"
                   caption="COST_RATE" [allowEditing]="true"
-                  alignment="center"> </dxi-column>
+                  alignment="right"> </dxi-column>
                 <dxi-column dataField="SELLING_PER" width="auto"
                   caption="SELLING PER" [allowEditing]="true"
-                  alignment="center"> </dxi-column>
+                  alignment="right"> </dxi-column>
                 <dxi-column dataField="CRACCODE" width="auto" caption="CRACCODE"
                   [allowEditing]="true"
                   alignment="center">
@@ -420,7 +419,7 @@
                 </dxi-column>
                 <dxi-column dataField="SELLING_RATE" width="auto"
                   caption="SELLING RATE" [allowEditing]="true"
-                  alignment="center">
+                  alignment="right">
                 </dxi-column>
                 <dxi-column dataField="CUSTOMER_CODE" width="auto"
                   caption="CUSTOMER CODE" [allowEditing]="true"

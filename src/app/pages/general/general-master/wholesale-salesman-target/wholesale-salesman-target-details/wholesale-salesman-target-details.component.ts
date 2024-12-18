@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -13,10 +13,18 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
   styleUrls: ['./wholesale-salesman-target-details.component.scss']
 })
 export class WholesaleSalesmanTargetDetailsComponent implements OnInit {
-  selectedDivision: string = "";
-  flag: any;
+  selectedDivision: string = 'd';
   private subscriptions: Subscription[] = [];
   sel_data:any;
+  @Input () parent_code :any;
+  @Input () grid_length :any;
+  @Input () fyear_code :any;
+  @Input () flag :any;
+  @Input () salesperson_code :any;
+  @Input () data :any;
+  code_value:boolean = true;
+  maindetails_dt :any[]=[];
+  
 
 
 
@@ -38,13 +46,14 @@ export class WholesaleSalesmanTargetDetailsComponent implements OnInit {
     { field: 'Diamond', value: 'd' },
     { field: 'Metal', value: 'm' }
   ];
+  
   targetonlist: any[] = [{ field: "Sales Amount" }, { field: "Quantity" },{ field: "Gp" }];
 
   wholesaledetailsform: FormGroup = this.formBuilder.group({
-    detail_target_code: [""],
-    description: [""],
+    detail_target_code: ["",[Validators.required]],
+    description: ["",[Validators.required]],
     division: [""],
-    target_on: [""],
+    target_on: ["",[Validators.required]],
     customer: [""],
     country: [""],
     area: [""],
@@ -56,7 +65,7 @@ export class WholesaleSalesmanTargetDetailsComponent implements OnInit {
     type3: [""],
     detail_target_code3: [""],
     target_selection: [""],
-    target_amount: [""],
+    target_amount: ["",[Validators.required]],
 
   });
 
@@ -155,7 +164,7 @@ export class WholesaleSalesmanTargetDetailsComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division',
     SEARCH_VALUE: '',
-    WHERECONDITION: `DIVISION = '${this.filrec()}'`, 
+    // WHERECONDITION: `DIVISION = '${this.filrec()}'`, 
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -164,6 +173,18 @@ export class WholesaleSalesmanTargetDetailsComponent implements OnInit {
   divisionCodeSelected(e: any) {
     console.log(e);
     this.wholesaledetailsform.controls.divisions.setValue(e.DIVISION_CODE);
+  }
+
+  change_divisions_value(){
+    let div = this.wholesaledetailsform.controls.division.value;
+    console.log(div)
+    if(div == 'd'){
+      //diamond
+      this.divisionCodeData.WHERECONDITION = "WHERE DIVISION  ='S'" ;
+    }else{
+      //metal
+      this.divisionCodeData.WHERECONDITION = "WHERE DIVISION  ='M'" ;
+    }
   }
 
 
@@ -188,38 +209,88 @@ export class WholesaleSalesmanTargetDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.grid_length++;
+    this.parent_code = this.parent_code+"-" + this.grid_length;
+    this.wholesaledetailsform.controls.detail_target_code.setValue(this.parent_code);
+    this.wholesaledetailsform.controls.description.setValue(this.parent_code);
+    // this.selectedDivision = 'd';
+    if(this.flag == undefined){
+      this.wholesaledetailsform.controls.division.setValue('d')
+    }
+
+    if (this.data != undefined) {
+      this.wholesaledetailsform.controls.detail_target_code.setValue(this.data.TARGET_CODE);
+      this.wholesaledetailsform.controls.customer.setValue(this.data.CUSTOMER);
+      this.wholesaledetailsform.controls.division.setValue(this.data.DIA_OR_MTL);
+      this.wholesaledetailsform.controls.divisions.setValue(this.data.DIVISIONS);
+      this.wholesaledetailsform.controls.type1.setValue(this.data.INVFILT1_VALUES);
+      this.wholesaledetailsform.controls.type2.setValue(this.data.INVFILT2_VALUES);
+      this.wholesaledetailsform.controls.type3.setValue(this.data.INVFILT3_VALUES);
+      this.wholesaledetailsform.controls.detail_target_code1.setValue(this.data.INVFILT1_FIELD);
+      this.wholesaledetailsform.controls.detail_target_code2.setValue(this.data.INVFILT2_FIELD);
+      this.wholesaledetailsform.controls.detail_target_code3.setValue(this.data.INVFILT3_FIELD);
+      this.wholesaledetailsform.controls.target_on.setValue(this.data.TARGET_ON);
+      this.wholesaledetailsform.controls.target_amount.setValue(this.data.TARGET);
+      this.wholesaledetailsform.controls.country.setValue(this.data.COUNTRY);
+      this.wholesaledetailsform.controls.area.setValue(this.data.AREA);
+      this.wholesaledetailsform.controls.target_selection.setValue(this.data.NARRATION);
+      this.wholesaledetailsform.controls.description.setValue(this.data.TARGET_DESC);
+    }
+
+    this.wholesaledetailsform.get('division')?.valueChanges.subscribe(() => {
+      this.change_divisions_value();
+    });
   }
+
+  
 
   formSubmit() {
 
+    Object.keys(this.wholesaledetailsform.controls).forEach((controlName) => {
+      const control = this.wholesaledetailsform.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
+
+    const requiredFieldsInvalid = Object.keys(
+      this.wholesaledetailsform.controls
+    ).some((controlName) => {
+      const control = this.wholesaledetailsform.controls[controlName];
+      return control.hasError("required") && control.touched;
+  });
+
     console.log(this.wholesaledetailsform.controls.division.value);
+     if(!requiredFieldsInvalid){
+      const postData = {
+        "SLNO": 0,
+        "TARGET_CODE": this.wholesaledetailsform.controls.detail_target_code.value,
+        "SALESPERSON_CODE": this.salesperson_code,
+        "CUSTOMER": this.wholesaledetailsform.controls.customer.value,
+        "DIA_OR_MTL": this.wholesaledetailsform.controls.division.value,
+        "DIVISIONS": this.wholesaledetailsform.controls.divisions.value,
+        "INVFILT1_VALUES": this.wholesaledetailsform.controls.type1.value,
+        "INVFILT2_VALUES": this.wholesaledetailsform.controls.type2.value,
+        "INVFILT3_VALUES": this.wholesaledetailsform.controls.type3.value,
+        "INVFILT1_FIELD": this.wholesaledetailsform.controls.detail_target_code1.value,
+        "INVFILT2_FIELD": this.wholesaledetailsform.controls.detail_target_code2.value,
+        "INVFILT3_FIELD": this.wholesaledetailsform.controls.detail_target_code3.value,
+        "DT_TARGETCODE": this.wholesaledetailsform.controls.detail_target_code.value,
+        "FYEARCODE": this.fyear_code,
+        "SERVICE_FILTER": "string",
+        "TARGET_ON": this.wholesaledetailsform.controls.target_on.value,
+        "TARGET": this.wholesaledetailsform.controls.target_amount.value,
+        "COUNTRY": this.wholesaledetailsform.controls.country.value,
+        "AREA": this.wholesaledetailsform.controls.area.value,
+        "NARRATION": this.wholesaledetailsform.controls.target_selection.value,
+        "TARGET_DESC": this.wholesaledetailsform.controls.description.value
+      }
+      console.log(postData);
+      this.close(postData);
+
+     }
 
 
-    const postData = {
-      "SLNO": 0,
-      "TARGET_CODE": this.wholesaledetailsform.controls.detail_target_code.value,
-      "SALESPERSON_CODE": "string",
-      "CUSTOMER": this.wholesaledetailsform.controls.customer.value,
-      "DIA_OR_MTL": this.wholesaledetailsform.controls.division.value,
-      "DIVISIONS": this.wholesaledetailsform.controls.divisions.value,
-      "INVFILT1_VALUES": this.wholesaledetailsform.controls.type1.value,
-      "INVFILT2_VALUES": this.wholesaledetailsform.controls.type2.value,
-      "INVFILT3_VALUES": this.wholesaledetailsform.controls.type3.value,
-      "INVFILT1_FIELD": this.wholesaledetailsform.controls.detail_target_code1.value,
-      "INVFILT2_FIELD": this.wholesaledetailsform.controls.detail_target_code2.value,
-      "INVFILT3_FIELD": this.wholesaledetailsform.controls.detail_target_code3.value,
-      "DT_TARGETCODE": this.wholesaledetailsform.controls.detail_target_code.value,
-      "FYEARCODE": "stri",
-      "SERVICE_FILTER": "string",
-      "TARGET_ON": this.wholesaledetailsform.controls.target_on.value,
-      "TARGET": this.wholesaledetailsform.controls.target_amount.value,
-      "COUNTRY": this.wholesaledetailsform.controls.country.value,
-      "AREA": this.wholesaledetailsform.controls.area.value,
-      "NARRATION": this.wholesaledetailsform.controls.target_selection.value,
-      "TARGET_DESC": this.wholesaledetailsform.controls.description.value
-    }
-    console.log(postData);
-    this.close(postData);
 
   }
 
@@ -373,5 +444,39 @@ export class WholesaleSalesmanTargetDetailsComponent implements OnInit {
     }
   }
 
+
+  setmonth(){
+    let amount = this.wholesaledetailsform.controls.target_amount.value;
+    let ind_value = amount/12;
+
+    let months = [
+      'January', 'February', 'March', 'April', 'May', 'June', 
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    let data = months.map((month, index) => ({
+      "SLNO": index+1,
+      "MONTH": month,
+      "TARGET_AMOUNT": ind_value,
+    }));
+
+    console.log(data);
+    this.maindetails_dt.push( ...data);
+
+  }
+
+  settotalamount(data: any, event: any){
+    const updatedSRNO = data.data.SLNO - 1; 
+    const budgetedAmt = parseFloat(event.target.value);
+    this.maindetails_dt[updatedSRNO].TARGET_AMOUNT = this.commonService.decimalQuantityFormat(event.target.value,'AMOUNT');
+    let total = 0;
+    this.maindetails_dt.forEach((e:any) => {
+      total += parseFloat(e.TARGET_AMOUNT);
+    });
+    this.wholesaledetailsform.controls.target_amount.setValue(total);
+  }
+
+  changedetails($event:any){
+    console.log($event);
+  }
 
 }

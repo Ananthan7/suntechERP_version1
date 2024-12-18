@@ -184,7 +184,7 @@ export class FixedAssetsComponent implements OnInit {
 
   codeChecker(event: any, controller: any) {
     let message = "Code cannot be empty!";
-    if (!this.fixedassetsform.value.code) {
+    if (!this.fixedassetsform.value.assets_code) {
       this.fixedassetsform.controls[controller].setValue("");
       this.openDialog("Warning", message, true);
       this.dialogBox.afterClosed().subscribe((result: any) => {
@@ -415,7 +415,6 @@ openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
 
 
   selectedfixingassets(e: any) {
-    console.log(e);
     this.fixedassetsform.controls.category_code.setValue(e.CODE);
     this.fixedassetsform.controls.category_code_desc.setValue(e.DESCRIPTION);
   }

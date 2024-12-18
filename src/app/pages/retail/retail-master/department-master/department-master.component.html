@@ -26,12 +26,13 @@
               <div class="col-md-6">
                 <div class="row">
                   <label for="inputPassword" class="col-sm-4 col-form-label">
-                    Code <span>* :</span> </label
-                  >
+                    Code <span>* :</span>
+                  </label>
                   <div class="col-sm-4">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
-                        id="code" #code
+                        id="code"
+                        #code
                         type="text"
                         matInput
                         formControlName="code"
@@ -42,12 +43,14 @@
                         [readonly]="viewMode || editMode"
                       />
                       <mat-error
-                      *ngIf="
-                       departmentMasterForm .controls['code'].hasError('required')
-                      "
-                    >
-                     Code is required.
-                    </mat-error>
+                        *ngIf="
+                          departmentMasterForm.controls['code'].hasError(
+                            'required'
+                          )
+                        "
+                      >
+                        Code is required.
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -426,28 +429,30 @@
                     for="inputPassword"
                     class="col-sm-1 offset-md-1 col-form-label"
                   >
-                    Shift From</label
+                    Shift From <span>*</span></label
                   >
                   <label for="inputPassword" class="col-sm-1 col-form-label">
-                    Shift To
+                    Shift To <span>*</span>
                   </label>
                   <label
                     for="inputPassword"
                     class="col-sm-1 offset-md-1 col-form-label"
                   >
                     Break 1 From
+                    <span>*</span>
                   </label>
                   <label for="inputPassword" class="col-sm-1 col-form-label">
-                    Break 1 To</label
+                    Break 1 To <span>*</span></label
                   >
                   <label
                     for="inputPassword"
                     class="col-sm-1 offset-md-1 col-form-label"
                   >
-                    Break 2 From</label
+                    Break 2 From <span>*</span></label
                   >
                   <label for="inputPassword" class="col-sm-1 col-form-label">
                     Break 2 To
+                    <span>*</span>
                   </label>
                 </div>
                 <div class="row align-items-center mb-3">
@@ -745,7 +750,7 @@
                         <input
                           type="text"
                           matInput
-                          formControlName="AIDebitExpCode"  
+                          formControlName="AIDebitExpCode"
                           UpperCaseDirective
                           autocomplete="off"
                           [readonly]="viewMode || codeEnable"

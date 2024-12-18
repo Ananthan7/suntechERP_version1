@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { log } from 'console';
 import { Subscription } from 'rxjs';
@@ -45,7 +45,7 @@ export class KycMasterComponent implements OnInit {
     mid: [""],
     kyccode: ["", [Validators.required]],
     kyccodedesc: ["", [Validators.required]],
-    transactionlimit: [".000", [Validators.required]],
+    transactionlimit: [".000"],
 
   });
 
@@ -86,13 +86,18 @@ export class KycMasterComponent implements OnInit {
       this.viewOnly = true;
       this.viewMode = true;
     }
-    this.kyc_id = this.content?.KYC_CODE;
-    console.log(this.kyc_id);
-    this.kycform.controls.kyccode.setValue(this.content?.KYC_CODE);
-    this.kycform.controls.kyccodedesc.setValue(this.content?.KYC_DESC);
-    this.kycform.controls.transactionlimit.setValue(this.content?.KYC_TRANSLIMIT);
+    if(this.flag == undefined){
+      this.kycform.controls.transactionlimit.setValue(".000");
+      
+    }
+   
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
+      console.log(this.kyc_id);
+      this.kyc_id = this.content?.KYC_CODE;
+      this.kycform.controls.kyccode.setValue(this.content?.KYC_CODE);
+      this.kycform.controls.kyccodedesc.setValue(this.content?.KYC_DESC);
+      this.kycform.controls.transactionlimit.setValue(this.content?.KYC_TRANSLIMIT);
       this.detailsapi(this.kyc_id);
     }
   }
@@ -253,68 +258,82 @@ export class KycMasterComponent implements OnInit {
 
   formSubmit() {
 
-    const postData = {
-      "MID": 0,
-      "KYC_CODE": this.kycform.controls.kyccode.value,
-      "KYC_DESC": this.kycform.controls.kyccodedesc.value,
-      "KYC_TRANSLIMIT": this.kycform.controls.transactionlimit.value,
-      "Details": this.maindetails
+    Object.keys(this.kycform.controls).forEach((controlName) => {
+      const control = this.kycform.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
+
+    const requiredFieldsInvalid = Object.keys(
+      this.kycform.controls
+    ).some((controlName) => {
+      const control = this.kycform.controls[controlName];
+      return control.hasError("required") && control.touched;
+    });
+
+    if(!requiredFieldsInvalid){
+      const postData = {
+        "MID": 0,
+        "KYC_CODE": this.kycform.controls.kyccode.value,
+        "KYC_DESC": this.kycform.controls.kyccodedesc.value,
+        "KYC_TRANSLIMIT":Number(this.kycform.controls.transactionlimit.value),
+        "Details": this.maindetails
+      }
+      console.log(postData);
+  
+      if (this.flag === "EDIT") {
+        let API = `KYCMaster/UpdateKYCMaster/${this.kyc_id}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `KYCMaster/InsertKYCMaster`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result: any) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
     }
-    console.log(postData);
-
-    if (this.flag === "EDIT") {
-      let API = `KYCMaster/UpdateKYCMaster/${this.kyc_id}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    } else {
-      let API = `KYCMaster/InsertKYCMaster`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result: any) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    }
-
-
 
   }
 

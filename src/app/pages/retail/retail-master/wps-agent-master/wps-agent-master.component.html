@@ -8,6 +8,7 @@
   </div>
   <!-- modal header component -->
   <modal-header
+    [isViewMore]="!['VIEW', 'DELETE'].includes(flag)"
     (saveClick)="WPSAgentMasterFormSubmit()"
     (cancelClick)="close()"
     (deleteClick)="DeleteController()"
@@ -37,6 +38,7 @@
                       type="text"
                       [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                       matInput
+                      UpperCaseDirective
                       [maxlength]="6"
                       formControlName="code"
                       (change)="onInput($event, 'code', true)"

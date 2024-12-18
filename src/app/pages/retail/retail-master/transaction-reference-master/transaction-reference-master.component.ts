@@ -25,6 +25,7 @@ export class TransactionReferenceMasterComponent implements OnInit {
   disable_code:boolean = false;
   editMode:boolean = false;
   viewMode:boolean = false;
+  code_occurs:boolean = false;
   prefixcode = new FormControl('');
   @ViewChild('ref_code') ref_codeInput!: ElementRef;
   statusList:any[]=[];
@@ -46,8 +47,8 @@ export class TransactionReferenceMasterComponent implements OnInit {
     ref_code:['',[Validators.required]],
     client_name:['',[Validators.required]],
     client_name_desc:['',[Validators.required]],
-    ref_date: [new Date()],
-    status:[''],
+    ref_date: [new Date(),[Validators.required]],
+    status:['',[Validators.required]],
   });
 
   clientnamedata: MasterSearchModel = {
@@ -61,6 +62,8 @@ export class TransactionReferenceMasterComponent implements OnInit {
     SEARCH_VALUE: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   } 
 
 
@@ -107,6 +110,8 @@ export class TransactionReferenceMasterComponent implements OnInit {
     }
     if (FLAG === "EDIT") {
       this.editController(DATA);
+      this.code_occurs = true;
+
     }
 
     if (FLAG === "DELETE") {
@@ -120,12 +125,20 @@ export class TransactionReferenceMasterComponent implements OnInit {
     }
   }
 
+  checkpartycode(){
+    const partycontrol = this.transactionform.controls.client_name;
+    // console.log(CodeControl.value);
+      
+    if (!partycontrol.value || partycontrol.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1549');
+      this.renderer.selectRootElement('#client_name')?.focus();
+    }
+  }
+
   
   checkcode() {
     const CodeControl = this.transactionform.controls.ref_code;
     // console.log(CodeControl.value);
-      this.renderer.selectRootElement('#ref_code')?.focus();
-
       
     if (!CodeControl.value || CodeControl.value.trim() === "") {
       this.commonService.toastErrorByMsgId('MSG1124');
@@ -135,6 +148,7 @@ export class TransactionReferenceMasterComponent implements OnInit {
         return;
       }
       this.checkReferenceCode();
+      this.code_occurs = true;
     }
   }
 
@@ -299,70 +313,74 @@ export class TransactionReferenceMasterComponent implements OnInit {
       return control.hasError("required") && control.touched;
     });
 
-
-    const postData = {
-      "MID": 0,
-      "REF_CODE": this.transactionform.controls.ref_code.value,//"string",
-      "PARTY_NAME": this.transactionform.controls.client_name.value,//"string",
-      "PARTY_HAED":this.transactionform.controls.client_name_desc.value,// "string",
-      "REF_DATE": this.transactionform.controls.ref_date.value,//"2024-12-05T10:36:31.627Z",
-      "STATUS": this.transactionform.controls.status.value ,//"string",
-      "SYSTEM_DATE": new Date()// "2024-12-05T10:36:31.627Z"
+    if(!requiredFieldsInvalid){
+      const postData = {
+        "MID": 0,
+        "REF_CODE": this.transactionform.controls.ref_code.value,//"string",
+        "PARTY_NAME": this.transactionform.controls.client_name.value,//"string",
+        "PARTY_HAED":this.transactionform.controls.client_name_desc.value,// "string",
+        "REF_DATE": this.transactionform.controls.ref_date.value,//"2024-12-05T10:36:31.627Z",
+        "STATUS": this.transactionform.controls.status.value ,//"string",
+        "SYSTEM_DATE": new Date()// "2024-12-05T10:36:31.627Z"
+      }
+  
+      // console.log(postData);return;
+  
+      if (this.flag === "EDIT") {
+        let API = `ReferenceNumberMaster/UpdateReferenceNumberMaster/${this.unq_id}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `ReferenceNumberMaster/InsertReferenceNumberMaster`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+  
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
     }
 
-    // console.log(postData);return;
 
-    if (this.flag === "EDIT") {
-      let API = `ReferenceNumberMaster/UpdateReferenceNumberMaster/${this.unq_id}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
 
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    } else {
-      let API = `ReferenceNumberMaster/InsertReferenceNumberMaster`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    }
 
   }
 
@@ -397,5 +415,149 @@ export class TransactionReferenceMasterComponent implements OnInit {
   BranchDataSelected(event:any){
 
   }
+
+
+    SPvalidateLookupFieldModified(
+      event: any,
+      LOOKUPDATA: MasterSearchModel,
+      FORMNAMES: string[],
+      isCurrencyField: boolean,
+      lookupFields?: string[],
+      FROMCODE?: boolean,
+      dont_check?: boolean
+    ) {
+      const searchValue = event.target.value?.trim();
+  
+      if (!searchValue || this.flag == "VIEW") return;
+  
+      LOOKUPDATA.SEARCH_VALUE = searchValue;
+  
+      const param = {
+        PAGENO: LOOKUPDATA.PAGENO,
+        RECORDS: LOOKUPDATA.RECORDS,
+        LOOKUPID: LOOKUPDATA.LOOKUPID,
+        WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+        searchField: LOOKUPDATA.SEARCH_FIELD,
+        searchValue: LOOKUPDATA.SEARCH_VALUE,
+      };
+  
+      this.commonService.showSnackBarMsg("MSG81447");
+  
+      const sub: Subscription = this.apiService
+        .postDynamicAPI("MasterLookUp", param)
+        .subscribe({
+          next: (result: any) => {
+            this.commonService.closeSnackBarMsg();
+            const data = result.dynamicData?.[0];
+  
+            console.log("API Response Data:", data);
+  
+            if (data?.length) {
+              if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+  
+                let searchResult = this.commonService.searchAllItemsInArray(
+                  data,
+                  LOOKUPDATA.SEARCH_VALUE
+                );
+  
+                console.log("Filtered Search Result:", searchResult);
+  
+                if (FROMCODE === true) {
+                  searchResult = [
+                    ...searchResult.filter(
+                      (item: any) =>
+                        item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
+                    ),
+                    ...searchResult.filter(
+                      (item: any) =>
+                        item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
+                    ),
+                  ];
+                } else if (FROMCODE === false) {
+                  searchResult = [
+                    ...searchResult.filter(
+                      (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
+                    ),
+                    ...searchResult.filter(
+                      (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
+                    ),
+                  ];
+                }
+  
+                if (searchResult?.length) {
+                  const matchedItem = searchResult[0];
+  
+                  FORMNAMES.forEach((formName, index) => {
+                    const field = lookupFields?.[index];
+                    if (field && field in matchedItem) {
+  
+                      this.transactionform.controls[formName].setValue(
+                        matchedItem[field]
+                      );
+                    } else {
+                      console.error(
+                        `Property ${field} not found in matched item.`
+                      );
+                      this.commonService.toastErrorByMsgId("No data found");
+                      this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                    }
+                  });
+                } else {
+                  this.commonService.toastErrorByMsgId("No data found");
+                  this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                }
+              }
+            } else {
+              this.commonService.toastErrorByMsgId("No data found");
+              this.clearLookupData(LOOKUPDATA, FORMNAMES);
+            }
+          },
+          error: () => {
+            this.commonService.toastErrorByMsgId("MSG2272");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          },
+        });
+  
+      this.subscriptions.push(sub);
+    }
+  
+    clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+      LOOKUPDATA.SEARCH_VALUE = "";
+      FORMNAMES.forEach((formName) => {
+        this.transactionform.controls[formName].setValue("");
+      });
+    }
+  
+    lookupSelect(e: any, controller?: any, modelfield?: any) {
+      console.log(e);
+      if (Array.isArray(controller) && Array.isArray(modelfield)) {
+        // Handle multiple controllers and fields
+        if (controller.length === modelfield.length) {
+          controller.forEach((ctrl, index) => {
+            const field = modelfield[index];
+            const value = e[field];
+            if (value !== undefined) {
+              this.transactionform.controls[ctrl].setValue(value);
+            } else {
+              console.warn(`Model field '${field}' not found in event object.`);
+            }
+          });
+        } else {
+          console.warn(
+            "Controller and modelfield arrays must be of equal length."
+          );
+        }
+      } else if (controller && modelfield) {
+        // Handle single controller and field
+        const value = e[modelfield];
+        if (value !== undefined) {
+          this.transactionform.controls[controller].setValue(value);
+        } else {
+          console.warn(`Model field '${modelfield}' not found in event object.`);
+        }
+      } else {
+        console.warn("Controller or modelfield is missing.");
+      }
+    }
 
 }
