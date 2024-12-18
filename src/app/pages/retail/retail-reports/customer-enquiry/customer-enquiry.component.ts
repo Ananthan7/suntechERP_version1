@@ -382,7 +382,7 @@ export class CustomerEnquiryComponent implements OnInit {
         // "USERBRANCH" : localStorage.getItem('userbranch')
 
         // Grid Data visibility
-        "NAME" : '',  
+        "NAME" : 'L. Hoothoysen',  
         "SPOUSE" : null,  
         "CODEFROM" : null,  
         "CODETO" : null,   
@@ -545,34 +545,31 @@ export class CustomerEnquiryComponent implements OnInit {
         };
       break;  
 
-      case 'Sales Register':
-        this.isLoading = false;
-        // payloadData = { API call needed & export
-        //   "SPID": "163",
-        //   "parameter": {
-        //     "strCertCode ": this.customerEnquiryForm.controls.customerfrom.value   //'1344' 
-        //   }  
-        // };
-      break;
-
-      case 'Address Label':  //Preview is needed
-      this.isLoading = false; 
-      payloadData = {
-        "SPID": "",
-        "parameter": {
-          "strCertCode ": ''    
-        }  
-      };
-      break;
-
-      case 'Previlage Card': //need to handle frm FE
+      case 'Address Label':
+        this.isLoading = false; 
         payloadData = {
-          "SPID": "162",
+          "SPID": "215 ",
           "parameter": {
-            "strCertCode ": this.customerEnquiryForm.controls.customerfrom.value  //1344         
+            "CUSTOMER_CODE ": this.customerEnquiryForm.controls.customerfrom.value  //1344  , 1240      
           }  
         };
       break;
+  
+      case 'Previlage Card':
+        payloadData = {
+          "SPID": "162",
+            "parameter": {
+              "strCertCode ": this.customerEnquiryForm.controls.customerfrom.value  //1344  , 1240       
+            }  
+          };
+      break;
+
+      case 'Sales Register':
+        this.isLoading = false;
+        // payloadData = { API call needed & export
+      break;
+
+    
 
       case 'Send Email': // rest discuss wiht muneer
       this.isLoading = false;
