@@ -71,8 +71,9 @@ export class JobcardComponent implements OnInit {
   UpdatetDate = moment(new Date(), 'DD/MM/YYYY');
   uploadedImages: string[] = []; // Array to store image URLs
   currentIndex = 0;
-
-
+  errorMessage: string = '';
+  isSubmitDisabled: boolean = false;
+  imagepath: any[] =[];
   urls: string | ArrayBuffer | null | undefined;
   url: any;
   allMode: string;
@@ -84,6 +85,7 @@ export class JobcardComponent implements OnInit {
   currencyDt: any;
   jobMaterialBOQ: any = [];
   jobsalesorderdetailDJ: any = [];
+  isButtonReadOnly: boolean = true;
 
   commentsCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -433,6 +435,7 @@ export class JobcardComponent implements OnInit {
           break;
         case 'EDIT':
           this.editMode = true;
+          this.setLoadFormValues();
           break;
         case 'DELETE':
           this.viewMode = true;
@@ -495,24 +498,48 @@ export class JobcardComponent implements OnInit {
     }
   }
 
-  onFileChanged(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const files = target?.files;
+  // onFileChanged(event: Event): void {
+  //   if (this.viewMode) {
+  //     return; 
+  //   }
+  //   const target = event.target as HTMLInputElement;
+  //   const files = target?.files;
 
-    if (files && files.length > 0) {
+  //   if (files && files.length > 0) {
+  //     const reader = new FileReader();
+
+  //     reader.onload = (e: any) => {
+  //       this.uploadedImages.push(e.target.result); // Add the image to the array
+  //     };
+
+  //     reader.readAsDataURL(files[0]); 
+  //     // Read the uploaded file as a data URL
+  //   }
+  // }
+  onFileChanged(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
       const reader = new FileReader();
 
-      reader.onload = (e: any) => {
-        this.uploadedImages.push(e.target.result); // Add the image to the array
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        const imageDataUrl = e.target?.result as string; // Base64 or Data URL
+
+        // Add the uploaded image to the imageArray
+        this.imagepath.push(imageDataUrl);
       };
 
-      reader.readAsDataURL(files[0]); // Read the uploaded file as a data URL
+      reader.readAsDataURL(file); // Convert file to Base64 string
     }
   }
+
 
   nextImage(): void {
     if (this.uploadedImages.length > 0) {
       this.currentIndex = (this.currentIndex + 1) % this.uploadedImages.length;
+      
     }
   }
 
@@ -521,6 +548,7 @@ export class JobcardComponent implements OnInit {
       this.currentIndex =
         (this.currentIndex - 1 + this.uploadedImages.length) %
         this.uploadedImages.length;
+        
     }
   }
 
@@ -625,7 +653,18 @@ export class JobcardComponent implements OnInit {
       this.jobCardFrom.controls.vocdate.setValue(new Date(date))
     }
   }
+  checkDates() {
+    const jobDate = new Date(this.jobCardFrom.get('jobdate')?.value);
+    const deliveryDate = new Date(this.jobCardFrom.get('deldate')?.value);
 
+    if (jobDate > deliveryDate) {
+      this.errorMessage = 'Job Date cannot be greater than Delivery Date.';
+      this.isSubmitDisabled = true;
+    } else {
+      this.errorMessage = '';
+      this.isSubmitDisabled = false;
+    }
+  }
   /**USE: close modal window */
   // close(data?: any) {
   //   this.activeModal.close(data);
@@ -713,7 +752,7 @@ export class JobcardComponent implements OnInit {
         if (result.response) {
           let data = result.response
           console.log(data, 'pic')
-          this.urls = data.map((item: any) => item.imagepath)
+          this.imagepath = data.map((item: any) => item.imagepath)
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG1531')
@@ -2042,6 +2081,12 @@ export class JobcardComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1460')
           this.jobCardFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+        }
+        switch (FORMNAME) {
+          case 'customer':
+            this.showOverleyPanel(event, 'customer');
+            break;
+          default:
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG1531')

@@ -110,8 +110,9 @@
                                         </master-search> -->
                                         <mat-form-field appearance="outline" style="width: 100%;">
                                             <input type="text" matInput [value]="data.value" [readonly]="viewMode"
+                                                formControlName="USER_CODE"
                                                 (focusout)="validateLookupField($event,user,'USER_CODE',data)"
-                                                UpperCaseDirective autocomplete="off"
+                                                 autocomplete="off" oninput="this.value = this.value.toUpperCase()"
                                                 (keydown)="lookupKeyPress($event,'USER_CODE')" />
                                             <master-search [MasterSearchData]="user" class="masterSearch"
                                                 *ngIf="!viewMode" (newRowClick)="userDataSelected($event,data)"

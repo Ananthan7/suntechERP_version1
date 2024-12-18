@@ -101,6 +101,8 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER:true
   }
 
   selectedfinyear(e: any) {

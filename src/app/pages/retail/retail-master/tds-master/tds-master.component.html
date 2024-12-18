@@ -23,7 +23,7 @@
                                 <div class="col-md-6">
                                     <div class="row">
                                         <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
-                                            Section Code :</label>
+                                            Section Code :<span class="text-danger"> *</span></label>
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="section_code"
@@ -37,7 +37,7 @@
                                 <div class="col-md-6">
                                     <div class="row">
                                         <label for="financial_year" id="ID001" class="col-sm-4 col-form-label">
-                                            Financial Year :
+                                            Financial Year : <span class="text-danger"> *</span>
                                         </label>
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
@@ -56,11 +56,11 @@
                             <div class="row mb-2">
                                 <div class="col-md-2">
                                     <label for="inputPassword" id="ID001" class="col-sm-12 col-form-label">
-                                        Description (NP) :</label>
+                                        Description (NP) : <span class="text-danger"> *</span></label>
                                 </div>
                                 <div class="col-md-10">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="description"
+                                        <input type="text" #desc id="desc" matInput formControlName="description" (focusout)="checkdesc()"
                                             autocomplete="off" />
                                     </mat-form-field>
                                 </div>
@@ -70,7 +70,7 @@
                                 <div class="col-md-6">
                                     <div class="row">
                                         <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
-                                            Credit A/c :</label>
+                                            Credit A/c : <span class="text-danger"> *</span></label>
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" #codeInput matInput formControlName="credit_ac"
@@ -82,7 +82,7 @@
                                                 ['ACCODE'],
                                                 false
                                             )" />
-                                                <master-search *ngIf="this.flag != 'VIEW'" class="masterSearch"
+                                                <master-search *ngIf="this.flag != 'VIEW' && code_occurs" class="masterSearch"
                                                     [MasterSearchData]="creditacdata"
                                                     (newRowClick)="creditcodeselected($event)">
                                                 </master-search>
@@ -110,7 +110,7 @@
                                                     ['ACCODE'],
                                                     false
                                                 )" />
-                                                <master-search *ngIf="this.flag != 'VIEW'" class="masterSearch"
+                                                <master-search *ngIf="this.flag != 'VIEW' && code_occurs" class="masterSearch"
                                                     [MasterSearchData]="debitacdata"
                                                     (newRowClick)="debitcodeselected($event)">
                                                 </master-search>
@@ -180,7 +180,7 @@
                             </dxi-column>
 
                             <div *dxTemplate="let data of 'individual_per'">
-                                <input type="number" [disabled]="viewMode" class="text-right" [value]="data.value"
+                                <input type="number" [disabled]="viewMode" class="text-right" [value]="data.value.toFixed(3)"
                                     style="width: 100%;" (change)="individual_change($event,data)" />
                             </div>
 
@@ -189,7 +189,7 @@
                             </dxi-column>
 
                             <div *dxTemplate="let data of 'company_per'">
-                                <input type="number" [disabled]="viewMode" class="text-right" [value]="data.value"
+                                <input type="number" [disabled]="viewMode" class="text-right" [value]="data.value.toFixed(3)"
                                     style="width: 100%;" (change)="company_change($event,data)" />
                             </div>
 
@@ -197,7 +197,7 @@
                             </dxi-column>
 
                             <div *dxTemplate="let data of 'nopan_per'">
-                                <input type="number" [disabled]="viewMode" class="text-right" [value]="data.value"
+                                <input type="number" [disabled]="viewMode" class="text-right" [value]="data.value.toFixed(3)"
                                     style="width: 100%;" (change)="nopan_change($event,data)" />
                             </div>
 
@@ -206,7 +206,7 @@
                             </dxi-column>
 
                             <div *dxTemplate="let data of 'tdslimit_per'">
-                                <input type="number" [disabled]="viewMode" class="text-right" [value]="data.value"
+                                <input type="number" [disabled]="viewMode" class="text-right" [value]="data.value.toFixed(3)"
                                     style="width: 100%;" (change)="tdslimit_chnage($event,data)" />
                             </div>
 

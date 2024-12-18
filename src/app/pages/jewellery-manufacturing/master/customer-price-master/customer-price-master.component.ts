@@ -164,7 +164,10 @@ export class CustomerPriceMasterComponent implements OnInit {
       this.isDisableSaveBtn = false;
     }
   }
-
+  onTabChange(index: number): void {
+    console.log('Selected tab index:', index);
+    
+  }
   Change_Prices() {
     if (this.tableDatastone?.length > 0) {
       let form = this.customerpricemasterForm.value;

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Renderer2 } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
@@ -32,6 +32,8 @@ export class PosSalespersonTargetComponent implements OnInit {
   _isdis_goldqty: boolean = false;
   _isdis_goldmakingcharge: boolean = false;
   codeedit: boolean = false;
+  code_occurs: boolean = false;
+  salesperson_occurs: boolean = false;
 
   salespersontargetform: FormGroup = this.formBuilder.group({
     code: ["", [Validators.required]],
@@ -39,8 +41,8 @@ export class PosSalespersonTargetComponent implements OnInit {
     datefrom: [""],
     dateto: [""],
     salesman: [""],
-    diamond_division: [""],
-    metal_division: [""],
+    diamond_division: ["F"],
+    metal_division: ["F"],
     diamondjewellery: [""],
     goldmakingcharge: [""],
     goldquantity: [""],
@@ -58,6 +60,8 @@ export class PosSalespersonTargetComponent implements OnInit {
     WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER:true
   };
 
   selectedfinyear(e: any) {
@@ -85,6 +89,8 @@ export class PosSalespersonTargetComponent implements OnInit {
     WHERECONDITION: "SALESPERSON_CODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER:true
   };
 
   salesmanSelected(event: any) {
@@ -104,15 +110,19 @@ export class PosSalespersonTargetComponent implements OnInit {
     // }
     if (this.flag == "EDIT") {
       this.disable_code = true;
-      this.editMode = true;
+      this.editMode = false;
       this.codeedit = true;
     } else if (this.flag == "VIEW") {
       this.viewMode = true;
       this.codeedit = true;
       this.viewOnly = true;
     }
+    if(this.flag == undefined){
+      this.renderer.selectRootElement('#code')?.focus();
+    }
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == "VIEW") {
+      this.code_occurs = true;
       this.detailsapi(this.unq_id);
     }
 
@@ -323,6 +333,8 @@ export class PosSalespersonTargetComponent implements OnInit {
     if (!prefixCodeControl.value || prefixCodeControl.value.trim() === "") {
       this.commonService.toastErrorByMsgId("MSG1124");
       this.renderer.selectRootElement("#code")?.focus();
+    }else{
+      this.code_occurs = true;
     }
   }
 
@@ -339,7 +351,39 @@ export class PosSalespersonTargetComponent implements OnInit {
     //     metal_qty += parseFloat(e.GOLD_QTY);
     //   });
     // }
-    let dia_type = this.salespersontargetform.controls.diamond_division.value;
+
+    Object.keys(this.salespersontargetform.controls).forEach((controlName) => {
+      const control = this.salespersontargetform.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
+
+    const requiredFieldsInvalid = Object.keys(
+      this.salespersontargetform.controls
+    ).some((controlName) => {
+      const control = this.salespersontargetform.controls[controlName];
+      return control.hasError("required") && control.touched;
+    });
+
+if(!requiredFieldsInvalid){
+
+  if(!this.salesperson_occurs){
+    this.commonService.toastErrorByMsgId("MSG1766");
+    Swal.fire({
+      text: "Sales Person is Mandatory",
+      icon: "warning",
+    });return;
+  }else if(this.maindetails2.length>0){
+    this.commonService.toastErrorByMsgId("MSG1200");
+    Swal.fire({
+      text: "Detail Record Not Found",
+      icon: "warning",
+    });return;
+  }
+
+
+  let dia_type = this.salespersontargetform.controls.diamond_division.value;
     if (dia_type != "") {
       dia_type = true;
     } else {
@@ -443,6 +487,8 @@ export class PosSalespersonTargetComponent implements OnInit {
           }
         });
     }
+}
+    
   }
 
   DeleteController(DATA?: any) {
@@ -496,7 +542,15 @@ export class PosSalespersonTargetComponent implements OnInit {
 
   BranchDataSelected(e: any) {}
 
-  onSelectionChanged() {}
+  onSelectionChanged(event:any) {
+    console.log(event);
+    if(event.selectedRowKeys.length >0){
+      this.salesperson_occurs = true;
+    }else{
+      this.salesperson_occurs = false;
+    }
+
+  }
 
   close(data?: any) {
     if (data) {

@@ -14,11 +14,11 @@
                 <div class="col-md-3">
                     <div class="row">
                         <label for="inputPassword" id="ID001" class="col-md-4 col-form-label">
-                            Code :</label>
+                            Code : <span class="text-danger"> *</span></label>
                         <div class="col-sm-8">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective id="code" #code
-                                    autocomplete="off" />
+                                <input type="text" #code id="code" matInput formControlName="code" UpperCaseDirective id="code" 
+                                    autocomplete="off" (focusout)="checkcode()" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
 
                     <div class="row">
                         <label for="datefrom" id="ID001" class="col-sm-4 col-form-label">
-                            Start Date :
+                            Start Date : <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-8">
                             <mat-form-field style="width: 100%" appearance="outline">
@@ -43,7 +43,7 @@
 
                     <div class="row">
                         <label for="datefrom" id="ID001" class="col-sm-4 col-form-label">
-                            End Date :
+                            End Date : <span class="text-danger"> *</span>
                         </label>
                         <div class="col-sm-8">
                             <mat-form-field style="width: 100%" appearance="outline">
@@ -60,7 +60,7 @@
 
                     <div class="row">
                         <label for="inputPassword" id="ID001" class="col-md-4 col-form-label">
-                            Group :</label>
+                            Group : <span class="text-danger"> *</span></label>
                         <div class="col-md-8">
                             <mat-form-field style="width: 100%;" appearance="outline">
                                 <mat-select formControlName="group">
@@ -87,9 +87,9 @@
                                 <mat-radio-group aria-label="Select an option" formControlName="metal_commission">
                                     <mat-radio-button value="F" id="diamond_sale_amount"
                                         class="mx-4 mt-2"><b>Making</b></mat-radio-button>
-                                    <mat-radio-button value="P" id="diamond_profit"
+                                    <mat-radio-button value="P" id="making_met"
                                         class="mx-2 mt-2"><b>Quantity</b></mat-radio-button>
-                                    <mat-radio-button value="P" id="diamond_profit"
+                                    <mat-radio-button value="P" id="qunat_met"
                                         class="mx-2 mt-2"><b>Profit</b></mat-radio-button>
                                 </mat-radio-group>
                             </div>
@@ -105,9 +105,9 @@
                         <div class="your-box-container">
                             <div class="row">
                                 <mat-radio-group aria-label="Select an option" formControlName="diamond_commission">
-                                    <mat-radio-button value="Amount" id="diamond_sale_amount"
+                                    <mat-radio-button value="Amount" id="amount_dia"
                                         class="mx-4 mt-2"><b>Amount</b></mat-radio-button>
-                                    <mat-radio-button value="Profit" id="diamond_profit"
+                                    <mat-radio-button value="Profit" id="amount_profit"
                                         class="mx-2 mt-2"><b>Profit</b></mat-radio-button>
                                 </mat-radio-group>
                             </div>
@@ -163,7 +163,7 @@
                         <div class="row mt-2">
                             <div class="col-md-2">
                                 <div class="col-md-3">
-                                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
+                                    <menu-buttons *ngIf="this.flag != 'VIEW' && this.code_occurs" [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
                                         [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
                                         (deleteClick)="deleteTableData()">
                                     </menu-buttons>

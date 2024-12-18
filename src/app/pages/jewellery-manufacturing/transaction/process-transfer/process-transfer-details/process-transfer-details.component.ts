@@ -432,8 +432,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let parentDetail: any;
     let PROCESS_FORMDETAILS: any;
     //if flag is present
-    let flag = this.content[0]?.FLAG || this.content[0]?.HEADERDETAILS.FLAG
-    if (flag && flag != "ADD") {
+    // let flag = this.content[0]?.FLAG || this.content[0]?.HEADERDETAILS.FLAG
+    if (this.content[0]?.FLAG) {
       //setting conditions related to flag
       this.setFlagMode(this.content[0]?.FLAG)
       this.processTransferdetailsForm.controls.FLAG.setValue(this.content[0]?.FLAG)
@@ -463,13 +463,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
       parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ// setting detail data
       PROCESS_FORMDETAILS = this.content[0]?.PROCESS_FORMDETAILS
       this.metalDetailData = this.content[0]?.TRN_STNMTL_GRID || [] // setting component grid data
-      // if(this.metalDetailData.length>0){
-      //   this.metalDetailData.forEach((item:any)=>{
-      //     if(this.commonService.Null2BitValue(item.SETTED)==false){
-      //       this.processTransferdetailsForm.controls.SETTED_FLAG.setValue(false)
-      //     }
-      //   })
-      // }
+      if(PROCESS_FORMDETAILS){
+        this.processTransferdetailsForm.controls.SETTED_FLAG.setValue(PROCESS_FORMDETAILS.SETTED_FLAG)
+      }
       this.setFormDecimal('METAL_ScrapPCS', 0, 'METAL')
       this.setFormDecimal('METAL_ScrapGrWt', 0, 'METAL')
       this.setFormDecimal('METAL_ScrapStoneWt', 0, 'METAL')
@@ -1091,8 +1087,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   setDataFromSalesOrderDj(job_salesorder: any) {
     this.setFormNullToString('JOB_PCS', this.emptyToZero(job_salesorder[0].PCS))
-    // this.setFormNullToString('DESIGN_CODE', job_salesorder[0].DESIGN_CODE)
-      this.setFormNullToString('PART_CODE', job_salesorder[0].DESIGN_CODE)
+    this.setFormNullToString('DESIGN_CODE', job_salesorder[0].DESIGN_CODE)
+    // this.setFormNullToString('PART_CODE', job_salesorder[0].DESIGN_CODE)
 
     this.setFormNullToString('UNQ_DESIGN_ID', job_salesorder[0].UNQ_DESIGN_ID)
     this.setFormNullToString('PICTURE_PATH', job_salesorder[0].PICTURE_PATH)
@@ -2181,6 +2177,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
   }
   selectAllBtnChange(event: any) {
+    this.processTransferdetailsForm.controls.SETTED_FLAG.setValue(event.checked)
+    console.log(this.processTransferdetailsForm.value.SETTED_FLAG);
     this.metalDetailData.forEach((item: any) => {
       if (event.checked) {
         item.SETTED_FLAG = true;
