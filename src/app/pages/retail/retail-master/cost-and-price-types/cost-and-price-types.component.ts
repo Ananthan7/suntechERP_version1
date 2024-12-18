@@ -59,9 +59,9 @@ export class CostAndPriceTypesComponent implements OnInit {
 
   detailsGridColumnHeadings: any[] = [
     { FIELD: "STOCK_CODE", CAPTION: "CODE" },
-    { FIELD: "DESCRIPTION", CAPTION: "DESCRIPTION" },
+    { FIELD: "STOCK_DESCRIPTION", CAPTION: "DESCRIPTION" },
     { FIELD: "UNIT_CODE", CAPTION: "UNIT CODE" },
-    { FIELD: "STD_COST", CAPTION: "COST" },
+    { FIELD: "COST", CAPTION: "COST" },
     { FIELD: "STD_VARIANCE", CAPTION: "STD VARIANCE" },
     { FIELD: "PURITY", CAPTION: "PURITY" },
     { FIELD: "WASTAGE", CAPTION: "WASTAGE" },
@@ -592,6 +592,9 @@ export class CostAndPriceTypesComponent implements OnInit {
             this.itemDetailsData = result.dynamicData[0].map((item: any) => ({
               ...item,
               // PURITY: this.commonService.transformDecimalVB(6, item.value),
+
+              STOCK_DESCRIPTION: item.DESCRIPTION,
+              COST: item.STOCK_CODE,
               CURRENCY: "AED",
               WASTAGE: this.preFilledWastage,
               STD_VARIANCE: this.preFilledStandardVariance,
@@ -672,7 +675,7 @@ export class CostAndPriceTypesComponent implements OnInit {
     let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
       (result) => {
         if (result.status.trim() === "Success") {
-          console.log(result.response);
+          this.itemDetailsData = result.response.costpricetypeMetalDetail;
         }
       },
       (err) => {

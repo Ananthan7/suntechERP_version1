@@ -8,9 +8,13 @@
 
 <!-- modal header component -->
 <modal-header
-  (saveClick)="formSave()"
+  [isViewMore]="!['VIEW', 'DELETE'].includes(flag)"
+  (saveClick)="emailTemplateFormSubmit()"
   (cancelClick)="close()"
-  (deleteClick)="deleteMaster()"
+  (deleteClick)="DeleteController()"
+  [isViewDelete]="false"
+  [isViewCancel]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewSave]="!['VIEW', 'DELETE'].includes(flag)"
 ></modal-header>
 
 <!-- content section -->
@@ -22,11 +26,25 @@
           <div class="col-md-12">
             <div class="row mt-2">
               <label for="code" class="col-sm-1 col-form-label" id="ID029"
-                >Code</label
+                >Code <span class="text-danger">*</span></label
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="code" />
+                  <input
+                    [maxlength]="10"
+                    [readonly]="flag === 'VIEW' || flag === 'EDIT'"
+                    #codeField
+                    matInput
+                    type="text"
+                    formControlName="code"
+                  />
+                  <mat-error
+                    *ngIf="
+                      emailTemplateForm.controls['code'].hasError('required')
+                    "
+                  >
+                    Code is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
 
@@ -34,11 +52,26 @@
                 for="description"
                 class="col-sm-1 col-form-label"
                 id="ID029"
-                >Description</label
+                >Description <span class="text-danger">*</span></label
               >
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    [maxlength]="40"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="description"
+                  />
+                  <mat-error
+                    *ngIf="
+                      emailTemplateForm.controls['description'].hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    Desc is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -48,47 +81,69 @@
                 <legend class="custom-legend">Template</legend>
                 <div class="col-md-12">
                   <div class="row m-2">
-                    <label
-                      for="description"
-                      class="col-sm-1 col-form-label"
-                      id="ID029"
+                    <label for="cc" class="col-sm-1 col-form-label" id="ID029"
                       >Cc</label
                     >
                     <div class="col-md-5">
                       <mat-form-field style="width: 100%" appearance="outline">
-                        <input matInput="text" formControlName="description" />
+                        <input
+                          [maxlength]="40"
+                          [readonly]="flag === 'VIEW'"
+                          matInput
+                          type="email"
+                          formControlName="cc"
+                        />
+                        <mat-error
+                          *ngIf="
+                            emailTemplateForm
+                              .get('cc')
+                              ?.hasError('domainInvalid')
+                          "
+                          >Email must end with a valid domain (e.g.,
+                          .com).</mat-error
+                        >
                       </mat-form-field>
                     </div>
                   </div>
 
                   <div class="row m-2">
-                    <label
-                      for="description"
-                      class="col-sm-1 col-form-label"
-                      id="ID029"
+                    <label for="bcc" class="col-sm-1 col-form-label" id="ID029"
                       >Bcc</label
                     >
                     <div class="col-md-5">
                       <mat-form-field style="width: 100%" appearance="outline">
-                        <input matInput="text" formControlName="description" />
+                        <input
+                          [maxlength]="40"
+                          [readonly]="flag === 'VIEW'"
+                          matInput
+                          type="email"
+                          formControlName="bcc"
+                        />
+                        <mat-error
+                          *ngIf="
+                            emailTemplateForm
+                              .get('bcc')
+                              ?.hasError('domainInvalid')
+                          "
+                          >Email must end with a valid domain (e.g.,
+                          .com).</mat-error
+                        >
                       </mat-form-field>
                     </div>
                   </div>
 
                   <div class="row m-2">
-                    <label
-                      for="description"
-                      class="col-sm-1 col-form-label"
-                      id="ID029"
+                    <label for="body" class="col-sm-1 col-form-label" id="ID029"
                       >Body</label
                     >
                     <div class="col-md-7">
                       <mat-form-field style="width: 100%" appearance="outline">
                         <textarea
+                          [readonly]="flag === 'VIEW'"
+                          [maxlength]="500"
                           matInput
                           rows="10"
-                          formControlName="addressFromAml"
-                          class=""
+                          formControlName="body"
                           style="resize: none"
                         ></textarea>
                       </mat-form-field>
