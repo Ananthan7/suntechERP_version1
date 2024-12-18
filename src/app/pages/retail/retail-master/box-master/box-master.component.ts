@@ -152,6 +152,9 @@ export class BoxMasterComponent implements OnInit {
     this.boxMasterMainForm.controls["toserialno"].setValue(DATA.TO_SERIALNO);
     this.boxMasterMainForm.controls["location"].setValue(DATA.LOCTYPE_CODE);
     this.boxMasterMainForm.controls["stockcode"].setValue(DATA.STOCK_CODE);
+
+    this.boxMasterGridData();
+
   }
 
   editController(DATA: any) {

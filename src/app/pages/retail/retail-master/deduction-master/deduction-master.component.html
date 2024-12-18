@@ -8,6 +8,8 @@
   </div>
   <!-- modal header component -->
   <modal-header
+  [isViewMore]="!['VIEW', 'DELETE'].includes(flag)"
+
     (saveClick)="deductionMasterFormSubmit()"
     (cancelClick)="close()"
     (deleteClick)="DeleteController()"

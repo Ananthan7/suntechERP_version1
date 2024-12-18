@@ -8,6 +8,7 @@
 
 <!-- modal header component -->
 <modal-header
+[isViewMore]="this.flag !== 'VIEW'"
   (saveClick)="costAndPriceTypeMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
