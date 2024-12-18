@@ -8,6 +8,7 @@
 
 <!-- modal header component -->
 <modal-header
+[isViewMore]="!['VIEW', 'DELETE'].includes(flag)"
   (saveClick)="receiptModesMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"

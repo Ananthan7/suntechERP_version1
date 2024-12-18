@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTabGroup } from "@angular/material/tabs";
 import {
@@ -330,32 +330,32 @@ export class VatMasterComponent implements OnInit {
   ) {}
 
   vatMasterMainForm: FormGroup = this.formBuilder.group({
-    vatCode: [""],
-    vatDesc: [""],
-    vatPercent: [""],
-    group1: [""],
-    group2: [""],
-    group3: [""],
-    regVatAccCredit: [""],
-    regVatAccDebit: [""],
-    regRcmAccCredit: [""],
-    regRcmAccDebit: [""],
-    regVatCtrlAccCredit: [""],
-    regVatCtrlAccDebit: [""],
-    unregVatAccCredit: [""],
-    unregVatAccDebit: [""],
-    unregRcmAccCredit: [""],
-    unregRcmAccDebit: [""],
-    unregVatCtrlAccCredit: [""],
-    unregVatCtrlAccDebit: [""],
-    impVatAccDebit: [""],
-    impRcmAccCredit: [""],
-    impVatCtrlAccDebit: [""],
-    impRcmCtrlAccDebit: [""],
-    expVatAccDebit: [""],
-    expVatAccCredit: [""],
-    posVatAccDebit: [""],
-    posVatRefundCredit: [""],
+    vatCode: ["",[Validators.required]],
+    vatDesc: ["",[Validators.required]],
+    vatPercent: ["",[Validators.required]],
+    group1: ["",[Validators.required]],
+    group2: ["",[Validators.required]],
+    group3: ["",[Validators.required]],
+    regVatAccCredit: ["",[Validators.required]],
+    regVatAccDebit: ["",[Validators.required]],
+    regRcmAccCredit: ["",[Validators.required]],
+    regRcmAccDebit: ["",[Validators.required]],
+    regVatCtrlAccCredit: ["",[Validators.required]],
+    regVatCtrlAccDebit: ["",[Validators.required]],
+    unregVatAccCredit: ["",[Validators.required]],
+    unregVatAccDebit: ["",[Validators.required]],
+    unregRcmAccCredit: ["",[Validators.required]],
+    unregRcmAccDebit: ["",[Validators.required]],
+    unregVatCtrlAccCredit: ["",[Validators.required]],
+    unregVatCtrlAccDebit: ["",[Validators.required]],
+    impVatAccDebit: ["",[Validators.required]],
+    impRcmAccCredit: ["",[Validators.required]],
+    impVatCtrlAccDebit: ["",[Validators.required]],
+    impRcmCtrlAccDebit: ["",[Validators.required]],
+    expVatAccDebit: ["",[Validators.required]],
+    expVatAccCredit: ["",[Validators.required]],
+    posVatAccDebit: ["",[Validators.required]],
+    posVatRefundCredit: ["",[Validators.required]],
     searchValue: [""],
   });
 

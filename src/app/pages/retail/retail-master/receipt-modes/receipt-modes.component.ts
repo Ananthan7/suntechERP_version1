@@ -1,6 +1,6 @@
 import { DatePipe } from "@angular/common";
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
@@ -133,10 +133,10 @@ export class ReceiptModesComponent implements OnInit {
   ) {}
 
   receiptModesMainForm: FormGroup = this.formBuilder.group({
-    mode: [""],
-    code: [""],
-    desc: [""],
-    accode: [""],
+    mode: ["",[Validators.required]],
+    code: ["",[Validators.required]],
+    desc: ["",[Validators.required]],
+    accode: ["",[Validators.required]],
     commision: [""],
     currencyCode: [""],
     commisionAccount: [""],
