@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatError } from '@angular/material/form-field';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -51,11 +51,19 @@ export class LoyaltyCardMasterComponent implements OnInit {
     pointmulfact: [''],
   })
 
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      this.activeModal.close();
+    }
+  }
+
   ngOnInit(): void {
     console.log(this.content);
     this.unq_id = this.content?.CODE;
     console.log(this.unq_id);
     this.flag = this.content?.FLAG;
+    
     if(this.flag == undefined){
       this.renderer.selectRootElement('#code').focus();
       this.togetlastpointsto();
@@ -63,7 +71,7 @@ export class LoyaltyCardMasterComponent implements OnInit {
     if (this.flag == 'EDIT') {
       this.disable_code = true;
       this.codeedit = true;
-      this.editMode = true;
+      this.editMode = false;
     } else if (this.flag == 'VIEW') {
       this.viewMode = true;
       this.codeedit = true;
@@ -148,17 +156,34 @@ export class LoyaltyCardMasterComponent implements OnInit {
   checkcode() {
     const CodeControl = this.loyaltycardform.controls.code;
     if (!CodeControl.value || CodeControl.value.trim() === "") {
-      this.commonService.toastErrorByMsgId('MSG1124');
-      this.renderer.selectRootElement('#code')?.focus();
+      // this.commonService.toastErrorByMsgId('MSG1124');
+      Swal.fire({
+        title: 'Error',
+        text: 'Code Cannot be Empty',
+        icon: 'error',
+      }).then((result) => { 
+        if (result.isConfirmed) {
+          this.renderer.selectRootElement('#code')?.focus();
+        }
+      });
     }
   }
+  
 
   
   checkdesc() {
     const descControl = this.loyaltycardform.controls.codedesc;
     if (!descControl.value || descControl.value.trim() === "") {
-      this.commonService.toastErrorByMsgId('MSG1193');
-      this.renderer.selectRootElement('#codedesc')?.focus();
+      // this.commonService.toastErrorByMsgId('MSG1193');
+      Swal.fire({
+        title: 'Error',
+        text: 'Description Cannot be Empty',
+        icon: 'error',
+      }).then((result) => { 
+        if (result.isConfirmed) {
+          this.renderer.selectRootElement('#codedesc')?.focus();
+        }
+      });
     }
   }
 
@@ -167,42 +192,87 @@ export class LoyaltyCardMasterComponent implements OnInit {
       let points_from = Number(this.loyaltycardform.controls.pointsfrom.value);
     let points_to = Number(this.loyaltycardform.controls.pointsto.value);
     if (points_from >= points_to) {
-        this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
-        this.renderer.selectRootElement('#pointsto')?.focus();
+        // this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
+        // this.renderer.selectRootElement('#pointsto')?.focus();
+        Swal.fire({
+          title: 'Error',
+          text: 'Points to should be higher than Points from',
+          icon: 'error',
+        }).then((result) => { 
+          if (result.isConfirmed) {
+            this.renderer.selectRootElement('#pointsto')?.focus();
+            this.loyaltycardform.controls.pointsto.reset();
+          }
+        });
+
     } else {
         this.loyaltycardform.controls.pointsto.setErrors(null);
     }
     }
   }
 
-  checkexp_days(){
-    let days = this.loyaltycardform.controls.pointexpdays.value;
-    if(days>10){
-      Swal.fire({
-        title: 'Warning',
-        text: 'Please enter a value less than 10',
-      })
-      this.loyaltycardform.controls.pointexpdays.reset();
-      this.renderer.selectRootElement('#pointexpdays')?.focus();
-    }
-  }
+  // checkexp_days(){
+  //   let days = this.loyaltycardform.controls.pointexpdays.value;
+  //   if(days>10){
+  //     Swal.fire({
+  //       title: 'Warning',
+  //       text: 'Please enter a value less than 10',
+  //     })
+  //     this.loyaltycardform.controls.pointexpdays.reset();
+  //     this.renderer.selectRootElement('#pointexpdays')?.focus();
+  //   }
+  // }
 
     check_greater(){
       if(this.flag == undefined){
         let points_from = Number(this.loyaltycardform.controls.pointsfrom.value);
         let points_to = Number(this.loyaltycardform.controls.pointsto.value);
         if(points_from<=0){
-          this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromzero: true });
-          this.renderer.selectRootElement('#pointsfrom')?.focus();
+          // this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromzero: true });
+          // this.renderer.selectRootElement('#pointsfrom')?.focus();
           // this.renderer.selectRootElement('#pointsfrom')?.reset();
+          Swal.fire({
+            title: 'Error',
+            text: 'Minimum value is zero',
+            icon: 'error',
+          }).then((result) => { 
+            if (result.isConfirmed) {
+              this.renderer.selectRootElement('#pointsfrom')?.focus();
+              this.loyaltycardform.controls.pointsfrom.reset();
+            }
+          });
         }
         else if (this.last_points_to >= points_from) {
-          this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromlower: true });
-          this.renderer.selectRootElement('#pointsfrom')?.focus();
-        }else  if (points_from >= points_to) {
-          this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
-          this.renderer.selectRootElement('#pointsto')?.focus();
-        } else {
+          // this.loyaltycardform.controls.pointsfrom.setErrors({ pointsfromlower: true });
+          // this.renderer.selectRootElement('#pointsfrom')?.focus();
+          Swal.fire({
+            title: 'Error',
+            text: 'Points from should be higher than Last Points to',
+            icon: 'error',
+          }).then((result) => { 
+            if (result.isConfirmed) {
+              this.renderer.selectRootElement('#pointsfrom')?.focus();
+              this.loyaltycardform.controls.pointsfrom.reset();
+
+            }
+          });
+        }
+        // else  if (points_from >= points_to) {
+        //   // this.loyaltycardform.controls.pointsto.setErrors({ pointsToLower: true });
+        //   // this.renderer.selectRootElement('#pointsto')?.focus();
+        //   Swal.fire({
+        //     title: 'Error',
+        //     text: 'Points to should be higher than Points from',
+        //     icon: 'error',
+        //   }).then((result) => { 
+        //     if (result.isConfirmed) {
+        //       this.renderer.selectRootElement('#pointsto')?.focus();
+        //       this.loyaltycardform.controls.pointsfrom.reset();
+
+        //     }
+        //   });
+        // } 
+        else {
           this.loyaltycardform.controls.pointsfrom.setErrors(null);
         }
       }     
