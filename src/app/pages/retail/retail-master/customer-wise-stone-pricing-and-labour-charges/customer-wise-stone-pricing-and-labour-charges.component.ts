@@ -105,6 +105,8 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
 
      } else if (this.content?.FLAG == 'DELETE') {
        this.viewMode = true;
+       this.setFormValues();
+
        this.deleteRecord()
      }
    }
