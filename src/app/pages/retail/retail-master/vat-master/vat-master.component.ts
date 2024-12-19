@@ -1470,6 +1470,7 @@ export class VatMasterComponent implements OnInit {
               ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT == 1,
               HSN_SAC_CODE: "",
               HSN_SAC_DESC: "",
+
             })),
           ];
         }
