@@ -1170,6 +1170,50 @@ export class ProductionEntryDetailsComponent implements OnInit {
       this.commonService.setCommaSerperatedNumber(value, Decimal)
     )
   }
+  formdata = new FormData();
+  /**USE: set form data for saving */
+  submitImageFormData() {
+    let form = this.productiondetailsFrom.value;
+    // this.detailArray.forEach((item: any, i: any) => {
+      this.formdata.append(`Model.Type`, this.commonService.nullToString(form.VOCTYPE));
+      this.formdata.append(`Model.Code`, this.commonService.nullToString(form.code));
+      if (this.imagepath.length > 0) {
+        for (let i: number = 0; i < this.imagepath.length; i++) {
+          this.formdata.append('Model.imageData[' + i + '].Picture_name', 'test');
+          this.formdata.append('Model.imageData[' + i + '].DefaultPicture', this.imagepath[i].DEFAULT);
+          this.formdata.append('Model.imageData[' + i + '].Picture_Type', 'jgp');
+        }
+        for (let i: number = 0; i < this.imagepath.length; i++) {
+          this.formdata.append("Model.Images[" + i + "].Image.File", this.imagepath[i]);
+        }
+      }
+    // })
+
+    let Sub: Subscription = this.dataService.postDynamicAPI('PictureAttachment/InsertWithAttachments', this.formdata)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
+        } else if (result.status == "Failed") {
+          this.commonService.toastErrorByMsgId('MSG1121')
+        } else {
+          this.commonService.toastErrorByMsgId('Image not uploaded')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
+    this.subscriptions.push(Sub)
+  }
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      // this.afterSave(result.value)
+    });
+  }
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
