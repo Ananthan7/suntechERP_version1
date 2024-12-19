@@ -52,7 +52,7 @@
                                             <div class="col-md-2">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input id="currency" type="text" matInput formControlName="currency"
-                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,currencyCodeData,'currency')"  (keydown)="lookupKeyPress($event,'currency')"/>
+                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,currencyCodeData,'currency')"  (keydown)="lookupKeyPress($event,'currency')" #currency (input)="currency.value = currency.value.toUpperCase()"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="currencyCodeData"
                                                         (newRowClick)="currencyCodeSelected($event)" #currencycodeSearch>
@@ -76,7 +76,7 @@
                                             <div class="col-md-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput formControlName="costcode"
-                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,costCodeData,'costcode')"  (keydown)="lookupKeyPress($event,'costcode')"/>
+                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,costCodeData,'costcode')"  (keydown)="lookupKeyPress($event,'costcode')" #costcode  (input)="costcode.value = costcode.value.toUpperCase()"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="costCodeData"
                                                         (newRowClick)="costCodeSelected($event)" #costcodeSearch>
@@ -89,7 +89,7 @@
                                             <div class="col-md-2">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input id="brand" type="text" matInput formControlName="brand"
-                                                        [readonly]="viewMode || codeEnable" (focusout)="validateLookupField($event,BrandCodeData,'brand')"  (keydown)="lookupKeyPress($event,'brand')"/>
+                                                        [readonly]="viewMode || codeEnable" (focusout)="validateLookupField($event,BrandCodeData,'brand')"  (keydown)="lookupKeyPress($event,'brand')"  #brand (input)="brand.value = brand.value.toUpperCase()"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="BrandCodeData"
                                                         (newRowClick)="brandCodeSelected($event)"  #brandcodeSearch>
@@ -105,7 +105,7 @@
                                             <div class="col-md-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput formControlName="Category"
-                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,categoryCodeData,'Category')"  (keydown)="lookupKeyPress($event,'Category')"/>
+                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,categoryCodeData,'Category')"  (keydown)="lookupKeyPress($event,'Category')"  #Category  (input)="Category.value = Category.value.toUpperCase()"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="categoryCodeData" 
                                                         (newRowClick)="categoryCodeSelected($event)" #CategorycodeSearch>
@@ -118,7 +118,7 @@
                                             <div class="col-md-2">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input id="Type" type="text" matInput formControlName="Type"
-                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,typeCodeData,'Type')"  (keydown)="lookupKeyPress($event,'Type')"/>
+                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,typeCodeData,'Type')"  (keydown)="lookupKeyPress($event,'Type')"  #Type  (input)="Type.value = Type.value.toUpperCase()"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="typeCodeData"
                                                         (newRowClick)="typeCodeSelected($event)" #TypecodeSearch>
@@ -135,7 +135,7 @@
                                             <div class="col-md-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput formControlName="subCategory"
-                                                        [readonly]="viewMode || codeEnable"   (focusout)="validateLookupField($event,subcategoryCodeData,'subCategory')"  (keydown)="lookupKeyPress($event,'subCategory')"/>
+                                                        [readonly]="viewMode || codeEnable"   (focusout)="validateLookupField($event,subcategoryCodeData,'subCategory')"  (keydown)="lookupKeyPress($event,'subCategory')"  #subCategory (input)="subCategory.value = subCategory.value.toUpperCase()"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="subcategoryCodeData"
                                                         (newRowClick)="subcategoryCodeSelected($event)" #subCategorycodeSearch>
@@ -148,7 +148,7 @@
                                             <div class="col-md-2">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input id="Country" type="text" matInput formControlName="Country"
-                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,countryCodeData,'Country')"  (keydown)="lookupKeyPress($event,'Country')"/>
+                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,countryCodeData,'Country')"  (keydown)="lookupKeyPress($event,'Country')" #Country (input)="Country.value = Country.value.toUpperCase()"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="countryCodeData"
                                                         (newRowClick)="countryCodeSelected($event)" #CountrycodeSearch>
@@ -164,7 +164,7 @@
                                             <div class="col-md-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput formControlName="branch"
-                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,BranchCodeData,'branch')"  (keydown)="lookupKeyPress($event,'branch')"/>
+                                                        [readonly]="viewMode || codeEnable"  (focusout)="validateLookupField($event,BranchCodeData,'branch')"  (keydown)="lookupKeyPress($event,'branch')" #branch (input)="branch.value = branch.value.toUpperCase()"/>
                                                     <master-search class="masterSearch" *ngIf="!viewMode"
                                                         [MasterSearchData]="BranchCodeData"
                                                         (newRowClick)="branchCodeSelected($event)" #branchcodeSearch>
@@ -189,7 +189,7 @@
                                             <div class="col-md-3">
                                                 <mat-form-field style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput formControlName="hsn"
-                                                        [readonly]="viewMode || codeEnable" />
+                                                        [readonly]="viewMode || codeEnable" (input)="codeField.value = codeField.value.toUpperCase()"/>
                                                     <master-search *ngIf="!viewMode" class="masterSearch"
                                                         [MasterSearchData]="HSNCodeData"
                                                         (newRowClick)="HSNCenterSelected($event)">
@@ -225,7 +225,7 @@
                                                     <div class="form-check-label">
                                                         <mat-checkbox type="checkbox" type="checkbox"
                                                             formControlName="boilProcessPrefix" [disabled]="viewMode || codeEnable">
-                                                            BoilProcess Prefix
+                                                            Boil Process Prefix
                                                         </mat-checkbox>
                                                     </div>
                                                 </div>

@@ -184,7 +184,7 @@
             <div class="row pt-2">
               <div class="col-md-12">
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                  (addClick)="openlabetails()" (deleteClick)="removeItemDetails()">
+                  (addClick)="openlabetails()" (deleteClick)="removeItemDetails()"   [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" >
                 </menu-buttons>
                 <dx-data-grid id="gridContainer" [showBorders]="true" [dataSource]="tableData2" [showColumnLines]="true"
                   [showRowLines]="true" class="mt-3" [paging]="{ pageSize: 5 }">
@@ -295,7 +295,7 @@
             <div class="row pt-2">
               <div class="col-md-12 d-flex justify-content-between align-items-center">
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                  (addClick)="openAccountdetails()" (deleteClick)="removeItemDetails()">
+                  (addClick)="openAccountdetails()" (deleteClick)="removeItemDetails()"   [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" >
                 </menu-buttons>
                 <div class="d-flex">
 

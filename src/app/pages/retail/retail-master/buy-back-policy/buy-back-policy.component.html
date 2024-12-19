@@ -20,9 +20,13 @@
                             :</label>
                         <div class="col-sm-8">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input #codeField type="text" #codeInput maxlength="6" matInput formControlName="policycode" (focusout)="validateLookupField($event,policycodeData,'policycode')"  (keydown)="lookupKeyPress($event,'policycode')" [readonly]="viewMode || editMode">
-                                <master-search *ngIf=" viewMode == false && editMode == false" [MasterSearchData]="policycodeData"
-                                    (newRowClick)="policycodeSelected($event)" class="masterSearch" #overlaypolicycodeSearch>
+                                <input #codeField type="text" #codeInput maxlength="6" matInput
+                                    formControlName="policycode"
+                                    (focusout)="validateLookupField($event,policycodeData,'policycode')"
+                                    (keydown)="lookupKeyPress($event,'policycode')" [readonly]="viewMode || editMode">
+                                <master-search *ngIf=" viewMode == false && editMode == false"
+                                    [MasterSearchData]="policycodeData" (newRowClick)="policycodeSelected($event)"
+                                    class="masterSearch" #overlaypolicycodeSearch>
                                 </master-search>
                             </mat-form-field>
                         </div>
@@ -41,13 +45,12 @@
                         </div>
                     </div>
                 </div> -->
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                     <div class="row mb-2">
                       <label for="input" id="ID001" class="col-sm-4 col-form-label"> Divisions :</label>
                       <div class="col-sm-8">
                         <mat-form-field appearance="outline" style="width: 100%;">
                           <mat-select formControlName="division" [disabled]="viewMode">
-                            <!-- Dynamically populate options -->
                             <mat-option *ngFor="let option of divisionOptions" [value]="option.DIVISION_CODE">
                               {{ option.DESCRIPTION }}
                             </mat-option>
@@ -55,9 +58,25 @@
                         </mat-form-field>
                       </div>
                     </div>
-                  </div>
-                  
-                  
+                  </div> -->
+
+
+                <div class="col-md-3">
+                    <div class="row mb-2">
+                        <label  class="col-sm-4 col-form-label" >Division * : </label>
+                        <div class="col-md-8">
+                            <mat-form-field style="width: 100%;" appearance="outline">
+                                <mat-select formControlName="division" multiple [disabled]="viewMode"
+                                    (selectionChange)="onSelectionChange($event)">
+                                    <mat-option *ngFor="let option of divisionOptions" [value]="option.DIVISION_CODE">
+                                        {{ option.DIVISION_CODE}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="row">
@@ -67,12 +86,12 @@
                         <div class="col-sm-8">
                             <div class="datepick">
                                 <mat-form-field style="width: 100%" appearance="outline">
-                                    <input matInput DateValidation 
-                                        [matDatepicker]="dateFrom" formControlName="dateFrom" [readonly]="viewMode"
-                                        placeholder="DD/MM/YYYY" 
-                                       />
-                                    <mat-datepicker-toggle matSuffix [for]="dateFrom" [disabled]="viewMode"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" #dateFrom [disabled]="viewMode"></mat-datepicker>
+                                    <input matInput DateValidation [matDatepicker]="dateFrom" formControlName="dateFrom"
+                                        [readonly]="viewMode" placeholder="DD/MM/YYYY" />
+                                    <mat-datepicker-toggle matSuffix [for]="dateFrom"
+                                        [disabled]="viewMode"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #dateFrom
+                                        [disabled]="viewMode"></mat-datepicker>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -84,11 +103,12 @@
                         <div class="col-sm-8">
                             <div class="datepick">
                                 <mat-form-field style="width: 100%" appearance="outline">
-                                    <input matInput DateValidation 
-                                        [matDatepicker]="dateTo" formControlName="dateTo" [readonly]="viewMode"
-                                        placeholder="DD/MM/YYYY" />
-                                    <mat-datepicker-toggle matSuffix [for]="dateTo" [disabled]="viewMode"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" #dateTo [disabled]="viewMode"></mat-datepicker>
+                                    <input matInput DateValidation [matDatepicker]="dateTo" formControlName="dateTo"
+                                        [readonly]="viewMode" placeholder="DD/MM/YYYY" />
+                                    <mat-datepicker-toggle matSuffix [for]="dateTo"
+                                        [disabled]="viewMode"></mat-datepicker-toggle>
+                                    <mat-datepicker [startAt]="currentDate" #dateTo
+                                        [disabled]="viewMode"></mat-datepicker>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -100,14 +120,16 @@
                             :</label>
                         <div class="col-sm-4">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="number" #codeInput maxlength="15" matInput formControlName="percentage" NumberOnly class="text-right" [readonly]="viewMode">
+                                <input type="number" #codeInput maxlength="15" matInput formControlName="percentage"
+                                    NumberOnly class="text-right" [readonly]="viewMode">
 
                             </mat-form-field>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <button type="button" class="btn btn-outline-primary metal-issue-del-btn" [disabled]="viewMode">Quick Fill</button>
+                    <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
+                        [disabled]="viewMode">Quick Fill</button>
                 </div>
 
             </div>
@@ -118,7 +140,7 @@
                 <div class="col-md-12">
                     <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
                         [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3"
-                        keyExpr="SRNO" >
+                        keyExpr="SRNO">
                         <dxo-selection mode="single"></dxo-selection>
                         <dxi-column dataField="SRNO" caption="SR No" class="tab"> </dxi-column>
                         <dxi-column dataField="DIVISION_CODE" caption="Division" cellTemplate="division">
@@ -128,7 +150,7 @@
                         <dxi-column dataField="DEF_ALLOY_DESCRIPTION" caption="Date To"> </dxi-column>
                         <dxi-column dataField="ALLOY_PER" caption="Policy Details" cellTemplate="alloyper">
                         </dxi-column>
-                        <dxi-column dataField="ALLOY_PER" caption="Refund %" cellTemplate="alloyper">
+                        <dxi-column dataField="ALLOY_PERS" caption="Refund %" cellTemplate="alloyper">
                         </dxi-column>
 
 

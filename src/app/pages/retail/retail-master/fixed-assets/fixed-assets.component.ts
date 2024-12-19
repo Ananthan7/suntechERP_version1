@@ -11,6 +11,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSelect } from "@angular/material/select";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -46,14 +47,16 @@ export class FixedAssetsComponent implements OnInit {
     private apiService: SuntechAPIService,
     private commonService: CommonServiceService,
     private renderer: Renderer2,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private toastr: ToastrService,
+    
   ) {}
 
   fixedassetsform: FormGroup = this.formBuilder.group({
-    category_code: [""],
+    category_code: ["", [Validators.required]],
     category_code_desc: [""],
     assets_code: ["", [Validators.required]],
-    description: [""],
+    description: ["", [Validators.required]],
     curr_code: [""],
     curr_rate: [""],
     land_cost_lc: [""],
@@ -72,22 +75,22 @@ export class FixedAssetsComponent implements OnInit {
     used_by: [""],
     type_code: [""],
     type: [""],
-    start_from: [""],
+    start_from: ["", [Validators.required]],
     method: [""],
     percent: [""],
     life_period: [""],
     months: [""],
-    last_dep_date: [""],
+    last_dep_date: ["", [Validators.required]],
     status: [""],
     status_desc: [""],
-    disposal_date: [""],
+    disposal_date: ["", [Validators.required]],
     opening: [""],
     supplier_code: [""],
     supplier_code_desc: [""],
     subledger_code: [""],
     subledger_code_desc: [""],
     purchase_inv: [""],
-    supp_inv_date: [""],
+    supp_inv_date: ["", [Validators.required]],
     cost_lc_dt: [""],
     cost_fc_dt: [""],
     remarks: [""],
@@ -96,12 +99,12 @@ export class FixedAssetsComponent implements OnInit {
     certi_no: [""],
     install_dt: [""],
     created_by: [""],
-    created_on: [""],
-    warranty: [""],
-    service_upto: [""],
-    insurance_upto: [""],
-    reg_upto: [""],
-    certi_upto: [""],
+    created_on: ["", [Validators.required]],
+    warranty: ["", [Validators.required]],
+    service_upto: ["", [Validators.required]],
+    insurance_upto: ["", [Validators.required]],
+    reg_upto: ["", [Validators.required]],
+    certi_upto: ["", [Validators.required]],
     userdefined_1: [""],
     userdefined_2: [""],
     userdefined_3: [""],
@@ -117,6 +120,10 @@ export class FixedAssetsComponent implements OnInit {
     this.fa_id = this.content?.MID;
     console.log(this.fa_id);
     this.flag = this.content?.FLAG;
+
+    this.fixedassetsform.get('assets_code')?.valueChanges.subscribe((value: string) => {
+      this.fixingassetscodedata.WHERECONDITION = `CODE='${value}'`;
+    });
 
     this.methodlist = this.getUniqueValues(
       this.commonService.getComboFilterByID("Depreciation Method"),
@@ -402,7 +409,7 @@ export class FixedAssetsComponent implements OnInit {
     ORDER_TYPE: 0,
     SEARCH_HEADING: "Fixing assets code",
     SEARCH_VALUE: "",
-    SEARCH_FIELD: " + txtFACategory.Text.Trim() + ",
+    SEARCH_FIELD: "",
     WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
@@ -423,7 +430,7 @@ export class FixedAssetsComponent implements OnInit {
     SEARCH_HEADING: "Department",
     SEARCH_VALUE: "",
     SEARCH_FIELD: "Types",
-    WHERECONDITION: "Types = 'FA DEPARTMENT'",
+    WHERECONDITION: "TYPES='FA DEPARTMENT'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -443,7 +450,7 @@ export class FixedAssetsComponent implements OnInit {
     SEARCH_HEADING: "Type Code",
     SEARCH_VALUE: "",
     SEARCH_FIELD: "Types",
-    WHERECONDITION: "Types = 'FA CATEGORY'",
+    WHERECONDITION: "Types = 'FA CATEGORY' ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -762,59 +769,65 @@ export class FixedAssetsComponent implements OnInit {
   }
 
   formSubmit() {
+
     const postData = {
       MID: 0,
-      FA_CATEGORY: this.fixedassetsform.controls.category_code.value,
-      FA_CODE: this.fixedassetsform.controls.assets_code.value,
-      FA_DESC: this.fixedassetsform.controls.description.value,
+      FA_CATEGORY: this.commonService.nullToString(this.fixedassetsform.controls.category_code.value),
+      FA_CODE: this.commonService.nullToString(this.fixedassetsform.controls.assets_code.value),
+      FA_DESC: this.commonService.nullToString(this.fixedassetsform.controls.description.value),
       FA_MSTORADDITION: "string",
-      FA_DEP_METHOD: this.fixedassetsform.controls.method.value,
-      FA_DEP_PERCENTAGE: this.fixedassetsform.controls.life_period.value,
+      FA_DEP_METHOD: this.commonService.nullToString(this.fixedassetsform.controls.method.value),
+      FA_DEP_PERCENTAGE:  this.commonService.emptyToZero(this.fixedassetsform.controls.life_period.value),
       FA_CALCULATION_METHOD: "string",
       FA_CM_LENGTH_MONTH: 0,
       FA_NO_OF_PCS: 0,
-      FA_COST: this.fixedassetsform.controls.cost_lc.value,
-      FA_LANDEDCOST: this.fixedassetsform.controls.land_cost_lc.value,
-      FA_OPN_DEP_AMOUNT: this.fixedassetsform.controls.open_net_val.value,
-      FA_ACC_DEP_AMOUNT: this.fixedassetsform.controls.opening_acc_dep.value,
-      FA_START_DEP_DATE: this.fixedassetsform.controls.start_from.value,
+      FA_COST:  this.commonService.emptyToZero(this.fixedassetsform.controls.cost_lc.value),
+      FA_LANDEDCOST:  this.commonService.emptyToZero(this.fixedassetsform.controls.land_cost_lc.value),
+      FA_OPN_DEP_AMOUNT:  this.commonService.emptyToZero(this.fixedassetsform.controls.open_net_val.value),
+      FA_ACC_DEP_AMOUNT:  this.commonService.emptyToZero(this.fixedassetsform.controls.opening_acc_dep.value),
+      FA_START_DEP_DATE:this.fixedassetsform.controls.start_from.value,
       FA_LAST_DEP_DATE: this.fixedassetsform.controls.last_dep_date.value,
       FA_PUR_DETAILS: "string",
-      FA_PUR_VOCNO: this.fixedassetsform.controls.purchase_inv.value,
+      FA_PUR_VOCNO: this.commonService.nullToString(this.fixedassetsform.controls.purchase_inv.value),
       FA_PUR_VOCDATE: this.fixedassetsform.controls.supp_inv_date.value,
-      FA_SUPPLIER: this.fixedassetsform.controls.supplier_code.value,
+      FA_SUPPLIER: this.commonService.nullToString(this.fixedassetsform.controls.supplier_code.value),
       FA_PUR_AMOUNT: 0,
       FA_DISPOSAL_DATE: this.fixedassetsform.controls.disposal_date.value,
-      FA_DISPOSAL_REMARKS: this.fixedassetsform.controls.remarks.value,
-      FA_CREATEDBY: this.fixedassetsform.controls.created_by.value,
+      FA_DISPOSAL_REMARKS: this.commonService.nullToString(this.fixedassetsform.controls.remarks.value),
+      FA_CREATEDBY: this.commonService.nullToString(this.fixedassetsform.controls.created_by.value),
       FA_CREATEDTIME: this.fixedassetsform.controls.created_on.value,
-      FA_BRANCHCODE: this.fixedassetsform.controls.Branchcode.value,
-      FA_DEPARTMENT: this.fixedassetsform.controls.department_code.value,
+      FA_BRANCHCODE: this.commonService.nullToString(this.fixedassetsform.controls.Branchcode.value),
+      FA_DEPARTMENT: this.commonService.nullToString(this.fixedassetsform.controls.department_code.value),
       FA_DIVISION: "string",
-      FA_LOCATION: this.fixedassetsform.controls.loc_code.value,
-      FA_USEDBY: this.fixedassetsform.controls.used_by_code.value,
-      FA_DET_CATEGORY: this.fixedassetsform.controls.category_code_desc.value,
-      FA_ACTIVESTATUS: this.fixedassetsform.controls.status.value,
+      FA_LOCATION: this.commonService.nullToString(this.fixedassetsform.controls.loc_code.value),
+      FA_USEDBY: this.commonService.nullToString(this.fixedassetsform.controls.used_by_code.value),
+      FA_DET_CATEGORY: this.commonService.nullToString(this.fixedassetsform.controls.category_code_desc.value),
+      FA_ACTIVESTATUS: this.commonService.nullToString(this.fixedassetsform.controls.status.value),
       FA_IMAGEPATH: "string",
       FA_WARRANTYUPTO_DATE: this.fixedassetsform.controls.warranty.value,
       FA_SERVICECTRLUPTO_DATE: this.fixedassetsform.controls.service_upto.value,
       FA_INSURANCEUPTO_DATE: this.fixedassetsform.controls.insurance_upto.value,
       FA_REGISTRATIONUPTO_DATE: this.fixedassetsform.controls.reg_upto.value,
       FA_CERTIFICATIONUPTO_DATE: this.fixedassetsform.controls.certi_upto.value,
-      FA_REGNO: this.fixedassetsform.controls.reg_no.value,
-      FA_INSURANCE: this.fixedassetsform.controls.insurance.value,
-      FA_CERTIFICATIONNO: this.fixedassetsform.controls.certi_no.value,
-      FA_INSTALLATION_DETAILS: this.fixedassetsform.controls.install_dt.value,
-      FA_COST_FC: this.fixedassetsform.controls.costfc.value,
-      FA_CONV_RATE: this.fixedassetsform.controls.curr_rate.value,
-      FA_CURRENCY: this.fixedassetsform.controls.curr_code.value,
-      FA_DEP_PERIOD: this.fixedassetsform.controls.months.value,
-      UDF1: this.fixedassetsform.controls.userdefined_1.value,
-      UDF2: this.fixedassetsform.controls.userdefined_2.value,
-      UDF3: this.fixedassetsform.controls.userdefined_3.value,
-      UDF4: this.fixedassetsform.controls.userdefined_4.value,
-      UDF5: this.fixedassetsform.controls.userdefined_5.value,
+      FA_REGNO: this.commonService.nullToString(this.fixedassetsform.controls.reg_no.value),
+      FA_INSURANCE: this.commonService.nullToString(this.fixedassetsform.controls.insurance.value),
+      FA_CERTIFICATIONNO: this.commonService.nullToString(this.fixedassetsform.controls.certi_no.value),
+      FA_INSTALLATION_DETAILS: this.commonService.nullToString(this.fixedassetsform.controls.install_dt.value),
+      FA_COST_FC:  this.commonService.emptyToZero(this.fixedassetsform.controls.costfc.value),
+      FA_CONV_RATE:  this.commonService.emptyToZero(this.fixedassetsform.controls.curr_rate.value),
+      FA_CURRENCY: this.commonService.nullToString(this.fixedassetsform.controls.curr_code.value),
+      FA_DEP_PERIOD:  this.commonService.emptyToZero(this.fixedassetsform.controls.months.value),
+      UDF1: this.commonService.nullToString(this.fixedassetsform.controls.userdefined_1.value),
+      UDF2: this.commonService.nullToString(this.fixedassetsform.controls.userdefined_2.value),
+      UDF3: this.commonService.nullToString(this.fixedassetsform.controls.userdefined_3.value),
+      UDF4: this.commonService.nullToString(this.fixedassetsform.controls.userdefined_4.value),
+      UDF5: this.commonService.nullToString(this.fixedassetsform.controls.userdefined_5.value),
     };
+
+    if (this.fixedassetsform.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
 
     if (this.flag === "EDIT") {
       let API = `FAMaster/UpdateFAMaster/${this.fa_id}`;
