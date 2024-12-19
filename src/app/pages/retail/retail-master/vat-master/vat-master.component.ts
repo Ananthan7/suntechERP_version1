@@ -101,59 +101,6 @@ export class VatMasterComponent implements OnInit {
   @Input() content!: any;
 
   expenseHsnSacAllocationData: any[] = [];
-  esxpenseHsnSacAllocationData: any[] = [
-    {
-      SN: 1,
-      EXPENSE_ACCODE: "A001",
-      EXPENSE_ACCODE_DESC: "Office Supplies",
-      HSN_SAC_CODE: "1234",
-      HSN_SAC_DESC: "Stationery",
-      TAX_REG: true,
-      REVERSECHARGE_UNREG: false,
-      ELIGIBLE_INPUTCREDIT: true,
-    },
-    {
-      SN: 2,
-      EXPENSE_ACCODE: "B002",
-      EXPENSE_ACCODE_DESC: "Travel Expenses",
-      HSN_SAC_CODE: "5678",
-      HSN_SAC_DESC: "Airfare",
-      TAX_REG: false,
-      REVERSECHARGE_UNREG: true,
-      ELIGIBLE_INPUTCREDIT: false,
-    },
-    {
-      SN: 3,
-      EXPENSE_ACCODE: "C003",
-      EXPENSE_ACCODE_DESC: "Consultancy Fees",
-      HSN_SAC_CODE: "9101",
-      HSN_SAC_DESC: "Legal Services",
-      TAX_REG: true,
-      REVERSECHARGE_UNREG: false,
-      ELIGIBLE_INPUTCREDIT: true,
-    },
-    {
-      SN: 4,
-      EXPENSE_ACCODE: "D004",
-      EXPENSE_ACCODE_DESC: "Miscellaneous Expenses",
-      HSN_SAC_CODE: "1122",
-      HSN_SAC_DESC: "Miscellaneous",
-      TAX_REG: false,
-      REVERSECHARGE_UNREG: true,
-      ELIGIBLE_INPUTCREDIT: false,
-    },
-    {
-      SN: 5,
-      EXPENSE_ACCODE: "E005",
-      EXPENSE_ACCODE_DESC: "Training and Development",
-      HSN_SAC_CODE: "3344",
-      HSN_SAC_DESC: "Workshops",
-      TAX_REG: true,
-      REVERSECHARGE_UNREG: false,
-      ELIGIBLE_INPUTCREDIT: true,
-    },
-  ];
-
   costCenterAccountData: any[] = [];
   accountSettingDateWiseVatDetailsData: any[] = [];
   selectedRowFromCostCenterAccount: any;
@@ -184,8 +131,7 @@ export class VatMasterComponent implements OnInit {
     RECORDS: 7,
     LOOKUPID: 7,
     ORDER_TYPE: 0,
-    WHERECONDITION:
-      " BRANCH_CODE = 'strbranchcode' AND AC_OnHold = 0 and  VIEW_ACCMST_BRANCHWISE.ACCODE in (select ACCODE from ACCOUNT_MAIN where ( (  account_mode in ('L','G')) ) and ISNULL(accode,'') <> '')",
+    WHERECONDITION: ` BRANCH_CODE = '${this.branchCode}' AND AC_OnHold = 0 and  VIEW_ACCMST_BRANCHWISE.ACCODE in (select ACCODE from ACCOUNT_MAIN where ( (  account_mode in ('L','G')) ) and ISNULL(accode,'') <> '')`,
     SEARCH_FIELD: "",
     SEARCH_HEADING: "EXPENSE CODE",
     SEARCH_VALUE: "",
@@ -1256,7 +1202,7 @@ export class VatMasterComponent implements OnInit {
           !this.selectedRowFromCostCenterAccount.includes(index)
       );
 
-      this.selectedRowFromCostCenterAccount = []; 
+      this.selectedRowFromCostCenterAccount = [];
     }
   }
 
@@ -1279,9 +1225,10 @@ export class VatMasterComponent implements OnInit {
       this.costCenterAccountData[currentIndex][gridField[1]] =
         event.DESCRIPTION;
     } else if (gridType === "expense") {
-      this.expenseHsnSacAllocationData[currentIndex][gridField[0]] = event.CODE;
+      this.expenseHsnSacAllocationData[currentIndex][gridField[0]] =
+        event.CODE || event.ACCODE;
       this.expenseHsnSacAllocationData[currentIndex][gridField[1]] =
-        event.DESCRIPTION;
+        event.DESCRIPTION || event.ACCOUNT_HEAD;
     }
 
     if (applyToAll && this.GPCFetched) {
@@ -1385,13 +1332,13 @@ export class VatMasterComponent implements OnInit {
         ? `A percentage value cannot be greater than 100.`
         : `A percentage value cannot be negative (-) or less than Zero (0).`;
     const GSTCODE = this.vatMasterMainForm.value.vatCode;
-  
-    if (!GSTCODE) return; 
-  
+
+    if (!GSTCODE) return;
+
     if (value > 100 || value < 1) {
       this.vatMasterMainForm.controls.vatPercent.reset();
       this.openDialog("Warning", MESSAGE, true);
-  
+
       this.dialogBox
         .afterClosed()
         .pipe(take(1))
@@ -1404,14 +1351,13 @@ export class VatMasterComponent implements OnInit {
         });
     } else {
       this.vatMasterMainForm.controls.vatPercent.setValue(value);
-  
+
       const GSTPERCENT = this.vatMasterMainForm.value.vatPercent;
       if (GSTCODE && GSTPERCENT) {
         this.getAccountSettingDatewiseListData();
       }
     }
   }
-  
 
   getGridDataObjects(CODE: any) {
     let API = `VatMaster/GetVatMasterDetail/${CODE}`;
@@ -1470,7 +1416,6 @@ export class VatMasterComponent implements OnInit {
               ELIGIBLE_INPUTCREDIT: item.ELIGIBLE_INPUTCREDIT == 1,
               HSN_SAC_CODE: "",
               HSN_SAC_DESC: "",
-
             })),
           ];
         }

@@ -81,11 +81,15 @@ export class GpcGridComponentComponent implements OnInit {
   // }
 
   getGpcData(): Observable<any> {
+    console.log('called');
+    
     const API = `VatMaster/GetFillGPCAccounts`;
     return this.apiService.getDynamicAPI(API).pipe(
       tap((result) => {
         if (result.status.trim() === "Success") {
           this.GPCData = result.dynamicData[0];
+          console.log("In");
+          
           console.log(this.GPCData);
         } else {
           console.warn("Failed to fetch GPC Data.");
@@ -133,9 +137,18 @@ export class GpcGridComponentComponent implements OnInit {
     
       // If search value is empty, fetch full data
       if (!SEARCHVALUE) {
-        this.getGpcData();
+        console.log("called");
+        this.getGpcData().subscribe({
+          next: (result) => {
+            console.log("Full data fetched successfully:", result);
+          },
+          error: (err) => {
+            console.error("Error while fetching full data:", err);
+          },
+        });
         return;
       }
+      
     
       // Ensure data exists before filtering
       if (this.GPCData && this.GPCData.length > 0) {

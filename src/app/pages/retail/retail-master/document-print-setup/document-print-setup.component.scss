@@ -9,10 +9,36 @@
 
 .boxed-label h6 {
     color: #000 !important;
-    margin-bottom: 0;
+    margin-bottom: 0; 
 }
 
 .your-box-container {
     border: 1px solid #b3bdc6;
     padding: 10px;
+}
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    text-align: center;
+}
+
+.upload-btn-wrapper .btnnew {
+    color: white;
+    border-radius: 5px;
+    font-size: 14px;
+    background: linear-gradient(0deg, #2a5298 30%, #1e3c72 60%) !important;
+    border-color: transparent;
+    padding: 2px 15px;
+}
+
+.upload-btn-wrapper .uploadproduct {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    font-size: 100px;
+    cursor: pointer;
 }

@@ -90,7 +90,7 @@
                         $event,
                         AccodeData,
                         ['accode', 'currencyCode'],
-                        ['CODE', 'DESCRIPTION']
+                        ['ACCODE', 'ACCOUNT_HEAD']
                       )
                     "
                   />
@@ -104,7 +104,7 @@
                       lookupSelect(
                         $event,
                         ['accode', 'currencyCode'],
-                        ['CODE', 'DESCRIPTION']
+                        ['ACCODE', 'ACCOUNT_HEAD']
                       )
                     "
                   ></master-search>
@@ -166,17 +166,18 @@
                         $event,
                         commisionCodeData,
                         ['commisionAccount'],
-                        ['CODE']
+                        ['ACCODE']
                       )
                     "
                   />
+
                   <master-search
                     *ngIf="flag != 'VIEW'"
                     #overlayCommisionAccount
                     [MasterSearchData]="commisionCodeData"
                     class="masterSearch"
                     (newRowClick)="
-                      lookupSelect($event, ['commisionAccount'], ['CODE'])
+                      lookupSelect($event, ['commisionAccount'], ['ACCODE'])
                     "
                   ></master-search>
                 </mat-form-field>
@@ -200,7 +201,7 @@
                         $event,
                         bankCodeData,
                         ['bank'],
-                        ['CODE']
+                        ['ACCODE']
                       )
                     "
                   />
@@ -210,7 +211,7 @@
                     #overlayBankCode
                     [MasterSearchData]="bankCodeData"
                     class="masterSearch"
-                    (newRowClick)="lookupSelect($event, ['bank'], ['CODE'])"
+                    (newRowClick)="lookupSelect($event, ['bank'], ['ACCODE'])"
                   ></master-search>
                 </mat-form-field>
               </div>
@@ -239,25 +240,33 @@
                 >Branches</label
               >
 
-              <div class="col-md-9">
+              <div class="col-md-10">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input
-                    [readonly]="flag === 'VIEW'"
-                    matInput
-                    type="text"
-                    formControlName="branches"
-                  />
+                  <div class="row">
+                    <div class="col-md-10">
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        type="text"
+                        formControlName="branches"
+                      />
+                    </div>
+                    <div class="col-md-2">
+                      <div
+                        class="d-flex justify-content-end "
+                      >
+                        <app-branch-division
+                          [fetchData]="fetchedBranchData"
+                          (newRowClick)="selectedData($event)"
+                          class="branchDivisionelectr"
+                          [matTooltip]="branchDivisionControlsTooltip"
+                          matTooltipClass="custom-tooltip"
+                          matTooltipPosition="above"
+                        ></app-branch-division>
+                      </div>
+                    </div>
+                  </div>
                 </mat-form-field>
-              </div>
-              <div class="col-md-1" style="cursor: pointer;">
-                <app-branch-division
-                  [fetchData]="fetchedBranchData"
-                  (newRowClick)="selectedData($event)"
-                  class="branchDivisionelectr"
-                  [matTooltip]="branchDivisionControlsTooltip"
-                  matTooltipClass="custom-tooltip"
-                  matTooltipPosition="above"
-                ></app-branch-division>
               </div>
             </div>
 
@@ -301,7 +310,7 @@
                         $event,
                         inputVatCodeData,
                         ['inputVat'],
-                        ['CODE']
+                        ['ACCODE']
                       )
                     "
                   />
@@ -311,7 +320,9 @@
                     #overlayInputVat
                     [MasterSearchData]="inputVatCodeData"
                     class="masterSearch"
-                    (newRowClick)="lookupSelect($event, ['inputVat'], ['CODE'])"
+                    (newRowClick)="
+                      lookupSelect($event, ['inputVat'], ['ACCODE'])
+                    "
                   ></master-search>
                 </mat-form-field>
               </div>
@@ -365,7 +376,7 @@
                             $event,
                             outputVatCodeData,
                             ['outputVat'],
-                            ['CODE']
+                            ['ACCODE']
                           )
                         "
                       />
@@ -376,7 +387,7 @@
                         [MasterSearchData]="outputVatCodeData"
                         class="masterSearch"
                         (newRowClick)="
-                          lookupSelect($event, ['outputVat'], ['CODE'])
+                          lookupSelect($event, ['outputVat'], ['ACCODE'])
                         "
                       ></master-search>
                     </mat-form-field>
