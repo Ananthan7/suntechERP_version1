@@ -412,7 +412,7 @@
                                         formControlName="comments"
                                         maxlength="20"
                                         [readonly]="viewMode"
-                                        (focusout)="validateLookupField($event,commentsCodeData,'comments')"
+                                        (focusout)="SPvalidateLookupField($event,commentsCodeData,'comments')"
                                         (input)="inputValidate($event)"
                                         (keydown)="lookupKeyPress($event,'comments')" />
                                     <master-search
