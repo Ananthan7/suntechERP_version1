@@ -135,6 +135,8 @@ export class ShowTransDetailsComponent implements OnInit {
   }
 
   valuesBindingOnForm(data: any) {
+    console.log('call frm Report', data)
+    
     this.showTarnsDetailsForm.controls["customerCode"].setValue(data.CODE);
     this.showTarnsDetailsForm.controls["customer"].setValue(data.NAME);
     this.showTarnsDetailsForm.controls["mobile"].setValue(data.MOBILE);
