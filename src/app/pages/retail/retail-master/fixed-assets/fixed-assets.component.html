@@ -53,7 +53,7 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input type="text" matInput id="assets_code" formControlName="assets_code"
                       [readonly]="viewOnly || disable_code" [maxlength]="15" (focusout)="checkcode()"
-                      #assets_code UpperCaseDirective />
+                      #assets_code UpperCaseDirective (input)="input($event)" />
                     <mat-error *ngIf="
                         fixedassetsform.controls['assets_code'].hasError(
                           'required'
