@@ -29,7 +29,7 @@
                     )
                   " />
 
-                <master-search *ngIf="this.flag != 'VIEW'" class="masterSearch"
+                <master-search *ngIf="this.flag != 'VIEW' && this.allowfields" class="masterSearch"
                   [MasterSearchData]="fixingassetscodedata" (newRowClick)="selectedfixingassets($event)">
                 </master-search>
                 <!-- <input type="text" matInput formControlName="category_code" [readonly]="viewOnly" [maxlength]="50" /> -->
