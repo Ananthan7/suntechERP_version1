@@ -1,5 +1,17 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {
+  Component,
+  ElementRef,
+  Input,
+  NgZone,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTabGroup } from "@angular/material/tabs";
 import {
@@ -20,6 +32,7 @@ import { GpcGridComponentComponent } from "./gpc-grid-component/gpc-grid-compone
 import { ChangeDetectorRef } from "@angular/core";
 import { DxDataGridComponent } from "devextreme-angular";
 import { CustomdialogboxComponent } from "./customdialogbox/customdialogbox.component";
+import { take } from "rxjs/operators";
 
 @Component({
   selector: "app-vat-master",
@@ -29,7 +42,8 @@ import { CustomdialogboxComponent } from "./customdialogbox/customdialogbox.comp
 export class VatMasterComponent implements OnInit {
   @ViewChild("codeField") codeField!: ElementRef;
   @ViewChild("vatPercentField") vatPercentField!: ElementRef;
-  @ViewChild("dataGrid", { static: false }) dataGrid!: DxDataGridComponent;
+  @ViewChild("dataGrid1", { static: false }) dataGrid1!: DxDataGridComponent;
+  @ViewChild("dataGrid2", { static: false }) dataGrid2!: DxDataGridComponent;
   @ViewChild("tabGroup") tabGroup!: MatTabGroup;
   @ViewChild("overlayGroupOne") overlayGroupOne!: MasterSearchComponent;
   @ViewChild("overlayGroupTwo") overlayGroupTwo!: MasterSearchComponent;
@@ -326,36 +340,37 @@ export class VatMasterComponent implements OnInit {
     private toastr: ToastrService,
     public dialog: MatDialog,
     private commonService: CommonServiceService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
   ) {}
 
   vatMasterMainForm: FormGroup = this.formBuilder.group({
-    vatCode: ["",[Validators.required]],
-    vatDesc: ["",[Validators.required]],
-    vatPercent: ["",[Validators.required]],
-    group1: ["",[Validators.required]],
-    group2: ["",[Validators.required]],
-    group3: ["",[Validators.required]],
-    regVatAccCredit: ["",[Validators.required]],
-    regVatAccDebit: ["",[Validators.required]],
-    regRcmAccCredit: ["",[Validators.required]],
-    regRcmAccDebit: ["",[Validators.required]],
-    regVatCtrlAccCredit: ["",[Validators.required]],
-    regVatCtrlAccDebit: ["",[Validators.required]],
-    unregVatAccCredit: ["",[Validators.required]],
-    unregVatAccDebit: ["",[Validators.required]],
-    unregRcmAccCredit: ["",[Validators.required]],
-    unregRcmAccDebit: ["",[Validators.required]],
-    unregVatCtrlAccCredit: ["",[Validators.required]],
-    unregVatCtrlAccDebit: ["",[Validators.required]],
-    impVatAccDebit: ["",[Validators.required]],
-    impRcmAccCredit: ["",[Validators.required]],
-    impVatCtrlAccDebit: ["",[Validators.required]],
-    impRcmCtrlAccDebit: ["",[Validators.required]],
-    expVatAccDebit: ["",[Validators.required]],
-    expVatAccCredit: ["",[Validators.required]],
-    posVatAccDebit: ["",[Validators.required]],
-    posVatRefundCredit: ["",[Validators.required]],
+    vatCode: ["", [Validators.required]],
+    vatDesc: ["", [Validators.required]],
+    vatPercent: ["", [Validators.required]],
+    group1: [""],
+    group2: [""],
+    group3: [""],
+    regVatAccCredit: ["", [Validators.required]],
+    regVatAccDebit: ["", [Validators.required]],
+    regRcmAccCredit: ["", [Validators.required]],
+    regRcmAccDebit: ["", [Validators.required]],
+    regVatCtrlAccCredit: ["", [Validators.required]],
+    regVatCtrlAccDebit: ["", [Validators.required]],
+    unregVatAccCredit: ["", [Validators.required]],
+    unregVatAccDebit: ["", [Validators.required]],
+    unregRcmAccCredit: ["", [Validators.required]],
+    unregRcmAccDebit: ["", [Validators.required]],
+    unregVatCtrlAccCredit: ["", [Validators.required]],
+    unregVatCtrlAccDebit: ["", [Validators.required]],
+    impVatAccDebit: ["", [Validators.required]],
+    impRcmAccCredit: ["", [Validators.required]],
+    impVatCtrlAccDebit: ["", [Validators.required]],
+    impRcmCtrlAccDebit: ["", [Validators.required]],
+    expVatAccDebit: ["", [Validators.required]],
+    expVatAccCredit: ["", [Validators.required]],
+    posVatAccDebit: ["", [Validators.required]],
+    posVatRefundCredit: ["", [Validators.required]],
     searchValue: [""],
   });
 
@@ -368,8 +383,6 @@ export class VatMasterComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    console.log("DataGrid instance:", this.dataGrid);
-
     if (this.flag === "ADD") {
       this.codeField.nativeElement.focus();
     }
@@ -542,8 +555,57 @@ export class VatMasterComponent implements OnInit {
       this.activeModal.close(data);
     }
   }
+  calculateCellValue(data: any, field: string): any {
+    if (field === "VAT_DATE") {
+      return data.VAT_DATE ? new Date(data.VAT_DATE).toLocaleDateString() : "";
+    }
+    return data[field];
+  }
+
+  checkIncompleteFields(data: any[], tabIndex: any): boolean {
+    const requiredFields =
+      tabIndex == 0
+        ? [
+            "HSN_SAC_CODE",
+            "HSN_SAC_DESC",
+            "EXPENSE_ACCODE",
+            "EXPENSE_ACCODE_DESC",
+          ]
+        : ["HSN_SAC_CODE", "HSN_SAC_DESC"];
+
+    for (let i = 0; i < data.length; i++) {
+      const row = data[i];
+      for (const field of requiredFields) {
+        if (!row[field]) {
+          console.log(`Missing value for field '${field}' in row index ${i}`);
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
 
   vatMasterMainFormSubmit() {
+    let grid1 = this.checkIncompleteFields(this.expenseHsnSacAllocationData, 0);
+
+    if (grid1) {
+      const message = `Expense HSN/SAC Allocation Row Cannot Be Empty!`;
+      this.openDialog("Warning", message, true);
+      this.goToTab(1);
+      return;
+    }
+
+    let grid2 = this.checkIncompleteFields(this.costCenterAccountData, 1);
+
+    if (grid2) {
+      const message = `Cost Center Account Row HSN Code & Desc Cannot Be Empty!`;
+      this.openDialog("Warning", message, true);
+      this.goToTab(2);
+
+      return;
+    }
+
     Object.keys(this.vatMasterMainForm.controls).forEach((controlName) => {
       const control = this.vatMasterMainForm.controls[controlName];
       if (control.validator && control.validator({} as AbstractControl)) {
@@ -1014,16 +1076,6 @@ export class VatMasterComponent implements OnInit {
       : this.selectingRowFromcostCenterAccountData(values);
   }
 
-  unSelectThroughFocusOut(GRIDTYPE: any): void {
-    if (this.dataGrid) {
-      this.dataGrid.instance.refresh();
-      GRIDTYPE === "costCenter"
-        ? (this.selectedRowFromCostCenterAccount = [])
-        : (this.selectedRowFromExpenseHasSacAllocation = []);
-      console.log("Grid lost focus, selection cleared.");
-    }
-  }
-
   updateField(EVENT: any, DATA: any, FIELD: string, GRIDTYPE: any): void {
     const rowIndex = DATA?.SN - 1;
 
@@ -1100,7 +1152,7 @@ export class VatMasterComponent implements OnInit {
       this.openDialog("Warning", message, true);
       return;
     }
-
+    this.clearSelection(this.dataGrid2, 1);
     const newRow = {
       SN:
         this.costCenterAccountData.length > 0
@@ -1112,12 +1164,22 @@ export class VatMasterComponent implements OnInit {
       GPC_ACCODE_DESC: "",
       HSN_SAC_CODE: "",
       HSN_SAC_DESC: "",
-      TAX_REG: false,
-      REVERSECHARGE_UNREG: false,
-      ELIGIBLE_INPUTCREDIT: false,
+      TAX_REG: true,
+      REVERSECHARGE_UNREG: true,
+      ELIGIBLE_INPUTCREDIT: true,
     };
 
     this.costCenterAccountData = [...this.costCenterAccountData, newRow];
+
+    const pageIndex = Math.floor(
+      (this.costCenterAccountData.length - 1) /
+        this.dataGrid2.instance.pageSize()
+    );
+    this.goToPage(pageIndex, this.dataGrid2);
+  }
+
+  event(event: any) {
+    console.log(event);
   }
   addingRowInExpenseHsnSacAllocation() {
     if (
@@ -1131,6 +1193,8 @@ export class VatMasterComponent implements OnInit {
       return;
     }
 
+    this.clearSelection(this.dataGrid1, 0);
+
     const newRow = {
       SN:
         this.expenseHsnSacAllocationData.length > 0
@@ -1142,15 +1206,21 @@ export class VatMasterComponent implements OnInit {
       EXPENSE_ACCODE_DESC: "",
       HSN_SAC_CODE: "",
       HSN_SAC_DESC: "",
-      TAX_REG: false,
-      REVERSECHARGE_UNREG: false,
-      ELIGIBLE_INPUTCREDIT: false,
+      TAX_REG: true,
+      REVERSECHARGE_UNREG: true,
+      ELIGIBLE_INPUTCREDIT: true,
     };
 
     this.expenseHsnSacAllocationData = [
       ...this.expenseHsnSacAllocationData,
       newRow,
     ];
+
+    const pageIndex = Math.floor(
+      (this.costCenterAccountData.length - 1) /
+        this.dataGrid1.instance.pageSize()
+    );
+    this.goToPage(pageIndex, this.dataGrid1);
   }
 
   addRowFunc(TAB: any) {
@@ -1175,17 +1245,18 @@ export class VatMasterComponent implements OnInit {
     }
   }
   deletingRowFromCostCenterAccount() {
+    console.log("sdd");
+
     if (
       this.selectedRowFromCostCenterAccount &&
       this.selectedRowFromCostCenterAccount.length > 0
     ) {
-      // Delete rows using selected indexes
       this.costCenterAccountData = this.costCenterAccountData.filter(
         (_: any, index: any) =>
           !this.selectedRowFromCostCenterAccount.includes(index)
       );
 
-      this.selectedRowFromCostCenterAccount = []; // Reset the selected row index array
+      this.selectedRowFromCostCenterAccount = []; 
     }
   }
 
@@ -1308,49 +1379,39 @@ export class VatMasterComponent implements OnInit {
   }
 
   vatPercentFocusout(event: any): void {
-    let MESSAGE;
-    event.target.value > 100
-      ? (MESSAGE = `A percentage value cannot be greater than 100.`)
-      : (MESSAGE = `A percentage value cannot be negative (-) or less than Zero (0).`);
-    let GSTCODE = this.vatMasterMainForm.value.vatCode;
-
-    if (GSTCODE) {
-      if (event.target.value > 100) {
-        this.vatMasterMainForm.controls.vatPercent.reset();
-        this.openDialog("Warning", MESSAGE, true);
-        this.dialogBox.afterClosed().subscribe((result: any) => {
+    const value = event.target.value;
+    const MESSAGE =
+      value > 100
+        ? `A percentage value cannot be greater than 100.`
+        : `A percentage value cannot be negative (-) or less than Zero (0).`;
+    const GSTCODE = this.vatMasterMainForm.value.vatCode;
+  
+    if (!GSTCODE) return; 
+  
+    if (value > 100 || value < 1) {
+      this.vatMasterMainForm.controls.vatPercent.reset();
+      this.openDialog("Warning", MESSAGE, true);
+  
+      this.dialogBox
+        .afterClosed()
+        .pipe(take(1))
+        .subscribe((result: any) => {
           if (result === "OK") {
             setTimeout(() => {
               this.vatPercentField.nativeElement.focus();
             }, 100);
           }
         });
-      } else {
-        this.vatMasterMainForm.controls.vatPercent.setValue(event.target.value);
-      }
-    }
-
-    if (GSTCODE) {
-      if (event.target.value < 1) {
-        this.vatMasterMainForm.controls.vatPercent.reset();
-
-        this.openDialog("Warning", MESSAGE, true);
-        this.dialogBox.afterClosed().subscribe((result: any) => {
-          if (result === "OK") {
-            setTimeout(() => {
-              this.vatPercentField.nativeElement.focus();
-            }, 100);
-          }
-        });
-      } else {
-        this.vatMasterMainForm.controls.vatPercent.setValue(event.target.value);
-        let GSTPERCENT = this.vatMasterMainForm.value.vatPercent;
-        if (GSTCODE && GSTPERCENT) {
-          this.getAccountSettingDatewiseListData();
-        }
+    } else {
+      this.vatMasterMainForm.controls.vatPercent.setValue(value);
+  
+      const GSTPERCENT = this.vatMasterMainForm.value.vatPercent;
+      if (GSTCODE && GSTPERCENT) {
+        this.getAccountSettingDatewiseListData();
       }
     }
   }
+  
 
   getGridDataObjects(CODE: any) {
     let API = `VatMaster/GetVatMasterDetail/${CODE}`;
@@ -1389,6 +1450,7 @@ export class VatMasterComponent implements OnInit {
   }
 
   getGPCAccountData() {
+    this.clearSelection(this.dataGrid2, 1);
     this.GPCFetched = true;
     let API = `VatMaster/GetFillGPCAccounts`;
     let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
@@ -1462,12 +1524,17 @@ export class VatMasterComponent implements OnInit {
       modalRef.result.then(
         (row) => {
           if (row) {
-            const currentIndex = index.data.SN - 1;
+            const currentSn = index.data.SN;
 
-            this.costCenterAccountData[currentIndex].GPC_ACCODE =
+            const dataIndex = this.costCenterAccountData.findIndex(
+              (item) => item.SN === currentSn
+            );
+
+            this.costCenterAccountData[dataIndex].GPC_ACCODE =
               row[0].GPC_ACCODE;
-            this.costCenterAccountData[currentIndex].GPC_ACCODE_DESC =
+            this.costCenterAccountData[dataIndex].GPC_ACCODE_DESC =
               row[0].Account_Head;
+            this.costCenterAccountData[dataIndex].COST_CODE = row[0].COST_CODE;
           }
         },
         (dismissReason) => {
@@ -1641,12 +1708,34 @@ export class VatMasterComponent implements OnInit {
     });
   }
 
-  unselectRow(rowId: number): void {
-    if (this.dataGrid) {
-      this.dataGrid.instance.deselectRows([rowId]);
-      console.log(`Row with ID ${rowId} has been unselected.`);
-    } else {
-      console.warn("DataGrid instance is not available.");
+  goToPage(pageIndex: number, dataGrid: any): void {
+    const gridInstance = dataGrid.instance;
+    if (gridInstance) {
+      const totalPages = gridInstance.pageCount();
+      if (pageIndex >= 0 && pageIndex < totalPages) {
+        gridInstance.pageIndex(pageIndex);
+      } else {
+        console.error("Invalid page index:", pageIndex);
+      }
+    }
+  }
+
+  clearSelection(dataGrid: any, tabIndex?: any): void {
+    const gridInstance = dataGrid.instance;
+    if (gridInstance) {
+      gridInstance.clearSelection();
+
+      if (tabIndex === 1) {
+        this.selectedRowFromCostCenterAccount = [];
+      } else if (tabIndex === 1) {
+        this.selectedRowFromExpenseHasSacAllocation = [];
+      }
+    }
+  }
+
+  goToTab(index: number): void {
+    if (this.tabGroup) {
+      this.tabGroup.selectedIndex = index;
     }
   }
 }

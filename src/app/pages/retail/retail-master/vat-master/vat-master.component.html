@@ -8,7 +8,7 @@
 
 <!-- modal header component -->
 <modal-header
-[isViewMore]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewMore]="!['VIEW', 'DELETE'].includes(flag)"
   (saveClick)="vatMasterMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
@@ -70,7 +70,7 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    (blur)="vatPercentFocusout($event)"
+                    (focusout)="vatPercentFocusout($event)"
                     (input)="vatPercentValidation('vatPercent')"
                     class="text-right"
                     ThreeDecimalInput
@@ -1208,6 +1208,7 @@
                       [showRowLines]="true"
                       class="mt-3"
                       [paging]="{ pageSize: 20 }"
+
                     >
                       <dxo-paging [enabled]="true"></dxo-paging>
                       <dxo-pager [showInfo]="true"></dxo-pager>
@@ -1220,6 +1221,7 @@
                         [dataField]="data.field"
                         [caption]="data.caption"
                         [allowEditing]="true"
+                        [allowSorting]="true"
                         alignment="center"
                         backgroundcolor="#000"
                         [format]="
@@ -1228,7 +1230,7 @@
                             : null
                         "
                         [calculateCellValue]="
-                          data.field === 'VAT_DATE' ? formatDateCell : null
+                          calculateCellValue(data, 'VAT_PER')
                         "
                       >
                       </dxi-column>
@@ -1271,7 +1273,7 @@
                     <div class="row pt-2">
                       <div class="col-md-12">
                         <dx-data-grid
-                          #dataGrid
+                          #dataGrid1
                           id="gridContainer"
                           [dataSource]="
                             searching
@@ -1562,7 +1564,7 @@
                     <div class="row pt-2">
                       <div class="col-md-12">
                         <dx-data-grid
-                          #dataGrid
+                          #dataGrid2
                           id="gridContainer"
                           [dataSource]="costCenterAccountData"
                           [showBorders]="true"
@@ -1575,8 +1577,7 @@
                           keyExpr="SN"
                           (onSelectionChanged)="onSelectionChanged($event, 0)"
                           [paging]="{ pageSize: 10 }"
-                          (focusout)="unSelectThroughFocusOut('costCenter')"
-                        >
+                        
                           >
                           <dxo-selection mode="single"></dxo-selection>
                           <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -1584,6 +1585,7 @@
                             *ngIf="costCenterAccountData.length"
                             [showInfo]="true"
                             [visible]="true"
+                            (change)="event($event)"
                             [showPageSizeSelector]="true"
                             [allowedPageSizes]="
                               costCenterAccountData &&
@@ -1657,7 +1659,7 @@
                               <input
                                 maxlength="6"
                                 matInput
-                                [readonly]="flag === 'VIEW'"
+                                [readonly]="true"
                                 type="text"
                                 (change)="
                                   updateField(
