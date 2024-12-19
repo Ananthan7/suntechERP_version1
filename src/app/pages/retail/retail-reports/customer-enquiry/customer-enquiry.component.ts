@@ -53,6 +53,7 @@ export class CustomerEnquiryComponent implements OnInit {
     MaritalStatusSelection: [''],
     GenderSelection: [''],
     country: [''],
+    countryDesc: [''],
     type: [''],
     nationality: [''],
     category: [''],
@@ -355,60 +356,60 @@ export class CustomerEnquiryComponent implements OnInit {
     let postData = {
       "SPID": "171",
       "parameter": {
-        // "NAME" : this.customerEnquiryForm.controls.Name.value,
-        // "SPOUSE" : this.customerEnquiryForm.controls.Spouse.value,
-        // "CODEFROM" : this.customerEnquiryForm.controls.customerfrom.value,
-        // "CODETO" : this.customerEnquiryForm.controls.customerto.value,
-        // "COUNTRY" : this.customerEnquiryForm.controls.country.value,
-        // "NATIONALITY" : this.customerEnquiryForm.controls.nationality.value,
-        // "CITY" : this.customerEnquiryForm.controls.city.value,
-        // "RELIGION" : this.customerEnquiryForm.controls.religion.value,
-        // "TYPE" : this.customerEnquiryForm.controls.type.value,
-        // "LOYALTYCODE" : this.customerEnquiryForm.controls.loyalty.value,
-        // "CATEGORY" : this.customerEnquiryForm.controls.category.value,
-        // "MARITALSTATUS" : this.customerEnquiryForm.controls.MaritalStatusSelection.value,
-        // "GENDER" : this.customerEnquiryForm.controls.GenderSelection.value,
-        // "MOBILE" : this.customerEnquiryForm.controls.mobileContact.value,
-        // "TELRES" : this.customerEnquiryForm.controls.telephoneContact.value,
-        // "EMAIL" : this.customerEnquiryForm.controls.Email.value,
-        // "BIRTHFROMDATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.DOBValue.value),
-        // "BIRTHTODATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.DOBValue2.value),
-        // "WEDDINGFROMDATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.WeddingDateValue.value),
-        // "WEDDINGTODATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.WeddingDateValue2.value),
-        // "STATE" : this.customerEnquiryForm.controls.state.value,
-        // "SALDATEFROM" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.saleDateFrom.value),
-        // "SALDATETO" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.dateTo.value),
-        // "DIVISION" : null, //this.customerEnquiryForm.controls.division.value,
-        // "BRANCHLIST": this.customerEnquiryForm.controls.branch.value,
-        // "USERBRANCH" : localStorage.getItem('userbranch')
+        "NAME" : this.customerEnquiryForm.controls.Name.value,
+        "SPOUSE" : this.customerEnquiryForm.controls.Spouse.value,
+        "CODEFROM" : this.customerEnquiryForm.controls.customerfrom.value,
+        "CODETO" : this.customerEnquiryForm.controls.customerto.value,
+        "COUNTRY" : this.customerEnquiryForm.controls.country.value,
+        "NATIONALITY" : this.customerEnquiryForm.controls.nationality.value,
+        "CITY" : this.customerEnquiryForm.controls.city.value,
+        "RELIGION" : this.customerEnquiryForm.controls.religion.value,
+        "TYPE" : this.customerEnquiryForm.controls.type.value,
+        "LOYALTYCODE" : this.customerEnquiryForm.controls.loyalty.value,
+        "CATEGORY" : this.customerEnquiryForm.controls.category.value,
+        "MARITALSTATUS" : this.customerEnquiryForm.controls.MaritalStatusSelection.value,
+        "GENDER" : this.customerEnquiryForm.controls.GenderSelection.value,
+        "MOBILE" : this.customerEnquiryForm.controls.mobileContact.value,
+        "TELRES" : this.customerEnquiryForm.controls.telephoneContact.value,
+        "EMAIL" : this.customerEnquiryForm.controls.Email.value,
+        "BIRTHFROMDATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.DOBValue.value),
+        "BIRTHTODATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.DOBValue2.value),
+        "WEDDINGFROMDATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.WeddingDateValue.value),
+        "WEDDINGTODATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.WeddingDateValue2.value),
+        "STATE" : this.customerEnquiryForm.controls.state.value,
+        "SALDATEFROM" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.saleDateFrom.value),
+        "SALDATETO" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.dateTo.value),
+        "DIVISION" : null, //this.customerEnquiryForm.controls.division.value,
+        "BRANCHLIST": this.customerEnquiryForm.controls.branch.value,
+        "USERBRANCH" : localStorage.getItem('userbranch')
 
         // Grid Data visibility
-        "NAME" : 'L. Hoothoysen',  
-        "SPOUSE" : null,  
-        "CODEFROM" : null,  
-        "CODETO" : null,   
-        "COUNTRY" : null,   
-        "NATIONALITY": null,  
-        "CITY" : null, 
-        "RELIGION" :null,   
-        "TYPE" : null,  
-        "LOYALTYCODE" : null,   
-        "CATEGORY" : null,  
-        "MARITALSTATUS" : null, 
-        "GENDER" : null,  
-        "MOBILE" : null,  
-        "TELRES" : null,   
-        "EMAIL" : null,  
-        "BIRTHFROMDATE" : null,  
-        "BIRTHTODATE" : null,   
-        "WEDDINGFROMDATE" : null,  
-        "WEDDINGTODATE" : null, 
-        "STATE" : null,   
-        "SALDATEFROM" : null,   
-        "SALDATETO" : null,   
-        "DIVISION" : null, 
-        "BRANCHLIST" : '',  
-        "USERBRANCH" : localStorage.getItem('userbranch')
+        // "NAME" : 'L. Hoothoysen',  
+        // "SPOUSE" : '',   
+        // "CODEFROM" : '',  
+        // "CODETO" : '',   
+        // "COUNTRY" : '',    
+        // "NATIONALITY": '',   
+        // "CITY" : '',  
+        // "RELIGION": '',    
+        // "TYPE" : '',   
+        // "LOYALTYCODE" : '',    
+        // "CATEGORY" : '',   
+        // "MARITALSTATUS" : '',  
+        // "GENDER" : '',   
+        // "MOBILE" : '',   
+        // "TELRES" : '',    
+        // "EMAIL" : '',   
+        // "BIRTHFROMDATE" : '', 
+        // "BIRTHTODATE" : '',    
+        // "WEDDINGFROMDATE" : '',  
+        // "WEDDINGTODATE" : '', 
+        // "STATE" : '',   
+        // "SALDATEFROM" : '',   
+        // "SALDATETO" : '',   
+        // "DIVISION" : '', 
+        // "BRANCHLIST" : '',  
+        // "USERBRANCH" : 'MOE'
       },
     }
     this.commonService.showSnackBarMsg('MSG81447');
@@ -435,6 +436,7 @@ export class CustomerEnquiryComponent implements OnInit {
 
   countryCodeSelected(e:any){
     this.customerEnquiryForm.controls.country.setValue(e.CODE);
+    this.customerEnquiryForm.controls.countryDesc.setValue(e.DESCRIPTION);
   }
 
   nationalitySelected(e: any) {
@@ -516,24 +518,6 @@ export class CustomerEnquiryComponent implements OnInit {
     }); 
   }
 
-  openModal() {
-    const modalRef: NgbModalRef = this.modalService.open(
-    ShowTransDetailsComponent,
-        {
-          size: "xl",
-          backdrop: true,
-          keyboard: false,
-          windowClass: "modal-dialog-centered modal-dialog-scrollable",
-        }
-    );
-    modalRef.componentInstance.customerCode = this.customerEnquiryForm.controls.customerfrom.value;
-    modalRef.componentInstance.data = {CODE: this.customerEnquiryForm.controls.customerfrom.value,
-      NAME: this.customerEnquiryForm.controls.customerto.value
-     }
-    this.isLoading = false;
-  }
-
-
   switchOutputTo(outputToValue: any){
     let logData =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
@@ -548,7 +532,9 @@ export class CustomerEnquiryComponent implements OnInit {
       "VOCDATE": "",
       "YEARMONTH" : this.commonService.yearSelected
     }
+    let custcode;
     let payloadData;
+ 
     switch (outputToValue) {
       case 'Customer Log':
         payloadData = {
@@ -565,34 +551,36 @@ export class CustomerEnquiryComponent implements OnInit {
       break;  
 
       case 'Address Label':
-        this.isLoading = false; 
-        payloadData = {
-          "SPID": "215 ",
-          "parameter": {
-            "CUSTOMER_CODE ": this.customerEnquiryForm.controls.customerfrom.value  //1344  , 1240      
-          }  
-        };
+        if(this.selectedRowKeys.length>0){
+          custcode = this.selectedRowKeys.map(item => item.CODE)
+          payloadData = {
+            "SPID": "215 ",
+            "parameter": {
+              "CUSTOMER_CODE": custcode[0]  //1344  , 1240      
+            }  
+          };
+        }
+        else{
+          Swal.fire('Please select a customer to proceed !', 'error');
+          this.isLoading = false;
+        }
       break;
   
       case 'Previlage Card':
-        payloadData = {
-          "SPID": "162",
+        if(this.selectedRowKeys.length>0){
+          custcode = this.selectedRowKeys.map(item => item.CODE)
+          payloadData = {
+            "SPID": "162",
             "parameter": {
-              "strCertCode ": this.customerEnquiryForm.controls.customerfrom.value  //1344  , 1240       
+              "strCertCode ": custcode[0]  //1344  , 1240       
             }  
           };
+        }
+        else{
+          Swal.fire('Please select a customer to proceed !', 'error');
+          this.isLoading = false;
+        }     
       break;
-
-      // case 'Sales Register':
-      //   this.isLoading = false;
-      //   // payloadData = { API call needed & export4
-      //   this.openModal()
-      // break;
-
-    
-
-
-
 
       case 'Send Email': // rest discuss wiht muneer
       this.isLoading = false;
@@ -623,8 +611,39 @@ export class CustomerEnquiryComponent implements OnInit {
         }  
       };
       break;
+
+      default:
+      // if none of the above cases match
+      break;
     }
     return payloadData;
+  }
+  openModal() {
+    const modalRef: NgbModalRef = this.modalService.open(
+    ShowTransDetailsComponent,
+        {
+          size: "xl",
+          backdrop: true,
+          keyboard: false,
+          windowClass: "modal-dialog-centered modal-dialog-scrollable",
+        }
+    );
+    modalRef.componentInstance.customerCode =1240 // this.selectedRowKeys.map(item => item.CODE);
+    modalRef.componentInstance.data = {
+      CODE: this.selectedRowKeys.map(item => item.CODE),
+      NAME: this.selectedRowKeys.map(item => item.NAME),
+      MOBILE: this.selectedRowKeys.map(item => item.MOBILE),
+      TEL1: '',
+      TEL2: '',
+      FAX: '',
+      EMAIL: this.selectedRowKeys.map(item => item.EMAIL1),
+      POBOX_NO: '',
+      CITY: this.selectedRowKeys.map(item => item.CITY),
+      COUNTRY_CODE:  this.selectedRowKeys.map(item => item.COUNTRY_CODE),
+      COUNTRY_DESC: ''
+    }
+    modalRef.componentInstance.hideElement = true;
+    this.isLoading = false;
   }
   previewClick() {
     this.isLoading = true;
