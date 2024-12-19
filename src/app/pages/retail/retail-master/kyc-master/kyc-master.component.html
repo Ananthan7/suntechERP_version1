@@ -20,11 +20,13 @@
                     <legend class="custom-legend">Header Detail
                     </legend>
                     <div class="row mb-2">
-                        <label for="prefixcode" class="col-sm-2 col-form-label me-4">Kyc Code: <span class="text-danger"> *</span></label>
+                        <label for="prefixcode" class="col-sm-2 col-form-label me-4">Kyc Code: <span
+                                class="text-danger"> *</span></label>
                         <div class="col-md-2 p-0 ms-2">
                             <mat-form-field style="width: 100%;" appearance="outline">
                                 <input type="text" #kyccode id="kyccode" matInput class="p-0" formControlName="kyccode"
-                                    [readonly]="viewOnly || disable_code" maxlength="20" (focusout)="checkcode()" UpperCaseDirective />
+                                    [readonly]="viewOnly || disable_code" maxlength="20" (focusout)="checkcode()"
+                                    UpperCaseDirective />
                                 <mat-error *ngIf="kycform.controls['kyccode'].hasError('required')">
                                     Code is required.
                                 </mat-error>
@@ -45,13 +47,14 @@
                         <label for="last_no" class="col-sm-2 pe-0 col-form-label me-4">Transaction Limit:</label>
                         <div class="col-md-4 ">
                             <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" maxlength="6" id="last_no" matInput formControlName="transactionlimit"
-                                    [readonly]="viewOnly" style="text-align: right;" appApplyOnlyNumbers/>
+                                <input type="text" maxlength="6" id="last_no" matInput
+                                    formControlName="transactionlimit" [readonly]="viewOnly" style="text-align: right;"
+                                    appApplyOnlyNumbers />
                             </mat-form-field>
                         </div>
                     </div>
 
-                    
+
                 </fieldset>
 
                 <div class="row mb-2" *ngIf="this.flag !='VIEW'">
