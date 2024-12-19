@@ -8,7 +8,7 @@
 
 <!-- modal header component -->
 <modal-header
-[isViewMore]="!['VIEW', 'DELETE'].includes(flag)"
+  [isViewMore]="!['VIEW', 'DELETE'].includes(flag)"
   (saveClick)="receiptModesMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
@@ -239,7 +239,7 @@
                 >Branches</label
               >
 
-              <div class="col-md-8">
+              <div class="col-md-9">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     [readonly]="flag === 'VIEW'"
@@ -249,18 +249,15 @@
                   />
                 </mat-form-field>
               </div>
-              <div class="col-md-2">
-                <button type="button" class="btn btn-primary text-center">
-                  ...
-                  <app-branch-division
-                    [fetchData]="fetchedBranchData"
-                    (newRowClick)="selectedData($event)"
-                    class="branchDivisionelectr"
-                    [matTooltip]="branchDivisionControlsTooltip"
-                    matTooltipClass="custom-tooltip"
-                    matTooltipPosition="above"
-                  ></app-branch-division>
-                </button>
+              <div class="col-md-1" style="cursor: pointer;">
+                <app-branch-division
+                  [fetchData]="fetchedBranchData"
+                  (newRowClick)="selectedData($event)"
+                  class="branchDivisionelectr"
+                  [matTooltip]="branchDivisionControlsTooltip"
+                  matTooltipClass="custom-tooltip"
+                  matTooltipPosition="above"
+                ></app-branch-division>
               </div>
             </div>
 
