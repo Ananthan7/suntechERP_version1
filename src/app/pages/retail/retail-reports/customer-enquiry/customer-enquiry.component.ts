@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { control } from 'leaflet';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -11,6 +11,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
+import { ShowTransDetailsComponent } from '../../retail-master/pos-customer-master-main/show-trans-details/show-trans-details.component';
 
 @Component({
   selector: 'app-customer-enquiry',
@@ -207,7 +208,7 @@ export class CustomerEnquiryComponent implements OnInit {
   
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, 
     private dataService: SuntechAPIService, private commonService: CommonServiceService, 
-    private toastr: ToastrService, private sanitizer: DomSanitizer,
+    private toastr: ToastrService, private sanitizer: DomSanitizer,  private modalService: NgbModal,
     private datePipe: DatePipe) { }
 
   ngOnInit(): void {
@@ -515,6 +516,24 @@ export class CustomerEnquiryComponent implements OnInit {
     }); 
   }
 
+  openModal() {
+    const modalRef: NgbModalRef = this.modalService.open(
+    ShowTransDetailsComponent,
+        {
+          size: "xl",
+          backdrop: true,
+          keyboard: false,
+          windowClass: "modal-dialog-centered modal-dialog-scrollable",
+        }
+    );
+    modalRef.componentInstance.customerCode = this.customerEnquiryForm.controls.customerfrom.value;
+    modalRef.componentInstance.data = {CODE: this.customerEnquiryForm.controls.customerfrom.value,
+      NAME: this.customerEnquiryForm.controls.customerto.value
+     }
+    this.isLoading = false;
+  }
+
+
   switchOutputTo(outputToValue: any){
     let logData =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
@@ -564,12 +583,16 @@ export class CustomerEnquiryComponent implements OnInit {
           };
       break;
 
-      case 'Sales Register':
-        this.isLoading = false;
-        // payloadData = { API call needed & export
-      break;
+      // case 'Sales Register':
+      //   this.isLoading = false;
+      //   // payloadData = { API call needed & export4
+      //   this.openModal()
+      // break;
 
     
+
+
+
 
       case 'Send Email': // rest discuss wiht muneer
       this.isLoading = false;
@@ -605,14 +628,15 @@ export class CustomerEnquiryComponent implements OnInit {
   }
   previewClick() {
     this.isLoading = true;
-    let postData = this.switchOutputTo(this.customerEnquiryForm.controls.outputTo.value)
+    let postData = this.customerEnquiryForm.controls.outputTo.value ==='Sales Register' ? this.openModal()
+    : this.switchOutputTo(this.customerEnquiryForm.controls.outputTo.value)
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
       console.log(result);
       let data = result.dynamicData;
       let printContent = data[0][0].HTMLOUT;
-      debugger
+    
       if (printContent && Object.keys(printContent).length > 0) {
         this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
         const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
