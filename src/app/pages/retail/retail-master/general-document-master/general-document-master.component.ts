@@ -25,6 +25,7 @@ export class GeneralDocumentMasterComponent implements OnInit {
   editMode: boolean = false;
   viewMode: boolean = false;
   codeedit: boolean = false;
+  code_occurs: boolean = false;
   prefixcode = new FormControl('');
   @ViewChild('codeInput') codeInput!: ElementRef;
 
@@ -389,6 +390,7 @@ export class GeneralDocumentMasterComponent implements OnInit {
       this.ViewController(DATA);
     }
     if (FLAG === "EDIT") {
+      this.code_occurs = true;      
       this.editController(DATA);
     }
 
@@ -518,6 +520,8 @@ export class GeneralDocumentMasterComponent implements OnInit {
     if (!kyc_code.value || kyc_code.value.trim() === "") {
       this.commonService.toastErrorByMsgId('MSG1124	');
       this.renderer.selectRootElement('#code')?.focus();
+    }else{
+      this.code_occurs = true;
     }
   }
 

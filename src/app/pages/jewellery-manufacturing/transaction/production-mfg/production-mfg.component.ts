@@ -618,6 +618,9 @@ export class ProductionMfgComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.productionFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'METAL_RATE') {
+            this.productionFrom.controls['METAL_RATE_TYPE'].setValue('')
+          }
           if (FORMNAME === 'SMAN'|| FORMNAME === 'CURRENCY_RATE') {
             this.showOverleyPanel(event, FORMNAME);
           }
