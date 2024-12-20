@@ -471,53 +471,6 @@ export class CustomerEnquiryComponent implements OnInit {
     }
   }
 
-  saveTemplate(){
-    this.popupVisible = true;
-  }
-  saveTemplate_DB(){
-    let postData = this.switchOutputTo(this.customerEnquiryForm.controls.outputTo.value)
-    const payload = {
-      "SPID": "0115",
-      "parameter": {
-        "FLAG": 'INSERT',
-        "CONTROLS": JSON.stringify({
-            "CONTROL_HEADER": {
-              "USERNAME": localStorage.getItem('username'),
-              "TEMPLATEID": this.commonService.getModuleName(),
-              "TEMPLATENAME": this.customerEnquiryForm.controls.templateName.value,
-              "FORM_NAME": this.commonService.getModuleName(),
-              "ISDEFAULT": 1
-            },
-            "CONTROL_DETAIL": {
-              postData
-            }
-         })
-      }
-    };
-    this.commonService.showSnackBarMsg('MSG81447');
-    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
-    .subscribe((result: any) => {
-      console.log(result);
-      let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
-      let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
-      if (Notifdata == 1) {
-        this.commonService.closeSnackBarMsg()
-        Swal.fire({
-          title: data || 'Success',
-          text: '',
-          icon: 'success',
-          confirmButtonColor: '#336699',
-          confirmButtonText: 'Ok'
-        })
-        this.popupVisible = false;
-        this.activeModal.close(data);
-      }
-      else {
-        this.toastr.error(Notifdata)
-      }
-    }); 
-  }
-
   switchOutputTo(outputToValue: any){
     let logData =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
@@ -628,7 +581,7 @@ export class CustomerEnquiryComponent implements OnInit {
           windowClass: "modal-dialog-centered modal-dialog-scrollable",
         }
     );
-    modalRef.componentInstance.customerCode =1240 // this.selectedRowKeys.map(item => item.CODE);
+    modalRef.componentInstance.customerCode = this.selectedRowKeys.map(item => item.CODE); //1240
     modalRef.componentInstance.data = {
       CODE: this.selectedRowKeys.map(item => item.CODE),
       NAME: this.selectedRowKeys.map(item => item.NAME),
@@ -645,6 +598,7 @@ export class CustomerEnquiryComponent implements OnInit {
     modalRef.componentInstance.hideElement = true;
     this.isLoading = false;
   }
+  
   previewClick() {
     this.isLoading = true;
     let postData = this.customerEnquiryForm.controls.outputTo.value ==='Sales Register' ? this.openModal()
@@ -679,7 +633,8 @@ export class CustomerEnquiryComponent implements OnInit {
 
   printBtnClick(){
     this.isLoading = true;
-    let postData = this.switchOutputTo(this.customerEnquiryForm.controls.outputTo.value)
+    let postData = this.customerEnquiryForm.controls.outputTo.value ==='Sales Register' ? this.openModal()
+    : this.switchOutputTo(this.customerEnquiryForm.controls.outputTo.value)
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
@@ -692,29 +647,80 @@ export class CustomerEnquiryComponent implements OnInit {
       }
     });  
    
-    
-    setTimeout(() => {
-      const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
-      
-      let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
-      userBranchDesc = JSON.parse(userBranchDesc)
+    if(this.customerEnquiryForm.controls.outputTo.value !=='Sales Register' ){
+      setTimeout(() => {
+        const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+        
+        let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
+        userBranchDesc = JSON.parse(userBranchDesc)
+  
+        if (content && Object.keys(content).length !== 0) {
+          const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
+  
+          const printWindow = window.open('', '', 'height=600,width=1000');
+          printWindow?.document.write(modifiedContent);
+          printWindow?.document.close();
+          printWindow?.focus();
+          printWindow?.print();
+          this.isLoading = false;
+        } else {
+          Swal.fire('No Data!', 'There is no data to print!', 'info');
+          this.commonService.closeSnackBarMsg();
+          this.isLoading = false;
+          return
+        }
+      }, 3000); 
+    }
+   
+  }
 
-      if (content && Object.keys(content).length !== 0) {
-        const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
-
-        const printWindow = window.open('', '', 'height=600,width=1000');
-        printWindow?.document.write(modifiedContent);
-        printWindow?.document.close();
-        printWindow?.focus();
-        printWindow?.print();
-        this.isLoading = false;
-      } else {
-        Swal.fire('No Data!', 'There is no data to print!', 'info');
-        this.commonService.closeSnackBarMsg();
-        this.isLoading = false;
-        return
+  saveTemplate(){
+    this.popupVisible = true;
+  }
+  saveTemplate_DB(){
+    let postData = this.customerEnquiryForm.controls.outputTo.value ==='Sales Register' ? this.openModal()
+    : this.switchOutputTo(this.customerEnquiryForm.controls.outputTo.value)
+    const payload = {
+      "SPID": "0115",
+      "parameter": {
+        "FLAG": 'INSERT',
+        "CONTROLS": JSON.stringify({
+            "CONTROL_HEADER": {
+              "USERNAME": localStorage.getItem('username'),
+              "TEMPLATEID": this.commonService.getModuleName(),
+              "TEMPLATENAME": this.customerEnquiryForm.controls.templateName.value,
+              "FORM_NAME": this.commonService.getModuleName(),
+              "ISDEFAULT": 1
+            },
+            "CONTROL_DETAIL": {
+              postData
+            }
+         })
       }
-    }, 3000); 
+    };
+
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
+      let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
+      if (Notifdata == 1) {
+        this.commonService.closeSnackBarMsg()
+        Swal.fire({
+          title: data || 'Success',
+          text: '',
+          icon: 'success',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })
+        this.popupVisible = false;
+        this.activeModal.close(data);
+      }
+      else {
+        this.toastr.error(Notifdata)
+      }
+    }); 
   }
 
   prefillScreenValues(){
