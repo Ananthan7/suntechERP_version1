@@ -26,6 +26,16 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   tableData3: any[] = [];
   viewMode: boolean = false;
   editMode: boolean = false;
+  Disable: boolean = false;
+  fieldDisable : boolean = false;
+  FieldEnable : boolean = false;
+  iskaratDisabled: boolean = false;
+  isKaratdisabled: boolean = false;
+  isPCSDisabled: boolean = false;
+  selectedtabledata1: any;
+  selectedtabledata2: any;
+  selectedtabledata3: any;
+
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
   currentDate: any = this.commonService.currentDate;
@@ -162,6 +172,87 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
    
 
   }
+
+  // divisionCode: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 18,
+  //   SEARCH_FIELD: 'DIVISION_CODE',
+  //   SEARCH_HEADING: 'Division Code',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "DIVISION_CODE<> ''",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
+
+  divisionCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: this.getDivisionCondition(),
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  // Function to determine the WHERECONDITION based on some criteria
+  getDivisionCondition(): string {
+    // Example criteria; replace with actual logic as needed
+    const condition = 'L'; // This value would be dynamically determined
+
+    if (condition === 'L') {
+      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','Z') ORDER BY DIVISION_CODE";
+    } else if (condition === 'Z') {
+      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','L') ORDER BY DIVISION_CODE";
+    } else {
+      // Default condition if none of the specific conditions are met
+      return "DIVISION_CODE <> '' ORDER BY DIVISION_CODE ";
+    }
+  }
+
+  
+  
+//   divisionCodeSelected(value:any,data:any, controlName: string){
+//     this.tableData2[data.data.SRNO - 1].Division = ('');
+//     console.log('Data ',data);
+//     console.log('values ',value);
+ 
+//     this.tableData2[data.data.SRNO - 1].Division = value.DIVISION_CODE;
+
+//     console.log(data.data.SRNO);
+//     console.log(this.tableData2);
+
+//     if(value.DIVISION_CODE == 'M'){
+//       this.Disable = true;
+//       this.fieldDisable = true;
+//       this.FieldEnable = false;
+//     }
+//     else if(value.DIVISION_CODE == 'S'){
+//       this.Disable = false;
+//       this.FieldEnable = true;
+//       this.fieldDisable = false;
+
+//     }
+
+
+// }
+
+divisionCodeSelected(value: any, data: any, controlName: string) {
+  this.tableData2[data.data.SRNO - 1].DIVISION = value.DIVISION_CODE;
+  // this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
+  console.log(value.DIVISION_CODE);
+  
+  if (value.DIVISION == 'M' || value.DIVISION == 'G') {
+    this.isPCSDisabled = true;
+    this.iskaratDisabled = false;
+  } else {
+    this.isPCSDisabled = false;
+    this.iskaratDisabled = true;
+  }
+}
+
 
   close(data?: any) {
     if (data){
@@ -465,6 +556,35 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
     this.tableData[value.data.SRNO - 1].CLARITY = data.target.value;
   }
 
+  sizefromtemp(data:any,value: any){
+    this.tableData[value.data.SRNO - 1].SIZE_FROM = data.target.value;
+  }
+  
+  sizetotemp(data:any,value: any){
+    this.tableData[value.data.SRNO - 1].SIZE_TO = data.target.value;
+  }
+  
+  wtfromtemp(data:any,value: any){
+    this.tableData[value.data.SRNO - 1].WEIGHT_FROM = data.target.value;
+  }
+  
+  wttotemp(data:any,value: any){
+    this.tableData[value.data.SRNO - 1].WEIGHT_TO = data.target.value;
+  }
+  
+  issueratetemp(data:any,value: any){
+    this.tableData[value.data.SRNO - 1].ISSUE_RATE = data.target.value;
+  }
+  
+  sellingpertemp(data:any,value: any){
+    this.tableData[value.data.SRNO - 1].SELLING_PER = data.target.value;
+  }
+  
+  sellingratetemp(data:any,value: any){
+    this.tableData[value.data.SRNO - 1].SELLING_RATE = data.target.value;
+  }
+
+
 
   
   openlabetails() {
@@ -528,6 +648,9 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
     this.tableData2[value.data.SRNO - 1].CUSTOMER_CODE = data.target.value;
   }
 
+  brandlabtemp(data:any,value: any){
+    this.tableData2[value.data.SRNO - 1].CUSTOMER_CODE = data.target.value;
+  }
    
   subCategorylabtemp(data:any,value: any){
     this.tableData2[value.data.SRNO - 1].LABOUR_CODE = data.target.value;
@@ -550,6 +673,26 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
 
  ctfromtemp(data:any,value: any){
     this.tableData2[value.data.SRNO - 1].CARATWT_FROM = data.target.value;
+  }
+
+  cttotemp(data:any,value: any){
+    this.tableData2[value.data.SRNO - 1].CARATWT_TO = data.target.value;
+  }
+
+  costRatetemp(data:any,value: any){
+    this.tableData2[value.data.SRNO - 1].COST_RATE = data.target.value;
+  }
+
+  sellingRatetemp(data:any,value: any){
+    this.tableData2[value.data.SRNO - 1].SELLING_RATE = data.target.value;
+  }
+
+  sellingperctemp(data:any,value: any){
+    this.tableData2[value.data.SRNO - 1].SELLING_PER = data.target.value;
+  }
+
+  settingtypetemp(data:any,value: any){
+    this.tableData2[value.data.SRNO - 1].PRICECODE = data.target.value;
   }
 
   openAccountdetails(){
@@ -603,6 +746,8 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+    const inputValue = event.target.value.toUpperCase();
+
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -622,9 +767,30 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
           return
         }
 
+        
+        const matchedItem2 = data.find((item: any) => item.CURRENCY_CODE.toUpperCase() === inputValue);
+        console.log(matchedItem2, 'data')
+        if (matchedItem2) {
+          this.customerWiseStonePriceForm.controls[FORMNAME].setValue(matchedItem2.CURRENCY_CODE);
+          if (FORMNAME === 'currency') {
+            this.customerWiseStonePriceForm.controls.currencyDetail.setValue(matchedItem2.CONV_RATE);
+          }
+        } else {
+          this.handleLookupError(FORMNAME, LOOKUPDATA);
+        }
+
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
+    }
+
+    handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
+      this.commonService.toastErrorByMsgId('MSG1531');
+      this.customerWiseStonePriceForm.controls[FORMNAME].setValue('');
+      LOOKUPDATA.SEARCH_VALUE = '';
+      if (FORMNAME === 'currency') {
+        this.customerWiseStonePriceForm.controls.currencyDetail.setValue('');
+      }
     }
 
 
@@ -660,8 +826,178 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
       }
     }
   
+    onSelectionChanged(event: any) {
+      let values = event.selectedRowKeys;
+      let indexes: number[] = [];
+  
+      console.log(this.tableData);
+      // Find the indexes of the selected rows
+      this.tableData.forEach(
+        (value: { SRNO: string }, index: number) => {
+          if (values.includes(parseFloat(value.SRNO))) {
+            indexes.push(index);
+          }
+        }
+      );
+      console.log(indexes);
+      this.selectedtabledata1 = indexes;
+      console.log(this.selectedtabledata1);
+    }
 
-  removeItemDetails() {}
+
+
+    removeItemDetails() {
+      if (this.selectedtabledata1 && this.selectedtabledata1.length > 0) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.tableData = this.tableData.filter(
+              (_: any, index: any) => !this.selectedtabledata1.includes(index)
+            );
+            this.selectedtabledata1 = [];
+            Swal.fire('Deleted!', 'The selected items have been removed.', 'success');
+          }
+        });
+      } else {
+        Swal.fire('No Selection', 'Please select items to remove.', 'info');
+      }
+    }
+
+
+
+
+    onSelectionChanged2(event: any) {
+      let values = event.selectedRowKeys;
+      let indexes: number[] = [];
+  
+      console.log(this.tableData2);
+      // Find the indexes of the selected rows
+      this.tableData2.forEach(
+        (value: { SRNO: string }, index: number) => {
+          if (values.includes(parseFloat(value.SRNO))) {
+            indexes.push(index);
+          }
+        }
+      );
+      console.log(indexes);
+      this.selectedtabledata2 = indexes;
+      console.log(this.selectedtabledata2);
+    }
+
+
+
+    removeItemDetails2() {
+      if (this.selectedtabledata2 && this.selectedtabledata2.length > 0) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.tableData2 = this.tableData2.filter(
+              (_: any, index: any) => !this.selectedtabledata2.includes(index)
+            );
+            this.selectedtabledata2 = [];
+            Swal.fire('Deleted!', 'The selected items have been removed.', 'success');
+          }
+        });
+      } else {
+        Swal.fire('No Selection', 'Please select items to remove.', 'info');
+      }
+    }
+
+    onSelectionChanged3(event: any) {
+      let values = event.selectedRowKeys;
+      let indexes: number[] = [];
+  
+      console.log(this.tableData3);
+      // Find the indexes of the selected rows
+      this.tableData3.forEach(
+        (value: { SRNO: string }, index: number) => {
+          if (values.includes(parseFloat(value.SRNO))) {
+            indexes.push(index);
+          }
+        }
+      );
+      console.log(indexes);
+      this.selectedtabledata3 = indexes;
+      console.log(this.selectedtabledata3);
+    }
+
+
+
+    removeItemDetails3() {
+      if (this.selectedtabledata3 && this.selectedtabledata3.length > 0) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.tableData3 = this.tableData3.filter(
+              (_: any, index: any) => !this.selectedtabledata3.includes(index)
+            );
+            this.selectedtabledata3 = [];
+            Swal.fire('Deleted!', 'The selected items have been removed.', 'success');
+          }
+        });
+      } else {
+        Swal.fire('No Selection', 'Please select items to remove.', 'info');
+      }
+    }
+
+    
+
+  // removeItemDetails() {
+  //   if (this.selectedtabledata1 && this.selectedtabledata1.length > 0) {
+  //     Swal.fire({
+  //       title: 'Are you sure?',
+  //       text: "You won't be able to revert this!",
+  //       icon: 'warning',
+  //       showCancelButton: true,
+  //       confirmButtonColor: '#3085d6',
+  //       cancelButtonColor: '#d33',
+  //       confirmButtonText: 'Yes, delete!'
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         // Ensure that rows are removed based on matching objects
+  //         this.tableData = this.tableData.filter(
+  //           (_: any, index: any) =>
+  //             !this.selectedtabledata1.includes(index)
+  //             )}
+  //       })
+         
+  //         // Clear the selection after deletion
+  //         this.selectedtabledata1 = [];
+  
+  //         Swal.fire('Deleted!', 'The selected items have been deleted.', 'success');
+  //       }
+     
+  //   }
+  
+
+  
+
+    deletingRowFromCostCenterAccount() {
+      console.log("sdd");
+  }
+
+ 
 
   cancelStone(){}
   submitStone(){}

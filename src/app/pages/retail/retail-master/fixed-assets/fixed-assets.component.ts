@@ -161,7 +161,6 @@ export class FixedAssetsComponent implements OnInit {
   checkcode() {
     const CodeControl = this.fixedassetsform.controls.assets_code;
     if (!CodeControl.value || CodeControl.value.trim() === "") {
-      this.commonService.toastErrorByMsgId("MSG1124");
       this.renderer.selectRootElement("#assets_code")?.focus();
       this.allowfields = false;
     } else {
