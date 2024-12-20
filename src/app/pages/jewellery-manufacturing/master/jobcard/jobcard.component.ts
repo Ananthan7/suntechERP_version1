@@ -967,10 +967,11 @@ export class JobcardComponent implements OnInit {
               SIEVE_SET: element.SIEVE_SET,
               PROCESS_TYPE: element.PROCESS_TYPE,
               PURITY: element.PURITY,
-              metal_wt: this.commonService.nullToString(metalWt.toString()),
-              stone_wt: this.commonService.nullToString(stoneWt.toString()),
-              part_code: this.commonService.nullToString(result.response.DESIGN_CODE),
-              Description: this.commonService.nullToString(result.response.DESIGN_DESCRIPTION),
+              METAL_WT: this.commonService.nullToString(result.response.METAL_WT.toString()),
+              STONE_WT: this.commonService.nullToString(result.response.STONE_WT.toString()),
+              PART_CODE: this.commonService.nullToString(result.response.DESIGN_CODE),
+              DESCRIPTION: this.commonService.nullToString(result.response.DESIGN_DESCRIPTION),
+              METAL_COLOR: this.commonService.nullToString(result.response.METAL_COLOR),
               SIZE: result.response.SIZE || "",
               LENGTH: result.response.LENGTH || "",
               CLOSE_TYPE: element.CLOSE_TYPE || "",
@@ -1369,10 +1370,10 @@ export class JobcardComponent implements OnInit {
 
           "SINO": this.jobCardFrom.value.sn,
           "job_reference": this.jobCardFrom.value.jobno + '/' + this.jobCardFrom.value.sn,
-          "part_code": this.jobCardFrom.value.Design_Code,
-          "Description": this.jobCardFrom.value.Design_Description,
+          "part_code": this.commonService.nullToString(this.jobCardFrom.value.Design_Code),
+          "Description": this.commonService.nullToString(this.jobCardFrom.value.Design_Description),
           "Pcs": this.jobCardFrom.value.pcs,
-          "metal_color": this.jobCardFrom.value.metal_color,
+          "metal_color": this.commonService.nullToString(this.jobCardFrom.value.metal_color),
           "metal_wt": this.jobCardFrom.value.metal_wt,
           "stone_wt": this.jobCardFrom.value.stone_wt,
           "gross_wt": this.jobCardFrom.value.gross_wt,
@@ -2064,11 +2065,14 @@ export class JobcardComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         let data = result.dynamicData[0]
         if (data && data.length > 0) {
+          console.log(data,'data')
           if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
             let result = this.commonService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
             if (result && result.length == 0) {
+              console.log(result,'result')
               this.commonService.toastErrorByMsgId('MSG1460')
               this.jobCardFrom.controls[FORMNAME].setValue('')
+              this.showOverleyPanel(event, 'customer');
               LOOKUPDATA.SEARCH_VALUE = ''
             }
             return
