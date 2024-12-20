@@ -48,12 +48,8 @@
                   "
                 />
 
-                <master-search
-                  *ngIf="this.flag != 'VIEW'"
-                  class="masterSearch"
-                  [MasterSearchData]="fixingassetscodedata"
-                  (newRowClick)="selectedfixingassets($event)"
-                >
+                <master-search *ngIf="this.flag != 'VIEW' && this.allowfields" class="masterSearch"
+                  [MasterSearchData]="fixingassetscodedata" (newRowClick)="selectedfixingassets($event)">
                 </master-search>
               </mat-form-field>
             </div>

@@ -368,7 +368,7 @@ export class RetailGridComponent implements OnInit {
       this.dataSource = result.dynamicData[0]
       
       this.dataSource.forEach((item: any) => {
-        // console.log('data Refetch for retail template grid',item)
+        console.log('data Refetch for retail template grid',item)
         this.templateFetched_Data = item;
         let parsedData;
         try {
@@ -380,13 +380,13 @@ export class RetailGridComponent implements OnInit {
         const fromVocDate = this.datePipe.transform(parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE ||
           parsedData.CONTROL_DETAIL?.strFmDate || parsedData.CONTROL_DETAIL?.FrVocDate || parsedData.CONTROL_DETAIL?.str_FmDate
           || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.FRVOCDATE || parsedData.CONTROL_DETAIL?.STRFMDATE
-          || parsedData.CONTROL_DETAIL?.frmDate,  'yyyy-MM-dd')!
+          || parsedData.CONTROL_DETAIL?.frmDate || parsedData.CONTROL_DETAIL?.STRDATEFROM,  'yyyy-MM-dd')!
         
       
         const toVocDate = this.datePipe.transform(parsedData.CONTROL_DETAIL?.TOVOCDATE || parsedData.CONTROL_DETAIL?.STRTODATE ||
           parsedData.CONTROL_DETAIL?.strToDate || parsedData.CONTROL_DETAIL?.ToVocDate || parsedData.CONTROL_DETAIL?.str_ToDate
           || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.TOVOCDATE
-          || parsedData.CONTROL_DETAIL?.toDate, 'yyyy-MM-dd')!
+          || parsedData.CONTROL_DETAIL?.toDate || parsedData.CONTROL_DETAIL?.STRDATETO, 'yyyy-MM-dd')!
       
         item.FROMVOCDATE = fromVocDate;
         item.TOVOCDATE = toVocDate;

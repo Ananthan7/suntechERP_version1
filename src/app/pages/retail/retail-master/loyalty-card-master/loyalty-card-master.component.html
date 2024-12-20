@@ -7,348 +7,202 @@
       </button>
     </div>
     <!-- modal header component -->
-    <modal-header
-      *ngIf="this.flag != 'VIEW' && this.flag !='DELETE'"
-      (cancelClick)="close()"
-      (saveClick)="formSubmit()"
-      [isViewDelete]="false"
+    <!-- <modal-header *ngIf="this.flag != 'VIEW'" (cancelClick)="close()" (saveClick)="formSubmit()" [isViewDelete]="editMode"></modal-header> -->
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="DeleteController()"
+    [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
     ></modal-header>
     <!-- content section -->
-    <div class="p-4">
-      <form [formGroup]="loyaltycardform">
-        <div class="row mt-2">
-          <div class="col-md-10">
+    <div class="p-4 ">
+        <form [formGroup]="loyaltycardform">
             <div class="row mt-2">
-              <div class="col-md-10">
-                <div class="row">
-                  <label for="prefixcode" class="col-sm-2 col-form-label"
-                    >Code: <span class="text-danger">*</span></label
-                  >
-                  <div class="col-md-2 p-0 ms-2">
-                    <mat-form-field style="width: 100%" appearance="outline">
-                      <input
-                        type="text"
-                        id="code"
-                        matInput
-                        class="p-0"
-                        maxlength="15"
-                        formControlName="code"
-                        UpperCaseDirective
-                        [readonly]="viewOnly || codeedit"
-                        (focusout)="checkcode()"
-                      />
-                      <mat-error
-                        *ngIf="
-                          loyaltycardform.controls['code'].hasError('required')
-                        "
-                      >
-                        Code is required.
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-6 p-0">
-                    <mat-form-field style="width: 100%" appearance="outline">
-                      <input
-                        type="text"
-                        id="codedesc"
-                        matInput
-                        formControlName="codedesc"
-                        [readonly]="viewOnly"
-                        class="p-0"
-                        (focusout)="checkdesc()"
-                        UpperCaseDirective
-                      />
-                      <mat-error
-                        *ngIf="
-                          loyaltycardform.controls['codedesc'].hasError(
-                            'required'
-                          )
-                        "
-                      >
-                        Description is required.
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
+                <div class="col-md-10">
+
+                    <div class="row mt-2">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <label for="prefixcode" class="col-sm-2 col-form-label">Code: <span class="text-danger">*</span></label>
+                                <div class="col-md-2 p-0 ms-2">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <input type="text" id="code" matInput class="p-0" maxlength="15"
+                                            formControlName="code" UpperCaseDirective
+                                            [readonly]="viewOnly || codeedit" (focusout)="checkcode()" />
+                                        <mat-error *ngIf="loyaltycardform.controls['code'].hasError('required')">
+                                            Code is required.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6 p-0">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <input type="text" id="codedesc" matInput formControlName="codedesc"
+                                            [readonly]="viewOnly" class="p-0" (focusout)="checkdesc()" UpperCaseDirective />
+                                        <mat-error *ngIf="loyaltycardform.controls['codedesc'].hasError('required')">
+                                            Description is required.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                            Points From : <span class="text-danger">*</span></label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" appApplyOnlyNumbers   RestrictNegative min="0" #codeInput matInput id="pointsfrom" formControlName="pointsfrom"
+                                                    [readonly]="viewOnly" autocomplete="off" (focusout)="check_greater()" maxlength="10"/>
+                                                <mat-error *ngIf="loyaltycardform.controls['pointsfrom'].hasError('required')">
+                                                    Points from is required.
+                                                </mat-error>
+                                                <mat-error *ngIf="loyaltycardform.controls['pointsfrom'].hasError('pointsfromlower')">
+                                                    Points from should be higher than Last Points to.
+                                                </mat-error>
+                                                <mat-error *ngIf="loyaltycardform.controls['pointsfrom'].hasError('pointsfromzero')">
+                                                    Minimum value is zero
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID001" class="col-sm-6 col-form-label">
+                                            Points To : <span class="text-danger">*</span></label>
+                                            <div class="col-sm-6">
+                                                <mat-form-field style="width: 100%" appearance="outline">
+                                                    <input 
+                                                        RestrictNegative
+                                                        appApplyOnlyNumbers
+                                                        type="text" 
+                                                        min="0"
+                                                        #codeInput 
+                                                        matInput 
+                                                        id="pointsto"
+                                                        formControlName="pointsto"
+                                                        [readonly]="viewOnly" 
+                                                        autocomplete="off" 
+                                                        (focusout)="checkvalue()"
+                                                        maxlength="10"
+                                                    />
+                                                    <mat-error *ngIf="loyaltycardform.controls['pointsto'].hasError('required')">
+                                                        Points to is required.
+                                                    </mat-error>
+                                                    <mat-error *ngIf="loyaltycardform.controls['pointsto'].hasError('pointsToLower')">
+                                                        Points to should be higher than Points from.
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                            Metal Discount % : </label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" appApplyOnlyNumbers #codeInput matInput formControlName="metaldiscount"
+                                                    class="text-right" [readonly]="viewOnly" autocomplete="off"
+                                                    maxlength="13"
+                                                    AmountDecimalInput />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID001" class="col-sm-6 col-form-label">
+                                            Diamond Discount % :</label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" appApplyOnlyNumbers class="text-right" #codeInput matInput
+                                                    formControlName="diamonddiscount" [readonly]="viewOnly"
+                                                    maxlength="13"
+                                                    autocomplete="off" AmountDecimalInput  />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                            Points Exp. Days : </label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text"  class="text-right" matInput formControlName="pointexpdays" id="pointexpdays" #pointexpdays
+                                                  maxlength="10" appApplyOnlyNumbers 
+                                                    [readonly]="viewOnly" autocomplete="off" 
+                                                    />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <div class="col-md-6">
+                                            <mat-checkbox formControlName="sendmessage" class="example-margin"
+                                                [disabled]="viewOnly">Send Message
+                                            </mat-checkbox>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <mat-checkbox formControlName="sendemail" class="example-margin"
+                                                [disabled]="viewOnly">Send Email
+                                            </mat-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                            Points Multiply Fact : </label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" #codeInput matInput formControlName="pointmulfact"
+                                                    [readonly]="viewOnly" class="text-right" AmountDecimalInput maxlength="13" autocomplete="off" />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
+                                    [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
+                                    keyExpr="SRNO">
+
+                                    <dxi-column dataField="CODE" caption="Code">
+                                    </dxi-column>
+
+                                    <dxi-column dataField="DESCRIPTION" caption="Description" format="dd/MM/yyyy">
+                                    </dxi-column>
+
+                                    <dxi-column dataField="POINTS_FROM" caption="Points From">
+                                    </dxi-column>
+
+                                    <dxi-column dataField="POINTS_TO" caption="Points To">
+                                    </dxi-column>
+
+                                </dx-data-grid>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-  
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="row mt-2">
-                      <label
-                        for="inputPassword"
-                        id="ID001"
-                        class="col-sm-4 col-form-label"
-                      >
-                        Points From : <span class="text-danger">*</span></label
-                      >
-                      <div class="col-sm-6">
-                        <mat-form-field style="width: 100%" appearance="outline">
-                          <input
-                            type="text"
-                            appApplyOnlyNumbers
-                            RestrictNegative
-                            min="0"
-                            #codeInput
-                            matInput
-                            id="pointsfrom"
-                            formControlName="pointsfrom"
-                            [readonly]="viewOnly"
-                            autocomplete="off"
-                            (focusout)="check_greater()"
-                            maxlength="10"
-                          />
-                          <mat-error
-                            *ngIf="
-                              loyaltycardform.controls['pointsfrom'].hasError(
-                                'required'
-                              )
-                            "
-                          >
-                            Points from is required.
-                          </mat-error>
-                          <mat-error
-                            *ngIf="
-                              loyaltycardform.controls['pointsfrom'].hasError(
-                                'pointsfromlower'
-                              )
-                            "
-                          >
-                            Points from should be higher than Last Points to.
-                          </mat-error>
-                          <mat-error
-                            *ngIf="
-                              loyaltycardform.controls['pointsfrom'].hasError(
-                                'pointsfromzero'
-                              )
-                            "
-                          >
-                            Minimum value is zero
-                          </mat-error>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="col-md-6">
-                    <div class="row mt-2">
-                      <label
-                        for="inputPassword"
-                        id="ID001"
-                        class="col-sm-6 col-form-label"
-                      >
-                        Points To : <span class="text-danger">*</span></label
-                      >
-                      <div class="col-sm-6">
-                        <mat-form-field style="width: 100%" appearance="outline">
-                          <input
-                            RestrictNegative
-                            appApplyOnlyNumbers
-                            type="text"
-                            min="0"
-                            #codeInput
-                            matInput
-                            id="pointsto"
-                            formControlName="pointsto"
-                            [readonly]="viewOnly"
-                            autocomplete="off"
-                            (focusout)="checkvalue()"
-                            maxlength="10"
-                          />
-                          <mat-error
-                            *ngIf="
-                              loyaltycardform.controls['pointsto'].hasError(
-                                'required'
-                              )
-                            "
-                          >
-                            Points to is required.
-                          </mat-error>
-                          <mat-error
-                            *ngIf="
-                              loyaltycardform.controls['pointsto'].hasError(
-                                'pointsToLower'
-                              )
-                            "
-                          >
-                            Points to should be higher than Points from.
-                          </mat-error>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-  
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="row mt-2">
-                      <label
-                        for="inputPassword"
-                        id="ID001"
-                        class="col-sm-4 col-form-label"
-                      >
-                        Metal Discount % :
-                      </label>
-                      <div class="col-sm-6">
-                        <mat-form-field style="width: 100%" appearance="outline">
-                          <input
-                            type="text"
-                            appApplyOnlyNumbers
-                            #codeInput
-                            matInput
-                            formControlName="metaldiscount"
-                            class="text-right"
-                            [readonly]="viewOnly"
-                            autocomplete="off"
-                            maxlength="13"
-                            AmountDecimalInput
-                          />
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="col-md-6">
-                    <div class="row mt-2">
-                      <label
-                        for="inputPassword"
-                        id="ID001"
-                        class="col-sm-6 col-form-label"
-                      >
-                        Diamond Discount % :</label
-                      >
-                      <div class="col-sm-6">
-                        <mat-form-field style="width: 100%" appearance="outline">
-                          <input
-                            type="text"
-                            appApplyOnlyNumbers
-                            class="text-right"
-                            #codeInput
-                            matInput
-                            formControlName="diamonddiscount"
-                            [readonly]="viewOnly"
-                            maxlength="13"
-                            autocomplete="off"
-                            AmountDecimalInput
-                          />
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-  
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="row mt-2">
-                      <label
-                        for="inputPassword"
-                        id="ID001"
-                        class="col-sm-4 col-form-label"
-                      >
-                        Points Exp. Days :
-                      </label>
-                      <div class="col-sm-6">
-                        <mat-form-field style="width: 100%" appearance="outline">
-                          <input
-                            type="number"
-                            class="text-right"
-                            matInput
-                            formControlName="pointexpdays"
-                            id="pointexpdays"
-                            #pointexpdays
-                            max="10"
-                            appApplyOnlyNumbers
-                            [readonly]="viewOnly"
-                            autocomplete="off"
-                            (focusout)="checkexp_days()"
-                          />
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="col-md-6">
-                    <div class="row mt-2">
-                      <div class="col-md-6">
-                        <mat-checkbox
-                          formControlName="sendmessage"
-                          class="example-margin"
-                          [disabled]="viewOnly"
-                          >Send Message
-                        </mat-checkbox>
-                      </div>
-  
-                      <div class="col-md-6">
-                        <mat-checkbox
-                          formControlName="sendemail"
-                          class="example-margin"
-                          [disabled]="viewOnly"
-                          >Send Email
-                        </mat-checkbox>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-  
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="row mt-2">
-                      <label
-                        for="inputPassword"
-                        id="ID001"
-                        class="col-sm-4 col-form-label"
-                      >
-                        Points Multiply Fact :
-                      </label>
-                      <div class="col-sm-6">
-                        <mat-form-field style="width: 100%" appearance="outline">
-                          <input
-                            type="text"
-                            #codeInput
-                            matInput
-                            formControlName="pointmulfact"
-                            [readonly]="viewOnly"
-                            class="text-right"
-                            AmountDecimalInput
-                            maxlength="13"
-                            autocomplete="off"
-                          />
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-  
-                <div class="row mt-3">
-                  <dx-data-grid
-                    id="gridContainer"
-                    [dataSource]="maindetails"
-                    [showBorders]="true"
-                    [showColumnLines]="true"
-                    [showRowLines]="true"
-                    [allowColumnResizing]="true"
-                    keyExpr="SRNO"
-                  >
-                    <dxi-column dataField="CODE" caption="Code"> </dxi-column>
-  
-                    <dxi-column
-                      dataField="DESCRIPTION"
-                      caption="Description"
-                      format="dd/MM/yyyy"
-                    >
-                    </dxi-column>
-  
-                    <dxi-column dataField="POINTS_FROM" caption="Points From">
-                    </dxi-column>
-  
-                    <dxi-column dataField="POINTS_TO" caption="Points To">
-                    </dxi-column>
-                  </dx-data-grid>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </form>
+        </form>
     </div>
   </div>
   
