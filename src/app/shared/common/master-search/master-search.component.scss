@@ -96,3 +96,7 @@
 .letters:hover {
   cursor: pointer;
 }
+.focused {
+  background-color: #f0f8ff; /* Light blue background */
+  outline: 2px solid #1e90ff; /* Outline for focused row */
+}
