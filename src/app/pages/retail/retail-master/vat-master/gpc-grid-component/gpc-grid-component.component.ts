@@ -63,6 +63,10 @@ export class GpcGridComponentComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  dismissModal(reason?: any) {
+    this.activeModal.dismiss(reason); // Rejects the modal with the given reason
+  }
+
   // getGpcData(): Observable<any> {
   //   let API = `VatMaster/GetFillGPCAccounts`;
   //   let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
@@ -81,15 +85,15 @@ export class GpcGridComponentComponent implements OnInit {
   // }
 
   getGpcData(): Observable<any> {
-    console.log('called');
-    
+    console.log("called");
+
     const API = `VatMaster/GetFillGPCAccounts`;
     return this.apiService.getDynamicAPI(API).pipe(
       tap((result) => {
         if (result.status.trim() === "Success") {
           this.GPCData = result.dynamicData[0];
           console.log("In");
-          
+
           console.log(this.GPCData);
         } else {
           console.warn("Failed to fetch GPC Data.");
@@ -127,17 +131,40 @@ export class GpcGridComponentComponent implements OnInit {
     console.log("Selected Row Indexes:", this.selectedRow);
   }
 
-    getSerachedData(event: any): void {
-      // Determine the search value
-      const SEARCHVALUE =
-        typeof event === "string" ? event.trim() : event?.target?.value.trim();
-    
-      // API endpoint
-      const API = `VatMaster/GetFillGPCAccounts/${this.branchCode}`;
-    
-      // If search value is empty, fetch full data
-      if (!SEARCHVALUE) {
-        console.log("called");
+  getSerachedData(event: any): void {
+    // Determine the search value
+    const SEARCHVALUE =
+      typeof event === "string" ? event.trim() : event?.target?.value.trim();
+
+    // API endpoint
+    const API = `VatMaster/GetFillGPCAccounts/${this.branchCode}`;
+
+    // If search value is empty, fetch full data
+    if (!SEARCHVALUE) {
+      console.log("called");
+      this.getGpcData().subscribe({
+        next: (result) => {
+          console.log("Full data fetched successfully:", result);
+        },
+        error: (err) => {
+          console.error("Error while fetching full data:", err);
+        },
+      });
+      return;
+    }
+
+    // Ensure data exists before filtering
+    if (this.GPCData && this.GPCData.length > 0) {
+      this.GPCData = this.GPCData.filter((item: any) =>
+        item.GPC_ACCODE.toLowerCase().startsWith(SEARCHVALUE.toLowerCase())
+      );
+
+      if (this.GPCData.length > 0) {
+        console.log("Matching records:", this.GPCData);
+      } else {
+        this.searchForm.controls["searchValue"].setValue("");
+        let message = "No matching records found.";
+        this.openDialog("Warning", message, true);
         this.getGpcData().subscribe({
           next: (result) => {
             console.log("Full data fetched successfully:", result);
@@ -146,26 +173,13 @@ export class GpcGridComponentComponent implements OnInit {
             console.error("Error while fetching full data:", err);
           },
         });
-        return;
+
+        console.log("No matching records found.");
       }
-      
-    
-      // Ensure data exists before filtering
-      if (this.GPCData && this.GPCData.length > 0) {
-        this.GPCData = this.GPCData.filter((item: any) =>
-          item.GPC_ACCODE.toLowerCase().startsWith(SEARCHVALUE.toLowerCase())
-        );
-    
-        if (this.GPCData.length > 0) {
-          console.log("Matching records:", this.GPCData);
-        } else {
-          console.log("No matching records found.");
-        }
-      } else {
-        console.warn("GPCData is empty. Consider fetching the data first.");
-      }
+    } else {
+      console.warn("GPCData is empty. Consider fetching the data first.");
     }
-    
+  }
 
   openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
     this.dialogBox = this.dialog.open(DialogboxComponent, {
