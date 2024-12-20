@@ -107,6 +107,7 @@
                 <mat-form-field appearance="outline" style="width: 80%;">
                   <input type="text" matInput UpperCaseDirective
                     (change)="currencyDataSelected($event)"
+                    (keydown)="lookupKeyPress($event,'CURRENCY_RATE')"
                     [readonly]="viewMode" formControlName="CURRENCY_CODE" />
                 </mat-form-field>
               </div>
@@ -114,9 +115,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput RateDecimalInput
                     class="text-right" readonly
-                    formControlName="CURRENCY_RATE"
-                    (keydown)="lookupKeyPress($event,'CURRENCY_RATE')"
-                    (focusout)="validateLookupField($event,currencyMasterData,'CURRENCY_RATE')" />
+                    formControlName="CURRENCY_RATE" />
                   <master-search class="masterSearch" #OverlayCurrencyRate
                     *ngIf="!viewMode"
                     [MasterSearchData]="currencyMasterData"

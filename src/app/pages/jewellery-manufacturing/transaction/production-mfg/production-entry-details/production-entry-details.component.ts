@@ -642,12 +642,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.setFormNullToString('STOCK_CODE', data[0].STOCK_CODE)
           this.setFormNullToString('DIVCODE', data[0].DIVCODE)
           this.setFormNullToString('METALSTONE', data[0].METALSTONE)
-          this.setFormNullToString('PURE_WT', data[0].PURE_WT)
           this.setFormNullToString('KARAT_CODE', data[0].KARAT)
           this.setFormNullToString('TOTAL_PCS', data[0].PCS)
-          this.setFormDecimal('STONE_WT', data[0].STONE, 'STONE')
-          this.setFormDecimal('GROSS_WT', data[0].METAL, 'METAL')
-          this.setFormDecimal('PUREWT', data[0].PUREWT, 'METAL')
+          // this.setFormDecimal('STONE_WT', data[0].STONE, 'STONE')
+          // this.setFormDecimal('GROSS_WT', data[0].METAL, 'METAL')
+          // this.setFormDecimal('PUREWT', data[0].PUREWT, 'METAL')
           this.setFormDecimal('PURITY', data[0].PURITY, 'PURITY')
           this.setFormDecimal('Job_Purity', data[0].PURITY, 'PURITY')
           this.setFormDecimal('STONE_PCS', 0, '')
@@ -659,7 +658,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
             data.forEach((element: any) => {
               metalWt += element.METAL
             });
-            this.setFormDecimal('METAL_WT', metalWt, 'METAL')
+            // this.setFormDecimal('METAL_WT', metalWt, 'METAL')
           }
           this.FORM_VALIDATER = this.productiondetailsFrom.value
           if (data[0].PROCESS?.toUpperCase() != 'FINAL') this.pendingProcessValidate()
@@ -723,6 +722,65 @@ export class ProductionEntryDetailsComponent implements OnInit {
         } else {
           // this.commonService.toastErrorByMsgId('MSG1456');
           this.showConfirmationDialog(this.commonService.getMsgByID('MSG1456'))
+        }
+
+        if (result.dynamicData && result.dynamicData[1].length > 0) {
+          let nGross_Wt = 0
+          let txtStone_Wt = 0
+          let txtStone_Pcs = 0
+          let txtMetal_Wt = 0
+          let txtPure_Wt = 0
+          let txtLossQty = 0
+          let MAKEZIRCONEGROSSWT = this.commonService.getCompanyParamValue('MAKEZIRCONEGROSSWT')
+          let MAKEPEARLINGRMS = this.commonService.getCompanyParamValue('MAKEPEARLINGRMS')
+          let dtProcess = result.dynamicData[1]
+          dtProcess.forEach((item: any) => {
+            if (item.METALSTONE == "M") {
+              if (this.designType == "METAL") {
+
+              } else {
+                txtMetal_Wt = (this.commonService.emptyToZero(txtMetal_Wt) + this.commonService.emptyToZero(item.NET_WT));
+                nGross_Wt = nGross_Wt + this.commonService.emptyToZero(item.GRWT)
+                txtPure_Wt = txtPure_Wt + this.commonService.emptyToZero(item.PUREWT)
+                txtLossQty = txtLossQty + this.commonService.emptyToZero(item.LOSSQTY)
+              }
+            } else {
+              if (this.designType == "METAL") {
+              } else {
+                if (MAKEZIRCONEGROSSWT && item.DIVCODE == 'Z') {
+                  txtStone_Wt = (this.commonService.emptyToZero(txtStone_Wt) + (this.commonService.emptyToZero(item.GRWT) * 5));
+                } else {
+                  txtStone_Wt = (this.commonService.emptyToZero(txtStone_Wt) + this.commonService.emptyToZero(item.GRWT));
+                }
+
+                txtStone_Pcs = (this.commonService.emptyToZero(txtStone_Pcs) + this.commonService.emptyToZero(item.PCS))
+                if (MAKEZIRCONEGROSSWT && item.DIVCODE == "Z") {
+                  nGross_Wt = nGross_Wt + this.commonService.emptyToZero(item.GRWT);
+                } else if (MAKEPEARLINGRMS && item.DIVCODE == "P") {
+                  nGross_Wt = nGross_Wt + this.commonService.emptyToZero(item.GRWT);
+                } else {
+                  if (item.DIVCODE == "Z") {
+                    nGross_Wt = nGross_Wt + this.commonService.emptyToZero(item.GRWT);
+                  } else {
+                    nGross_Wt = nGross_Wt + (this.commonService.emptyToZero(item.GRWT) * 0.2);
+                  }
+                }
+              }
+            }
+            this.setValueWithDecimal('loss', txtLossQty, 'THREE')
+            this.setValueWithDecimal('PURE_WT', txtPure_Wt, 'THREE')
+            this.setValueWithDecimal('STONE_WT', txtStone_Wt, 'STONE')
+            this.setValueWithDecimal('GROSS_WT', nGross_Wt, 'METAL')
+            this.setValueWithDecimal('METAL_WT', txtMetal_Wt, 'METAL')
+            this.setValueWithDecimal('STONE_PCS', txtStone_Pcs, 'METAL')
+          })
+        }else{
+          let msg = this.commonService.getMsgByID('MSG1456')
+          this.showConfirmationDialog(msg)
+          this.productiondetailsFrom.controls.PROCESS_CODE.setValue('')
+          this.productiondetailsFrom.controls.PROCESS_NAME.setValue('')
+          this.productiondetailsFrom.controls.WORKER_CODE.setValue('')
+          this.productiondetailsFrom.controls.WORKER_NAME.setValue('')
         }
       }, err => {
         this.commonService.closeSnackBarMsg();
@@ -1175,18 +1233,18 @@ export class ProductionEntryDetailsComponent implements OnInit {
   submitImageFormData() {
     let form = this.productiondetailsFrom.value;
     // this.detailArray.forEach((item: any, i: any) => {
-      this.formdata.append(`Model.Type`, this.commonService.nullToString(form.VOCTYPE));
-      this.formdata.append(`Model.Code`, this.commonService.nullToString(form.code));
-      if (this.imagepath.length > 0) {
-        for (let i: number = 0; i < this.imagepath.length; i++) {
-          this.formdata.append('Model.imageData[' + i + '].Picture_name', 'test');
-          this.formdata.append('Model.imageData[' + i + '].DefaultPicture', this.imagepath[i].DEFAULT);
-          this.formdata.append('Model.imageData[' + i + '].Picture_Type', 'jgp');
-        }
-        for (let i: number = 0; i < this.imagepath.length; i++) {
-          this.formdata.append("Model.Images[" + i + "].Image.File", this.imagepath[i]);
-        }
+    this.formdata.append(`Model.Type`, this.commonService.nullToString(form.VOCTYPE));
+    this.formdata.append(`Model.Code`, this.commonService.nullToString(form.code));
+    if (this.imagepath.length > 0) {
+      for (let i: number = 0; i < this.imagepath.length; i++) {
+        this.formdata.append('Model.imageData[' + i + '].Picture_name', 'test');
+        this.formdata.append('Model.imageData[' + i + '].DefaultPicture', this.imagepath[i].DEFAULT);
+        this.formdata.append('Model.imageData[' + i + '].Picture_Type', 'jgp');
       }
+      for (let i: number = 0; i < this.imagepath.length; i++) {
+        this.formdata.append("Model.Images[" + i + "].Image.File", this.imagepath[i]);
+      }
+    }
     // })
 
     let Sub: Subscription = this.dataService.postDynamicAPI('PictureAttachment/InsertWithAttachments', this.formdata)
