@@ -678,8 +678,9 @@ export class CustomerEnquiryComponent implements OnInit {
     this.popupVisible = true;
   }
   saveTemplate_DB(){
-    let postData = this.customerEnquiryForm.controls.outputTo.value ==='Sales Register' ? this.openModal()
+    let postData: any = this.customerEnquiryForm.controls.outputTo.value ==='Sales Register' ? this.openModal()
     : this.switchOutputTo(this.customerEnquiryForm.controls.outputTo.value)
+    postData.parameter
     const payload = {
       "SPID": "0115",
       "parameter": {
@@ -692,13 +693,10 @@ export class CustomerEnquiryComponent implements OnInit {
               "FORM_NAME": this.commonService.getModuleName(),
               "ISDEFAULT": 1
             },
-            "CONTROL_DETAIL": {
-              postData
-            }
+            "CONTROL_DETAIL": postData.parameter 
          })
       }
     };
-
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
     .subscribe((result: any) => {
