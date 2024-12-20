@@ -46,7 +46,7 @@ export class GridSearchComponent implements OnInit {
   }
 
   currentRowIndex = 0; // Index of the currently selected row
-  focusedRowKey = 0; // Initialize with the first row
+  focusedRowKey = 1; // Initialize with the first row
   onKeyDown(event: KeyboardEvent): void {
     if (event.key === 'ArrowDown') {
       // Move focus to the next row
