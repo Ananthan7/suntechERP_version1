@@ -58,6 +58,8 @@ export class ShowTransDetailsComponent implements OnInit {
     { field: "Loyalty Points", caption: "Loyalty Points" },
     { field: "Redeem", caption: "Redeem Points" },
   ];
+  @Input() hideElement: boolean = false;
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -135,8 +137,6 @@ export class ShowTransDetailsComponent implements OnInit {
   }
 
   valuesBindingOnForm(data: any) {
-    console.log('call frm Report', data)
-    
     this.showTarnsDetailsForm.controls["customerCode"].setValue(data.CODE);
     this.showTarnsDetailsForm.controls["customer"].setValue(data.NAME);
     this.showTarnsDetailsForm.controls["mobile"].setValue(data.MOBILE);
