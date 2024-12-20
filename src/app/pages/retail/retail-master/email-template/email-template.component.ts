@@ -81,7 +81,7 @@ export class EmailTemplateComponent implements OnInit {
   }
 
   ViewController(DATA: any) {
-    this.code = DATA.MID;
+    this.code = DATA.EMTMP_CODE;
     this.emailTemplateForm.controls["code"].setValue(DATA.EMTMP_CODE);
     this.emailTemplateForm.controls["description"].setValue(DATA.EMTMP_DESC);
     this.emailTemplateForm.controls["cc"].setValue(DATA.EMTMP_CC);

@@ -392,7 +392,7 @@
                             for="regVatCtrlAccCredit"
                             class="col-sm-4 col-form-label"
                             id="ID029"
-                            >VAT ctrl. A/C</label
+                            >VAT Ctrl. A/C</label
                           >
                           <div class="col-md-4">
                             <mat-form-field
@@ -665,7 +665,7 @@
                             for="unregVatCtrlAccCredit"
                             class="col-sm-4 col-form-label"
                             id="ID029"
-                            >VAT ctrl. A/C</label
+                            >VAT Ctrl. A/C</label
                           >
                           <div class="col-md-4">
                             <mat-form-field
@@ -868,7 +868,7 @@
                             for="impVatCtrlAccDebit"
                             class="col-sm-4 col-form-label"
                             id="ID029"
-                            >VAT ctrl. A/C</label
+                            >VAT Ctrl. A/C</label
                           >
                           <div class="col-md-4"></div>
 
@@ -1358,9 +1358,9 @@
                                 (focusout)="
                                   SPvalidateLookupGridModified(
                                     $event,
-                                    hsnCodeData,
+                                    expenseCodeData,
                                     ['EXPENSE_ACCODE', 'EXPENSE_ACCODE_DESC'],
-                                    ['CODE', 'DESCRIPTION'],
+                                    ['ACCODE', 'ACCOUNT_HEAD'],
                                     'expense',
                                     data.data
                                   )
@@ -1377,7 +1377,7 @@
                               />
                               <master-search
                                 *ngIf="flag != 'VIEW'"
-                                [MasterSearchData]="hsnCodeData"
+                                [MasterSearchData]="expenseCodeData"
                                 #overlayEEXPENSEACCODE
                                 class="masterSearch"
                                 (newRowClick)="

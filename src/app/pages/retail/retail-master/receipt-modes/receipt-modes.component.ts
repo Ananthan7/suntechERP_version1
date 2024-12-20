@@ -1,6 +1,18 @@
 import { DatePipe } from "@angular/common";
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
@@ -27,14 +39,14 @@ export class ReceiptModesComponent implements OnInit {
 
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
+  branchCode = this.commonService.branchCode;
 
   AccodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 7,
     ORDER_TYPE: 0,
-    WHERECONDITION:
-      " ACCOUNT_MODE in ('G','B','L') AND AC_OnHold = 0 AND BRANCH_CODE='STRBRANCHCODE'",
+    WHERECONDITION: ` ACCOUNT_MODE in ('G','B','L') AND AC_OnHold = 0 AND BRANCH_CODE='${this.branchCode}'`,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "ACCODE",
     SEARCH_VALUE: "",
@@ -49,8 +61,7 @@ export class ReceiptModesComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 7,
     ORDER_TYPE: 0,
-    WHERECONDITION:
-      " ACCOUNT_MODE in ('G','B','L') AND AC_OnHold = 0 AND BRANCH_CODE='STRBRANCHCODE'",
+    WHERECONDITION: ` ACCOUNT_MODE in ('G','B','L') AND AC_OnHold = 0 AND BRANCH_CODE='${this.branchCode}'`,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "BANK CODE",
     SEARCH_VALUE: "",
@@ -65,8 +76,7 @@ export class ReceiptModesComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 7,
     ORDER_TYPE: 0,
-    WHERECONDITION:
-      " ACCOUNT_MODE in ('L') AND AC_OnHold = 0 AND BRANCH_CODE='STRBRANCHCODE '",
+    WHERECONDITION: ` ACCOUNT_MODE in ('L') AND AC_OnHold = 0 AND BRANCH_CODE='${this.branchCode} '`,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "COMMISION",
     SEARCH_VALUE: "",
@@ -81,8 +91,7 @@ export class ReceiptModesComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 7,
     ORDER_TYPE: 0,
-    WHERECONDITION:
-      "  ACCOUNT_MODE in ('L','G')  and BRANCH_CODE = 'STRBRANCHCODE ' AND AC_OnHold = 0 ",
+    WHERECONDITION: `  ACCOUNT_MODE in ('L','G')  and BRANCH_CODE = '${this.branchCode} ' AND AC_OnHold = 0 `,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "INPUT VAT",
     SEARCH_VALUE: "",
@@ -97,8 +106,7 @@ export class ReceiptModesComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 7,
     ORDER_TYPE: 0,
-    WHERECONDITION:
-      "  ACCOUNT_MODE in ('L','G')  and BRANCH_CODE = 'STRBRANCHCODE ' AND AC_OnHold = 0 ",
+    WHERECONDITION: `  ACCOUNT_MODE in ('L','G')  and BRANCH_CODE = '${this.branchCode} ' AND AC_OnHold = 0 `,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "OUTPUT VAT",
     SEARCH_VALUE: "",
@@ -114,12 +122,15 @@ export class ReceiptModesComponent implements OnInit {
   excludeTax!: boolean;
   LoyaltyItem!: boolean;
   modeDorpdown!: any[];
-  fetchedBranchDataParam: any= [];
-  fetchedBranchData: any[] =[];
-  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
+  fetchedBranchDataParam: any = [];
+  fetchedBranchData: any[] = [];
+  dateToPass: { fromDate: string; toDate: string } = {
+    fromDate: "",
+    toDate: "",
+  };
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
-  isEnableRCM!:boolean
+  isEnableRCM!: boolean;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -133,10 +144,10 @@ export class ReceiptModesComponent implements OnInit {
   ) {}
 
   receiptModesMainForm: FormGroup = this.formBuilder.group({
-    mode: ["",[Validators.required]],
-    code: ["",[Validators.required]],
-    desc: ["",[Validators.required]],
-    accode: ["",[Validators.required]],
+    mode: ["", [Validators.required]],
+    code: ["", [Validators.required]],
+    desc: ["", [Validators.required]],
+    accode: ["", [Validators.required]],
     commision: [""],
     currencyCode: [""],
     commisionAccount: [""],
@@ -151,12 +162,9 @@ export class ReceiptModesComponent implements OnInit {
     loyalty: [""],
     rcmCredit: [""],
     excludeTax: [""],
-    
   });
 
   ngOnInit(): void {
-
-
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
@@ -425,8 +433,8 @@ export class ReceiptModesComponent implements OnInit {
         this.LoyaltyItem = checked;
         break;
       case "rcmCredit":
-        this.isEnableRCM = checked
-        this.cdr.detectChanges()
+        this.isEnableRCM = checked;
+        this.cdr.detectChanges();
         this.RcmCreditCard = checked;
         break;
       case "excludeTax":
@@ -442,17 +450,15 @@ export class ReceiptModesComponent implements OnInit {
     this.flag = currentFlag;
 
     switch (this.flag) {
-      
-
       case "ADD":
-
-      this.modeDorpdown = this.getUniqueValues(
-        this.commonService.getComboFilterByID("Receipt Mode"),
-        "ENGLISH"
-      );
-        this.receiptModesMainForm.controls["mode"].setValue(this.modeDorpdown[0].SRNO)
+        this.modeDorpdown = this.getUniqueValues(
+          this.commonService.getComboFilterByID("Receipt Mode"),
+          "ENGLISH"
+        );
+        this.receiptModesMainForm.controls["mode"].setValue(
+          this.modeDorpdown[0].SRNO
+        );
         console.log(this.modeDorpdown);
-        
 
         break;
       case "VIEW":
@@ -627,71 +633,73 @@ export class ReceiptModesComponent implements OnInit {
     });
   }
 
-  prefillScreenValues(){
-    if ( Object.keys(this.content).length > 0) {
+  prefillScreenValues() {
+    if (Object.keys(this.content).length > 0) {
       //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
-    }
-    else{
-      const userBranch = localStorage.getItem('userbranch');
+    } else {
+      const userBranch = localStorage.getItem("userbranch");
       const formattedUserBranch = userBranch ? `${userBranch}#` : null;
       this.receiptModesMainForm.controls.branch.setValue(formattedUserBranch);
       this.fetchedBranchDataParam = formattedUserBranch;
-      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
-   
+      this.fetchedBranchData = this.fetchedBranchDataParam?.split("#");
+
       this.dateToPass = {
-        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
-        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!
+        fromDate: this.datePipe.transform(new Date(), "yyyy-MM-dd")!,
+        toDate: this.datePipe.transform(new Date(), "yyyy-MM-dd")!,
       };
     }
   }
 
   selectedData(data: any) {
-    console.log(data)
+    console.log(data);
     // let content= ``, content2 =``,  content3 =``, content4 =``
-    let content = `Current Selected Branches:  \n`
-    let content2 = `Current Selected Divisions:  \n`
-    let content3 = `Current Selected Area:  \n`
-    let content4 = `Current Selected B category:  \n`
-    let branchDivisionData = '';
-    if(data.BranchData){
+    let content = `Current Selected Branches:  \n`;
+    let content2 = `Current Selected Divisions:  \n`;
+    let content3 = `Current Selected Area:  \n`;
+    let content4 = `Current Selected B category:  \n`;
+    let branchDivisionData = "";
+    if (data.BranchData) {
       // content = `Current Selected Branches:  \n`
-      data.BranchData.forEach((Bdata: any)=>{
-        branchDivisionData += Bdata.BRANCH_CODE+'#'
-        content += Bdata.BRANCH_CODE ? `${Bdata.BRANCH_CODE}, ` : ''
-      }) 
+      data.BranchData.forEach((Bdata: any) => {
+        branchDivisionData += Bdata.BRANCH_CODE + "#";
+        content += Bdata.BRANCH_CODE ? `${Bdata.BRANCH_CODE}, ` : "";
+      });
     }
 
-    if(data.DivisionData){
+    if (data.DivisionData) {
       // content2 = `Current Selected Divisions:  \n`
-      data.DivisionData.forEach((Ddata: any)=>{
-        branchDivisionData += Ddata.DIVISION_CODE+'#'
-        content2 += Ddata.DIVISION_CODE ? `${Ddata.DIVISION_CODE}, ` : ''
-      }) 
+      data.DivisionData.forEach((Ddata: any) => {
+        branchDivisionData += Ddata.DIVISION_CODE + "#";
+        content2 += Ddata.DIVISION_CODE ? `${Ddata.DIVISION_CODE}, ` : "";
+      });
     }
 
-    if(data.AreaData){
+    if (data.AreaData) {
       // content3 = `Current Selected Area:  \n`
-      data.AreaData.forEach((Adata: any)=>{
-        branchDivisionData += Adata.AREA_CODE+'#'
-        content3 += Adata.AREA_CODE ? `${Adata.AREA_CODE}, ` : ''
-      }) 
+      data.AreaData.forEach((Adata: any) => {
+        branchDivisionData += Adata.AREA_CODE + "#";
+        content3 += Adata.AREA_CODE ? `${Adata.AREA_CODE}, ` : "";
+      });
     }
 
-    if(data.BusinessCategData){
+    if (data.BusinessCategData) {
       // content4 = `Current Selected B category:  \n`
-      data.BusinessCategData.forEach((BCdata: any)=>{
-        branchDivisionData += BCdata.CATEGORY_CODE+'#'
-        content4 += BCdata.CATEGORY_CODE ? `${BCdata.CATEGORY_CODE}, ` : ''
-      }) 
+      data.BusinessCategData.forEach((BCdata: any) => {
+        branchDivisionData += BCdata.CATEGORY_CODE + "#";
+        content4 += BCdata.CATEGORY_CODE ? `${BCdata.CATEGORY_CODE}, ` : "";
+      });
     }
 
-    content = content.replace(/, $/, '');
-    content2 = content2.replace(/, $/, '');
-    content3 = content3.replace(/, $/, '');
-    content4 = content4.replace(/, $/, '');
-    this.branchDivisionControlsTooltip = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
+    content = content.replace(/, $/, "");
+    content2 = content2.replace(/, $/, "");
+    content3 = content3.replace(/, $/, "");
+    content4 = content4.replace(/, $/, "");
+    this.branchDivisionControlsTooltip =
+      content + "\n" + content2 + "\n" + content3 + "\n" + content4;
 
-    this.formattedBranchDivisionData = branchDivisionData
-    this.receiptModesMainForm.controls.branches.setValue(this.formattedBranchDivisionData);
+    this.formattedBranchDivisionData = branchDivisionData;
+    this.receiptModesMainForm.controls.branches.setValue(
+      this.formattedBranchDivisionData
+    );
   }
 }

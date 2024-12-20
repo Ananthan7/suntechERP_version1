@@ -233,7 +233,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 15,
     SEARCH_FIELD: 'COST_CODE',
-    SEARCH_HEADING: 'Cost type',
+    SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "COST_CODE<> ''",
     VIEW_INPUT: true,
@@ -250,7 +250,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 30,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Category Code',
+    SEARCH_HEADING: 'Category',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
     VIEW_INPUT: true,
@@ -267,7 +267,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 31,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Subcategory Code',
+    SEARCH_HEADING: 'Sub Category ',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
     VIEW_INPUT: true,
@@ -284,7 +284,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 62,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Type Code',
+    SEARCH_HEADING: 'Type',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'TYPE MASTER'",
     VIEW_INPUT: true,
@@ -301,7 +301,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 32,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Brand Code',
+    SEARCH_HEADING: 'Brand',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES = 'BRAND MASTER' AND DIV_Y=1",
     VIEW_INPUT: true,
@@ -318,7 +318,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 26,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Country type',
+    SEARCH_HEADING: 'Country',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES='COUNTRY MASTER'",
     VIEW_INPUT: true,
@@ -407,7 +407,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     console.log(e);
     if (this.checkCode()) return
 
-    this.diamondprefixForm.controls.setting.setValue(e.CODE);
+    this.diamondprefixForm.controls.shape.setValue(e.CODE);
   }
 
 
@@ -565,16 +565,45 @@ export class DiamondPrefixMasterComponent implements OnInit {
     }
   }
 
+
+
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.prefixcode) == '') {
+      this.commonService.toastErrorByMsgId('MSG1628') //"Code cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.currencyRate) == '') {
+      this.commonService.toastErrorByMsgId('MSG1172')//"costCenter cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.currency) == '') {
+      this.commonService.toastErrorByMsgId('MSG1172')//"currency cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.description) == '') {
+      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.costcode) == '') {
+      this.commonService.toastErrorByMsgId('MSG1151')//"costcode cannot be empty"
+      return true
+    }
+
+    return false;
+  }
+
   formSubmit() {
 
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
-    if (this.diamondprefixForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.diamondprefixForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+    if (this.submitValidations(this.diamondprefixForm.value)) return;
+
 
     let API = 'PrefixMaster/InsertPrefixMaster'
     let postData = this.setPostData()
@@ -704,6 +733,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
 
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    const inputValue = event.target.value.toUpperCase();
+
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
@@ -724,11 +755,30 @@ export class DiamondPrefixMasterComponent implements OnInit {
           return
         }
 
+        const matchedItem2 = data.find((item: any) => item.CURRENCY_CODE.toUpperCase() === inputValue);
+        console.log(matchedItem2, 'data')
+        if (matchedItem2) {
+          this.diamondprefixForm.controls[FORMNAME].setValue(matchedItem2.CURRENCY_CODE);
+          if (FORMNAME === 'currency') {
+            this.diamondprefixForm.controls.currencyRate.setValue(matchedItem2.CONV_RATE);
+          }
+        } else {
+          this.handleLookupError(FORMNAME, LOOKUPDATA);
+        }
+
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
   }
 
+  handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
+    this.commonService.toastErrorByMsgId('MSG1531');
+    this.diamondprefixForm.controls[FORMNAME].setValue('');
+    LOOKUPDATA.SEARCH_VALUE = '';
+    if (FORMNAME === 'currency') {
+      this.diamondprefixForm.controls.currencyRate.setValue('');
+    }
+  }
 
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {

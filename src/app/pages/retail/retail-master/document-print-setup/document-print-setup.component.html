@@ -1,161 +1,374 @@
 <div>
-    <!-- header section starts -->
-    <div class="card-content border-bottom d-flex justify-content-between p-2">
-        <h5 class="pos-modaltitle" id="modal-dia-metal">Fixed Assets Category Master</h5>
-        <button type="button" class="btn btn-close close-btn" (click)="close()">
-            <i class="feather icon-x close-icon"></i>
-        </button>
-    </div>
-    <!-- modal header component -->
-    <modal-header
+  <!-- header section starts -->
+  <div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Document Print Setup</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <modal-header
     *ngIf="content?.FLAG !== 'VIEW'"
     (saveClick)="formSubmit()"
     (cancelClick)="close()"
     [isViewDelete]="deleteMode"
     (deleteClick)="deleteRecord()"
   ></modal-header>
-    <!-- content section -->
-    <div class="p-4 ">
-        <form [formGroup]="DocumentPrintSetupForm">
-            <div class="row mb-1">
-                <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">
-                    Code :</label>
-                <div class="col-sm-2">
-                    <mat-form-field style="width: 100%" appearance="outline">
-                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                            autocomplete="off" />
-                    </mat-form-field>
-                </div>
-                <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">
-                    Description :</label>
-                <div class="col-sm-3">
-                    <mat-form-field style="width: 100%" appearance="outline">
-                        <input type="text" #codeInput matInput formControlName="description" UpperCaseDirective
-                            autocomplete="off" />
-                    </mat-form-field>
-                </div>
-                <div class="col-md-3">
-                    <button class="btn btn-primary btn-sm rounded-2">Select Branch</button>
-                </div>
-            </div>
+  <!-- content section -->
+  <div class="p-4">
+    <form [formGroup]="DocumentPrintSetupForm">
+      <div class="row mb-1">
+        <label for="inputPassword" id="ID001" class="col-sm-1 col-form-label">
+          Code <span>*</span>:</label
+        >
+        <div class="col-sm-2">
+          <mat-form-field style="width: 100%" appearance="outline">
+            <input
+              type="text"
+              #codeInput
+              matInput
+              formControlName="code"
+              UpperCaseDirective
+              autocomplete="off"
+              [maxlength]="6" 
+              (keyup)="codeEnabled()"
+              [readonly]="viewMode || editMode"
+            />
+          </mat-form-field>
+        </div>
+        <label for="inputPassword" id="ID001" class="col-sm-1 col-form-label">
+          Description :</label
+        >
+        <div class="col-sm-3">
+          <mat-form-field style="width: 100%" appearance="outline">
+            <input
+              type="text"
+              #codeInput
+              [maxlength]="50"
+              matInput
+              formControlName="description"
+              autocomplete="off"
+              [readonly]="viewMode || codeEnable"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-md-1">
+          <app-branch-division
+            [fetchData]="fetchedBranchData"
+            (newRowClick)="selectedData($event)"
+            class="branchDivisionelectr"
+            [matTooltip]="branchDivisionControlsTooltip"
+            matTooltipClass="custom-tooltip"
+            matTooltipPosition="above"
+          ></app-branch-division>
+        </div>
+        {{ formattedBranchDivisionData }}
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="boxed-label">
+            <h6>Document Header Setting</h6>
+          </div>
+          <div class="your-box-container mb-2">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="boxed-label">
-                        <h6>Document Header Setting</h6>
-                    </div>
-                    <div class="your-box-container mb-2">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <mat-checkbox formControlName="show_only_logo"> Show Only Logo</mat-checkbox>
-                                <div class="boxed-label">
-                                    <h6>Logo Position</h6>
-                                </div>
-                                <!-- <div class="your-box-container mb-2">
-                                    <div class="row">
-                                        <mat-radio-group formControlName="logo_position">
-                                        <div class="col-md-12">
-                                            <mat-checkbox value="Left"> Left</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <mat-checkbox value="Right"> Right</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <mat-checkbox value="Center"> Center</mat-checkbox>
-                                        </div>
-                                        </mat-radio-group>
-                                    </div>
-                                </div> -->
-                                <div class="your-box-container mb-2">
-                                    <div class="row">
-                                      <mat-radio-group formControlName="logo_position">
-                                        <div class="col-md-12">
-                                          <mat-radio-button value="Left">Left</mat-radio-button>
-                                        </div>
-                                        <div class="col-md-12">
-                                          <mat-radio-button value="Right">Right</mat-radio-button>
-                                        </div>
-                                        <div class="col-md-12">
-                                          <mat-radio-button value="Center">Center</mat-radio-button>
-                                        </div>
-                                      </mat-radio-group>
-                                    </div>
-                                  </div>
-                                  
-                            </div>
-                            <div class="col-md-9">
-                                <mat-checkbox formControlName="show_as_header" > Show As Header</mat-checkbox>
-                                <div class="boxed-label">
-                                    <h6>Header</h6>
-                                </div>
-                                <div class="your-box-container mb-2">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <mat-checkbox formControlName="header_english"> English</mat-checkbox>
-                                            <mat-form-field style="width: 100%;" appearance="outline">
-                                                <textarea matInput id="inputAddress" formControlName="english_header_images"
-                                                    rows="4"></textarea>
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <mat-checkbox formControlName="header_arabic"> English & Arabic</mat-checkbox>
-                                            <mat-form-field style="width: 100%;" appearance="outline">
-                                                <textarea matInput id="inputAddress" formControlName="other_header_images"
-                                                    rows="4"></textarea>
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-9">
-                                <mat-checkbox formControlName="show_combined_header"> Show Combined Header(A4)</mat-checkbox>
-                                <div class="boxed-label">
-                                    <h6>Header</h6>
-                                </div>
-                                <div class="your-box-container mb-2">
-                                    <div class="row">
-                                        <div class="col-md-12 mb-3">
-                                            <mat-form-field style="width: 100%;" appearance="outline">
-                                                <textarea matInput id="inputAddress" formControlName="combined_header_images"
-                                                    rows="4"></textarea>
-                                            </mat-form-field>
-                                        </div>
-                                        <mat-checkbox formControlName="show_combined_headerA5"> Show Combined Header(A5)</mat-checkbox>
-                                        <div class="col-md-8">
-                                            <mat-form-field style="width: 100%;" appearance="outline">
-                                                <textarea matInput id="inputAddress" formControlName="combined_header_a5images"
-                                                    rows="4"></textarea>
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="boxed-label mt-3">
-                                    <h6>Footer Setting</h6>
-                                </div>
-                                <div class="your-box-container mb-2">
-                                    <div class="row" >
-                                        <mat-radio-group formControlName="footer_settings">
-                                        <div class="col-md-12">
-                                            <mat-checkbox> Footer Party Signature</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <mat-checkbox> Footer Checked By</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <mat-checkbox> Footer Prepared By</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <mat-checkbox> Footer Authorized By</mat-checkbox>
-                                        </div>
-                                    </mat-radio-group>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+              <div class="col-md-3">
+                <mat-checkbox
+                  [disabled]="viewMode || codeEnable"
+                  formControlName="show_only_logo"
+                  (change)="checkvalue($event)"
+                >
+                  Show Only Logo</mat-checkbox
+                >
+                <div class="boxed-label">
+                  <h6>Logo Position</h6>
                 </div>
+                <!-- <div class="your-box-container mb-2">
+                                      <div class="row">
+                                          <mat-radio-group formControlName="logo_position">
+                                          <div class="col-md-12">
+                                              <mat-checkbox value="Left"> Left</mat-checkbox>
+                                          </div>
+                                          <div class="col-md-12">
+                                              <mat-checkbox value="Right"> Right</mat-checkbox>
+                                          </div>
+                                          <div class="col-md-12">
+                                              <mat-checkbox value="Center"> Center</mat-checkbox>
+                                          </div>
+                                          </mat-radio-group>
+                                      </div>
+                                  </div> -->
+                <div class="your-box-container mb-2">
+                  <div class="row">
+                    <mat-radio-group
+                      formControlName="logo_position"
+                      [disabled]="viewMode || codeEnable"
+                    >
+                      <div class="col-md-12">
+                        <mat-radio-button value="0">Left</mat-radio-button>
+                      </div>
+                      <div class="col-md-12">
+                        <mat-radio-button value="1">Right</mat-radio-button>
+                      </div>
+                      <div class="col-md-12">
+                        <mat-radio-button value="2">Center</mat-radio-button>
+                      </div>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-9">
+                <mat-checkbox
+                  formControlName="show_as_header"
+                  [disabled]="viewMode || codeEnable"
+                  (change)="checkHeader($event)"
+                >
+                  Show As Header</mat-checkbox
+                >
+                <div class="boxed-label">
+                  <h6>Header</h6>
+                </div>
+                <div class="your-box-container mb-2">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="d-flex justify-content-between">
+                        <mat-checkbox
+                          [disabled]="viewMode || codeEnable"
+                          formControlName="header_english"
+                        >
+                          English</mat-checkbox
+                        >
+                        <div class="upload-btn-wrapper">
+                          <button
+                            class="btn btnnew"
+                            id="ID032"
+                            style="width: 125px"
+                            [disabled]="viewMode"
+                          >
+                            Upload Image
+                          </button>
+                          <input
+                            type="file"
+                            name="uploadproduct"
+                            accept=".png, .jpg, .jpeg"
+                            #fileInput
+                            class="uploadproduct"
+                            [disabled]="viewMode"
+                            (change)="onFileChanged($event)"
+                            formControlName="english_header_images"
+                          />
+                        </div>
+                      </div>
+                      <!-- <mat-form-field style="width: 100%" appearance="outline">
+                          <textarea
+                            matInput
+                            id="inputAddress"
+                            formControlName="english_header_images"
+                            rows="4"
+                          ></textarea>
+                        </mat-form-field> -->
+
+                      <div class="image_box">
+                        <div class="img_box">
+                          <img
+                            *ngIf="image"
+                            src="{{ image }}"
+                            style="width: 100%; height: 250px"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="d-flex justify-content-between">
+                        <mat-checkbox
+                          [disabled]="viewMode || codeEnable"
+                          formControlName="header_arabic"
+                        >
+                          English & Arabic</mat-checkbox
+                        >
+                        <div class="upload-btn-wrapper">
+                          <button
+                            class="btn btnnew"
+                            id="ID032"
+                            style="width: 125px"
+                            [disabled]="viewMode"
+                          >
+                            Upload Image
+                          </button>
+                          <input
+                            type="file"
+                            name="uploadproduct"
+                            accept=".png, .jpg, .jpeg"
+                            #fileInput
+                            class="uploadproduct"
+                            [disabled]="viewMode"
+                            (change)="onFileChangedArabicandEnglish($event)"
+                            formControlName="other_header_images"
+                          />
+                        </div>
+                      </div>
+
+                      <!-- <mat-form-field style="width: 100%" appearance="outline">
+                          <textarea
+                            matInput
+                            id="inputAddress"
+                            formControlName="english_header_images"
+                            rows="4"
+                          ></textarea>
+                        </mat-form-field> -->
+
+                      <div class="image_box">
+                        <div class="img_box">
+                          <img
+                            *ngIf="image1"
+                            src="{{ image1 }}"
+                            style="width: 100%; height: 250px"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-9">
+                <mat-checkbox
+                  [disabled]="viewMode || codeEnable"
+                  formControlName="show_combined_header"
+                  (change)="checkHeaderA4($event)"
+                >
+                  Show Combined Header(A4)</mat-checkbox
+                >
+                <div class="boxed-label">
+                  <h6>Header</h6>
+                </div>
+                <div class="your-box-container mb-2">
+                  <div class="row">
+                    <div class="col-md-12 mb-3">
+                      <div class="d-flex justify-content-end">
+                        <div class="upload-btn-wrapper">
+                          <button
+                            class="btn btnnew"
+                            id="ID032"
+                            style="width: 125px"
+                            [disabled]="viewMode"
+                          >
+                            Upload Image
+                          </button>
+                          <input
+                            type="file"
+                            name="uploadproduct"
+                            accept=".png, .jpg, .jpeg"
+                            #fileInput
+                            class="uploadproduct"
+                            [disabled]="viewMode"
+                            (change)="onFileChangedA4($event)"
+                            formControlName="combined_header_images"
+                          />
+                        </div>
+                      </div>
+                      <!-- <mat-form-field style="width: 100%" appearance="outline">
+                              <textarea
+                                matInput
+                                id="inputAddress"
+                                formControlName="english_header_images"
+                                rows="4"
+                              ></textarea>
+                            </mat-form-field> -->
+
+                      <div class="image_box">
+                        <div class="img_box">
+                          <img
+                            *ngIf="image2"
+                            src="{{ image2 }}"
+                            style="width: 100%; height: 250px"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <mat-checkbox
+                        [disabled]="viewMode || codeEnable"
+                        formControlName="show_combined_headerA5"
+                        (change)="checkHeaderA5($event)"
+                      >
+                        Show Combined Header(A5)</mat-checkbox
+                      >
+                      <div class="upload-btn-wrapper">
+                        <button
+                          class="btn btnnew"
+                          id="ID032"
+                          style="width: 125px"
+                          [disabled]="viewMode"
+                        >
+                          Upload Image
+                        </button>
+                        <input
+                          type="file"
+                          name="uploadproduct"
+                          accept=".png, .jpg, .jpeg"
+                          #fileInput
+                          class="uploadproduct"
+                          [disabled]="viewMode"
+                          (change)="onFileChangedA5($event)"
+                          formControlName="combined_header_a5images"
+                        />
+                      </div>
+                    </div>
+                    <!-- <mat-form-field style="width: 100%" appearance="outline">
+                          <textarea
+                            matInput
+                            id="inputAddress"
+                            formControlName="english_header_images"
+                            rows="4"
+                          ></textarea>
+                        </mat-form-field> -->
+
+                    <div class="image_box">
+                      <div class="img_box">
+                        <img
+                          *ngIf="image3"
+                          src="{{ image3 }}"
+                          style="width: 75%; height: 250px"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="boxed-label mt-3">
+                  <h6>Footer Setting</h6>
+                </div>
+                <div class="your-box-container mb-2">
+                  <div class="row">
+                    <mat-radio-group formControlName="footer_settings">
+                      <div class="col-md-12">
+                        <mat-checkbox [disabled]="viewMode || codeEnable">
+                          Footer Party Signature</mat-checkbox
+                        >
+                      </div>
+                      <div class="col-md-12">
+                        <mat-checkbox [disabled]="viewMode || codeEnable">
+                          Footer Checked By</mat-checkbox
+                        >
+                      </div>
+                      <div class="col-md-12">
+                        <mat-checkbox [disabled]="viewMode || codeEnable">
+                          Footer Prepared By</mat-checkbox
+                        >
+                      </div>
+                      <div class="col-md-12">
+                        <mat-checkbox [disabled]="viewMode || codeEnable">
+                          Footer Authorized By</mat-checkbox
+                        >
+                      </div>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
             </div>
-        </form>
-    </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
