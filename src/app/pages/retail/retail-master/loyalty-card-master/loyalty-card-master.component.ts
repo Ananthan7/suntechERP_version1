@@ -56,6 +56,8 @@ export class LoyaltyCardMasterComponent implements OnInit {
     this.unq_id = this.content?.CODE;
     console.log(this.unq_id);
     this.flag = this.content?.FLAG;
+    console.log(this.flag);
+    
     if(this.flag == undefined){
       this.renderer.selectRootElement('#code').focus();
       this.togetlastpointsto();
@@ -64,7 +66,7 @@ export class LoyaltyCardMasterComponent implements OnInit {
       this.disable_code = true;
       this.codeedit = true;
       this.editMode = true;
-    } else if (this.flag == 'VIEW') {
+    } else if (this.flag == 'VIEW' || this.flag == "DELETE") {
       this.viewMode = true;
       this.codeedit = true;
     }

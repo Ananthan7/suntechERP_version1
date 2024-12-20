@@ -12,9 +12,13 @@
     (cancelClick)="close()"
     (saveClick)="formSubmit()"
   ></modal-header> -->
-  <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="DeleteController()"
-  [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
-  [isViewMore]="!viewMode"></modal-header>
+  <modal-header
+    *ngIf="!this.viewMode"
+    (cancelClick)="close()"
+    (saveClick)="formSubmit()"
+    (deleteClick)="DeleteController()"
+    [isViewDelete]="false"
+  ></modal-header>
   <!-- content section -->
   <div class="p-4">
     <form [formGroup]="salespersontargetform">
@@ -68,7 +72,6 @@
                       UpperCaseDirective
                       autocomplete="off"
                       [readonly]="viewOnly"
-
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
@@ -79,7 +82,6 @@
                           false
                         )
                       "
-
                     />
                     <master-search
                       *ngIf="this.flag != 'VIEW' && code_occurs"

@@ -48,7 +48,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
 
 
   loyaltysettingform: FormGroup = this.formBuilder.group({
-    code: ['', [Validators.required]],
+    code: ['',[Validators.required]],
     codedesc: [''],
     division: [''],
     divisions: [''],
@@ -58,7 +58,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     group2search: [''],
     group3: [''],
     group3search: [''],
-    standardamt1: ['', [Validators.required]],
+    standardamt1: ['',[Validators.required]],
     standardamt2: [''],
     standardamt3: [''],
     standardamt4: [''],
@@ -108,7 +108,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     SEARCH_FIELD: "",
     SEARCH_VALUE: "",
     LOAD_ONCLICK: true,
-    FRONTENDFILTER: true
+    FRONTENDFILTER:true
   }
 
   group2data: MasterSearchModel = {
@@ -121,7 +121,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     SEARCH_FIELD: "",
     SEARCH_VALUE: "",
     LOAD_ONCLICK: true,
-    FRONTENDFILTER: true
+    FRONTENDFILTER:true
   }
 
   group3data: MasterSearchModel = {
@@ -134,7 +134,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     SEARCH_FIELD: "",
     SEARCH_VALUE: "",
     LOAD_ONCLICK: true,
-    FRONTENDFILTER: true
+    FRONTENDFILTER:true
   }
 
 
@@ -221,7 +221,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     );
     console.log(this.division_values)
     this.getdropdownvalues();
-    if (this.flag == undefined) {
+    if(this.flag == undefined){
       this.renderer.selectRootElement('#code')?.focus();
     }
 
@@ -230,13 +230,15 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
       this.detailsapi(this.unq_id);
       this.disable_code = true;
       this.codeedit = true;
-    } else if (this.flag == 'VIEW') {
+    } else if (this.flag == 'VIEW' ) {
       this.dis_group = true;
 
       this.detailsapi(this.unq_id);
 
       this.viewMode = true;
       this.codeedit = true;
+    }else if(this.flag == "DELETE"){
+      this.viewMode = true;
     }
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
@@ -248,7 +250,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
 
 
   ngAfterViewInit() {
-    if (this.content?.FLAG != undefined) {
+    if(this.content?.FLAG != undefined){
       if (this.grid && this.grid.instance) {
         this.grid.instance.columnOption('INVFILT1_VALUES', 'caption', this.content?.FILTER1);
         this.grid.instance.columnOption('INVFILT2_VALUES', 'caption', this.content?.FILTER2);
@@ -256,9 +258,9 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
       } else {
         console.error('Grid instance is not available.');
       }
-    }
+    }    
   }
-
+  
 
 
   getUniqueValues(List: any[], field: string) {
@@ -291,6 +293,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
   ViewController(DATA: any) {
     console.log(this.viewOnly);
     this.loyaltysettingform.controls.code.setValue(this.content?.CODE);
+console.log(this.content);
 
     // this.salespersontargetform.controls.dateto.setValue(this.content?.TO_DATE);
 
@@ -311,9 +314,9 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
       this.commonService.emptyToZero(this.content?.STD_REF_PER), "METAL"));
     this.loyaltysettingform.controls.standardamt1.setValue(this.commonService.decimalQuantityFormat(
       this.commonService.emptyToZero(this.content?.STD_AMT_PERPOINT), "METAL"));
-    this.grid.instance.columnOption('INVFILT1_VALUES', 'caption', this.content?.FILTER1);
-    this.grid.instance.columnOption('INVFILT2_VALUES', 'caption', this.content?.FILTER2);
-    this.grid.instance.columnOption('INVFILT3_VALUES', 'caption', this.content?.FILTER3);
+      this.grid.instance?.columnOption('INVFILT1_VALUES', 'caption', this.content?.FILTER1);
+      this.grid.instance?.columnOption('INVFILT2_VALUES', 'caption', this.content?.FILTER2);
+      this.grid.instance?.columnOption('INVFILT3_VALUES', 'caption', this.content?.FILTER3);
 
   }
 
@@ -387,6 +390,8 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
 
   DeleteController(DATA?: any) {
     this.ViewController(DATA);
+    console.log("IN");
+    
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -478,22 +483,22 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
       return control.hasError("required") && control.touched;
     });
 
-    if (!requiredFieldsInvalid) {
+    if(!requiredFieldsInvalid){
 
       let len = this.maindetails.length;
-      if (len <= 0) {
+      if(len<=0){
         this.commonService.toastErrorByMsgId('MSG1453');
         Swal.fire({
           title: 'Error',
           text: 'No Detail Found!!',
-        }); return;
+        });return;
       }
 
       let datas = this.maindetails;
       let allgroup_1 = '';
       let allgroup_2 = '';
       let allgroup_3 = '';
-
+  
       if (Array.isArray(datas)) {
         datas.forEach((e: any) => {
           allgroup_1 += e.INVFILT1_VALUES + ',';
@@ -504,7 +509,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
       allgroup_1 = allgroup_1.slice(0, -1);
       allgroup_2 = allgroup_2.slice(0, -1);
       allgroup_3 = allgroup_3.slice(0, -1);
-
+  
       const postData = {
         "MID": 0,
         "CODE": this.loyaltysettingform.controls.code.value,
@@ -529,9 +534,9 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
         "STD_REF_PER": this.loyaltysettingform.controls.subreference.value,
         "Detail": this.maindetails
       }
-
+  
       // console.log(postData); return;
-
+  
       if (this.flag === "EDIT") {
         let API = `LoyaltySettingMaster/UpdateLoyaltySettingMaster/${this.unq_id}`;
         let sub: Subscription = this.apiService
@@ -545,7 +550,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
                 confirmButtonColor: "#336699",
                 confirmButtonText: "Ok",
               });
-
+  
               this.close("reloadMainGrid");
             } else {
               Swal.fire({
@@ -570,7 +575,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
                 confirmButtonColor: "#336699",
                 confirmButtonText: "Ok",
               });
-
+  
               this.close("reloadMainGrid");
             } else {
               Swal.fire({
@@ -585,7 +590,7 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
       }
     }
 
-
+  
   }
 
 
@@ -643,11 +648,11 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     this.loyaltysettingform.controls['group1'].disable();
     this.loyaltysettingform.controls['group2'].disable();
     this.loyaltysettingform.controls['group3'].disable();
-
+   
     if (this.grid) {
-      this.grid.instance.columnOption('INVFILT1_VALUES', 'caption', group_1);
-      this.grid.instance.columnOption('INVFILT2_VALUES', 'caption', group_2);
-      this.grid.instance.columnOption('INVFILT3_VALUES', 'caption', group_3);
+        this.grid.instance.columnOption('INVFILT1_VALUES', 'caption', group_1);
+        this.grid.instance.columnOption('INVFILT2_VALUES', 'caption', group_2);
+        this.grid.instance.columnOption('INVFILT3_VALUES', 'caption', group_3);
 
     } else {
       console.log("grid not found");
@@ -722,152 +727,152 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
     if (!CodeControl.value || CodeControl.value.trim() === "") {
       this.commonService.toastErrorByMsgId('MSG1124');
       this.renderer.selectRootElement('#code')?.focus();
-    } else {
+    }else{
       this.code_occurs = true;
     }
   }
 
-  SPvalidateLookupFieldModified(
-    event: any,
-    LOOKUPDATA: MasterSearchModel,
-    FORMNAMES: string[],
-    isCurrencyField: boolean,
-    lookupFields?: string[],
-    FROMCODE?: boolean,
-    dont_check?: boolean
-  ) {
-    const searchValue = event.target.value?.trim();
-
-    if (!searchValue || this.flag == "VIEW") return;
-
-    LOOKUPDATA.SEARCH_VALUE = searchValue;
-
-    const param = {
-      PAGENO: LOOKUPDATA.PAGENO,
-      RECORDS: LOOKUPDATA.RECORDS,
-      LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
-      searchField: LOOKUPDATA.SEARCH_FIELD,
-      searchValue: LOOKUPDATA.SEARCH_VALUE,
-    };
-
-    this.commonService.showSnackBarMsg("MSG81447");
-
-    const sub: Subscription = this.apiService
-      .postDynamicAPI("MasterLookUp", param)
-      .subscribe({
-        next: (result: any) => {
-          this.commonService.closeSnackBarMsg();
-          const data = result.dynamicData?.[0];
-
-          console.log("API Response Data:", data);
-
-          if (data?.length) {
-            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
-
-              let searchResult = this.commonService.searchAllItemsInArray(
-                data,
-                LOOKUPDATA.SEARCH_VALUE
-              );
-
-              console.log("Filtered Search Result:", searchResult);
-
-              if (FROMCODE === true) {
-                searchResult = [
-                  ...searchResult.filter(
-                    (item: any) =>
-                      item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
-                  ),
-                  ...searchResult.filter(
-                    (item: any) =>
-                      item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
-                  ),
-                ];
-              } else if (FROMCODE === false) {
-                searchResult = [
-                  ...searchResult.filter(
-                    (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
-                  ),
-                  ...searchResult.filter(
-                    (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
-                  ),
-                ];
+    SPvalidateLookupFieldModified(
+      event: any,
+      LOOKUPDATA: MasterSearchModel,
+      FORMNAMES: string[],
+      isCurrencyField: boolean,
+      lookupFields?: string[],
+      FROMCODE?: boolean,
+      dont_check?: boolean
+    ) {
+      const searchValue = event.target.value?.trim();
+  
+      if (!searchValue || this.flag == "VIEW") return;
+  
+      LOOKUPDATA.SEARCH_VALUE = searchValue;
+  
+      const param = {
+        PAGENO: LOOKUPDATA.PAGENO,
+        RECORDS: LOOKUPDATA.RECORDS,
+        LOOKUPID: LOOKUPDATA.LOOKUPID,
+        WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+        searchField: LOOKUPDATA.SEARCH_FIELD,
+        searchValue: LOOKUPDATA.SEARCH_VALUE,
+      };
+  
+      this.commonService.showSnackBarMsg("MSG81447");
+  
+      const sub: Subscription = this.apiService
+        .postDynamicAPI("MasterLookUp", param)
+        .subscribe({
+          next: (result: any) => {
+            this.commonService.closeSnackBarMsg();
+            const data = result.dynamicData?.[0];
+  
+            console.log("API Response Data:", data);
+  
+            if (data?.length) {
+              if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+  
+                let searchResult = this.commonService.searchAllItemsInArray(
+                  data,
+                  LOOKUPDATA.SEARCH_VALUE
+                );
+  
+                console.log("Filtered Search Result:", searchResult);
+  
+                if (FROMCODE === true) {
+                  searchResult = [
+                    ...searchResult.filter(
+                      (item: any) =>
+                        item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
+                    ),
+                    ...searchResult.filter(
+                      (item: any) =>
+                        item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
+                    ),
+                  ];
+                } else if (FROMCODE === false) {
+                  searchResult = [
+                    ...searchResult.filter(
+                      (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
+                    ),
+                    ...searchResult.filter(
+                      (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
+                    ),
+                  ];
+                }
+  
+                if (searchResult?.length) {
+                  const matchedItem = searchResult[0];
+  
+                  FORMNAMES.forEach((formName, index) => {
+                    const field = lookupFields?.[index];
+                    if (field && field in matchedItem) {
+  
+                      this.loyaltysettingform.controls[formName].setValue(
+                        matchedItem[field]
+                      );
+                    } else {
+                      console.error(
+                        `Property ${field} not found in matched item.`
+                      );
+                      this.commonService.toastErrorByMsgId("No data found");
+                      this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                    }
+                  });
+                } else {
+                  this.commonService.toastErrorByMsgId("No data found");
+                  this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                }
               }
-
-              if (searchResult?.length) {
-                const matchedItem = searchResult[0];
-
-                FORMNAMES.forEach((formName, index) => {
-                  const field = lookupFields?.[index];
-                  if (field && field in matchedItem) {
-
-                    this.loyaltysettingform.controls[formName].setValue(
-                      matchedItem[field]
-                    );
-                  } else {
-                    console.error(
-                      `Property ${field} not found in matched item.`
-                    );
-                    this.commonService.toastErrorByMsgId("No data found");
-                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
-                  }
-                });
-              } else {
-                this.commonService.toastErrorByMsgId("No data found");
-                this.clearLookupData(LOOKUPDATA, FORMNAMES);
-              }
+            } else {
+              this.commonService.toastErrorByMsgId("No data found");
+              this.clearLookupData(LOOKUPDATA, FORMNAMES);
             }
-          } else {
-            this.commonService.toastErrorByMsgId("No data found");
+          },
+          error: () => {
+            this.commonService.toastErrorByMsgId("MSG2272");
             this.clearLookupData(LOOKUPDATA, FORMNAMES);
-          }
-        },
-        error: () => {
-          this.commonService.toastErrorByMsgId("MSG2272");
-          this.clearLookupData(LOOKUPDATA, FORMNAMES);
-        },
-      });
-
-    this.subscriptions.push(sub);
-  }
-
-  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
-    LOOKUPDATA.SEARCH_VALUE = "";
-    FORMNAMES.forEach((formName) => {
-      this.loyaltysettingform.controls[formName].setValue("");
-    });
-  }
-
-  lookupSelect(e: any, controller?: any, modelfield?: any) {
-    console.log(e);
-    if (Array.isArray(controller) && Array.isArray(modelfield)) {
-      // Handle multiple controllers and fields
-      if (controller.length === modelfield.length) {
-        controller.forEach((ctrl, index) => {
-          const field = modelfield[index];
-          const value = e[field];
-          if (value !== undefined) {
-            this.loyaltysettingform.controls[ctrl].setValue(value);
-          } else {
-            console.warn(`Model field '${field}' not found in event object.`);
-          }
+          },
         });
-      } else {
-        console.warn(
-          "Controller and modelfield arrays must be of equal length."
-        );
-      }
-    } else if (controller && modelfield) {
-      // Handle single controller and field
-      const value = e[modelfield];
-      if (value !== undefined) {
-        this.loyaltysettingform.controls[controller].setValue(value);
-      } else {
-        console.warn(`Model field '${modelfield}' not found in event object.`);
-      }
-    } else {
-      console.warn("Controller or modelfield is missing.");
+  
+      this.subscriptions.push(sub);
     }
-  }
+  
+    clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+      LOOKUPDATA.SEARCH_VALUE = "";
+      FORMNAMES.forEach((formName) => {
+        this.loyaltysettingform.controls[formName].setValue("");
+      });
+    }
+  
+    lookupSelect(e: any, controller?: any, modelfield?: any) {
+      console.log(e);
+      if (Array.isArray(controller) && Array.isArray(modelfield)) {
+        // Handle multiple controllers and fields
+        if (controller.length === modelfield.length) {
+          controller.forEach((ctrl, index) => {
+            const field = modelfield[index];
+            const value = e[field];
+            if (value !== undefined) {
+              this.loyaltysettingform.controls[ctrl].setValue(value);
+            } else {
+              console.warn(`Model field '${field}' not found in event object.`);
+            }
+          });
+        } else {
+          console.warn(
+            "Controller and modelfield arrays must be of equal length."
+          );
+        }
+      } else if (controller && modelfield) {
+        // Handle single controller and field
+        const value = e[modelfield];
+        if (value !== undefined) {
+          this.loyaltysettingform.controls[controller].setValue(value);
+        } else {
+          console.warn(`Model field '${modelfield}' not found in event object.`);
+        }
+      } else {
+        console.warn("Controller or modelfield is missing.");
+      }
+    }
 
 }

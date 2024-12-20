@@ -82,15 +82,15 @@ export class KycMasterComponent implements OnInit {
     if (this.flag == 'EDIT') {
       this.disable_code = true;
     }
-    if (this.flag == 'VIEW') {
+    if (this.flag == 'VIEW' || this.flag ==  "DELETE") {
       this.viewOnly = true;
       this.viewMode = true;
     }
-    if (this.flag == undefined) {
+    if(this.flag == undefined){
       this.kycform.controls.transactionlimit.setValue(".000");
-
+      
     }
-
+   
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       console.log(this.kyc_id);
@@ -137,8 +137,8 @@ export class KycMasterComponent implements OnInit {
         console.log(this.dyndatas);
         // this.maindetails.push(...this.dyndatas?.Details)
         this.maindetails = [...this.maindetails, ...this.dyndatas?.Details];
-        result.response.Details.forEach((e: any) => {
-          this.doc_codes.push(e.KYC_DOCTYPE);
+        result.response.Details.forEach((e:any) => {
+          this.doc_codes.push(e.KYC_DOCTYPE);      
         });
       }, (err: any) => {
 
@@ -191,7 +191,7 @@ export class KycMasterComponent implements OnInit {
       confirmButtonText: "Yes, delete!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const API = `KYCMaster/DeleteKYCMaster/${this.kyc_id}`;
+        const API = `KYCMaster/DeleteKYCMaster/${this.content?.KYC_CODE}`;
         const Sub: Subscription = this.apiService
           .deleteDynamicAPI(API)
           .subscribe({
@@ -272,16 +272,16 @@ export class KycMasterComponent implements OnInit {
       return control.hasError("required") && control.touched;
     });
 
-    if (!requiredFieldsInvalid) {
+    if(!requiredFieldsInvalid){
       const postData = {
         "MID": 0,
         "KYC_CODE": this.kycform.controls.kyccode.value,
         "KYC_DESC": this.kycform.controls.kyccodedesc.value,
-        "KYC_TRANSLIMIT": Number(this.kycform.controls.transactionlimit.value),
+        "KYC_TRANSLIMIT":Number(this.kycform.controls.transactionlimit.value),
         "Details": this.maindetails
       }
       console.log(postData);
-
+  
       if (this.flag === "EDIT") {
         let API = `KYCMaster/UpdateKYCMaster/${this.kyc_id}`;
         let sub: Subscription = this.apiService
@@ -295,7 +295,7 @@ export class KycMasterComponent implements OnInit {
                 confirmButtonColor: "#336699",
                 confirmButtonText: "Ok",
               });
-
+  
               this.close("reloadMainGrid");
             } else {
               Swal.fire({
@@ -320,7 +320,7 @@ export class KycMasterComponent implements OnInit {
                 confirmButtonColor: "#336699",
                 confirmButtonText: "Ok",
               });
-
+  
               this.close("reloadMainGrid");
             } else {
               Swal.fire({

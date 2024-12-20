@@ -1,150 +1,212 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal"> WholeSale Salesman Target
-    </h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">WholeSale Salesman Target</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
-        <i class="feather icon-x close-icon"></i>
+      <i class="feather icon-x close-icon"></i>
     </button>
-</div>
-<!-- modal header component -->
-<modal-header 
- *ngIf="!this.viewMode"
-(cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="DeleteController()"
-[isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-></modal-header>
-<!-- content section -->
-
-<div class="container-fluid pt-3">
+  </div>
+  <!-- modal header component -->
+  <modal-header
+    *ngIf="!this.viewMode"
+    (cancelClick)="close()"
+    (saveClick)="formSubmit()"
+    (deleteClick)="DeleteController()"
+    [isViewDelete]="false"
+    
+  ></modal-header>
+  <!-- content section -->
+  
+  <div class="container-fluid pt-3">
     <form [formGroup]="wholesalesmanform" class="p-1">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">SalesMan  <span class="text-danger"> *</span></label>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="salesman"  id="salesman" #salesman  [readonly]="viewMode"
-                            (focusout)="
-                            SPvalidateLookupFieldModified(
-                              $event,
-                              salesmanCodeData,
-                              ['salesman'],
-                              false,
-                              ['SALESPERSON_CODE'],
-                              false
-                            )
-                          "  (blur)="check_value()"
-
-                          />
-                            <master-search *ngIf="this.content?.FLAG != 'VIEW' " [MasterSearchData]="salesmanCodeData" class="masterSearch"
-                                (newRowClick)="selectedsalesman($event)"></master-search>
-                        </mat-form-field>
-                    </div>
-
-                </div>
-
-                <div class="row align-items-center my-2">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Fin. Year <span class="text-danger"> *</span></label>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="fin_year"    [readonly]="viewMode"
-                            (focusout)="
-                            SPvalidateLookupFieldModified(
-                              $event,
-                              finyearcodedata,
-                              ['fin_year','datefrom','dateto'],
-                              false,
-                              ['FYEARCODE','STARTYEAR','ENDYEAR'],
-                              false
-                            )
-                          " 
-                            />
-                            <master-search  *ngIf="this.content?.FLAG != 'VIEW' "  [MasterSearchData]="finyearcodedata" class="masterSearch"
-                                (newRowClick)="selectedfinyear($event)"></master-search>
-                        </mat-form-field>
-                    </div>
-
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Date From</label>
-                    <div class="col-md-2">
-                        <div class="datepick">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input matInput DateValidation [matDatepicker]="datefrom" formControlName="datefrom"
-                                    placeholder="DD/MM/YYYY"  [readonly]="viewMode" [disabled]="viewMode"/>
-                                <mat-datepicker-toggle matSuffix [for]="datefrom" *ngIf="!viewMode"></mat-datepicker-toggle>
-                                <mat-datepicker #datefrom></mat-datepicker>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="row align-items-center">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Code <span class="text-danger"> *</span></label>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="code"  (focusin)="setcodevalues()"  [readonly]="viewMode" [disabled]="disable_code" maxlength="15" />
-                        </mat-form-field>
-                    </div>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Date To</label>
-                    <div class="col-md-2">
-                        <div class="datepick">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input matInput [matDatepicker]="dateto" formControlName="dateto" 
-                                       placeholder="DD/MM/YYYY" [readonly]="viewMode" [disabled]="viewMode" />
-                                <mat-datepicker-toggle matSuffix [for]="dateto" *ngIf="!viewMode"></mat-datepicker-toggle>
-                                <mat-datepicker #dateto></mat-datepicker>
-                              </mat-form-field>
-                              
-                        </div>
-                    </div>
-                </div>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row align-items-center">
+            <label for="inputPassword" class="col-sm-2 col-form-label"
+              >SalesMan <span class="text-danger"> *</span></label
+            >
+            <div class="col-md-2">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  id="inputPassword"
+                  matInput
+                  formControlName="salesman"
+                  id="salesman"
+                  #salesman
+                  [readonly]="viewMode"
+                  (focusout)="
+                    SPvalidateLookupFieldModified(
+                      $event,
+                      salesmanCodeData,
+                      ['salesman'],
+                      false,
+                      ['SALESPERSON_CODE'],
+                      false
+                    )
+                  "
+                  (blur)="check_value()"
+                />
+                <master-search
+                  *ngIf="this.content?.FLAG != 'VIEW'"
+                  [MasterSearchData]="salesmanCodeData"
+                  class="masterSearch"
+                  (newRowClick)="selectedsalesman($event)"
+                ></master-search>
+              </mat-form-field>
             </div>
-
-            <div class="row mt-2">
-                <div class="col-md-3">
-                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
-                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
-                        (deleteClick)="deleteTableData()">
-                    </menu-buttons>
-                </div>
+          </div>
+  
+          <div class="row align-items-center my-2">
+            <label for="inputPassword" class="col-sm-2 col-form-label"
+              >Fin. Year <span class="text-danger"> *</span></label
+            >
+            <div class="col-md-2">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  id="inputPassword"
+                  matInput
+                  formControlName="fin_year"
+                  [readonly]="viewMode"
+                  (focusout)="
+                    SPvalidateLookupFieldModified(
+                      $event,
+                      finyearcodedata,
+                      ['fin_year', 'datefrom', 'dateto'],
+                      false,
+                      ['FYEARCODE', 'STARTYEAR', 'ENDYEAR'],
+                      false
+                    )
+                  "
+                />
+                <master-search
+                  *ngIf="this.content?.FLAG != 'VIEW'"
+                  [MasterSearchData]="finyearcodedata"
+                  class="masterSearch"
+                  (newRowClick)="selectedfinyear($event)"
+                ></master-search>
+              </mat-form-field>
             </div>
-
-            <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true" [showColumnLines]="true"
-                [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SLNO"
-                (onEditingStart)="addTableData($event)"
-                >
-
-                <dxo-editing
-                      [allowUpdating]="true"
-                      [allowDeleting]="!viewOnly"
-                    >
-                      <dxo-texts
-                        alignment="right"
-                        [editRow]="viewOnly ? 'View' : 'Edit'"
-                        deleteRow="Remove"
-                      >
-                      </dxo-texts>
-                    </dxo-editing>
-                    <dxo-selection mode="single"></dxo-selection>
-
-
-                <dxi-column dataField="SLNO" caption="S.NO"> </dxi-column>
-                <dxi-column dataField="TARGET_CODE" caption="Detail Target Code" >
-                </dxi-column>
-                <dxi-column dataField="TARGET_DESC" caption="Description">
-                </dxi-column>
-                <dxi-column dataField="DIA_OR_MTL" caption="Dia/Metal">
-                </dxi-column>
-                <dxi-column dataField="TARGET_ON" caption="Target On" width="auto" >
-                </dxi-column>
-                <dxi-column dataField="TARGET" caption="Target">
-                </dxi-column>
-                <dxi-column dataField="CUSTOMER" caption="CUSTOMER">
-                </dxi-column>
-                <dxi-column dataField="DIVISIONS" caption="Division">
-                </dxi-column>
-                
-
-            </dx-data-grid>
+  
+            <label for="inputPassword" class="col-sm-2 col-form-label"
+              >Date From</label
+            >
+            <div class="col-md-2">
+              <div class="datepick">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    matInput
+                    DateValidation
+                    [matDatepicker]="datefrom"
+                    formControlName="datefrom"
+                    placeholder="DD/MM/YYYY"
+                    [readonly]="viewMode"
+                    [disabled]="viewMode"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="datefrom"
+                    *ngIf="!viewMode"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #datefrom></mat-datepicker>
+                </mat-form-field>
+                          
+              </div>
+            </div>
+          </div>
+  
+          <div class="row align-items-center">
+            <label for="inputPassword" class="col-sm-2 col-form-label"
+              >Code <span class="text-danger"> *</span></label
+            >
+            <div class="col-md-2">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  id="inputPassword"
+                  matInput
+                  formControlName="code"
+                  (focusin)="setcodevalues()"
+                  [readonly]="viewMode"
+                  [disabled]="disable_code"
+                  maxlength="15"
+                />
+              </mat-form-field>
+            </div>
+            <label for="inputPassword" class="col-sm-2 col-form-label"
+              >Date To</label
+            >
+            <div class="col-md-2">
+              <div class="datepick">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    matInput
+                    [matDatepicker]="dateto"
+                    formControlName="dateto"
+                    placeholder="DD/MM/YYYY"
+                    [readonly]="viewMode"
+                    [disabled]="viewMode"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="dateto"
+                    *ngIf="!viewMode"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #dateto></mat-datepicker>
+                </mat-form-field>
+  
+                          
+              </div>
+            </div>
+          </div>
         </div>
-       
+  
+        <div class="row mt-2">
+          <div class="col-md-3">
+            <menu-buttons
+              [viewAddBtn]="true"
+              [viewDeleteBtn]="true"
+              [viewImportBtn]="false"
+              [viewAddBtn]="!viewMode"
+              [viewDeleteBtn]="!viewMode"
+              (addClick)="addTableData()"
+              (deleteClick)="deleteTableData()"
+            >
+            </menu-buttons>
+          </div>
+        </div>
+  
+        <dx-data-grid
+          id="gridContainer"
+          [dataSource]="maindetails"
+          [showBorders]="true"
+          [showColumnLines]="true"
+          [showRowLines]="true"
+          [allowColumnResizing]="true"
+          keyExpr="SLNO"
+          (onEditingStart)="addTableData($event)"
+        >
+          <dxo-editing [allowUpdating]="true" [allowDeleting]="!viewOnly">
+            <dxo-texts
+              alignment="right"
+              [editRow]="viewOnly ? 'View' : 'Edit'"
+              deleteRow="Remove"
+            >
+            </dxo-texts>
+          </dxo-editing>
+          <dxo-selection mode="single"></dxo-selection>
+  
+          <dxi-column dataField="SLNO" caption="S.NO"> </dxi-column>
+          <dxi-column dataField="TARGET_CODE" caption="Detail Target Code">
+          </dxi-column>
+          <dxi-column dataField="TARGET_DESC" caption="Description"> </dxi-column>
+          <dxi-column dataField="DIA_OR_MTL" caption="Dia/Metal"> </dxi-column>
+          <dxi-column dataField="TARGET_ON" caption="Target On" width="auto">
+          </dxi-column>
+          <dxi-column dataField="TARGET" caption="Target"> </dxi-column>
+          <dxi-column dataField="CUSTOMER" caption="CUSTOMER"> </dxi-column>
+          <dxi-column dataField="DIVISIONS" caption="Division"> </dxi-column>
+        </dx-data-grid>
+      </div>
     </form>
-</div>
+  </div>
+  

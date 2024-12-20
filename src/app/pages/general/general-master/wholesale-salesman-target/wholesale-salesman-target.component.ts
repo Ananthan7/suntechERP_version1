@@ -1,35 +1,42 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { WholesaleSalesmanTargetDetailsComponent } from './wholesale-salesman-target-details/wholesale-salesman-target-details.component';
-import { Subscription } from 'rxjs';
-import { SuntechAPIService } from 'src/app/services/suntech-api.service';
-import Swal from 'sweetalert2';
-import { CommonServiceService } from 'src/app/services/common-service.service';
+import { Component, Input, OnInit, Renderer2 } from "@angular/core";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
+import {
+  NgbActiveModal,
+  NgbModal,
+  NgbModalRef,
+} from "@ng-bootstrap/ng-bootstrap";
+import { MasterSearchModel } from "src/app/shared/data/master-find-model";
+import { WholesaleSalesmanTargetDetailsComponent } from "./wholesale-salesman-target-details/wholesale-salesman-target-details.component";
+import { Subscription } from "rxjs";
+import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import Swal from "sweetalert2";
+import { CommonServiceService } from "src/app/services/common-service.service";
 
 @Component({
-  selector: 'app-wholesale-salesman-target',
-  templateUrl: './wholesale-salesman-target.component.html',
-  styleUrls: ['./wholesale-salesman-target.component.scss']
+  selector: "app-wholesale-salesman-target",
+  templateUrl: "./wholesale-salesman-target.component.html",
+  styleUrls: ["./wholesale-salesman-target.component.scss"],
 })
 export class WholesaleSalesmanTargetComponent implements OnInit {
   @Input() content!: any;
-  maindetails :any[] =[];
-  viewMode:boolean = false;
+  maindetails: any[] = [];
+  viewMode: boolean = false;
   modalReference!: NgbModalRef;
-  wst_id:any;
-  flag:any;
-  details:any;
-  viewOnly:boolean = false;
+  wst_id: any;
+  flag: any;
+  details: any;
+  viewOnly: boolean = false;
   private subscriptions: Subscription[] = [];
-  dyndatas:any;
-  username = localStorage.getItem('username');
-  postdata:any;
-  disable_code:boolean = false;
+  dyndatas: any;
+  username = localStorage.getItem("username");
+  postdata: any;
+  disable_code: boolean = false;
   editMode: boolean = false;
-
-
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -38,75 +45,71 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
     private apiService: SuntechAPIService,
     private commonService: CommonServiceService,
     private renderer: Renderer2
-
-
-
-  ) { }
+  ) {}
 
   wholesalesmanform: FormGroup = this.formBuilder.group({
-    salesman: ["",[Validators.required]],
-    fin_year: ["",[Validators.required]],
+    salesman: ["", [Validators.required]],
+    fin_year: ["", [Validators.required]],
     datefrom: [""],
-    code: ["",[Validators.required]],
+    code: ["", [Validators.required]],
     dateto: [""],
-   
   });
 
   enteredCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 73,
-    SEARCH_FIELD: 'UsersName',
-    SEARCH_HEADING: 'Username',
-    SEARCH_VALUE: '',
+    SEARCH_FIELD: "UsersName",
+    SEARCH_HEADING: "Username",
+    SEARCH_VALUE: "",
     WHERECONDITION: "UsersName<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
+  };
 
   finyearcodedata: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 103,
-    SEARCH_FIELD: '',
-    SEARCH_HEADING: 'FIN YEAR',
-    SEARCH_VALUE: '',
-    WHERECONDITION:"",
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "FIN YEAR",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
-    VIEW_TABLE:true,
+    VIEW_TABLE: true,
     LOAD_ONCLICK: true,
-    FRONTENDFILTER:true
-}
+    FRONTENDFILTER: true,
+  };
 
-setcodevalues(){
-  console.log(this.viewMode);
-  console.log(this.disable_code);
-  
-  if(this.viewMode || this.disable_code){
-    return;
-  }
-  let salesmancode = this.wholesalesmanform.controls.salesman.value;
-  let finyearcode = this.wholesalesmanform.controls.fin_year.value;
-  if(salesmancode != "" && finyearcode != ""){
-    let data_code = salesmancode + '-' + finyearcode;
-    this.wholesalesmanform.controls.code.setValue(data_code);
-  }
-}
+  setcodevalues() {
+    console.log(this.viewMode);
+    console.log(this.disable_code);
 
- selectedfinyear(e:any){
-  console.log(e);
-  this.wholesalesmanform.controls.fin_year.setValue(e.FYEARCODE);
-  this.wholesalesmanform.controls.datefrom.setValue(e.STARTYEAR);
-  this.wholesalesmanform.controls.dateto.setValue(e.ENDYEAR);
- }
-
- check_value(){
-  let sales =  this.wholesalesmanform.controls.salesman.value;
-  if(sales == "" || sales.trim() == ""){
-    this.commonService.toastErrorByMsgId('MSG3652')
-    this.renderer.selectRootElement('#salesman')?.focus();
+    if (this.viewMode || this.disable_code) {
+      return;
+    }
+    let salesmancode = this.wholesalesmanform.controls.salesman.value;
+    let finyearcode = this.wholesalesmanform.controls.fin_year.value;
+    if (salesmancode != "" && finyearcode != "") {
+      let data_code = salesmancode + "-" + finyearcode;
+      this.wholesalesmanform.controls.code.setValue(data_code);
+    }
   }
- }
+
+  selectedfinyear(e: any) {
+    console.log(e);
+    this.wholesalesmanform.controls.fin_year.setValue(e.FYEARCODE);
+    this.wholesalesmanform.controls.datefrom.setValue(e.STARTYEAR);
+    this.wholesalesmanform.controls.dateto.setValue(e.ENDYEAR);
+  }
+
+  check_value() {
+    let sales = this.wholesalesmanform.controls.salesman.value;
+    if (sales == "" || sales.trim() == "") {
+      this.commonService.toastErrorByMsgId("MSG3652");
+      this.renderer.selectRootElement("#salesman")?.focus();
+    }
+  }
 
   enteredCodeSelected(e: any) {
     console.log(e);
@@ -119,85 +122,89 @@ setcodevalues(){
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 1,
-    SEARCH_FIELD: 'SALESPERSON_CODE',
-    SEARCH_HEADING: 'Salesman type',
-    SEARCH_VALUE: '',
+    SEARCH_FIELD: "SALESPERSON_CODE",
+    SEARCH_HEADING: "Salesman type",
+    SEARCH_VALUE: "",
     WHERECONDITION: "SALESPERSON_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    FRONTENDFILTER :true,
-    LOAD_ONCLICK :true
-  }
+    FRONTENDFILTER: true,
+    LOAD_ONCLICK: true,
+  };
 
-  selectedsalesman(e:any){
+  selectedsalesman(e: any) {
     console.log(e);
     this.wholesalesmanform.controls.salesman.setValue(e.SALESPERSON_CODE);
   }
 
   ngOnInit(): void {
     console.log(this.content);
-   
+
     this.wst_id = this.content?.TARGET_CODE;
     console.log(this.wst_id);
     this.flag = this.content?.FLAG;
 
-    if(this.flag == undefined){
-      this.renderer.selectRootElement('#salesman')?.focus();
+    if (this.flag == undefined) {
+      this.renderer.selectRootElement("#salesman")?.focus();
       this.getfinyearvalues();
-
     }
 
-    if(this.flag == 'EDIT'){
-
+    if (this.flag == "EDIT") {
       this.disable_code = true;
       this.editMode = false;
+    } else if (this.flag == "DELETE") {
+      this.viewMode = true;
     }
     this.initialController(this.flag, this.content);
-    if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
+    if (this?.flag == "EDIT" || this?.flag == "VIEW") {
       this.detailsapi(this.wst_id);
     }
   }
 
-  getfinyearvalues(){
-
+  getfinyearvalues() {
     let postData = {
       PAGENO: 1,
       RECORDS: 100,
       LOOKUPID: 103,
-      SEARCH_FIELD: '',
-      SEARCH_HEADING: 'FIN YEAR',
-      SEARCH_VALUE: '',
-      WHERECONDITION:"",
+      SEARCH_FIELD: "",
+      SEARCH_HEADING: "FIN YEAR",
+      SEARCH_VALUE: "",
+      WHERECONDITION: "",
       VIEW_INPUT: true,
-      VIEW_TABLE:true,
-  }    
+      VIEW_TABLE: true,
+    };
     let API = `MasterLookUp`;
-    let Sub: Subscription = this.apiService.postDynamicAPI(API,postData)
+    let Sub: Subscription = this.apiService
+      .postDynamicAPI(API, postData)
       .subscribe((result: any) => {
         let last_data = result.dynamicData[0];
-        let index = last_data.length -1;
-        this.wholesalesmanform.controls.fin_year.setValue(last_data[index].FYEARCODE)
-        this.wholesalesmanform.controls.datefrom.setValue(last_data[index].STARTYEAR)
-        this.wholesalesmanform.controls.dateto.setValue(last_data[index].ENDYEAR)       
-      },
-    ) 
+        let index = last_data.length - 1;
+        this.wholesalesmanform.controls.fin_year.setValue(
+          last_data[index].FYEARCODE
+        );
+        this.wholesalesmanform.controls.datefrom.setValue(
+          last_data[index].STARTYEAR
+        );
+        this.wholesalesmanform.controls.dateto.setValue(
+          last_data[index].ENDYEAR
+        );
+      });
   }
 
   detailsapi(wst_id: any) {
     this.viewOnly = true;
     let API = `WhlSmanTargetHeader/GetWhlSmanTargetFullDetail/${this.wst_id}`;
-    let Sub: Subscription = this.apiService.getDynamicAPI(API)
-      .subscribe((result: any) => {
+    let Sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
+      (result: any) => {
         this.dyndatas = result.response;
         console.log(this.dyndatas.details);
-        
-        this.maindetails.push(...this.dyndatas?.details)
 
-      }, (err: any) => {
-      })
+        this.maindetails.push(...this.dyndatas?.details);
+      },
+      (err: any) => {}
+    );
     this.subscriptions.push(Sub);
   }
-
 
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
@@ -213,15 +220,15 @@ setcodevalues(){
     }
   }
 
-  
   ViewController(DATA: any) {
     this.wholesalesmanform.controls.code.setValue(this.content?.TARGET_CODE);
     this.wholesalesmanform.controls.fin_year.setValue(this.content?.FYEARCODE);
-    this.wholesalesmanform.controls.salesman.setValue(this.content?.SALESPERSON_CODE);
+    this.wholesalesmanform.controls.salesman.setValue(
+      this.content?.SALESPERSON_CODE
+    );
     this.wholesalesmanform.controls.datefrom.setValue(this.content?.FROM_DATE);
     this.wholesalesmanform.controls.dateto.setValue(this.content?.TO_DATE);
   }
-
 
   editController(DATA: any) {
     this.ViewController(DATA);
@@ -231,33 +238,31 @@ setcodevalues(){
     if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
-      return
+      return;
     }
-    if (this.content && this.content.FLAG == 'VIEW') {
+    if (this.content && this.content.FLAG == "VIEW") {
       this.activeModal.close(data);
-      return
+      return;
     }
     Swal.fire({
-      title: 'Do you want to exit?',
-      text: '',
-      icon: 'warning',
+      title: "Do you want to exit?",
+      text: "",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes!',
-      cancelButtonText: 'No'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+      cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
         this.activeModal.close(data);
       }
-    }
-    )
+    });
   }
 
   formSubmit() {
-
-    if(this.maindetails.length == 0 || !this.maindetails.length){
-      this.commonService.toastErrorByMsgId('MSG1200');
+    if (this.maindetails.length == 0 || !this.maindetails.length) {
+      this.commonService.toastErrorByMsgId("MSG1200");
       return;
     }
 
@@ -273,78 +278,75 @@ setcodevalues(){
     ).some((controlName) => {
       const control = this.wholesalesmanform.controls[controlName];
       return control.hasError("required") && control.touched;
-  });
+    });
 
-  if(!requiredFieldsInvalid){
-    const postData = {
+    if (!requiredFieldsInvalid) {
+      const postData = {
+        TARGET_CODE: this.wholesalesmanform.controls.code.value,
+        FYEARCODE: this.wholesalesmanform.controls.fin_year.value,
+        CREATED_BY: this.username, //"string",
+        CREATED_ON: new Date(), //"2024-11-15T07:07:04.433Z",
+        SALESPERSON_CODE: this.wholesalesmanform.controls.salesman.value,
+        FROM_DATE: this.wholesalesmanform.controls.datefrom.value,
+        TO_DATE: this.wholesalesmanform.controls.dateto.value,
+        MID: 0,
+        details: this.maindetails,
+      };
 
-      "TARGET_CODE": this.wholesalesmanform.controls.code.value,
-      "FYEARCODE": this.wholesalesmanform.controls.fin_year.value,
-      "CREATED_BY": this.username,//"string",
-      "CREATED_ON": new Date(),//"2024-11-15T07:07:04.433Z",
-      "SALESPERSON_CODE": this.wholesalesmanform.controls.salesman.value,
-      "FROM_DATE": this.wholesalesmanform.controls.datefrom.value,
-      "TO_DATE": this.wholesalesmanform.controls.dateto.value,
-      "MID": 0,
-      "details": this.maindetails
-     
+      if (this.flag === "EDIT") {
+        let API = `WhlSmanTargetHeader/UpdateWhlSmanTargetHeader/${this.wst_id}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `WhlSmanTargetHeader/InsertWhlSmanTargetHeader`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message
+                  ? result.message
+                  : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid");
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
     }
-
-    if (this.flag === "EDIT") {
-      let API = `WhlSmanTargetHeader/UpdateWhlSmanTargetHeader/${this.wst_id}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    } else {
-      let API = `WhlSmanTargetHeader/InsertWhlSmanTargetHeader`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-    }
-  }
-
-
-
   }
 
   DeleteController(DATA?: any) {
@@ -391,53 +393,54 @@ setcodevalues(){
         this.subscriptions.push(Sub);
       } else {
         this.flag = "VIEW";
+        this.close("reloadMainGrid")
       }
     });
   }
 
+  addTableData(event?: any) {
+    this.modalReference = this.modalService.open(
+      WholesaleSalesmanTargetDetailsComponent,
+      {
+        size: "xl",
+        backdrop: true,
+        keyboard: false,
+        windowClass: "modal-full-width",
+      }
+    );
 
-  
-  addTableData(event?:any){
-
-    this.modalReference = this.modalService.open(WholesaleSalesmanTargetDetailsComponent, {
-      size: 'xl',
-      backdrop: true,
-      keyboard: false,
-      windowClass: 'modal-full-width',
-  });
-
-  this.modalReference.componentInstance.parent_code = this.wholesalesmanform.controls.code.value;
-  this.modalReference.componentInstance.grid_length = this.maindetails.length;
-  this.modalReference.componentInstance.fyear_code = this.wholesalesmanform.controls.fin_year.value;
-  this.modalReference.componentInstance.salesperson_code = this.wholesalesmanform.controls.salesman.value;
-  this.modalReference.componentInstance.flag = this.flag;
-  if(event?.data != undefined){
-  this.modalReference.componentInstance.data = event.data;
-
-  }
-
-
-  this.modalReference.closed.subscribe((result) => {
-    if (result) {
-      console.log('Data received from modal:', result);
-      this.details = result;
-      const newData = Array.isArray(result) ? result : [result];
-
-      newData.forEach(e => {
-        e.SLNO = this.maindetails.length + 1; 
-      });
-      
-      this.maindetails.push(...newData); 
-
-      // this.maindetails = result;
-      // this.maindetails.push(result);
-      console.log(result);
-      
+    this.modalReference.componentInstance.parent_code =
+      this.wholesalesmanform.controls.code.value;
+    this.modalReference.componentInstance.grid_length = this.maindetails.length;
+    this.modalReference.componentInstance.fyear_code =
+      this.wholesalesmanform.controls.fin_year.value;
+    this.modalReference.componentInstance.salesperson_code =
+      this.wholesalesmanform.controls.salesman.value;
+    this.modalReference.componentInstance.flag = this.flag;
+    if (event?.data != undefined) {
+      this.modalReference.componentInstance.data = event.data;
     }
-  });
+
+    this.modalReference.closed.subscribe((result) => {
+      if (result) {
+        console.log("Data received from modal:", result);
+        this.details = result;
+        const newData = Array.isArray(result) ? result : [result];
+
+        newData.forEach((e) => {
+          e.SLNO = this.maindetails.length + 1;
+        });
+
+        this.maindetails.push(...newData);
+
+        // this.maindetails = result;
+        // this.maindetails.push(result);
+        console.log(result);
+      }
+    });
   }
 
-  deleteTableData(){
+  deleteTableData() {
     this.maindetails.pop();
   }
 
@@ -447,7 +450,7 @@ setcodevalues(){
     FORMNAMES: string[],
     isCurrencyField: boolean,
     lookupFields?: string[],
-    FROMCODE?: boolean,
+    FROMCODE?: boolean
   ) {
     const searchValue = event.target.value?.trim();
 
@@ -477,7 +480,6 @@ setcodevalues(){
 
           if (data?.length) {
             if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
-
               let searchResult = this.commonService.searchAllItemsInArray(
                 data,
                 LOOKUPDATA.SEARCH_VALUE
@@ -485,15 +487,12 @@ setcodevalues(){
 
               console.log("Filtered Search Result:", searchResult);
 
-             
-
               if (searchResult?.length) {
                 const matchedItem = searchResult[0];
 
                 FORMNAMES.forEach((formName, index) => {
                   const field = lookupFields?.[index];
                   if (field && field in matchedItem) {
-
                     this.wholesalesmanform.controls[formName].setValue(
                       matchedItem[field]
                     );
@@ -563,11 +562,7 @@ setcodevalues(){
     }
   }
 
-
   // onSelectionChanged(e:any){
   //     console.log(e);
   // }
-
-
-
 }
