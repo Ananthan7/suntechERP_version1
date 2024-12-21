@@ -323,6 +323,8 @@ export class VatMasterComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    console.log(this.content);
+
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
@@ -625,9 +627,9 @@ export class VatMasterComponent implements OnInit {
         GROUP_CODE2: this.vatMasterMainForm.value.group2 || "",
         GROUP_CODE3: this.vatMasterMainForm.value.group3 || "",
         REG_IGST_CREDIT_ACCODE:
-          this.vatMasterMainForm.value.regRcmAccCredit || "",
+          this.vatMasterMainForm.value.regVatAccCredit || "",
         REG_IGST_DEBIT_ACCODE:
-          this.vatMasterMainForm.value.regRcmAccDebit || "",
+          this.vatMasterMainForm.value.regVatAccDebit || "",
         UNREG_IGST_CREDIT_ACCODE:
           this.vatMasterMainForm.value.unregVatAccCredit || "",
         UNREG_IGST_DEBIT_ACCODE:
@@ -652,8 +654,8 @@ export class VatMasterComponent implements OnInit {
           this.vatMasterMainForm.value.regVatCtrlAccCredit || "",
         REG_IGST_CTRLDEBIT_ACCODE:
           this.vatMasterMainForm.value.regVatCtrlAccDebit || "",
-        UNREG_RCM_DEBIT: this.vatMasterMainForm.value.unregRcmAccCredit || "",
-        UNREG_RCM_CREDIT: this.vatMasterMainForm.value.unregRcmAccDebit || "",
+        UNREG_RCM_DEBIT: this.vatMasterMainForm.value.unregRcmAccDebit || "",
+        UNREG_RCM_CREDIT: this.vatMasterMainForm.value.unregRcmAccCredit || "",
         REG_RCM_DEBIT: this.vatMasterMainForm.value.regRcmAccDebit || "",
         REG_RCM_CREDIT: this.vatMasterMainForm.value.regRcmAccCredit || "",
         IMP_RCM_DEBIT: this.vatMasterMainForm.value.impRcmAccCredit || "",
@@ -890,6 +892,8 @@ export class VatMasterComponent implements OnInit {
     }
 
     if (event.key === "Backspace" || event.key === "Delete") {
+      let input = (event.target as HTMLInputElement).value;
+
       console.log(input);
       if (!input || input.length <= 1 || input == "") {
         if (gridType === "costCenter") {
@@ -1240,8 +1244,6 @@ export class VatMasterComponent implements OnInit {
     }
   }
   deletingRowFromCostCenterAccount() {
-    console.log("sdd");
-
     if (
       this.selectedRowFromCostCenterAccount &&
       this.selectedRowFromCostCenterAccount.length > 0
@@ -1527,13 +1529,12 @@ export class VatMasterComponent implements OnInit {
 
   openGPCGrid(event?: any, index?: any): void {
     const clickedElement = event.target as HTMLElement;
+
     if (
       event.key === "Tab" ||
       event.key === "Enter" ||
       (clickedElement && clickedElement.tagName === "I")
     ) {
-      let searchValue = (event?.target as HTMLInputElement)?.value || "";
-
       const modalRef: NgbModalRef = this.modalService.open(
         GpcGridComponentComponent,
         {
@@ -1544,23 +1545,28 @@ export class VatMasterComponent implements OnInit {
         }
       );
 
+      let searchValue = (event?.target as HTMLInputElement)?.value || "";
+
       modalRef.componentInstance.searchValue = searchValue;
 
       modalRef.result.then(
         (row) => {
-          if (!row || row.length === 0) {
-            console.log("No data returned from modal.");
-            const currentSn = index.data.SN;
+          if (row === "NOT-SELECTED") {
+            (event?.target as HTMLInputElement).value = "";
 
+            console.log("No data selected from modal.");
+
+            const currentSn = index.data.SN;
             const dataIndex = this.costCenterAccountData.findIndex(
               (item) => item.SN === currentSn
             );
 
+            this.costCenterAccountData[dataIndex].COST_CODE = "";
             this.costCenterAccountData[dataIndex].GPC_ACCODE = "";
             this.costCenterAccountData[dataIndex].GPC_ACCODE_DESC = "";
-            this.costCenterAccountData[dataIndex].COST_CODE = "";
+            (event?.target as HTMLInputElement).value = "";
 
-            return; // Exit if no data is returned
+            return;
           }
 
           if (row) {
@@ -1568,12 +1574,11 @@ export class VatMasterComponent implements OnInit {
 
             const isDuplicate = this.costCenterAccountData.some(
               (item) => item.GPC_ACCODE === row[0].GPC_ACCODE
-              // &&
-              //   item.COST_CODE === row[0].COST_CODE
             );
 
             if (isDuplicate) {
               let message = `GPC Accode Already Exist ! `;
+              (event?.target as HTMLInputElement).value = "";
               return this.openDialog("Warning", message, true);
             } else {
               const dataIndex = this.costCenterAccountData.findIndex(
@@ -1592,23 +1597,39 @@ export class VatMasterComponent implements OnInit {
           }
         },
         (close) => {
-          if (close === true) {
-            console.log(close);
-            event.target.value = "";
-            const currentSn = index.data.SN;
+          console.log(close);
+          (event?.target as HTMLInputElement).value = "";
 
-            const dataIndex = this.costCenterAccountData.findIndex(
-              (item) => item.SN === currentSn
-            );
+          console.log("No data selected from modal.");
 
-            this.costCenterAccountData[dataIndex].GPC_ACCODE = "";
+          const currentSn = index.data.SN;
+          const dataIndex = this.costCenterAccountData.findIndex(
+            (item) => item.SN === currentSn
+          );
 
-            this.costCenterAccountData[dataIndex].GPC_ACCODE_DESC = "";
+          this.costCenterAccountData[dataIndex].COST_CODE = "";
+          this.costCenterAccountData[dataIndex].GPC_ACCODE = "";
+          this.costCenterAccountData[dataIndex].GPC_ACCODE_DESC = "";
+          (event?.target as HTMLInputElement).value = "";
 
-            this.costCenterAccountData[dataIndex].COST_CODE = "";
-          }
+          return;
         }
       );
+    }
+
+    if (event.key === "Backspace" || event.key === "Delete") {
+      const currentSn = index.data.SN;
+
+      const dataIndex = this.costCenterAccountData.findIndex(
+        (item) => item.SN === currentSn
+      );
+      const searchValue = (event.target as HTMLInputElement).value || "";
+      console.log("Expected");
+      if (!searchValue || searchValue.length <= 1 || searchValue == "") {
+        this.costCenterAccountData[dataIndex].COST_CODE = "";
+        this.costCenterAccountData[dataIndex].GPC_ACCODE = "";
+        this.costCenterAccountData[dataIndex].GPC_ACCODE_DESC = "";
+      }
     }
   }
 
@@ -1833,4 +1854,5 @@ export class VatMasterComponent implements OnInit {
       this.getAccountSettingDatewiseListData();
     }
   }
+  
 }

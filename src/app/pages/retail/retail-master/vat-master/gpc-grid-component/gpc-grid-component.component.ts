@@ -63,38 +63,12 @@ export class GpcGridComponentComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  dismissModal(reason?: any) {
-    this.activeModal.dismiss(reason); // Rejects the modal with the given reason
-  }
-
-  // getGpcData(): Observable<any> {
-  //   let API = `VatMaster/GetFillGPCAccounts`;
-  //   let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
-  //     (result) => {
-  //       if (result.status.trim() === "Success") {
-  //         this.GPCData = result.dynamicData[0];
-
-  //         console.log(this.GPCData);
-  //       }
-  //     },
-  //     (err) => {
-  //       console.error("Error fetching data:", err);
-  //       this.commonService.toastErrorByMsgId("MSG1531");
-  //     }
-  //   );
-  // }
-
   getGpcData(): Observable<any> {
-    console.log("called");
-
     const API = `VatMaster/GetFillGPCAccounts`;
     return this.apiService.getDynamicAPI(API).pipe(
       tap((result) => {
         if (result.status.trim() === "Success") {
           this.GPCData = result.dynamicData[0];
-          console.log("In");
-
-          console.log(this.GPCData);
         } else {
           console.warn("Failed to fetch GPC Data.");
         }
@@ -109,12 +83,10 @@ export class GpcGridComponentComponent implements OnInit {
 
   getSelectedData() {
     if (!this.selectedRow.length) {
-      console.log("Please select a row before proceeding.");
       let message = "Please Select Any GPC Accode";
       this.openDialog("Warning", message, true);
       return;
     }
-    console.log(this.selectedRow);
     this.close(this.selectedRow);
   }
 
@@ -132,16 +104,12 @@ export class GpcGridComponentComponent implements OnInit {
   }
 
   getSerachedData(event: any): void {
-    // Determine the search value
     const SEARCHVALUE =
       typeof event === "string" ? event.trim() : event?.target?.value.trim();
 
-    // API endpoint
     const API = `VatMaster/GetFillGPCAccounts/${this.branchCode}`;
 
-    // If search value is empty, fetch full data
     if (!SEARCHVALUE) {
-      console.log("called");
       this.getGpcData().subscribe({
         next: (result) => {
           console.log("Full data fetched successfully:", result);
@@ -153,7 +121,6 @@ export class GpcGridComponentComponent implements OnInit {
       return;
     }
 
-    // Ensure data exists before filtering
     if (this.GPCData && this.GPCData.length > 0) {
       this.GPCData = this.GPCData.filter((item: any) =>
         item.GPC_ACCODE.toLowerCase().startsWith(SEARCHVALUE.toLowerCase())
