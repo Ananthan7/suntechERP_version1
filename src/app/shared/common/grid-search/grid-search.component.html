@@ -1,59 +1,21 @@
-<!-- prime ng drop down -->
-<span >
-    <button (click)="showOverlayPanel($event)" 
-        style="border: none; background-color: transparent;padding-top: 6px;">
-        <i class="fa fa-search searchIcon"></i>
-    </button>
-    <p-overlayPanel #overlayPanel (onHide)="onHidePanel()">
-        <ng-template pTemplate="content">
-           <div >
-                <div class="d-flex justify-content-between border-bottom">
-                    <h6>{{MasterSearchData.SEARCH_HEADING}}</h6>
-                    <i (click)="closeOverlayPanel()" class="fas fa-times icon-common"></i>
-                </div>
-                <div class="row" *ngIf="MasterSearchData.VIEW_INPUT">
-                    <div class="col-md-6 p-2">
-                        <mat-form-field style="width: 100%">
-                            <mat-label>Search</mat-label>
-                            <input type="text" matInput
-                                [(ngModel)]="MasterSearchData.SEARCH_VALUE"
-                                (keyup.enter)="searchValueChange($event)"
-                                (focusout)="searchValueChange($event)" />
-                            <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-                        </mat-form-field>
-                        
-                    </div>
-                    <div class="col-md-3 pt-3">
-                        <button class="btn btn-white search-btn">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="letters" *ngIf="MasterSearchData.VIEW_INPUT">
-                    <ng-container *ngFor="let item of alphabetSource">
-                        <a (click)="alphabetClicked(item)">{{item}}</a>
-                    </ng-container>
-                </div>
-                <div class="d-flex">
-                    <div (scroll)="onScrollTable($event)" style="max-height: 180px;overflow-y: scroll;">
-                        <table class="lazyTable">
-                            <thead>
-                            <tr>
-                                <th *ngFor="let col of dataSourceHead">{{ col }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr *ngFor="let item of dataSource" (click)="handleRowClick(item)">
-                                <td *ngFor="let col of dataSourceHead">
-                                    {{ item[col] }}
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                </div>
-           </div>
-        </ng-template>
-    </p-overlayPanel>
-</span>
+<div class="row p-2">
+    <div class="col-md-12" tabindex="0">
+        <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO"
+            [showBorders]="true"
+            (onRowClick)="onRowClickHandler($event)"
+            [selection]="{ mode: 'single' }"
+            [focusedRowEnabled]="true"
+            [focusedRowKey]="focusedRowKey"
+            [dataSource]="dataSource">
+            <!-- <dxo-paging [enabled]="true"></dxo-paging> -->
+            <dxo-selection mode="single" [deferred]="true"> </dxo-selection>
+            <dxo-scrolling mode="virtual"></dxo-scrolling>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxi-column *ngFor="let data of dataSourceHead"
+                dataField="{{ data.dataField }}"
+                caption="{{ data.caption }}" [allowEditing]="false" alignment="{{ data.alignment }}"
+                backgroundcolor="#000">
+            </dxi-column>
+        </dx-data-grid>
+    </div>
+</div>

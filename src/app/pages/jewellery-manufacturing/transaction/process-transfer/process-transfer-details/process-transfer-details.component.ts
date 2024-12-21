@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -8,6 +8,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { DateTimeModel } from 'src/app/shared/data/datetime-model';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import Swal from 'sweetalert2';
+import { DxDataGridComponent } from 'devextreme-angular';
 @Component({
   selector: 'app-process-transfer-details',
   templateUrl: './process-transfer-details.component.html',
@@ -37,7 +38,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   minEndDate: string = '';
   divisionMS: any = 'ID';
   tableData: any[] = [];
-  subJobDetailData: any[] = []
+  subJobDetailData: any[] = [{SRNO: 1}]
   imagepath: any[] = []
   metalDetailData: any[] = [];
   metalDetailData_2: any[] = [];
@@ -63,6 +64,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
   fromWorkerCodeEmpty: boolean = false;
 
   private subscriptions: Subscription[] = [];
+  subJobDetailDataHead: any[] = [
+    {dataField: 'PROCESS',caption: 'PROCESS', alignment: 'center'},
+    {dataField: 'WORKER',caption: 'WORKER', alignment: 'center'},
+    {dataField: 'METAL',caption: 'METAL', alignment: 'right'},
+    {dataField: 'STONE',caption: 'STONE', alignment: 'right'},
+  ]
   STDDateTimeData: DateTimeModel = {
     TIMEINMINUTES: 0,
     SEARCH_HEADING: 'Standard Time'
@@ -1119,8 +1126,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   //use: on row click on multiple sub job details
   onRowClickHandler(event: any) {
-    if (!event.data.PROCESS) return;
-    let data = this.subJobDetailData.filter((item: any) => event.data.SRNO == item.SRNO)
+    if (!event.PROCESS) return;
+    let data = this.subJobDetailData.filter((item: any) => event.SRNO == item.SRNO)
     if (data && data.length > 0) {
       if (this.designType == 'METAL') { //metal data assigning
         this.setMetalSubJob_Details(data)

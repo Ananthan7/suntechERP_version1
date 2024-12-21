@@ -18,9 +18,11 @@ export class LossRecoveryComponent implements OnInit {
   @ViewChild('overlayReceicvedBy') overlayReceicvedBy!: MasterSearchComponent;
   @ViewChild('overlayEnterBy') overlayEnterBy!: MasterSearchComponent;
   @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
-
+  gridAmountDecimalFormat: undefined;
   Attachedfile: any[] = [];
+  selectedKey: number[] = [];
   savedAttachments: any[] = [];
+  collectDetails:any[] = [];
   isloading: boolean = false;
   divisionMS: any = 'ID';
   branchCode?: string;
@@ -135,6 +137,7 @@ export class LossRecoveryComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
   jobNumberCodeSelected(e: any) {
     this.lossRecoveryFrom.controls.jobNo.setValue(e.job_number);
     this.lossRecoveryFrom.controls.jobDesc.setValue(e.job_description);
@@ -214,6 +217,14 @@ export class LossRecoveryComponent implements OnInit {
     console.log(this.Attachedfile);
   }
 
+  onRowClickHandler(event: any) {
+  }
+
+  onRowDblClickHandler(event: any) {
+  }
+
+  onSelectionChanged(event: any) {}
+
   userDataSelected(e: any) {
     console.log(e);
     this.lossRecoveryFrom.controls.receicvedBy.setValue(e.WORKER_CODE);
@@ -232,8 +243,8 @@ export class LossRecoveryComponent implements OnInit {
 
   karatCodeSelected(e: any) {
     console.log(e);
-    this.lossRecoveryFrom.controls.karatCode.setValue(e['Karat Code']);
-    this.lossRecoveryFrom.controls.karatCodeDesc.setValue(e['Karat Description']);
+    this.lossRecoveryFrom.controls.karatCode.setValue(e.KARAT_CODE);
+    this.lossRecoveryFrom.controls.karatCodeDesc.setValue(e.Karat_desc);
   }
 
   stockCodeSelected(e: any) {
@@ -248,6 +259,26 @@ export class LossRecoveryComponent implements OnInit {
     console.log(e);
     this.lossRecoveryFrom.controls.locationTo.setValue(e.LOCATION_CODE);
   }
+
+  formatDate(event: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue)
+    let yr = date.getFullYear()
+    let dt = date.getDate()
+    let dy = date.getMonth()
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.lossRecoveryFrom.controls.vocDate.setValue(new Date(date))
+    }
+  }
+
+
+  todateFilter = (date: Date | null): boolean => {
+    if (this.lossRecoveryFrom.value.fromDate) {
+      return date ? date >= this.lossRecoveryFrom.value.fromDate : false;
+    }
+    return true;  
+  };
 
 
   lossRecoveryFrom: FormGroup = this.formBuilder.group({

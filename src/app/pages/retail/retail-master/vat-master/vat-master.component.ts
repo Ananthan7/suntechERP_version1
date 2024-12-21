@@ -33,6 +33,7 @@ import { ChangeDetectorRef } from "@angular/core";
 import { DxDataGridComponent } from "devextreme-angular";
 import { CustomdialogboxComponent } from "./customdialogbox/customdialogbox.component";
 import { take } from "rxjs/operators";
+import * as moment from "moment";
 
 @Component({
   selector: "app-vat-master",
@@ -277,6 +278,7 @@ export class VatMasterComponent implements OnInit {
   expenseHsnSearchData: any;
   searching!: boolean;
   GPCFetched: Boolean = false;
+  typedValues: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -363,15 +365,13 @@ export class VatMasterComponent implements OnInit {
     this.vatMasterMainForm.controls["group1"].setValue(DATA.GROUP_CODE1);
     this.vatMasterMainForm.controls["group2"].setValue(DATA.GROUP_CODE2);
     this.vatMasterMainForm.controls["group3"].setValue(DATA.GROUP_CODE3);
-    this.vatMasterMainForm.controls["regRcmAccCredit"].setValue(
+    this.vatMasterMainForm.controls["regVatAccCredit"].setValue(
       DATA.REG_IGST_CREDIT_ACCODE
     );
-    this.vatMasterMainForm.controls["regRcmAccDebit"].setValue(
+    this.vatMasterMainForm.controls["regVatAccDebit"].setValue(
       DATA.REG_IGST_DEBIT_ACCODE
     );
-    this.vatMasterMainForm.controls["regRcmAccDebit"].setValue(
-      DATA.REG_IGST_DEBIT_ACCODE
-    );
+
     this.vatMasterMainForm.controls["unregVatAccCredit"].setValue(
       DATA.UNREG_IGST_CREDIT_ACCODE
     );
@@ -406,7 +406,7 @@ export class VatMasterComponent implements OnInit {
       DATA.REG_IGST_CTRLDEBIT_ACCODE
     );
 
-    this.vatMasterMainForm.controls["regVatCtrlAccDebit"].setValue(
+    this.vatMasterMainForm.controls["unregRcmAccCredit"].setValue(
       DATA.UNREG_RCM_DEBIT
     );
     this.vatMasterMainForm.controls["unregRcmAccDebit"].setValue(
@@ -508,6 +508,45 @@ export class VatMasterComponent implements OnInit {
     return data[field];
   }
 
+  checkSpecificControls(): boolean {
+    const specificControls = [
+      "regVatAccCredit",
+      "regVatAccDebit",
+      "regRcmAccCredit",
+      "regRcmAccDebit",
+      "regVatCtrlAccCredit",
+      "regVatCtrlAccDebit",
+      "unregVatAccCredit",
+      "unregVatAccDebit",
+      "unregRcmAccCredit",
+      "unregRcmAccDebit",
+      "unregVatCtrlAccCredit",
+      "unregVatCtrlAccDebit",
+      "impVatAccDebit",
+      "impRcmAccCredit",
+      "impVatCtrlAccDebit",
+      "impRcmCtrlAccDebit",
+      "expVatAccDebit",
+      "expVatAccCredit",
+      "posVatAccDebit",
+      "posVatRefundCredit",
+    ];
+
+    for (const controlName of specificControls) {
+      const control = this.vatMasterMainForm.get(controlName);
+
+      if (control) {
+        const controlValue = control.value;
+
+        if (controlValue && controlValue.length < 3) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   checkIncompleteFields(data: any[], tabIndex: any): boolean {
     const requiredFields =
       tabIndex == 0
@@ -517,7 +556,7 @@ export class VatMasterComponent implements OnInit {
             "EXPENSE_ACCODE",
             "EXPENSE_ACCODE_DESC",
           ]
-        : ["HSN_SAC_CODE", "HSN_SAC_DESC"];
+        : ["GPC_ACCODE", "GPC_ACCODE_DESC", "HSN_SAC_CODE", "HSN_SAC_DESC"];
 
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
@@ -536,7 +575,7 @@ export class VatMasterComponent implements OnInit {
     let grid1 = this.checkIncompleteFields(this.expenseHsnSacAllocationData, 0);
 
     if (grid1) {
-      const message = `Expense HSN/SAC Allocation Row Cannot Be Empty!`;
+      const message = `The Expense HSN/SAC Allocation row's Expense Code & Description, and HSN Code & Description cannot be empty!`;
       this.openDialog("Warning", message, true);
       this.goToTab(1);
       return;
@@ -545,9 +584,19 @@ export class VatMasterComponent implements OnInit {
     let grid2 = this.checkIncompleteFields(this.costCenterAccountData, 1);
 
     if (grid2) {
-      const message = `Cost Center Account Row HSN Code & Desc Cannot Be Empty!`;
+      const message = `The Cost Center Account row's Cost Code, GPC Account Code & Description, and HSN Code & Description cannot be empty!`;
       this.openDialog("Warning", message, true);
       this.goToTab(2);
+
+      return;
+    }
+
+    let checkSpecificControlsName = this.checkSpecificControls();
+
+    if (checkSpecificControlsName) {
+      const message = `Please Fill The Regular Trade Fields!`;
+      this.openDialog("Warning", message, true);
+      this.goToTab(0);
 
       return;
     }
@@ -1304,7 +1353,7 @@ export class VatMasterComponent implements OnInit {
     const VATCODE = this.vatMasterMainForm.value.vatCode;
     if (!VATCODE) {
       this.openDialog("Warning", "Code cannot be empty!", true);
-      this.vatMasterMainForm.controls[controller].reset();
+      controller && this.vatMasterMainForm.controls[controller].reset();
       this.dialogBox.afterClosed().subscribe((result: any) => {
         if (result === "OK") {
           setTimeout(() => {
@@ -1325,17 +1374,28 @@ export class VatMasterComponent implements OnInit {
     return this.validateVATCode(controller);
   }
 
+  regularTradeValidation(controller: String) {
+    return this.validateVATCode(controller);
+  }
+
   vatPercentFocusout(event: any): void {
-    const value = event.target.value;
-    const MESSAGE =
-      value > 100
-        ? `A percentage value cannot be greater than 100.`
-        : `A percentage value cannot be negative (-) or less than Zero (0).`;
-    const GSTCODE = this.vatMasterMainForm.value.vatCode;
+    const VATCODE = this.vatMasterMainForm.value.vatCode;
+    const TYPEDVALUE = this.typedValues;
+    if (!VATCODE) return;
 
-    if (!GSTCODE) return;
+    const VATPER = event.target.value;
+    let MESSAGE;
+    if (TYPEDVALUE > 100) {
+      MESSAGE = "A percentage value cannot be greater than 100.";
+    } else if (!TYPEDVALUE || TYPEDVALUE <= 0) {
+      MESSAGE = "A percentage value cannot be negative (-), zero, or empty.";
+    }
 
-    if (value > 100 || value < 1) {
+    console.log(VATPER);
+
+    console.log(MESSAGE);
+
+    if (VATPER > 100 || VATPER < 1) {
       this.vatMasterMainForm.controls.vatPercent.reset();
       this.openDialog("Warning", MESSAGE, true);
 
@@ -1350,13 +1410,35 @@ export class VatMasterComponent implements OnInit {
           }
         });
     } else {
-      this.vatMasterMainForm.controls.vatPercent.setValue(value);
+      this.vatMasterMainForm.controls.vatPercent.setValue(VATPER);
 
-      const GSTPERCENT = this.vatMasterMainForm.value.vatPercent;
-      if (GSTCODE && GSTPERCENT) {
+      if (VATCODE && VATPER && this.flag === "ADD") {
         this.getAccountSettingDatewiseListData();
       }
+
+      if (VATCODE && VATPER && this.flag === "EDIT") {
+        const today = moment().startOf("day");
+
+        this.accountSettingDateWiseVatDetailsData =
+          this.accountSettingDateWiseVatDetailsData.map((item) => {
+            const vatDate = moment(item.VAT_DATE, "DD/MM/YYYY");
+            if (vatDate.isSameOrAfter(today)) {
+              item.VAT_PER = VATPER;
+            }
+            return item;
+          });
+      }
     }
+  }
+
+  typedValue(event: KeyboardEvent) {
+    const inputElement = event.target as HTMLInputElement;
+    return (this.typedValues = inputElement.value);
+  }
+
+  dateFormating(isoDate: any) {
+    const formattedDate = moment(isoDate).format("DD/MM/YYYY");
+    return formattedDate;
   }
 
   getGridDataObjects(CODE: any) {
@@ -1369,6 +1451,7 @@ export class VatMasterComponent implements OnInit {
               (item: any, index: number) => ({
                 ...item,
                 SRNO: index + 1,
+                VAT_DATE: this.dateFormating(item.VAT_DATE),
               })
             );
 
@@ -1402,7 +1485,7 @@ export class VatMasterComponent implements OnInit {
     let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
       (result) => {
         if (result.status.trim() === "Success") {
-          console.log(this.costCenterAccountData);
+          this.costCenterAccountData = [];
           this.costCenterAccountData = [
             ...this.costCenterAccountData,
             ...result.dynamicData[0].map((item: any) => ({
@@ -1444,16 +1527,12 @@ export class VatMasterComponent implements OnInit {
 
   openGPCGrid(event?: any, index?: any): void {
     const clickedElement = event.target as HTMLElement;
-
-    if (clickedElement && clickedElement.tagName === "I") {
-      console.log("Button was clicked");
-    }
     if (
       event.key === "Tab" ||
       event.key === "Enter" ||
       (clickedElement && clickedElement.tagName === "I")
     ) {
-      const searchValue = (event?.target as HTMLInputElement)?.value || "";
+      let searchValue = (event?.target as HTMLInputElement)?.value || "";
 
       const modalRef: NgbModalRef = this.modalService.open(
         GpcGridComponentComponent,
@@ -1469,22 +1548,65 @@ export class VatMasterComponent implements OnInit {
 
       modalRef.result.then(
         (row) => {
-          if (row) {
+          if (!row || row.length === 0) {
+            console.log("No data returned from modal.");
             const currentSn = index.data.SN;
 
             const dataIndex = this.costCenterAccountData.findIndex(
               (item) => item.SN === currentSn
             );
 
-            this.costCenterAccountData[dataIndex].GPC_ACCODE =
-              row[0].GPC_ACCODE;
-            this.costCenterAccountData[dataIndex].GPC_ACCODE_DESC =
-              row[0].Account_Head;
-            this.costCenterAccountData[dataIndex].COST_CODE = row[0].COST_CODE;
+            this.costCenterAccountData[dataIndex].GPC_ACCODE = "";
+            this.costCenterAccountData[dataIndex].GPC_ACCODE_DESC = "";
+            this.costCenterAccountData[dataIndex].COST_CODE = "";
+
+            return; // Exit if no data is returned
+          }
+
+          if (row) {
+            const currentSn = index.data.SN;
+
+            const isDuplicate = this.costCenterAccountData.some(
+              (item) => item.GPC_ACCODE === row[0].GPC_ACCODE
+              // &&
+              //   item.COST_CODE === row[0].COST_CODE
+            );
+
+            if (isDuplicate) {
+              let message = `GPC Accode Already Exist ! `;
+              return this.openDialog("Warning", message, true);
+            } else {
+              const dataIndex = this.costCenterAccountData.findIndex(
+                (item) => item.SN === currentSn
+              );
+
+              this.costCenterAccountData[dataIndex].GPC_ACCODE =
+                row[0].GPC_ACCODE;
+
+              this.costCenterAccountData[dataIndex].GPC_ACCODE_DESC =
+                row[0].Account_Head;
+
+              this.costCenterAccountData[dataIndex].COST_CODE =
+                row[0].COST_CODE;
+            }
           }
         },
-        (dismissReason) => {
-          console.log("Modal dismissed:", dismissReason);
+        (close) => {
+          if (close === true) {
+            console.log(close);
+            event.target.value = "";
+            const currentSn = index.data.SN;
+
+            const dataIndex = this.costCenterAccountData.findIndex(
+              (item) => item.SN === currentSn
+            );
+
+            this.costCenterAccountData[dataIndex].GPC_ACCODE = "";
+
+            this.costCenterAccountData[dataIndex].GPC_ACCODE_DESC = "";
+
+            this.costCenterAccountData[dataIndex].COST_CODE = "";
+          }
         }
       );
     }
@@ -1682,6 +1804,33 @@ export class VatMasterComponent implements OnInit {
   goToTab(index: number): void {
     if (this.tabGroup) {
       this.tabGroup.selectedIndex = index;
+    }
+  }
+
+  onInput(event: any, controller?: any) {
+    let input = event.target.value;
+
+    if (input && this.flag === "ADD") {
+      let API = `VatMaster/CheckIfvatCodePresent/${input}`;
+      let sub: Subscription = this.apiService
+        .getDynamicAPI(API)
+        .subscribe((res) => {
+          console.log(res);
+
+          if (res.checkifExists === true) {
+            let message = `Code Already Exist ! `;
+            this.vatMasterMainForm.controls[controller].setValue("");
+            return this.openDialog("Warning", message, true);
+          }
+        });
+    }
+
+    if (
+      this.vatMasterMainForm.value.vatCode &&
+      this.vatMasterMainForm.value.vatPercent &&
+      this.flag === "ADD"
+    ) {
+      this.getAccountSettingDatewiseListData();
     }
   }
 }

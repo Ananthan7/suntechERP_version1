@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -9,6 +9,7 @@ import { ProductionStockDetailComponent } from "../production-stock-detail/produ
 import { SavedataModel } from "../savedata-model";
 import Swal from "sweetalert2";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { DxDataGridComponent } from "devextreme-angular";
 
 @Component({
   selector: "app-production-entry-details",

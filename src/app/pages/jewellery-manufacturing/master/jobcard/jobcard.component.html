@@ -9,7 +9,7 @@
     </div>
     <!-- modal header component -->
     <modal-header (saveClick)="formSubmit()" [isViewDelete]="false"
-        [isViewSave]="!viewMode"
+        [isViewSave]="!viewMode" (deleteClick)="deleteRecord()"
         (cancelClick)="close()"></modal-header>
     <!-- content section -->
     <form [formGroup]="jobCardFrom">
@@ -78,7 +78,7 @@
                                             [matDatepicker]="jobdate"
                                             placeholder="DD/MM/YYYY"
                                             [readonly]="viewMode"
-                                            class="text-right"/>
+                                            class="text-right" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="jobdate"></mat-datepicker-toggle>
                                         <mat-datepicker [disabled]="isSaved"
@@ -536,11 +536,12 @@
                                             formControlName="deldate"
                                             [readonly]="viewMode"
                                             placeholder="DD/MM/YYYY"
-                                            class="text-right"   [matDatepickerFilter]="deldateFilter" />
+                                            class="text-right"
+                                            [matDatepickerFilter]="deldateFilter" />
                                         <mat-datepicker-toggle matSuffix
                                             [for]="deldate"></mat-datepicker-toggle>
                                         <mat-datepicker [disabled]="isSaved"
-                                            [startAt]="currentDate"
+                                            [startAt]="currentDate" 
                                             #deldate></mat-datepicker>
                                     </mat-form-field>
                                 </div>
@@ -800,13 +801,14 @@
                             <div class="col-sm-12" style="margin-left: 84px;">
                                 <!-- <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea> -->
                                 <div class="upload-btn-wrapper">
-                                    
-                                        <!-- <img [src]="content.PICTURE_NAME" style="width:200px;height:185px" > -->
-                                      
-                                            <image-slider style="height: 200px; width: 200; margin-left: 70px;"
-                                                [imageArray]="imagepath"></image-slider>
-                                     
-                                        <!-- <button class="carousel-control-prev"
+
+                                    <!-- <img [src]="content.PICTURE_NAME" style="width:200px;height:185px" > -->
+
+                                    <image-slider
+                                        style="height: 200px; width: 200; margin-left: 70px;"
+                                        [imageArray]="imagepath"></image-slider>
+
+                                    <!-- <button class="carousel-control-prev"
                                             type="button"
                                             data-bs-target="#carouselExampleControls"
                                             data-bs-slide="prev">
@@ -816,7 +818,7 @@
                                             <span id="ID040"
                                                 class="visually-hidden">Previous</span>
                                         </button> -->
-                                        <!-- <button class="carousel-control-next"
+                                    <!-- <button class="carousel-control-next"
                                             type="button"
                                             data-bs-target="#carouselExampleControls"
                                             data-bs-slide="next">
@@ -826,17 +828,19 @@
                                             <span class="visually-hidden"
                                                 id="ID041">Next</span>
                                         </button> -->
-                                 
+
                                 </div>
 
-                                <div class="p-2 bd-highlight" style="margin-left: -77px;">
+                                <div class="p-2 bd-highlight"
+                                    style="margin-left: -77px;">
                                     <div class="upload-btn">
                                         <button
                                             class="btn btnnew bgColourUpdate"
-                                            id="ID015" [disabled]="viewMode"> Image</button>
+                                            id="ID015" [disabled]="viewMode">
+                                            Image</button>
                                         <input type="file" name="uploadproduct"
                                             accept=".png, .jpg, .jpeg"
-                                            #fileInput  [disabled]="viewMode"
+                                            #fileInput [disabled]="viewMode"
                                             class="uploadproduct"
                                             (change)="onFileChanged($event)">
                                     </div>

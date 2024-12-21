@@ -76,7 +76,8 @@
               <div class="col-md-3">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="UNQ_JOB_ID"
-                    UpperCaseDirective [readonly]="viewMode || editMode" id="UNQ_JOB_ID"
+                    UpperCaseDirective [readonly]="viewMode || editMode"
+                    id="UNQ_JOB_ID"
                     (keydown)="lookupKeyPress($event,'UNQ_JOB_ID')"
                     (change)="subJobNumberValidate($event)" />
                   <master-search class="masterSearch"
@@ -156,9 +157,11 @@
                       <th>From</th>
                       <th>To</th>
                     </tr>
-                    <ng-container *ngTemplateOutlet="processWorkerOrderFlag ? workerTemplate : processTemplate">
+                    <ng-container
+                      *ngTemplateOutlet="processWorkerOrderFlag ? workerTemplate : processTemplate">
                     </ng-container>
-                    <ng-container *ngTemplateOutlet="processWorkerOrderFlag ? processTemplate : workerTemplate">
+                    <ng-container
+                      *ngTemplateOutlet="processWorkerOrderFlag ? processTemplate : workerTemplate">
                     </ng-container>
                     <ng-template #processTemplate>
                       <tr>
@@ -1143,7 +1146,7 @@
                           <input matInput DateValidation
                             (dateChange)="onStartDateChange()"
                             [matDatepicker]="start" formControlName="startdate"
-                            placeholder="DD/MM/YYYY"/>
+                            placeholder="DD/MM/YYYY" />
                           <mat-datepicker-toggle matSuffix
                             [for]="start"></mat-datepicker-toggle>
                           <mat-datepicker #start></mat-datepicker>
@@ -1595,11 +1598,18 @@
     </button> -->
   </div>
   <div class="row p-2">
-    <dx-data-grid id="gridContainer" [columnAutoWidth]="true"
+    <grid-search [dataSource]="subJobDetailData" 
+    [dataSourceHead]="subJobDetailDataHead"
+    (newRowClick)="onRowClickHandler($event)">
+    </grid-search>
+    <!-- <dx-data-grid id="gridContainer" [columnAutoWidth]="true"
       [allowColumnResizing]="true" [showBorders]="true"
-      [showRowLines]="true"
+      [showRowLines]="true" [keyExpr]="'SRNO'"
       (onRowClick)="onRowClickHandler($event)"
-      [dataSource]="subJobDetailData">
+      [dataSource]="subJobDetailData"
+      [selection]="{ mode: 'single' }"
+      [focusedRowEnabled]="true"
+      [focusedRowKey]="focusedRowKey">
       <dxo-filter-row [visible]="true"></dxo-filter-row>
       <dxo-selection mode="single"></dxo-selection>
       <dxi-column caption="PROCESS" dataField="PROCESS">
@@ -1610,6 +1620,6 @@
       </dxi-column>
       <dxi-column caption="STONE" dataField="STONE" alignment="right">
       </dxi-column>
-    </dx-data-grid>
+    </dx-data-grid> -->
   </div>
 </ng-template>

@@ -104,11 +104,16 @@
               <label for="input" class="col-sm-4  col-form-label">Currency
                 *</label>
               <div class="col-sm-3">
-                <mat-form-field appearance="outline" style="width: 80%;">
+                <mat-form-field appearance="outline" style="width: 90%;">
                   <input type="text" matInput UpperCaseDirective
                     (change)="currencyDataSelected($event)"
                     (keydown)="lookupKeyPress($event,'CURRENCY_RATE')"
                     [readonly]="viewMode" formControlName="CURRENCY_CODE" />
+                  <master-search class="masterSearch" #OverlayCurrencyRate
+                    *ngIf="!viewMode"
+                    [MasterSearchData]="currencyMasterData"
+                    (newRowClick)="currencyDataSelected($event)">
+                  </master-search>
                 </mat-form-field>
               </div>
               <div class="col-sm-3">
@@ -116,11 +121,6 @@
                   <input type="text" matInput RateDecimalInput
                     class="text-right" readonly
                     formControlName="CURRENCY_RATE" />
-                  <master-search class="masterSearch" #OverlayCurrencyRate
-                    *ngIf="!viewMode"
-                    [MasterSearchData]="currencyMasterData"
-                    (newRowClick)="currencyDataSelected($event)">
-                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -160,16 +160,19 @@
                       <input type="text" matInput UpperCaseDirective
                         formControlName="METAL_RATE_TYPE"
                         [readonly]="viewMode"
-                        (focusout)="validateLookupField($event,rateTypeMasterData,'METAL_RATE')" />
+                        (keydown)="lookupKeyPress($event,'METAL_RATE_TYPE')"
+                        (focusout)="validateLookupField($event,rateTypeMasterData,'METAL_RATE_TYPE')" />
+                      <master-search class="masterSearch" *ngIf="!viewMode"
+                        #OverlayMETAL_RATE_TYPE
+                        [MasterSearchData]="rateTypeMasterData"
+                        (newRowClick)="rateTypeSelected($event)">
+                      </master-search>
                     </mat-form-field>
                     <mat-form-field appearance="outline" style="width: 50%;">
                       <input type="text" matInput SixDecimalInput readonly
                         class="text-right"
                         formControlName="METAL_RATE" />
-                      <master-search class="masterSearch" *ngIf="!viewMode"
-                        [MasterSearchData]="rateTypeMasterData"
-                        (newRowClick)="rateTypeSelected($event)">
-                      </master-search>
+
                     </mat-form-field>
                   </div>
                 </div>

@@ -22,8 +22,6 @@ import { map, startWith } from "rxjs/operators";
 import { FestivalMasterComponent } from "./festival-master/festival-master.component";
 import { StoneWeightMasterComponent } from "./stone-weight-master/stone-weight-master.component";
 
-
-
 import { PosBranchTargetComponent } from "./pos-branch-target/pos-branch-target.component";
 import { BuyBackPolicyComponent } from "./buy-back-policy/buy-back-policy.component";
 import { ReversePriceRatioComponent } from "./reverse-price-ratio/reverse-price-ratio.component";
@@ -193,7 +191,12 @@ export class RetailMasterComponent implements OnInit {
 
     let isAuth = await this.openAuthModal();
     if (isAuth) this.openModalView(str);
-    else this.snackBar.open("Authentication Failed", "OK");
+    // else this.snackBar.open("Authentication Failed", "OK");
+    else {
+      // this.snackBar.open("Authentication Closed", "OK");
+      this.CommonService.showSnackBarMsg("Authentication Closed.");
+      this.authForm.reset();
+    }
   }
   async deleteBtnClicked(e: any) {
     console.log(e);
@@ -202,7 +205,12 @@ export class RetailMasterComponent implements OnInit {
 
     let isAuth = await this.openAuthModal();
     if (isAuth) this.openModalView(str);
-    else this.snackBar.open("Authentication Failed", "OK");
+    // else this.snackBar.open("Authentication Failed", "OK");
+    else {
+      this.CommonService.showSnackBarMsg("Authentication Closed.");
+      // this.snackBar.open("Authentication Closed", "OK");
+      this.authForm.reset();
+    }
     // this.authCheckerComponent?.openAuthModal();
   }
   //  open Jobcard in modal
@@ -215,21 +223,21 @@ export class RetailMasterComponent implements OnInit {
       PosCustomerMaster: PosCustomerMasterMainComponent,
       SchemeMasterComponent: SchemeMasterComponent,
       PosWalkinCustomerComponent: PosWalkinCustomerComponent,
-      BuyBackPolicyComponent:BuyBackPolicyComponent,
-      PosBranchTargetComponent:PosBranchTargetComponent,
-      StoneWeightMasterComponent : StoneWeightMasterComponent,
-      FestivalMasterComponent : FestivalMasterComponent,
-      ReversePriceRatioComponent:ReversePriceRatioComponent,
-      AllowanceMasterComponent:AllowanceMasterComponent,
-      DeductionMasterComponent : DeductionMasterComponent,
-      WholesaleSalesmanTargetComponent:WholesaleSalesmanTargetComponent,
-      FixingCommodityMasterComponent:FixingCommodityMasterComponent,
+      BuyBackPolicyComponent: BuyBackPolicyComponent,
+      PosBranchTargetComponent: PosBranchTargetComponent,
+      StoneWeightMasterComponent: StoneWeightMasterComponent,
+      FestivalMasterComponent: FestivalMasterComponent,
+      ReversePriceRatioComponent: ReversePriceRatioComponent,
+      AllowanceMasterComponent: AllowanceMasterComponent,
+      DeductionMasterComponent: DeductionMasterComponent,
+      WholesaleSalesmanTargetComponent: WholesaleSalesmanTargetComponent,
+      FixingCommodityMasterComponent: FixingCommodityMasterComponent,
       JewelleryBrandingComponent: JewelleryBrandingComponent,
       CertificateMasterComponent: CertificateMasterComponent,
       ZirconMasterComponent: ZirconMasterComponent,
-      ManufacturedItemsComponent:ManufacturedItemsComponent,
+      ManufacturedItemsComponent: ManufacturedItemsComponent,
       SubLedgerMasterComponent: SubLedgerMasterComponent,
-      DepartmentMasterComponent: DepartmentMasterComponent, 
+      DepartmentMasterComponent: DepartmentMasterComponent,
       LoanSalaryAdvanceMasterComponent: LoanSalaryAdvanceMasterComponent,
       YearlyBudgetPlannerComponent: YearlyBudgetPlannerComponent,
       TdsMasterComponent: TdsMasterComponent,
@@ -240,7 +248,8 @@ export class RetailMasterComponent implements OnInit {
       CostAndPriceTypesComponent: CostAndPriceTypesComponent,
       PricelistMasterComponent: PriceListMasterComponent,
       AdditionalAmountComponent: AdditionalAmountComponent,
-      CustomerWiseStonePricingAndLabourChargesComponent: CustomerWiseStonePricingAndLabourChargesComponent,
+      CustomerWiseStonePricingAndLabourChargesComponent:
+        CustomerWiseStonePricingAndLabourChargesComponent,
       ReceiptModesComponent: ReceiptModesComponent,
       DesignMasterComponent: DesignMasterComponent,
       JewelleryMasterComponent: JewelleryMasterComponent,
@@ -249,11 +258,12 @@ export class RetailMasterComponent implements OnInit {
       RefiningChargePostingComponent: RefiningChargePostingComponent,
       PosSalespersonTargetComponent: PosSalespersonTargetComponent,
       LoyaltyCardMasterComponent: LoyaltyCardMasterComponent,
-      LoyaltyProgramSettingsMasterComponent: LoyaltyProgramSettingsMasterComponent,
+      LoyaltyProgramSettingsMasterComponent:
+        LoyaltyProgramSettingsMasterComponent,
       GeneralDocumentMasterComponent: GeneralDocumentMasterComponent,
       GstMasterComponent: GstMasterComponent,
       VatMasterComponent: VatMasterComponent,
-      ReorderLevelSetupComponent: ReorderLevelSetupComponent, 
+      ReorderLevelSetupComponent: ReorderLevelSetupComponent,
       SalesPersonMasterComponent: SalesPersonMasterComponent,
       GiftVoucherMasterComponent: GiftVoucherMasterComponent,
       ServiceMasterComponent: ServiceMasterComponent,
@@ -271,12 +281,12 @@ export class RetailMasterComponent implements OnInit {
       HolidayMasterComponent: HolidayMasterComponent,
       SalesInvoiceComponent: SalesInvoiceComponent,
       ClientAuthorizationComponent: ClientAuthorizationComponent,
-      MobileAppSettingComponent:MobileAppSettingComponent,
-      MobileAppUserComponent:MobileAppUserComponent,
+      MobileAppSettingComponent: MobileAppSettingComponent,
+      MobileAppUserComponent: MobileAppUserComponent,
       FixedAssetsCategoryMasterComponent: FixedAssetsCategoryMasterComponent,
-      DocumentPrintSetupComponent:DocumentPrintSetupComponent,
-      EmailTemplateComponent:EmailTemplateComponent,
-      FixedAssetsComponent:FixedAssetsComponent
+      DocumentPrintSetupComponent: DocumentPrintSetupComponent,
+      EmailTemplateComponent: EmailTemplateComponent,
+      FixedAssetsComponent: FixedAssetsComponent,
 
       // Add components and update in operationals > menu updation grid form component name
     };
@@ -307,10 +317,12 @@ export class RetailMasterComponent implements OnInit {
         }
       },
       (reason) => {
-        if (reason === 'reloadMainGrid') {
-          this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
-        } else if (reason == 'OpenModal') {
-          this.openModalView()
+        if (reason === "reloadMainGrid") {
+          this.getMasterGridData({
+            HEADER_TABLE: this.CommonService.getqueryParamTable(),
+          });
+        } else if (reason == "OpenModal") {
+          this.openModalView();
         }
         // Handle modal dismissal (if needed)
       }
