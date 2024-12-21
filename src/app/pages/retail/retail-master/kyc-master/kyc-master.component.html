@@ -1,122 +1,181 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal"> KYC Master
-    </h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">KYC Master</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
-        <i class="feather icon-x close-icon"></i>
+      <i class="feather icon-x close-icon"></i>
     </button>
-</div>
-<!-- modal header component -->
-<modal-header *ngIf="!this.viewMode" (cancelClick)="close()" (saveClick)="formSubmit()"
-    (deleteClick)="DeleteController()" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
-    [isViewMore]="!viewMode"></modal-header>
-<!-- content section -->
-
-<div class="container-fluid pt-3">
+  </div>
+  <!-- modal header component -->
+  <modal-header
+    *ngIf="!this.viewMode"
+    (cancelClick)="close()"
+    (saveClick)="formSubmit()"
+    (deleteClick)="DeleteController()"
+    [isViewDelete]="false"
+  ></modal-header>
+  <!-- content section -->
+  
+  <div class="container-fluid pt-3">
     <form [formGroup]="kycform" class="p-1">
-        <div class="row">
-            <div class="col-md-8">
-
-                <fieldset class="custom-fieldset mb-2">
-                    <legend class="custom-legend">Header Detail
-                    </legend>
-                    <div class="row mb-2">
-                        <label for="prefixcode" class="col-sm-2 col-form-label me-4">Kyc Code: <span
-                                class="text-danger"> *</span></label>
-                        <div class="col-md-2 p-0 ms-2">
-                            <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" #kyccode id="kyccode" matInput class="p-0" formControlName="kyccode"
-                                    [readonly]="viewOnly || disable_code" maxlength="20" (focusout)="checkcode()"
-                                    UpperCaseDirective />
-                                <mat-error *ngIf="kycform.controls['kyccode'].hasError('required')">
-                                    Code is required.
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-5 p-0">
-                            <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" id="kyccodedesc" matInput formControlName="kyccodedesc"
-                                    [readonly]="viewOnly" (focusout)="checkdesc()" class="p-0" />
-                                <mat-error *ngIf="kycform.controls['kyccodedesc'].hasError('required')">
-                                    Description is required.
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="row mb-2">
-                        <label for="last_no" class="col-sm-2 pe-0 col-form-label me-4">Transaction Limit:</label>
-                        <div class="col-md-4 ">
-                            <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" maxlength="6" id="last_no" matInput
-                                    formControlName="transactionlimit" [readonly]="viewOnly" style="text-align: right;"
-                                    appApplyOnlyNumbers />
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-
-                </fieldset>
-
-                <div class="row mb-2" *ngIf="this.flag !='VIEW'">
-                    <div class="col-md-3">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
-                            [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
-                            (deleteClick)="deleteTableData()">
-                        </menu-buttons>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
-                        [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="KYC_SRNO">
-
-                        <dxi-column dataField="KYC_SRNO" caption="S.NO">
-                        </dxi-column>
-                        <dxi-column dataField="KYC_DOCTYPE" caption="Doc. Type" cellTemplate="kyc_doctype"></dxi-column>
-
-                        <!-- <div *dxTemplate="let data of 'kyc_doctype'">
-                                <input 
-                                    type="text" 
-                                    [disabled]="viewMode"  
-                                    (change)="docType(data, $event)" 
-                                    [value]="data.value" 
-                                    style="width: 100%;" 
-                                />
-                                
-                                <master-search 
-                                    class="masterSearch" 
-                                    [MasterSearchData]="kyccodetype"
-                                    (newRowClick)="selectedcodetype($event,data)">
-                                </master-search>
-                            </div> -->
-
-                        <div *dxTemplate="let data of 'kyc_doctype'">
-                            <input href="" class="mx-1" [value]="data.value" [readonly]="viewOnly">
-                            <master-search *ngIf="flag!='VIEW'" [MasterSearchData]="kyccodetype"
-                                (newRowClick)="selectedcodetype($event,data)">
-                            </master-search>
-                        </div>
-
-
-
-                        <dxi-column dataField="KYC_DOCDESC" caption="Doc. Desc" cellTemplate="doc_desc"> </dxi-column>
-
-                        <div *dxTemplate="let data of 'doc_desc'">
-                            <input type="text" [disabled]="viewMode" (change)="docTypeDes(data,$event)"
-                                [value]="data.value" style="width: 100%;" />
-                        </div>
-
-
-                        <!-- <dxi-column dataField="DOC_DESC" caption="Doc.Desc" cellTemp="doc_desc">
-                        </dxi-column>
-
-                        <div *dxTemplate="let data of 'doc_desc'">
-                            <input type="text" [disabled]="viewMode" [value]="data.value" (change)="docTypeDes(data,$event)" style="width: 100%;" />
-                        </div> -->
-                    </dx-data-grid>
-                </div>
+      <div class="row">
+        <div class="col-md-8">
+          <fieldset class="custom-fieldset mb-2">
+            <legend class="custom-legend">Header Detail</legend>
+            <div class="row mb-2">
+              <label for="prefixcode" class="col-sm-2 col-form-label me-4"
+                >Kyc Code: <span class="text-danger"> *</span></label
+              >
+              <div class="col-md-2 p-0 ms-2">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    type="text"
+                    #kyccode
+                    id="kyccode"
+                    matInput
+                    class="p-0"
+                    formControlName="kyccode"
+                    [readonly]="viewOnly || disable_code"
+                    maxlength="20"
+                    (focusout)="checkcode()"
+                    UpperCaseDirective
+                  />
+                  <mat-error
+                    *ngIf="kycform.controls['kyccode'].hasError('required')"
+                  >
+                    Code is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-5 p-0">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    type="text"
+                    id="kyccodedesc"
+                    matInput
+                    formControlName="kyccodedesc"
+                    [readonly]="viewOnly"
+                    (focusout)="checkdesc()"
+                    class="p-0"
+                  />
+                  <mat-error
+                    *ngIf="kycform.controls['kyccodedesc'].hasError('required')"
+                  >
+                    Description is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
             </div>
+  
+            <div class="row mb-2">
+              <label for="last_no" class="col-sm-2 pe-0 col-form-label me-4"
+                >Transaction Limit:</label
+              >
+              <div class="col-md-4">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    type="text"
+                    maxlength="6"
+                    id="last_no"
+                    matInput
+                    formControlName="transactionlimit"
+                    [readonly]="viewOnly"
+                    style="text-align: right"
+                    appApplyOnlyNumbers
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </fieldset>
+  
+          <div class="row mb-2" *ngIf="this.flag != 'VIEW'">
+            <div class="col-md-3">
+              <menu-buttons
+                [viewAddBtn]="true"
+                [viewDeleteBtn]="true"
+                [viewImportBtn]="false"
+                [viewAddBtn]="!viewMode"
+                [viewDeleteBtn]="!viewMode"
+                (addClick)="addTableData()"
+                (deleteClick)="deleteTableData()"
+              >
+              </menu-buttons>
+            </div>
+          </div>
+  
+          <div class="row">
+            <dx-data-grid
+              id="gridContainer"
+              [dataSource]="maindetails"
+              [showBorders]="true"
+              [showColumnLines]="true"
+              [showRowLines]="true"
+              [allowColumnResizing]="true"
+              keyExpr="KYC_SRNO"
+            >
+              <dxi-column dataField="KYC_SRNO" caption="S.NO"> </dxi-column>
+              <dxi-column
+                dataField="KYC_DOCTYPE"
+                caption="Doc. Type"
+                cellTemplate="kyc_doctype"
+              ></dxi-column>
+  
+              <!-- <div *dxTemplate="let data of 'kyc_doctype'">
+                                  <input 
+                                      type="text" 
+                                      [disabled]="viewMode"  
+                                      (change)="docType(data, $event)" 
+                                      [value]="data.value" 
+                                      style="width: 100%;" 
+                                  />
+                                  
+                                  <master-search 
+                                      class="masterSearch" 
+                                      [MasterSearchData]="kyccodetype"
+                                      (newRowClick)="selectedcodetype($event,data)">
+                                  </master-search>
+                              </div> -->
+  
+              <div *dxTemplate="let data of 'kyc_doctype'">
+                <input
+                  href=""
+                  class="mx-1"
+                  [value]="data.value"
+                  [readonly]="viewOnly"
+                />
+                <master-search
+                  *ngIf="flag != 'VIEW'"
+                  [MasterSearchData]="kyccodetype"
+                  (newRowClick)="selectedcodetype($event, data)"
+                >
+                </master-search>
+              </div>
+  
+              <dxi-column
+                dataField="KYC_DOCDESC"
+                caption="Doc. Desc"
+                cellTemplate="doc_desc"
+              >
+              </dxi-column>
+  
+              <div *dxTemplate="let data of 'doc_desc'">
+                <input
+                  type="text"
+                  [disabled]="viewMode"
+                  (change)="docTypeDes(data, $event)"
+                  [value]="data.value"
+                  style="width: 100%"
+                />
+              </div>
+  
+              <!-- <dxi-column dataField="DOC_DESC" caption="Doc.Desc" cellTemp="doc_desc">
+                          </dxi-column>
+  
+                          <div *dxTemplate="let data of 'doc_desc'">
+                              <input type="text" [disabled]="viewMode" [value]="data.value" (change)="docTypeDes(data,$event)" style="width: 100%;" />
+                          </div> -->
+            </dx-data-grid>
+          </div>
         </div>
-
+      </div>
     </form>
-</div>
+  </div>
+  
