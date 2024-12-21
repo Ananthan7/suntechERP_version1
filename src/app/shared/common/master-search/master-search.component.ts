@@ -75,6 +75,7 @@ export class MasterSearchComponent implements OnInit {
     this.currentPage = 1
     this.searchValueChange()
   }
+
   @HostListener('scroll', ['$event'])
   onScrollTable(event: any) {
     const container = event.target;
@@ -318,8 +319,23 @@ export class MasterSearchComponent implements OnInit {
   }
   f2Flag = false;
   SearchPlaceholder: string = 'Search Starts With';
+
+  currentRowIndex = 0; // Index of the currently focused row
+
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'ArrowDown') {
+      // Move focus to the next row
+      this.currentRowIndex = Math.min(this.currentRowIndex + 1, this.dataSource.length - 1);
+    } else if (event.key === 'ArrowUp') {
+      // Move focus to the previous row
+      this.currentRowIndex = Math.max(this.currentRowIndex - 1, 0);
+    } else if (event.key === "Enter"){
+      this.handleRowClick(this.dataSource[this.currentRowIndex])
+    }
+  }
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
+    this.onKeyDown(event)
     // Check if the pressed key is Enter
     if (event.key != 'F2') return
     this.f2Flag = !this.f2Flag

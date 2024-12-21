@@ -28,16 +28,16 @@
               <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
               <div class="col-md-2">
                 <mat-form-field style="width: 100%;" appearance="outline">
-                  <input type="text" matInput formControlName="currency"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="currency"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode" (focusout)="validateLookupField($event,curencyCodeData,'currency')"  (keydown)="lookupKeyPress($event,'currency')"/>
+                  <master-search [MasterSearchData]="curencyCodeData"  *ngIf=" viewMode == false" class="masterSearch"
+                  (newRowClick)="curencyCodeSelected($event)" #currencyDetailcodeSearch>
+                </master-search>
                 </mat-form-field>
               </div>
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%;" appearance="outline">
-                  <input type="text" matInput formControlName="currencyDetail"  readonly (focusout)="validateLookupField($event,curencyCodeData,'currencyDetail')"  (keydown)="lookupKeyPress($event,'currencyDetail')"/>
-                  <master-search [MasterSearchData]="curencyCodeData"  *ngIf=" viewMode == false" class="masterSearch"
-                    (newRowClick)="curencyCodeSelected($event)" #currencyDetailcodeSearch>
-                  </master-search>
+                  <input type="text" matInput formControlName="currencyDetail"  readonly PurityDecimal/>
                 </mat-form-field>
               </div>
             </div>
@@ -74,13 +74,17 @@
               </div>
 
               <!-- Data Grid -->
-              <dx-data-grid id="gridContainer" [showBorders]="true" [dataSource]="tableData" [showColumnLines]="true"
-                [showRowLines]="true" class="mt-3" [paging]="{ pageSize: 5 }">
+              <dx-data-grid id="gridContainer" [showBorders]="true" keyExpr="SRNO" [dataSource]="tableData" [showColumnLines]="true"
+                [showRowLines]="true" class="mt-3" [paging]="{ pageSize: 5 }"
+                [allowColumnReordering]="true"
+                [allowColumnResizing]="true" [columnAutoWidth]="true" (onSelectionChanged)="onSelectionChanged($event)">
                 <dxo-paging [enabled]="true"></dxo-paging>
                 <dxo-pager [showInfo]="true"></dxo-pager>
                 <dxo-selection mode="single"></dxo-selection>
+                <dxo-scrolling
+                mode="virtual"></dxo-scrolling>
 
-                <dxi-column dataField="SRNO" caption="SRNO"> </dxi-column>
+                <dxi-column dataField="SRNO" caption="SR No."> </dxi-column>
                 <dxi-column dataField="DIVISION" caption="Division" cellTemplate="divisiontemp">
                 </dxi-column>
                 <dxi-column dataField="LABTYPE" caption="Type" cellTemplate="typetemp">
@@ -104,6 +108,34 @@
                 <dxi-column dataField="COLOR" caption="Color" cellTemplate="colortemp">
                 </dxi-column>
                 <dxi-column dataField="CLARITY" caption="Clarity" cellTemplate="claritytemp">
+                </dxi-column>
+                <dxi-column dataField="SIZE_FROM" caption="Size From" cellTemplate="sizefromtemp">
+                </dxi-column>
+                <dxi-column dataField="SIZE_TO" caption="Size To" cellTemplate="sizetotemp">
+                </dxi-column>
+                <dxi-column dataField="WEIGHT_FROM" caption="Wt From" cellTemplate="wtfromtemp">
+                </dxi-column>
+                <dxi-column dataField="WEIGHT_TO" caption="Wt To" cellTemplate="wttotemp">
+                </dxi-column>
+                <dxi-column dataField="ISSUE_RATE" caption="Issue Rate" cellTemplate="issueratetemp">
+                </dxi-column>
+                <dxi-column dataField="SELLING_PER" caption="Selling %" cellTemplate="sellingpertemp">
+                </dxi-column>
+                <dxi-column dataField="SELLING_RATE" caption="Selling Rate" cellTemplate="sellingratetemp">
+                </dxi-column>
+                <dxi-column dataField="SIZE_FROM" caption="Size From" cellTemplate="sizefromtemp">
+                </dxi-column>
+                <dxi-column dataField="SIZE_TO" caption="Size To" cellTemplate="sizetotemp">
+                </dxi-column>
+                <dxi-column dataField="WEIGHT_FROM" caption="Wt From" cellTemplate="wtfromtemp">
+                </dxi-column>
+                <dxi-column dataField="WEIGHT_TO" caption="Wt To" cellTemplate="wttotemp">
+                </dxi-column>
+                <dxi-column dataField="ISSUE_RATE" caption="Issue Rate" cellTemplate="issueratetemp">
+                </dxi-column>
+                <dxi-column dataField="SELLING_PER" caption="Selling %" cellTemplate="sellingpertemp">
+                </dxi-column>
+                <dxi-column dataField="SELLING_RATE" caption="Selling Rate" cellTemplate="sellingratetemp">
                 </dxi-column>
 
                 <div *dxTemplate="let data1 of 'divisiontemp'">
@@ -169,6 +201,48 @@
                     style="width: 100%;" />
                 </div>
 
+                <div *dxTemplate="let data1 of 'sizefromtemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="sizefromtemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+
+                <div *dxTemplate="let data1 of 'sizetotemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="sizetotemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+
+                <div *dxTemplate="let data1 of 'wtfromtemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="wtfromtemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+
+                <div *dxTemplate="let data1 of 'wttotemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="wttotemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+
+                <div *dxTemplate="let data1 of 'issueratetemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="issueratetemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+
+                <div *dxTemplate="let data1 of 'sellingpertemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="sellingpertemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+
+                <div *dxTemplate="let data1 of 'sellingratetemp'">
+
+                  <input type="text" [disabled]="viewMode" [value]="data1.value" (change)="sellingratetemp($event,data1)"
+                    style="width: 100%;" />
+                </div>
+
                 <!-- <dxi-column
                           *ngFor="let data of stonePricingHeadings"
                           [dataField]="data.field"
@@ -184,13 +258,17 @@
             <div class="row pt-2">
               <div class="col-md-12">
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                  (addClick)="openlabetails()" (deleteClick)="removeItemDetails()"   [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" >
+                  (addClick)="openlabetails()"  (deleteClick)="removeItemDetails2()"  [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" >
                 </menu-buttons>
                 <dx-data-grid id="gridContainer" [showBorders]="true" [dataSource]="tableData2" [showColumnLines]="true"
-                  [showRowLines]="true" class="mt-3" [paging]="{ pageSize: 5 }">
+                  [showRowLines]="true" class="mt-3" [paging]="{ pageSize: 5 }"  keyExpr="SRNO" 
+                  [allowColumnReordering]="true"
+                  [allowColumnResizing]="true" [columnAutoWidth]="true" (onSelectionChanged)="onSelectionChanged2($event)">
                   <dxo-paging [enabled]="true"></dxo-paging>
                   <dxo-pager [showInfo]="true"></dxo-pager>
                   <dxo-selection mode="single"></dxo-selection>
+                  <dxo-scrolling
+                  mode="virtual"></dxo-scrolling>
 
 
                   <dxi-column dataField="SRNO" caption="SRNO"> </dxi-column>
@@ -206,6 +284,8 @@
                   </dxi-column>
                   <dxi-column dataField="CUSTOMER_CODE" caption="Category" cellTemplate="categorylabtemp">
                   </dxi-column>
+                  <dxi-column dataField="" caption="Brand" cellTemplate="brandlabtemp">
+                  </dxi-column>
                   <dxi-column dataField="LABOUR_CODE" caption="Sub Category" cellTemplate="subCategorylabtemp">
                   </dxi-column>
                   <dxi-column dataField="SHAPE" caption="Shape" cellTemplate="shapelabtemp">
@@ -214,16 +294,45 @@
                   </dxi-column>
                   <dxi-column dataField="SIZE_TO" caption="Sieve To" cellTemplate="sieveToLabtemp">
                   </dxi-column>
-                  <dxi-column dataField="SIEVE" caption="Sieve Set" cellTemplate="sieveSetLabtemp">
+                  <dxi-column dataField="SIEVE" caption="Sieve" cellTemplate="sieveSetLabtemp">
                   </dxi-column>
                   <dxi-column dataField="CARATWT_FROM" caption="Ct Wt From" cellTemplate="ctfromtemp">
                   </dxi-column>
+                  <dxi-column dataField="CARATWT_FROM" caption="Ct Wt From" cellTemplate="ctfromtemp">
+                  </dxi-column>
+                  <dxi-column dataField="CARATWT_TO" caption="Ct Wt To" cellTemplate="cttotemp">
+                  </dxi-column>
+                  <dxi-column dataField="COST_RATE" caption="Cost Rate" cellTemplate="costRatetemp">
+                  </dxi-column>
+                  <dxi-column dataField="SELLING_RATE" caption="Selling Rate" cellTemplate="sellingRatetemp">
+                  </dxi-column>
+                  <dxi-column dataField="SELLING_PER" caption="Selling %" cellTemplate="sellingperctemp">
+                  </dxi-column>
+                  <dxi-column dataField="PRICECODE" caption="Setting Type" cellTemplate="settingtypetemp">
+                  </dxi-column>
 
-                    <div *dxTemplate="let data of 'divisionLabtemp'">
+
+                    <!-- <div *dxTemplate="let data of 'divisionLabtemp'">
 
                       <input type="text" [disabled]="viewMode" [value]="data.value"
                         (change)="divisionLabtemp($event,data)" style="width: 100%;" />
+                    </div> -->
+
+                    <div *dxTemplate="let data of 'divisionLabtemp'">
+                      <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                      <master-search [MasterSearchData]="divisionCode" *ngIf=" viewMode == false"
+                        (newRowClick)="divisionCodeSelected($event,data,'divisionLabtemp')">
+                      </master-search>
                     </div>
+                    <!-- <div *dxTemplate="let data of 'divisionLabtemp'">
+                      <span [innerHTML]="data.data.value"></span>
+                      <master-search 
+                        [MasterSearchData]="divisionCode" 
+                        *ngIf="!viewMode" 
+                        (newRowClick)="divisionCodeSelected($event, data, 'divisionLabtemp')">
+                      </master-search>
+                    </div> -->
+                    
 
                     <div *dxTemplate="let data of 'labtypetemp'">
 
@@ -251,6 +360,12 @@
                       <input type="text" [disabled]="viewMode" [value]="data.value"
                         (change)="categorylabtemp($event,data)" style="width: 100%;" />
                     </div>
+                    <div *dxTemplate="let data of 'brandlabtemp'">
+
+                      <input type="text" [disabled]="viewMode" [value]="data.value"
+                        (change)="brandlabtemp($event,data)" style="width: 100%;" />
+                    </div>
+                    
                     <div *dxTemplate="let data of 'subCategorylabtemp'">
 
                       <input type="text" [disabled]="viewMode" [value]="data.value"
@@ -281,6 +396,36 @@
                       <input type="number" [disabled]="viewMode" [value]="data.value"
                         (change)="ctfromtemp($event,data)" style="width: 100%;" class="text-right"/>
                     </div>
+  
+                    <div *dxTemplate="let data of 'cttotemp'">
+
+                      <input type="number" [disabled]="viewMode" [value]="data.value"
+                        (change)="cttotemp($event,data)" style="width: 100%;" class="text-right"/>
+                    </div>
+
+                    <div *dxTemplate="let data of 'costRatetemp'">
+
+                      <input type="number" [disabled]="viewMode" [value]="data.value"
+                        (change)="costRatetemp($event,data)" style="width: 100%;" class="text-right"/>
+                    </div>
+
+                    <div *dxTemplate="let data of 'sellingRatetemp'">
+
+                      <input type="number" [disabled]="viewMode" [value]="data.value"
+                        (change)="sellingRatetemp($event,data)" style="width: 100%;" class="text-right"/>
+                    </div>
+
+                    <div *dxTemplate="let data of 'sellingperctemp'">
+
+                      <input type="number" [disabled]="viewMode" [value]="data.value"
+                        (change)="sellingperctemp($event,data)" style="width: 100%;" class="text-right"/>
+                    </div>
+
+                    <div *dxTemplate="let data of 'settingtypetemp'">
+
+                      <input type="number" [disabled]="viewMode" [value]="data.value"
+                        (change)="settingtypetemp($event,data)" style="width: 100%;" class="text-right"/>
+                    </div>
 
 
                     <!-- <dxi-column *ngFor="let data of labourPricingHeadings" [dataField]="data.field"
@@ -295,7 +440,7 @@
             <div class="row pt-2">
               <div class="col-md-12 d-flex justify-content-between align-items-center">
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                  (addClick)="openAccountdetails()" (deleteClick)="removeItemDetails()"   [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" >
+                  (addClick)="openAccountdetails()"  (deleteClick)="removeItemDetails3()"   [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" >
                 </menu-buttons>
                 <div class="d-flex">
 
@@ -322,7 +467,7 @@
                             </button> -->
               </div>
               <dx-data-grid id="gridContainer" [showBorders]="true" [dataSource]="tableData3"
-                [showColumnLines]="true" [showRowLines]="true" class="mt-3" [paging]="{ pageSize: 5 }">
+                [showColumnLines]="true" [showRowLines]="true" class="mt-3"  keyExpr="SRNO"  [paging]="{ pageSize: 5 }"  (onSelectionChanged)="onSelectionChanged3($event)">
                 <dxo-paging [enabled]="true"></dxo-paging>
                 <dxo-pager [showInfo]="true"></dxo-pager>
                 <dxo-selection mode="single"></dxo-selection>

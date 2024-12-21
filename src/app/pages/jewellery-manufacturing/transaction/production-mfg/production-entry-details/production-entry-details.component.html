@@ -50,7 +50,8 @@
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="UNQ_JOB_ID"
-                UpperCaseDirective [readonly]="viewMode || editMode" id="UNQ_JOB_ID"
+                UpperCaseDirective [readonly]="viewMode || editMode"
+                id="UNQ_JOB_ID"
                 (keydown)="lookupKeyPress($event,'UNQ_JOB_ID')"
                 (change)="subJobNumberValidate($event)" />
               <master-search class="masterSearch"
@@ -286,7 +287,7 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" style="width: 50%;">
                   <input type="text" matInput formControlName="PREFIX_LASTNO"
-                  ithoutComma [readonly]="viewMode" class="text-right" />
+                    ithoutComma [readonly]="viewMode" class="text-right" />
                 </mat-form-field>
               </div>
 
@@ -907,9 +908,10 @@
     <dx-data-grid id="gridContainer" [columnAutoWidth]="true"
       [allowColumnResizing]="true" [showBorders]="true"
       [showRowLines]="true"
-      [dataSource]="pendingProcess">
+      [dataSource]="pendingProcess"
+      >
       <dxo-filter-row [visible]="true"></dxo-filter-row>
-      <dxo-selection mode="single"></dxo-selection>
+      <!-- <dxo-selection mode="single"></dxo-selection> -->
       <dxi-column width="auto" caption="Multiple Process Pending"
         dataField="PROCESS">
       </dxi-column>

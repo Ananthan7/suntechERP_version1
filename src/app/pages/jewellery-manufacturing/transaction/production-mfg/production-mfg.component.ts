@@ -20,6 +20,7 @@ import { AttachmentUploadComponent } from "src/app/shared/common/attachment-uplo
 export class ProductionMfgComponent implements OnInit {
   @ViewChild('overlayuserName') overlayuserName!: MasterSearchComponent;
   @ViewChild('OverlayCurrencyRate') OverlayCurrencyRate!: MasterSearchComponent;
+  @ViewChild('OverlayMETAL_RATE_TYPE') OverlayMETAL_RATE_TYPE!: MasterSearchComponent;
   @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
   Attachedfile: any[] = [];
@@ -597,6 +598,9 @@ export class ProductionMfgComponent implements OnInit {
       case 'CURRENCY_RATE':
         this.OverlayCurrencyRate.showOverlayPanel(event);
         break;
+      case 'METAL_RATE_TYPE':
+        this.OverlayMETAL_RATE_TYPE.showOverlayPanel(event);
+        break;
       default:
     }
   }
@@ -604,7 +608,12 @@ export class ProductionMfgComponent implements OnInit {
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) {
+      if (FORMNAME === 'METAL_RATE_TYPE') {
+        this.productionFrom.controls['METAL_RATE'].setValue('')
+      }
+      return
+    }
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
@@ -618,26 +627,22 @@ export class ProductionMfgComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.productionFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'METAL_RATE') {
-            this.productionFrom.controls['METAL_RATE_TYPE'].setValue('')
+          if (FORMNAME === 'METAL_RATE_TYPE') {
+            this.productionFrom.controls['METAL_RATE'].setValue('')
           }
           if (FORMNAME === 'SMAN'|| FORMNAME === 'CURRENCY_RATE') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
         }
-        if (FORMNAME === 'METAL_RATE'){
-          this.setMetalRate(data)
+        if (FORMNAME === 'METAL_RATE_TYPE'){
+          this.setFormDecimal('METAL_RATE',data[0].WHOLESALE_RATE,'RATE')
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
-  setMetalRate(data:any) {
-    this.setFormDecimal('METAL_RATE',data[0].WHOLESALE_RATE,'RATE')
-  }
-
 
   close(data?: any) {
     if (data){
