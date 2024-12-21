@@ -349,8 +349,28 @@ export class DiamondPrefixMasterComponent implements OnInit {
     console.log(value);
     if (this.checkCode()) return
 
-    this.diamondprefixForm.controls.itemcode.setValue(value.PREFIX_CODE);
-    this.diamondprefixForm.controls.itemcodedetail.setValue(value.DESCRIPTION)
+    this.diamondprefixForm.controls.collection.setValue(value.PREFIX_CODE);
+  }
+
+  itemcodeSelectedsubcollection(value: any) {
+    console.log(value);
+    if (this.checkCode()) return
+
+    this.diamondprefixForm.controls.sub_collection.setValue(value.PREFIX_CODE);
+  }
+
+  itemcodeSelectedIncat(value: any) {
+    console.log(value);
+    if (this.checkCode()) return
+
+    this.diamondprefixForm.controls.inc_cat.setValue(value.PREFIX_CODE);
+  }
+
+  itemcodeSelectedorderRef(value: any) {
+    console.log(value);
+    if (this.checkCode()) return
+
+    this.diamondprefixForm.controls.order_ref.setValue(value.PREFIX_CODE);
   }
 
   stoneTypeCodeData: MasterSearchModel = {

@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { retry } from 'rxjs/operators';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-customer-wise-stone-pricing-and-labour-charges',
@@ -35,12 +36,19 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   selectedtabledata1: any;
   selectedtabledata2: any;
   selectedtabledata3: any;
+  isCodeFilled: boolean = false;
+  UpdatetDate = moment(new Date(), 'DD/MM/YYYY');
+
 
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
   currentDate: any = this.commonService.currentDate;
   @ViewChild('currencyDetailcodeSearch') currencyDetailcodeSearch!: MasterSearchComponent;
   @ViewChild("codeField") codeField!: ElementRef;
+
+  LCColLABTYPE: any[] = [];
+  LCColUNITCODE: any[] = [];
+  LCColMETHOD: any[] = [];
 
 
   stonePricingHeadings: any[] = [
@@ -101,6 +109,20 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
 
   ngOnInit(): void {
     this.renderer.selectRootElement('#code')?.focus();
+    // this.LCColLABTYPE = this.getUniqueValues(
+    //   this.commonService.getComboFilterByID("LCColLABTYPE"),
+    //   "ENGLISH"
+    // );
+
+    this.LCColUNITCODE = this.getUniqueValues(
+      this.commonService.getComboFilterByID("lab unit"),
+      "ENGLISH"
+    );
+
+    // this.LCColMETHOD = this.getUniqueValues(
+    //   this.commonService.getComboFilterByID("LCColMETHOD"),
+    //   "ENGLISH"
+    // );
 
     if (this.content?.FLAG) {
       console.log(this.content)
@@ -112,6 +134,8 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
        this.viewMode = false;
        this.editMode = true;
        this.setFormValues();
+       this.isCodeFilled = true;
+
 
      } else if (this.content?.FLAG == 'DELETE') {
        this.viewMode = true;
@@ -120,6 +144,10 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
        this.deleteRecord()
      }
    }
+   this.setInitialValues();
+   this.customerWiseStonePriceForm.get('pricecode')?.valueChanges.subscribe((value) => {
+    this.isCodeFilled = value && value.trim().length > 0;
+    });
   }
 
   ngAfterViewInit(): void {
@@ -129,6 +157,25 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
 }
 }
 
+onCodeInput(value: string): void {
+  this.isCodeFilled = value.trim().length > 0;
+}
+
+setInitialValues() {
+
+
+  this.customerWiseStonePriceForm.controls.validFrom.setValue(this.UpdatetDate)
+
+  console.log('', this.currentDate)
+}
+
+getUniqueValues(List: any[], field: string) {
+  return List.filter(
+    (item, index, self) =>
+      index ===
+      self.findIndex((t) => t[field] === item[field] && t[field] !== "")
+  );
+}
 
   customerWiseStonePriceForm: FormGroup = this.formBuilder.group({
 
@@ -152,7 +199,13 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
     
   }
 
-
+  checkCode(): boolean {
+    if (this.customerWiseStonePriceForm.value.pricecode == '') {
+      this.commonService.toastErrorByMsgId('MSG1593')
+      return true
+    }
+    return false
+  }
 
   curencyCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -167,6 +220,8 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   }
 
   curencyCodeSelected(e: any) {
+    if (this.checkCode()) return
+
     this.customerWiseStonePriceForm.controls.currency.setValue(e. CURRENCY_CODE);
     this.customerWiseStonePriceForm.controls.currencyDetail.setValue(e.CONV_RATE);
    
@@ -212,8 +267,104 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
     }
   }
 
+  stonetypeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Stone Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "types = 'STONE TYPE MASTER' ORDER BY CODE",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+  stoneTypeCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CURRENCYCODE = value.CODE;
+  }
   
-  
+  shapeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Shape',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "types='SHAPE MASTER' ORDER BY CODE",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  shapegridCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].SHAPE = value.CODE;
+  }
+
+  sieveCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'SIEVE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "types = 'SIEVE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  sieveCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].SIEVE_SET = value.CODE;
+  }
+
+  sieveFromtempCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].SIEVE = value.CODE;
+  }
+
+  sieveTotempCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].SIEVE_TO = value.CODE;
+  }
+
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Color Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Types = 'COLOR MASTER' ORDER BY CODE",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+  colorCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].COLOR = value.CODE;
+  }
+
+
+  clarityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Types = 'CLARITY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  clarityCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CLARITY = value.CODE;
+  }
+
 //   divisionCodeSelected(value:any,data:any, controlName: string){
 //     this.tableData2[data.data.SRNO - 1].Division = ('');
 //     console.log('Data ',data);
@@ -244,13 +395,18 @@ divisionCodeSelected(value: any, data: any, controlName: string) {
   // this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
   console.log(value.DIVISION_CODE);
   
-  if (value.DIVISION == 'M' || value.DIVISION == 'G') {
-    this.isPCSDisabled = true;
-    this.iskaratDisabled = false;
-  } else {
-    this.isPCSDisabled = false;
-    this.iskaratDisabled = true;
-  }
+  // if (value.DIVISION == 'M' || value.DIVISION == 'G') {
+  //   this.isPCSDisabled = true;
+  //   this.iskaratDisabled = false;
+  // } else {
+  //   this.isPCSDisabled = false;
+  //   this.iskaratDisabled = true;
+  // }
+}
+
+divisionCodeSelectedStone(value: any, data: any, controlName: string) {
+  this.tableData[data.data.SRNO - 1].DIVISION = value.DIVISION_CODE;
+  console.log(value.DIVISION_CODE);
 }
 
 
@@ -529,7 +685,7 @@ divisionCodeSelected(value: any, data: any, controlName: string) {
   stoneTypetemp(data:any,value: any){
     this.tableData[value.data.SRNO - 1].CURRENCYCODE = data.target.value;
   }
-      
+  
   shapeTypetemp(data:any,value: any){
     this.tableData[value.data.SRNO - 1].SHAPE = data.target.value;
   }

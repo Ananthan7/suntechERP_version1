@@ -286,7 +286,7 @@
                                                 (focusout)="validateLookupField($event,itemcodeData,'sub_collection')"
                                                 (keydown)="lookupKeyPress($event,'sub_collection')" />
                                             <master-search class="masterSearch" [MasterSearchData]="itemcodeData"
-                                                (newRowClick)="itemcodeSelected($event)" *ngIf=" viewMode == false"
+                                                (newRowClick)="itemcodeSelectedsubcollection($event)" *ngIf=" viewMode == false"
                                                 #sub_collectioncodeSearch></master-search>
                                         </mat-form-field>
                                     </div>
@@ -339,7 +339,7 @@
                                                 (focusout)="validateLookupField($event,itemcodeData,'inc_cat')"
                                                 (keydown)="lookupKeyPress($event,'inc_cat')" />
                                             <master-search class="masterSearch" [MasterSearchData]="itemcodeData"
-                                                (newRowClick)="itemcodeSelected($event)" *ngIf=" viewMode == false"
+                                                (newRowClick)="itemcodeSelectedIncat($event)" *ngIf=" viewMode == false"
                                                 #inc_catcodeSearch></master-search>
                                         </mat-form-field>
                                     </div>
@@ -353,7 +353,7 @@
                                                 (focusout)="validateLookupField($event,itemcodeData,'order_ref')"
                                                 (keydown)="lookupKeyPress($event,'order_ref')" />
                                             <master-search class="masterSearch" [MasterSearchData]="itemcodeData"
-                                                (newRowClick)="itemcodeSelected($event)" *ngIf=" viewMode == false"
+                                                (newRowClick)="itemcodeSelectedorderRef($event)" *ngIf=" viewMode == false"
                                                 #order_refcodeSearch></master-search>
                                         </mat-form-field>
                                     </div>

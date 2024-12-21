@@ -25,6 +25,8 @@ export class MetalDivisionMasterComponent implements OnInit {
   editMode: boolean=false;
   isDisableSaveBtn: boolean = false;
   viewDisable: boolean = false;
+  isCodeFilled: boolean = false;
+
 
   @ViewChild('overlaycostcenterSearch') overlaycostcenterSearch!: MasterSearchComponent;
   @ViewChild('overlaycostcentermakingSearch') overlaycostcentermakingSearch!: MasterSearchComponent;
@@ -57,13 +59,19 @@ export class MetalDivisionMasterComponent implements OnInit {
         this.editableMode = true;
         this.editMode = true;
         this.setFormValues();
+       this.isCodeFilled = true;
+
 
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteMetalDivision()
       }
     }
+    this.metaldivisionForm.get('code')?.valueChanges.subscribe((value) => {
+      this.isCodeFilled = value && value.trim().length > 0;
+      });
   }
+
 
 
   inputValidate(event: any) {
@@ -86,6 +94,7 @@ export class MetalDivisionMasterComponent implements OnInit {
   })
 
 
+
   setFormValues() {
     if (!this.content) return
 
@@ -98,6 +107,20 @@ export class MetalDivisionMasterComponent implements OnInit {
     this.metaldivisionForm.controls.stockcode.setValue(this.content.AUTOFIXSTOCK);
 
   }
+
+  onCodeInput(value: string): void {
+    this.isCodeFilled = value.trim().length > 0;
+  }
+
+
+  checkCode(): boolean {
+    if (this.metaldivisionForm.value.code == '') {
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
+      return true
+    }
+    return false
+  }
+
 
   checkCodeExists(event: any) {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -148,6 +171,8 @@ export class MetalDivisionMasterComponent implements OnInit {
   }
   costCenterSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.metaldivisionForm.controls.costcenter.setValue(e.COST_CODE);
   }
 
@@ -164,6 +189,8 @@ export class MetalDivisionMasterComponent implements OnInit {
   }
   costSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.metaldivisionForm.controls.costcentermaking.setValue(e.COST_CODE);
   }
 
@@ -180,6 +207,8 @@ export class MetalDivisionMasterComponent implements OnInit {
   }
   stockCodeSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.metaldivisionForm.controls.stockcode.setValue(e.STOCK_CODE);
   }
 

@@ -21,6 +21,8 @@ export class ServiceMasterComponent implements OnInit {
   viewMode: boolean = false;
   editMode: boolean = false;
   codeEnable: boolean = false;
+  isCodeFilled: boolean = false;
+
 
 
   @ViewChild('accountcodeSearch') accountcodeSearch!: MasterSearchComponent;
@@ -57,12 +59,17 @@ export class ServiceMasterComponent implements OnInit {
         this.viewMode = false;
         this.editMode = true;
         this.codeEnable = false;
+        this.isCodeFilled = true;
+
 
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteRecord()
       }
     }
+    this.serviceForm.get('servicecode')?.valueChanges.subscribe((value) => {
+      this.isCodeFilled = value && value.trim().length > 0;
+    });
   }
 
   serviceForm: FormGroup = this.formBuilder.group({
@@ -82,6 +89,19 @@ export class ServiceMasterComponent implements OnInit {
     branchtransfer: [''],
 
   })
+
+  onCodeInput(value: string): void {
+    this.isCodeFilled = value.trim().length > 0;
+  }
+
+  checkCode(): boolean {
+    if (this.serviceForm.value.servicecode == '') {
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
+      return true
+    }
+    return false
+  }
+
 
   close(data?: any) {
     if (data) {
@@ -348,6 +368,8 @@ export class ServiceMasterComponent implements OnInit {
 
   accountCodeSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.serviceForm.controls.account.setValue(e.ACCODE);
   }
 
@@ -365,6 +387,8 @@ export class ServiceMasterComponent implements OnInit {
 
   designCodeSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.serviceForm.controls.designCode.setValue(e.Design_Code);
   }
 
@@ -383,6 +407,8 @@ export class ServiceMasterComponent implements OnInit {
 
   hsnCodeSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.serviceForm.controls.hsn.setValue(e.CODE);
   }
 
@@ -401,11 +427,15 @@ export class ServiceMasterComponent implements OnInit {
   }
   FilterVoctypeCodeSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.serviceForm.controls.filterinvoctype.setValue(e.VOCTYPE);
   }
 
   FiltersalesVoctypeCodeSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.serviceForm.controls.filtersales.setValue(e.VOCTYPE);
   }
 
@@ -422,6 +452,8 @@ export class ServiceMasterComponent implements OnInit {
   }
   FiltersalesreturnSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.serviceForm.controls.filtersalesreturn.setValue(e.VOCTYPE);
   }
 
@@ -429,7 +461,7 @@ export class ServiceMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 49,
-    SEARCH_FIELD: '',
+    SEARCH_FIELD: 'GST_CODE',
     SEARCH_HEADING: 'Purchase Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "",
@@ -438,6 +470,8 @@ export class ServiceMasterComponent implements OnInit {
   }
   purchaseSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.serviceForm.controls.purchase.setValue(e.GST_CODE);
   }
 
@@ -454,6 +488,8 @@ export class ServiceMasterComponent implements OnInit {
   }
   salesCodeSelected(e: any) {
     console.log(e);
+    if (this.checkCode()) return
+
     this.serviceForm.controls.sales.setValue(e.GST_CODE);
   }
 
@@ -470,7 +506,9 @@ export class ServiceMasterComponent implements OnInit {
   }
   branchtransferCodeSelected(e: any) {
     console.log(e);
-    this.serviceForm.controls.sales.setValue(e.GST_CODE);
+    if (this.checkCode()) return
+
+    this.serviceForm.controls.branchtransfer.setValue(e.GST_CODE);
   }
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {

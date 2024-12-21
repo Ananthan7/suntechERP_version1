@@ -8,6 +8,8 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
 
 @Component({
   selector: 'app-sales-person-master',
@@ -25,7 +27,8 @@ export class SalesPersonMasterComponent implements OnInit {
   userbranch = localStorage.getItem('userbranch');
   editMode:boolean = false;
   isCodeFilled: boolean = false;
-
+  imagepath: any[] = [];
+  dialogBox: any;
 
   @ViewChild('overlaybranchSearch') overlaybranchSearch!: MasterSearchComponent;
   @ViewChild('overlayemployeecodeSearch') overlayemployeecodeSearch!: MasterSearchComponent;
@@ -41,6 +44,7 @@ export class SalesPersonMasterComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     private renderer: Renderer2,
+    public dialog: MatDialog,
 
   ) { }
 
@@ -63,6 +67,8 @@ export class SalesPersonMasterComponent implements OnInit {
          
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
+        this.setFormValues();
+
         this.deleteRecord()
       }
     }
@@ -83,6 +89,8 @@ export class SalesPersonMasterComponent implements OnInit {
     employeecode: [''],
     glcode: [''],
     emailId: [''],
+    imagepath: [''],
+
   })
 
   setFormValues() {
@@ -99,9 +107,34 @@ export class SalesPersonMasterComponent implements OnInit {
     this.salesPersonForm.controls.glcode.setValue(this.content.SPACCODE)
     this.salesPersonForm.controls.commisionOthers.setValue(this.commonService.transformDecimalVB(
     this.commonService.allbranchMaster?.BAMTDECIMALS,this.content.COMMISSIONDIA))
+    this.salesPersonForm.controls.emailId.setValue(this.content.SALESMAN_IMAGE_PATH)
+
+  }
+
+  CommisionMetallesshunderd(){
+    if(this.salesPersonForm.value.commisionMetal > 100){
+      this.salesPersonForm.controls.commisionMetal.setValue('');
+      this.openDialog('Warning', 'Commision Metal % Cannot Exceed 100', true);
+    }
    
   }
 
+  CommisionOtherslesshunderd(){
+    if(this.salesPersonForm.value.commisionOthers > 100){
+      this.salesPersonForm.controls.commisionOthers.setValue('');
+      this.openDialog('Warning', 'Commision Others % Cannot Exceed 100', true);
+    }
+   
+  }
+
+      openDialog(title: any, msg: any, okBtn: any, swapColor = false) {
+          this.dialogBox = this.dialog.open(DialogboxComponent, {
+              width: '40%',
+              disableClose: true,
+              data: { title, msg, okBtn, swapColor },
+          });
+      }
+  
   onCodeInput(value: string): void {
     this.isCodeFilled = value.trim().length > 0;
   }
@@ -196,6 +229,25 @@ export class SalesPersonMasterComponent implements OnInit {
     )
   }
 
+  onFileChanged(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
+      const reader = new FileReader();
+
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        const imageDataUrl = e.target?.result as string; // Base64 or Data URL
+
+        // Add the uploaded image to the imageArray
+        this.imagepath.push(imageDataUrl);
+      };
+
+      reader.readAsDataURL(file); // Convert file to Base64 string
+    }
+  }
+
   setPostData(){
 
    
@@ -208,8 +260,8 @@ export class SalesPersonMasterComponent implements OnInit {
       "DESCRIPTION": this.commonService.nullToString(this.salesPersonForm.value.description),
       "COMMISSION": this.commonService.emptyToZero(this.salesPersonForm.value.commisionMetal),
       "MID": 0,
-      "SALESMAN_IMAGE_PATH": "",
-      "SALESMAN_IMAGE": "",
+      "SALESMAN_IMAGE_PATH":  this.commonService.nullToString(this.salesPersonForm.value.emailId),
+      "SALESMAN_IMAGE": this.commonService.nullToString(this.salesPersonForm.value.imagepath),
       "SYSTEM_DATE": "2024-11-27T11:06:03.169Z",
       "SP_SHORTNAME": this.commonService.nullToString(this.salesPersonForm.value.shortname),
       "SP_BRANCHCODE": this.commonService.nullToString(this.salesPersonForm.value.branch),

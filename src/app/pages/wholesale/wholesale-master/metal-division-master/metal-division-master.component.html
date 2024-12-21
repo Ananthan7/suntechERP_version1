@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-md-5">
                           <mat-form-field style="width: 100%" appearance="outline">
-                            <input type="text" matInput formControlName="codedes" oninput="this.value = this.value.toUpperCase()" maxlength="40" [readonly]="viewMode"/>
+                            <input type="text" matInput formControlName="codedes" oninput="this.value = this.value.toUpperCase()" maxlength="40" [readonly]="viewMode || !isCodeFilled"/>
                           </mat-form-field>
                         </div>
                       </div>
@@ -33,7 +33,7 @@
                             <input type="text" matInput formControlName="costcenter" 
                             (input)="inputValidate($event)"
                             UpperCaseDirective
-                            (focusout)="validateLookupField($event,costCenterData,'costcenter')" [readonly]="viewMode" (keydown)="lookupKeyPress($event,'costcenter')"/>
+                            (focusout)="validateLookupField($event,costCenterData,'costcenter')" [readonly]="viewMode || !isCodeFilled" (keydown)="lookupKeyPress($event,'costcenter')"/>
                             <master-search [MasterSearchData]="costCenterData"  class="masterSearch"
                           *ngIf=" viewDisable == false" #overlaycostcenterSearch  (newRowClick)="costCenterSelected($event)">
                       </master-search>
@@ -46,7 +46,7 @@
                             <input type="text" matInput formControlName="costcentermaking" 
                             (input)="inputValidate($event)"
                             UpperCaseDirective
-                            (focusout)="validateLookupField($event,costData,'costcentermaking')" [readonly]="viewMode" (keydown)="lookupKeyPress($event,'costcentermaking')"/>
+                            (focusout)="validateLookupField($event,costData,'costcentermaking')" [readonly]="viewMode || !isCodeFilled" (keydown)="lookupKeyPress($event,'costcentermaking')"/>
                             <master-search [MasterSearchData]="costData"  class="masterSearch"
                           *ngIf=" viewDisable == false" #overlaycostcentermakingSearch  (newRowClick)="costSelected($event)">
                       </master-search>
@@ -58,7 +58,7 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Abbreviation :</label>
                         <div class="col-md-3">
                           <mat-form-field style="width: 100%" appearance="outline">
-                            <input type="text" matInput formControlName="Abbreviation" [maxlength]="4" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode"/>
+                            <input type="text" matInput formControlName="Abbreviation" [maxlength]="4" oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode || !isCodeFilled"/>
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
@@ -79,7 +79,7 @@
                           <mat-form-field style="width: 100%" appearance="outline">
                             <input type="text" matInput formControlName="stockcode" 
                             (input)="inputValidate($event)"
-                            UpperCaseDirective [readonly]="viewMode"
+                            UpperCaseDirective [readonly]="viewMode || !isCodeFilled"
                             (focusout)="validateLookupField($event,stockCodeData,'stockcode')" (keydown)="lookupKeyPress($event,'stockcode')"/>
                             <master-search [MasterSearchData]="stockCodeData" class="masterSearch"
                             *ngIf=" viewDisable == false" #overlaystockcodeSearch (newRowClick)="stockCodeSelected($event)">
@@ -92,7 +92,7 @@
                         <label for="inputPassword" class="col-sm-5 col-form-label">Code</label>
                         <div class="col-md-3">
                           <div class="form-check">
-                            <button type="button" class="btn btn-outline-primary metal-issue-del-btn" [disabled]="viewMode">
+                            <button type="button" class="btn btn-outline-primary metal-issue-del-btn" [disabled]="viewMode || !isCodeFilled">
                               Excel Import
                             </button>
                           </div>
