@@ -98,6 +98,7 @@ export class JobcardComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
   formatDateToDDMMYYYY(date: Date): string {
     const day = String(date.getDate()).padStart(2, '0');
@@ -1813,10 +1814,7 @@ export class JobcardComponent implements OnInit {
 
   SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
-    if (FORMNAME === 'comments') {
-      console.log(FORMNAME);
       this.setFromProcessWhereCondition();
-    }
     if (event.target.value === '' || this.viewMode) return;
     let param = {
       PAGENO: LOOKUPDATA.PAGENO,
@@ -1834,8 +1832,7 @@ export class JobcardComponent implements OnInit {
         let data = result.dynamicData[0];
         if (data && data.length > 0) {
           if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
-            let filteredResult = this.commonService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
-        
+            let filteredResult = this.commonService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);       
             if (filteredResult && filteredResult.length === 0) {
               this.commonService.toastErrorByMsgId('MSG1460');
               this.jobCardFrom.controls[FORMNAME].setValue('');
